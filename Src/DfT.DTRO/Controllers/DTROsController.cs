@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace DfT.DTRO.Controllers;
 
 /// <summary>
-/// Prototype controller for capturing DTROs.
+/// Controller for capturing DTROs.
 /// </summary>
 [ApiController]
 [Consumes("application/json")]
