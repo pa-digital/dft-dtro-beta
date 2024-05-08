@@ -1,0 +1,14 @@
+# IntelliJ project files
+.idea
+.env
+
+# Visual Studio configs
+.vs/
+
+# Default dev GCL configuration file location
+/src/DfT.DTRO/appsettings.Development.Serilog.Gcl.json
+
+# Local adjustments in docker compose
+docker-compose.override.yml
+.DS_Store
+*.lutconfig

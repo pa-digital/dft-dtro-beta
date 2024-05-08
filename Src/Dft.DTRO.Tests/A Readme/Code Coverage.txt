@@ -1,0 +1,14 @@
+1) install nuget package Report Generator
+
+2) PM consol -> dotnet test --collect:"XPlat Code Coverage"
+
+3) Move the coverage.cobertura.xml to above the folder e.g "0a05e5b5-3ddf-4be9-a8f0-ec529ccea885"
+
+3) PM- >
+
+C:\Users\rhock\.nuget\packages\reportgenerator\5.2.4\tools\net6.0\ReportGenerator -reports:D:\Repos\dft-dtro-alpha\src\Dft.DTRO.Tests\TestResults\coverage.cobertura.xml -targetdir:D:\Repos\dft-dtro-alpha\src\Dft.DTRO.Tests\TestResults\coveragereport
+
+
+4) copy 
+D:\Repos\dft-dtro-alpha\src\Dft.DTRO.Tests\TestResults\coveragereport\index.html
+to browser

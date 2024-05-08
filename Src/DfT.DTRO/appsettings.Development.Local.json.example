@@ -1,0 +1,8 @@
+{
+  "Postgres": {
+    "Host": "localhost",
+    "User": "root",
+    "Password": "root",
+    "DbName": "data"
+  }
+}

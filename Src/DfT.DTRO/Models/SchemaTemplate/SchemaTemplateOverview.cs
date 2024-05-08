@@ -1,0 +1,32 @@
+﻿using DfT.DTRO.Converters;
+using Newtonsoft.Json;
+using System.Runtime.Serialization;
+
+namespace DfT.DTRO.Models.SchemaTemplate;
+
+/// <summary>
+/// Response dto of the SchemaDefinition data.
+/// </summary>
+[DataContract]
+public class SchemaTemplateOverview
+{
+    /// <summary>
+    /// Gets or sets the schema identifier of the SchemaTemplate payload being submitted.
+    /// </summary>
+    /// <example>3.1.1.</example>
+    [DataMember(Name = "schemaVersion")]
+    [JsonConverter(typeof(SchemaVersionJsonConverter))]
+    public SchemaVersion SchemaVersion { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the template is active.
+    /// </summary>
+    [DataMember(Name = "isActive")]
+    public bool IsActive { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether a rules record exists for this schema.
+    /// </summary>
+    [DataMember(Name = "rulesExist")]
+    public bool RulesExist { get; set; }
+}

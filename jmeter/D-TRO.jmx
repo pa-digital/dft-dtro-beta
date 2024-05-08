@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="D-TRO" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="PUBLISHING_API_ENDPOINT" elementType="Argument">
+            <stringProp name="Argument.name">PUBLISHING_API_ENDPOINT</stringProp>
+            <stringProp name="Argument.value">publish.dtro-prototype.dev</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="EXTRACT_API_ENDPOINT" elementType="Argument">
+            <stringProp name="Argument.name">EXTRACT_API_ENDPOINT</stringProp>
+            <stringProp name="Argument.value">search.dtro-prototype.dev</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <collectionProp name="HeaderManager.headers">
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">content-type</stringProp>
+            <stringProp name="Header.value">application/json</stringProp>
+          </elementProp>
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">X-Correlation-Id</stringProp>
+            <stringProp name="Header.value">${__UUID}</stringProp>
+          </elementProp>
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">accept</stringProp>
+            <stringProp name="Header.value">application/json</stringProp>
+          </elementProp>
+        </collectionProp>
+      </HeaderManager>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="D-TRO Publishing Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">100</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">60</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST D-TRO" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;schemaVersion&quot;: &quot;3.1.2&quot;,&#xd;
+    &quot;data&quot;: {&#xd;
+        &quot;source&quot;: {&#xd;
+            &quot;provision&quot;: [&#xd;
+                {&#xd;
+                    &quot;regulatedPlaces&quot;: [&#xd;
+                        {&#xd;
+                            &quot;externalReference&quot;: [&#xd;
+                                {&#xd;
+                                    &quot;lastUpdateDate&quot;: &quot;1981-02-08T11:30:43.0Z&quot;,&#xd;
+                                    &quot;usrn&quot;: 96854586&#xd;
+                                }&#xd;
+                            ],&#xd;
+                            &quot;geometry&quot;: {&#xd;
+                                &quot;coordinates&quot;: {&#xd;
+                                    &quot;type&quot;: &quot;Polygon&quot;,&#xd;
+                                    &quot;coordinates&quot;: [&#xd;
+                                        [&#xd;
+                                            [&#xd;
+                                                -104.05,&#xd;
+                                                48.99&#xd;
+                                            ],&#xd;
+                                            [&#xd;
+                                                -97.22,&#xd;
+                                                48.98&#xd;
+                                            ],&#xd;
+                                            [&#xd;
+                                                -96.58,&#xd;
+                                                45.94&#xd;
+                                            ],&#xd;
+                                            [&#xd;
+                                                -104.03,&#xd;
+                                                45.94&#xd;
+                                            ],&#xd;
+                                            [&#xd;
+                                                -104.05,&#xd;
+                                                48.99&#xd;
+                                            ]&#xd;
+                                        ]&#xd;
+                                    ]&#xd;
+                                },&#xd;
+                                &quot;crs&quot;: &quot;osgb36Epsg27700&quot;,&#xd;
+                                &quot;geometryType&quot;: &quot;polygon&quot;&#xd;
+                            },&#xd;
+                            &quot;dailyOpeningPeriod&quot;: {&#xd;
+                                &quot;endTimeOfPeriod&quot;: &quot;17:00:00.0Z&quot;,&#xd;
+                                &quot;startTimeOfPeriod&quot;: &quot;18:00:00.0Z&quot;&#xd;
+                            },&#xd;
+                            &quot;description&quot;: &quot;Zone 5, Kenworthy Road, All Odd, All Even&quot; /*Comment: example*/&#xd;
+                        }&#xd;
+                    ],&#xd;
+                    &quot;regulations&quot;: [&#xd;
+                        {&#xd;
+                            &quot;overallPeriod&quot;: {&#xd;
+                                &quot;validityCondition&quot;: {&#xd;
+                                    &quot;conditionSet&quot;: [&#xd;
+                                        {&#xd;
+                                            &quot;operator&quot;: &quot;and&quot;,&#xd;
+                                            &quot;negate&quot;: false,&#xd;
+                                            &quot;conditions&quot;: [&#xd;
+                                                {&#xd;
+                                                    &quot;vehicleCharacteristics&quot;: {&#xd;
+                                                        &quot;vehicleType&quot;: [&#xd;
+                                                            &quot;anyVehicle&quot;&#xd;
+                                                        ]&#xd;
+                                                    },&#xd;
+                                                    &quot;negate&quot;: false&#xd;
+                                                },&#xd;
+                                                {&#xd;
+                                                    &quot;vehicleCharacteristics&quot;: {&#xd;
+                                                        &quot;vehicleType&quot;: [&#xd;
+                                                            &quot;taxi&quot;&#xd;
+                                                        ]&#xd;
+                                                    },&#xd;
+                                                    &quot;negate&quot;: true&#xd;
+                                                }&#xd;
+                                            ]&#xd;
+                                        }&#xd;
+                                    ],&#xd;
+                                    &quot;rateTable&quot;: {&#xd;
+                                        &quot;rateLineCollection&quot;: [&#xd;
+                                            {&#xd;
+                                                &quot;rateLine&quot;: [&#xd;
+                                                    {&#xd;
+                                                        &quot;relativeTimes&quot;: false,&#xd;
+                                                        &quot;sequence&quot;: 0,&#xd;
+                                                        &quot;type&quot;: &quot;flatRateTier&quot;,&#xd;
+                                                        &quot;value&quot;: 15,&#xd;
+                                                        &quot;durationEnd&quot;: &quot;19:00:00.0Z&quot;&#xd;
+                                                    },&#xd;
+                                                    {&#xd;
+                                                        &quot;relativeTimes&quot;: true,&#xd;
+                                                        &quot;sequence&quot;: 1,&#xd;
+                                                        &quot;type&quot;: &quot;flatRate&quot;,&#xd;
+                                                        &quot;value&quot;: 20,&#xd;
+                                                        &quot;maxValue&quot;: 40,&#xd;
+                                                        &quot;durationStart&quot;: &quot;19:00:00.0Z&quot;,&#xd;
+                                                        &quot;incrementPeriod&quot;: &quot;PT1H&quot;,&#xd;
+                                                        &quot;durationEnd&quot;: &quot;19:30:00.0Z&quot;,&#xd;
+                                                        &quot;usageCondition&quot;: &quot;unlimited&quot;,&#xd;
+                                                        &quot;description&quot;: &quot;eiusmod nisi&quot;,&#xd;
+                                                        &quot;minValue&quot;: 10&#xd;
+                                                    }&#xd;
+                                                ],&#xd;
+                                                &quot;applicableCurrency&quot;: &quot;GBP&quot;,&#xd;
+                                                &quot;sequence&quot;: 0,&#xd;
+                                                &quot;startValidUsagePeriod&quot;: &quot;13:00:00.0Z&quot;&#xd;
+                                            }&#xd;
+                                        ],&#xd;
+                                        &quot;type&quot;: &quot;hourly&quot;,&#xd;
+                                        &quot;additionalInformation&quot;: &quot;id&quot;&#xd;
+                                    }&#xd;
+                                },&#xd;
+                                &quot;start&quot;: &quot;2023-01-05T22:50:50.0Z&quot;,&#xd;
+                                &quot;exceptionPeriod&quot;: [&#xd;
+                                    {&#xd;
+                                        &quot;recurringSpecialDay&quot;: [&#xd;
+                                            {&#xd;
+                                                &quot;intersectWithApplicableDays&quot;: true,&#xd;
+                                                &quot;specialDayType&quot;: &quot;matchDay&quot;&#xd;
+                                            },&#xd;
+                                            {&#xd;
+                                                &quot;intersectWithApplicableDays&quot;: false,&#xd;
+                                                &quot;specialDayType&quot;: &quot;matchDay&quot;,&#xd;
+                                                &quot;publicEvent&quot;: &quot;footballMatch&quot;&#xd;
+                                            }&#xd;
+                                        ],&#xd;
+                                        &quot;recurringTimePeriodOfDay&quot;: [&#xd;
+                                            {&#xd;
+                                                &quot;startTimeOfPeriod&quot;: &quot;17:00:00.0Z&quot;,&#xd;
+                                                &quot;endTimeOfPeriod&quot;: &quot;18:00:00.0Z&quot;&#xd;
+                                            }&#xd;
+                                        ],&#xd;
+                                        &quot;recurringDayWeekMonthPeriod&quot;: [&#xd;
+                                            {&#xd;
+                                                &quot;applicableDay&quot;: [&#xd;
+                                                    &quot;monday&quot;                                                   &#xd;
+                                                ],&#xd;
+                                                &quot;applicableMonth&quot;: [&#xd;
+                                                    &quot;october&quot;&#xd;
+                                                ]&#xd;
+                                            }&#xd;
+                                        ],&#xd;
+                                        &quot;startOfPeriod&quot;: &quot;2023-05-05T22:50:50.0Z&quot;,&#xd;
+                                        &quot;periodName&quot;: &quot;adipisicing incididunt Lorem&quot;,&#xd;
+                                        &quot;endOfPeriod&quot;: &quot;2023-06-17T16:47:01.0Z&quot; /*Comment: would be helpful if start was after end :)*/&#xd;
+                                    }&#xd;
+                                ],&#xd;
+                                &quot;validPeriod&quot;: [&#xd;
+                                    {&#xd;
+                                        &quot;recurringTimePeriodOfDay&quot;: [&#xd;
+                                            {&#xd;
+                                                &quot;startTimeOfPeriod&quot;: &quot;07:30:00.0Z&quot;,&#xd;
+                                                &quot;endTimeOfPeriod&quot;: &quot;09:00:00.0Z&quot;&#xd;
+                                            },&#xd;
+                                            {&#xd;
+                                                &quot;startTimeOfPeriod&quot;: &quot;17:00:00.0Z&quot;,&#xd;
+                                                &quot;endTimeOfPeriod&quot;: &quot;18:00:00.0Z&quot;&#xd;
+                                            }&#xd;
+                                        ],&#xd;
+                                        &quot;startOfPeriod&quot;: &quot;2023-07-01T21:12:04.0Z&quot;,&#xd;
+                                        &quot;recurringSpecialDay&quot;: [&#xd;
+                                            {&#xd;
+                                                &quot;intersectWithApplicableDays&quot;: true,&#xd;
+                                                &quot;specialDayType&quot;: &quot;eventDay&quot;&#xd;
+                                            },&#xd;
+                                            {&#xd;
+                                                &quot;intersectWithApplicableDays&quot;: true,&#xd;
+                                                &quot;specialDayType&quot;: &quot;eventDay&quot;&#xd;
+                                            }&#xd;
+                                        ],&#xd;
+                                        &quot;periodName&quot;: &quot;Every Tuesday throughout the year and Monday&apos;s in June&quot;,&#xd;
+                                        &quot;recurringDayWeekMonthPeriod&quot;: [&#xd;
+                                            {&#xd;
+                                                &quot;applicableDay&quot;: [&#xd;
+                                                    &quot;tuesday&quot;&#xd;
+                                                ]&#xd;
+                                            },&#xd;
+                                            {&#xd;
+                                                &quot;applicableMonth&quot;: [&#xd;
+                                                    &quot;june&quot;&#xd;
+                                                ],&#xd;
+                                                &quot;applicableDay&quot;: [&#xd;
+                                                    &quot;monday&quot;&#xd;
+                                                ]&#xd;
+                                            }&#xd;
+                                        ]&#xd;
+                                    },&#xd;
+                                    {&#xd;
+                                        &quot;startOfPeriod&quot;: &quot;2023-05-12T13:42:51.0Z&quot;,&#xd;
+                                        &quot;periodName&quot;: &quot;2023 to 2025&quot;,&#xd;
+                                        &quot;endOfPeriod&quot;: &quot;2025-01-03T17:54:21.0Z&quot;&#xd;
+                                    }&#xd;
+                                ],&#xd;
+                                &quot;end&quot;: &quot;2025-01-05T22:50:50.0Z&quot;&#xd;
+                            },&#xd;
+                            &quot;isDynamic&quot;: false,&#xd;
+                            &quot;regulationStatus&quot;: &quot;not valid&quot;,&#xd;
+                            &quot;timeZone&quot;: &quot;Europe/London&quot;,&#xd;
+                            &quot;regulationType&quot;: &quot;bannedMovementNoEntry&quot;,&#xd;
+                            &quot;conditions&quot;: [&#xd;
+                                {&#xd;
+                                    &quot;vehicleCharacteristics&quot;: {&#xd;
+                                        &quot;vehicleType&quot;: [&#xd;
+                                            &quot;taxi&quot;,&#xd;
+											&quot;anyVehicle&quot;&#xd;
+                                        ]&#xd;
+                                    }&#xd;
+                                }&#xd;
+                            ]&#xd;
+                        }&#xd;
+                    ],&#xd;
+                    &quot;addition&quot;: true,&#xd;
+                    &quot;fullPartial&quot;: true,&#xd;
+                    &quot;orderReportingPoint&quot;: &quot;ttroTtmoByNotice&quot;,&#xd;
+                    &quot;provisionDescription&quot;: &quot;Prohibition of Waiting&quot;,&#xd;
+                    &quot;provisionIndex&quot;: 0&#xd;
+                }&#xd;
+            ],&#xd;
+            &quot;ha&quot;: 1585,&#xd;
+            &quot;section&quot;: &quot;All sections&quot;,&#xd;
+            &quot;troName&quot;: &quot;Load Test D-TRO&quot;&#xd;
+        }&#xd;
+    }&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${PUBLISHING_API_ENDPOINT}</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/v1/dtros</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="TestPlan.comments">Submits a new D-TRO to the service</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="Results Tree" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="D-TRO Extract Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">500</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">60</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET D-TRO" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${EXTRACT_API_ENDPOINT}</stringProp>
+          <stringProp name="HTTPSampler.port">443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/v1/dtros/63d32991-e57e-4c47-89c9-42ec5a4cc7b2</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="TestPlan.comments">Gets a D-TRO from the service</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="Results Tree" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <url>true</url>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

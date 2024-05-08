@@ -1,0 +1,131 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "title" : "DTRO - OpenAPI 3.0",
+    "description" : "A prototype implementation of API endpoints for publishing and consuming Traffic Regulation orders.",
+    "termsOfService" : "https://example.com/terms",
+    "version" : "0.0.1"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "tags" : [ {
+    "name" : "publish",
+    "description" : "Endpoints for publishing and modifying digital TROs."
+  } ],
+  "paths" : {
+    "/dtro" : {
+      "post" : {
+        "tags" : [ "publish" ],
+        "summary" : "Creates a new DTRO",
+        "description" : "Create a new DTRO",
+        "operationId" : "createDtro",
+        "requestBody" : {
+          "description" : "Create a new DTRO in the store",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DTRO"
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DTRO"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DTRO"
+                }
+              },
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DTRO"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        },
+        "security" : [ {
+          "api_auth" : [ "write:pets", "read:pets" ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "DTRO" : {
+        "type" : "object",
+        "properties" : {
+          "modelVersion" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 1
+          },
+          "data" : {
+            "type" : "object"
+          }
+        },
+        "example" : {
+          "data" : { },
+          "modelVersion" : 1
+        },
+        "xml" : {
+          "name" : "dtro"
+        }
+      },
+      "ApiResponse" : {
+        "type" : "object",
+        "xml" : {
+          "name" : "##default"
+        }
+      }
+    },
+    "requestBodies" : {
+      "DTRO" : {
+        "description" : "DTRO object that needs to be added to the store",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/DTRO"
+            }
+          },
+          "application/xml" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/DTRO"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "api_auth" : {
+        "type" : "oauth2",
+        "flows" : {
+          "implicit" : {
+            "authorizationUrl" : "https://example-oauth-endpoint.com/oauth/authorize",
+            "scopes" : {
+              "write:dtro" : "modify DTROS",
+              "read:dtro" : "read DTROS"
+            }
+          }
+        }
+      },
+      "api_key" : {
+        "type" : "apiKey",
+        "name" : "api_key",
+        "in" : "header"
+      }
+    }
+  }
+}

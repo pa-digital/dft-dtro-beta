@@ -1,0 +1,16 @@
+terraform
+.gitignore
+.github
+.githooks
+.vscode
+docker
+example-requests
+jmeter
+*.txt
+*.md
+.vs
+.idea
+.env
+.DS_Store
+src/DfT.DTRO.Tests
+src/DfT.DTRO/.gitignore
