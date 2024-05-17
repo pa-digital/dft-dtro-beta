@@ -44,17 +44,17 @@ namespace Dft.DTRO.Tests.IntegrationTests
         {
             new SchemaTemplateOverview
             {
-                SchemaVersion = new SchemaVersion("3.1.1"),
+                SchemaVersion = "3.1.1",
                 IsActive = false
             },
             new SchemaTemplateOverview
             {
-                SchemaVersion = new SchemaVersion("3.1.2"),
+                SchemaVersion = "3.1.2",
                 IsActive = true
             },
             new SchemaTemplateOverview
             {
-                SchemaVersion = new SchemaVersion("3.2.0"),
+                SchemaVersion = "3.2.0",
                 IsActive = true
             }
         };

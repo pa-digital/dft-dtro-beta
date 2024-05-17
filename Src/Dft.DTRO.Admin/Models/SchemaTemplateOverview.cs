@@ -1,11 +1,5 @@
 ﻿using System.Runtime.Serialization;
 
-namespace DfT.DTRO.Models.SchemaTemplate;
-
-/// <summary>
-/// Response dto of the SchemaDefinition data.
-/// </summary>
-[DataContract]
 public class SchemaTemplateOverview
 {
     /// <summary>
