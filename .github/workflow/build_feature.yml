@@ -1,0 +1,59 @@
+name: Build Feature
+
+on:
+  push:
+    branches:
+      - feature/DPPD-188*
+
+permissions:
+  contents: read
+  packages: read
+  actions: read
+
+jobs:
+  build-feature:
+    name: Build, Test and Verify Feature Branch
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+
+      - name: Format check
+        run: dotnet format --check
+
+      - name: Install dotnet tools for vulnerability scan
+        run: dotnet tool install --global dotnet-outdated-tool
+
+      - name: Add dotnet tools to PATH
+        run: echo "/home/runner/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Check for outdated dependencies
+        run: dotnet outdated --include-auto-references
+
+      - name: Install dotnet tools for security analysis
+        run: dotnet tool install --global dotnet-audit
+
+      - name: Add dotnet tools to PATH
+        run: echo "/home/runner/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Run security vulnerability analysis
+        run: dotnet audit
