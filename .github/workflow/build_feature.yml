@@ -1,9 +1,15 @@
 name: Build Feature
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - feature/DPPD-188*
+      - 'feature*'
+      - 'bug*'
+      - 'hotfix*'
+
+env:
+  GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
   contents: read
