@@ -3,7 +3,12 @@ name: Build Feature
 on:
   push:
     branches:
-      - feature/DPPD-188*
+      - 'feature*'
+      - 'bug*'
+      - 'hotfix*'
+
+env:
+  GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
   contents: read
