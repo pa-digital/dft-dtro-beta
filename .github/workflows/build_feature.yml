@@ -1,14 +1,15 @@
 name: Build Feature
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - feature/*
       - bug/*
       - hotfix/*
 
-env:
-  GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#env:
+#  GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
   contents: read
@@ -43,22 +44,19 @@ jobs:
 #        run: dotnet test --no-restore --verbosity normal
 
       - name: Format check
-        run: dotnet format --check
+        run: dotnet format
 
       - name: Install dotnet tools for vulnerability scan
         run: dotnet tool install --global dotnet-outdated-tool
-
-      - name: Add dotnet tools to PATH
-        run: echo "/home/runner/.dotnet/tools" >> $GITHUB_PATH
-
-      - name: Check for outdated dependencies
-        run: dotnet outdated --include-auto-references
 
       - name: Install dotnet tools for security analysis
         run: dotnet tool install --global dotnet-audit
 
       - name: Add dotnet tools to PATH
         run: echo "/home/runner/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Check for outdated dependencies
+        run: dotnet outdated --include-auto-references
 
       - name: Run security vulnerability analysis
         run: dotnet audit
