@@ -8,9 +8,6 @@ on:
       - bug/*
       - hotfix/*
 
-#env:
-#  GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 permissions:
   contents: read
   packages: read
@@ -50,7 +47,7 @@ jobs:
         run: dotnet tool install --global dotnet-outdated-tool
 
       - name: Install dotnet tools for security analysis
-        run: dotnet tool install --global dotnet-audit
+        run: dotnet tool install --global dotnet-audit --roll-forward LatestMajor
 
       - name: Add dotnet tools to PATH
         run: echo "/home/runner/.dotnet/tools" >> $GITHUB_PATH
