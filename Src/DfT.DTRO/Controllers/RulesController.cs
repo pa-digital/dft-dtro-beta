@@ -213,7 +213,7 @@ public class RulesController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the updated rule.</returns>
-    [HttpPut]
+    [HttpPost]
     [Route("/v1/updateRuleFromFile/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]

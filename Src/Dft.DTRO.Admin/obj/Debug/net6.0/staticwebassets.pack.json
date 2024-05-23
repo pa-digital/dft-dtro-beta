@@ -5,6 +5,14 @@
       "PackagePath": "staticwebassets\\Dft.DTRO.Admin.bundle.scp.css"
     },
     {
+      "Id": "D:\\Repos\\dft-dtro-beta\\Src\\Dft.DTRO.Admin\\wwwroot\\Images\\cross.png",
+      "PackagePath": "staticwebassets\\Images\\cross.png"
+    },
+    {
+      "Id": "D:\\Repos\\dft-dtro-beta\\Src\\Dft.DTRO.Admin\\wwwroot\\Images\\tick.png",
+      "PackagePath": "staticwebassets\\Images\\tick.png"
+    },
+    {
       "Id": "D:\\Repos\\dft-dtro-beta\\Src\\Dft.DTRO.Admin\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

@@ -15,4 +15,8 @@
     <Content Remove="wwwroot\js\schemaDropAdd.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
 </Project>

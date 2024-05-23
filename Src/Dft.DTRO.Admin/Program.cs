@@ -13,6 +13,7 @@ builder.Services.AddHttpClient("ExternalApi", client =>
 });
 
 builder.Services.AddScoped<SchemaService>();
+builder.Services.AddScoped<RuleService>();
 
 var app = builder.Build();
 

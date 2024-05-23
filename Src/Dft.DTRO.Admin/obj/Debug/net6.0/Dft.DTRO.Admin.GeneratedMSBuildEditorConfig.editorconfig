@@ -30,6 +30,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/RuleDropEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUnVsZURyb3BFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/SchemaDropEdit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2NoZW1hRHJvcEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

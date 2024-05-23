@@ -10,8 +10,8 @@
         <tr>
             <th>Schema Version</th>
             <th>Active</th>
-            <th>Rules Exist</th>
-            <th>Actions</th>
+            <th>Schema Actions</th>
+            <th>Rule Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -19,10 +19,20 @@
         {
             <tr>
                 <td>@schema.SchemaVersion</td>
-                <td>@schema.IsActive</td>
-                <td>@schema.RulesExist</td>
                 <td>
-                    <a class="btn btn-primary" asp-page="SchemaDropEdit" asp-route-IsEdit="true" asp-route-version="@schema.SchemaVersion">Edit</a>
+                    @if (schema.IsActive)
+                    {
+                        <img src="~/images/tick.png" alt="Active" style="max-height:20px; align-vertical:center" />
+                    }
+                    else
+                    {
+                        <img src="~/images/cross.png" alt="Inactive" style="max-height:20px" />
+                    }
+                </td>
+
+               
+                <td>
+                    <a class="btn btn-info" asp-page="SchemaDropEdit" asp-route-IsEdit="true" asp-route-version="@schema.SchemaVersion">Edit</a>
                     <form method="post" asp-page-handler="ToggleActive" asp-route-version="@schema.SchemaVersion" class="d-inline">
                         <button style="min-width: 100px;" class="btn btn-@(schema.IsActive ? "warning" : "success")"
                                 type="submit"
@@ -31,6 +41,19 @@
                         </button>
                     </form>
                 </td>
+
+                @if (schema.RulesExist)
+                {
+                    <td>
+                        <a class="btn btn-info" asp-page="RuleDropEdit" asp-route-IsEdit="true" asp-route-version="@schema.SchemaVersion">Edit</a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <a class="btn btn-primary" asp-page="RuleDropEdit" asp-route-IsEdit="false" asp-route-version="@schema.SchemaVersion">+</a>
+                    </td>
+                }
             </tr>
         }
     </tbody>
