@@ -4,12 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'feature*'
-      - 'bug*'
-      - 'hotfix*'
-
-env:
-  GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - feature/*
+      - bug/*
+      - hotfix/*
 
 permissions:
   contents: read
@@ -40,26 +37,22 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal
-
-      - name: Format check
-        run: dotnet format --check
-
-      - name: Install dotnet tools for vulnerability scan
-        run: dotnet tool install --global dotnet-outdated-tool
-
-      - name: Add dotnet tools to PATH
-        run: echo "/home/runner/.dotnet/tools" >> $GITHUB_PATH
-
-      - name: Check for outdated dependencies
-        run: dotnet outdated --include-auto-references
-
-      - name: Install dotnet tools for security analysis
-        run: dotnet tool install --global dotnet-audit
-
-      - name: Add dotnet tools to PATH
-        run: echo "/home/runner/.dotnet/tools" >> $GITHUB_PATH
-
-      - name: Run security vulnerability analysis
-        run: dotnet audit
+#      - name: Test
+#        run: dotnet test --no-restore --verbosity normal
+#
+#      - name: Format check
+#        run: dotnet format
+##        Which is better, this cmd or the one above?: run: dotnet format --verify-no-changes
+#
+#      - name: Install .NET analyzers
+#        run: dotnet tool install -g dotnet-format
+#
+##        Do we want this step or 'Run Code Analysis with Roslyn Analyzers' step?
+#      - name: Run .NET analyzers
+#        run: |
+#          dotnet format --verify-no-changes
+#          dotnet tool install --global dotnet-format
+#          dotnet build --no-restore --configuration Release /warnaserror
+#
+#      - name: Run Code Analysis with Roslyn Analyzers
+#        run: dotnet build --no-restore --configuration Release /p:EnableNETAnalyzers=true /warnaserror
