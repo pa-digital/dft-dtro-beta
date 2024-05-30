@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace DfT.DTRO.Models.Search;
-
 /// <summary>
 /// Response to DTRO search query.
 /// </summary>

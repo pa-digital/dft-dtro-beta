@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Dft.DTRO.Admin")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+553ff2f4e74e23a9854913e4fe9bde0ffcb7a426")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3317282f604a3fd06ad142efe63a56964fe9fe69")]
 [assembly: System.Reflection.AssemblyProductAttribute("Dft.DTRO.Admin")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Dft.DTRO.Admin")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

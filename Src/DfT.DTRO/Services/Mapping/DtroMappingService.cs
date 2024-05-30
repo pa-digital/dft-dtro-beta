@@ -101,7 +101,7 @@ public class DtroMappingService : IDtroMappingService
             var regulationStartTimes = periods.Select(it => it.GetValueOrDefault<DateTime?>("start")).Where(it => it is not null).Select(it => it.Value).ToList();
             var regulationEndTimes = periods.Select(it => it.GetValueOrDefault<DateTime?>("end")).Where(it => it is not null).Select(it => it.Value).ToList();
 
-            results.Add(DtroSearchResult.FromDtro(dtro, baseUrl, regulationStartTimes, regulationEndTimes));
+            results.Add(CopyDtroToSearchResult(dtro, baseUrl, regulationStartTimes, regulationEndTimes));
         }
 
         return results;
@@ -174,5 +174,23 @@ public class DtroMappingService : IDtroMappingService
                 it.GetExpando("geometry").GetValue<string>("crs")));
 
         dtro.Location = BoundingBox.Wrapping(coordinates);
+    }
+
+    private DtroSearchResult CopyDtroToSearchResult(Models.DataBase.DTRO dtro, string baseUrl, List<DateTime> regulationStartDates, List<DateTime> regulationEndDates)
+    {
+        return new DtroSearchResult
+        {
+            TroName = dtro.Data.GetValueOrDefault<string>("source.troName"),
+            TrafficAuthorityId = dtro.Data.GetExpando("source").HasField("ta")
+                ? dtro.Data.GetValueOrDefault<int>("source.ta")
+                : dtro.Data.GetValueOrDefault<int>("source.ha"),
+            PublicationTime = dtro.Created.Value,
+            RegulationType = dtro.RegulationTypes,
+            VehicleType = dtro.VehicleTypes,
+            OrderReportingPoint = dtro.OrderReportingPoints,
+            RegulationStart = regulationStartDates,
+            RegulationEnd = regulationEndDates,
+            Id = dtro.Id
+        };
     }
 }

@@ -71,4 +71,28 @@ public class SearchController : ControllerBase
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
+
+    [HttpPost]
+    [Route("/v1/search2")]
+    [ValidateModelState]
+    [FeatureGate(FeatureNames.DtroRead)]
+    [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]
+    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros2([FromBody] DtroSearch2 body)
+    {
+        try
+        {
+            _logger.LogInformation("[{method}] Searching DTROs with criteria {searchCriteria}", "dtro.search", body.ToIndentedJsonString());
+            var response = await _searchService.SearchAsync(new DtroSearch());
+            return Ok(response);
+        }
+        catch (InvalidOperationException err)
+        {
+            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while processing GetSchemaById request.");
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+        }
+    }
 }

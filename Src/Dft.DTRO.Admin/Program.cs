@@ -14,6 +14,7 @@ builder.Services.AddHttpClient("ExternalApi", client =>
 
 builder.Services.AddScoped<SchemaService>();
 builder.Services.AddScoped<RuleService>();
+builder.Services.AddScoped<DtroService>();
 
 var app = builder.Build();
 
