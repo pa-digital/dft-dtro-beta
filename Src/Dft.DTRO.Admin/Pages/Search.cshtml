@@ -1,8 +1,8 @@
 ﻿@page
 @model SearchModel
 
-<h2>DTROs</h2>
 
+<h2>DTROs <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="false">+</a></h2>
 <table class="table">
     <thead>
         <tr>
@@ -34,7 +34,7 @@
                     }
                 </td>
                 <td>
-                    <a class="btn btn-primary" asp-page="DtroEdit" asp-route-dtroid="@result.Id">View</a>
+                    <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="true" asp-route-id="@result.Id">Edit</a>
                 </td>
             </tr>
         }

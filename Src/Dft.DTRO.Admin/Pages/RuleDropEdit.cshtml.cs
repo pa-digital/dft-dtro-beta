@@ -28,6 +28,6 @@ public class RuleDropEditModel : PageModel
         {
             await _ruleService.CreateRuleAsync(Version, file);
         }
-        return RedirectToPage("RuleOverview");
+        return RedirectToPage("SchemaOverview");
     }
 }

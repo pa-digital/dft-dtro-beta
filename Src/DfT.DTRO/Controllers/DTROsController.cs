@@ -13,6 +13,7 @@ using Microsoft.FeatureManagement.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using System.Dynamic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -92,6 +93,61 @@ public class DTROsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while processing CreateSchema request.");
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+        }
+    }
+
+    /// <summary>
+    /// Updates an existing dtro.
+    /// </summary>
+    /// <remarks>
+    /// The payload requires a dtro which will replace the dtro with the quoted dtro version.
+    /// </remarks>
+    /// <param name="guid">The existing dtro guid.</param>
+    /// <param name="file">The replacement dtro.</param>
+    /// <response code="200">Ok.</response>
+    /// <response code="400">Bad request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>Id of the updated dtro.</returns>
+    [HttpPost]
+    [Route("/v1/updateDtroFromFile/{guid}")]
+    [Consumes("multipart/form-data")]
+    [RequestFormLimits(ValueCountLimit = 1)]
+    [ValidateModelState]
+    [FeatureGate(FeatureNames.DtroWrite)]
+    [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
+    public async Task<IActionResult> UpdateDtroFromFile(Guid guid, IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("File is empty");
+        }
+
+        try
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
+                var dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
+
+                _logger.LogInformation("[{method}] Updating dtro with dtro version {dtroVersion}", "dtro.update", guid.ToString());
+                var response = await _dtroService.TryUpdateDtroAsJsonAsync(guid, dtroSubmit, _correlationProvider.CorrelationId);
+                return Ok(response);
+            }
+        }
+        catch (NotFoundException)
+        {
+            return NotFound(new ApiErrorResponse("Dtro version", "Dtro version not found"));
+        }
+        catch (InvalidOperationException err)
+        {
+            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while processing UpdateDtro request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }

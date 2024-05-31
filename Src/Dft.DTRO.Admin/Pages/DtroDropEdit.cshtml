@@ -5,22 +5,24 @@
     string id = Request.Query["id"];
 }
 
-<h2>@(isEdit ? "Edit Dtro" : "Add Dtro")</h2>
+<h2>@(isEdit ? "Edit Dtro " : "Add Dtro")</h2>
 
-<div class="drop-area" id="drop-area">
-    <div class="drop-area-inner">
-        Drag & Drop
+<form method="post" enctype="multipart/form-data">
+    <div class="drop-area" id="drop-area">
+        <div class="drop-area-inner">
+            Drag & Drop
+        </div>
     </div>
-</div>
 
-<div style="margin-top: 20px">
-    <label>Select file:</label>
-    <input style="margin-left: 10px" type="file" id="fileInput" />
-</div>
+    <div style="margin-top: 20px">
+        <label>Select file:</label>
+        <input style="margin-left: 10px" type="file" id="fileInput" name="file" />
+    </div>
 
-<div style="margin-top: 20px">
-    <button id="saveButton" class="btn btn-primary" disabled>Save</button>
-</div>
+    <div style="margin-top: 20px">
+        <button id="saveButton" class="btn btn-primary" type="submit" disabled>Save</button>
+    </div>
+</form>
 
 @section Scripts {
     <script>
@@ -62,24 +64,5 @@
             saveButton.disabled = !isFileDropped;
         }
 
-        saveButton.addEventListener('click', function () {
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-
-            var url = isEdit ? `${apiBaseUrl}/v1/updateDtroFromFile/${id}` : `${apiBaseUrl}/v1/createDtroFromFile`;
-
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors'
-            })
-                .then(response => {
-                    window.location.href = 'Search';
-                })
-                .catch(error => {
-                    alert(error.message);
-                    console.error('Error:', error);
-                });
-        });
     </script>
 }

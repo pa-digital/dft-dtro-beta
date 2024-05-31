@@ -24,7 +24,7 @@ body {
 .drop-area {
     width: 270px;
     height: 270px;
-    background-color: #e0e0e0;
+    background-color: #f9f9f9;
     border-radius: 8px;
     display: flex;
     justify-content: center;

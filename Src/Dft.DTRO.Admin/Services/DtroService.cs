@@ -33,7 +33,7 @@ public class DtroService
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task UpdateDtroAsync(int id, IFormFile file)
+    public async Task UpdateDtroAsync(Guid id, IFormFile file)
     {
         using var content = new MultipartFormDataContent
         {

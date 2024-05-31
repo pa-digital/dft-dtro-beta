@@ -18,16 +18,17 @@ public class DtroDropEditModel : PageModel
     [BindProperty]
     public string ApiBaseUrl { get; set; }
 
-    public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, int id)
+    public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, string id)
     {
+
         if (isEdit)
         {
-            await _dtroService.UpdateDtroAsync(id, file);
+            await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);
         }
         else
         {
             await _dtroService.CreateDtroAsync(file);
         }
-        return RedirectToPage("RuleOverview");
+        return RedirectToPage("Search");
     }
 }
