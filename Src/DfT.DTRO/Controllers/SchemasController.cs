@@ -54,7 +54,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Schema Versions.</returns>
     [HttpGet]
-    [Route("/v1/schemasVersions")]
+    [Route("/v1/schemasversions")]
     [FeatureGate(FeatureNames.SchemasRead)]
     public virtual async Task<IActionResult> GetSchemasVersions()
     {
@@ -190,7 +190,7 @@ public class SchemasController : ControllerBase
 
                 _logger.LogInformation("[{method}] Creating schema", "schema.create");
                 var response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, expandon, _correlationProvider.CorrelationId);
-                return CreatedAtAction(nameof(GetSchemaById), new { id = response.Id }, response);
+                return CreatedAtAction(nameof(CreateSchema), new { id = response.Id }, response);
             }
         }
         catch (InvalidOperationException err)
@@ -225,7 +225,7 @@ public class SchemasController : ControllerBase
         {
             _logger.LogInformation("[{method}] Creating schema", "schema.create");
             var response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, body, _correlationProvider.CorrelationId);
-            return CreatedAtAction(nameof(GetSchemaById), new { id = response.Id }, response);
+            return CreatedAtAction(nameof(CreateSchema), new { id = response.Id }, response);
         }
         catch (InvalidOperationException err)
         {
@@ -245,13 +245,68 @@ public class SchemasController : ControllerBase
     /// The payload requires a schema which will replace the schema with the quoted schema version.
     /// </remarks>
     /// <param name="version">The existing version.</param>
+    /// <param name="file">The replacement schema.</param>
+    /// <response code="200">Ok.</response>
+    /// <response code="400">Bad request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>Id of the updated schema.</returns>
+    [HttpPost]
+    [Route("/v1/updateSchemaFromFile/{version}")]
+    [Consumes("multipart/form-data")]
+    [RequestFormLimits(ValueCountLimit = 1)]
+    [ValidateModelState]
+    [FeatureGate(FeatureNames.SchemaWrite)]
+    [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
+    public async Task<IActionResult> UpdateSchema(string version, IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("File is empty");
+        }
+
+        try
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
+                dynamic expandon = JsonConvert.DeserializeObject<ExpandoObject>(fileContent);
+
+                _logger.LogInformation("[{method}] Updating schema with schema version {schemaVersion}", "schema.update", version);
+                var response = await _schemaTemplateService.UpdateSchemaTemplateAsJsonAsync(version, expandon, _correlationProvider.CorrelationId);
+                return Ok(response);
+            }
+        }
+        catch (NotFoundException)
+        {
+            return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
+        }
+        catch (InvalidOperationException err)
+        {
+            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while processing UpdateSchema request.");
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+        }
+    }
+
+    /// <summary>
+    /// Updates an existing schema.
+    /// </summary>
+    /// <remarks>
+    /// The payload requires a schema which will replace the schema with the quoted schema version.
+    /// </remarks>
+    /// <param name="version">The existing version.</param>
     /// <param name="body">The replacement schema.</param>
     /// <response code="200">Ok.</response>
     /// <response code="400">Bad request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the updated schema.</returns>
-    [HttpPut]
+    [HttpPost]
     [Route("/v1/update/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]

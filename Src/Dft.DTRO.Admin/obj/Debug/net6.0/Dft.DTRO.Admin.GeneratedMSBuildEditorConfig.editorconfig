@@ -1,0 +1,71 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = Dft.DTRO.Admin
+build_property.RootNamespace = Dft.DTRO.Admin
+build_property.ProjectDir = D:\Repos\dft-dtro-beta\Src\Dft.DTRO.Admin\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\Repos\dft-dtro-beta\Src\Dft.DTRO.Admin
+build_property._RazorSourceGeneratorDebug = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/DtroDropEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRHRyb0Ryb3BFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/RuleDropEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUnVsZURyb3BFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/SchemaDropEdit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2NoZW1hRHJvcEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/SchemaOverview.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2NoZW1hT3ZlcnZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/Search.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/SearchDtro.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VhcmNoRHRyby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Repos/dft-dtro-beta/Src/Dft.DTRO.Admin/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-ckqvkpm77q

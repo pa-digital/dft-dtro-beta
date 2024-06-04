@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Converters;
-using Newtonsoft.Json;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace DfT.DTRO.Models.SchemaTemplate;
 
@@ -15,8 +13,7 @@ public class SchemaTemplateOverview
     /// </summary>
     /// <example>3.1.1.</example>
     [DataMember(Name = "schemaVersion")]
-    [JsonConverter(typeof(SchemaVersionJsonConverter))]
-    public SchemaVersion SchemaVersion { get; set; }
+    public string SchemaVersion { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the template is active.

@@ -273,8 +273,9 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             var result = await _controller.CreateSchema(schemaVersion, schemaTemplate) as CreatedAtActionResult;
 
             // Assert
+            
             Assert.IsType<CreatedAtActionResult>(result);
-            Assert.Equal("GetSchemaById", result?.ActionName);
+            Assert.Equal("CreateSchema", result?.ActionName);
             Assert.Equal(guidId, result?.RouteValues?["id"]);
             Assert.IsType<GuidResponse>(result?.Value);
         }

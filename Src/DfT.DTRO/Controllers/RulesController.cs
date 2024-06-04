@@ -52,7 +52,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Rule Versions.</returns>
     [HttpGet]
-    [Route("/v1/ruleVersions")]
+    [Route("/v1/rulesversions")]
     [FeatureGate(FeatureNames.SchemasRead)]
     public virtual async Task<IActionResult> GetRulesVersions()
     {
@@ -213,7 +213,7 @@ public class RulesController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the updated rule.</returns>
-    [HttpPut]
+    [HttpPost]
     [Route("/v1/updateRuleFromFile/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
