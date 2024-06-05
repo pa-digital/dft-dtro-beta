@@ -161,7 +161,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the DTRO.</returns>
     [HttpPost]
-    [Route("/v1/dtros/create")]
+    [Route("/v1/dtros/createFromBody")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
