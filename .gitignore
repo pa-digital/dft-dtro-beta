@@ -12,3 +12,9 @@
 docker-compose.override.yml
 .DS_Store
 *.lutconfig
+*.user
+/Src/Dft.DTRO.Admin/bin/Debug/net6.0/Dft.DTRO.Admin.dll
+obj/
+bin/
+/Src/Dft.DTRO.Tests/Configurations/appsettings.SqlStorageServiceTests.json.example
+/Src/DfT.DTRO/appsettings.Development.Local.json.example

@@ -1,6 +1,4 @@
 ﻿using DfT.DTRO.Controllers;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.RuleTemplate;
 using DfT.DTRO.Models.SchemaTemplate;
@@ -8,9 +6,6 @@ using DfT.DTRO.RequestCorrelation;
 using DfT.DTRO.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Moq;
-using System;
-using System.Threading.Tasks;
 
 namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
 {
@@ -43,7 +38,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
 
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(It.IsAny<Guid>())).ReturnsAsync(expected);
             // Act
-            var result = await _controller.GetRuleById(new Guid());
+            var result = await _controller.GetById(new Guid());
             // Assert
             Assert.IsType<OkObjectResult>(result);
             var okResult = result as OkObjectResult;
@@ -56,7 +51,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             var ruleId = Guid.NewGuid();
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId)).ThrowsAsync(new NotFoundException());
             // Act
-            var result = await _controller.GetRuleById(ruleId);
+            var result = await _controller.GetById(ruleId);
             // Assert
             Assert.IsType<NotFoundObjectResult>(result);
         }
@@ -67,7 +62,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             var ruleId = Guid.NewGuid();
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId)).ThrowsAsync(new InvalidOperationException("Invalid operation"));
             // Act
-            var result = await _controller.GetRuleById(ruleId);
+            var result = await _controller.GetById(ruleId);
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
@@ -79,7 +74,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             var ruleId = Guid.NewGuid();
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId)).ThrowsAsync(new Exception("Unexpected error"));
             // Act
-            var result = await _controller.GetRuleById(ruleId);
+            var result = await _controller.GetById(ruleId);
             // Assert
             Assert.IsType<ObjectResult>(result);
             var objectResult = result as ObjectResult;

@@ -1,13 +1,11 @@
-﻿using DfT.DTRO.Controllers;
+﻿using System.Text;
+using DfT.DTRO.Controllers;
 using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.RequestCorrelation;
 using DfT.DTRO.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Moq;
-using System.Text;
-using System.Threading;
 
 namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
 {
@@ -36,7 +34,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             string version = "1.0";
             IFormFile? file = null;
             // Act
-            var result = await _controller.UpdateRule(version, file);
+            var result = await _controller.UpdateFromFile(version, file);
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
@@ -48,7 +46,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             var file = new Mock<IFormFile>();
             file.Setup(f => f.Length).Returns(0);
             // Act
-            var result = await _controller.UpdateRule(version, file.Object);
+            var result = await _controller.UpdateFromFile(version, file.Object);
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
@@ -68,7 +66,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
              .ReturnsAsync(response);
             _mockCorrelationProvider.Setup(c => c.CorrelationId).Returns("correlation-id");
             // Act
-            var result = await _controller.UpdateRule(version, file.Object);
+            var result = await _controller.UpdateFromFile(version, file.Object);
             // Assert
             Assert.IsType<OkObjectResult>(result);
         }
@@ -86,7 +84,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
              .ThrowsAsync(new InvalidOperationException("Invalid operation"));
             // Act
-            var result = await _controller.UpdateRule(version, file.Object);
+            var result = await _controller.UpdateFromFile(version, file.Object);
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
         }
@@ -104,7 +102,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
              .ThrowsAsync(new Exception("General exception"));
             // Act
-            var result = await _controller.UpdateRule(version, file.Object);
+            var result = await _controller.UpdateFromFile(version, file.Object);
             // Assert
             Assert.IsType<ObjectResult>(result);
             var objectResult = result as ObjectResult;

@@ -1,3 +1,4 @@
+using System.Net;
 using DfT.DTRO;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.Errors;
@@ -5,13 +6,11 @@ using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
-using Google.Apis.Util;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using System.Net;
 
 namespace Dft.DTRO.Tests.IntegrationTests
 {
@@ -49,7 +48,7 @@ namespace Dft.DTRO.Tests.IntegrationTests
             HttpClient client = _factory.CreateClient();
             var payload = await CreateDtroJsonPayload(ValidComplexDtroJsonPath, "3.1.2");
 
-            HttpResponseMessage response = await client.PostAsync("/v1/dtros", payload);
+            HttpResponseMessage response = await client.PostAsync("/v1/dtros/createFromBody", payload);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
             GuidResponse? data = JsonConvert.DeserializeObject<GuidResponse>(await response.Content.ReadAsStringAsync());
@@ -81,7 +80,7 @@ namespace Dft.DTRO.Tests.IntegrationTests
             HttpClient client = _factory.CreateClient();
 
             var payload = await CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
-            HttpResponseMessage response = await client.PostAsync("/v1/dtros", payload);
+            HttpResponseMessage response = await client.PostAsync("/v1/dtros/createFromBody", payload);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             ApiErrorResponse? data = JsonConvert.DeserializeObject<ApiErrorResponse>(await response.Content.ReadAsStringAsync());
@@ -99,7 +98,7 @@ namespace Dft.DTRO.Tests.IntegrationTests
             HttpClient client = _factory.CreateClient();
 
             var payload = await CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
-            HttpResponseMessage response = await client.PutAsync($"/v1/dtros/{dtroId}", payload);
+            HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody{dtroId}", payload);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             GuidResponse? data = JsonConvert.DeserializeObject<GuidResponse>(await response.Content.ReadAsStringAsync());
@@ -134,7 +133,7 @@ namespace Dft.DTRO.Tests.IntegrationTests
             HttpClient client = _factory.CreateClient();
 
             var payload = await CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
-            HttpResponseMessage response = await client.PutAsync($"/v1/dtros/{dtroId}", payload);
+            HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody{dtroId}", payload);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 

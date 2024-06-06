@@ -1,4 +1,5 @@
-﻿using DfT.DTRO.Controllers;
+﻿using System.Dynamic;
+using DfT.DTRO.Controllers;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.SchemaTemplate;
@@ -12,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Dynamic;
 
 
 namespace DfT.DTRO.Tests.CodeiumTests.Integration
@@ -65,12 +65,12 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             _mockDtroService.Setup(x => x.SaveDtroAsJsonAsync(dtroSubmit, It.IsAny<string>())).ReturnsAsync(response);
 
             // Act
-            var result = await _controller.CreateDtro(dtroSubmit);
+            var result = await _controller.CreateFromBody(dtroSubmit);
 
             // Assert
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
             Assert.Equal(201, createdAtActionResult.StatusCode);
-            Assert.Equal(nameof(_controller.GetDtroById), createdAtActionResult.ActionName);
+            Assert.Equal(nameof(_controller.GetById), createdAtActionResult.ActionName);
             Assert.Equal(response.Id, createdAtActionResult.RouteValues["id"]);
             Assert.Equal(response, createdAtActionResult.Value);
         }
@@ -84,7 +84,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .ThrowsAsync(new DtroValidationException());
 
             // Act
-            var response = await _controller.CreateDtro(dtroBadSubmit);
+            var response = await _controller.CreateFromBody(dtroBadSubmit);
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(response);
@@ -100,7 +100,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .ThrowsAsync(new Exception("Unexpected error"));
 
             // Act
-            var response = await _controller.CreateDtro(dtroBadSubmit);
+            var response = await _controller.CreateFromBody(dtroBadSubmit);
 
             // Assert
             Assert.IsType<ObjectResult>(response);
@@ -118,7 +118,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .Returns(Task.FromResult(new GuidResponse()));
 
             // Act
-            var result = await _controller.UpdateDtro(Guid.NewGuid(), dtroSubmit);
+            var result = await _controller.UpdateFromBody(Guid.NewGuid(), dtroSubmit);
 
             // Assert
             Assert.IsType<OkObjectResult>(result);
@@ -136,7 +136,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             { SchemaVersion = new("3.1.2"), Data = new() };
 
             // Act
-            var result = await _controller.UpdateDtro(Guid.NewGuid(), dtroBadSubmit);
+            var result = await _controller.UpdateFromBody(Guid.NewGuid(), dtroBadSubmit);
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -154,7 +154,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             { SchemaVersion = new("3.1.2"), Data = new() };
 
             // Act
-            var result = await _controller.UpdateDtro(Guid.NewGuid(), dtroBadSubmit);
+            var result = await _controller.UpdateFromBody(Guid.NewGuid(), dtroBadSubmit);
 
             // Assert
             Assert.IsType<NotFoundObjectResult>(result);
@@ -172,7 +172,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             { SchemaVersion = new("3.1.2"), Data = new() };
 
             // Act
-            var result = await _controller.UpdateDtro(Guid.NewGuid(), dtroBadSubmit) as ObjectResult;
+            var result = await _controller.UpdateFromBody(Guid.NewGuid(), dtroBadSubmit) as ObjectResult;
 
             // Assert
             Assert.IsType<ObjectResult>(result);
@@ -190,7 +190,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             _mockDtroService.Setup(s => s.GetDtroByIdAsync(dtroId)).ReturnsAsync(dtroResponse);
 
             // Act
-            var result = await _controller.GetDtroById(dtroId) as OkObjectResult;
+            var result = await _controller.GetById(dtroId) as OkObjectResult;
 
             // Assert
             Assert.NotNull(result);
@@ -205,7 +205,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             _mockDtroService.Setup(s => s.GetDtroByIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult<DtroResponse?>(null));
 
             // Act
-            var response = await _controller.GetDtroById(Guid.NewGuid()) as NotFoundResult;
+            var response = await _controller.GetById(Guid.NewGuid()) as NotFoundResult;
 
             // Assert
             Assert.Null(response);
@@ -219,7 +219,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             _mockDtroService.Setup(s => s.GetDtroByIdAsync(It.IsAny<Guid>())).ThrowsAsync(new Exception());
 
             // Act
-            var result = await _controller.GetDtroById(Guid.NewGuid()) as ObjectResult;
+            var result = await _controller.GetById(Guid.NewGuid()) as ObjectResult;
 
             // Assert
             Assert.IsType<ObjectResult>(result);
@@ -234,7 +234,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             _mockDtroService.Setup(s => s.DeleteDtroAsync(It.IsAny<Guid>(), null)).Returns(Task.FromResult(true));
 
             // Act
-            var response = await _controller.DeleteDtro(Guid.NewGuid()) as NoContentResult;
+            var response = await _controller.Delete(Guid.NewGuid()) as NoContentResult;
 
             // Assert
             Assert.NotNull(response);
@@ -249,7 +249,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             _mockDtroService.Setup(s => s.DeleteDtroAsync(It.IsAny<Guid>(), null)).Returns(Task.FromResult(true));
 
             // Act
-            var response = await _controller.DeleteDtro(Guid.NewGuid()) as NoContentResult;
+            var response = await _controller.Delete(Guid.NewGuid()) as NoContentResult;
 
             Assert.NotNull(response);
             Assert.IsType<NoContentResult>(response);
@@ -264,7 +264,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             _mockDtroService.Setup(s => s.DeleteDtroAsync(It.IsAny<Guid>(), null)).ThrowsAsync(new Exception());
 
             // Act
-            var response = await _controller.DeleteDtro(Guid.NewGuid()) as ObjectResult;
+            var response = await _controller.Delete(Guid.NewGuid()) as ObjectResult;
 
             Assert.NotNull(response);
             Assert.IsType<ObjectResult>(response);

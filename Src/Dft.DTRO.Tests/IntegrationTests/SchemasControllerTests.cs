@@ -1,3 +1,5 @@
+using System.Dynamic;
+using System.Net;
 using DfT.DTRO;
 using DfT.DTRO.Models.SchemaTemplate;
 using DfT.DTRO.Models.SharedResponse;
@@ -6,11 +8,8 @@ using DfT.DTRO.Services.Mapping;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Dynamic;
-using System.Net;
 
 namespace Dft.DTRO.Tests.IntegrationTests
 {
@@ -63,7 +62,7 @@ namespace Dft.DTRO.Tests.IntegrationTests
                  .ReturnsAsync(schema_template_overview);
 
             HttpClient client = _factory.CreateClient();
-            HttpResponseMessage response = await client.GetAsync("/v1/schemasVersions");
+            HttpResponseMessage response = await client.GetAsync("/v1/schemas/versions");
 
             response.EnsureSuccessStatusCode();
             dynamic? data = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
@@ -82,7 +81,7 @@ namespace Dft.DTRO.Tests.IntegrationTests
                  .Returns(Task.FromResult(new List<SchemaTemplateOverview>()));
 
             HttpClient client = _factory.CreateClient();
-            HttpResponseMessage response = await client.GetAsync("/v1/schemasVersions");
+            HttpResponseMessage response = await client.GetAsync("/v1/schemas/versions");
 
             response.EnsureSuccessStatusCode();
             dynamic? data = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
@@ -171,7 +170,7 @@ namespace Dft.DTRO.Tests.IntegrationTests
 
             HttpClient client = _factory.CreateClient();
 
-            HttpResponseMessage response = await client.PatchAsync($"/v1/activate/{schemaVersion}", null);
+            HttpResponseMessage response = await client.PatchAsync($"/v1/schemas/activate/{schemaVersion}", null);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -188,7 +187,7 @@ namespace Dft.DTRO.Tests.IntegrationTests
 
             HttpClient client = _factory.CreateClient();
 
-            HttpResponseMessage response = await client.PatchAsync($"/v1/deactivate/{schemaVersion}", null);
+            HttpResponseMessage response = await client.PatchAsync($"/v1/schemas/deactivate/{schemaVersion}", null);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }

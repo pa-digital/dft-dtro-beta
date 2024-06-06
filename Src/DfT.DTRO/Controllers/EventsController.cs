@@ -1,4 +1,6 @@
-﻿using DfT.DTRO.Attributes;
+﻿using System;
+using System.Threading.Tasks;
+using DfT.DTRO.Attributes;
 using DfT.DTRO.FeatureManagement;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.Errors;
@@ -8,8 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Threading.Tasks;
 
 namespace DfT.DTRO.Controllers;
 
@@ -62,7 +62,7 @@ public class EventsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetSchemaById request.");
+            _logger.LogError(ex, "An error occurred while processing GetById request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
