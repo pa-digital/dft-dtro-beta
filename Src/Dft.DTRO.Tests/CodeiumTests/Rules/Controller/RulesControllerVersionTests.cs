@@ -6,9 +6,6 @@ using DfT.DTRO.RequestCorrelation;
 using DfT.DTRO.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Moq;
-using System;
-using System.Threading.Tasks;
 
 namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
 {
@@ -46,7 +43,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             .ReturnsAsync(expectedVersions);
 
             // Act
-            var result = await _controller.GetRulesVersions();
+            var result = await _controller.GetVersions();
             // Assert
             var okResult = result as OkObjectResult;
             Assert.NotNull(okResult);
@@ -60,7 +57,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplatesVersionsAsync())
              .ThrowsAsync(new Exception("Test exception"));
             // Act
-            var result = await _controller.GetRulesVersions();
+            var result = await _controller.GetVersions();
             // Assert
 
             var objectResult = result as ObjectResult;

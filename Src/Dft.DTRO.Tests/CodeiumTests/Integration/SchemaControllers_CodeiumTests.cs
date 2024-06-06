@@ -1,4 +1,6 @@
-﻿using DfT.DTRO.Controllers;
+﻿using System.Dynamic;
+using System.Net;
+using DfT.DTRO.Controllers;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.SchemaTemplate;
@@ -12,8 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Dynamic;
-using System.Net;
 
 namespace DfT.DTRO.Tests.CodeiumTests.Integration
 {
@@ -80,7 +80,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .ReturnsAsync(templates);
 
             // Act
-            var result = await _controller.GetSchemas() as OkObjectResult;
+            var result = await _controller.Get() as OkObjectResult;
 
             // Assert
             Assert.IsType<OkObjectResult>(result);
@@ -96,7 +96,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .ReturnsAsync(templates);
 
             // Act
-            var result = await _controller.GetSchemas() as OkObjectResult;
+            var result = await _controller.Get() as OkObjectResult;
 
             // Assert
             Assert.IsType<OkObjectResult>(result);
@@ -112,7 +112,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .Throws(new Exception());
 
             // Act
-            var result = await _controller.GetSchemas() as ObjectResult;
+            var result = await _controller.Get() as ObjectResult;
 
             // Assert
             Assert.IsType<ObjectResult>(result);
@@ -134,7 +134,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .Returns(Task.FromResult(template));
 
             // Act
-            var result = await _controller.GetSchema(schemaVersion) as OkObjectResult;
+            var result = await _controller.GetByVersion(schemaVersion) as OkObjectResult;
             var response = result?.StatusCode.ToString();
 
             // Assert
@@ -151,7 +151,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .Throws(new NotFoundException());
 
             // Act
-            var result = await _controller.GetSchema(badschemaVersion) as NotFoundObjectResult;
+            var result = await _controller.GetByVersion(badschemaVersion) as NotFoundObjectResult;
 
             // Assert
             Assert.IsType<NotFoundObjectResult>(result);
@@ -165,7 +165,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .Throws(new InvalidOperationException("Invalid operation"));
 
             // Act
-            var result = await _controller.GetSchema(badschemaVersion) as BadRequestObjectResult;
+            var result = await _controller.GetByVersion(badschemaVersion) as BadRequestObjectResult;
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -179,7 +179,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .Throws(new Exception("Something went wrong"));
 
             // Act
-            var result = await _controller.GetSchema(badschemaVersion) as ObjectResult;
+            var result = await _controller.GetByVersion(badschemaVersion) as ObjectResult;
 
             // Assert
             Assert.IsType<ObjectResult>(result);
@@ -199,7 +199,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .Returns(Task.FromResult(new SchemaTemplateResponse()));
 
             // Act
-            var result = await _controller.GetSchemaById(schemaId) as OkObjectResult;
+            var result = await _controller.GetById(schemaId) as OkObjectResult;
 
             // Assert
             Assert.IsType<OkObjectResult>(result);
@@ -216,7 +216,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .ThrowsAsync(new NotFoundException());
 
             // Act
-            var result = await _controller.GetSchemaById(schemaId) as ObjectResult;
+            var result = await _controller.GetById(schemaId) as ObjectResult;
 
             // Assert
             Assert.IsType<NotFoundObjectResult>(result);
@@ -232,7 +232,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .ThrowsAsync(new InvalidOperationException());
 
             // Act
-            var result = await _controller.GetSchemaById(schemaId) as BadRequestObjectResult;
+            var result = await _controller.GetById(schemaId) as BadRequestObjectResult;
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -249,7 +249,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .ThrowsAsync(new Exception());
 
             // Act
-            var result = await _controller.GetSchemaById(schemaId) as ObjectResult;
+            var result = await _controller.GetById(schemaId) as ObjectResult;
 
             // Assert
             Assert.IsType<ObjectResult>(result);
@@ -270,12 +270,12 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 });
 
             // Act
-            var result = await _controller.CreateSchema(schemaVersion, schemaTemplate) as CreatedAtActionResult;
+            var result = await _controller.CreateFromBodyByVersion(schemaVersion, schemaTemplate) as CreatedAtActionResult;
 
             // Assert
-            
+
             Assert.IsType<CreatedAtActionResult>(result);
-            Assert.Equal("CreateSchema", result?.ActionName);
+            Assert.Equal("CreateFromFileByVersion", result?.ActionName);
             Assert.Equal(guidId, result?.RouteValues?["id"]);
             Assert.IsType<GuidResponse>(result?.Value);
         }
@@ -289,7 +289,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .Throws(new InvalidOperationException("Invalid schema"));
 
             // Act
-            var result = await _controller.CreateSchema(badschemaVersion, body) as BadRequestObjectResult;
+            var result = await _controller.CreateFromBodyByVersion(badschemaVersion, body) as BadRequestObjectResult;
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -308,7 +308,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .Throws(new Exception("Unexpected error"));
 
             // Act
-            var result = await _controller.CreateSchema(badschemaVersion, body) as ObjectResult;
+            var result = await _controller.CreateFromBodyByVersion(badschemaVersion, body) as ObjectResult;
 
             // Assert
             Assert.IsType<ObjectResult>(result);
@@ -326,7 +326,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             .ReturnsAsync(guidResponse);
 
             // Act
-            var result = await _controller.UpdateSchema(schemaVersion, body) as ObjectResult;
+            var result = await _controller.UpdateFromBodyByVersion(schemaVersion, body) as ObjectResult;
 
             // Assert
             Assert.IsType<OkObjectResult>(result);
@@ -345,7 +345,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .ThrowsAsync(new NotFoundException());
 
             // Act
-            var result = await _controller.UpdateSchema(badschemaVersion, body) as ObjectResult;
+            var result = await _controller.UpdateFromBodyByVersion(badschemaVersion, body) as ObjectResult;
 
             // Assert
             Assert.IsType<NotFoundObjectResult>(result);
@@ -362,7 +362,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .ThrowsAsync(new InvalidOperationException("Invalid schema version or body"));
 
             // Act
-            var result = await _controller.UpdateSchema(badschemaVersion, body) as BadRequestObjectResult;
+            var result = await _controller.UpdateFromBodyByVersion(badschemaVersion, body) as BadRequestObjectResult;
 
             // Assert
             Assert.NotNull(result);
@@ -380,7 +380,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 (version, body, It.IsAny<string>())).ThrowsAsync(new Exception());
 
             // Act
-            var result = await _controller.UpdateSchema(version, body) as ObjectResult;
+            var result = await _controller.UpdateFromBodyByVersion(version, body) as ObjectResult;
 
             // Assert
             Assert.NotNull(result);
@@ -398,7 +398,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .ReturnsAsync(new GuidResponse());
 
             // Act
-            var result = await _controller.ActivateSchema(version);
+            var result = await _controller.ActivateByVersion(version);
 
             // Assert
             Assert.IsType<OkObjectResult>(result);
@@ -412,7 +412,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .ThrowsAsync(new NotFoundException());
 
             // Act
-            var result = await _controller.ActivateSchema(badschemaVersion) as ObjectResult;
+            var result = await _controller.ActivateByVersion(badschemaVersion) as ObjectResult;
 
             // Assert
             Assert.IsType<NotFoundObjectResult>(result);
@@ -428,7 +428,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
 
 
             // Act
-            var result = await _controller.ActivateSchema(badschemaVersion) as BadRequestObjectResult;
+            var result = await _controller.ActivateByVersion(badschemaVersion) as BadRequestObjectResult;
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -444,7 +444,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .ReturnsAsync(new GuidResponse());
 
             // Act
-            var result = await _controller.DeActivateSchema(version);
+            var result = await _controller.DeactivateByVersion(version);
 
             // Assert
             Assert.IsType<OkObjectResult>(result);
@@ -458,7 +458,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .ThrowsAsync(new NotFoundException());
 
             // Act
-            var result = await _controller.DeActivateSchema(badschemaVersion) as ObjectResult;
+            var result = await _controller.DeactivateByVersion(badschemaVersion) as ObjectResult;
 
             // Assert
             Assert.IsType<NotFoundObjectResult>(result);
@@ -474,7 +474,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .ThrowsAsync(new InvalidOperationException("Invalid version"));
 
             // Act
-            var result = await _controller.DeActivateSchema(version) as BadRequestObjectResult;
+            var result = await _controller.DeactivateByVersion(version) as BadRequestObjectResult;
 
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
@@ -492,7 +492,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
                 .ThrowsAsync(new Exception("Unexpected error"));
 
             // Act
-            var result = await _controller.DeActivateSchema(version) as ObjectResult;
+            var result = await _controller.DeactivateByVersion(version) as ObjectResult;
 
             // Assert
             Assert.IsType<ObjectResult>(result);

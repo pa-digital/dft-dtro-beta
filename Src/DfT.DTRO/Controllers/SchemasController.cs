@@ -1,3 +1,8 @@
+using System;
+using System.Dynamic;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using DfT.DTRO.Attributes;
 using DfT.DTRO.FeatureManagement;
 using DfT.DTRO.Models.Errors;
@@ -10,11 +15,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Dynamic;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DfT.DTRO.Controllers;
 
@@ -54,9 +54,9 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Schema Versions.</returns>
     [HttpGet]
-    [Route("/v1/schemasversions")]
+    [Route("/v1/schemas/versions")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetSchemasVersions()
+    public virtual async Task<IActionResult> GetVersions()
     {
         try
         {
@@ -65,7 +65,7 @@ public class SchemasController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetSchemasVersions request.");
+            _logger.LogError(ex, "An error occurred while processing GetVersions request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -79,7 +79,7 @@ public class SchemasController : ControllerBase
     [HttpGet]
     [Route("/v1/schemas")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetSchemas()
+    public virtual async Task<IActionResult> Get()
     {
         try
         {
@@ -88,7 +88,7 @@ public class SchemasController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetSchemas request.");
+            _logger.LogError(ex, "An error occurred while processing GetByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -105,7 +105,7 @@ public class SchemasController : ControllerBase
     [HttpGet]
     [Route("/v1/schemas/{version}")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetSchema(string version)
+    public virtual async Task<IActionResult> GetByVersion(string version)
     {
         try
         {
@@ -122,7 +122,7 @@ public class SchemasController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetSchema request.");
+            _logger.LogError(ex, "An error occurred while processing GetByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -136,9 +136,9 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Schema.</returns>
     [HttpGet]
-    [Route("/v1/schemaById/{id}")]
+    [Route("/v1/schemas/{id:guid}")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetSchemaById(Guid id)
+    public virtual async Task<IActionResult> GetById(Guid id)
     {
         try
         {
@@ -155,7 +155,7 @@ public class SchemasController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetSchemaById request.");
+            _logger.LogError(ex, "An error occurred while processing GetById request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -170,10 +170,10 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the Schema.</returns>
     [HttpPost]
-    [Route("/v1/createSchemaFromFile/{version}")]
+    [Route("/v1/schemas/createFromFile/{version}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
-    public async Task<IActionResult> CreateSchema(string version, IFormFile file)
+    public async Task<IActionResult> CreateFromFileByVersion(string version, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -190,7 +190,7 @@ public class SchemasController : ControllerBase
 
                 _logger.LogInformation("[{method}] Creating schema", "schema.create");
                 var response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, expandon, _correlationProvider.CorrelationId);
-                return CreatedAtAction(nameof(CreateSchema), new { id = response.Id }, response);
+                return CreatedAtAction(nameof(CreateFromFileByVersion), new { id = response.Id }, response);
             }
         }
         catch (InvalidOperationException err)
@@ -199,7 +199,7 @@ public class SchemasController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing CreateSchema request.");
+            _logger.LogError(ex, "An error occurred while processing CreateFromFileByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -214,18 +214,18 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the Schema.</returns>
     [HttpPost]
-    [Route("/v1/create/{version}")]
+    [Route("/v1/schemas/createFromBody/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
 
-    public async Task<IActionResult> CreateSchema(string version, [FromBody] ExpandoObject body)
+    public async Task<IActionResult> CreateFromBodyByVersion(string version, [FromBody] ExpandoObject body)
     {
         try
         {
             _logger.LogInformation("[{method}] Creating schema", "schema.create");
             var response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, body, _correlationProvider.CorrelationId);
-            return CreatedAtAction(nameof(CreateSchema), new { id = response.Id }, response);
+            return CreatedAtAction(nameof(CreateFromFileByVersion), new { id = response.Id }, response);
         }
         catch (InvalidOperationException err)
         {
@@ -233,7 +233,7 @@ public class SchemasController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing CreateSchema request.");
+            _logger.LogError(ex, "An error occurred while processing CreateFromFileByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -251,14 +251,14 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the updated schema.</returns>
-    [HttpPost]
-    [Route("/v1/updateSchemaFromFile/{version}")]
+    [HttpPut]
+    [Route("/v1/schemas/updateFromFile/{version}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
-    public async Task<IActionResult> UpdateSchema(string version, IFormFile file)
+    public async Task<IActionResult> UpdateFromFileByVersion(string version, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -288,7 +288,7 @@ public class SchemasController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing UpdateSchema request.");
+            _logger.LogError(ex, "An error occurred while processing UpdateFromFileByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -306,12 +306,12 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the updated schema.</returns>
-    [HttpPost]
-    [Route("/v1/update/{version}")]
+    [HttpPut]
+    [Route("/v1/schemas/updateFromBody/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
-    public async Task<IActionResult> UpdateSchema(string version, [FromBody] ExpandoObject body)
+    public async Task<IActionResult> UpdateFromBodyByVersion(string version, [FromBody] ExpandoObject body)
     {
         try
         {
@@ -329,7 +329,7 @@ public class SchemasController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing UpdateSchema request.");
+            _logger.LogError(ex, "An error occurred while processing UpdateFromFileByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -344,11 +344,11 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the activated schema.</returns>
     [HttpPatch]
-    [Route("/v1/activate/{version}")]
+    [Route("/v1/schemas/activate/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
-    public async Task<IActionResult> ActivateSchema(string version)
+    public async Task<IActionResult> ActivateByVersion(string version)
     {
         try
         {
@@ -366,7 +366,7 @@ public class SchemasController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing ActivateSchema request.");
+            _logger.LogError(ex, "An error occurred while processing ActivateByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -381,11 +381,11 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the deactivated schema.</returns>
     [HttpPatch]
-    [Route("/v1/deactivate/{version}")]
+    [Route("/v1/schemas/deactivate/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
-    public async Task<IActionResult> DeActivateSchema(string version)
+    public async Task<IActionResult> DeactivateByVersion(string version)
     {
         try
         {
@@ -403,7 +403,7 @@ public class SchemasController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing ActivateSchema request.");
+            _logger.LogError(ex, "An error occurred while processing ActivateByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }

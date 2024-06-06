@@ -6,9 +6,6 @@ using DfT.DTRO.RequestCorrelation;
 using DfT.DTRO.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Moq;
-using System;
-using System.Threading.Tasks;
 
 namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
 {
@@ -46,7 +43,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             .ReturnsAsync(expectedVersions);
 
             // Act
-            var result = await _controller.GetRulesVersions();
+            var result = await _controller.GetVersions();
             // Assert
             var okResult = result as OkObjectResult;
             Assert.NotNull(okResult);
@@ -60,7 +57,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplatesVersionsAsync())
              .ThrowsAsync(new Exception("Test exception"));
             // Act
-            var result = await _controller.GetRulesVersions();
+            var result = await _controller.GetVersions();
             // Assert
 
             var objectResult = result as ObjectResult;
@@ -84,7 +81,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
 
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplatesAsync()).ReturnsAsync(expected);
             // Act
-            var result = await _controller.GetRules();
+            var result = await _controller.Get();
             // Assert
             var okResult = result as OkObjectResult;
             Assert.Equal(expected, okResult?.Value);
@@ -96,7 +93,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             // Arrange
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplatesAsync()).ThrowsAsync(new Exception());
             // Act
-            var result = await _controller.GetRules();
+            var result = await _controller.Get();
             // Assert
             var objectResult = result as ObjectResult;
             Assert.Equal(500, objectResult?.StatusCode);
@@ -112,7 +109,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             var expectedRule = new RuleTemplateResponse();
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplateAsync(version)).ReturnsAsync(expectedRule);
             // Act
-            var result = await _controller.GetRule(version.ToString());
+            var result = await _controller.GetByVersion(version.ToString());
             // Assert
 
             Assert.IsType<OkObjectResult>(result);
@@ -126,7 +123,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             var version = new SchemaVersion("1.0.0");
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplateAsync(version)).ThrowsAsync(new NotFoundException());
             // Act
-            var result = await _controller.GetRule(version.ToString());
+            var result = await _controller.GetByVersion(version.ToString());
             // Assert
             Assert.IsType<NotFoundObjectResult>(result);
         }
@@ -138,7 +135,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             var exceptionMessage = "Invalid operation";
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplateAsync(version)).ThrowsAsync(new InvalidOperationException(exceptionMessage));
             // Act
-            var result = await _controller.GetRule(version.ToString());
+            var result = await _controller.GetByVersion(version.ToString());
             // Assert
             Assert.IsType<BadRequestObjectResult>(result);
             var badRequestResult = result as BadRequestObjectResult;
@@ -153,7 +150,7 @@ namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller
             var version = new SchemaVersion("1.0.0");
             _mockRuleTemplateService.Setup(s => s.GetRuleTemplateAsync(version)).ThrowsAsync(new Exception());
             // Act
-            var result = await _controller.GetRule(version.ToString());
+            var result = await _controller.GetByVersion(version.ToString());
             // Assert
             Assert.IsType<ObjectResult>(result);
             var objectResult = result as ObjectResult;

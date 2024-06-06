@@ -1,5 +1,4 @@
 ﻿using DfT.DTRO.Caching;
-using DfT.DTRO.DAL;
 using DfT.DTRO.Extensions.DependencyInjection;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
