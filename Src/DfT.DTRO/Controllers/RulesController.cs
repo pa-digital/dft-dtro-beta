@@ -168,7 +168,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the Rule.</returns>
     [HttpPost]
-    [Route("/v1/rules/createRuleFromFile/{version}")]
+    [Route("/v1/rules/createFromFile/{version}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     public async Task<IActionResult> CreateFromFile(string version, IFormFile file)
@@ -214,7 +214,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the updated rule.</returns>
     [HttpPut]
-    [Route("/v1/rules/updateRuleFromFile/{version}")]
+    [Route("/v1/rules/updateFromFile/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
