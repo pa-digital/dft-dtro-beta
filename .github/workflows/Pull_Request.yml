@@ -1,0 +1,53 @@
+name: Build Feature
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  packages: read
+  actions: read
+
+jobs:
+  build-feature:
+    name: Build, Test and Verify Feature Branch
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+#      - name: Test
+#        run: dotnet test --no-restore --verbosity normal
+#
+#      - name: Format check
+#        run: dotnet format
+##        Which is better, this cmd or the one above?: run: dotnet format --verify-no-changes
+#
+#      - name: Install .NET analyzers
+#        run: dotnet tool install -g dotnet-format
+#
+##        Do we want this step or 'Run Code Analysis with Roslyn Analyzers' step?
+#      - name: Run .NET analyzers
+#        run: |
+#          dotnet format --verify-no-changes
+#          dotnet tool install --global dotnet-format
+#          dotnet build --no-restore --configuration Release /warnaserror
+#
+#      - name: Run Code Analysis with Roslyn Analyzers
+#        run: dotnet build --no-restore --configuration Release /p:EnableNETAnalyzers=true /warnaserror
