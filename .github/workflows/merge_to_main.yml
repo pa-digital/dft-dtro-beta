@@ -1,0 +1,35 @@
+name: Merge To Main
+
+on:
+  workflow_dispatch:
+# TODO: Once GCP infrastructure are in place, this workflow will be triggered by merging of a PR to Main
+#  push:
+#    branches:
+#      - main
+
+jobs:
+  deploy-dev:
+    name: Deploy to Dev
+    uses: ./.github/workflows/deploy_resources.yml
+    secrets:
+      WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+    with:
+      gcp-project-id: ${{ vars.GCP_PROJECT_ID_DEV }}
+      gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
+      environment: dev
+      gcp-ar-dtro-repo: ''
+      dtro-image-name: ''
+
+  deploy-test:
+    name: Deploy to Test
+    uses: ./.github/workflows/deploy_resources.yml
+    needs:
+      - deploy-dev
+    secrets:
+      WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+    with:
+      gcp-project-id: ${{ vars.GCP_PROJECT_ID_test }}
+      gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
+      environment: test
+      gcp-ar-dtro-repo: ''
+      dtro-image-name: ''

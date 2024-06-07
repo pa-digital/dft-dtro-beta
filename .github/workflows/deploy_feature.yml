@@ -1,0 +1,17 @@
+name: Deploy Feature
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-feature-dev:
+    name: Deploy Feature Branch
+    uses: ./.github/workflows/deploy_resources.yml
+    secrets:
+      WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+    with:
+      gcp-project-id: ${{ vars.GCP_PROJECT_ID_DEV }}
+      gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
+      environment: dev
+      gcp-ar-dtro-repo: ''
+      dtro-image-name: ''

@@ -3,10 +3,6 @@ name: Build Feature
 on:
   workflow_call:
     secrets:
-      github_packages_token:
-        required: true
-      ssh_private_key_for_github_access:
-        required: true
       WORKLOAD_IDENTITY_PROVIDER:
         required: true
     inputs:
@@ -25,17 +21,12 @@ on:
       dtro-image-name:
         type: string
         required: true
-      dtro-app-execution-name:
-        type: string
-        required: true
 
 env:
   GITHUB_PACKAGES_TOKEN: ${{ secrets.github_packages_token }}
   gcp_service_account: create-application@${{ inputs.gcp-project-id }}.iam.gserviceaccount.com
-  TF_VAR_gcp_region: ${{ inputs.gcp-region }}
-  TF_VAR_docker_image: ${{ github.sha }}
-  TF_VAR_ar_repo_url: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ vars.gcp-ar-dtro-repo }}/${{ vars.dtro-image-name }}:latest
-  TF_VAR_execution_role_arn: ${{ inputs.dtro-app-execution-name }}@${{ inputs.gcp-project-id }}.iam.gserviceaccount.com
+  gcp_region: ${{ inputs.default_gcp_region }}
+  ar_repo_url: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ vars.gcp-ar-dtro-repo }}/${{ vars.dtro-image-name }}:latest
 
 
 permissions:
@@ -63,7 +54,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           project_id: ${{ inputs.gcp-project-id }}
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }} // https://github.com/google-github-actions/auth/blob/main/docs/EXAMPLES.md#direct-workload-identity-federation
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }} # https://github.com/google-github-actions/auth/blob/main/docs/EXAMPLES.md#direct-workload-identity-federation
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -100,12 +91,12 @@ jobs:
           provenance: false
           push: true
           tags: |
-            ${{ env.TF_VAR_ar_repo_url }}:${{ github.sha }}
-            ${{ env.TF_VAR_ar_repo_url }}:latest
+            ${{ env.ar_repo_url }}:${{ github.sha }}
+            ${{ env.ar_repo_url }}:latest
           build-args: GITHUB_PACKAGES_TOKEN=${{ env.GITHUB_PACKAGES_TOKEN }}
 
       - name: Deploy to CloudRun
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: d-tro-${{ inputs.environment }}
-          image: ${{ env.TF_VAR_ar_repo_url }}
+          image: ${{ env.ar_repo_url }}
