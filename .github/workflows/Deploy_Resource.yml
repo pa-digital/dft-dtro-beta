@@ -88,6 +88,10 @@ jobs:
           username: oauth2accesstoken
           password: ${{ steps.google-creds.outputs.access_token }}
 
+      - name: Get tag
+        id: get-tag
+        run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+
       - name: Build, Tag and push Docker image to Google Artifact Registry
         uses: docker/build-push-action@v4
         with:
