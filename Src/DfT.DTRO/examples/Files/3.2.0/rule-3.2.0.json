@@ -1426,5 +1426,74 @@
                 }
             ]
         }
+    },
+    {
+        "name": "SourceReference",
+        "message": "The 'Source Reference' value must be of UUID format.",
+        "path": "source.reference",
+        "rule": {
+            "in": [
+                {
+                    "var": "source.reference"
+                },
+                {
+                    "service_data": "UUID"
+                }
+            ]
+        }
+    },
+    {
+        "name": "SourceActionType",
+        "message": "The 'Source Action Type' value must be of string format and one of these: 'new', 'update','noChange', 'errorFix'",
+        "path": "source.actionType",
+        "rule": {
+            "in": [
+                {
+                    "var": "source.actionType"
+                },
+                [
+                    "new",
+                    "update",
+                    "noChange",
+                    "errorFix"
+                ]
+            ]
+        }
+    },
+    {
+        "name": "ProvisionReference",
+        "message": "The 'Provision Reference' value must be of UUID format.",
+        "path": "provision.reference",
+        "rule": {
+            "in": [
+                {
+                    "var": "provision.reference"
+                },
+                {
+                    "service_data": "UUID"
+                }
+            ]
+        }
+    },
+    {
+        "name": "ProvisionType",
+        "message": "The 'Provision Action Type' value must be of string format and one of these: 'new', 'fullAmendment', 'partialAmendment', 'fullRevoke', 'partialRevoke', 'noChange', 'errorFix'",
+        "path": "provision.actionType",
+        "rule": {
+            "in": [
+                {
+                    "var": "provision.actionType"
+                },
+                [
+                    "new",
+                    "fullAmendment",
+                    "partialAmendment",
+                    "fullRevoke",
+                    "partialRevoke",
+                    "noChange",
+                    "errorFix"
+                ]
+            ]
+        }
     }
 ]
