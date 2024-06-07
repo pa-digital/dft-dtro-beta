@@ -19,6 +19,7 @@ namespace Dft.DTRO.Tests.IntegrationTests
     {
         private const string ValidDtroJsonPath = "./DtroJsonDataExamples/proper-data.json";
         private const string ValidComplexDtroJsonPath = "./DtroJsonDataExamples/3.1.2-valid-complex-dtro.json";
+        private const string ValidComplexDtroJsonPathV320 = "./DtroJsonDataExamples/3.2.0-valid-complex-dtro.json";
         private const string InvalidDtroJsonPath = "./DtroJsonDataExamples/provision-empty.json";
 
         private readonly WebApplicationFactory<Program> _factory;
@@ -27,26 +28,30 @@ namespace Dft.DTRO.Tests.IntegrationTests
 
         public DTROsControllerTests(WebApplicationFactory<Program> factory)
         {
-            var builder = new ConfigurationBuilder();
-            var configuration = builder.Build();
+            var configurationBuilder = new ConfigurationBuilder();
+            var configuration = configurationBuilder.Build();
 
             _dtroMappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
             _mockDtroService = new Mock<IDtroService>(MockBehavior.Strict);
 
-            _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
-            {
-                services.AddSingleton(_mockDtroService.Object);
-            }));
+            _factory = factory
+                .WithWebHostBuilder(builder => builder
+                    .ConfigureTestServices(services =>
+                    {
+                        services.AddSingleton(_mockDtroService.Object);
+                    }));
         }
 
-        [Fact]
-        public async Task Post_DtroIsValid_CreatesDtroAndReturnsDtroId()
+        [Theory]
+        [InlineData(ValidComplexDtroJsonPath, "3.1.2")]
+        [InlineData(ValidComplexDtroJsonPathV320, "3.2.0")]
+        public async Task Post_DtroIsValid_CreatesDtroAndReturnsDtroId(string dtroPath, string version)
         {
             _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>()))
             .ReturnsAsync(new GuidResponse { Id = Guid.NewGuid() });
 
             HttpClient client = _factory.CreateClient();
-            var payload = await CreateDtroJsonPayload(ValidComplexDtroJsonPath, "3.1.2");
+            var payload = await CreateDtroJsonPayload(dtroPath, version);
 
             HttpResponseMessage response = await client.PostAsync("/v1/dtros/createFromBody", payload);
 

@@ -1,7 +1,7 @@
-﻿using DfT.DTRO.Models.DtroDtos;
+﻿using System.Collections.Generic;
+using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.Search;
-using System.Collections.Generic;
 
 namespace DfT.DTRO.Services.Mapping;
 
@@ -15,7 +15,7 @@ public interface IDtroMappingService
     /// but are used in the database for search optimization.
     /// </summary>
     /// <param name="dtro">The <see cref="Models.DataBase.DTRO"/> to infer index fields for.</param>
-    void InferIndexFields(ref Models.DataBase.DTRO dtro);
+    void InferIndexFields(ref Models.DataBase.DTRO dtro, string schemaVersion);
 
     DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro);
 

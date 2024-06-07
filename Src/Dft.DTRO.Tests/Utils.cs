@@ -1,4 +1,5 @@
-﻿using Castle.Core.Configuration;
+﻿using System.Dynamic;
+using System.Text;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.SchemaTemplate;
@@ -7,9 +8,6 @@ using DfT.DTRO.Services.Mapping;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Serilog.Settings.Configuration;
-using System.Dynamic;
-using System.Text;
 
 namespace Dft.DTRO.Tests
 {
@@ -77,7 +75,7 @@ namespace Dft.DTRO.Tests
             var builder = new ConfigurationBuilder();
             var configuration = builder.Build();
             var mappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
-            mappingService.InferIndexFields(ref sampleDtro);
+            mappingService.InferIndexFields(ref sampleDtro, "");
 
             return sampleDtro;
         }
@@ -95,7 +93,7 @@ namespace Dft.DTRO.Tests
                 var builder = new ConfigurationBuilder();
                 var configuration = builder.Build();
                 var mappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
-                mappingService.InferIndexFields(ref dtro);
+                mappingService.InferIndexFields(ref dtro, schemaVersion);
             }
 
             string payload = JsonConvert.SerializeObject(dtro);

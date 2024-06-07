@@ -71,7 +71,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
             Assert.Equal(201, createdAtActionResult.StatusCode);
             Assert.Equal(nameof(_controller.GetById), createdAtActionResult.ActionName);
-            Assert.Equal(response.Id, createdAtActionResult.RouteValues["id"]);
+            Assert.Equal(response.Id, createdAtActionResult.RouteValues?["id"]);
             Assert.Equal(response, createdAtActionResult.Value);
         }
 
