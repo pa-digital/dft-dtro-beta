@@ -57,7 +57,6 @@
 		<None Remove="CodeiumTests\" />
 		<None Remove="CodeiumTests\Integration\" />
 		<None Remove="CodeiumTests\Unit\" />
-		<None Remove="Configurations\appsettings.SqlStorageServiceTests.json" />
 		<None Remove="DtroJsonDataExamples\3.2.0-valid-complex-dtro.json" />
 	</ItemGroup>
 
