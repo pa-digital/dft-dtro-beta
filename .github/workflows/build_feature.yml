@@ -36,7 +36,7 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore
-
+#      TODO: Ross/Gabriel: Please uncomment the lines below once you are happy your code will pass the checks below
 #      - name: Test
 #        run: dotnet test --no-restore --verbosity normal
 #
