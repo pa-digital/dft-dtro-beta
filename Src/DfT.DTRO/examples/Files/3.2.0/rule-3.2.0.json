@@ -1410,46 +1410,6 @@
     }
   },
   {
-    "id": 26,
-    "name": "ProvisionType",
-    "message": "The 'Provision Action Type' value must be of string format and one of these: 'new', 'fullAmendment', 'partialAmendment', 'fullRevoke', 'partialRevoke', 'noChange', 'errorFix'",
-    "path": "provision.actionType",
-    "rule": {
-      "in": [
-        {
-          "var": "provision.actionType"
-        },
-        {
-          "enum": [
-            "new",
-            "fullAmendment",
-            "partialAmendment",
-            "fullRevoke",
-            "partialRevoke",
-            "noChange",
-            "errorFix"
-          ]
-        }
-      ]
-    }
-  },
-  {
-    "id": 27,
-    "name": "ProvisionReference",
-    "message": "The 'Provision Reference' value must be of UUID format.",
-    "path": "provision.reference",
-    "rule": {
-      "in": [
-        {
-          "var": "provision.reference"
-        },
-        {
-          "service_data": "UUID"
-        }
-      ]
-    }
-  },
-  {
     "id": 28,
     "name": "PublicationTimeAge",
     "message": "The 'publicationTime' must be less than one month in the past, and not in the future",
@@ -1481,43 +1441,6 @@
               ]
             }
           ]
-        }
-      ]
-    }
-  },
-  {
-    "id": 29,
-    "name": "SourceActionType",
-    "message": "The 'Source Action Type' value must be of string format and one of these: 'new', 'update','noChange', 'errorFix'",
-    "path": "source.actionType",
-    "rule": {
-      "in": [
-        {
-          "var": "source.actionType"
-        },
-        {
-          "enum": [
-            "new",
-            "update",
-            "noChange",
-            "errorFix"
-          ]
-        }
-      ]
-    }
-  },
-  {
-    "id": 30,
-    "name": "SourceReference",
-    "message": "The 'Source Reference' value must be of UUID format.",
-    "path": "source.reference",
-    "rule": {
-      "in": [
-        {
-          "var": "source.reference"
-        },
-        {
-          "service_data": "UUID"
         }
       ]
     }
