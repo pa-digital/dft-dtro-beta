@@ -1,20 +1,15 @@
-# IntelliJ project files
-.idea
-.env
-
-# Visual Studio configs
-.vs/
-
-# Default dev GCL configuration file location
-/src/DfT.DTRO/appsettings.Development.Serilog.Gcl.json
-
-# Local adjustments in docker compose
-docker-compose.override.yml
-.DS_Store
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
 *.lutconfig
-*.user
-/Src/Dft.DTRO.Admin/bin/Debug/net6.0/Dft.DTRO.Admin.dll
-obj/
-bin/
-/Src/Dft.DTRO.Tests/Configurations/appsettings.SqlStorageServiceTests.json.example
-/Src/DfT.DTRO/appsettings.Development.Local.json.example
+/DfT.DTRO.sln.DotSettings.user
+/Src/DfT.DTRO/bin
+/Src/DfT.DTRO/bin/Debug/net6.0
+/Src/DfT.DTRO/obj
+/Src/Dft.DTRO.Tests/bin
+/Src/Dft.DTRO.Tests/bin/Debug/net6.0
+/Src/Dft.DTRO.Tests/obj
+/Src/Dft.DTRO.Admin/bin
+/Src/Dft.DTRO/Admin/bin/Debug/net6.0
+/Src/Dft.DTRO.Admin/obj
+/.vs
