@@ -1358,7 +1358,7 @@
 				},
 				"actionType": {
 					"description": "D-TRO provision action type",
-					"type": "string"
+					"$ref": "#/$defs/actionType"
 				},
 				"regulatedPlaces": {
 					"items": {
@@ -1731,7 +1731,7 @@
 				},
 				"actionType": {
 					"description": "D-TRO source action type",
-					"type": "string" 
+					"$ref": "#/$defs/actionType" 
 				}, 
 				"provision": {
 				"items": {
@@ -2207,6 +2207,20 @@
 				"vehicleWidth"
 			],
 			"type": "object"
+		},
+		"actionType": {
+			"description": "List of the action types",
+			"enum": [
+				"new",
+				"amendment",
+				"fullAmendment",
+				"partialAmendment",
+				"fullRevoke",
+				"partialRevoke",
+				"noChange",
+				"errorFix"
+			],
+			"type": "string"
 		},
 		"accessConditionType": {
 			"description": "List of access condition types",

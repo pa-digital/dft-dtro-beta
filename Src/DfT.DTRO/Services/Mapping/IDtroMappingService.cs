@@ -15,7 +15,7 @@ public interface IDtroMappingService
     /// but are used in the database for search optimization.
     /// </summary>
     /// <param name="dtro">The <see cref="Models.DataBase.DTRO"/> to infer index fields for.</param>
-    void InferIndexFields(ref Models.DataBase.DTRO dtro, string schemaVersion);
+    void InferIndexFields(ref Models.DataBase.DTRO dtro);
 
     DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro);
 

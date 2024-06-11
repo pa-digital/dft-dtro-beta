@@ -119,7 +119,7 @@ public class DtroDal : IDtroDal
         dtro.LastUpdatedCorrelationId = correlationId;
         dtro.CreatedCorrelationId = dtro.LastUpdatedCorrelationId;
 
-        _dtroMappingService.InferIndexFields(ref dtro, dtro.SchemaVersion.ToString());
+        _dtroMappingService.InferIndexFields(ref dtro);
 
         await _dtroContext.Dtros.AddAsync(dtro);
 
@@ -160,7 +160,7 @@ public class DtroDal : IDtroDal
         existing.LastUpdated = DateTime.UtcNow;
         existing.LastUpdatedCorrelationId = correlationId;
 
-        _dtroMappingService.InferIndexFields(ref existing, existing.SchemaVersion.ToString());
+        _dtroMappingService.InferIndexFields(ref existing);
         await _dtroCache.RemoveDtro(id);
         await _dtroContext.SaveChangesAsync();
     }

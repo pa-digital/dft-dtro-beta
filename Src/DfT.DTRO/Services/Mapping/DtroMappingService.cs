@@ -108,7 +108,7 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc/>
-    public void InferIndexFields(ref Models.DataBase.DTRO dtro, string schemaVersion)
+    public void InferIndexFields(ref Models.DataBase.DTRO dtro)
     {
         var regulations = dtro.Data.GetValueOrDefault<IList<object>>("source.provision")
             .OfType<ExpandoObject>()
@@ -146,21 +146,6 @@ public class DtroMappingService : IDtroMappingService
         dtro.RegulationEnd = regulations.Select(it => it.GetExpando("overallPeriod").GetDateTimeOrNull("end"))
             .Where(it => it is not null)
             .Max();
-
-        if (schemaVersion == "3.2.0")
-        {
-            dtro.SourceReference = dtro.Data.GetExpando("source").GetValue<string>("reference");
-            dtro.SourceActionType = dtro.Data.GetExpando("source").GetValue<string>("actionType");
-
-            dtro.ProvisionReference = dtro.Data.GetValueOrDefault<IList<object>>("source.provision")
-                .OfType<ExpandoObject>()
-                .Select(it => it.GetValue<string>("reference"))
-                .FirstOrDefault();
-            dtro.ProvisionActionType = dtro.Data.GetValueOrDefault<IList<object>>("source.provision")
-                .OfType<ExpandoObject>()
-                .Select(it => it.GetValue<string>("actionType"))
-                .FirstOrDefault();
-        }
 
         IEnumerable<Coordinates> FlattenAndConvertCoordinates(ExpandoObject coordinates, string crs)
         {

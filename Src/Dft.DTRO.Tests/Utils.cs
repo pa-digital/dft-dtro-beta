@@ -75,7 +75,7 @@ namespace Dft.DTRO.Tests
             var builder = new ConfigurationBuilder();
             var configuration = builder.Build();
             var mappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
-            mappingService.InferIndexFields(ref sampleDtro, "");
+            mappingService.InferIndexFields(ref sampleDtro);
 
             return sampleDtro;
         }
@@ -93,14 +93,12 @@ namespace Dft.DTRO.Tests
                 var builder = new ConfigurationBuilder();
                 var configuration = builder.Build();
                 var mappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
-                mappingService.InferIndexFields(ref dtro, schemaVersion);
+                mappingService.InferIndexFields(ref dtro);
             }
 
             string payload = JsonConvert.SerializeObject(dtro);
 
             return new StringContent(payload, Encoding.UTF8, "application/json");
         }
-
-
     }
 }

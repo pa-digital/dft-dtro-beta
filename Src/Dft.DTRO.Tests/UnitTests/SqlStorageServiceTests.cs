@@ -63,10 +63,6 @@ public class SqlStorageServiceTests : IDisposable
             Id = _existingDtroKey,
             SchemaVersion = new("3.2.0"),
             Data = new(),
-            SourceReference = Guid.NewGuid().ToString(),
-            SourceActionType = "update",
-            ProvisionReference = Guid.NewGuid().ToString(),
-            ProvisionActionType = "fullAmend"
         };
 
         _deletedDtro = new()
@@ -76,10 +72,6 @@ public class SqlStorageServiceTests : IDisposable
             Data = new(),
             Deleted = true,
             DeletionTime = DateTime.SpecifyKind(new DateTime(2023, 07, 23), DateTimeKind.Utc),
-            SourceReference = Guid.NewGuid().ToString(),
-            SourceActionType = "update",
-            ProvisionReference = Guid.NewGuid().ToString(),
-            ProvisionActionType = "fullAmend"
         };
 
         _dtroWithTa1234 = new()
@@ -87,11 +79,7 @@ public class SqlStorageServiceTests : IDisposable
             Id = _dtroWithHa1234Key,
             SchemaVersion = new("3.1.2"),
             Data = new(),
-            TrafficAuthorityId = 1234,
-            SourceReference = Guid.NewGuid().ToString(),
-            SourceActionType = "new",
-            ProvisionReference = Guid.NewGuid().ToString(),
-            ProvisionActionType = "new"
+            TrafficAuthorityId = 1234
         };
 
         _dtroWithCreationDate = new()
@@ -99,11 +87,7 @@ public class SqlStorageServiceTests : IDisposable
             Id = _dtroWithCreationDateKey,
             SchemaVersion = new("3.1.2"),
             Data = new(),
-            Created = DateTime.SpecifyKind(new DateTime(2023, 07, 22), DateTimeKind.Utc),
-            SourceReference = Guid.NewGuid().ToString(),
-            SourceActionType = "new",
-            ProvisionReference = Guid.NewGuid().ToString(),
-            ProvisionActionType = "new"
+            Created = DateTime.SpecifyKind(new DateTime(2023, 07, 22), DateTimeKind.Utc)
         };
 
         _dtroWithModificationTime = new()
@@ -111,11 +95,7 @@ public class SqlStorageServiceTests : IDisposable
             Id = _dtroWithModificationTimeKey,
             SchemaVersion = new("3.1.2"),
             Data = new(),
-            LastUpdated = DateTime.SpecifyKind(new DateTime(2023, 07, 22), DateTimeKind.Utc),
-            SourceReference = Guid.NewGuid().ToString(),
-            SourceActionType = "new",
-            ProvisionReference = Guid.NewGuid().ToString(),
-            ProvisionActionType = "new"
+            LastUpdated = DateTime.SpecifyKind(new DateTime(2023, 07, 22), DateTimeKind.Utc)
         };
 
         _dtroWithName = new()
@@ -123,11 +103,7 @@ public class SqlStorageServiceTests : IDisposable
             Id = _dtroWithNameKey,
             SchemaVersion = new("3.1.2"),
             Data = new(),
-            TroName = "this is a test name",
-            SourceReference = Guid.NewGuid().ToString(),
-            SourceActionType = "new",
-            ProvisionReference = Guid.NewGuid().ToString(),
-            ProvisionActionType = "new"
+            TroName = "this is a test name"
         };
 
         _dtroWithVehicleTypes = new()
@@ -135,10 +111,6 @@ public class SqlStorageServiceTests : IDisposable
             Id = _dtroWithVehicleTypesKey,
             SchemaVersion = new("3.1.2"),
             Data = new(),
-            SourceReference = Guid.NewGuid().ToString(),
-            SourceActionType = "new",
-            ProvisionReference = Guid.NewGuid().ToString(),
-            ProvisionActionType = "new",
             VehicleTypes = new List<string>() { "taxi" }
         };
 
@@ -147,10 +119,6 @@ public class SqlStorageServiceTests : IDisposable
             Id = _dtroWithRegulationTypesKey,
             SchemaVersion = new("3.1.2"),
             Data = new(),
-            SourceReference = Guid.NewGuid().ToString(),
-            SourceActionType = "new",
-            ProvisionReference = Guid.NewGuid().ToString(),
-            ProvisionActionType = "new",
             RegulationTypes = new List<string>() { "test-regulation-type" }
         };
 
@@ -159,10 +127,6 @@ public class SqlStorageServiceTests : IDisposable
             Id = _dtroWithOrderReportingPointKey,
             SchemaVersion = new("3.1.2"),
             Data = new(),
-            SourceReference = Guid.NewGuid().ToString(),
-            SourceActionType = "new",
-            ProvisionReference = Guid.NewGuid().ToString(),
-            ProvisionActionType = "new",
             OrderReportingPoints = new List<string>() { "test-orp" }
         };
 
