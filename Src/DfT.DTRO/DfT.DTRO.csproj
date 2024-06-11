@@ -7,7 +7,7 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>DfT.DTRO</AssemblyName>
     <PackageId>DfT.DTRO</PackageId>
-    <CodeAnalysisRuleSet>stylecop.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="CustomErrors\**" />

@@ -1,4 +1,5 @@
-﻿using Castle.Core.Configuration;
+﻿using System.Dynamic;
+using System.Text;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.SchemaTemplate;
@@ -7,9 +8,6 @@ using DfT.DTRO.Services.Mapping;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Serilog.Settings.Configuration;
-using System.Dynamic;
-using System.Text;
 
 namespace Dft.DTRO.Tests
 {
@@ -102,7 +100,5 @@ namespace Dft.DTRO.Tests
 
             return new StringContent(payload, Encoding.UTF8, "application/json");
         }
-
-
     }
 }

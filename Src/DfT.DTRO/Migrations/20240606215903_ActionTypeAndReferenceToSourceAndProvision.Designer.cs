@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,10 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    partial class DtroContextModelSnapshot : ModelSnapshot
+    [Migration("20240606215903_ActionTypeAndReferenceToSourceAndProvision")]
+    partial class ActionTypeAndReferenceToSourceAndProvision
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,6 +59,16 @@ namespace DfT.DTRO.Migrations
                     b.Property<List<string>>("OrderReportingPoints")
                         .HasColumnType("text[]");
 
+                    b.Property<string>("ProvisionActionType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ProvisionActionType");
+
+                    b.Property<string>("ProvisionReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ProvisionReference");
+
                     b.Property<DateTime?>("RegulationEnd")
                         .HasColumnType("timestamp with time zone");
 
@@ -69,6 +81,16 @@ namespace DfT.DTRO.Migrations
                     b.Property<string>("SchemaVersion")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("SourceActionType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("SourceActionType");
+
+                    b.Property<string>("SourceReference")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("SourceReference");
 
                     b.Property<int>("TrafficAuthorityId")
                         .HasColumnType("integer")

@@ -1,66 +1,66 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.20" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-    <PackageReference Include="Moq" Version="4.18.4" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.2.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.20" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+		<PackageReference Include="Moq" Version="4.18.4" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="3.2.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DfT.DTRO\DfT.DTRO.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\DfT.DTRO\DfT.DTRO.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-	  <Content Include="DtroJsonDataExamples\**">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-	  <Content Include="Configurations\**">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-    <Content Include="SchemaJsonExamples\**">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="DtroJsonDataExamples\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Configurations\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="SchemaJsonExamples\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="CodeiumTests\Unit\**" />
-    <Compile Remove="TestResults\**" />
-    <EmbeddedResource Remove="CodeiumTests\Unit\**" />
-    <EmbeddedResource Remove="TestResults\**" />
-    <None Remove="CodeiumTests\Unit\**" />
-    <None Remove="TestResults\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="CodeiumTests\Unit\**" />
+		<Compile Remove="TestResults\**" />
+		<EmbeddedResource Remove="CodeiumTests\Unit\**" />
+		<EmbeddedResource Remove="TestResults\**" />
+		<None Remove="CodeiumTests\Unit\**" />
+		<None Remove="TestResults\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="CodeiumTests\Integration\EventsController_CodeiumTests.cs" />
-    <Compile Remove="CodeiumTests\Integration\SearchController_CodeiumTests.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="CodeiumTests\Integration\EventsController_CodeiumTests.cs" />
+		<Compile Remove="CodeiumTests\Integration\SearchController_CodeiumTests.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Configurations\appsettings.SqlStorageServiceTests.json.example" />
-    <None Remove="CodeiumTests\" />
-    <None Remove="CodeiumTests\Integration\" />
-    <None Remove="CodeiumTests\Unit\" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="CodeiumTests\" />
+		<None Remove="CodeiumTests\Integration\" />
+		<None Remove="CodeiumTests\Unit\" />
+		<None Remove="DtroJsonDataExamples\3.2.0-valid-complex-dtro.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="A Readme\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="A Readme\" />
+	</ItemGroup>
 </Project>

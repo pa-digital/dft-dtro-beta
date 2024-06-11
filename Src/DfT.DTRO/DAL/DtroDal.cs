@@ -1,4 +1,10 @@
-﻿using DfT.DTRO.Caching;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using DfT.DTRO.Caching;
 using DfT.DTRO.DAL;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
@@ -9,12 +15,6 @@ using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using static DfT.DTRO.Extensions.ExpressionExtensions;
 using DateTime = System.DateTime;
 

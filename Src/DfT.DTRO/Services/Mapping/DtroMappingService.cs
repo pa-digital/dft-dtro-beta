@@ -1,14 +1,14 @@
-﻿using DfT.DTRO.Extensions;
+﻿using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq;
+using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.DtroJson;
 using DfT.DTRO.Models.Search;
 using DfT.DTRO.Services.Conversion;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
 
 namespace DfT.DTRO.Services.Mapping;
 
@@ -116,7 +116,7 @@ public class DtroMappingService : IDtroMappingService
         .ToList();
 
         dtro.TrafficAuthorityId = dtro.Data.GetExpando("source").HasField("ta")
-        ? dtro.Data.GetValueOrDefault<int>("source.ta")
+            ? dtro.Data.GetValueOrDefault<int>("source.ta")
             : dtro.Data.GetValueOrDefault<int>("source.ha");
         dtro.TroName = dtro.Data.GetValueOrDefault<string>("source.troName");
         dtro.RegulationTypes = regulations.Select(it => it.GetValueOrDefault<string>("regulationType"))
@@ -158,7 +158,7 @@ public class DtroMappingService : IDtroMappingService
                     .Select(it => new Coordinates((double)it[0], (double)it[1])),
                 "LineString" => coords.OfType<IList<object>>()
                     .Select(it => new Coordinates((double)it[0], (double)it[1])),
-                "Point" => new List<Coordinates> { new ((double)coords[0], (double)coords[1]) },
+                "Point" => new List<Coordinates> { new((double)coords[0], (double)coords[1]) },
                 _ => throw new InvalidOperationException($"Coordinate type '{type}' unsupported.")
             };
 

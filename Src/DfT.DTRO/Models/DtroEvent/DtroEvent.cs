@@ -1,7 +1,7 @@
-﻿using DfT.DTRO.Models.Search;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using DfT.DTRO.Models.Search;
 
 namespace DfT.DTRO.Models.DtroEvent;
 

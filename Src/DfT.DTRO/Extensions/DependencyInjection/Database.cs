@@ -1,8 +1,8 @@
-﻿using DfT.DTRO.DAL;
+﻿using System;
+using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace DfT.DTRO.Extensions.DependencyInjection;
 
