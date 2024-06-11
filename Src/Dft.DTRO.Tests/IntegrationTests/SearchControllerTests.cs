@@ -14,7 +14,7 @@ namespace Dft.DTRO.Tests.IntegrationTests;
 public class SearchControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {
-    private const string SampleDtroJsonPath = "./DtroJsonDataExamples/proper-data.json";
+    private const string SampleDtroJsonPath = "./DtroJsonDataExamples/v3.1.1/proper-data.json";
 
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockStorageService;

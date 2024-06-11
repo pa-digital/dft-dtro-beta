@@ -30,7 +30,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
 
     private readonly SchemasController _controller;
 
-    private readonly string json = File.ReadAllText("./SchemaJsonExamples/example-3.2.0.json");
+    private readonly string json = File.ReadAllText("./SchemaJsonExamples/v3.2.0/example-3.2.0.json");
 
     private readonly string schemaVersion = "3.2.0";
 

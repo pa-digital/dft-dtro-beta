@@ -13,7 +13,7 @@ public class RecordManagementService : IRecordManagementService
     {
         var validationErrors = new List<SemanticValidationError>();
 
-        var sourceReference = dtroSubmit.Data.GetExpando("source").GetValue<string>("reference");
+        var sourceReference = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("reference");
         if (!sourceReference.IsGuid())
         {
             validationErrors.Add(new SemanticValidationError
@@ -22,7 +22,7 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        var sourceActionType = dtroSubmit.Data.GetExpando("source").GetValue<string>("actionType");
+        var sourceActionType = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("actionType");
         if (!sourceActionType.IsEnum("SourceActionType"))
         {
             validationErrors.Add(new SemanticValidationError
@@ -39,10 +39,27 @@ public class RecordManagementService : IRecordManagementService
 
         if (!provisionReferences.TrueForAll(reference => reference.IsGuid()))
         {
-            validationErrors.Add(new SemanticValidationError
+            SemanticValidationError error = new()
             {
                 Message = "One or more provision reference is not of type UUID"
+            };
+            validationErrors.Add(error);
+        }
+
+        if (provisionReferences.Count > 1)
+        {
+            Dictionary<string, int> dictionary = provisionReferences
+                .GroupBy(it => it)
+                .Where(it => it.Count() > 1)
+                .ToDictionary(it => it.Key, it => it.Count());
+
+
+            IEnumerable<SemanticValidationError> errors = dictionary.Select(kv => new SemanticValidationError
+            {
+                Message = $"Provision reference '{kv.Key}' is present {kv.Value} times."
             });
+
+            validationErrors.AddRange(errors);
         }
 
         List<string> provisionActionTypes = dtroSubmit.Data.GetValueOrDefault<IList<object>>("source.provision")
