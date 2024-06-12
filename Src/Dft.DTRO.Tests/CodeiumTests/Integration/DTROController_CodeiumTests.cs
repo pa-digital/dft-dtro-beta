@@ -26,7 +26,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
 
     private readonly WebApplicationFactory<Program> _factory;
 
-    private const string ValidDtroJsonPath = "./DtroJsonDataExamples/3.1.2-valid-complex-dtro.json";
+    private const string ValidDtroJsonPath = "./DtroJsonDataExamples/v3.1.2/3.1.2-valid-complex-dtro.json";
     private readonly DtroSubmit dtroSubmit;
 
 

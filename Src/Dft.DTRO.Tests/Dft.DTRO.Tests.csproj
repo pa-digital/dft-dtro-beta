@@ -58,6 +58,11 @@
 		<None Remove="CodeiumTests\Integration\" />
 		<None Remove="CodeiumTests\Unit\" />
 		<None Remove="DtroJsonDataExamples\3.2.0-valid-complex-dtro.json" />
+		<None Remove="DtroJsonDataExamples\v3.2.0\3.2.0-invalid-duplicate-provision-reference.json" />
+		<None Remove="DtroJsonDataExamples\v3.2.0\3.2.0-invalid-provision-actionType.json" />
+		<None Remove="DtroJsonDataExamples\v3.2.0\3.2.0-invalid-provision-reference.json" />
+		<None Remove="DtroJsonDataExamples\v3.2.0\3.2.0-invalid-source-actionType.json" />
+		<None Remove="DtroJsonDataExamples\v3.2.0\3.2.0-invalid-source-reference.json" />
 	</ItemGroup>
 
 	<ItemGroup>
