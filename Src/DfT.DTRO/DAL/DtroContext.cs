@@ -22,6 +22,12 @@ public partial class DtroContext : DbContext
     public virtual DbSet<Models.DataBase.DTRO> Dtros { get; set; }
 
     /// <summary>
+    /// Used to query the DTRO History table.
+    /// </summary>
+    public virtual DbSet<DTROHistory> DtroHistories { get; set; }
+
+
+    /// <summary>
     /// Used to query the SchemaTemplate table.
     /// </summary>
     public virtual DbSet<SchemaTemplate> SchemaTemplate { get; set; }
