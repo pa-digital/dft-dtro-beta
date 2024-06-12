@@ -22,4 +22,6 @@ public interface IDtroMappingService
     IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros);
 
     IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros);
+
+    void UpdateDetails(Models.DataBase.DTRO currentDtro, DtroSubmit dtroSubmit);
 }

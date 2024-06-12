@@ -82,7 +82,7 @@ public interface IDtroDal
     /// if the DTRO was successfully marked deleted
     /// or <see langword="false"/> if it was not found.
     /// </returns>
-    Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null);
+    Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime = null);
 
     /// <summary>
     /// Finds all DTROs that match the criteria specified in <paramref name="search"/>.
@@ -99,13 +99,14 @@ public interface IDtroDal
     Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search);
 
     /// <summary>
-    /// Save current DTRO to DTRO History Table
+    /// Delete DTRO.
     /// </summary>
-    /// <param name="currentDtro"></param>
+    /// <param name="id">The unique id of the DTRO.</param>
+    /// <param name="deletionTime">The time of deletion. Will default to <see cref="DateTime.UtcNow"/> if not provided.</param>
     /// <returns>
-    /// A <see cref="Task"/> that resolved to <see langword="true"/>
-    /// if the DTRO was successfully saved
-    /// or <see langword="false"/> if it was not.
+    /// A <see cref="Task"/> that resolves to <see langword="true"/>
+    /// if the DTRO was successfully marked deleted
+    /// or <see langword="false"/> if it was not found.
     /// </returns>
-    Task<bool> SaveDtroAsJsonAsyncInHistoryTable(Models.DataBase.DTRO currentDtro);
+    Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null);
 }

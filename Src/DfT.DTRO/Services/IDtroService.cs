@@ -62,7 +62,7 @@ public interface IDtroService
     /// <summary>
     /// Tries to update the DTRO.
     /// </summary>
-    /// <param name="guid">The unique id of the DTRO.</param>
+    /// <param name="id">The unique id of the DTRO.</param>
     /// <param name="dtroSubmit">The DTRO Json content.</param>
     /// <param name="correlationId">The correlation id.</param>
     /// <returns>
@@ -70,7 +70,7 @@ public interface IDtroService
     /// if the DTRO was successfully updated
     /// or <see langword="false"/> if it was not found.
     /// </returns>
-    Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId);
+    Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId);
 
     /// <summary>
     /// Marks the specified DTRO as deleted (does not delete the DTRO immediately).

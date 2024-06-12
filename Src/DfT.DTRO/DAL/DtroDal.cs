@@ -51,11 +51,13 @@ public class DtroDal : IDtroDal
     }
 
     /// <inheritdoc/>
-    public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
+    public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime = null)
     {
         deletionTime ??= DateTime.UtcNow;
 
-        if (await _dtroContext.Dtros.FindAsync(id) is not Models.DataBase.DTRO existing || existing.Deleted)
+        Models.DataBase.DTRO existing = await _dtroContext.Dtros.FindAsync(id);
+
+        if (existing is null || existing.Deleted)
         {
             return false;
         }
@@ -399,25 +401,16 @@ public class DtroDal : IDtroDal
         return await sqlQuery.ToListAsync();
     }
 
-    public async Task<bool> SaveDtroAsJsonAsyncInHistoryTable(Models.DataBase.DTRO currentDtro)
+    public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
     {
-        DTROHistory dtroHistory = new()
-        {
-            Id = Guid.NewGuid(),
-            SchemaVersion = currentDtro.SchemaVersion,
-            Created = currentDtro.Created,
-            LastUpdated = currentDtro.Created,
-            Deleted = currentDtro.Deleted,
-            DeletionTime = currentDtro.DeletionTime,
-            Data = currentDtro.Data
-        };
+        Models.DataBase.DTRO dtro = await _dtroContext.Dtros.FindAsync(id);
 
-        EntityEntry<DTROHistory> entity = await _dtroContext.DtroHistories.AddAsync(dtroHistory);
-        if (entity.Entity.Id == Guid.Empty)
+        if (dtro is null)
         {
             return false;
         }
 
+        _dtroContext.Dtros.Remove(dtro);
         await _dtroContext.SaveChangesAsync();
         return true;
     }

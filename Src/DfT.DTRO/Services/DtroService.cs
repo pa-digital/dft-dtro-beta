@@ -9,6 +9,7 @@ using DfT.DTRO.Services.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DfT.DTRO.DAL;
 
 namespace DfT.DTRO.Services;
 
@@ -18,33 +19,33 @@ namespace DfT.DTRO.Services;
 public class DtroService : IDtroService
 {
     private readonly IDtroDal _dtroDal;
+    private readonly IDtroHistoryDal _dtroHistoryDal;
     private readonly ISchemaTemplateDal _schemaTemplateDal;
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
-    private readonly IDtroHistoryService _dtroHistoryService;
 
     /// <summary>
     /// The default constructor.
     /// </summary>
     /// <param name="dtroDal">An <see cref="IDtroDal"/> instance.</param>
+    /// <param name="dtroHistoryDal">An <see cref="IDtroHistoryDal"/> instance.</param>
     /// <param name="schemaTemplateDal">An <see cref="ISchemaTemplateDal"/> instance.</param>
     /// <param name="dtroMappingService">An <see cref="IDtroMappingService"/> instance.</param>
     /// <param name="dtroGroupValidatorService">An <see cref="IDtroGroupValidatorService"/> instance.</param>
-    /// <param name="dtroHistoryService">An <see cref="IDtroHistoryService"/> instance.</param>
-    public DtroService(IDtroDal dtroDal, ISchemaTemplateDal schemaTemplateDal, IDtroMappingService dtroMappingService, IDtroGroupValidatorService dtroGroupValidatorService, IDtroHistoryService dtroHistoryService)
+    public DtroService(IDtroDal dtroDal, IDtroHistoryDal dtroHistoryDal, ISchemaTemplateDal schemaTemplateDal, IDtroMappingService dtroMappingService, IDtroGroupValidatorService dtroGroupValidatorService)
     {
         _dtroDal = dtroDal;
+        _dtroHistoryDal = dtroHistoryDal;
         _schemaTemplateDal = schemaTemplateDal;
         _dtroMappingService = dtroMappingService;
         _dtroGroupValidatorService = dtroGroupValidatorService;
-        _dtroHistoryService = dtroHistoryService;
     }
 
     /// <inheritdoc/>
     public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
     {
         deletionTime ??= DateTime.UtcNow;
-        var result = await _dtroDal.DeleteDtroAsync(id, deletionTime);
+        var result = await _dtroDal.SoftDeleteDtroAsync(id, deletionTime);
         if (!result)
         {
             throw new NotFoundException();
@@ -99,7 +100,7 @@ public class DtroService : IDtroService
     }
 
     /// <inheritdoc/>
-    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId)
+    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId)
     {
         var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit);
 
@@ -108,7 +109,7 @@ public class DtroService : IDtroService
             throw validationErrors;
         }
 
-        var dtroExists = await _dtroDal.DtroExistsAsync(guid);
+        var dtroExists = await _dtroDal.DtroExistsAsync(id);
         if (!dtroExists)
         {
             throw new NotFoundException();
@@ -121,29 +122,24 @@ public class DtroService : IDtroService
             throw new NotFoundException("Schema Template not found");
         }
 
-        //DONE: Get the current DTRO
-        Models.DataBase.DTRO currentDtro = await _dtroDal.GetDtroByIdAsync(guid);
+        Models.DataBase.DTRO currentDtro = await _dtroDal.GetDtroByIdAsync(id);
 
-        //DONE: Update the new DTRO (DTRO Submit) create date with current DTRO create date
-        _dtroHistoryService.UpdateDetails(currentDtro, dtroSubmit);
-
-        //DONE: Save current DTRO into the DtroHistory table
-        var isSaved = await _dtroDal.SaveDtroAsJsonAsyncInHistoryTable(currentDtro);
+        var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(currentDtro);
         if (!isSaved)
         {
             throw new Exception();
         }
 
-        ////TODO: Delete current DTRO from Dtro table - ERROR
-        //var isDeleted = await _dtroDal.DeleteDtroAsync(guid, DateTime.Now);
-        //if (!isDeleted)
-        //{
-        //    throw new Exception();
-        //}
+        var isDeleted = await _dtroDal.DeleteDtroAsync(currentDtro.Id, DateTime.UtcNow);
+        if (!isDeleted)
+        {
+            throw new Exception();
+        }
 
-        //DONE: Save the new DTRO (DTRO Submit) to the Dtro table
-        await _dtroDal.TryUpdateDtroAsJsonAsync(guid, dtroSubmit, correlationId);
-        return new GuidResponse { Id = guid };
+        _dtroMappingService.UpdateDetails(currentDtro, dtroSubmit);
+
+        GuidResponse response = await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
+        return new GuidResponse { Id = response.Id };
     }
 
     /// <inheritdoc/>
