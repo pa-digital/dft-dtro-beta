@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DfT.DTRO.Caching;
 using DfT.DTRO.DAL;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.Filtering;
@@ -15,6 +16,7 @@ using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using static DfT.DTRO.Extensions.ExpressionExtensions;
 using DateTime = System.DateTime;
 
@@ -395,5 +397,28 @@ public class DtroDal : IDtroDal
             .OrderBy(it => it.Id);
 
         return await sqlQuery.ToListAsync();
+    }
+
+    public async Task<bool> SaveDtroAsJsonAsyncInHistoryTable(Models.DataBase.DTRO currentDtro)
+    {
+        DTROHistory dtroHistory = new()
+        {
+            Id = Guid.NewGuid(),
+            SchemaVersion = currentDtro.SchemaVersion,
+            Created = currentDtro.Created,
+            LastUpdated = currentDtro.Created,
+            Deleted = currentDtro.Deleted,
+            DeletionTime = currentDtro.DeletionTime,
+            Data = currentDtro.Data
+        };
+
+        EntityEntry<DTROHistory> entity = await _dtroContext.DtroHistories.AddAsync(dtroHistory);
+        if (entity.Entity.Id == Guid.Empty)
+        {
+            return false;
+        }
+
+        await _dtroContext.SaveChangesAsync();
+        return true;
     }
 }

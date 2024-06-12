@@ -110,6 +110,7 @@ public class Startup
         services.AddScoped<ISemanticValidationService, SemanticValidationService>();
         services.AddScoped<IConditionValidationService, ConditionValidationService>();
         services.AddSingleton<ISpatialProjectionService, Proj4SpatialProjectionService>();
+        services.AddScoped<IDtroHistoryService, DtroHistoryService>();
         services.AddScoped<IDtroGroupValidatorService, DtroGroupValidatorService>();
         services.AddSingleton<IDtroMappingService, DtroMappingService>();
         services.AddSingleton<ISchemaTemplateMappingService, SchemaTemplateMappingService>();

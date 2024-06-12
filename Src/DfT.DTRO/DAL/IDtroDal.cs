@@ -97,4 +97,15 @@ public interface IDtroDal
     /// <param name="search">The search criteria.</param>
     /// <returns>A <see cref="Task"/> that resolves to a collection of <see cref="Models.DataBase.DTRO"/> that match the criteria.</returns>
     Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search);
+
+    /// <summary>
+    /// Save current DTRO to DTRO History Table
+    /// </summary>
+    /// <param name="currentDtro"></param>
+    /// <returns>
+    /// A <see cref="Task"/> that resolved to <see langword="true"/>
+    /// if the DTRO was successfully saved
+    /// or <see langword="false"/> if it was not.
+    /// </returns>
+    Task<bool> SaveDtroAsJsonAsyncInHistoryTable(Models.DataBase.DTRO currentDtro);
 }
