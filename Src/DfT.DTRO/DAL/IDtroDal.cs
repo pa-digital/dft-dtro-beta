@@ -82,7 +82,7 @@ public interface IDtroDal
     /// if the DTRO was successfully marked deleted
     /// or <see langword="false"/> if it was not found.
     /// </returns>
-    Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null);
+    Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime = null);
 
     /// <summary>
     /// Finds all DTROs that match the criteria specified in <paramref name="search"/>.
@@ -97,4 +97,16 @@ public interface IDtroDal
     /// <param name="search">The search criteria.</param>
     /// <returns>A <see cref="Task"/> that resolves to a collection of <see cref="Models.DataBase.DTRO"/> that match the criteria.</returns>
     Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search);
+
+    /// <summary>
+    /// Delete DTRO.
+    /// </summary>
+    /// <param name="id">The unique id of the DTRO.</param>
+    /// <param name="deletionTime">The time of deletion. Will default to <see cref="DateTime.UtcNow"/> if not provided.</param>
+    /// <returns>
+    /// A <see cref="Task"/> that resolves to <see langword="true"/>
+    /// if the DTRO was successfully marked deleted
+    /// or <see langword="false"/> if it was not found.
+    /// </returns>
+    Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null);
 }

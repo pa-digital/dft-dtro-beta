@@ -205,7 +205,7 @@ public class SqlStorageServiceTests : IDisposable
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
-        var result = await sut.DeleteDtroAsync(Guid.NewGuid());
+        var result = await sut.SoftDeleteDtroAsync(Guid.NewGuid());
 
         Assert.False(result);
     }
@@ -215,7 +215,7 @@ public class SqlStorageServiceTests : IDisposable
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
-        var result = await sut.DeleteDtroAsync(_deletedDtroKey);
+        var result = await sut.SoftDeleteDtroAsync(_deletedDtroKey);
 
         Assert.False(result);
     }
@@ -225,7 +225,7 @@ public class SqlStorageServiceTests : IDisposable
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
-        var result = await sut.DeleteDtroAsync(_existingDtroKey);
+        var result = await sut.SoftDeleteDtroAsync(_existingDtroKey);
 
         Assert.True(result);
     }
