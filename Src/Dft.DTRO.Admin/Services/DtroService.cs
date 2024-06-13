@@ -15,7 +15,7 @@ public class DtroService
 
     public async Task<PaginatedResponse<DtroSearchResult>> SearchDtros()
     {
-        var search = new DtroSearch() { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { new() { VehicleType = "taxi" } } };
+        var search = new DtroSearch() { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { new() } };
           
         var response = await _client.PostAsJsonAsync("/v1/search", search);
         response.EnsureSuccessStatusCode();
@@ -29,7 +29,7 @@ public class DtroService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        var response = await _client.PostAsync($"/v1/createDtroFromFile", content);
+        var response = await _client.PostAsync($"/v1/dtros/createFromFile", content);
         response.EnsureSuccessStatusCode();
     }
 
@@ -39,7 +39,7 @@ public class DtroService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        var response = await _client.PostAsync($"/v1/updateDtroFromFile/{id}", content);
+        var response = await _client.PostAsync($"/v1/dtros/updateFromFile", content);
         response.EnsureSuccessStatusCode();
     }
 
