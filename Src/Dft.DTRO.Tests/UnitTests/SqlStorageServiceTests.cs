@@ -1,9 +1,12 @@
-﻿using DfT.DTRO.Caching;
+﻿using System.Dynamic;
+using DfT.DTRO.Caching;
 using DfT.DTRO.DAL;
 using DfT.DTRO.Extensions.DependencyInjection;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.Filtering;
+using DfT.DTRO.Models.SchemaTemplate;
 using DfT.DTRO.Services;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
@@ -16,7 +19,7 @@ namespace Dft.DTRO.Tests;
 
 public class SqlStorageServiceTests : IDisposable
 {
-    private readonly DfT.DTRO.DAL.DtroContext _context;
+    private readonly DtroContext _context;
     private readonly ISpatialProjectionService _spatialProjectionService;
 
     private readonly Guid _deletedDtroKey = Guid.NewGuid();
@@ -29,7 +32,7 @@ public class SqlStorageServiceTests : IDisposable
     private readonly Guid _dtroWithRegulationTypesKey = Guid.NewGuid();
     private readonly Guid _dtroWithOrderReportingPointKey = Guid.NewGuid();
 
-    private readonly DfT.DTRO.Models.DataBase.DTRO _existingDtro;
+    private readonly DfT.DTRO.Models.DataBase.DTRO _existingDtro;   
     private readonly DfT.DTRO.Models.DataBase.DTRO _deletedDtro;
     private readonly DfT.DTRO.Models.DataBase.DTRO _dtroWithTa1234;
     private readonly DfT.DTRO.Models.DataBase.DTRO _dtroWithCreationDate;
@@ -201,7 +204,7 @@ public class SqlStorageServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task DeleteDtro_ReturnsFalse_ForNonexistentDtros()
+    public async Task SoftDeleteDtro_ReturnsFalse_ForNonexistentDtros()
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
@@ -211,7 +214,17 @@ public class SqlStorageServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task DeleteDtro_ReturnsFalse_ForDeletedDtros()
+    public async Task DeleteDtro_ReturnsFalse_ForNonExistingDtro()
+    {
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+
+        var actual = await sut.DeleteDtroAsync(Guid.NewGuid());
+
+        Assert.False(actual);
+    }
+
+    [Fact]
+    public async Task SoftDeleteDtro_ReturnsFalse_ForDeletedDtros()
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
@@ -219,15 +232,26 @@ public class SqlStorageServiceTests : IDisposable
 
         Assert.False(result);
     }
+    
 
     [Fact]
-    public async Task DeleteDtro_ReturnsTrue_OnSuccessfulDelete()
+    public async Task SoftDeleteDtro_ReturnsTrue_OnSuccessfulDelete()
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
         var result = await sut.SoftDeleteDtroAsync(_existingDtroKey);
 
         Assert.True(result);
+    }
+
+    [Fact]
+    public async Task DeleteDtro_ReturnsTrue_OnSuccessfulDelete()
+    {
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+
+        var actual = await sut.DeleteDtroAsync(_existingDtroKey);
+
+        Assert.True(actual);
     }
 
     [Fact]

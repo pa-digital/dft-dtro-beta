@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DfT.DTRO.DAL;
+using DfT.DTRO.Models.DataBase;
 
 namespace DfT.DTRO.Services;
 
@@ -124,7 +125,10 @@ public class DtroService : IDtroService
 
         Models.DataBase.DTRO currentDtro = await _dtroDal.GetDtroByIdAsync(id);
 
-        var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(currentDtro);
+
+        DTROHistory historyDtro = _dtroMappingService.AsHistoryDtro(currentDtro);
+
+        var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
         if (!isSaved)
         {
             throw new Exception();

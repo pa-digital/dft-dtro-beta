@@ -24,20 +24,9 @@ public class DtroHistoryDal : IDtroHistoryDal
     /// if the DTRO was successfully saved
     /// or <see langword="false"/> if it was not.
     /// </returns>
-    public async Task<bool> SaveDtroInHistoryTable(Models.DataBase.DTRO currentDtro)
+    public async Task<bool> SaveDtroInHistoryTable(DTROHistory dtroHistory)
     {
-        DTROHistory dtro = new()
-        {
-            Id = Guid.NewGuid(),
-            Created = currentDtro.Created,
-            Data = currentDtro.Data,
-            Deleted = currentDtro.Deleted,
-            DeletionTime = currentDtro.DeletionTime,
-            LastUpdated = currentDtro.LastUpdated,
-            SchemaVersion = currentDtro.SchemaVersion
-        };
-
-        EntityEntry<DTROHistory> entry = await _dtroContext.DtroHistories.AddAsync(dtro);
+        EntityEntry<DTROHistory> entry = await _dtroContext.DtroHistories.AddAsync(dtroHistory);
         if (entry.Entity.Id == Guid.Empty)
         {
             return false;
