@@ -33,8 +33,8 @@ public static class StorageServiceDIExtensions
 
         var host = postgresConfig.GetValue("Host", "localhost");
         var port = postgresConfig.GetValue("Port", 5432);
-        var user = "root";//postgresConfig.GetValue("User", "root");
-        var password = "root";// postgresConfig.GetValue("Password", "root");
+        var user = postgresConfig.GetValue("User", "postgres");
+        var password = postgresConfig.GetValue("Password", "admin");
         var database = postgresConfig.GetValue("DbName", "data");
         var useSsl = postgresConfig.GetValue("UseSsl", false);
         int? maxPoolSize = postgresConfig.GetValue<int?>("MaxPoolSize", null);

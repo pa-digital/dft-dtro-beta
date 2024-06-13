@@ -33,9 +33,9 @@ public class RecordManagementService : IRecordManagementService
         }
 
         List<string> provisionReferences = dtroSubmit.Data.GetValueOrDefault<IList<object>>("source.provision")
-            .OfType<ExpandoObject>()
-            .Select(it => it.GetValue<string>("reference"))
-            .ToList();
+        ?.OfType<ExpandoObject>()
+        .Select(it => it.GetValue<string>("reference"))
+        .ToList() ?? new List<string>();
 
         if (!provisionReferences.TrueForAll(reference => reference.IsGuid()))
         {
