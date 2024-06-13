@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using DfT.DTRO.Extensions;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.DtroJson;
@@ -107,6 +108,20 @@ public class DtroMappingService : IDtroMappingService
         return results;
     }
 
+    /// <inheritdoc/>
+    public DTROHistory AsHistoryDtro(Models.DataBase.DTRO currentDtro) =>
+        new()
+        {
+            Id = Guid.NewGuid(),
+            Created = currentDtro.Created,
+            Data = currentDtro.Data,
+            Deleted = currentDtro.Deleted,
+            DeletionTime = currentDtro.DeletionTime,
+            LastUpdated = currentDtro.LastUpdated,
+            SchemaVersion = currentDtro.SchemaVersion
+        };
+
+    /// <inheritdoc/>
     public void UpdateDetails(Models.DataBase.DTRO currentDtro, DtroSubmit dtroSubmit)
     {
         Models.DataBase.DTRO dtro = new()
