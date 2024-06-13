@@ -39,7 +39,7 @@ public class DtroService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        var response = await _client.PostAsync($"/v1/dtros/updateFromFile", content);
+        var response = await _client.PutAsync($"/v1/dtros/updateFromFile", content);
         response.EnsureSuccessStatusCode();
     }
 

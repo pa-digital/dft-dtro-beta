@@ -39,7 +39,7 @@ public class SchemaService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        var response = await _client.PostAsync($"/v1/schemas/updateFromFile/{version}", content);
+        var response = await _client.PutAsync($"/v1/schemas/updateFromFile/{version}", content);
         response.EnsureSuccessStatusCode();
     }
 
