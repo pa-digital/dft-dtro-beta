@@ -15,7 +15,7 @@ public class SchemaService
 
     public async Task<List<SchemaTemplateOverview>> GetSchemaVersionsAsync()
     {
-        var response = await _client.GetAsync("/v1/schemasversions");
+        var response = await _client.GetAsync("/v1/schemas/versions");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<List<SchemaTemplateOverview>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -23,13 +23,13 @@ public class SchemaService
 
     public async Task ActivateSchemaAsync(string version)
     {
-        var response = await _client.PatchAsync($"/v1/activate/{version}", null);
+        var response = await _client.PatchAsync($"/v1/schemas/activate/{version}", null);
         response.EnsureSuccessStatusCode();
     }
 
     public async Task DeactivateSchemaAsync(string version)
     {
-        var response = await _client.PatchAsync($"/v1/deactivate/{version}", null);
+        var response = await _client.PatchAsync($"/v1/schemas/deactivate/{version}", null);
         response.EnsureSuccessStatusCode();
     }
 
@@ -39,7 +39,7 @@ public class SchemaService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        var response = await _client.PostAsync($"/v1/updateSchemaFromFile/{version}", content);
+        var response = await _client.PutAsync($"/v1/schemas/updateFromFile/{version}", content);
         response.EnsureSuccessStatusCode();
     }
 
@@ -49,7 +49,7 @@ public class SchemaService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        var response = await _client.PostAsync($"/v1/createSchemaFromFile/{version}", content);
+        var response = await _client.PostAsync($"/v1/schemas/createFromFile/{version}", content);
         response.EnsureSuccessStatusCode();
     }
 }

@@ -1354,7 +1354,7 @@
 				"reference": {
 					"description": "D-TRO provision reference",
 					"type": "string",
-					"format": "uuid"
+					"format": "string"
 				},
 				"actionType": {
 					"description": "D-TRO provision action type",
@@ -1727,7 +1727,7 @@
 				"reference": {
 					"description": "D-TRO source reference",
 					"type": "string",
-					"format": "uuid"
+					"format": "string"
 				},
 				"actionType": {
 					"description": "D-TRO source action type",

@@ -19,7 +19,7 @@ public class RuleService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        var response = await _client.PostAsync($"/v1/updateRuleFromFile/{version}", content);
+        var response = await _client.PutAsync($"/v1/rules/updateFromFile/{version}", content);
         response.EnsureSuccessStatusCode();
     }
 
@@ -29,7 +29,7 @@ public class RuleService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        var response = await _client.PostAsync($"/v1/createRuleFromFile/{version}", content);
+        var response = await _client.PostAsync($"/v1/rules/createFromFile/{version}", content);
         response.EnsureSuccessStatusCode();
     }
 }
