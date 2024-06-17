@@ -20,10 +20,10 @@ public class DtroEvent
     /// <summary>
     /// The unique identifier of the traffic authority that created the TRO.
     /// </summary>
-    [DataMember(Name = "taCreator")]
+    [DataMember(Name = "traCreator")]
     public int TrafficAuthorityCreatorId { get; set; }
 
-    [DataMember(Name = "taOwner")]
+    [DataMember(Name = "currentTraOwner")]
     public int TrafficAuthorityOwnerId { get; set; }
 
     /// <summary>

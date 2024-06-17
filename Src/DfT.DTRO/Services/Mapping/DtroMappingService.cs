@@ -219,11 +219,11 @@ public class DtroMappingService : IDtroMappingService
         return new DtroSearchResult
         {
             TroName = dtro.Data.GetValueOrDefault<string>("source.troName"),
-            TrafficAuthorityCreatorId = dtro.Data.GetExpando("source").HasField("taCreator")
-                ? dtro.Data.GetValueOrDefault<int>("source.taCreator")
+            TrafficAuthorityCreatorId = dtro.Data.GetExpando("source").HasField("traCreator")
+                ? dtro.Data.GetValueOrDefault<int>("source.traCreator")
                 : dtro.Data.GetValueOrDefault<int>("source.ha"),
-            TrafficAuthorityOwnerId = dtro.Data.GetExpando("source").HasField("taOwner")
-                ? dtro.Data.GetValueOrDefault<int>("source.taOwner")
+            TrafficAuthorityOwnerId = dtro.Data.GetExpando("source").HasField("currentTraOwner")
+                ? dtro.Data.GetValueOrDefault<int>("source.currentTraOwner")
                 : dtro.Data.GetValueOrDefault<int>("source.ha"),
             PublicationTime = dtro.Created.Value,
             RegulationType = dtro.RegulationTypes,

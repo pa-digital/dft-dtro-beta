@@ -190,14 +190,14 @@ public class DtroDal : IDtroDal
                 expressionsToConjunct.Add(it => !it.Deleted);
             }
 
-            if (query.TaCreator is int taCreator)
+            if (query.TraCreator is int traCreator)
             {
-                expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == taCreator);
+                expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == traCreator);
             }
 
-            if (query.TaOwner is int taOwner)
+            if (query.CurrentTraOwner is int currentTraOwner)
             {
-                expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == taOwner);
+                expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == currentTraOwner);
             }
 
             if (query.PublicationTime is DateTime publicationTime)
@@ -311,14 +311,14 @@ public class DtroDal : IDtroDal
             expressionsToConjunct.Add(it => it.DeletionTime >= deletionTime);
         }
 
-        if (search.TaCreator is int taCreator)
+        if (search.TraCreator is int traCreator)
         {
-            expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == taCreator);
+            expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == traCreator);
         }
 
-        if (search.TaOwner is int taOwner)
+        if (search.CurrentTraOwner is int currentTraOwner)
         {
-            expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == taOwner);
+            expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == currentTraOwner);
         }
 
         if (search.Since is DateTime publicationTime)

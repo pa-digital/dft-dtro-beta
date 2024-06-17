@@ -25,13 +25,13 @@ public class DtroSearchResult
     /// <summary>
     /// The identifier of the Traffic Authority.
     /// </summary>
-    [DataMember(Name = "taCreator")]
+    [DataMember(Name = "traCreator")]
     public long TrafficAuthorityCreatorId { get; set; }
 
     /// <summary>
     /// The identifier of the Traffic Authority.
     /// </summary>
-    [DataMember(Name = "taOwner")]
+    [DataMember(Name = "currentTraOwner")]
     public long TrafficAuthorityOwnerId { get; set; }
 
     /// <summary>

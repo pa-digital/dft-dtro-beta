@@ -618,23 +618,23 @@
     }
   },
   {
-    "name": "TaCreatorInSwaCodes",
-    "message": "The 'taCreator' value must be one of the recognised SWA codes.",
-    "path": "source.taCreator",
+    "name": "TraCreatorInSwaCodes",
+    "message": "The 'traCreator' value must be one of the recognised SWA codes.",
+    "path": "source.traCreator",
     "rule": {
       "in": [
-        { "var": "source.taCreator" },
+        { "var": "source.traCreator" },
         { "service_data": "swa_codes" }
       ]
     }
   },
   {
-    "name": "TaOwnerInSwaCodes",
-    "message": "The 'taOwner' value must be one of the recognised SWA codes.",
-    "path": "source.taOwner",
+    "name": "CurrentTraOwnerInSwaCodes",
+    "message": "The 'currentTraOwner' value must be one of the recognised SWA codes.",
+    "path": "source.currentTraOwner",
     "rule": {
       "in": [
-        { "var": "source.taOwner" },
+        { "var": "source.currentTraOwner" },
         { "service_data": "swa_codes" }
       ]
     }

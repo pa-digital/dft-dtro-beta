@@ -1447,13 +1447,13 @@
   },
   {
     "id": 31,
-    "name": "TaInSwaCodes",
-    "message": "The 'TA' value must be one of the recognised SWA codes.",
-    "path": "source.ta",
+    "name": "TraCreatorInSwaCodes",
+    "message": "The 'TraCreatorInSwaCodes' value must be one of the recognised SWA codes.",
+    "path": "source.traCreator",
     "rule": {
       "in": [
         {
-          "var": "source.ta"
+          "var": "source.traCreator"
         },
         {
           "service_data": "swa_codes"
@@ -1462,14 +1462,14 @@
     }
   },
   {
-    "id": 31,
-    "name": "TaInSwaCodes",
-    "message": "The 'TA' value must be one of the recognised SWA codes.",
-    "path": "source.ta",
+    "id": 301,
+    "name": "CurrentTraOwnerInSwaCodes",
+    "message": "The 'CurrentTraOwnerInSwaCodes' value must be one of the recognised SWA codes.",
+    "path": "source.currentTraOwner",
     "rule": {
       "in": [
         {
-          "var": "source.ta"
+          "var": "source.currentTraOwner"
         },
         {
           "service_data": "swa_codes"

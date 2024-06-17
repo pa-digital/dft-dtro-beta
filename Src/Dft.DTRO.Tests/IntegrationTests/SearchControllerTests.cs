@@ -37,7 +37,7 @@ public class SearchControllerTests
         HttpClient client = _factory.CreateClient();
 
         DtroSearch search =
-            new() { Queries = new[] { new SearchQuery { TaCreator = 1585 } }, Page = 1, PageSize = 10 };
+            new() { Queries = new[] { new SearchQuery { TraCreator = 1585 } }, Page = 1, PageSize = 10 };
         string payload = JsonConvert.SerializeObject(search);
 
         HttpResponseMessage response =
@@ -65,7 +65,7 @@ public class SearchControllerTests
         HttpClient client = _factory.CreateClient();
 
         DtroSearch search =
-            new() { Queries = new[] { new SearchQuery { TaCreator = 1585 } }, Page = 1, PageSize = 10 };
+            new() { Queries = new[] { new SearchQuery { TraCreator = 1585 } }, Page = 1, PageSize = 10 };
         string payload = JsonConvert.SerializeObject(search);
 
         HttpResponseMessage response =

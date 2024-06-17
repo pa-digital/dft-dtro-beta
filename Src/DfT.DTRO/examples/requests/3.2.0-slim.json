@@ -214,8 +214,8 @@
             "provisionIndex": 0 /*Comment: example 123X435 - could be anything the data supplier wants as a key*/
           }
         ],
-        "taCreator": 1585, /*Comment: SWA code for Essex County Council https://www.geoplace.co.uk/local-authority-resources/street-works-managers/view-swa-codes*/
-        "taOwner": 1585,
+        "traCreator": 1585, /*Comment: SWA code for Essex County Council https://www.geoplace.co.uk/local-authority-resources/street-works-managers/view-swa-codes*/
+        "currentTraOwner": 1585,
         "section": "All sections" /*Comment: example*/,
         "troName": "The Essex County Council (Braintree District) (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019" /*Comment: example*/
       }
