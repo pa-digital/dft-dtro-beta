@@ -1393,6 +1393,13 @@
 					"description": "unique identifier (per authority) for referenced provision",
 					"type": "number",
 					"minimum": 0
+				},
+				"reference": {
+					"description": "unique identifier (per authority) for future referencing",
+					"type": "string"
+				},
+				"actionType": {
+					"$def": "#/$defs/actionType"
 				}
 			},
 			"required": [
@@ -1401,7 +1408,9 @@
 				"addition",
 				"orderReportingPoint",
 				"provisionDescription",
-				"provisionIndex"
+				"provisionIndex",
+				"reference",
+				"actionType"
 			],
 			"type": "object"
 		},
@@ -1747,6 +1756,13 @@
 				"troName": {
 					"description": "Published title of the Traffic Regulation Order",
 					"type": "string"
+				},
+				"reference": {
+					"description": "unique identifier (per authority) for future referencing",
+					"type": "string"
+				},
+				"actionType": {
+					"$def": "#/$defs/actionType"
 				}
 			},
 			"required": [
@@ -1754,7 +1770,9 @@
 				"taCreator",
 				"taOwner",
 				"section",
-				"troName"
+				"troName",
+				"reference",
+				"actionType"
 			],
 			"type": "object"
 		},
@@ -3063,11 +3081,25 @@
 				"unladen"
 			],
 			"type": "string"
+		},
+		"actionType": {
+			"description": "List of the action types",
+			"enum": [
+				"new",
+				"amendment",
+				"fullAmendment",
+				"partialAmendment",
+				"fullRevoke",
+				"partialRevoke",
+				"noChange",
+				"errorFix"
+			],
+			"type": "string"
 		}
 	},
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"additionalProperties": true,
-	"description": "DTRO v3.1.2 data model JSON schema",
+	"description": "DTRO v3.2.0 data model JSON schema",
 	"oneOf": [
 		{
 			"type": "object",

@@ -12,8 +12,6 @@ public static class ObjectExtensions
         return JsonConvert.SerializeObject(obj, Formatting.Indented);
     }
 
-    public static bool IsGuid(this string source) => Guid.TryParse(source, out Guid _);
-
     public static bool IsEnum(this string value, string type)
     {
         List<string> items = type switch

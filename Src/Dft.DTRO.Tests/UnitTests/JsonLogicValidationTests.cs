@@ -1,12 +1,11 @@
-﻿using DfT.DTRO.Extensions.DependencyInjection;
+﻿using System.Text.Json;
+using DfT.DTRO.Extensions.DependencyInjection;
 using DfT.DTRO.JsonLogic;
+using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.SchemaTemplate;
 using DfT.DTRO.Models.Validation;
 using DfT.DTRO.Services;
 using DfT.DTRO.Services.Validation;
-using Moq;
-using System.Collections.Generic;
-using System.Text.Json;
 
 namespace Dft.DTRO.Tests;
 
@@ -22,28 +21,28 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsOverallPeriodStartTimeBeforeEndTime()
     {
-        var dtro = PrepareDtro(@"
-{
-    ""source"": {
-        ""provision"": [
-            {   ""regulations"": [
-                    {
-                        ""overallPeriod"": {
-                            ""start"": ""1983-01-05T22:50:50.0Z"",
-                            ""end"": ""1985-01-05T22:50:50.0Z""
-                        }
+        DtroSubmit dtro = PrepareDtro(@"
+        {
+            ""source"": {
+                ""provision"": [
+                    {   ""regulations"": [
+                            {
+                                ""overallPeriod"": {
+                                    ""start"": ""1983-01-05T22:50:50.0Z"",
+                                    ""end"": ""1985-01-05T22:50:50.0Z""
+                                }
+                            }
+                        ]
                     }
                 ]
             }
-        ]
-    }
-}");
+        }");
 
         await UseRulesByName("OverallPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -51,27 +50,27 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsOverallPeriodEndTimeToBeMissing()
     {
-        var dtro = PrepareDtro(@"
-{
-    ""source"": {
-        ""provision"": [
-            {   ""regulations"": [
-                    {
-                        ""overallPeriod"": {
-                            ""start"": ""1983-01-05T22:50:50.0Z""
-                        }
+        DtroSubmit dtro = PrepareDtro(@"
+        {
+            ""source"": {
+                ""provision"": [
+                    {   ""regulations"": [
+                            {
+                                ""overallPeriod"": {
+                                    ""start"": ""1983-01-05T22:50:50.0Z""
+                                }
+                            }
+                        ]
                     }
                 ]
             }
-        ]
-    }
-}");
+        }");
 
         await UseRulesByName("OverallPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -79,28 +78,28 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowsOverallPeriodEndTimeBeforeStartTime()
     {
-        var dtro = PrepareDtro(@"
-{
-    ""source"": {
-        ""provision"": [
-            {   ""regulations"": [
-                    {
-                        ""overallPeriod"": {
-                            ""start"": ""1985-01-05T22:50:50.0Z"",
-                            ""end"": ""1983-01-05T22:50:50.0Z""
-                        }
+        DtroSubmit dtro = PrepareDtro(@"
+        {
+            ""source"": {
+                ""provision"": [
+                    {   ""regulations"": [
+                            {
+                                ""overallPeriod"": {
+                                    ""start"": ""1985-01-05T22:50:50.0Z"",
+                                    ""end"": ""1983-01-05T22:50:50.0Z""
+                                }
+                            }
+                        ]
                     }
                 ]
             }
-        ]
-    }
-}");
+        }");
 
         await UseRulesByName("OverallPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -108,7 +107,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsValidPeriodStartTimeBeforeEndTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -129,9 +128,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ValidPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -139,7 +138,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowsValidPeriodEndTimeBeforeStartTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -160,9 +159,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ValidPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -170,7 +169,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsExceptionPeriodStartTimeBeforeEndTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -191,9 +190,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ExceptionPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -201,7 +200,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowsExceptionPeriodEndTimeBeforeStartTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -222,9 +221,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ExceptionPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -232,7 +231,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsExceptionPeriodStartTimeAfterOverallPeriodStartTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -253,9 +252,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ExceptionPeriodStartNotLessThanOverallPeriodStart");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -263,7 +262,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowsExceptionPeriodStartTimeBeforeOverallPeriodStartTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -284,9 +283,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ExceptionPeriodStartNotLessThanOverallPeriodStart");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -294,7 +293,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsExceptionPeriodEndTimeBeforeOverallPeriodEndTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -315,9 +314,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ExceptionPeriodEndNotMoreThanOverallPeriodEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -325,7 +324,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowsExceptionPeriodEndTimeAfterOverallPeriodEndTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -346,19 +345,18 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ExceptionPeriodEndNotMoreThanOverallPeriodEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
 
 
-
     [Fact]
     public async Task AllowsValidPeriodStartTimeAfterOverallPeriodStartTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -379,9 +377,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ValidPeriodStartNotLessThanOverallPeriodStart");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -389,7 +387,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowsValidPeriodStartTimeBeforeOverallPeriodStartTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -410,9 +408,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ValidPeriodStartNotLessThanOverallPeriodStart");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -420,7 +418,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsValidPeriodEndTimeBeforeOverallPeriodEndTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -441,9 +439,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ValidPeriodEndNotMoreThanOverallPeriodEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -451,7 +449,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowsValidPeriodEndTimeAfterOverallPeriodEndTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -472,9 +470,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ValidPeriodEndNotMoreThanOverallPeriodEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -482,7 +480,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsRecurringTimePeriodOfDayStartTimeBeforeEndTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -515,9 +513,9 @@ public class JsonLogicValidationTests
             "ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
             "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -525,7 +523,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowsRecurringTimePeriodOfDayEndTimeBeforeStartTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -558,9 +556,9 @@ public class JsonLogicValidationTests
             "ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
             "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
         Assert.Equal(2, result.Count);
@@ -569,7 +567,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsRecurringTimePeriodOfDayToBeEmpty()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -594,9 +592,9 @@ public class JsonLogicValidationTests
             "ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
             "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -604,7 +602,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsRecurringTimePeriodOfDayToBeMissing()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -627,16 +625,17 @@ public class JsonLogicValidationTests
             "ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
             "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
+
     [Fact]
     public async Task AllowsValidPeriodToBeEmpty()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -656,9 +655,9 @@ public class JsonLogicValidationTests
             "ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
             "ValidPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -666,7 +665,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsExceptionPeriodToBeEmpty()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -686,9 +685,9 @@ public class JsonLogicValidationTests
             "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd",
             "ExceptionPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -696,7 +695,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsValidPeriodToBeMissing()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -715,9 +714,9 @@ public class JsonLogicValidationTests
             "ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
             "ValidPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -725,7 +724,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsExceptionPeriodToBeMissing()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -744,9 +743,9 @@ public class JsonLogicValidationTests
             "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd",
             "ExceptionPeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -754,7 +753,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsTaInSwaRules()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""taCreator"": 10,  ""taOwner"": 10
@@ -763,9 +762,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("TaInSwaCodes");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -773,7 +772,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowsTaNotInSwaRules()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""taCreator"": 9,  ""taOwner"": 9
@@ -782,9 +781,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("TaInSwaCodes");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -792,9 +791,9 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowPublicationTimeMoreThanOneMonthOld()
     {
-        var time = DateTime.UtcNow.AddMonths(-2);
+        DateTime time = DateTime.UtcNow.AddMonths(-2);
 
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""header"": {
                 ""publicationTime"": " + JsonSerializer.Serialize(time) + @"
@@ -803,9 +802,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("PublicationTimeAge");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -813,9 +812,9 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowPublicationTimeWithinOneMonthOld()
     {
-        var time = DateTime.UtcNow.AddDays(-15);
+        DateTime time = DateTime.UtcNow.AddDays(-15);
 
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""header"": {
                 ""publicationTime"": " + JsonSerializer.Serialize(time) + @"
@@ -824,9 +823,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("PublicationTimeAge");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -834,9 +833,9 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowPublicationTimeFromTheFuture()
     {
-        var time = DateTime.UtcNow.AddMonths(1);
+        DateTime time = DateTime.UtcNow.AddMonths(1);
 
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""header"": {
                 ""publicationTime"": " + JsonSerializer.Serialize(time) + @"
@@ -845,9 +844,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("PublicationTimeAge");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -858,7 +857,7 @@ public class JsonLogicValidationTests
     {
         DateTime time = DateTime.UtcNow.AddMonths(-2);
 
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -892,7 +891,7 @@ public class JsonLogicValidationTests
     {
         DateTime time = DateTime.UtcNow.AddMonths(2);
 
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -923,15 +922,15 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowHeaderMissing()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
         }");
 
         await UseRulesByName("PublicationTimeAge");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -939,7 +938,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowValidUsagePeriodStartLessThanEnd()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -966,9 +965,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ValidUsagePeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -976,7 +975,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowValidUsagePeriodEndMissing()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1002,9 +1001,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ValidUsagePeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -1012,7 +1011,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowValidUsagePeriodEndLessThanStart()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1039,9 +1038,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ValidUsagePeriodStartLessThanEnd");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -1049,7 +1048,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowMinTimeLessThanMaxTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1076,9 +1075,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("MinTimeLessThanMaxTime");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -1086,7 +1085,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowMaxTimeLessThanMinTime()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1113,9 +1112,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("MinTimeLessThanMaxTime");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -1123,7 +1122,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowMaxTimeAndOrMinTimeMissing()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1154,9 +1153,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("MinTimeLessThanMaxTime");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -1164,7 +1163,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisllowValueCollectionMaxLessThanMin()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1191,9 +1190,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("MinValueCollectionLessThanMax");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -1201,7 +1200,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowValueCollectionMinLessThanMax()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1228,9 +1227,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("MinValueCollectionLessThanMax");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -1238,7 +1237,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowValueCollectionMinAndOrMaxMissing()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1269,9 +1268,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("MinValueCollectionLessThanMax");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -1280,7 +1279,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "43")]
     public async Task DisallowValueMaxLessThanMin()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1323,7 +1322,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "43")]
     public async Task AllowValueMinLessThanMax()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1365,7 +1364,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowSequentialProvisionIndex()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1384,9 +1383,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ProvisionIndexSequential");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -1394,7 +1393,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowsNonSequentialProvisionIndex()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1413,9 +1412,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("ProvisionIndexSequential");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -1423,7 +1422,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowSequentialRateLineCollection()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1449,9 +1448,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("RateLineCollectionSequential");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -1459,7 +1458,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowNonSequentialRateLineCollection()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1485,9 +1484,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("RateLineCollectionSequential");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -1495,7 +1494,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowSequentialRateLine()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1523,9 +1522,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("RateLineSequential");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result);
     }
@@ -1533,7 +1532,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisallowNonSequentialRateLine()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
                 ""provision"": [
@@ -1561,9 +1560,9 @@ public class JsonLogicValidationTests
 
         await UseRulesByName("RateLineSequential");
 
-        var sut = new JsonLogicValidationService(ruleDal.Object);
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 
-        var result = await sut.ValidateCreationRequest(dtro);
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result);
     }
@@ -1572,7 +1571,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "DFT-205/3")]
     public async Task AllowHeightCharacteristicValidForRegulationTypeDimensionMaximumHeightWithTro()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1612,7 +1611,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "DFT-205/3")]
     public async Task DisallowHeightCharacteristicInvalidForRegulationTypeDimensionMaximumHeightWithTro()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1652,7 +1651,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "DFT-205/4")]
     public async Task AllowHeightCharacteristicValidForRegulationTypeDimensionMaximumHeightStructural()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1692,7 +1691,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "DFT-205/4")]
     public async Task DisallowHeightCharacteristicInvalidForRegulationTypeDimensionMaximumHeightStructural()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1732,7 +1731,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "DFT-205/5")]
     public async Task AllowLengthCharacteristicValidForRegulationTypeDimensionMaximumLength()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1772,7 +1771,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "DFT-205/5")]
     public async Task DisallowLengthCharacteristicInvalidForRegulationTypeDimensionMaximumLength()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1812,7 +1811,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "DFT-205/6")]
     public async Task AllowWidthCharacteristicValidForRegulationTypeDimensionMaximumWidth()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1852,7 +1851,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "DFT-205/6")]
     public async Task DisallowWidthCharacteristicInvalidForRegulationTypeDimensionMaximumWidth()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1894,7 +1893,7 @@ public class JsonLogicValidationTests
     [InlineData("dimensionMaximumWeightStructural")]
     public async Task AllowGrossWeightCharacteristicValidForRegulationTypes(string regulationType)
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1936,7 +1935,7 @@ public class JsonLogicValidationTests
     [InlineData("dimensionMaximumWeightStructural")]
     public async Task DisallowGrossWeightCharacteristicInvalidForRegulationTypes(string regulationType)
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -1978,7 +1977,7 @@ public class JsonLogicValidationTests
     [InlineData("dimensionMaximumWeightStructural")]
     public async Task AllowHeaviestAxleWeightCharacteristicValidForRegulationTypes(string regulationType)
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -2020,7 +2019,7 @@ public class JsonLogicValidationTests
     [InlineData("dimensionMaximumWeightStructural")]
     public async Task DisallowHeaviestAxleWeightCharacteristicInvalidForRegulationTypes(string regulationType)
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -2060,7 +2059,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "33")]
     public async Task AllowYearOfFirstRegistrationLessOrEqualToCurrentYearValueInConditions()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -2107,7 +2106,7 @@ public class JsonLogicValidationTests
     {
         int year = DateTime.UtcNow.AddYears(1).Year;
 
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -2157,7 +2156,7 @@ public class JsonLogicValidationTests
     [Trait("RuleId", "33")]
     public async Task AllowYearOfFirstRegistrationLessOrEqualToCurrentYearValueInOverallPeriod()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -2212,7 +2211,7 @@ public class JsonLogicValidationTests
     {
         int year = DateTime.UtcNow.AddYears(1).Year;
 
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
         {
           ""source"": {
             ""provision"": [
@@ -2264,7 +2263,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsUniqueWeekInMonthInPeriods()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2301,7 +2300,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisllowsDuplicateWeekInMonthInPeriods()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2338,7 +2337,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisllowsDuplicateApplicableInstanceOfDayWithinMonthInPeriods()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2375,7 +2374,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsUniqueApplicableInstanceOfDayWithinMonthInPeriods()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2413,7 +2412,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisllowsDuplicateApplicableWeekInPeriods()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2450,7 +2449,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsUniqueApplicableWeekInPeriods()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2485,11 +2484,10 @@ public class JsonLogicValidationTests
     }
 
 
-
     [Fact]
     public async Task AllowsUniqueWeekInMonthInValidityPeriod()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2526,7 +2524,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisllowsDuplicateWeekInMonthInValidityPeriod()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2563,7 +2561,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisllowsDuplicateApplicableInstanceOfDayWithinMonthInValidityPeriod()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2600,7 +2598,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsUniqueApplicableInstanceOfDayWithinMonthInValidityPeriod()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2638,7 +2636,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task DisllowsDuplicateApplicableWeekInValidityPeriod()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2675,7 +2673,7 @@ public class JsonLogicValidationTests
     [Fact]
     public async Task AllowsUniqueApplicableWeekInValidityPeriod()
     {
-        var dtro = PrepareDtro(@"
+        DtroSubmit dtro = PrepareDtro(@"
 {
     ""source"": {
         ""provision"": [
@@ -2711,44 +2709,43 @@ public class JsonLogicValidationTests
 
     private async Task UseAllRules()
     {
-
-        var source = new FileJsonLogicRuleSource();
-        var rules = await source.GetRules("dtro-3.2.0");
+        FileJsonLogicRuleSource source = new FileJsonLogicRuleSource();
+        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("dtro-3.2.0");
 
         ruleDal.Setup(it => it.GetRuleTemplateDeserializeAsync(It.IsAny<SchemaVersion>())).ReturnsAsync(rules);
     }
 
     private async Task UseRulesByName(params string[] names)
     {
-        var source = new FileJsonLogicRuleSource();
-        var rules = await source.GetRules("dtro-3.2.0");
-        var subset = rules.Where(it => names.Contains(it.Name)).ToList();
+        FileJsonLogicRuleSource source = new FileJsonLogicRuleSource();
+        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("dtro-3.2.0");
+        List<JsonLogicValidationRule> subset = rules.Where(it => names.Contains(it.Name)).ToList();
 
         ruleDal.Setup(it => it.GetRuleTemplateDeserializeAsync(It.IsAny<SchemaVersion>())).ReturnsAsync(subset);
     }
 
     private async Task UseRulesByPath(params string[] paths)
     {
-        var source = new FileJsonLogicRuleSource();
-        var rules = await source.GetRules("dtro-3.2.0");
-        var subset = rules.Where(it => paths.Any(path => it.Path.StartsWith(path))).ToList();
+        FileJsonLogicRuleSource source = new FileJsonLogicRuleSource();
+        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("dtro-3.2.0");
+        List<JsonLogicValidationRule> subset = rules.Where(it => paths.Any(path => it.Path.StartsWith(path))).ToList();
 
         ruleDal.Setup(it => it.GetRuleTemplateDeserializeAsync(It.IsAny<SchemaVersion>())).ReturnsAsync(subset);
     }
 
     private async Task UseRulesByIndex(params int[] indexes)
     {
-        var source = new FileJsonLogicRuleSource();
-        var rules = await source.GetRules("dtro-3.2.0");
+        FileJsonLogicRuleSource source = new FileJsonLogicRuleSource();
+        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("dtro-3.2.0");
 
         if (indexes.Max() >= rules.Count())
         {
             throw new InvalidOperationException();
         }
 
-        var selected = new List<JsonLogicValidationRule>();
+        List<JsonLogicValidationRule> selected = new List<JsonLogicValidationRule>();
 
-        foreach (var index in indexes)
+        foreach (int index in indexes)
         {
             selected.Add(rules.ElementAt(index));
         }

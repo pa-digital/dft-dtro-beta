@@ -49,7 +49,7 @@ public class SemanticValidationService : ISemanticValidationService
     {
         if (condition is ConditionSet conditionSet)
         {
-            return conditionSet.SelectMany(it => GetValueRules(it));
+            return conditionSet.SelectMany(GetValueRules);
         }
 
         if (condition is DriverCondition driverCondition)
