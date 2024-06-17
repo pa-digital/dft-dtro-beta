@@ -1,0 +1,68 @@
+﻿@page
+@model DtroDropEditModel
+@{
+    bool isEdit = Request.Query["IsEdit"].ToString().ToLower() == "true";
+    string id = Request.Query["id"];
+}
+
+<h2>@(isEdit ? "Edit Dtro " : "Add Dtro")</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="drop-area" id="drop-area">
+        <div class="drop-area-inner">
+            Drag & Drop
+        </div>
+    </div>
+
+    <div style="margin-top: 20px">
+        <label>Select file:</label>
+        <input style="margin-left: 10px" type="file" id="fileInput" name="file" />
+    </div>
+
+    <div style="margin-top: 20px">
+        <button id="saveButton" class="btn btn-primary" type="submit" disabled>Save</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const saveButton = document.getElementById('saveButton');
+        const apiBaseUrl = '@Model.ApiBaseUrl';
+        const dropArea = document.getElementById('drop-area');
+        const id = '@id';
+        const isEdit = @isEdit.ToString().ToLower();
+
+        dropArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropArea.classList.add('dragover');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('dragover');
+        });
+
+        dropArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropArea.classList.remove('dragover');
+
+            const files = event.dataTransfer.files;
+            fileInput.files = files;
+            dropArea.querySelector('.drop-area-inner').textContent = files[0].name;
+            dropArea.style.backgroundColor = 'white';
+
+            checkEnableSaveButton();
+        });
+
+        fileInput.addEventListener('change', function () {
+            checkEnableSaveButton();
+        });
+
+        function checkEnableSaveButton() {
+            const isFileDropped = fileInput.files.length > 0;
+            // Enable save button only if a file is dropped
+            saveButton.disabled = !isFileDropped;
+        }
+
+    </script>
+}

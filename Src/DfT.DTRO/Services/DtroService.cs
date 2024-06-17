@@ -9,6 +9,8 @@ using DfT.DTRO.Services.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DfT.DTRO.DAL;
+using DfT.DTRO.Models.DataBase;
 
 namespace DfT.DTRO.Services;
 
@@ -18,6 +20,7 @@ namespace DfT.DTRO.Services;
 public class DtroService : IDtroService
 {
     private readonly IDtroDal _dtroDal;
+    private readonly IDtroHistoryDal _dtroHistoryDal;
     private readonly ISchemaTemplateDal _schemaTemplateDal;
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
@@ -26,12 +29,14 @@ public class DtroService : IDtroService
     /// The default constructor.
     /// </summary>
     /// <param name="dtroDal">An <see cref="IDtroDal"/> instance.</param>
+    /// <param name="dtroHistoryDal">An <see cref="IDtroHistoryDal"/> instance.</param>
     /// <param name="schemaTemplateDal">An <see cref="ISchemaTemplateDal"/> instance.</param>
     /// <param name="dtroMappingService">An <see cref="IDtroMappingService"/> instance.</param>
     /// <param name="dtroGroupValidatorService">An <see cref="IDtroGroupValidatorService"/> instance.</param>
-    public DtroService(IDtroDal dtroDal, ISchemaTemplateDal schemaTemplateDal, IDtroMappingService dtroMappingService, IDtroGroupValidatorService dtroGroupValidatorService)
+    public DtroService(IDtroDal dtroDal, IDtroHistoryDal dtroHistoryDal, ISchemaTemplateDal schemaTemplateDal, IDtroMappingService dtroMappingService, IDtroGroupValidatorService dtroGroupValidatorService)
     {
         _dtroDal = dtroDal;
+        _dtroHistoryDal = dtroHistoryDal;
         _schemaTemplateDal = schemaTemplateDal;
         _dtroMappingService = dtroMappingService;
         _dtroGroupValidatorService = dtroGroupValidatorService;
@@ -41,7 +46,7 @@ public class DtroService : IDtroService
     public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
     {
         deletionTime ??= DateTime.UtcNow;
-        var result = await _dtroDal.DeleteDtroAsync(id, deletionTime);
+        var result = await _dtroDal.SoftDeleteDtroAsync(id, deletionTime);
         if (!result)
         {
             throw new NotFoundException();
@@ -96,7 +101,7 @@ public class DtroService : IDtroService
     }
 
     /// <inheritdoc/>
-    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId)
+    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId)
     {
         var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit);
 
@@ -105,7 +110,7 @@ public class DtroService : IDtroService
             throw validationErrors;
         }
 
-        var dtroExists = await _dtroDal.DtroExistsAsync(guid);
+        var dtroExists = await _dtroDal.DtroExistsAsync(id);
         if (!dtroExists)
         {
             throw new NotFoundException();
@@ -118,8 +123,27 @@ public class DtroService : IDtroService
             throw new NotFoundException("Schema Template not found");
         }
 
-        await _dtroDal.TryUpdateDtroAsJsonAsync(guid, dtroSubmit, correlationId);
-        return new GuidResponse() { Id = guid };
+        Models.DataBase.DTRO currentDtro = await _dtroDal.GetDtroByIdAsync(id);
+
+
+        DTROHistory historyDtro = _dtroMappingService.AsHistoryDtro(currentDtro);
+
+        var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
+        if (!isSaved)
+        {
+            throw new Exception();
+        }
+
+        var isDeleted = await _dtroDal.DeleteDtroAsync(currentDtro.Id, DateTime.UtcNow);
+        if (!isDeleted)
+        {
+            throw new Exception();
+        }
+
+        _dtroMappingService.UpdateDetails(currentDtro, dtroSubmit);
+
+        GuidResponse response = await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
+        return new GuidResponse { Id = response.Id };
     }
 
     /// <inheritdoc/>

@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using DfT.DTRO.Attributes;
 using DfT.DTRO.FeatureManagement;
 using DfT.DTRO.Models.Errors;
@@ -9,10 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DfT.DTRO.Controllers;
 
@@ -52,9 +52,9 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Rule Versions.</returns>
     [HttpGet]
-    [Route("/v1/rulesversions")]
+    [Route("/v1/rules/versions")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetRulesVersions()
+    public virtual async Task<IActionResult> GetVersions()
     {
         try
         {
@@ -63,7 +63,7 @@ public class RulesController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetRulesVersions request.");
+            _logger.LogError(ex, "An error occurred while processing GetVersions request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -77,7 +77,7 @@ public class RulesController : ControllerBase
     [HttpGet]
     [Route("/v1/rules")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetRules()
+    public virtual async Task<IActionResult> Get()
     {
         try
         {
@@ -86,7 +86,7 @@ public class RulesController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetRules request.");
+            _logger.LogError(ex, "An error occurred while processing GetByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -103,7 +103,7 @@ public class RulesController : ControllerBase
     [HttpGet]
     [Route("/v1/rules/{version}")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetRule(string version)
+    public virtual async Task<IActionResult> GetByVersion(string version)
     {
         try
         {
@@ -120,7 +120,7 @@ public class RulesController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetRule request.");
+            _logger.LogError(ex, "An error occurred while processing GetByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -134,9 +134,9 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Rule.</returns>
     [HttpGet]
-    [Route("/v1/ruleById/{id}")]
+    [Route("/v1/rules/{id:guid}")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetRuleById(Guid id)
+    public virtual async Task<IActionResult> GetById(Guid id)
     {
         try
         {
@@ -153,7 +153,7 @@ public class RulesController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetRuleById request.");
+            _logger.LogError(ex, "An error occurred while processing GetById request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -168,10 +168,10 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the Rule.</returns>
     [HttpPost]
-    [Route("/v1/createRuleFromFile/{version}")]
+    [Route("/v1/rules/createFromFile/{version}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
-    public async Task<IActionResult> CreateRule(string version, IFormFile file)
+    public async Task<IActionResult> CreateFromFile(string version, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -186,7 +186,7 @@ public class RulesController : ControllerBase
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
 
                 var response = await _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
-                return CreatedAtAction(nameof(GetRuleById), new { id = response.Id }, response);
+                return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }
         catch (InvalidOperationException err)
@@ -195,7 +195,7 @@ public class RulesController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing CreateRule request.");
+            _logger.LogError(ex, "An error occurred while processing CreateFromFile request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -213,14 +213,14 @@ public class RulesController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the updated rule.</returns>
-    [HttpPost]
-    [Route("/v1/updateRuleFromFile/{version}")]
+    [HttpPut]
+    [Route("/v1/rules/updateFromFile/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
-    public async Task<IActionResult> UpdateRule(string version, IFormFile file)
+    public async Task<IActionResult> UpdateFromFile(string version, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -249,7 +249,7 @@ public class RulesController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing UpdateRule request.");
+            _logger.LogError(ex, "An error occurred while processing UpdateFromFile request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }

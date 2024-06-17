@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Src\\DfT.DTRO\\DfT.DTRO.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Src\\Dft.DTRO.Admin\\Dft.DTRO.Admin.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

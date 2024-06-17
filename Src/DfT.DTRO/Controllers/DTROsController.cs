@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using DfT.DTRO.Attributes;
 using DfT.DTRO.FeatureManagement;
 using DfT.DTRO.Models.DtroDtos;
@@ -12,10 +16,6 @@ using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DfT.DTRO.Controllers;
 
@@ -58,10 +58,10 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the DTRO.</returns>
     [HttpPost]
-    [Route("/v1/createDtroFromFile")]
+    [Route("/v1/dtros/createFromFile")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
-    public async Task<IActionResult> CreateDtroFromFile(IFormFile file)
+    public async Task<IActionResult> CreateFromFile(IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -78,7 +78,7 @@ public class DTROsController : ControllerBase
 
                 _logger.LogInformation("[{method}] Creating DTRO", "dtro.create");
                 var response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId);
-                return CreatedAtAction(nameof(GetDtroById), new { id = response.Id }, response);
+                return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }
         catch (DtroValidationException err)
@@ -91,7 +91,62 @@ public class DTROsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing CreateSchema request.");
+            _logger.LogError(ex, "An error occurred while processing CreateFromFileByVersion request.");
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+        }
+    }
+
+    /// <summary>
+    /// Updates an existing dtro.
+    /// </summary>
+    /// <remarks>
+    /// The payload requires a dtro, which will replace the dtro with the quoted dtro version.
+    /// </remarks>
+    /// <param name="id">The existing dtro id.</param>
+    /// <param name="file">The replacement dtro.</param>
+    /// <response code="200">Ok.</response>
+    /// <response code="400">Bad request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>Id of the updated dtro.</returns>
+    [HttpPut]
+    [Route("/v1/dtros/updateFromFile/{id:guid}")]
+    [Consumes("multipart/form-data")]
+    [RequestFormLimits(ValueCountLimit = 1)]
+    [ValidateModelState]
+    [FeatureGate(FeatureNames.DtroWrite)]
+    [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
+    public async Task<IActionResult> UpdateFromFile(Guid id, IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("File is empty");
+        }
+
+        try
+        {
+            using (MemoryStream memoryStream = new())
+            {
+                await file.CopyToAsync(memoryStream);
+                string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
+                var dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
+
+                _logger.LogInformation("[{method}] Updating dtro with dtro version {dtroVersion}", "dtro.update", id.ToString());
+                var response = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId);
+                return Ok(response);
+            }
+        }
+        catch (NotFoundException)
+        {
+            return NotFound(new ApiErrorResponse("Dtro version", "Dtro version not found"));
+        }
+        catch (InvalidOperationException err)
+        {
+            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while processing UpdateFromBody request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -106,17 +161,17 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Id of the DTRO.</returns>
     [HttpPost]
-    [Route("/v1/dtros")]
+    [Route("/v1/dtros/createFromBody")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
-    public async Task<IActionResult> CreateDtro([FromBody] DtroSubmit dtroSubmit)
+    public async Task<IActionResult> CreateFromBody([FromBody] DtroSubmit dtroSubmit)
     {
         try
         {
             _logger.LogInformation("[{method}] Creating DTRO", "dtro.create");
             var response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId);
-            return CreatedAtAction(nameof(GetDtroById), new { id = response.Id }, response);
+            return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
         catch (DtroValidationException err)
         {
@@ -128,7 +183,7 @@ public class DTROsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing CreateSchema request.");
+            _logger.LogError(ex, "An error occurred while processing CreateFromFileByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -146,11 +201,11 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <returns>Id of the updated DTRO.</returns>
     [HttpPut]
-    [Route("/v1/dtros/{id}")]
+    [Route("/v1/dtros/updateFromBody{id:guid}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Okay")]
-    public async Task<IActionResult> UpdateDtro([FromRoute] Guid id, [FromBody] DtroSubmit dtroSubmit)
+    public async Task<IActionResult> UpdateFromBody([FromRoute] Guid id, [FromBody] DtroSubmit dtroSubmit)
     {
         try
         {
@@ -168,7 +223,7 @@ public class DTROsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing CreateSchema request.");
+            _logger.LogError(ex, "An error occurred while processing CreateFromFileByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -181,9 +236,9 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     [HttpGet]
-    [Route("/v1/dtros/{id}")]
+    [Route("/v1/dtros/{id:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
-    public async Task<IActionResult> GetDtroById(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         try
         {
@@ -196,7 +251,7 @@ public class DTROsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetDtroById request.");
+            _logger.LogError(ex, $"An error occurred while processing {nameof(GetById)} request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -208,11 +263,11 @@ public class DTROsController : ControllerBase
     /// <response code="204">Okay.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpDelete("/v1/dtros/{id}")]
+    [HttpDelete("/v1/dtros/{id:guid}")]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> DeleteDtro(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         try
         {
@@ -225,7 +280,7 @@ public class DTROsController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing DeleteDtro request.");
+            _logger.LogError(ex, $"An error occurred while processing {nameof(Delete)} request.request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }

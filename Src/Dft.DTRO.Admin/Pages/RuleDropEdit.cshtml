@@ -6,26 +6,32 @@
 }
 
 <h2>@(isEdit ? "Edit Rule" : "Add Rule")</h2>
+<form method="post" enctype="multipart/form-data">
 
-<div style="margin-top: 30px">
-    <label>Version </label>
-    <input type="text" id="versionInput" value="@version" @(isEdit ? "disabled style='background-color: grey;'" : "") />
-</div>
+    <input type="hidden" name="IsEdit" value="@(isEdit.ToString().ToLower())" />
+    <input type="hidden" id="hiddenVersionInput" name="Version" value="@version" />
 
-<div class="drop-area" id="drop-area">
-    <div class="drop-area-inner">
-        Drag & Drop
+
+    <div style="margin-top: 30px">
+        <label>Version </label>
+        <input type="text" id="versionInput" value="@version" disabled style="background-color: #f0f0f0;" />
     </div>
-</div>
 
-<div style="margin-top: 20px">
-    <label>Select file:</label>
-    <input style="margin-left: 10px" type="file" id="fileInput" />
-</div>
+    <div class="drop-area" id="drop-area">
+        <div class="drop-area-inner">
+            Drag & Drop
+        </div>
+    </div>
 
-<div style="margin-top: 20px">
-    <button id="saveButton" class="btn btn-primary" disabled>Save</button>
-</div>
+    <div style="margin-top: 20px">
+        <label>Select file:</label>
+        <input style="margin-left: 10px" name="file" type="file" id="fileInput" />
+    </div>
+
+    <div style="margin-top: 20px">
+        <button id="saveButton" class="btn btn-primary" type="submit" disabled>Save</button>
+    </div>
+</form>
 
 @section Scripts {
     <script>
@@ -57,14 +63,6 @@
             checkEnableSaveButton();
         });
 
-        versionInput.addEventListener('input', () => {
-            checkEnableSaveButton();
-        });
-
-        versionInput.addEventListener('change', () => {
-            checkEnableSaveButton();
-        });
-
         fileInput.addEventListener('change', function () {
             checkEnableSaveButton();
         });
@@ -81,33 +79,7 @@
         // If editing, disable the version input and apply styles accordingly
         if (isEdit) {
             versionInput.disabled = true;
-            versionInput.style.backgroundColor = 'grey';
         }
 
-        saveButton.addEventListener('click', function () {
-
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-            var version = versionInput.value;
-           
-            var url = isEdit ? `${apiBaseUrl}/v1/updateRuleFromFile/${version}` : `${apiBaseUrl}/v1/createRuleFromFile/${version}`;
-            
-            //method: isEdit ? 'PUT' : 'POST',
-            //mode: 'no-cors'
-            fetch(url, {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors'
-            })
-                .then(response => {
-                    window.location.href = 'SchemaOverview';
-
-                })
-                .catch(error => {
-                    alert(error.message);
-                    // window.location.href = 'SchemaOverview';
-                    console.error('Error:', error);
-                });
-        });
     </script>
 }

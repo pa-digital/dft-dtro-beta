@@ -31,6 +31,7 @@ public static class JsonLogicDIExtensions
     {
         services.AddScoped<IJsonLogicRuleSource, FileJsonLogicRuleSource>();
         services.AddScoped<IJsonLogicValidationService, JsonLogicValidationService>();
+        services.AddScoped<IRecordManagementService, RecordManagementService>();
 
         AddAllRules(assembly ?? Assembly.GetExecutingAssembly());
 

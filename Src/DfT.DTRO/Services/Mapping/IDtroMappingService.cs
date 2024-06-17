@@ -1,7 +1,8 @@
-﻿using DfT.DTRO.Models.DtroDtos;
+﻿using System.Collections.Generic;
+using DfT.DTRO.Models.DataBase;
+using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.Search;
-using System.Collections.Generic;
 
 namespace DfT.DTRO.Services.Mapping;
 
@@ -22,4 +23,8 @@ public interface IDtroMappingService
     IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros);
 
     IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros);
+
+    DTROHistory AsHistoryDtro(Models.DataBase.DTRO currentDtro);
+
+    void UpdateDetails(Models.DataBase.DTRO currentDtro, DtroSubmit dtroSubmit);
 }

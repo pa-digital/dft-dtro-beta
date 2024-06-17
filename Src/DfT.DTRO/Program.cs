@@ -38,7 +38,7 @@ public class Program
                 }
 
                 config.AddEnvironmentVariables();
-                config.AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.Local.json", optional: true, reloadOnChange: false);
+                config.AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.Local.example.json", optional: true, reloadOnChange: false);
             })
              .ConfigureWebHostDefaults(webBuilder =>
              {

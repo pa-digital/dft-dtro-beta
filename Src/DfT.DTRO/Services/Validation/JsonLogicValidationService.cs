@@ -1,10 +1,10 @@
-﻿using DfT.DTRO.Models.DtroDtos;
+﻿using System.Collections.Generic;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
+using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.Validation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Collections.Generic;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 
 namespace DfT.DTRO.Services.Validation;
 
@@ -32,7 +32,7 @@ public class JsonLogicValidationService : IJsonLogicValidationService
 
         var rules = await _ruleTemplateDal.GetRuleTemplateDeserializeAsync(request.SchemaVersion);
 
-        // var rules = await _ruleSource.GetRules($"dtro-{request.SchemaVersion}");
+        // var rules = await _ruleSource.GetByVersion($"dtro-{request.SchemaVersion}");
         var errors = new List<SemanticValidationError>();
 
         var json = JsonConvert.SerializeObject(request.Data, new ExpandoObjectConverter());

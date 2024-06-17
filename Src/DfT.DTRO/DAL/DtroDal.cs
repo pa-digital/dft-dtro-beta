@@ -1,5 +1,12 @@
-﻿using DfT.DTRO.Caching;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using DfT.DTRO.Caching;
 using DfT.DTRO.DAL;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.Filtering;
@@ -9,12 +16,7 @@ using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using static DfT.DTRO.Extensions.ExpressionExtensions;
 using DateTime = System.DateTime;
 
@@ -49,11 +51,13 @@ public class DtroDal : IDtroDal
     }
 
     /// <inheritdoc/>
-    public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
+    public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime = null)
     {
         deletionTime ??= DateTime.UtcNow;
 
-        if (await _dtroContext.Dtros.FindAsync(id) is not Models.DataBase.DTRO existing || existing.Deleted)
+        Models.DataBase.DTRO existing = await _dtroContext.Dtros.FindAsync(id);
+
+        if (existing is null || existing.Deleted)
         {
             return false;
         }
@@ -395,5 +399,19 @@ public class DtroDal : IDtroDal
             .OrderBy(it => it.Id);
 
         return await sqlQuery.ToListAsync();
+    }
+
+    public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
+    {
+        Models.DataBase.DTRO dtro = await _dtroContext.Dtros.FindAsync(id);
+
+        if (dtro is null)
+        {
+            return false;
+        }
+
+        _dtroContext.Dtros.Remove(dtro);
+        await _dtroContext.SaveChangesAsync();
+        return true;
     }
 }
