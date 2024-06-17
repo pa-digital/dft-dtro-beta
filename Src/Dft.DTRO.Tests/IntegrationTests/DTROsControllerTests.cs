@@ -19,7 +19,7 @@ public class DTROsControllerTests
 {
     private const string ValidDtroJsonPath = "./DtroJsonDataExamples/v3.1.1/proper-data.json";
     private const string ValidComplexDtroJsonPath = "./DtroJsonDataExamples/v3.1.2/3.1.2-valid-complex-dtro.json";
-    private const string ValidComplexDtroJsonPathV320 = "./DtroJsonDataExamples/v3.2.0/3.2.0-valid.json";
+    private const string ValidComplexDtroJsonPathV320 = "./DtroJsonDataExamples/v3.2.0/valid-new-x.json";
     private const string InvalidDtroJsonPath = "./DtroJsonDataExamples/v3.1.1/provision-empty.json";
 
     private readonly WebApplicationFactory<Program> _factory;
