@@ -14,11 +14,11 @@ public class RecordManagementService : IRecordManagementService
         var validationErrors = new List<SemanticValidationError>();
 
         var sourceReference = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("reference");
-        if (!sourceReference.IsGuid())
+        if (string.IsNullOrWhiteSpace(sourceReference))
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = "Source reference is not of type UUID"
+                Message = "Source reference is not of type string"
             });
         }
 
@@ -37,11 +37,11 @@ public class RecordManagementService : IRecordManagementService
         .Select(it => it.GetValue<string>("reference"))
         .ToList() ?? new List<string>();
 
-        if (!provisionReferences.TrueForAll(reference => reference.IsGuid()))
+        if (provisionReferences.Any(string.IsNullOrWhiteSpace))
         {
             SemanticValidationError error = new()
             {
-                Message = "One or more provision reference is not of type UUID"
+                Message = "One or more provision reference is not of type string"
             };
             validationErrors.Add(error);
         }
