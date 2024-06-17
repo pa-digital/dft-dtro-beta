@@ -50,8 +50,11 @@ public class DtroEventSearch
     /// <summary>
     /// The unique identifier of the traffic authority that created the TRO.
     /// </summary>
-    [DataMember(Name = "ta")]
-    public int? Ta { get; set; }
+    [DataMember(Name = "taCreator")]
+    public int? TaCreator { get; set; }
+
+    [DataMember(Name = "taOwner")]
+    public int? TaOwner { get; set; }
 
     /// <summary>
     /// Published title of the Traffic Regulation Order.

@@ -82,7 +82,7 @@ public class SqlStorageServiceTests : IDisposable
             Id = _dtroWithHa1234Key,
             SchemaVersion = new("3.1.2"),
             Data = new(),
-            TrafficAuthorityId = 1234
+            TrafficAuthorityCreatorId = 1234
         };
 
         _dtroWithCreationDate = new()
@@ -368,7 +368,7 @@ public class SqlStorageServiceTests : IDisposable
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
-        var result = await sut.FindDtrosAsync(new DtroSearch { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { new() { Ta = 1234 } } });
+        var result = await sut.FindDtrosAsync(new DtroSearch { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { new() { TaCreator = 1234 } } });
 
         Assert.Equal(1, result.Results.Count);
         Assert.Contains(_dtroWithTa1234, result.Results);
@@ -476,7 +476,7 @@ public class SqlStorageServiceTests : IDisposable
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
-        var result = await sut.FindDtrosAsync(new DtroEventSearch { Page = 1, PageSize = 10, Ta = 1234 });
+        var result = await sut.FindDtrosAsync(new DtroEventSearch { Page = 1, PageSize = 10, TaCreator = 1234 });
 
         Assert.Single(result);
         Assert.Contains(_dtroWithTa1234, result);

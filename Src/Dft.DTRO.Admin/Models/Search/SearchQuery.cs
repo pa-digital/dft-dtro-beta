@@ -33,8 +33,14 @@ public class SearchQuery
     /// <summary>
     /// Traffic Authority identifier.
     /// </summary>
-    [DataMember(Name = "ta")]
-    public int? Ta { get; set; }
+    [DataMember(Name = "taCreator")]
+    public int? TaCreator { get; set; }
+
+    /// <summary>
+    /// Traffic Authority identifier.
+    /// </summary>
+    [DataMember(Name = "taOwner")]
+    public int? TaOwner { get; set; }
 
     /// <summary>
     /// Published title of the Traffic Regulation Order.

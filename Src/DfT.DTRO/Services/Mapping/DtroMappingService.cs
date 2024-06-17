@@ -130,7 +130,7 @@ public class DtroMappingService : IDtroMappingService
             Created = currentDtro.Created,
             RegulationStart = currentDtro.RegulationStart,
             RegulationEnd = currentDtro.RegulationEnd,
-            TrafficAuthorityId = currentDtro.TrafficAuthorityId,
+            TrafficAuthorityCreatorId = currentDtro.TrafficAuthorityCreatorId,
             TroName = currentDtro.TroName,
             CreatedCorrelationId = currentDtro.CreatedCorrelationId,
             Deleted = currentDtro.Deleted,
@@ -153,7 +153,7 @@ public class DtroMappingService : IDtroMappingService
             .SelectMany(it => it.GetValue<IList<object>>("regulations").OfType<ExpandoObject>())
         .ToList();
 
-        dtro.TrafficAuthorityId = dtro.Data.GetExpando("source").HasField("ta")
+        dtro.TrafficAuthorityCreatorId = dtro.Data.GetExpando("source").HasField("ta")
             ? dtro.Data.GetValueOrDefault<int>("source.ta")
             : dtro.Data.GetValueOrDefault<int>("source.ha");
         dtro.TroName = dtro.Data.GetValueOrDefault<string>("source.troName");
@@ -219,8 +219,11 @@ public class DtroMappingService : IDtroMappingService
         return new DtroSearchResult
         {
             TroName = dtro.Data.GetValueOrDefault<string>("source.troName"),
-            TrafficAuthorityId = dtro.Data.GetExpando("source").HasField("ta")
-                ? dtro.Data.GetValueOrDefault<int>("source.ta")
+            TrafficAuthorityCreatorId = dtro.Data.GetExpando("source").HasField("taCreator")
+                ? dtro.Data.GetValueOrDefault<int>("source.taCreator")
+                : dtro.Data.GetValueOrDefault<int>("source.ha"),
+            TrafficAuthorityOwnerId = dtro.Data.GetExpando("source").HasField("taOwner")
+                ? dtro.Data.GetValueOrDefault<int>("source.taOwner")
                 : dtro.Data.GetValueOrDefault<int>("source.ha"),
             PublicationTime = dtro.Created.Value,
             RegulationType = dtro.RegulationTypes,

@@ -20,8 +20,11 @@ public class DtroEvent
     /// <summary>
     /// The unique identifier of the traffic authority that created the TRO.
     /// </summary>
-    [DataMember(Name = "ta")]
-    public int TrafficAuthorityId { get; set; }
+    [DataMember(Name = "taCreator")]
+    public int TrafficAuthorityCreatorId { get; set; }
+
+    [DataMember(Name = "taOwner")]
+    public int TrafficAuthorityOwnerId { get; set; }
 
     /// <summary>
     /// Published title of the Traffic Regulation Order.
@@ -86,7 +89,8 @@ public class DtroEvent
             PublicationTime = dtro.Created.Value,
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
-            TrafficAuthorityId = dtro.TrafficAuthorityId,
+            TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
+            TrafficAuthorityOwnerId = dtro.TrafficAuthorityOwnerId,
             RegulationType = dtro.RegulationTypes,
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
@@ -104,7 +108,8 @@ public class DtroEvent
             PublicationTime = dtro.Created.Value,
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
-            TrafficAuthorityId = dtro.TrafficAuthorityId,
+            TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
+            TrafficAuthorityOwnerId = dtro.TrafficAuthorityOwnerId,
             RegulationType = dtro.RegulationTypes,
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
@@ -122,7 +127,8 @@ public class DtroEvent
             PublicationTime = dtro.Created.Value,
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
-            TrafficAuthorityId = dtro.TrafficAuthorityId,
+            TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
+            TrafficAuthorityOwnerId = dtro.TrafficAuthorityOwnerId,
             RegulationType = dtro.RegulationTypes,
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,

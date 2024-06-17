@@ -76,6 +76,6 @@ public class EventsControllerTests
         Assert.Equal(1, data.PageSize);
         Assert.Equal(1, data.TotalCount);
         Assert.Single(data.Events);
-        Assert.Equal(1585, data.Events.First().TrafficAuthorityId);
+        Assert.Equal(1585, data.Events.First().TrafficAuthorityCreatorId);
     }
 }

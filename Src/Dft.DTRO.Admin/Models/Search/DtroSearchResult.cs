@@ -23,8 +23,14 @@ public class DtroSearchResult
     /// <summary>
     /// The identifier of the Traffic Authority.
     /// </summary>
-    [DataMember(Name = "ta")]
-    public long TrafficAuthorityId { get; set; }
+    [DataMember(Name = "taCreator")]
+    public long TrafficAuthorityCreatorId { get; set; }
+
+    /// <summary>
+    /// The identifier of the Traffic Authority.
+    /// </summary>
+    [DataMember(Name = "taOwner")]
+    public long TrafficAuthorityOwnerId { get; set; }
 
     /// <summary>
     /// The types of all regulations in the DTRO.

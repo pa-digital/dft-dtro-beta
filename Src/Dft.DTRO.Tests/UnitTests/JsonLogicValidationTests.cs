@@ -757,7 +757,7 @@ public class JsonLogicValidationTests
         var dtro = PrepareDtro(@"
         {
             ""source"": {
-                ""ta"": 10
+                ""taCreator"": 10,  ""taOwner"": 10
             }
         }");
 
@@ -776,7 +776,7 @@ public class JsonLogicValidationTests
         var dtro = PrepareDtro(@"
         {
             ""source"": {
-                ""ta"": 9
+                ""taCreator"": 9,  ""taOwner"": 9
             }
         }");
 

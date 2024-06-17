@@ -1462,6 +1462,22 @@
     }
   },
   {
+    "id": 31,
+    "name": "TaInSwaCodes",
+    "message": "The 'TA' value must be one of the recognised SWA codes.",
+    "path": "source.ta",
+    "rule": {
+      "in": [
+        {
+          "var": "source.ta"
+        },
+        {
+          "service_data": "swa_codes"
+        }
+      ]
+    }
+  },
+  {
     "id": 32,
     "name": "ExceptionPeriodApplicableInstanceOfDayWithinMonthInstancesUnique",
     "message": "weekInMonth instances must be unique.",

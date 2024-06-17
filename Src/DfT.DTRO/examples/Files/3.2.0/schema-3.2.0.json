@@ -1731,14 +1731,14 @@
 				},
 				"actionType": {
 					"description": "D-TRO source action type",
-					"$ref": "#/$defs/actionType" 
-				}, 
-				"provision": {
-				"items": {
-					"$ref": "#/$defs/provision"
+					"$ref": "#/$defs/actionType"
 				},
-				"minItems": 1,
-				"type": "array"
+				"provision": {
+					"items": {
+						"$ref": "#/$defs/provision"
+					},
+					"minItems": 1,
+					"type": "array"
 				},
 				"crossRefTro": {
 					"items": {
@@ -1748,7 +1748,13 @@
 					},
 					"type": "array"
 				},
-				"ta": {
+				"taCreator": {
+					"description": "Traffic authority (SWA code)",
+					"type": "number",
+					"minimum": 0,
+					"maximum": 9999
+				},
+				"taOwner": {
 					"description": "Traffic authority (SWA code)",
 					"type": "number",
 					"minimum": 0,
@@ -1767,7 +1773,8 @@
 				"reference",
 				"actionType",
 				"provision",
-				"ta",
+				"taCreator",
+				"taOwner",
 				"section",
 				"troName"
 			],

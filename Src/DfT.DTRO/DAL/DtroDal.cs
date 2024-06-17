@@ -190,9 +190,14 @@ public class DtroDal : IDtroDal
                 expressionsToConjunct.Add(it => !it.Deleted);
             }
 
-            if (query.Ta is int ta)
+            if (query.TaCreator is int taCreator)
             {
-                expressionsToConjunct.Add(it => it.TrafficAuthorityId == ta);
+                expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == taCreator);
+            }
+
+            if (query.TaOwner is int taOwner)
+            {
+                expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == taOwner);
             }
 
             if (query.PublicationTime is DateTime publicationTime)
@@ -306,9 +311,14 @@ public class DtroDal : IDtroDal
             expressionsToConjunct.Add(it => it.DeletionTime >= deletionTime);
         }
 
-        if (search.Ta is int ta)
+        if (search.TaCreator is int taCreator)
         {
-            expressionsToConjunct.Add(it => it.TrafficAuthorityId == ta);
+            expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == taCreator);
+        }
+
+        if (search.TaOwner is int taOwner)
+        {
+            expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == taOwner);
         }
 
         if (search.Since is DateTime publicationTime)
