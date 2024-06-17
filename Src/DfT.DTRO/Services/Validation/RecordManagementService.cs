@@ -11,7 +11,7 @@ public class RecordManagementService : IRecordManagementService
 {
     public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit, int? ta)
     {
-        var validationErrors = new List<SemanticValidationError>();
+        List<SemanticValidationError> validationErrors = new();
 
         if (ta != null)
         {

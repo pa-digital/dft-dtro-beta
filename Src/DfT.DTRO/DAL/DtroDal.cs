@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DfT.DTRO.Caching;
 using DfT.DTRO.DAL;
-using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.Filtering;
@@ -16,9 +15,7 @@ using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using static DfT.DTRO.Extensions.ExpressionExtensions;
-using DateTime = System.DateTime;
 
 namespace DfT.DTRO.Services;
 
@@ -415,5 +412,10 @@ public class DtroDal : IDtroDal
         _dtroContext.Dtros.Remove(dtro);
         await _dtroContext.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<List<Models.DataBase.DTRO>> GetDtroSourceHistoryAsync(string reference)
+    {
+        throw new NotImplementedException();
     }
 }
