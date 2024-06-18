@@ -1737,7 +1737,13 @@
 					},
 					"type": "array"
 				},
-				"ta": {
+				"currentTraOwner": {
+					"description": "Traffic authority (SWA code)",
+					"type": "number",
+					"minimum": 0,
+					"maximum": 9999
+				},
+				"traCreator": {
 					"description": "Traffic authority (SWA code)",
 					"type": "number",
 					"minimum": 0,
@@ -1761,7 +1767,8 @@
 			},
 			"required": [
 				"provision",
-				"ta",
+				"traCreator",
+				"currentTraOwner",
 				"section",
 				"troName",
 				"reference",

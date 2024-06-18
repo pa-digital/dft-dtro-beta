@@ -756,7 +756,7 @@ public class JsonLogicValidationTests
         DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
-                ""ta"": 10
+                ""traCreator"": 10,  ""currentTraOwner"": 10
             }
         }");
 
@@ -770,16 +770,36 @@ public class JsonLogicValidationTests
     }
 
     [Fact]
-    public async Task DisallowsTaNotInSwaRules()
+    public async Task DisallowsTraCreatorNotInSwaRules()
     {
         DtroSubmit dtro = PrepareDtro(@"
         {
             ""source"": {
-                ""ta"": 9
+                ""traCreator"": 9,  ""currentTraOwner"": 9
             }
         }");
 
-        await UseRulesByName("TaInSwaCodes");
+        await UseRulesByName("TraCreatorInSwaCodes");
+
+        JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
+
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+
+        Assert.NotEmpty(result);
+    }
+
+
+    [Fact]
+    public async Task DisallowsCurrentTraOwnerNotInSwaRules()
+    {
+        DtroSubmit dtro = PrepareDtro(@"
+        {
+            ""source"": {
+                ""traCreator"": 9,  ""currentTraOwner"": 9
+            }
+        }");
+
+        await UseRulesByName("CurrentTraOwnerInSwaCodes");
 
         JsonLogicValidationService sut = new JsonLogicValidationService(ruleDal.Object);
 

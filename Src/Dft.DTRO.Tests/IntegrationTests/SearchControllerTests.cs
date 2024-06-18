@@ -37,7 +37,7 @@ public class SearchControllerTests
         HttpClient client = _factory.CreateClient();
 
         DtroSearch search =
-            new() { Queries = new[] { new SearchQuery { Ta = 1585 } }, Page = 1, PageSize = 10 };
+            new() { Queries = new[] { new SearchQuery { TraCreator = 1585 } }, Page = 1, PageSize = 10 };
         string payload = JsonConvert.SerializeObject(search);
 
         HttpResponseMessage response =
@@ -65,7 +65,7 @@ public class SearchControllerTests
         HttpClient client = _factory.CreateClient();
 
         DtroSearch search =
-            new() { Queries = new[] { new SearchQuery { Ta = 1585 } }, Page = 1, PageSize = 10 };
+            new() { Queries = new[] { new SearchQuery { TraCreator = 1585 } }, Page = 1, PageSize = 10 };
         string payload = JsonConvert.SerializeObject(search);
 
         HttpResponseMessage response =
@@ -80,6 +80,6 @@ public class SearchControllerTests
         Assert.Equal(1, data.PageSize);
         Assert.Equal(1, data.TotalCount);
         Assert.Equal(1, data.Results.Count);
-        Assert.Equal(1585, data.Results.First().TrafficAuthorityId);
+        Assert.Equal(1585, data.Results.First().TrafficAuthorityOwnerId);
     }
 }

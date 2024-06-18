@@ -41,9 +41,13 @@ public class DTRO
 
     public DateTime? RegulationEnd { get; set; }
 
-    [DataMember(Name = "ta")]
-    [Column("TA")]
-    public int TrafficAuthorityId { get; set; }
+    [DataMember(Name = "traCreator")]
+    [Column("TraCreator")]
+    public int TrafficAuthorityCreatorId { get; set; }
+
+    [DataMember(Name = "currentTraOwner")]
+    [Column("CurrentTraOwner")]
+    public int TrafficAuthorityOwnerId { get; set; }
 
     public string TroName { get; set; }
 

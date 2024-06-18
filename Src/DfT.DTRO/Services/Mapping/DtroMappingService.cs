@@ -130,7 +130,7 @@ public class DtroMappingService : IDtroMappingService
             Created = currentDtro.Created,
             RegulationStart = currentDtro.RegulationStart,
             RegulationEnd = currentDtro.RegulationEnd,
-            TrafficAuthorityId = currentDtro.TrafficAuthorityId,
+            TrafficAuthorityCreatorId = currentDtro.TrafficAuthorityCreatorId,
             TroName = currentDtro.TroName,
             CreatedCorrelationId = currentDtro.CreatedCorrelationId,
             Deleted = currentDtro.Deleted,
@@ -153,9 +153,15 @@ public class DtroMappingService : IDtroMappingService
             .SelectMany(it => it.GetValue<IList<object>>("regulations").OfType<ExpandoObject>())
         .ToList();
 
-        dtro.TrafficAuthorityId = dtro.Data.GetExpando("source").HasField("ta")
-            ? dtro.Data.GetValueOrDefault<int>("source.ta")
+        dtro.TrafficAuthorityCreatorId = dtro.Data.GetExpando("source").HasField("traCreator")
+            ? dtro.Data.GetValueOrDefault<int>("source.traCreator")
             : dtro.Data.GetValueOrDefault<int>("source.ha");
+
+        dtro.TrafficAuthorityOwnerId = dtro.Data.GetExpando("source").HasField("currentTraOwner")
+           ? dtro.Data.GetValueOrDefault<int>("source.currentTraOwner")
+           : dtro.Data.GetValueOrDefault<int>("source.ha");
+
+
         dtro.TroName = dtro.Data.GetValueOrDefault<string>("source.troName");
         dtro.RegulationTypes = regulations.Select(it => it.GetValueOrDefault<string>("regulationType"))
             .Where(it => it is not null)
@@ -219,8 +225,11 @@ public class DtroMappingService : IDtroMappingService
         return new DtroSearchResult
         {
             TroName = dtro.Data.GetValueOrDefault<string>("source.troName"),
-            TrafficAuthorityId = dtro.Data.GetExpando("source").HasField("ta")
-                ? dtro.Data.GetValueOrDefault<int>("source.ta")
+            TrafficAuthorityCreatorId = dtro.Data.GetExpando("source").HasField("traCreator")
+                ? dtro.Data.GetValueOrDefault<int>("source.traCreator")
+                : dtro.Data.GetValueOrDefault<int>("source.ha"),
+            TrafficAuthorityOwnerId = dtro.Data.GetExpando("source").HasField("currentTraOwner")
+                ? dtro.Data.GetValueOrDefault<int>("source.currentTraOwner")
                 : dtro.Data.GetValueOrDefault<int>("source.ha"),
             PublicationTime = dtro.Created.Value,
             RegulationType = dtro.RegulationTypes,
