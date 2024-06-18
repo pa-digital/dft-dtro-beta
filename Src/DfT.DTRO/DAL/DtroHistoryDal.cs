@@ -39,7 +39,12 @@ public class DtroHistoryDal : IDtroHistoryDal
         return true;
     }
 
-    public async Task<List<DTROHistory>> GetHistoryForDtro(string reference)
+    /// <summary>
+    /// Get list of the D-TROs from DTRO History Table
+    /// </summary>
+    /// <param name="reference">Source reference passed</param>
+    /// <returns>List of historic D-TROs</returns>
+    public async Task<List<DTROHistory>> GetDtroSourceHistory(string reference)
     {
         List<DTROHistory> histories = await _dtroContext.DtroHistories.ToListAsync();
 

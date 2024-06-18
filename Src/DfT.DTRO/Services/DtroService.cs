@@ -137,8 +137,14 @@ public class DtroService : IDtroService
     }
 
     /// <inheritdoc />
-    public async Task<List<DTROHistory>> GetDtroSourceHistoryAsync(string reference) => 
-        await _dtroHistoryDal.GetHistoryForDtro(reference);
+    public async Task<List<DTROHistory>> GetDtroSourceHistoryAsync(string reference)
+    {
+        List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroSourceHistory(reference);
+
+        List<DTROHistory> sourceHistories = _dtroMappingService.StripProvisions(dtroHistories);
+
+        return sourceHistories;
+    }
 
     /// <inheritdoc/>
     //public async Task UpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId)
