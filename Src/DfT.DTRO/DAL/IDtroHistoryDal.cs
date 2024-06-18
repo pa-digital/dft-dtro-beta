@@ -8,5 +8,5 @@ public interface IDtroHistoryDal
 {
     Task<bool> SaveDtroInHistoryTable(DTROHistory dtroHistory);
 
-    Task<List<DTROHistory>> GetHistoryForDtro(string reference);
+    Task<List<DTROHistory>> GetDtroSourceHistory(string reference);
 }
