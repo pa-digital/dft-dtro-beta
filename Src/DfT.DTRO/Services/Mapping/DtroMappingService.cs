@@ -145,6 +145,42 @@ public class DtroMappingService : IDtroMappingService
         dtro.LastUpdatedCorrelationId = dtro.CreatedCorrelationId;
     }
 
+    public List<DTROHistory> StripProvisions(List<DTROHistory> dtroHistories)
+    {
+        List<DTROHistory> histories = new();
+
+        foreach (DTROHistory dtroHistory in dtroHistories)
+        {
+            DTROHistory history = new();
+
+            var sourceActionType = Get(dtroHistory, "source.actionType");
+            var sourceReference = Get(dtroHistory, "source.reference");
+            var sourceSection = Get(dtroHistory, "source.section");
+            var sourceTa = Get(dtroHistory, "source.ta");
+            var sourceTroName = Get(dtroHistory, "source.troName");
+
+            ExpandoObject expando = new();
+            IDictionary<string, object> dictionary = expando;
+            dictionary.Add("actionType", sourceActionType);
+            dictionary.Add("reference", sourceReference);
+            dictionary.Add("section", sourceSection);
+            dictionary.Add("ta", sourceTa);
+            dictionary.Add("troName", sourceTroName);
+            
+            history.Created = dtroHistory.Created;
+            history.Data = (ExpandoObject)dictionary;
+            history.Deleted = dtroHistory.Deleted;
+            history.DeletionTime = dtroHistory.DeletionTime;
+            history.Id = dtroHistory.Id;
+            history.LastUpdated = dtroHistory.LastUpdated;
+            history.SchemaVersion = dtroHistory.SchemaVersion;
+
+            histories.Add(history);
+        }
+
+        return histories;
+    }
+
     /// <inheritdoc/>
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
     {
@@ -185,23 +221,23 @@ public class DtroMappingService : IDtroMappingService
             .Where(it => it is not null)
             .Max();
 
-        IEnumerable<Coordinates> FlattenAndConvertCoordinates(ExpandoObject coordinates, string crs)
+        IEnumerable<Coordinates> FlattenAndConvertCoordinates(ExpandoObject expandoObject, string crs)
         {
-            var type = coordinates.GetValue<string>("type");
-            var coords = coordinates.GetValue<IList<object>>("coordinates");
+            var type = expandoObject.GetValue<string>("type");
+            IList<object> coordinates = expandoObject.GetValue<IList<object>>("coordinates");
 
-            var result = type switch
+            IEnumerable<Coordinates> result = type switch
             {
-                "Polygon" => coords.OfType<IList<object>>().SelectMany(it => it).OfType<IList<object>>()
-                    .Select(it => new Coordinates((double)it[0], (double)it[1])),
-                "LineString" => coords.OfType<IList<object>>()
-                    .Select(it => new Coordinates((double)it[0], (double)it[1])),
-                "Point" => new List<Coordinates> { new((double)coords[0], (double)coords[1]) },
+                "Polygon" => coordinates.OfType<IList<object>>().SelectMany(objects => objects).OfType<IList<object>>()
+                    .Select(objects => new Coordinates((double)objects[0], (double)objects[1])),
+                "LineString" => coordinates.OfType<IList<object>>()
+                    .Select(objects => new Coordinates((double)objects[0], (double)objects[1])),
+                "Point" => new List<Coordinates> { new((double)coordinates[0], (double)coordinates[1]) },
                 _ => throw new InvalidOperationException($"Coordinate type '{type}' unsupported.")
             };
 
             return crs != "osgb36Epsg27700"
-                ? result.Select(coords => _projectionService.Wgs84ToOsgb36(coords))
+                ? result.Select(_projectionService.Wgs84ToOsgb36)
             : result;
         }
 
@@ -231,4 +267,6 @@ public class DtroMappingService : IDtroMappingService
             Id = dtro.Id
         };
     }
+
+    private string Get(DTROHistory dtroHistory, string key) => dtroHistory.Data.GetValueOrDefault<string>(key);
 }

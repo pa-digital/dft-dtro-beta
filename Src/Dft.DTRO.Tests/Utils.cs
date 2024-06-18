@@ -100,5 +100,29 @@ namespace Dft.DTRO.Tests
 
             return new StringContent(payload, Encoding.UTF8, "application/json");
         }
+
+        public static async Task<List<DTROHistory>> CreateDtroHistoryObject(string[] dtroJsonPath)
+        {
+            List<string> items = new();
+            foreach (string path in dtroJsonPath)
+            {
+                var item = await File.ReadAllTextAsync(path);
+                items.Add(item);
+            }
+
+            DateTime createdAt = DateTime.Now;
+
+            List<DTROHistory> sampleDtroHistories = items
+                .Select(item => JsonConvert.DeserializeObject<ExpandoObject>(item, new ExpandoObjectConverter()))
+                .Select(dtroData => new DTROHistory
+                {
+                    Id = Guid.NewGuid(), 
+                    Created = createdAt, 
+                    LastUpdated = createdAt, 
+                    Data = dtroData
+                }).ToList();
+
+            return sampleDtroHistories;
+        }
     }
 }
