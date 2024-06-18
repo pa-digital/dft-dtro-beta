@@ -153,9 +153,15 @@ public class DtroMappingService : IDtroMappingService
             .SelectMany(it => it.GetValue<IList<object>>("regulations").OfType<ExpandoObject>())
         .ToList();
 
-        dtro.TrafficAuthorityCreatorId = dtro.Data.GetExpando("source").HasField("ta")
-            ? dtro.Data.GetValueOrDefault<int>("source.ta")
+        dtro.TrafficAuthorityCreatorId = dtro.Data.GetExpando("source").HasField("traCreator")
+            ? dtro.Data.GetValueOrDefault<int>("source.traCreator")
             : dtro.Data.GetValueOrDefault<int>("source.ha");
+
+        dtro.TrafficAuthorityOwnerId = dtro.Data.GetExpando("source").HasField("currentTraOwner")
+           ? dtro.Data.GetValueOrDefault<int>("source.currentTraOwner")
+           : dtro.Data.GetValueOrDefault<int>("source.ha");
+
+
         dtro.TroName = dtro.Data.GetValueOrDefault<string>("source.troName");
         dtro.RegulationTypes = regulations.Select(it => it.GetValueOrDefault<string>("regulationType"))
             .Where(it => it is not null)
