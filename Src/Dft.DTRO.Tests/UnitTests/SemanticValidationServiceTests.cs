@@ -4,10 +4,12 @@ using DfT.DTRO.Services.Validation;
 using Microsoft.Extensions.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 
 namespace Dft.DTRO.Tests;
 
+[ExcludeFromCodeCoverage]
 public class SemanticValidationServiceTests
 {
     private readonly Mock<ISystemClock> _mockClock;

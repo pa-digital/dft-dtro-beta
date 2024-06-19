@@ -3,6 +3,7 @@ using DfT.DTRO.Models.DtroJson;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using System.IO;
 
 namespace Dft.DTRO.Tests.CodeiumTests.JsonConverters;
 
+[ExcludeFromCodeCoverage]
 public class BoundingBoxJsonConverterTests
 {
     private JsonSerializer serializer;

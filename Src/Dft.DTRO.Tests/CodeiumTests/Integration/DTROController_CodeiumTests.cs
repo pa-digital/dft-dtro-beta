@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
 using DfT.DTRO.Controllers;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.Errors;
@@ -17,6 +18,7 @@ using Newtonsoft.Json.Converters;
 
 namespace DfT.DTRO.Tests.CodeiumTests.Integration;
 
+[ExcludeFromCodeCoverage]
 public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly Mock<IDtroService> _mockDtroService;

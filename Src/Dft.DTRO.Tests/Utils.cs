@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
 using System.Text;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
@@ -11,6 +12,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Dft.DTRO.Tests
 {
+    [ExcludeFromCodeCoverage]
     public static class Utils
     {
         public static DtroSubmit PrepareDtro(string jsonData, SchemaVersion? schemaVersion = null)
