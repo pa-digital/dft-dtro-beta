@@ -8,9 +8,11 @@ using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DfT.DTRO.DAL;
 using DfT.DTRO.Models.DataBase;
+using DfT.DTRO.Models.DtroHistory;
 
 namespace DfT.DTRO.Services;
 
@@ -126,7 +128,7 @@ public class DtroService : IDtroService
         Models.DataBase.DTRO currentDtro = await _dtroDal.GetDtroByIdAsync(id);
 
 
-        DTROHistory historyDtro = _dtroMappingService.AsHistoryDtro(currentDtro);
+        DTROHistory historyDtro = _dtroMappingService.MapToDtroHistory(currentDtro);
 
         var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
         if (!isSaved)
@@ -159,11 +161,13 @@ public class DtroService : IDtroService
     }
 
     /// <inheritdoc />
-    public async Task<List<DTROHistory>> GetDtroSourceHistoryAsync(string reference)
+    public async Task<List<DtroHistoryResponse>> GetDtroSourceHistoryAsync(string reference)
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroSourceHistory(reference);
 
-        List<DTROHistory> sourceHistories = _dtroMappingService.StripProvisions(dtroHistories);
+        List<DtroHistoryRequest> dtroHistoryRequests = dtroHistories.Select(_dtroMappingService.MapToDtroRequest).ToList();
+
+        List<DtroHistoryResponse> sourceHistories = dtroHistoryRequests.Select(_dtroMappingService.StripProvision).Where(response=>response!=null).ToList();
 
         return sourceHistories;
     }

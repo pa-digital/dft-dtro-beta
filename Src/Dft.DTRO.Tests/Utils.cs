@@ -3,6 +3,7 @@ using System.Dynamic;
 using System.Text;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.SchemaTemplate;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
@@ -103,7 +104,7 @@ namespace Dft.DTRO.Tests
             return new StringContent(payload, Encoding.UTF8, "application/json");
         }
 
-        public static async Task<List<DTROHistory>> CreateDtroHistoryObject(string[] dtroJsonPath)
+        public static async Task<List<DtroHistoryResponse>> CreateResponseDtroHistoryObject(string[] dtroJsonPath)
         {
             List<string> items = new();
             foreach (string path in dtroJsonPath)
@@ -114,9 +115,9 @@ namespace Dft.DTRO.Tests
 
             DateTime createdAt = DateTime.Now;
 
-            List<DTROHistory> sampleDtroHistories = items
+            List<DtroHistoryResponse> sampleDtroHistories = items
                 .Select(item => JsonConvert.DeserializeObject<ExpandoObject>(item, new ExpandoObjectConverter()))
-                .Select(dtroData => new DTROHistory
+                .Select(dtroData => new DtroHistoryResponse
                 {
                     Id = Guid.NewGuid(), 
                     Created = createdAt, 
@@ -125,6 +126,32 @@ namespace Dft.DTRO.Tests
                 }).ToList();
 
             return sampleDtroHistories;
+        }
+
+        public static async Task<List<DtroHistoryRequest>> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
+        {
+            List<string> items = new();
+            foreach (string path in dtroJsonPath)
+            {
+                var item = await File.ReadAllTextAsync(path);
+                items.Add(item);
+            }
+
+            DateTime createdAt = DateTime.Now;
+
+            List<DtroHistoryRequest> requests = items
+                .Select(item => JsonConvert.DeserializeObject<ExpandoObject>(item, new ExpandoObjectConverter()))
+                .Select(dtroData => new DtroHistoryRequest
+                {
+                    Id = Guid.NewGuid(), 
+                    Created = createdAt, 
+                    LastUpdated = createdAt, 
+                    Data = dtroData,
+                    TrafficAuthorityOwnerId = 1585,
+                    TrafficAuthorityCreatorId = 1585
+                }).ToList();
+
+            return requests;
         }
     }
 }

@@ -2,6 +2,7 @@
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Search;
 
 namespace DfT.DTRO.Services.Mapping;
@@ -24,9 +25,11 @@ public interface IDtroMappingService
 
     IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros);
 
-    DTROHistory AsHistoryDtro(Models.DataBase.DTRO currentDtro);
+    DTROHistory MapToDtroHistory(Models.DataBase.DTRO currentDtro);
 
     void UpdateDetails(Models.DataBase.DTRO currentDtro, DtroSubmit dtroSubmit);
 
-    List<DTROHistory> StripProvisions(List<DTROHistory> dtroHistories);
+    DtroHistoryResponse StripProvision(DtroHistoryRequest request);
+
+    DtroHistoryRequest MapToDtroRequest(DTROHistory dtroHistory);
 }

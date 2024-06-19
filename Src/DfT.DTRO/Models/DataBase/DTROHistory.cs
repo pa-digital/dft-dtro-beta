@@ -46,4 +46,14 @@ public class DTROHistory
     [DataMember(Name = "data")]
     [JsonConverter(typeof(ExpandoObjectConverter))]
     public ExpandoObject Data { get; set; }
+
+    [Required(ErrorMessage = "TRA Creator field must be included")]
+    [DataMember(Name = "traCreator")]
+    [Column("TraCreator")]
+    public int TrafficAuthorityCreatorId { get; set; }
+
+    [Required(ErrorMessage = "Current TRA owner field must be included")]
+    [DataMember(Name = "currentTraOwner")]
+    [Column("CurrentTraOwner")]
+    public int TrafficAuthorityOwnerId { get; set; }
 }

@@ -3,6 +3,7 @@ using System.Net;
 using DfT.DTRO;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services;
@@ -211,7 +212,7 @@ public class DTROsControllerTests
     [Fact]
     public async Task Get_SourceHistory_ReturnsListOfDtroHistory()
     {
-        List<DTROHistory> sampleDtroHistories = await CreateDtroHistoryObject(ValidDtroHistories);
+        List<DtroHistoryResponse> sampleDtroHistories = await CreateResponseDtroHistoryObject(ValidDtroHistories);
 
         _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<string>()))
             .Returns(Task.FromResult(sampleDtroHistories));
