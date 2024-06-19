@@ -1,12 +1,14 @@
 ﻿using DfT.DTRO.Services.Conversion;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Dft.DTRO.Tests;
 
+[ExcludeFromCodeCoverage]
 public class Proj4SpatialProjectionTests
 {
     const double ErrorMarginPercent = 1.2;
