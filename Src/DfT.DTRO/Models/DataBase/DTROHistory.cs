@@ -15,10 +15,14 @@ namespace DfT.DTRO.Models.DataBase;
 [DataContract]
 public class DTROHistory
 {
+    [Key]
     [SwaggerSchema(ReadOnly = true)]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
+
+    [Column(TypeName = "uuid")]
+    public Guid DtroId { get; set; }
 
     [Required(ErrorMessage = "schemaVersion field must be included")]
     [DataMember(Name = "schemaVersion")]

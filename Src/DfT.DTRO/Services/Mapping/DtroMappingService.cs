@@ -115,6 +115,7 @@ public class DtroMappingService : IDtroMappingService
         new()
         {
             Id = Guid.NewGuid(),
+            DtroId = currentDtro.Id,
             Created = currentDtro.Created,
             Data = currentDtro.Data,
             Deleted = currentDtro.Deleted,
@@ -150,7 +151,7 @@ public class DtroMappingService : IDtroMappingService
     /// <inheritdoc />
     public DtroHistoryResponse StripProvision(DtroHistoryRequest request)
     {
-        DtroHistoryResponse history = new();
+        DtroHistoryResponse response = new();
 
         var sourceActionType = Get(request, "source.actionType");
         var sourceReference = Get(request, "source.reference");
@@ -173,17 +174,17 @@ public class DtroMappingService : IDtroMappingService
         dictionary.Add("currentTraOwner", sourceCurrentTraOwner);
         dictionary.Add("troName", sourceTroName);
 
-        history.Created = request.Created;
-        history.Data = (ExpandoObject)dictionary;
-        history.Deleted = request.Deleted;
-        history.DeletionTime = request.DeletionTime;
-        history.Id = request.Id;
-        history.LastUpdated = request.LastUpdated;
-        history.SchemaVersion = request.SchemaVersion;
-        history.TrafficAuthorityCreatorId = request.TrafficAuthorityCreatorId;
-        history.TrafficAuthorityOwnerId = request.TrafficAuthorityOwnerId;
+        response.Created = request.Created;
+        response.Data = (ExpandoObject)dictionary;
+        response.Deleted = request.Deleted;
+        response.DeletionTime = request.DeletionTime;
+        response.Id = request.Id;
+        response.LastUpdated = request.LastUpdated;
+        response.SchemaVersion = request.SchemaVersion;
+        response.TrafficAuthorityCreatorId = request.TrafficAuthorityCreatorId;
+        response.TrafficAuthorityOwnerId = request.TrafficAuthorityOwnerId;
 
-        return history;
+        return response;
 
     }
 

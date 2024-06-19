@@ -118,13 +118,6 @@ public class DtroService : IDtroService
             throw new NotFoundException();
         }
 
-        var schemaExists = await _schemaTemplateDal.SchemaTemplateExistsAsync(dtroSubmit.SchemaVersion);
-
-        if (!schemaExists)
-        {
-            throw new NotFoundException("Schema Template not found");
-        }
-
         Models.DataBase.DTRO currentDtro = await _dtroDal.GetDtroByIdAsync(id);
 
 
@@ -133,19 +126,13 @@ public class DtroService : IDtroService
         var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
         if (!isSaved)
         {
-            throw new Exception();
-        }
-
-        var isDeleted = await _dtroDal.DeleteDtroAsync(currentDtro.Id, DateTime.UtcNow);
-        if (!isDeleted)
-        {
-            throw new Exception();
+            throw new Exception("Failed to write to history table");
         }
 
         _dtroMappingService.UpdateDetails(currentDtro, dtroSubmit);
 
-        GuidResponse response = await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
-        return new GuidResponse { Id = response.Id };
+        await _dtroDal.UpdateDtroAsJsonAsync(id, dtroSubmit, correlationId);
+        return new GuidResponse { Id = id };
     }
 
     /// <inheritdoc/>
