@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DfT.DTRO.Models.DataBase;
+using DfT.DTRO.Models.DtroHistory;
 
 namespace DfT.DTRO.Services;
 
@@ -103,5 +104,5 @@ public interface IDtroService
     /// Find all D-TRO Source History
     /// </summary>
     /// <returns>List of D-TRO Source History</returns>
-    Task<List<DTROHistory>> GetDtroSourceHistoryAsync(string reference);
+    Task<List<DtroHistoryResponse>> GetDtroSourceHistoryAsync(string reference);
 }

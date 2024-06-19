@@ -28,7 +28,7 @@ public static class EnumerableExtensions
         return enums.Select(it=>it.GetDisplayName()).ToList();
     }
 
-    private static string GetDisplayName(this Enum enumToDisplay) => 
+    public static string GetDisplayName(this Enum enumToDisplay) => 
         enumToDisplay.GetAttribute<DisplayAttribute>().Name;
 
     private static TAttribute GetAttribute<TAttribute>(this Enum enumValue) where TAttribute : Attribute => 

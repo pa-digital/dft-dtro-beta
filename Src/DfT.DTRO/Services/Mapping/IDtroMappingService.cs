@@ -2,6 +2,7 @@
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Search;
 
 namespace DfT.DTRO.Services.Mapping;

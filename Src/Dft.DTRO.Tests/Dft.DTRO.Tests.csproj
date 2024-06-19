@@ -67,6 +67,7 @@
 		<None Remove="DtroJsonDataExamples\v3.2.0\valid-fullAmendment.json" />
 		<None Remove="DtroJsonDataExamples\v3.2.0\valid-fullRevoke.json" />
 		<None Remove="DtroJsonDataExamples\v3.2.0\valid-new-x.json" />
+		<None Remove="DtroJsonDataExamples\v3.2.0\valid-noChange.json" />
 		<None Remove="DtroJsonDataExamples\v3.2.0\valid-partialAmendment.json" />
 		<None Remove="DtroJsonDataExamples\v3.2.0\valid-partialRevoke.json" />
 	</ItemGroup>

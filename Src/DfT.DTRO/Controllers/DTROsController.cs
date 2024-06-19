@@ -7,6 +7,7 @@ using DfT.DTRO.Attributes;
 using DfT.DTRO.FeatureManagement;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.RequestCorrelation;
@@ -342,12 +343,12 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     [HttpGet]
     [Route("/v1/dtros/sourceHistory/{reference}")]
-    public async Task<IActionResult> GetSourceHistory(string reference)
+    public async Task<ActionResult<List<DtroHistoryResponse>>> GetSourceHistory(string reference)
     {
         try
         {
-            List<DTROHistory> historyResponse = await _dtroService.GetDtroSourceHistoryAsync(reference);
-            return Ok(historyResponse);
+            var response = await _dtroService.GetDtroSourceHistoryAsync(reference);
+            return Ok(response);
         }
         catch (NotFoundException nFex)
         {

@@ -7,11 +7,11 @@ using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.DtroJson;
 using DfT.DTRO.Models.Search;
 using DfT.DTRO.Services.Conversion;
 using Microsoft.Extensions.Configuration;
-using Microsoft.OpenApi.Extensions;
 
 namespace DfT.DTRO.Services.Mapping;
 
@@ -111,7 +111,7 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc/>
-    public DTROHistory AsHistoryDtro(Models.DataBase.DTRO currentDtro) =>
+    public DTROHistory MapToDtroHistory(Models.DataBase.DTRO currentDtro) =>
         new()
         {
             Id = Guid.NewGuid(),
@@ -119,7 +119,7 @@ public class DtroMappingService : IDtroMappingService
             Data = currentDtro.Data,
             Deleted = currentDtro.Deleted,
             DeletionTime = currentDtro.DeletionTime,
-            LastUpdated = currentDtro.LastUpdated,
+            LastUpdated = DateTime.UtcNow,
             SchemaVersion = currentDtro.SchemaVersion
         };
 
@@ -148,46 +148,54 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc />
-    public List<DTROHistory> StripProvisions(List<DTROHistory> dtroHistories)
+    public DtroHistoryResponse StripProvision(DtroHistoryRequest request)
     {
-        List<DTROHistory> histories = new();
+        DtroHistoryResponse history = new();
 
-        foreach (DTROHistory dtroHistory in dtroHistories)
+        var sourceActionType = Get(request, "source.actionType");
+        var sourceReference = Get(request, "source.reference");
+        var sourceSection = Get(request, "source.section");
+        var sourceTa = Get(request, "source.ta");
+        var sourceTroName = Get(request, "source.troName");
+
+        ExpandoObject expando = new();
+        IDictionary<string, object> dictionary = expando;
+        if (sourceActionType == SourceActionType.NoChange.GetDisplayName())
         {
-            DTROHistory history = new();
-
-            var sourceActionType = Get(dtroHistory, "source.actionType");
-            if (sourceActionType == SourceActionType.NoChange.GetDisplayName())
-            {
-                continue;
-            }
-
-            var sourceReference = Get(dtroHistory, "source.reference");
-            var sourceSection = Get(dtroHistory, "source.section");
-            var sourceTa = Get(dtroHistory, "source.ta");
-            var sourceTroName = Get(dtroHistory, "source.troName");
-
-            ExpandoObject expando = new();
-            IDictionary<string, object> dictionary = expando;
-            dictionary.Add("actionType", sourceActionType);
-            dictionary.Add("reference", sourceReference);
-            dictionary.Add("section", sourceSection);
-            dictionary.Add("ta", sourceTa);
-            dictionary.Add("troName", sourceTroName);
-            
-            history.Created = dtroHistory.Created;
-            history.Data = (ExpandoObject)dictionary;
-            history.Deleted = dtroHistory.Deleted;
-            history.DeletionTime = dtroHistory.DeletionTime;
-            history.Id = dtroHistory.Id;
-            history.LastUpdated = dtroHistory.LastUpdated;
-            history.SchemaVersion = dtroHistory.SchemaVersion;
-
-            histories.Add(history);
+            return null;
         }
 
-        return histories;
+        dictionary.Add("actionType", sourceActionType);
+        dictionary.Add("reference", sourceReference);
+        dictionary.Add("section", sourceSection);
+        dictionary.Add("ta", sourceTa);
+        dictionary.Add("troName", sourceTroName);
+
+        history.Created = request.Created;
+        history.Data = (ExpandoObject)dictionary;
+        history.Deleted = request.Deleted;
+        history.DeletionTime = request.DeletionTime;
+        history.Id = request.Id;
+        history.LastUpdated = request.LastUpdated;
+        history.SchemaVersion = request.SchemaVersion;
+        history.TrafficAuthorityCreatorId = request.TrafficAuthorityCreatorId;
+        history.TrafficAuthorityOwnerId = request.TrafficAuthorityOwnerId;
+
+        return history;
+
     }
+
+    public DtroHistoryRequest MapToDtroRequest(DTROHistory dtroHistory) =>
+        new()
+        {
+            Id = dtroHistory.Id,
+            Created = dtroHistory.Created,
+            Data = dtroHistory.Data,
+            Deleted = dtroHistory.Deleted,
+            DeletionTime = dtroHistory.DeletionTime,
+            LastUpdated = dtroHistory.LastUpdated,
+            SchemaVersion = dtroHistory.SchemaVersion
+        };
 
     /// <inheritdoc/>
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
@@ -285,5 +293,5 @@ public class DtroMappingService : IDtroMappingService
         };
     }
 
-    private string Get(DTROHistory dtroHistory, string key) => dtroHistory.Data.GetValueOrDefault<string>(key);
+    private string Get(DtroHistoryRequest request, string key) => request.Data.GetValueOrDefault<string>(key);
 }
