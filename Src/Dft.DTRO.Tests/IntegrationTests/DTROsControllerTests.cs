@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using DfT.DTRO;
 using DfT.DTRO.Models.DataBase;
@@ -15,6 +16,7 @@ using Newtonsoft.Json;
 
 namespace Dft.DTRO.Tests.IntegrationTests;
 
+[ExcludeFromCodeCoverage]
 public class DTROsControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {

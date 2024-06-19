@@ -21,7 +21,7 @@ public class DtroHistoryDal : IDtroHistoryDal
     /// <summary>
     /// Save current DTRO to DTRO History Table
     /// </summary>
-    /// <param name="currentDtro"></param>
+    /// <param name="dtroHistory">the history dtro instance</param>
     /// <returns>
     /// A <see cref="Task"/> that resolved to <see langword="true"/>
     /// if the DTRO was successfully saved

@@ -1,4 +1,5 @@
-﻿using DfT.DTRO.Models.DataBase;
+﻿using System.Diagnostics.CodeAnalysis;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.RuleTemplate;
 using DfT.DTRO.Models.SchemaTemplate;
@@ -8,6 +9,7 @@ using DfT.DTRO.Services.Mapping;
 
 namespace Dft.DTRO.Tests.CodeiumTests.Rules.Service;
 
+[ExcludeFromCodeCoverage]
 public class RuleTemplateServiceTests
 {
     private Mock<IRuleTemplateDal> _mockRuleTemplateDal;

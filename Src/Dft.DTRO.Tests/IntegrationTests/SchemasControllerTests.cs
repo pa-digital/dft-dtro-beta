@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Net;
 using DfT.DTRO;
@@ -13,6 +14,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Dft.DTRO.Tests.IntegrationTests;
 
+[ExcludeFromCodeCoverage]
 public class SchemasControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using DfT.DTRO.Enums;
 using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
@@ -10,6 +11,7 @@ using DfT.DTRO.Models.DtroJson;
 using DfT.DTRO.Models.Search;
 using DfT.DTRO.Services.Conversion;
 using Microsoft.Extensions.Configuration;
+using Microsoft.OpenApi.Extensions;
 
 namespace DfT.DTRO.Services.Mapping;
 
@@ -145,6 +147,7 @@ public class DtroMappingService : IDtroMappingService
         dtro.LastUpdatedCorrelationId = dtro.CreatedCorrelationId;
     }
 
+    /// <inheritdoc />
     public List<DTROHistory> StripProvisions(List<DTROHistory> dtroHistories)
     {
         List<DTROHistory> histories = new();
@@ -154,6 +157,11 @@ public class DtroMappingService : IDtroMappingService
             DTROHistory history = new();
 
             var sourceActionType = Get(dtroHistory, "source.actionType");
+            if (sourceActionType == SourceActionType.NoChange.GetDisplayName())
+            {
+                continue;
+            }
+
             var sourceReference = Get(dtroHistory, "source.reference");
             var sourceSection = Get(dtroHistory, "source.section");
             var sourceTa = Get(dtroHistory, "source.ta");

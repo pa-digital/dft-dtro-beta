@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.Validation;
 using DfT.DTRO.Services.Validation;
@@ -6,6 +7,7 @@ using Newtonsoft.Json;
 
 namespace Dft.DTRO.Tests;
 
+[ExcludeFromCodeCoverage]
 public class RecordManagementServiceTests
 {
     private const string SourceJsonBasePath = "./DtroJsonDataExamples/v3.2.0";

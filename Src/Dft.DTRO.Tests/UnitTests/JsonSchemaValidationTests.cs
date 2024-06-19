@@ -1,7 +1,9 @@
-﻿using DfT.DTRO.Services.Validation;
+﻿using System.Diagnostics.CodeAnalysis;
+using DfT.DTRO.Services.Validation;
 
 namespace Dft.DTRO.Tests;
 
+[ExcludeFromCodeCoverage]
 public class JsonSchemaValidationTests
 {
     private const string Schema311Files = "./DtroJsonDataExamples/v3.1.1";

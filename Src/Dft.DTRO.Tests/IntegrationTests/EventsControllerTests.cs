@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace Dft.DTRO.Tests.IntegrationTests;
 
+[ExcludeFromCodeCoverage]
 public class EventsControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {

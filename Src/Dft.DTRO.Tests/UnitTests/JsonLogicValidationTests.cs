@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using DfT.DTRO.Extensions.DependencyInjection;
 using DfT.DTRO.JsonLogic;
 using DfT.DTRO.Models.DtroDtos;
@@ -9,6 +10,7 @@ using DfT.DTRO.Services.Validation;
 
 namespace Dft.DTRO.Tests;
 
+[ExcludeFromCodeCoverage]
 public class JsonLogicValidationTests
 {
     private readonly Mock<IRuleTemplateDal> ruleDal = new();
