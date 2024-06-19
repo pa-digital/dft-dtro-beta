@@ -155,7 +155,8 @@ public class DtroMappingService : IDtroMappingService
         var sourceActionType = Get(request, "source.actionType");
         var sourceReference = Get(request, "source.reference");
         var sourceSection = Get(request, "source.section");
-        var sourceTa = Get(request, "source.ta");
+        var sourceTraCreator = Get(request, "source.traCreator");
+        var sourceCurrentTraOwner = Get(request, "source.currentTraOwner");
         var sourceTroName = Get(request, "source.troName");
 
         ExpandoObject expando = new();
@@ -168,7 +169,8 @@ public class DtroMappingService : IDtroMappingService
         dictionary.Add("actionType", sourceActionType);
         dictionary.Add("reference", sourceReference);
         dictionary.Add("section", sourceSection);
-        dictionary.Add("ta", sourceTa);
+        dictionary.Add("traCreator", sourceTraCreator);
+        dictionary.Add("currentTraOwner", sourceCurrentTraOwner);
         dictionary.Add("troName", sourceTroName);
 
         history.Created = request.Created;
