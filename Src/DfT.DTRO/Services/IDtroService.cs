@@ -104,5 +104,5 @@ public interface IDtroService
     /// Find all D-TRO Source History
     /// </summary>
     /// <returns>List of D-TRO Source History</returns>
-    Task<List<DtroHistoryResponse>> GetDtroSourceHistoryAsync(string reference);
+    Task<List<DtroHistoryResponse>> GetDtroSourceHistoryAsync(Guid dtroId);
 }

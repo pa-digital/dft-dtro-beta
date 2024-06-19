@@ -42,22 +42,11 @@ public class DtroHistoryDal : IDtroHistoryDal
     /// <summary>
     /// Get list of the D-TROs from DTRO History Table
     /// </summary>
-    /// <param name="reference">Source reference passed</param>
+    /// <param name="dtroId">D-TRO ID reference passed</param>
     /// <returns>List of historic D-TROs</returns>
-    public async Task<List<DTROHistory>> GetDtroSourceHistory(string reference)
-    {
-        List<DTROHistory> histories = await _dtroContext.DtroHistories.ToListAsync();
-
-        List<DTROHistory> currentHistory = new();
-        foreach (DTROHistory history in histories)
-        {
-            var sourceReference = history.Data.GetExpando("source").GetValueOrDefault<string>("reference");
-            if (sourceReference == reference)
-            {
-                currentHistory.Add(history);
-            }
-        }
-
-        return currentHistory.OrderByDescending(history=>history.LastUpdated).ToList();
-    }
+    public async Task<List<DTROHistory>> GetDtroSourceHistory(Guid dtroId) =>
+        await _dtroContext.DtroHistories
+            .Where(history => history.DtroId == dtroId)
+            .OrderByDescending(history => history.LastUpdated)
+            .ToListAsync();
 }

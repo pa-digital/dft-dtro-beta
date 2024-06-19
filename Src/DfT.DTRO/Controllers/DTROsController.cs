@@ -337,17 +337,17 @@ public class DTROsController : ControllerBase
     /// <summary>
     /// Get D-TRO source history.
     /// </summary>
-    /// <param name="reference">The D-TRO source history reference.</param>
+    /// <param name="dtroId">The D-TRO ID reference.</param>
     /// <response code="200">OK</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     [HttpGet]
-    [Route("/v1/dtros/sourceHistory/{reference}")]
-    public async Task<ActionResult<List<DtroHistoryResponse>>> GetSourceHistory(string reference)
+    [Route("/v1/dtros/sourceHistory/{dtroId:guid}")]
+    public async Task<ActionResult<List<DtroHistoryResponse>>> GetSourceHistory(Guid dtroId)
     {
         try
         {
-            var response = await _dtroService.GetDtroSourceHistoryAsync(reference);
+            var response = await _dtroService.GetDtroSourceHistoryAsync(dtroId);
             return Ok(response);
         }
         catch (NotFoundException nFex)
