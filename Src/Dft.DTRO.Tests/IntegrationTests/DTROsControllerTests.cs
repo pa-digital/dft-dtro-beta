@@ -214,12 +214,13 @@ public class DTROsControllerTests
     {
         List<DtroHistoryResponse> sampleDtroHistories = await CreateResponseDtroHistoryObject(ValidDtroHistories);
 
-        _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<string>()))
+
+        _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<Guid>()))
             .Returns(Task.FromResult(sampleDtroHistories));
 
         HttpClient client = _factory.CreateClient();
 
-        HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/REFRENCE");
+        HttpResponseMessage response = await client.GetAsync($"/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -227,12 +228,12 @@ public class DTROsControllerTests
     [Fact]
     public async Task Get_SourceHistory_ReturnsNotFoundError()
     {
-        _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<string>()))
+        _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<Guid>()))
             .Throws(new NotFoundException());
 
         HttpClient client = _factory.CreateClient();
 
-        HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/REFRENCE");
+        HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -240,12 +241,12 @@ public class DTROsControllerTests
     [Fact]
     public async Task Get_SourceHistory_ReturnsBadRequestError()
     {
-        _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<string>()))
+        _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<Guid>()))
             .Throws(new Exception());
 
         HttpClient client = _factory.CreateClient();
 
-        HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/REFRENCE");
+        HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
     }

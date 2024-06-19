@@ -148,9 +148,9 @@ public class DtroService : IDtroService
     }
 
     /// <inheritdoc />
-    public async Task<List<DtroHistoryResponse>> GetDtroSourceHistoryAsync(string reference)
+    public async Task<List<DtroHistoryResponse>> GetDtroSourceHistoryAsync(Guid dtroId)
     {
-        List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroSourceHistory(reference);
+        List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroSourceHistory(dtroId);
 
         List<DtroHistoryRequest> dtroHistoryRequests = dtroHistories.Select(_dtroMappingService.MapToDtroRequest).ToList();
 

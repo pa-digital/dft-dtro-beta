@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DfT.DTRO.Models.DataBase;
 
@@ -8,5 +9,5 @@ public interface IDtroHistoryDal
 {
     Task<bool> SaveDtroInHistoryTable(DTROHistory dtroHistory);
 
-    Task<List<DTROHistory>> GetDtroSourceHistory(string reference);
+    Task<List<DTROHistory>> GetDtroSourceHistory(Guid dtroId);
 }
