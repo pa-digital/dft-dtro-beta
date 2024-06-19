@@ -8,6 +8,8 @@ public class DtroHistoryRequest
 {
     public Guid Id { get; set; }
 
+    public Guid DtroId { get; set; }
+
     public SchemaVersion SchemaVersion { get; set; }
 
     public DateTime? Created { get; set; }

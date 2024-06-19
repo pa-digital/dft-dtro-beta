@@ -31,7 +31,7 @@ public class MappingServiceTests
     public async Task StripProvisions_Returns_DtroHistoryResponse()
     {
         List<DtroHistoryRequest> requests = await CreateRequestDtroHistoryObject(ValidDtroHistories);
-        List<DtroHistoryResponse> actual = requests.Select(_sut.StripProvision).Where(response=>response!=null).ToList();
+        List<DtroHistoryResponse> actual = requests.Select(_sut.StripProvision).Where(response => response != null).ToList();
 
         Assert.True(actual.Any());
 
@@ -39,7 +39,6 @@ public class MappingServiceTests
 
         Assert.Equal(actual[0].Created, actual[1].Created);
 
-
-        var updatedDate = actual.Select(it => it.LastUpdated);
+        Assert.True(actual[1].LastUpdated > actual[0].LastUpdated);
     }
 }

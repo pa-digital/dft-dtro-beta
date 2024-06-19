@@ -30,7 +30,7 @@ public class DtroHistoryDal : IDtroHistoryDal
     public async Task<bool> SaveDtroInHistoryTable(DTROHistory dtroHistory)
     {
         EntityEntry<DTROHistory> entry = await _dtroContext.DtroHistories.AddAsync(dtroHistory);
-        if (entry.Entity.Id == Guid.Empty)
+        if (entry.Entity.Id==Guid.Empty)
         {
             return false;
         }
