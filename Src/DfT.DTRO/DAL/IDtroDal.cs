@@ -109,11 +109,4 @@ public interface IDtroDal
     /// or <see langword="false"/> if it was not found.
     /// </returns>
     Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null);
-
-    /// <summary>
-    /// Get D-TRO source history.
-    /// </summary>
-    /// <param name="reference">The reference ID of the D-TRO source</param>
-    /// <returns>List of the D-TRO source history</returns>
-    Task<List<Models.DataBase.DTRO>> GetDtroSourceHistoryAsync(string reference);
 }

@@ -29,3 +29,34 @@ D:\Repos\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\refint\Dft.DTRO.Admin
 D:\Repos\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.pdb
 D:\Repos\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.genruntimeconfig.cache
 D:\Repos\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\ref\Dft.DTRO.Admin.dll
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.dll
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\refint\Dft.DTRO.Admin.dll
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.pdb
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\bin\Debug\net6.0\appsettings.json
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\bin\Debug\net6.0\Dft.DTRO.Admin.staticwebassets.runtime.json
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\bin\Debug\net6.0\Dft.DTRO.Admin.exe
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\bin\Debug\net6.0\Dft.DTRO.Admin.deps.json
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\bin\Debug\net6.0\Dft.DTRO.Admin.runtimeconfig.json
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\bin\Debug\net6.0\Dft.DTRO.Admin.dll
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\bin\Debug\net6.0\Dft.DTRO.Admin.pdb
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.AssemblyInfoInputs.cache
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.AssemblyInfo.cs
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.csproj.CoreCompileInputs.cache
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.RazorAssemblyInfo.cache
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.RazorAssemblyInfo.cs
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.sourcelink.json
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\staticwebassets\msbuild.Dft.DTRO.Admin.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\staticwebassets\msbuild.build.Dft.DTRO.Admin.props
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.Dft.DTRO.Admin.props
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.Dft.DTRO.Admin.props
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\staticwebassets.pack.json
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\scopedcss\Pages\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\scopedcss\bundle\Dft.DTRO.Admin.styles.css
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\scopedcss\projectbundle\Dft.DTRO.Admin.bundle.scp.css
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\Dft.DTRO.Admin.genruntimeconfig.cache
+C:\Users\BELGP3\OneDrive - PA Consulting Group\Documents\Work\Code\PA\Clients\DfT\dft-dtro-beta\Src\Dft.DTRO.Admin\obj\Debug\net6.0\ref\Dft.DTRO.Admin.dll

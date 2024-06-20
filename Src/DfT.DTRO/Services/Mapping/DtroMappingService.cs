@@ -149,7 +149,7 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc />
-    public DtroHistoryResponse StripProvision(DtroHistoryRequest request)
+    public DtroHistoryResponse StripProvision(DTROHistory request)
     {
         DtroHistoryResponse response = new();
 
@@ -187,18 +187,6 @@ public class DtroMappingService : IDtroMappingService
         return response;
 
     }
-
-    public DtroHistoryRequest MapToDtroRequest(DTROHistory dtroHistory) =>
-        new()
-        {
-            Id = dtroHistory.Id,
-            Created = dtroHistory.Created,
-            Data = dtroHistory.Data,
-            Deleted = dtroHistory.Deleted,
-            DeletionTime = dtroHistory.DeletionTime,
-            LastUpdated = dtroHistory.LastUpdated,
-            SchemaVersion = dtroHistory.SchemaVersion
-        };
 
     /// <inheritdoc/>
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
@@ -296,5 +284,5 @@ public class DtroMappingService : IDtroMappingService
         };
     }
 
-    private string Get(DtroHistoryRequest request, string key) => request.Data.GetValueOrDefault<string>(key);
+    private string Get(DTROHistory request, string key) => request.Data.GetValueOrDefault<string>(key);
 }

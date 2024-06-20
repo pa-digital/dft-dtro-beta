@@ -125,7 +125,7 @@ namespace Dft.DTRO.Tests
             return sampleDtroHistories;
         }
 
-        public static async Task<List<DtroHistoryRequest>> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
+        public static async Task<List<DTROHistory>> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
         {
             List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
 
@@ -134,10 +134,10 @@ namespace Dft.DTRO.Tests
                 .ToList();
 
 
-            var requests = new List<DtroHistoryRequest>();
+            var requests = new List<DTROHistory>();
             foreach (ExpandoObject? expando in data)
             {
-                var request = new DtroHistoryRequest
+                var request = new DTROHistory
                 {
                     Id = Guid.NewGuid(),
                     DtroId = Guid.Parse("C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4"),
