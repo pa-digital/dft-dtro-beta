@@ -103,6 +103,14 @@ public interface IDtroService
     /// <summary>
     /// Find all D-TRO Source History
     /// </summary>
+    /// <param name="dtroId">D-TRO ID passed</param>
     /// <returns>List of D-TRO Source History</returns>
-    Task<List<DtroHistoryResponse>> GetDtroSourceHistoryAsync(Guid dtroId);
+    Task<List<DtroHistorySourceResponse>> GetDtroSourceHistoryAsync(Guid dtroId);
+
+    /// <summary>
+    /// Find all D-TRO Provision History
+    /// </summary>
+    /// <param name="dtroId">D-TRO ID passed</param>
+    /// <returns>List of D-TRO Provision History</returns>
+    Task<List<DtroHistoryProvisionResponse>> GetDtroProvisionHistoryAsync(Guid dtroId);
 }

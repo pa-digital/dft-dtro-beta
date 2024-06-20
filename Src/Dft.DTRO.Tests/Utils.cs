@@ -105,21 +105,18 @@ namespace Dft.DTRO.Tests
             return new StringContent(payload, Encoding.UTF8, "application/json");
         }
 
-        public static async Task<List<DtroHistoryResponse>> CreateResponseDtroHistoryObject(string[] dtroJsonPath)
+        public static async Task<List<DtroHistorySourceResponse>> CreateResponseDtroHistoryObject(string[] dtroJsonPath)
         {
             List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
 
             DateTime createdAt = DateTime.Now;
 
-            List<DtroHistoryResponse> sampleDtroHistories = items
+            List<DtroHistorySourceResponse> sampleDtroHistories = items
                 .Select(item => JsonConvert.DeserializeObject<ExpandoObject>(item, new ExpandoObjectConverter()))
-                .Select(dtroData => new DtroHistoryResponse
+                .Select(dtroData => new DtroHistorySourceResponse
                 {
-                    Id = Guid.NewGuid(), 
-                    DtroId = Guid.Parse("C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4"),
                     Created = new DateTime(2024,6,19,16,38,00), 
                     LastUpdated = createdAt, 
-                    Data = dtroData
                 }).ToList();
 
             return sampleDtroHistories;
@@ -137,7 +134,7 @@ namespace Dft.DTRO.Tests
             var requests = new List<DTROHistory>();
             foreach (ExpandoObject? expando in data)
             {
-                var request = new DTROHistory
+                DTROHistory request = new()
                 {
                     Id = Guid.NewGuid(),
                     DtroId = Guid.Parse("C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4"),

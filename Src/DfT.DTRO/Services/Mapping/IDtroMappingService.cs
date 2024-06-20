@@ -27,5 +27,7 @@ public interface IDtroMappingService
 
     DtroHistoryResponse StripProvision(DTROHistory request);
 
-    DTROHistory MapToDtroHistory(Models.DataBase.DTRO currentDtro);
+    DtroHistorySourceResponse GetSource(DTROHistory dtroHistory);
+
+    DtroHistoryProvisionResponse GetProvision(DTROHistory dtroHistory);
 }
