@@ -112,14 +112,11 @@ public class DtroDal : IDtroDal
 
         dtro.SchemaVersion = dtroSubmit.SchemaVersion;
 
-        // dtro.RegulationStart = dtroSubmit.RegulationStart;
-        // dtro.RegulationEnd = dtroSubmit.RegulationEnd;
-        // dtro.TrafficAuthorityId = dtroSubmit.TrafficAuthorityId;
-        // dtro.TroName = dtroSubmit.TroName;
-        dtro.Data = dtroSubmit.Data;
 
-        dtro.LastUpdated = DateTime.UtcNow;
-        dtro.Created = dtro.LastUpdated;
+        dtro.Data = dtroSubmit.Data;
+        var now = DateTime.UtcNow;
+        dtro.LastUpdated = now;
+        dtro.Created = now;
         dtro.LastUpdatedCorrelationId = correlationId;
         dtro.CreatedCorrelationId = dtro.LastUpdatedCorrelationId;
 
@@ -154,11 +151,6 @@ public class DtroDal : IDtroDal
         }
 
         existing.SchemaVersion = dtroSubmit.SchemaVersion;
-
-        // existing.RegulationStart = dtroSubmit.RegulationStart;
-        // existing.RegulationEnd = dtroSubmit.RegulationEnd;
-        // existing.TrafficAuthorityId = dtroSubmit.TrafficAuthorityId;
-        // existing.TroName = dtroSubmit.TroName;
         existing.Data = dtroSubmit.Data;
 
         existing.LastUpdated = DateTime.UtcNow;

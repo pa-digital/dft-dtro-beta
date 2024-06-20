@@ -25,6 +25,4 @@ public interface IDtroMappingService
     IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros);
 
     DTROHistory AsHistoryDtro(Models.DataBase.DTRO currentDtro);
-
-    void UpdateDetails(Models.DataBase.DTRO currentDtro, DtroSubmit dtroSubmit);
 }

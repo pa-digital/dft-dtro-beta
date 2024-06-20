@@ -10,11 +10,12 @@ namespace DfT.DTRO.Models.Errors;
 /// </summary>
 public class DtroValidationException : Exception
 {
-    /// <summary>
-    /// The message detail of the error encountered.
-    /// </summary>
     public DtroValidationException()
        : base("Dtro Validation Failure")
+    {
+    }
+
+    public DtroValidationException(string message) : base(message)
     {
     }
 

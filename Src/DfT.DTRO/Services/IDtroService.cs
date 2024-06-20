@@ -40,7 +40,7 @@ public interface IDtroService
     /// <param name="dtroSubmit">The DTRO Json content.</param>
     /// <param name="correlationId">The correlation id.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
-    Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId);
+    Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, int? headerTa);
 
     /// <summary>
     /// Gets a DTRO domain object from storage by a quoted id.
@@ -57,7 +57,7 @@ public interface IDtroService
     /// <param name="dtroSubmit">The DTRO Json content.</param>
     /// <param name="correlationId">The correlation id.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous update operation.</returns>
-    Task UpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId);
+    // Task UpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId);
 
     /// <summary>
     /// Tries to update the DTRO.
@@ -70,7 +70,7 @@ public interface IDtroService
     /// if the DTRO was successfully updated
     /// or <see langword="false"/> if it was not found.
     /// </returns>
-    Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId);
+    Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, int? headerTa);
 
     /// <summary>
     /// Marks the specified DTRO as deleted (does not delete the DTRO immediately).

@@ -9,9 +9,21 @@ namespace DfT.DTRO.Services.Validation;
 
 public class RecordManagementService : IRecordManagementService
 {
-    public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit)
+    public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit, int? ta)
     {
         var validationErrors = new List<SemanticValidationError>();
+
+        if (ta != null)
+        {
+            var creator = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<int>("traCreator");
+            var owner = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<int>("currentTraOwner");
+
+            var isCreatorOrOwner = creator == ta | owner == ta;
+            if (!isCreatorOrOwner)
+            {
+                validationErrors.Add(new SemanticValidationError { Message = $"Traffic authority {ta} is not the creator or owner in the DTRO data submitted" });
+            }
+        }
 
         var sourceReference = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("reference");
         if (string.IsNullOrWhiteSpace(sourceReference))

@@ -35,7 +35,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         _recordManagementService = recordManagementService;
     }
 
-    public async Task<DtroValidationException> ValidateDtro(DtroSubmit dtroSubmit)
+    public async Task<DtroValidationException> ValidateDtro(DtroSubmit dtroSubmit, int? headerTa)
     {
         var schemaVersion = dtroSubmit.SchemaVersion;
         var schema = await _schemaTemplateService.GetSchemaTemplateAsync(schemaVersion);
@@ -60,7 +60,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
         }
 
-        var requests = _recordManagementService.ValidateCreationRequest(dtroSubmit);
+        var requests = _recordManagementService.ValidateCreationRequest(dtroSubmit, headerTa);
         if (requests.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requests.ToList() };
