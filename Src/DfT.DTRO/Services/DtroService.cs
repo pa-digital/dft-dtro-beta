@@ -152,9 +152,10 @@ public class DtroService : IDtroService
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroSourceHistory(dtroId);
 
-        List<DtroHistoryRequest> dtroHistoryRequests = dtroHistories.Select(_dtroMappingService.MapToDtroRequest).ToList();
-
-        List<DtroHistoryResponse> sourceHistories = dtroHistoryRequests.Select(_dtroMappingService.StripProvision).Where(response=>response!=null).ToList();
+        List<DtroHistoryResponse> sourceHistories = dtroHistories
+            .Select(_dtroMappingService.StripProvision)
+            .Where(response => response != null)
+            .ToList();
 
         return sourceHistories;
     }

@@ -421,9 +421,4 @@ public class DtroDal : IDtroDal
         await _dtroContext.SaveChangesAsync();
         return true;
     }
-
-    public async Task<List<Models.DataBase.DTRO>> GetDtroSourceHistoryAsync(string reference)
-    {
-        throw new NotImplementedException();
-    }
 }

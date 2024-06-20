@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
@@ -30,8 +31,8 @@ public class MappingServiceTests
     [Fact]
     public async Task StripProvisions_Returns_DtroHistoryResponse()
     {
-        List<DtroHistoryRequest> requests = await CreateRequestDtroHistoryObject(ValidDtroHistories);
-        List<DtroHistoryResponse> actual = requests.Select(_sut.StripProvision).Where(response => response != null).ToList();
+        List<DTROHistory> histories = await CreateRequestDtroHistoryObject(ValidDtroHistories);
+        List<DtroHistoryResponse> actual = histories.Select(_sut.StripProvision).Where(response => response != null).ToList();
 
         Assert.True(actual.Any());
 
