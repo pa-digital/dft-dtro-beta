@@ -32,7 +32,10 @@ public class MappingServiceTests
     public async Task StripProvisions_Returns_DtroHistoryResponse()
     {
         List<DTROHistory> histories = await CreateRequestDtroHistoryObject(ValidDtroHistories);
-        List<DtroHistoryResponse> actual = histories.Select(_sut.StripProvision).Where(response => response != null).ToList();
+        List<DtroHistorySourceResponse> actual = histories
+            .Select(_sut.GetSource)
+            .Where(response => response != null)
+            .ToList();
 
         Assert.True(actual.Any());
 

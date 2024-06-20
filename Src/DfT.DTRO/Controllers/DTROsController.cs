@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DfT.DTRO.Attributes;
 using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Errors;
@@ -297,11 +296,11 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     [HttpGet]
     [Route("/v1/dtros/sourceHistory/{dtroId:guid}")]
-    public async Task<ActionResult<List<DtroHistoryResponse>>> GetSourceHistory(Guid dtroId)
+    public async Task<ActionResult<List<DtroHistorySourceResponse>>> GetSourceHistory(Guid dtroId)
     {
         try
         {
-            var response = await _dtroService.GetDtroSourceHistoryAsync(dtroId);
+            List<DtroHistorySourceResponse> response = await _dtroService.GetDtroSourceHistoryAsync(dtroId);
             return Ok(response);
         }
         catch (NotFoundException nFex)
@@ -311,6 +310,33 @@ public class DTROsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"An error occurred while processing {nameof(GetSourceHistory)} request.");
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+        }
+    }
+
+    /// <summary>
+    /// Get D-TRO provision history.
+    /// </summary>
+    /// <param name="dtroId">The D-TRO ID reference.</param>
+    /// <response code="200">OK</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    [HttpGet]
+    [Route("/v1/dtros/provisionHistory/{dtroId:guid}")]
+    public async Task<ActionResult<List<DtroHistoryProvisionResponse>>> GetProvisionHistory(Guid dtroId)
+    {
+        try
+        {
+            List<DtroHistoryProvisionResponse> response = await _dtroService.GetDtroProvisionHistoryAsync(dtroId);
+            return Ok(response);
+        }
+        catch (NotFoundException nFex)
+        {
+            return NotFound(new ApiErrorResponse(nFex.Message, "Dtro History not found."));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"An error occurred while processing {nameof(GetProvisionHistory)} request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
