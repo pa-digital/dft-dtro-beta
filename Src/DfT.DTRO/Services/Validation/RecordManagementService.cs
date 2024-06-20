@@ -11,7 +11,7 @@ public class RecordManagementService : IRecordManagementService
 {
     public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit)
     {
-        var validationErrors = new List<SemanticValidationError>();
+        List<SemanticValidationError> validationErrors = new();
 
         var sourceReference = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("reference");
         if (string.IsNullOrWhiteSpace(sourceReference))

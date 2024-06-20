@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using DfT.DTRO.Enums;
 using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.DtroJson;
 using DfT.DTRO.Models.Search;
 using DfT.DTRO.Services.Conversion;
@@ -109,15 +111,16 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc/>
-    public DTROHistory AsHistoryDtro(Models.DataBase.DTRO currentDtro) =>
+    public DTROHistory MapToDtroHistory(Models.DataBase.DTRO currentDtro) =>
         new()
         {
             Id = Guid.NewGuid(),
+            DtroId = currentDtro.Id,
             Created = currentDtro.Created,
             Data = currentDtro.Data,
             Deleted = currentDtro.Deleted,
             DeletionTime = currentDtro.DeletionTime,
-            LastUpdated = currentDtro.LastUpdated,
+            LastUpdated = DateTime.UtcNow,
             SchemaVersion = currentDtro.SchemaVersion
         };
 
@@ -143,6 +146,46 @@ public class DtroMappingService : IDtroMappingService
         };
 
         dtro.LastUpdatedCorrelationId = dtro.CreatedCorrelationId;
+    }
+
+    /// <inheritdoc />
+    public DtroHistoryResponse StripProvision(DTROHistory request)
+    {
+        DtroHistoryResponse response = new();
+
+        var sourceActionType = Get(request, "source.actionType");
+        var sourceReference = Get(request, "source.reference");
+        var sourceSection = Get(request, "source.section");
+        var sourceTraCreator = Get(request, "source.traCreator");
+        var sourceCurrentTraOwner = Get(request, "source.currentTraOwner");
+        var sourceTroName = Get(request, "source.troName");
+
+        ExpandoObject expando = new();
+        IDictionary<string, object> dictionary = expando;
+        if (sourceActionType == SourceActionType.NoChange.GetDisplayName())
+        {
+            return null;
+        }
+
+        dictionary.Add("actionType", sourceActionType);
+        dictionary.Add("reference", sourceReference);
+        dictionary.Add("section", sourceSection);
+        dictionary.Add("traCreator", sourceTraCreator);
+        dictionary.Add("currentTraOwner", sourceCurrentTraOwner);
+        dictionary.Add("troName", sourceTroName);
+
+        response.Created = request.Created;
+        response.Data = (ExpandoObject)dictionary;
+        response.Deleted = request.Deleted;
+        response.DeletionTime = request.DeletionTime;
+        response.Id = request.Id;
+        response.LastUpdated = request.LastUpdated;
+        response.SchemaVersion = request.SchemaVersion;
+        response.TrafficAuthorityCreatorId = request.TrafficAuthorityCreatorId;
+        response.TrafficAuthorityOwnerId = request.TrafficAuthorityOwnerId;
+
+        return response;
+
     }
 
     /// <inheritdoc/>
@@ -191,23 +234,23 @@ public class DtroMappingService : IDtroMappingService
             .Where(it => it is not null)
             .Max();
 
-        IEnumerable<Coordinates> FlattenAndConvertCoordinates(ExpandoObject coordinates, string crs)
+        IEnumerable<Coordinates> FlattenAndConvertCoordinates(ExpandoObject expandoObject, string crs)
         {
-            var type = coordinates.GetValue<string>("type");
-            var coords = coordinates.GetValue<IList<object>>("coordinates");
+            var type = expandoObject.GetValue<string>("type");
+            IList<object> coordinates = expandoObject.GetValue<IList<object>>("coordinates");
 
-            var result = type switch
+            IEnumerable<Coordinates> result = type switch
             {
-                "Polygon" => coords.OfType<IList<object>>().SelectMany(it => it).OfType<IList<object>>()
-                    .Select(it => new Coordinates((double)it[0], (double)it[1])),
-                "LineString" => coords.OfType<IList<object>>()
-                    .Select(it => new Coordinates((double)it[0], (double)it[1])),
-                "Point" => new List<Coordinates> { new((double)coords[0], (double)coords[1]) },
+                "Polygon" => coordinates.OfType<IList<object>>().SelectMany(objects => objects).OfType<IList<object>>()
+                    .Select(objects => new Coordinates((double)objects[0], (double)objects[1])),
+                "LineString" => coordinates.OfType<IList<object>>()
+                    .Select(objects => new Coordinates((double)objects[0], (double)objects[1])),
+                "Point" => new List<Coordinates> { new((double)coordinates[0], (double)coordinates[1]) },
                 _ => throw new InvalidOperationException($"Coordinate type '{type}' unsupported.")
             };
 
             return crs != "osgb36Epsg27700"
-                ? result.Select(coords => _projectionService.Wgs84ToOsgb36(coords))
+                ? result.Select(_projectionService.Wgs84ToOsgb36)
             : result;
         }
 
@@ -240,4 +283,6 @@ public class DtroMappingService : IDtroMappingService
             Id = dtro.Id
         };
     }
+
+    private string Get(DTROHistory request, string key) => request.Data.GetValueOrDefault<string>(key);
 }

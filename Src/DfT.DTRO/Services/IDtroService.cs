@@ -7,6 +7,8 @@ using DfT.DTRO.Models.SharedResponse;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DfT.DTRO.Models.DataBase;
+using DfT.DTRO.Models.DtroHistory;
 
 namespace DfT.DTRO.Services;
 
@@ -97,4 +99,10 @@ public interface IDtroService
     /// <param name="search">The search criteria.</param>
     /// <returns>A <see cref="Task"/> that resolves to a collection of <see cref="Models.DataBase.DTRO"/> that match the criteria.</returns>
     Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search);
+
+    /// <summary>
+    /// Find all D-TRO Source History
+    /// </summary>
+    /// <returns>List of D-TRO Source History</returns>
+    Task<List<DtroHistoryResponse>> GetDtroSourceHistoryAsync(Guid dtroId);
 }

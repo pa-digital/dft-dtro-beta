@@ -8,9 +8,11 @@ using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DfT.DTRO.DAL;
 using DfT.DTRO.Models.DataBase;
+using DfT.DTRO.Models.DtroHistory;
 
 namespace DfT.DTRO.Services;
 
@@ -116,34 +118,21 @@ public class DtroService : IDtroService
             throw new NotFoundException();
         }
 
-        var schemaExists = await _schemaTemplateDal.SchemaTemplateExistsAsync(dtroSubmit.SchemaVersion);
-
-        if (!schemaExists)
-        {
-            throw new NotFoundException("Schema Template not found");
-        }
-
         Models.DataBase.DTRO currentDtro = await _dtroDal.GetDtroByIdAsync(id);
 
 
-        DTROHistory historyDtro = _dtroMappingService.AsHistoryDtro(currentDtro);
+        DTROHistory historyDtro = _dtroMappingService.MapToDtroHistory(currentDtro);
 
         var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
         if (!isSaved)
         {
-            throw new Exception();
-        }
-
-        var isDeleted = await _dtroDal.DeleteDtroAsync(currentDtro.Id, DateTime.UtcNow);
-        if (!isDeleted)
-        {
-            throw new Exception();
+            throw new Exception("Failed to write to history table");
         }
 
         _dtroMappingService.UpdateDetails(currentDtro, dtroSubmit);
 
-        GuidResponse response = await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
-        return new GuidResponse { Id = response.Id };
+        await _dtroDal.UpdateDtroAsJsonAsync(id, dtroSubmit, correlationId);
+        return new GuidResponse { Id = id };
     }
 
     /// <inheritdoc/>
@@ -158,9 +147,20 @@ public class DtroService : IDtroService
         return await _dtroDal.FindDtrosAsync(search);
     }
 
-    /// <inheritdoc/>
-    public async Task UpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId)
+    /// <inheritdoc />
+    public async Task<List<DtroHistoryResponse>> GetDtroSourceHistoryAsync(Guid dtroId)
     {
-        await _dtroDal.UpdateDtroAsJsonAsync(guid, dtroSubmit, correlationId);
+        List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroSourceHistory(dtroId);
+
+        List<DtroHistoryResponse> sourceHistories = dtroHistories
+            .Select(_dtroMappingService.StripProvision)
+            .Where(response => response != null)
+            .ToList();
+
+        return sourceHistories;
     }
+
+    /// <inheritdoc/>
+    public async Task UpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId) => 
+        await _dtroDal.UpdateDtroAsJsonAsync(guid, dtroSubmit, correlationId);
 }

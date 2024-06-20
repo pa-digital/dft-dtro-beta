@@ -1,9 +1,11 @@
-﻿using DfT.DTRO.Models.DataBase;
+﻿using System.Diagnostics.CodeAnalysis;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.SchemaTemplate;
 using DfT.DTRO.Services.Mapping;
 
 namespace Dft.DTRO.Tests.CodeiumTests.Rules.Mapping;
 
+[ExcludeFromCodeCoverage]
 public class RulesTemplateMappingServiceTests
 {
     private RuleTemplateMappingService _service;

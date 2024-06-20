@@ -1,8 +1,11 @@
-﻿using System.Dynamic;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
 using System.Text;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.SchemaTemplate;
+using DfT.DTRO.Services;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +14,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Dft.DTRO.Tests
 {
+    [ExcludeFromCodeCoverage]
     public static class Utils
     {
         public static DtroSubmit PrepareDtro(string jsonData, SchemaVersion? schemaVersion = null)
@@ -99,6 +103,55 @@ namespace Dft.DTRO.Tests
             string payload = JsonConvert.SerializeObject(dtro);
 
             return new StringContent(payload, Encoding.UTF8, "application/json");
+        }
+
+        public static async Task<List<DtroHistoryResponse>> CreateResponseDtroHistoryObject(string[] dtroJsonPath)
+        {
+            List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
+
+            DateTime createdAt = DateTime.Now;
+
+            List<DtroHistoryResponse> sampleDtroHistories = items
+                .Select(item => JsonConvert.DeserializeObject<ExpandoObject>(item, new ExpandoObjectConverter()))
+                .Select(dtroData => new DtroHistoryResponse
+                {
+                    Id = Guid.NewGuid(), 
+                    DtroId = Guid.Parse("C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4"),
+                    Created = new DateTime(2024,6,19,16,38,00), 
+                    LastUpdated = createdAt, 
+                    Data = dtroData
+                }).ToList();
+
+            return sampleDtroHistories;
+        }
+
+        public static async Task<List<DTROHistory>> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
+        {
+            List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
+
+            List<ExpandoObject?> data = items.Select(item =>
+                JsonConvert.DeserializeObject<ExpandoObject>(item, new ExpandoObjectConverter()))
+                .ToList();
+
+
+            var requests = new List<DTROHistory>();
+            foreach (ExpandoObject? expando in data)
+            {
+                var request = new DTROHistory
+                {
+                    Id = Guid.NewGuid(),
+                    DtroId = Guid.Parse("C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4"),
+                    Created = new DateTime(2024, 6, 19, 16, 44, 00),
+                    LastUpdated = DateTime.Now,
+                    Data = expando,
+                    TrafficAuthorityOwnerId = 1585,
+                    TrafficAuthorityCreatorId = 1585
+                };
+
+                requests.Add(request);
+            }
+
+            return requests;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using DfT.DTRO.Controllers;
 using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.RequestCorrelation;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller;
 
+[ExcludeFromCodeCoverage]
 public class RulesControllerCreateTests
 {
     private readonly Mock<IRuleTemplateService> _mockRuleTemplateService;

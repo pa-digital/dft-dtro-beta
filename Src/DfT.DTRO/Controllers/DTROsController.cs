@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using DfT.DTRO.Attributes;
 using DfT.DTRO.FeatureManagement;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.RequestCorrelation;
@@ -85,9 +88,9 @@ public class DTROsController : ControllerBase
         {
             return BadRequest(err);
         }
-        catch (NotFoundException nfex)
+        catch (NotFoundException nFex)
         {
-            return NotFound(new ApiErrorResponse("DTRO", nfex.Message));
+            return NotFound(new ApiErrorResponse("DTRO", nFex.Message));
         }
         catch (Exception ex)
         {
@@ -281,6 +284,33 @@ public class DTROsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"An error occurred while processing {nameof(Delete)} request.request.");
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+        }
+    }
+
+    /// <summary>
+    /// Get D-TRO source history.
+    /// </summary>
+    /// <param name="dtroId">The D-TRO ID reference.</param>
+    /// <response code="200">OK</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    [HttpGet]
+    [Route("/v1/dtros/sourceHistory/{dtroId:guid}")]
+    public async Task<ActionResult<List<DtroHistoryResponse>>> GetSourceHistory(Guid dtroId)
+    {
+        try
+        {
+            var response = await _dtroService.GetDtroSourceHistoryAsync(dtroId);
+            return Ok(response);
+        }
+        catch (NotFoundException nFex)
+        {
+            return NotFound(new ApiErrorResponse(nFex.Message, "Dtro History not found."));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"An error occurred while processing {nameof(GetSourceHistory)} request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }

@@ -11,9 +11,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="CustomErrors\**" />
+    <Compile Remove="Models\DtroSourceHistory\**" />
     <Content Remove="CustomErrors\**" />
+    <Content Remove="Models\DtroSourceHistory\**" />
     <EmbeddedResource Remove="CustomErrors\**" />
+    <EmbeddedResource Remove="Models\DtroSourceHistory\**" />
     <None Remove="CustomErrors\**" />
+    <None Remove="Models\DtroSourceHistory\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="JsonLogic\DataBaseRuleSource.cs" />

@@ -1479,13 +1479,13 @@
   },
   {
     "id": 31,
-    "name": "TaInSwaCodes",
-    "message": "The 'TA' value must be one of the recognised SWA codes.",
-    "path": "source.ta",
+    "name": "TraCreatorInSwaCodes",
+    "message": "The 'TRA' value must be one of the recognised SWA codes.",
+    "path": "source.traCreator",
     "rule": {
       "in": [
         {
-          "var": "source.ta"
+          "var": "source.traCreator"
         },
         {
           "service_data": "swa_codes"

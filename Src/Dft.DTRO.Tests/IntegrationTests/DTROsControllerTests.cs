@@ -1,6 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using DfT.DTRO;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services;
@@ -14,6 +17,7 @@ using Newtonsoft.Json;
 
 namespace Dft.DTRO.Tests.IntegrationTests;
 
+[ExcludeFromCodeCoverage]
 public class DTROsControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -21,6 +25,12 @@ public class DTROsControllerTests
     private const string ValidComplexDtroJsonPath = "./DtroJsonDataExamples/v3.1.2/3.1.2-valid-complex-dtro.json";
     private const string ValidComplexDtroJsonPathV320 = "./DtroJsonDataExamples/v3.2.0/valid-new-x.json";
     private const string InvalidDtroJsonPath = "./DtroJsonDataExamples/v3.1.1/provision-empty.json";
+    private static readonly string[] ValidDtroHistories =
+    {
+        "./DtroJsonDataExamples/v3.2.0/valid-new-x.json", 
+        "./DtroJsonDataExamples/v3.2.0/valid-fullAmendment.json", 
+        "./DtroJsonDataExamples/v3.2.0/valid-fullRevoke.json"
+    };
 
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockDtroService;
@@ -197,5 +207,47 @@ public class DTROsControllerTests
         HttpResponseMessage response = await client.DeleteAsync($"/v1/dtros/{dtroId}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Get_SourceHistory_ReturnsListOfDtroHistory()
+    {
+        List<DtroHistoryResponse> sampleDtroHistories = await CreateResponseDtroHistoryObject(ValidDtroHistories);
+
+
+        _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<Guid>()))
+            .Returns(Task.FromResult(sampleDtroHistories));
+
+        HttpClient client = _factory.CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync($"/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Get_SourceHistory_ReturnsNotFoundError()
+    {
+        _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<Guid>()))
+            .Throws(new NotFoundException());
+
+        HttpClient client = _factory.CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Get_SourceHistory_ReturnsBadRequestError()
+    {
+        _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<Guid>()))
+            .Throws(new Exception());
+
+        HttpClient client = _factory.CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+
+        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
     }
 }

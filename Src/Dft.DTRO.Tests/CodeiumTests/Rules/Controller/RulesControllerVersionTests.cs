@@ -1,4 +1,5 @@
-﻿using DfT.DTRO.Controllers;
+﻿using System.Diagnostics.CodeAnalysis;
+using DfT.DTRO.Controllers;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.RuleTemplate;
 using DfT.DTRO.Models.SchemaTemplate;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller;
 
+[ExcludeFromCodeCoverage]
 public class RulesControllerVersionTests
 {
     private Mock<IRuleTemplateService> _mockRuleTemplateService;
