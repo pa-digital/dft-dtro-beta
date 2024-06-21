@@ -22,6 +22,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 
+
 /// <summary>
 /// Controller for capturing DTROs.
 /// </summary>
@@ -49,6 +50,31 @@ public class DTROsController : ControllerBase
         _dtroService = dtroService;
         _correlationProvider = correlationProvider;
         _logger = logger;
+    }
+
+    private int? GetTaFromHeader(HttpRequest httpRequest)
+    {
+        if (httpRequest == null)
+        {
+            return null;
+        }
+
+        var headers = httpRequest.Headers;
+        if (!headers.TryGetValue("ta", out var taHeaderValue))
+        {
+            throw new DtroValidationException("Missing 'ta' header");
+        }
+
+        int ta;
+        if (!int.TryParse(taHeaderValue, out ta))
+        {
+            throw new DtroValidationException("Missing 'ta' header");
+        }
+        if (ta == 0)
+        {
+            return null;
+        }
+        return ta;
     }
 
     /// <summary>
@@ -80,7 +106,10 @@ public class DTROsController : ControllerBase
                 var dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
 
                 _logger.LogInformation("[{method}] Creating DTRO", "dtro.create");
-                var response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId);
+
+                var ta = GetTaFromHeader(this.Request);
+
+                var response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, ta);
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }
@@ -91,6 +120,10 @@ public class DTROsController : ControllerBase
         catch (NotFoundException nFex)
         {
             return NotFound(new ApiErrorResponse("DTRO", nFex.Message));
+        }
+        catch (InvalidOperationException err)
+        {
+            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
@@ -133,15 +166,19 @@ public class DTROsController : ControllerBase
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 var dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
-
+                var ta = GetTaFromHeader(this.Request);
                 _logger.LogInformation("[{method}] Updating dtro with dtro version {dtroVersion}", "dtro.update", id.ToString());
-                var response = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId);
+                var response = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId,ta);
                 return Ok(response);
             }
         }
-        catch (NotFoundException)
+        catch (DtroValidationException err)
         {
-            return NotFound(new ApiErrorResponse("Dtro version", "Dtro version not found"));
+            return BadRequest(err);
+        }
+        catch (NotFoundException nfex)
+        {
+            return NotFound(new ApiErrorResponse("DTRO", nfex.Message));
         }
         catch (InvalidOperationException err)
         {
@@ -173,7 +210,8 @@ public class DTROsController : ControllerBase
         try
         {
             _logger.LogInformation("[{method}] Creating DTRO", "dtro.create");
-            var response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId);
+            var ta = GetTaFromHeader(this.Request);
+            var response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, ta);
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
         catch (DtroValidationException err)
@@ -183,6 +221,10 @@ public class DTROsController : ControllerBase
         catch (NotFoundException nfex)
         {
             return NotFound(new ApiErrorResponse("DTRO", nfex.Message));
+        }
+        catch (InvalidOperationException err)
+        {
+            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
@@ -213,7 +255,8 @@ public class DTROsController : ControllerBase
         try
         {
             _logger.LogInformation("[{method}] Updating DTRO with ID {dtroId}", "dtro.update", id);
-            var guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId);
+            var ta = GetTaFromHeader(this.Request);
+            var guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId, ta);
             return Ok(guidResponse);
         }
         catch (DtroValidationException err)
@@ -223,6 +266,10 @@ public class DTROsController : ControllerBase
         catch (NotFoundException nfex)
         {
             return NotFound(new ApiErrorResponse("DTRO", nfex.Message));
+        }
+        catch (InvalidOperationException err)
+        {
+            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {

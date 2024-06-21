@@ -83,29 +83,22 @@ public class DtroService : IDtroService
     }
 
     /// <inheritdoc/>
-    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId)
+    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, int? headerTa)
     {
-        var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit);
+        var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, headerTa);
 
         if (validationErrors is not null)
         {
             throw validationErrors;
         }
 
-        var schemaExists = await _schemaTemplateDal.SchemaTemplateExistsAsync(dtroSubmit.SchemaVersion);
-
-        if (!schemaExists)
-        {
-            throw new NotFoundException("Schema Template not found");
-        }
-
         return await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
     }
 
     /// <inheritdoc/>
-    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId)
+    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, int? headerTa)
     {
-        var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit);
+        var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, headerTa);
 
         if (validationErrors is not null)
         {
@@ -128,8 +121,6 @@ public class DtroService : IDtroService
         {
             throw new Exception("Failed to write to history table");
         }
-
-        _dtroMappingService.UpdateDetails(currentDtro, dtroSubmit);
 
         await _dtroDal.UpdateDtroAsJsonAsync(id, dtroSubmit, correlationId);
         return new GuidResponse { Id = id };
@@ -161,6 +152,8 @@ public class DtroService : IDtroService
     }
 
     /// <inheritdoc/>
-    public async Task UpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId) => 
-        await _dtroDal.UpdateDtroAsJsonAsync(guid, dtroSubmit, correlationId);
+    //public async Task UpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId)
+    //{
+    //    await _dtroDal.UpdateDtroAsJsonAsync(guid, dtroSubmit, correlationId);
+    //}
 }
