@@ -210,13 +210,13 @@ public class DTROsControllerTests
     }
 
     [Fact]
-    public async Task Get_SourceHistory_ReturnsListOfDtroHistory()
+    public async Task Get_SourceHistory_ReturnsListOfHistoricSources()
     {
-        List<DtroHistorySourceResponse> sampleDtroHistories = await CreateResponseDtroHistoryObject(ValidDtroHistories);
+        List<DtroHistorySourceResponse> sourceResponses = CreateResponseDtroHistoryObject(ValidDtroHistories);
 
 
         _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<Guid>()))
-            .Returns(Task.FromResult(sampleDtroHistories));
+            .Returns(Task.FromResult(sourceResponses));
 
         HttpClient client = _factory.CreateClient();
 
@@ -247,6 +247,47 @@ public class DTROsControllerTests
         HttpClient client = _factory.CreateClient();
 
         HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+
+        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Get_ProvisionHistory_ReturnsListOfHistoricProvisions()
+    {
+        List<DtroHistoryProvisionResponse> provisionResponses = CreateResponseDtroProvisionHistory(ValidDtroHistories);
+
+        _mockDtroService.Setup(it => it.GetDtroProvisionHistoryAsync(It.IsAny<Guid>()))
+            .Returns(Task.FromResult(provisionResponses));
+
+        HttpClient client = _factory.CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("/v1/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Get_ProvisionHistory_ReturnsNotFoundError()
+    {
+        _mockDtroService.Setup(it => it.GetDtroProvisionHistoryAsync(It.IsAny<Guid>()))
+            .Throws(new NotFoundException());
+
+        HttpClient client = _factory.CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("/v1/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Get_ProvisionHistory_ReturnsBadRequestError()
+    {
+        _mockDtroService.Setup(it => it.GetDtroProvisionHistoryAsync(It.IsAny<Guid>()))
+            .Throws(new Exception());
+
+        HttpClient client = _factory.CreateClient();
+
+        HttpResponseMessage response = await client.GetAsync("/v1/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
     }

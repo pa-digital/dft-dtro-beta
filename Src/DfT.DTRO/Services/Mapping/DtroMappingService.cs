@@ -165,8 +165,12 @@ public class DtroMappingService : IDtroMappingService
             Data = provisions[0] as ExpandoObject, 
             LastUpdated = dtroHistory.LastUpdated
         };
-        provisionResponse.Reference = provisionResponse.Data?.ElementAtOrDefault(1).Value.ToString();
-        provisionResponse.ActionType = provisionResponse.Data?.ElementAtOrDefault(2).Value.ToString();
+        provisionResponse.Reference = provisionResponse.Data?.GetValueOrDefault<string>("reference");
+        provisionResponse.ActionType = provisionResponse.Data?.GetValueOrDefault<string>("actionType");
+        if (provisionResponse.ActionType == ProvisionActionType.NoChange.GetDisplayName())
+        {
+            return null;
+        }
         provisionResponse.SchemaVersion = dtroHistory.SchemaVersion;
 
         return provisionResponse;
