@@ -44,9 +44,13 @@ public class DtroHistoryDal : IDtroHistoryDal
     /// </summary>
     /// <param name="dtroId">D-TRO ID reference passed</param>
     /// <returns>List of historic D-TROs</returns>
-    public async Task<List<DTROHistory>> GetDtroSourceHistory(Guid dtroId) =>
-        await _dtroContext.DtroHistories
+    public async Task<List<DTROHistory>> GetDtroHistory(Guid dtroId)
+    {
+        var result = await _dtroContext.DtroHistories
             .Where(history => history.DtroId == dtroId)
             .OrderByDescending(history => history.LastUpdated)
             .ToListAsync();
+
+        return result;
+    }
 }

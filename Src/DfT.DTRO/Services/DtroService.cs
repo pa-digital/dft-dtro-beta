@@ -139,16 +139,26 @@ public class DtroService : IDtroService
     }
 
     /// <inheritdoc />
-    public async Task<List<DtroHistoryResponse>> GetDtroSourceHistoryAsync(Guid dtroId)
+    public async Task<List<DtroHistorySourceResponse>> GetDtroSourceHistoryAsync(Guid dtroId)
     {
-        List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroSourceHistory(dtroId);
+        List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
-        List<DtroHistoryResponse> sourceHistories = dtroHistories
-            .Select(_dtroMappingService.StripProvision)
+        return dtroHistories
+            .Select(_dtroMappingService.GetSource)
+            .Where(response => response != null)
+            .ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<DtroHistoryProvisionResponse>> GetDtroProvisionHistoryAsync(Guid dtroId)
+    {
+        List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
+
+        return dtroHistories
+            .Select(_dtroMappingService.GetProvision)
             .Where(response => response != null)
             .ToList();
 
-        return sourceHistories;
     }
 
     /// <inheritdoc/>

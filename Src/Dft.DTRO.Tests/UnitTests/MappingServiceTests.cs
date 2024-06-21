@@ -29,10 +29,31 @@ public class MappingServiceTests
     }
 
     [Fact]
-    public async Task StripProvisions_Returns_DtroHistoryResponse()
+    public async Task GetSource_Returns_DtroHistoryResponse()
     {
         List<DTROHistory> histories = await CreateRequestDtroHistoryObject(ValidDtroHistories);
-        List<DtroHistoryResponse> actual = histories.Select(_sut.StripProvision).Where(response => response != null).ToList();
+        List<DtroHistorySourceResponse> actual = histories
+            .Select(_sut.GetSource)
+            .Where(response => response != null)
+            .ToList();
+
+        Assert.True(actual.Any());
+
+        Assert.Equal(2, actual.Count);
+
+        Assert.Equal(actual[0].Created, actual[1].Created);
+
+        Assert.True(actual[1].LastUpdated > actual[0].LastUpdated);
+    }
+
+    [Fact]
+    public async Task GetProvision_Returns_DtroHistoryProvision()
+    {
+        List<DTROHistory> histories = await CreateRequestDtroHistoryObject(ValidDtroHistories);
+        List<DtroHistoryProvisionResponse> actual = histories
+            .Select(_sut.GetProvision)
+            .Where(response => response != null)
+            .ToList();
 
         Assert.True(actual.Any());
 

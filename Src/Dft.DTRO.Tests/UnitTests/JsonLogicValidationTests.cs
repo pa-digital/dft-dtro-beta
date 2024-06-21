@@ -2732,7 +2732,7 @@ public class JsonLogicValidationTests
     private async Task UseAllRules()
     {
         FileJsonLogicRuleSource source = new FileJsonLogicRuleSource();
-        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("dtro-3.2.0");
+        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("rules-3.2.0");
 
         ruleDal.Setup(it => it.GetRuleTemplateDeserializeAsync(It.IsAny<SchemaVersion>())).ReturnsAsync(rules);
     }
@@ -2740,7 +2740,7 @@ public class JsonLogicValidationTests
     private async Task UseRulesByName(params string[] names)
     {
         FileJsonLogicRuleSource source = new FileJsonLogicRuleSource();
-        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("dtro-3.2.0");
+        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("rules-3.2.0");
         List<JsonLogicValidationRule> subset = rules.Where(it => names.Contains(it.Name)).ToList();
 
         ruleDal.Setup(it => it.GetRuleTemplateDeserializeAsync(It.IsAny<SchemaVersion>())).ReturnsAsync(subset);
@@ -2749,7 +2749,7 @@ public class JsonLogicValidationTests
     private async Task UseRulesByPath(params string[] paths)
     {
         FileJsonLogicRuleSource source = new FileJsonLogicRuleSource();
-        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("dtro-3.2.0");
+        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("rules-3.2.0");
         List<JsonLogicValidationRule> subset = rules.Where(it => paths.Any(path => it.Path.StartsWith(path))).ToList();
 
         ruleDal.Setup(it => it.GetRuleTemplateDeserializeAsync(It.IsAny<SchemaVersion>())).ReturnsAsync(subset);
@@ -2758,7 +2758,7 @@ public class JsonLogicValidationTests
     private async Task UseRulesByIndex(params int[] indexes)
     {
         FileJsonLogicRuleSource source = new FileJsonLogicRuleSource();
-        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("dtro-3.2.0");
+        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("rules-3.2.0");
 
         if (indexes.Max() >= rules.Count())
         {
