@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Text;
+using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroHistory;
@@ -105,7 +106,7 @@ namespace Dft.DTRO.Tests
             return new StringContent(payload, Encoding.UTF8, "application/json");
         }
 
-        public static async Task<List<DtroHistorySourceResponse>> CreateResponseDtroHistoryObject(string[] dtroJsonPath)
+        public static List<DtroHistorySourceResponse> CreateResponseDtroHistoryObject(string[] dtroJsonPath)
         {
             List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
 
@@ -113,13 +114,36 @@ namespace Dft.DTRO.Tests
 
             List<DtroHistorySourceResponse> sampleDtroHistories = items
                 .Select(item => JsonConvert.DeserializeObject<ExpandoObject>(item, new ExpandoObjectConverter()))
-                .Select(dtroData => new DtroHistorySourceResponse
+                .Select(_ => new DtroHistorySourceResponse
                 {
                     Created = new DateTime(2024,6,19,16,38,00), 
                     LastUpdated = createdAt, 
                 }).ToList();
 
             return sampleDtroHistories;
+        }
+
+        public static List<DtroHistoryProvisionResponse> CreateResponseDtroProvisionHistory(string[] dtroJsonPath)
+        {
+            List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
+
+            List<IList<object>> objects = items
+                .Select(JsonConvert.DeserializeObject<ExpandoObject>)
+                .Select(item => item.GetValueOrDefault<IList<object>>("source.provision"))
+                .ToList();
+
+            List<DtroHistoryProvisionResponse> provisions = new();
+
+            foreach (IList<object> obj in objects)
+            {
+                DtroHistoryProvisionResponse provision = new();
+
+                var data = obj[0].ToIndentedJsonString();
+
+                provisions.Add(provision);
+            }
+
+            return provisions;
         }
 
         public static async Task<List<DTROHistory>> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
