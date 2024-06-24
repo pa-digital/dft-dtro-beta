@@ -82,7 +82,7 @@ public interface IDtroDal
     /// if the DTRO was successfully marked deleted
     /// or <see langword="false"/> if it was not found.
     /// </returns>
-    Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime = null);
+    Task<bool> SoftDeleteDtroAsync(Guid id,  DateTime? deletionTime);
 
     /// <summary>
     /// Finds all DTROs that match the criteria specified in <paramref name="search"/>.
@@ -101,6 +101,7 @@ public interface IDtroDal
     /// <summary>
     /// Delete DTRO.
     /// </summary>
+    /// <param name="ta">Traffic authority that owns the current D-TRO.</param>
     /// <param name="id">The unique id of the DTRO.</param>
     /// <param name="deletionTime">The time of deletion. Will default to <see cref="DateTime.UtcNow"/> if not provided.</param>
     /// <returns>
