@@ -4,7 +4,7 @@ WORKDIR /app
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 # copy csproj and restore as distinct layers
-COPY *.csproj ./
+COPY DfT.DTRO.csproj ./
 RUN dotnet restore
 
 # copy everything else and build
