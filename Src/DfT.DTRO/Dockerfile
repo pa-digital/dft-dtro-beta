@@ -37,15 +37,15 @@ ENV FeatureManagement__DtroRead=True
 
 ENTRYPOINT ["./DfT.DTRO"]
 
-# build image for Postgres migrations job
-FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:6.0-alpine AS postgres-migrations-job
-WORKDIR /app
+# # build image for Postgres migrations job
+# FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:6.0-alpine AS postgres-migrations-job
+# WORKDIR /app
 
-ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
+# ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
-COPY *.csproj ./
-RUN dotnet restore
+# COPY *.csproj ./
+# RUN dotnet restore
 
-COPY . ./
+# COPY . ./
 
-ENTRYPOINT ["/bin/sh", "-c", "dotnet tool restore && dotnet ef database update"]
+# ENTRYPOINT ["/bin/sh", "-c", "dotnet tool restore && dotnet ef database update"]
