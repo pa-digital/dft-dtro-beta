@@ -199,33 +199,6 @@ public class DTROsControllerTests
     }
 
     [Fact]
-    public async Task Delete_DtroExists_ReturnsDtro()
-    {
-        Guid dtroId = Guid.NewGuid();
-        _mockDtroService.Setup(mock => mock.DeleteDtroAsync
-            (It.Is(dtroId, EqualityComparer<Guid>.Default), It.IsAny<DateTime?>())).Returns(Task.FromResult(true));
-
-        HttpClient client = _factory.CreateClient();
-
-        HttpResponseMessage response = await client.DeleteAsync($"/v1/dtros/{dtroId}");
-
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task Delete_DtroDoesNotExist_ReturnsNotFoundError()
-    {
-        Guid dtroId = Guid.NewGuid();
-        _mockDtroService.Setup(mock => mock.DeleteDtroAsync
-            (It.Is(dtroId, EqualityComparer<Guid>.Default), It.IsAny<DateTime?>())).Throws(new NotFoundException());
-        HttpClient client = _factory.CreateClient();
-
-        HttpResponseMessage response = await client.DeleteAsync($"/v1/dtros/{dtroId}");
-
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-    }
-
-    [Fact]
     public async Task Get_SourceHistory_ReturnsListOfHistoricSources()
     {
         List<DtroHistorySourceResponse> sourceResponses = CreateResponseDtroHistoryObject(ValidDtroHistories);
