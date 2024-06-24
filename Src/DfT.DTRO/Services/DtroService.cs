@@ -45,9 +45,14 @@ public class DtroService : IDtroService
     }
 
     /// <inheritdoc/>
-    public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
+    public async Task<bool> DeleteDtroAsync(int? ta, Guid id, DateTime? deletionTime = null)
     {
         deletionTime ??= DateTime.UtcNow;
+        if (ta == null)
+        {
+            throw new Exception();
+        }
+
         var result = await _dtroDal.SoftDeleteDtroAsync(id, deletionTime);
         if (!result)
         {

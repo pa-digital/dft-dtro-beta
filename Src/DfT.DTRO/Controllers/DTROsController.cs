@@ -283,6 +283,7 @@ public class DTROsController : ControllerBase
     /// <summary>
     /// Marks a DTRO as deleted.
     /// </summary>
+    /// <param name="ta">Traffic Authority that is creating this D-TRO</param>
     /// <param name="id">Id of the DTRO.</param>
     /// <response code="204">Okay.</response>
     /// <response code="404">Not found.</response>
@@ -291,11 +292,11 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete([FromHeader(Name = "TA")][Required] int? ta, Guid id)
     {
         try
         {
-            await _dtroService.DeleteDtroAsync(id);
+            await _dtroService.DeleteDtroAsync(ta, id);
             return NoContent();
         }
         catch (NotFoundException)
