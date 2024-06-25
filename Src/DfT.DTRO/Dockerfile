@@ -4,11 +4,12 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 # copy csproj and restore as distinct layers
 COPY *.csproj ./
-RUN dotnet restore
+RUN dotnet restore -r alpine-x64 /p:PublishReadyToRun=true
 
 # copy everything else and build
 COPY . .
-RUN dotnet publish -c Release -o out
+RUN dotnet publish --framework net6.0 -o out -c Release -r alpine-x64 \
+    --self-contained true /p:PublishReadyToRun=true /p:PublishSingleFile=true
 
 # build common runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
@@ -22,7 +23,7 @@ ENV FeatureManagement__DtroWrite=True \
     FeatureManagement__SchemaWrite=True \
     FeatureManagement__DtroRead=True
 
-ENTRYPOINT ["dotnet", "DfT.DTRO.dll"]
+ENTRYPOINT ["./DfT.DTRO"]
 
 # # build image for Postgres migrations job
 # FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:6.0-alpine AS postgres-migrations-job
