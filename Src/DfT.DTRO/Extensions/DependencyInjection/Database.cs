@@ -57,15 +57,13 @@ public static class Database
     /// <returns>A reference to this instance after the operation has completed.</returns>
     public static IServiceCollection AddPostgresDtroContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var postgresConfig = configuration.GetRequiredSection("Postgres");
-
-        var host = postgresConfig.GetValue<string>("Host");
-        var port = postgresConfig.GetValue<int?>("Port") ?? 5432;
-        var user = postgresConfig.GetValue<string>("User");
-        var password = postgresConfig.GetValue<string>("Password");
-        var database = postgresConfig.GetValue<string>("DbName");
-        var useSsl = postgresConfig.GetValue("UseSsl", false);
-        int? maxPoolSize = postgresConfig.GetValue<int?>("MaxPoolSize", null);
+        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? configuration.GetValue<string>("Postgres:Host");
+        var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int parsedPort) ? parsedPort : configuration.GetValue<int>("Postgres:Port");
+        var user = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? configuration.GetValue<string>("Postgres:User");
+        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? configuration.GetValue<string>("Postgres:Password");
+        var database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE") ?? configuration.GetValue<string>("Postgres:Database");
+        bool useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool parsedUseSsl) ? parsedUseSsl : configuration.GetValue<bool>("Postgres:UseSsl");
+        int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int parsedMaxPoolSize) ? parsedMaxPoolSize : configuration.GetValue<int?>("Postgres:MaxPoolSize");
 
         return services.AddPostgresDtroContext(host, user, password, useSsl, database, port, maxPoolSize);
     }
