@@ -16,6 +16,7 @@ RUN dotnet publish --framework net6.0 -o out -c Release -r alpine-x64 \
 FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
 WORKDIR /app
 COPY --from=build /app/out .
+ENV ASPNETCORE_ENVIRONMENT=Development
 
 # Expose the application port and set environment variables
 EXPOSE 8080
