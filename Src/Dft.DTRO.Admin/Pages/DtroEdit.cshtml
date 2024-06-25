@@ -1,0 +1,45 @@
+﻿@page
+@model DtroEditModel
+@{
+    string id = Request.Query["id"];
+}
+
+<h2>Assign Dtro</h2>
+
+<form method="post" enctype="multipart/form-data">
+
+    <div style="margin-top: 20px;">
+        <table>
+            <tr>
+                <td>
+                    <label for="assignToTraId">Reassign to Tra ID</label>
+                </td>
+                <td style="width: 100px">
+                    <input name="assignToTraId" style="margin-left: 10px;" type="number" id="assignToTraId" class="form-control" min="0" />
+                </td>
+                <td>
+                    <button style="margin-left: 20px;" id="reassignButton" class="btn btn-primary" type="submit" disabled>Reassign</button>
+                </td>
+            </tr>
+        </table>
+
+        <label>swa_codes</label>
+        <label>
+            10, 11, 12, 13, 14, 16, 17, 18, 20, 30, 50, 60, 70, 114, 116
+        </label>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const assignToTraId = document.getElementById('assignToTraId');
+            const reassignButton = document.getElementById('reassignButton');
+
+            assignToTraId.addEventListener('input', function () {
+                const isValidInteger = Number.isInteger(parseInt(assignToTraId.value)) && assignToTraId.value >= 0;
+                reassignButton.disabled = !isValidInteger;
+            });
+        });
+    </script>
+}

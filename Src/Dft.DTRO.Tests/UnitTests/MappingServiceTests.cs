@@ -51,7 +51,7 @@ public class MappingServiceTests
     {
         List<DTROHistory> histories = await CreateRequestDtroHistoryObject(ValidDtroHistories);
         List<DtroHistoryProvisionResponse> actual = histories
-            .Select(_sut.GetProvision)
+            .SelectMany(_sut.GetProvision)
             .Where(response => response != null)
             .ToList();
 

@@ -22,7 +22,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 
-
 /// <summary>
 /// Controller for capturing DTROs.
 /// </summary>
@@ -37,6 +36,7 @@ public class DTROsController : ControllerBase
     private readonly ILogger<DTROsController> _logger;
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="DTROsController"/> class.
     /// Default constructor.
     /// </summary>
     /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
@@ -360,6 +360,36 @@ public class DTROsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, $"An error occurred while processing {nameof(GetProvisionHistory)} request.");
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+        }
+    }
+
+    /// <summary>
+    /// Assign a DTRO to anoth TRA.
+    /// </summary>
+    /// <param name="id">The D-TRO ID reference.</param>
+    /// <param name="assignToTraId">Id of tra to which ownership is to be assigned.</param>
+    /// <response code="204">Okay.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    [HttpPost("v1/dtros/Ownership/{id:guid}/{assignToTraId:int}")]
+    [FeatureGate(FeatureNames.DtroWrite)]
+    [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
+    [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
+    public async Task<IActionResult> AssignOwnership([FromHeader(Name = "TA")][Required] int? ta, Guid id, int assignToTraId)
+    {
+        try
+        {
+            await _dtroService.AssignOwnershipAsync(id, ta, assignToTraId, _correlationProvider.CorrelationId);
+            return NoContent();
+        }
+        catch (NotFoundException)
+        {
+            return NotFound(new ApiErrorResponse("Not found", "Dtro not found"));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"An error occurred while processing {nameof(AssignOwnership)} request.request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }

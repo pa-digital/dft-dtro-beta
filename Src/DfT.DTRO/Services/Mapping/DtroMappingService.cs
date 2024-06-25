@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
 using DfT.DTRO.Enums;
+using System.Linq;
 using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
@@ -12,7 +12,6 @@ using DfT.DTRO.Models.DtroJson;
 using DfT.DTRO.Models.Search;
 using DfT.DTRO.Services.Conversion;
 using Microsoft.Extensions.Configuration;
-using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace DfT.DTRO.Services.Mapping;
 
@@ -29,8 +28,8 @@ public class DtroMappingService : IDtroMappingService
     /// <param name="projectionService">An <see cref="ISpatialProjectionService"/> instance.</param>
     public DtroMappingService(IConfiguration configuration, ISpatialProjectionService projectionService)
     {
-        _configuration = configuration;
-        _projectionService = projectionService;
+        this._configuration = configuration;
+        this._projectionService = projectionService;
     }
 
     /// <inheritdoc/>
@@ -150,30 +149,79 @@ public class DtroMappingService : IDtroMappingService
             Section = sourceSection, 
             TrafficAuthorityCreatorId = dtroHistory.TrafficAuthorityCreatorId,
             TrafficAuthorityOwnerId = dtroHistory.TrafficAuthorityOwnerId,
-            TroName = sourceTroName
+            TroName = sourceTroName,
         };
     }
 
     /// <inheritdoc />
-    public DtroHistoryProvisionResponse GetProvision(DTROHistory dtroHistory)
+    public DtroOwner GetOwnership(Models.DataBase.DTRO dtro)
     {
-        IList<object> provisions = GetProvision(dtroHistory, "source.provision");
+        var traCreator = dtro.Data.GetValueOrDefault<int>("source.traCreator");
+        var currentTraOwner = dtro.Data.GetValueOrDefault<int>("source.currentTraOwner");
 
-        DtroHistoryProvisionResponse provisionResponse = new()
+        return new DtroOwner
         {
-            Created = dtroHistory.Created, 
-            Data = provisions[0] as ExpandoObject, 
-            LastUpdated = dtroHistory.LastUpdated
+            TrafficAuthorityCreatorId = traCreator,
+            TrafficAuthorityOwnerId = currentTraOwner,
         };
-        provisionResponse.Reference = provisionResponse.Data?.GetValueOrDefault<string>("reference");
-        provisionResponse.ActionType = provisionResponse.Data?.GetValueOrDefault<string>("actionType");
-        if (provisionResponse.ActionType == ProvisionActionType.NoChange.GetDisplayName())
-        {
-            return null;
-        }
-        provisionResponse.SchemaVersion = dtroHistory.SchemaVersion;
+    }
 
-        return provisionResponse;
+    /// <inheritdoc />
+    public void SetOwnership(ref Models.DataBase.DTRO dtro, int currentTraOwner)
+    {
+       dtro.Data.PutValue("source.currentTraOwner", currentTraOwner);
+    }
+
+    public void SetSourceActionType(ref Models.DataBase.DTRO dtro, SourceActionType sourceActionType)
+    {
+        ExpandoObject source = dtro.Data;
+        var sourceDict = source as IDictionary<string, object>;
+        if (sourceDict == null)
+        {
+            throw new ArgumentException("Source must be an ExpandoObject", nameof(source));
+        }
+
+        if (sourceDict.TryGetValue("source", out var sourceObject) && sourceObject is IDictionary<string, object> sourceDetails)
+        {
+            sourceDetails["actionType"] = sourceActionType.GetDisplayName();
+
+            if (sourceDetails.TryGetValue("provision", out var provisionList) && provisionList is IEnumerable<object> provisions)
+            {
+                foreach (var provision in provisions)
+                {
+                    if (provision is IDictionary<string, object> provisionDict)
+                    {
+                        provisionDict["actionType"] = ProvisionActionType.NoChange.GetDisplayName();
+                    }
+                }
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public List<DtroHistoryProvisionResponse> GetProvision(DTROHistory dtroHistory)
+    {
+        IList<object> provisions = this.GetProvision(dtroHistory, "source.provision");
+        var ret = new List<DtroHistoryProvisionResponse>();
+        foreach (var provision in provisions)
+        {
+
+            DtroHistoryProvisionResponse provisionResponse = new()
+            {
+                Created = dtroHistory.Created,
+                Data = provision as ExpandoObject,
+                LastUpdated = dtroHistory.LastUpdated,
+            };
+            provisionResponse.Reference = provisionResponse.Data?.GetValueOrDefault<string>("reference");
+            provisionResponse.ActionType = provisionResponse.Data?.GetValueOrDefault<string>("actionType");
+            provisionResponse.SchemaVersion = dtroHistory.SchemaVersion;
+            if (provisionResponse.ActionType != ProvisionActionType.NoChange.GetDisplayName())
+            {
+                ret.Add(provisionResponse);
+            }
+        }
+
+        return ret.OrderByDescending(x => x.Reference).ThenByDescending(x => x.LastUpdated).ToList();
     }
 
     /// <inheritdoc/>
@@ -191,7 +239,6 @@ public class DtroMappingService : IDtroMappingService
         dtro.TrafficAuthorityOwnerId = dtro.Data.GetExpando("source").HasField("currentTraOwner")
            ? dtro.Data.GetValueOrDefault<int>("source.currentTraOwner")
            : dtro.Data.GetValueOrDefault<int>("source.ha");
-
 
         dtro.TroName = dtro.Data.GetValueOrDefault<string>("source.troName");
         dtro.RegulationTypes = regulations.Select(it => it.GetValueOrDefault<string>("regulationType"))
@@ -238,7 +285,7 @@ public class DtroMappingService : IDtroMappingService
             };
 
             return crs != "osgb36Epsg27700"
-                ? result.Select(_projectionService.Wgs84ToOsgb36)
+                ? result.Select(this._projectionService.Wgs84ToOsgb36)
             : result;
         }
 
@@ -268,7 +315,7 @@ public class DtroMappingService : IDtroMappingService
             OrderReportingPoint = dtro.OrderReportingPoints,
             RegulationStart = regulationStartDates,
             RegulationEnd = regulationEndDates,
-            Id = dtro.Id
+            Id = dtro.Id,
         };
     }
 

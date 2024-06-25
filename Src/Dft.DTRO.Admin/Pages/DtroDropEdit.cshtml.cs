@@ -1,3 +1,4 @@
+using System.Net.Http;
 using Dft.DTRO.Admin.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -30,5 +31,17 @@ public class DtroDropEditModel : PageModel
             await _dtroService.CreateDtroAsync(file);
         }
         return RedirectToPage("Search");
+    }
+
+    public async Task<IActionResult> OnPostReassign(Guid id, int assignToTraId)
+    {
+        var res = await _dtroService.ReassignDtroAsync(id, assignToTraId);
+        return res;
+    }
+
+    public class ReassignRequest
+    {
+        public Guid Id { get; set; }
+        public int AssignToTraId { get; set; }
     }
 }
