@@ -46,21 +46,21 @@ public class MappingServiceTests
         Assert.True(actual[1].LastUpdated > actual[0].LastUpdated);
     }
 
-    //[Fact]
-    //public async Task GetProvision_Returns_DtroHistoryProvision()
-    //{
-    //    List<DTROHistory> histories = await CreateRequestDtroHistoryObject(ValidDtroHistories);
-    //    List<DtroHistoryProvisionResponse> actual = histories
-    //        .Select(_sut.GetProvision)
-    //        .Where(response => response != null)
-    //        .ToList();
+    [Fact]
+    public async Task GetProvision_Returns_DtroHistoryProvision()
+    {
+        List<DTROHistory> histories = await CreateRequestDtroHistoryObject(ValidDtroHistories);
+        List<DtroHistoryProvisionResponse> actual = histories
+            .SelectMany(_sut.GetProvision)
+            .Where(response => response != null)
+            .ToList();
 
-    //    Assert.True(actual.Any());
+        Assert.True(actual.Any());
 
-    //    Assert.Equal(2, actual.Count);
+        Assert.Equal(2, actual.Count);
 
-    //    Assert.Equal(actual[0].Created, actual[1].Created);
+        Assert.Equal(actual[0].Created, actual[1].Created);
 
-    //    Assert.True(actual[1].LastUpdated > actual[0].LastUpdated);
-    //}
+        Assert.True(actual[1].LastUpdated > actual[0].LastUpdated);
+    }
 }
