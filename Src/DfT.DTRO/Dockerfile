@@ -27,7 +27,7 @@ ENV FeatureManagement__DtroWrite=True \
     FeatureManagement__DtroRead=True
 
 # Run the application
-ENTRYPOINT ["./DfT.DTRO"]
+ENTRYPOINT ["dotnet", "DfT.DTRO.dll"]
 
 # # build image for Postgres migrations job
 # FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:6.0-alpine AS postgres-migrations-job
