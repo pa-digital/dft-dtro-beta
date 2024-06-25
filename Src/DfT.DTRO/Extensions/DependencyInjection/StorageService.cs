@@ -28,45 +28,37 @@ public static class StorageServiceDIExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
     /// <param name="configuration">The configuration that the storage service is infered from.</param>
     /// <returns>A reference to this instance after the operation has completed.</returns>
-    public static IServiceCollection AddStorage(this IServiceCollection services, IConfiguration configuration)
+public static IServiceCollection AddStorage(this IServiceCollection services, IConfiguration configuration)
+{
+    var host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+    var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+    var user = Environment.GetEnvironmentVariable("POSTGRES_USER");
+    var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+    var database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE");
+    bool useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool parsedUseSsl) ? parsedUseSsl : false;
+    int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int parsedMaxPoolSize) ? parsedMaxPoolSize : null;
+
+    // If environment variables are not set, fallback to configuration values
+    if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(port)
+    || string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(password)
+    || string.IsNullOrWhiteSpace(database))
     {
         var postgresConfig = configuration.GetRequiredSection("Postgres");
 
-        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST")
-        ?? postgresConfig.GetValue<string>("Host");
-
-        var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int parsedPort)
-        ? parsedPort : postgresConfig.GetValue<int?>("Port") ?? 5432;
-
-        var user = Environment.GetEnvironmentVariable("POSTGRES_USER")
-        ?? postgresConfig.GetValue<string>("User");
-
-        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
-        ?? postgresConfig.GetValue<string>("Password");
-
-        var database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE")
-        ?? postgresConfig.GetValue<string>("DbName");
-
-        bool useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool parsedUseSsl)
-        ? parsedUseSsl : postgresConfig.GetValue<bool>("UseSsl", false);
-
-        int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int parsedMaxPoolSize)
-        ? parsedMaxPoolSize : postgresConfig.GetValue<int?>("MaxPoolSize", null);
-
-        if (configuration.GetValue("WriteToBucket", false))
-        {
-            return
-                services
-                    .AddPostgresDtroContext(host, user, password, useSsl, database, port, maxPoolSize);
-        }
-
-        // if (configuration.GetValue("WriteToBucket", false))
-        // {
-        //    return
-        //        services
-        //            .AddPostgresDtroContext(host, user, password, useSsl, database, port)
-        //            .AddMultiStorageService<SqlStorageService, FileStorageService>();
-        // }
-        return services.AddPostgresStorage(host, user, password, useSsl, database, port, maxPoolSize);
+        host = postgresConfig.GetValue<string>("Host");
+        port = configuration.GetValue<int?>("Port")?.ToString() ?? "5432";
+        user = postgresConfig.GetValue<string>("User");
+        password = postgresConfig.GetValue<string>("Password");
+        database = postgresConfig.GetValue<string>("DbName");
+        useSsl = postgresConfig.GetValue<bool>("UseSsl", false);
+        maxPoolSize = postgresConfig.GetValue<int?>("MaxPoolSize");
     }
+
+    if (configuration.GetValue("WriteToBucket", false))
+    {
+        return services.AddPostgresDtroContext(host, user, password, useSsl, database, int.Parse(port), maxPoolSize);
+    }
+
+    return services.AddPostgresStorage(host, user, password, useSsl, database, int.Parse(port), maxPoolSize);
+}
 }
