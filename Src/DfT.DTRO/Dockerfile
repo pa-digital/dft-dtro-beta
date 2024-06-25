@@ -1,9 +1,9 @@
-FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
 WORKDIR /app
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 # copy csproj and restore as distinct layers
-COPY ./DfT.DTRO.csproj ./
+COPY *.csproj ./
 RUN dotnet restore
 
 # copy everything else and build
@@ -11,7 +11,7 @@ COPY . .
 RUN dotnet publish -c Release -o out
 
 # build common runtime image
-FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
 WORKDIR /app
 COPY --from=build /app/out .
 
