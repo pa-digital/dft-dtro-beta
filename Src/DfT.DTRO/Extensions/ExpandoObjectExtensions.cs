@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using DfT.DTRO.Enums;
 
 namespace DfT.DTRO.Extensions;
 
@@ -78,6 +79,47 @@ public static class ExpandoObjectExtensions
         => (path.Split('.') is string[] split && split.Length > 1)
             ? source.GetValueOrDefault<T>(split)
             : source.GetFieldValueOrDefault<T>(path);
+
+    public static void PutValue<T>(this ExpandoObject source, string path, T value)
+    {
+        if (path.Split('.') is string[] split && split.Length > 1)
+        {
+            source.PutValue(split, value);
+        }
+        else
+        {
+            source.SetFieldValue(path, value);
+        }
+    }
+
+    private static void SetFieldValue<T>(this ExpandoObject source, string field, T value)
+    {
+        var dict = (IDictionary<string, object>)source;
+        dict[field] = value;
+    }
+
+    private static void PutValue<T>(this ExpandoObject source, string[] path, T value)
+    {
+        if (path.Length == 1)
+        {
+            source.SetFieldValue(path[0], value);
+            return;
+        }
+
+        var current = source as IDictionary<string, object>;
+
+        for (int i = 0; i < path.Length - 1; i++)
+        {
+            if (!current.ContainsKey(path[i]))
+            {
+                current[path[i]] = new ExpandoObject();
+            }
+
+            current = current[path[i]] as IDictionary<string, object>;
+        }
+
+        current[path.Last()] = value;
+    }
 
     /// <summary>
     /// Extension to retrieve a field from an Expando object.

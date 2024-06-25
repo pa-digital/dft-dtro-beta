@@ -109,4 +109,13 @@ public interface IDtroDal
     /// or <see langword="false"/> if it was not found.
     /// </returns>
     Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null);
+
+    /// <summary>
+    /// Assigns ownership of DTRO.
+    /// </summary>
+    /// <param name="id">The unique id of the DTRO.</param>
+    /// <param name="assignToTraId">The traID to assign ownership.</param>
+    /// <param name="correlationId">The correlation id.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous update operation.</returns>
+    Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId);
 }

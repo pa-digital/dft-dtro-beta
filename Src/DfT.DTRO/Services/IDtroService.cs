@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroHistory;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DfT.DTRO.Services;
 
@@ -114,5 +116,13 @@ public interface IDtroService
     /// <returns>List of D-TRO Provision History</returns>
     Task<List<DtroHistoryProvisionResponse>> GetDtroProvisionHistoryAsync(Guid dtroId);
 
-
+    /// <summary>
+    /// Assign ownership.
+    /// </summary>
+    /// <param name="id">D-TRO ID passed.</param>
+    /// <param name="apiTraId">The TRA ID passed in the header by the API manager.</param>
+    /// <param name="assignToTraId">TRA ID to assign ownership to.</param>
+    /// <param name="correlationId">Correlation ID passed</param>
+    /// <returns>Ok.</returns>
+    Task<bool> AssignOwnershipAsync(Guid id, int? apiTraId, int assignToTraId, string correlationId);
 }

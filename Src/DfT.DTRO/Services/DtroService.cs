@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using DfT.DTRO.DAL;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroHistory;
+using DfT.DTRO.Extensions;
 
 namespace DfT.DTRO.Services;
 
@@ -155,15 +156,42 @@ public class DtroService : IDtroService
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
         return dtroHistories
-            .Select(_dtroMappingService.GetProvision)
+            .SelectMany(_dtroMappingService.GetProvision)
             .Where(response => response != null)
             .ToList();
 
     }
 
     /// <inheritdoc/>
-    //public async Task UpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId)
-    //{
-    //    await _dtroDal.UpdateDtroAsJsonAsync(guid, dtroSubmit, correlationId);
-    //}
+    public async Task<bool> AssignOwnershipAsync(Guid id, int? apiTraId, int assignToTraId, string correlationId)
+    {
+
+        var currentDtro = await _dtroDal.GetDtroByIdAsync(id);
+        if (currentDtro is null)
+        {
+            throw new NotFoundException();
+        }
+
+        if (apiTraId != null)
+        {
+            var ownership = _dtroMappingService.GetOwnership(currentDtro);
+
+            var isCreatorOrOwner = ownership.TrafficAuthorityCreatorId == apiTraId | ownership.TrafficAuthorityOwnerId == apiTraId;
+            if (!isCreatorOrOwner)
+            {
+                throw new DtroValidationException($"Traffic authority {apiTraId} is not the creator or owner in the DTRO data submitted");
+            }
+        }
+
+        DTROHistory historyDtro = _dtroMappingService.MapToDtroHistory(currentDtro);
+        var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
+        if (!isSaved)
+        {
+            throw new Exception("Failed to write to history table");
+        }
+
+        await _dtroDal.AssignDtroOwnership(id, assignToTraId, correlationId);
+
+        return true;
+    }
 }
