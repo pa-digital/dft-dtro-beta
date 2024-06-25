@@ -1,4 +1,5 @@
-﻿using DfT.DTRO.Services;
+﻿using System;
+using DfT.DTRO.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,13 +30,21 @@ public static class StorageServiceDIExtensions
     /// <returns>A reference to this instance after the operation has completed.</returns>
     public static IServiceCollection AddStorage(this IServiceCollection services, IConfiguration configuration)
     {
-        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? configuration.GetValue<string>("Postgres:Host");
-        var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int parsedPort) ? parsedPort : configuration.GetValue<int>("Postgres:Port");
-        var user = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? configuration.GetValue<string>("Postgres:User");
-        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? configuration.GetValue<string>("Postgres:Password");
-        var database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE") ?? configuration.GetValue<string>("Postgres:Database");
-        bool useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool parsedUseSsl) ? parsedUseSsl : configuration.GetValue<bool>("Postgres:UseSsl");
-        int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int parsedMaxPoolSize) ? parsedMaxPoolSize : configuration.GetValue<int?>("Postgres:MaxPoolSize");
+        var postgresConfig = configuration.GetRequiredSection("Postgres");
+
+        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? postgresConfig.GetValue<string>("Host");
+        var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int parsedPort)
+        ? parsedPort : postgresConfig.GetValue<int>("Port") ?? 5432;
+        
+        var user = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? postgresConfig.GetValue<string>("User");
+        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? postgresConfig.GetValue<string>("Password");
+        var database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE") ?? postgresConfig.GetValue<string>("DbName");
+
+        bool useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool parsedUseSsl)
+        ? parsedUseSsl : postgresConfig.GetValue<bool>("UseSsl", false);
+
+        int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int parsedMaxPoolSize)
+        ? parsedMaxPoolSize : postgresConfig.GetValue<int?>("MaxPoolSize", null);
 
         if (configuration.GetValue("WriteToBucket", false))
         {
