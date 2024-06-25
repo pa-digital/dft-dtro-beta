@@ -42,6 +42,7 @@ public class SqlStorageServiceTests : IDisposable
     private readonly DfT.DTRO.Models.DataBase.DTRO _dtroWithOrderReportingPoint;
 
     private readonly Mock<IDtroMappingService> _mappingServiceMock = new();
+    private int? _traHeader = 1585;
 
     public SqlStorageServiceTests()
     {
@@ -207,7 +208,7 @@ public class SqlStorageServiceTests : IDisposable
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
-        var result = await sut.SoftDeleteDtroAsync(Guid.NewGuid());
+        var result = await sut.SoftDeleteDtroAsync(Guid.NewGuid(), DateTime.UtcNow);
 
         Assert.False(result);
     }
@@ -227,7 +228,7 @@ public class SqlStorageServiceTests : IDisposable
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
-        var result = await sut.SoftDeleteDtroAsync(_deletedDtroKey);
+        var result = await sut.SoftDeleteDtroAsync(_deletedDtroKey, DateTime.UtcNow);
 
         Assert.False(result);
     }
@@ -238,7 +239,7 @@ public class SqlStorageServiceTests : IDisposable
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
-        var result = await sut.SoftDeleteDtroAsync(_existingDtroKey);
+        var result = await sut.SoftDeleteDtroAsync(_existingDtroKey, DateTime.UtcNow);
 
         Assert.True(result);
     }

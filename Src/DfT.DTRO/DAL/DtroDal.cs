@@ -48,10 +48,8 @@ public class DtroDal : IDtroDal
     }
 
     /// <inheritdoc/>
-    public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime = null)
+    public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime)
     {
-        deletionTime ??= DateTime.UtcNow;
-
         Models.DataBase.DTRO existing = await _dtroContext.Dtros.FindAsync(id);
 
         if (existing is null || existing.Deleted)
