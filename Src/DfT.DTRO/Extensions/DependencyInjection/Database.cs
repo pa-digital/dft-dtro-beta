@@ -53,24 +53,16 @@ public static class Database
     /// Adds an <see cref="DtroContext"/> using the connection parameters contained in the <paramref name="configuration"/>.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
-    /// <param name="configuration">The configuration that the connection parameters are infered from.</param>
     /// <returns>A reference to this instance after the operation has completed.</returns>
-    public static IServiceCollection AddPostgresDtroContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddPostgresDtroContext(this IServiceCollection services)
     {
-        var postgresConfig = configuration.GetRequiredSection("Postgres");
-
-        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? postgresConfig.GetValue<string>("Host");
-        var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int parsedPort)
-        ? parsedPort : configuration.GetValue<int?>("Port") ?? 5432;
-
-        var user = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? postgresConfig.GetValue<string>("User");
-        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? postgresConfig.GetValue<string>("Password");
-        var database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE") ?? postgresConfig.GetValue<string>("DbName");
-        bool useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool parsedUseSsl)
-        ? parsedUseSsl : postgresConfig.GetValue<bool>("UseSsl", false);
-
-        int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int parsedMaxPoolSize)
-        ? parsedMaxPoolSize : postgresConfig.GetValue<int?>("MaxPoolSize", null);
+        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
+        var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
+        var user = Environment.GetEnvironmentVariable("POSTGRES_USER");
+        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
+        var database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE");
+        var useSsl = Environment.GetEnvironmentVariable("POSTGRES_USE_SSL");
+        var maxPoolSize = Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE");
 
         return services.AddPostgresDtroContext(host, user, password, useSsl, database, port, maxPoolSize);
     }
