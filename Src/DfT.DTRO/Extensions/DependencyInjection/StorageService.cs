@@ -34,8 +34,8 @@ public static class StorageServiceDIExtensions
 
         var host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? postgresConfig.GetValue<string>("Host");
         var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int parsedPort)
-        ? parsedPort : postgresConfig.GetValue<int>("Port") ?? 5432;
-        
+        ? parsedPort : postgresConfig.GetValue<int?>("Port") ?? 5432;
+
         var user = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? postgresConfig.GetValue<string>("User");
         var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? postgresConfig.GetValue<string>("Password");
         var database = Environment.GetEnvironmentVariable("POSTGRES_DATABASE") ?? postgresConfig.GetValue<string>("DbName");

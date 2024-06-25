@@ -61,7 +61,7 @@ public static class Database
 
         var host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? postgresConfig.GetValue<string>("Host");
         var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int parsedPort)
-        ? parsedPort : configuration.GetValue<int>("Postgres:Port") ?? 5432;
+        ? parsedPort : configuration.GetValue<int?>("Port") ?? 5432;
 
         var user = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? postgresConfig.GetValue<string>("User");
         var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? postgresConfig.GetValue<string>("Password");
