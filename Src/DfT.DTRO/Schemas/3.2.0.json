@@ -1763,6 +1763,15 @@
 				},
 				"actionType": {
 					"$def": "#/$defs/actionType"
+				},
+				"traAffected": {
+					"items": {
+						"description": "Traffic authority (SWA code) affected by D-TRO",
+						"type": "number",
+						"minimum": 0,
+						"maximum": 9999
+					},
+					"type": "array"
 				}
 			},
 			"required": [
