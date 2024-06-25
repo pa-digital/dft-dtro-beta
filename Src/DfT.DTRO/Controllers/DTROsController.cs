@@ -376,11 +376,10 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> AssignOwnership(Guid id, int assignToTraId)
+    public async Task<IActionResult> AssignOwnership([FromHeader(Name = "TA")][Required] int? ta, Guid id, int assignToTraId)
     {
         try
         {
-            var ta = GetTaFromHeader(this.Request);
             await _dtroService.AssignOwnershipAsync(id, ta, assignToTraId, _correlationProvider.CorrelationId);
             return NoContent();
         }

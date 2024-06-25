@@ -23,7 +23,7 @@ public class DtroEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(Guid id, int assignToTraId)
     {
-        var res = await _dtroService.ReassignDtroAsync(id, assignToTraId);
-        return res;
+        await _dtroService.ReassignDtroAsync(id, assignToTraId);
+        return RedirectToPage("Search");
     }
 }
