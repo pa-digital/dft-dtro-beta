@@ -30,35 +30,31 @@ public static class StorageServiceDIExtensions
     /// <returns>A reference to this instance after the operation has completed.</returns>
     public static IServiceCollection AddStorage(this IServiceCollection services, IConfiguration configuration)
     {
-        // Attempt to retrieve the configuration values from environment variables first, then fall back to appsettings.json if not found
-        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST")
-        ?? configuration.GetValue<string>("Postgres:Host", "localhost");
+        var postgresConfig = configuration.GetSection("Postgres");
 
-        int port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int portValue)
-        ? portValue : configuration.GetValue<int>("Postgres:Port", 5432);
-
-        var user = Environment.GetEnvironmentVariable("POSTGRES_USER")
-        ?? configuration.GetValue<string>("Postgres:User" , "postgres");
-
-        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
-        ?? configuration.GetValue<string>("Postgres:Password", "admin");
-
-        var database = Environment.GetEnvironmentVariable("POSTGRES_DBNAME")
-        ?? configuration.GetValue<string>("Postgres:DbName", "data");
-
-        bool useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool useSslValue)
-        ? useSslValue : configuration.GetValue("Postgres:UseSsl", false);
-
-        int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int maxPoolSizeValue)
-        ? maxPoolSizeValue : configuration.GetValue<int?>("Postgres:MaxPoolSize", null);
+        var host = postgresConfig.GetValue("Host", "localhost");
+        var port = postgresConfig.GetValue("Port", 5432);
+        var user = postgresConfig.GetValue("User", "postgres");
+        var password = postgresConfig.GetValue("Password", "admin");
+        var database = postgresConfig.GetValue("DbName", "data");
+        var useSsl = postgresConfig.GetValue("UseSsl", false);
+        int? maxPoolSize = postgresConfig.GetValue<int?>("MaxPoolSize", null);
 
         if (configuration.GetValue("WriteToBucket", false))
         {
-            return services.AddPostgresDtroContext(host, user, password, useSslValue, database, portValue);
+            return
+                services
+                    .AddPostgresDtroContext(host, user, password, useSsl, database, port);
         }
 
-        return services.AddPostgresStorage(host, user, password, useSslValue, database, portValue, maxPoolSizeValue);
+        // if (configuration.GetValue("WriteToBucket", false))
+        // {
+        //    return
+        //        services
+        //            .AddPostgresDtroContext(host, user, password, useSsl, database, port)
+        //            .AddMultiStorageService<SqlStorageService, FileStorageService>();
+        // }
+        return services.AddPostgresStorage(host, user, password, useSsl, database, port, maxPoolSize);
     }
-
 
 }
