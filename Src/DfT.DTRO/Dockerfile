@@ -19,7 +19,6 @@ COPY --from=build /app/out .
 
 # Expose the application port and set environment variables
 EXPOSE 8080
-ENV ASPNETCORE_URLS=http://+:8080
 ENV FeatureManagement__DtroWrite=True \
     FeatureManagement__SchemasRead=True \
     FeatureManagement__SchemaWrite=True \
