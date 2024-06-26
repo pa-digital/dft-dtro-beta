@@ -1,8 +1,4 @@
-﻿using System;
-using DfT.DTRO.Models.SchemaTemplate;
-
-namespace DfT.DTRO.Models.DtroHistory;
-
+﻿
 public class DtroHistorySourceResponse
 {
     public string ActionType { get; set; }
