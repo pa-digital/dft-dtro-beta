@@ -25,29 +25,6 @@
     </div>
 </form>
 
-@if (isEdit)
-{
-    <div style="margin-top: 20px;">
-        <table>
-            <tr>
-                <td>
-                    <label for="reassignInput">Reassign to Tra ID</label>
-                </td>
-                <td style="width: 100px">
-                    <input style="margin-left: 10px;" type="number" id="reassignInput" class="form-control" min="0" />
-                </td>
-                <td>
-                    <button onclick="location.href='@Url.Action("OnPostReassign", new { id = Model.Id, assignToTraId = 121 })'" style="margin-left: 20px;" id="reassignButton" class="btn btn-secondary" disabled>Reassign</button>
-                </td>
-            </tr>
-        </table>
-
-        <label>swa_codes</label>
-        <label>
-            10, 11, 12, 13, 14, 16, 17, 18, 20, 30, 50, 60, 70, 114, 116, 119, 121, 230, 235
-        </label>
-    </div>
-}
 
 @section Scripts {
     <script>
@@ -94,34 +71,6 @@
                     const isValidInteger = Number.isInteger(parseInt(reassignInput.value)) && reassignInput.value >= 0;
                     reassignButton.disabled = !isValidInteger;
                 });
-
-
-                // reassignButton.addEventListener('click', async function () {
-                //     const assignToTraId = parseInt(reassignInput.value);
-                //     const reassignUrl = `/DtroDropEdit/OnPostReassign`;
-
-                //     try {
-                //         const response = await fetch(reassignUrl, {
-                //             method: 'POST',
-                //             headers: {
-                //                 'Content-Type': 'application/json'
-                //             },
-                //             body: JSON.stringify({
-                //                 id: id,
-                //                 assignToTraId: assignToTraId
-                //             })
-                //         });
-
-                //         if (response.ok) {
-                //             alert('Successfully reassigned the DTRO.');
-                //         } else {
-                //             alert('Failed to reassign the DTRO.');
-                //         }
-                //     } catch (error) {
-                //         console.error('Error reassigning DTRO:', error);
-                //         alert('An error occurred while reassigning the DTRO.');
-                //     }
-                // });
             }
         });
     </script>

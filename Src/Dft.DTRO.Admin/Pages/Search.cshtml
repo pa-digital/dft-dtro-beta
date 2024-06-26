@@ -17,6 +17,7 @@
             <th>Creator</th>
             <th>Owner</th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -46,9 +47,13 @@
                 <td>@result.TrafficAuthorityOwnerId</td>
 
                 <td>
-                    <a class="btn btn-primary" asp-page="DtroEdit" asp-route-id="@result.Id" asp-route-IsEdit="false">Assign</a>
+                    <a class="btn btn-primary" asp-page="DtroEdit" asp-route-id="@result.Id">Reassign</a>
                 </td>
-              
+
+
+                <td>
+                    <a class="btn btn-secondary" asp-page="DtroHistory" asp-route-id="@result.Id">History</a>
+                </td>
             </tr>
         }
     </tbody>

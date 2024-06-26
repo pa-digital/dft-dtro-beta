@@ -14,6 +14,34 @@ public class DtroService
         _client = clientFactory.CreateClient("ExternalApi");
     }
 
+
+    //[HttpGet]
+    //[Route("/v1/dtros/provisionHistory/{dtroId:guid}")]
+    //public async Task<ActionResult<List<DtroHistoryProvisionResponse>>> GetProvisionHistory(Guid dtroId)
+
+    public async Task<List<DtroHistoryProvisionResponse>> DtroProvisionHistory(Guid id)
+    {
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/v1/dtros/provisionHistory/{id}");
+        var response = await _client.SendAsync(httpRequestMessage);
+
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        var history = JsonSerializer.Deserialize<List<DtroHistoryProvisionResponse>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        return history;
+    }
+
+
+    public async Task<List<DtroHistorySourceResponse>> DtroSourceHistory(Guid id)
+    {
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/v1/dtros/sourceHistory/{id}");
+        var response = await _client.SendAsync(httpRequestMessage);
+
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        var history = JsonSerializer.Deserialize<List<DtroHistorySourceResponse>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        return history;
+    }
+
     public async Task<PaginatedResponse<DtroSearchResult>> SearchDtros()
     {
         var search = new DtroSearch() { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { new() } };
@@ -21,7 +49,8 @@ public class DtroService
         var response = await _client.PostAsJsonAsync("/v1/search", search);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<PaginatedResponse<DtroSearchResult>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        var paginatedResponse = JsonSerializer.Deserialize<PaginatedResponse<DtroSearchResult>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        return paginatedResponse;
     }
 
     public async Task CreateDtroAsync(IFormFile file)
@@ -50,7 +79,7 @@ public class DtroService
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
 
-        var request = new HttpRequestMessage(HttpMethod.Put, "/v1/dtros/updateFromFile")
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/v1/dtros/updateFromFile/{id}")
         {
             Content = content
         };

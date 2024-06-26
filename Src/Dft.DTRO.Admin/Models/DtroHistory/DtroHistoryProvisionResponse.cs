@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using DfT.DTRO.Models.SchemaTemplate;
-
-namespace DfT.DTRO.Models.DtroHistory;
+﻿using System.Dynamic;
 
 public class DtroHistoryProvisionResponse
 {
