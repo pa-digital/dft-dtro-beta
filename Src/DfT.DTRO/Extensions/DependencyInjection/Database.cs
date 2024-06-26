@@ -57,18 +57,31 @@ public static class Database
     /// <returns>A reference to this instance after the operation has completed.</returns>
     public static IServiceCollection AddPostgresDtroContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var postgresConfig = configuration.GetRequiredSection("Postgres");
+        // Attempt to retrieve the configuration values from environment variables first, then fall back to appsettings.json if not found
+        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST")
+        ?? configuration.GetValue<string>("Postgres:Host", "localhost");
 
-        var host = postgresConfig.GetValue<string>("Host");
-        var port = postgresConfig.GetValue<int?>("Port") ?? 5432;
-        var user = postgresConfig.GetValue<string>("User");
-        var password = postgresConfig.GetValue<string>("Password");
-        var database = postgresConfig.GetValue<string>("DbName");
-        var useSsl = postgresConfig.GetValue("UseSsl", false);
-        int? maxPoolSize = postgresConfig.GetValue<int?>("MaxPoolSize", null);
+        int port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int portValue)
+        ? portValue : configuration.GetValue<int>("Postgres:Port", 5432);
 
-        return services.AddPostgresDtroContext(host, user, password, useSsl, database, port, maxPoolSize);
+        var user = Environment.GetEnvironmentVariable("POSTGRES_USER")
+        ?? configuration.GetValue<string>("Postgres:User", "postgres");
+
+        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
+        ?? configuration.GetValue<string>("Postgres:Password", "admin");
+
+        var database = Environment.GetEnvironmentVariable("POSTGRES_DBNAME")
+        ?? configuration.GetValue<string>("Postgres:DbName", "data");
+
+        bool useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool useSslValue)
+        ? useSslValue : configuration.GetValue("Postgres:UseSsl", false);
+
+        int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int maxPoolSizeValue)
+        ? maxPoolSizeValue : configuration.GetValue<int?>("Postgres:MaxPoolSize", null);
+
+        return services.AddPostgresDtroContext(host, user, password, useSslValue, database, port, maxPoolSizeValue);
     }
+
 
     /// <summary>
     /// with PostgreSQL backend using the provided connection parameters.
