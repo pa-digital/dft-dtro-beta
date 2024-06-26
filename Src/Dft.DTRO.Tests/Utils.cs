@@ -166,7 +166,8 @@ namespace Dft.DTRO.Tests
                     LastUpdated = DateTime.Now,
                     Data = expando,
                     TrafficAuthorityOwnerId = 1585,
-                    TrafficAuthorityCreatorId = 1585
+                    TrafficAuthorityCreatorId = 1585,
+                    SchemaVersion = "3.1.2"
                 };
 
                 requests.Add(request);
