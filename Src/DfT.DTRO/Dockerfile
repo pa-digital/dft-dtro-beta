@@ -10,21 +10,21 @@ RUN dotnet restore -r alpine-x64
 # Copy the rest of the files and build
 COPY . .
 RUN dotnet publish -o out -c Release -r alpine-x64 \
-    --self-contained true /p:PublishReadyToRun=true
+    --self-contained true /p:PublishReadyToRun=true /p:PublishSingleFile=true
 
 # Base image to run application
 FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
 WORKDIR /app
 COPY --from=build /app/out .
-ENV ASPNETCORE_ENVIRONMENT=Development
 
 # Expose the application port and set environment variables
 EXPOSE 8080
-ENV ASPNETCORE_URLS=http://*:8080
+ENV ASPNETCORE_URLS=http://+:8080
 ENV FeatureManagement__DtroWrite=True \
     FeatureManagement__SchemasRead=True \
     FeatureManagement__SchemaWrite=True \
     FeatureManagement__DtroRead=True
+ENV ASPNETCORE_ENVIRONMENT=Development
 
 # Run the application
 ENTRYPOINT ["./DfT.DTRO"]
