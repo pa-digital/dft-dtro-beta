@@ -24,7 +24,6 @@ ENV FeatureManagement__DtroWrite=True \
     FeatureManagement__SchemasRead=True \
     FeatureManagement__SchemaWrite=True \
     FeatureManagement__DtroRead=True
-ENV ASPNETCORE_ENVIRONMENT=Development
 
 # Run the application
 ENTRYPOINT ["./DfT.DTRO"]
