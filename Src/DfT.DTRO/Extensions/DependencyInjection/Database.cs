@@ -1,4 +1,5 @@
 ﻿using System;
+using Npgsql;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,8 +21,7 @@ public static class Database
     /// <returns>A reference to this instance after the operation has completed.</returns>
     public static IServiceCollection AddPostgresDtroContext(this IServiceCollection services, string connectionString)
     {
-        return services.AddDbContext<DtroContext>(
-            opt => opt.UseNpgsql(connectionString));
+        return services.AddDbContext<DtroContext>(opt => opt.UseNpgsql(connectionString));
     }
 
     /// <summary>
@@ -46,8 +46,7 @@ public static class Database
         string database = null,
         int port = 5432,
         int? maxPoolSize = null)
-        => services.AddPostgresDtroContext(
-            BuildPostgresConnectionString(host, user, password, useSsl, database, port, maxPoolSize));
+        => services.AddPostgresDtroContext(BuildPostgresConnectionString(host, user, password, useSsl, database, port, maxPoolSize));
 
     /// <summary>
     /// Adds an <see cref="DtroContext"/> using the connection parameters contained in the <paramref name="configuration"/>.
@@ -92,8 +91,7 @@ public static class Database
         string database = null,
         int port = 5432,
         int? maxPoolSize = null)
-        => services.AddPostgresStorage(
-            BuildPostgresConnectionString(host, user, password, useSsl, database, port, maxPoolSize));
+        => services.AddPostgresStorage(BuildPostgresConnectionString(host, user, password, useSsl, database, port, maxPoolSize));
 
     internal static string BuildPostgresConnectionString(
         string host,
@@ -103,10 +101,25 @@ public static class Database
         string database = null,
         int port = 5432,
         int? maxPoolSize = null)
-        => $"Host={host ?? throw new ArgumentNullException(nameof(host))}:{port};" +
-           $"Username={user ?? throw new ArgumentNullException(nameof(user))};" +
-           $"Password={password ?? throw new ArgumentNullException(nameof(password))};" +
-           $"Database={database ?? user};" +
-           $"{(useSsl ? "sslmode=Require;Trust Server Certificate=true;" : string.Empty)};" +
-           $"{(maxPoolSize is not null ? $"Maximum Pool Size={maxPoolSize};" : string.Empty)};";
+        {
+            var connectionStringBuilder = new NpgsqlConnectionStringBuilder
+            {
+                Host = host,
+                Port = port,
+                Username = user,
+                Password = password,
+                Database = database ?? user,
+                SslMode = useSsl ? SslMode.Require : SslMode.Prefer
+            };
+
+            if (maxPoolSize.HasValue)
+            {
+                connectionStringBuilder.Pooling = true;
+                connectionStringBuilder.MaxPoolSize = maxPoolSize.Value;
+            }
+            
+            return connectionStringBuilder.ToString();
+
+        }
+
 }
