@@ -145,8 +145,8 @@ public class DtroMappingService : IDtroMappingService
             Created = dtroHistory.Created,
             LastUpdated = dtroHistory.LastUpdated,
             Reference = sourceReference,
-            SchemaVersion = dtroHistory.SchemaVersion,
-            Section = sourceSection, 
+            SchemaVersion = dtroHistory.SchemaVersion.ToString(),
+            Section = sourceSection,
             TrafficAuthorityCreatorId = dtroHistory.TrafficAuthorityCreatorId,
             TrafficAuthorityOwnerId = dtroHistory.TrafficAuthorityOwnerId,
             TroName = sourceTroName,
@@ -214,7 +214,7 @@ public class DtroMappingService : IDtroMappingService
             };
             provisionResponse.Reference = provisionResponse.Data?.GetValueOrDefault<string>("reference");
             provisionResponse.ActionType = provisionResponse.Data?.GetValueOrDefault<string>("actionType");
-            provisionResponse.SchemaVersion = dtroHistory.SchemaVersion;
+            provisionResponse.SchemaVersion = dtroHistory.SchemaVersion.ToString();
             if (provisionResponse.ActionType != ProvisionActionType.NoChange.GetDisplayName())
             {
                 ret.Add(provisionResponse);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DfT.DTRO.DAL;
+using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
@@ -147,24 +148,81 @@ public class DtroService : IDtroService
     public async Task<List<DtroHistorySourceResponse>> GetDtroSourceHistoryAsync(Guid dtroId)
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
-
-        return dtroHistories
+        var histories = dtroHistories
             .Select(_dtroMappingService.GetSource)
             .Where(response => response != null)
             .ToList();
+
+        var current = await _dtroDal.GetDtroByIdAsync(dtroId);
+        var currentAsHistory = _dtroMappingService.MapToDtroHistory(current);
+        var currentSource = _dtroMappingService.GetSource(currentAsHistory);
+
+        var completeList = new List<DtroHistorySourceResponse>();
+
+        if (currentSource != null)
+        {
+            var first = histories.FirstOrDefault();
+
+            if (first == null || !currentSource.ComparePropertiesValues(first))
+            {
+                completeList.Add(currentSource);
+            }
+        }
+
+        completeList.AddRange(histories);
+
+        return completeList;
     }
 
-    /// <inheritdoc />
     public async Task<List<DtroHistoryProvisionResponse>> GetDtroProvisionHistoryAsync(Guid dtroId)
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
-        return dtroHistories
-            .SelectMany(_dtroMappingService.GetProvision)
+        var histories = dtroHistories
+            .SelectMany(history => _dtroMappingService.GetProvision(history))
             .Where(response => response != null)
             .ToList();
 
+        var currentDtro = await _dtroDal.GetDtroByIdAsync(dtroId);
+        var currentAsHistory = _dtroMappingService.MapToDtroHistory(currentDtro);
+        var currentProvisions = _dtroMappingService.GetProvision(currentAsHistory);
+        var completeList = new List<DtroHistoryProvisionResponse>();
+
+        // Process each current provision
+        foreach (var currentProvision in currentProvisions)
+        {
+            // Find old provisions with the same reference
+            var oldProvisions = histories.Where(x => x.Reference == currentProvision.Reference).ToList();
+
+            if (oldProvisions.Count > 0)
+            {
+                // Add current provision if it differs from the first old provision
+                var firstOld = oldProvisions.First();
+                if (!currentProvision.ComparePropertiesValues(firstOld))
+                {
+                    completeList.Add(currentProvision);
+                }
+
+                // Add all old provisions
+                completeList.AddRange(oldProvisions);
+
+                // Remove all old provisions from histories
+                histories.RemoveAll(x => x.Reference == currentProvision.Reference);
+            }
+            else
+            {
+                // If no old provisions found, add current provision directly
+                completeList.Add(currentProvision);
+            }
+        }
+
+        // Add remaining histories to complete list
+        completeList.AddRange(histories);
+
+        return completeList;
     }
+
+
 
     /// <inheritdoc/>
     public async Task<bool> AssignOwnershipAsync(Guid id, int? apiTraId, int assignToTraId, string correlationId)

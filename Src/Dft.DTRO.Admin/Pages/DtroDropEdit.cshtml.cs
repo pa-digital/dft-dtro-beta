@@ -21,7 +21,7 @@ public class DtroDropEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, string id)
     {
-
+ 
         if (isEdit)
         {
             await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);
@@ -30,18 +30,7 @@ public class DtroDropEditModel : PageModel
         {
             await _dtroService.CreateDtroAsync(file);
         }
+
         return RedirectToPage("Search");
-    }
-
-    public async Task<IActionResult> OnPostReassign(Guid id, int assignToTraId)
-    {
-        var res = await _dtroService.ReassignDtroAsync(id, assignToTraId);
-        return res;
-    }
-
-    public class ReassignRequest
-    {
-        public Guid Id { get; set; }
-        public int AssignToTraId { get; set; }
     }
 }
