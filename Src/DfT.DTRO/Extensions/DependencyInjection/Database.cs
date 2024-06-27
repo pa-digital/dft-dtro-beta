@@ -58,11 +58,11 @@ public static class Database
     {
         var postgresConfig = configuration.GetRequiredSection("Postgres");
 
-        var host = postgresConfig.GetValue<string>("Host");
-        var port = postgresConfig.GetValue<int?>("Port") ?? 5432;
-        var user = postgresConfig.GetValue<string>("User");
-        var password = postgresConfig.GetValue<string>("Password");
-        var database = postgresConfig.GetValue<string>("DbName");
+        var host = postgresConfig.GetValue("Host", "localhost");
+        var port = postgresConfig.GetValue("Port", 5432);
+        var user = postgresConfig.GetValue("User", "postgres");
+        var password = postgresConfig.GetValue("Password", "admin");
+        var database = postgresConfig.GetValue("DbName", "data");
         var useSsl = postgresConfig.GetValue("UseSsl", false);
         int? maxPoolSize = postgresConfig.GetValue<int?>("MaxPoolSize", null);
 
@@ -117,7 +117,7 @@ public static class Database
                 connectionStringBuilder.Pooling = true;
                 connectionStringBuilder.MaxPoolSize = maxPoolSize.Value;
             }
-            
+
             return connectionStringBuilder.ToString();
 
         }

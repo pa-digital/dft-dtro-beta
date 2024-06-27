@@ -42,18 +42,9 @@ public static class StorageServiceDIExtensions
 
         if (configuration.GetValue("WriteToBucket", false))
         {
-            return
-                services
-                    .AddPostgresDtroContext(host, user, password, useSsl, database, port);
+            return services.AddPostgresDtroContext(host, user, password, useSsl, database, port);
         }
 
-        // if (configuration.GetValue("WriteToBucket", false))
-        // {
-        //    return
-        //        services
-        //            .AddPostgresDtroContext(host, user, password, useSsl, database, port)
-        //            .AddMultiStorageService<SqlStorageService, FileStorageService>();
-        // }
         return services.AddPostgresStorage(host, user, password, useSsl, database, port, maxPoolSize);
     }
 
