@@ -1192,22 +1192,6 @@
   },
   {
     "id": 23,
-    "message": "The 'TraCreatorInSwaCodes' value must be one of the recognised SWA codes.",
-    "name": "TraCreatorInSwaCodes",
-    "path": "source.traCreator",
-    "rule": {
-      "in": [
-        {
-          "var": "source.traCreator"
-        },
-        {
-          "service_data": "swa_codes"
-        }
-      ]
-    }
-  },
-  {
-    "id": 24,
     "message": "The 'TRA' value must be one of the recognised SWA codes.",
     "name": "TraCreatorInSwaCodes",
     "path": "source.traCreator",
@@ -1223,7 +1207,7 @@
     }
   },
   {
-    "id": 25,
+    "id": 24,
     "message": "Period end date must not be later than overall period end date.",
     "name": "ValidPeriodEndNotMoreThanOverallPeriodEnd",
     "path": "source.provision.regulations.overallPeriod.validPeriod",
@@ -1290,7 +1274,7 @@
     }
   },
   {
-    "id": 26,
+    "id": 25,
     "message": "Period start time must be earlier than end time.",
     "name": "ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.validPeriod.recurringTimePeriodOfDay",
@@ -1352,7 +1336,7 @@
     }
   },
   {
-    "id": 27,
+    "id": 26,
     "message": "Period start date must be earlier than end date.",
     "name": "ValidPeriodStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.validPeriod",
@@ -1412,7 +1396,7 @@
     }
   },
   {
-    "id": 28,
+    "id": 27,
     "message": "Period start date must not be earlier than overall period start date.",
     "name": "ValidPeriodStartNotLessThanOverallPeriodStart",
     "path": "source.provision.regulations.overallPeriod.validPeriod",
@@ -1474,7 +1458,7 @@
     }
   },
   {
-    "id": 29,
+    "id": 28,
     "message": "'startValidUsagePeriod' must be lower than 'endValidUsagePeriod'",
     "name": "ValidUsagePeriodStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.validityCondition.rateTable.rateLineCollection",
@@ -1520,7 +1504,7 @@
     }
   },
   {
-    "id": 30,
+    "id": 29,
     "message": "weekInMonth instances must be unique.",
     "name": "ValidityPeriodApplicableInstanceOfDayWithinMonthInstancesUnique",
     "path": "source.provision.regulations.overallPeriod.validityPeriod.recurringDayWeekMonthPeriod.applicableInstanceOfDayWithinMonth",
@@ -1590,7 +1574,7 @@
     }
   },
   {
-    "id": 31,
+    "id": 30,
     "message": "weekInMonth instances must be unique.",
     "name": "ValidityPeriodApplicableWeekInstancesUnique",
     "path": "source.provision.regulations.overallPeriod.validityPeriod.recurringDayWeekMonthPeriod.applicableWeek",
@@ -1660,7 +1644,7 @@
     }
   },
   {
-    "id": 32,
+    "id": 31,
     "message": "weekInMonth instances must be unique.",
     "name": "ValidityPeriodWeekInMonthInstancesUnique",
     "path": "source.provision.regulations.overallPeriod.validityPeriod.recurringDayWeekMonthPeriod.weekInMonth",
@@ -1730,7 +1714,7 @@
     }
   },
   {
-    "id": 33,
+    "id": 32,
     "message": "'comparisonOperator' must be 'lessThan' or 'lessThanOrEqualTo' and 'vehicleHeight' must be between 0 and 6.",
     "name": "WidthCharacteristicValidForRegulationTypeDimensionMaximumWidth",
     "path": "source.provision.regulations.conditions.vehicleCharacteristics.widthCharacteristic",
@@ -1800,7 +1784,7 @@
     }
   },
   {
-    "id": 34,
+    "id": 33,
     "message": "The 'yearOfFirstRegistration' must less than or equal to current year value.",
     "name": "YearOfFirstRegistrationLessOrEqualToCurrentYearValueInConditions",
     "path": "source.provision.regulations.conditions.vehicleCharacteristics.yearOfFirstRegistration",
@@ -1859,7 +1843,7 @@
     }
   },
   {
-    "id": 35,
+    "id": 34,
     "message": "The 'yearOfFirstRegistration' must be less than or equal to the current year value.",
     "name": "YearOfFirstRegistrationLessOrEqualToCurrentYearValueInOverallPeriod",
     "path": "source.provision.regulations.overallPeriod.validityCondition.conditionSet.conditions.vehicleCharacteristics.yearOfFirstRegistration",
@@ -1912,35 +1896,5 @@
         }
       ]
     }
-  },
-
-  {
-    "id": 36,
-    "message": "Each value in 'traAffected' must be one of the recognized SWA codes.",
-    "name": "TraAffectedSwaCodes",
-    "path": "source.traAffected",
-    "rule": {
-      "all": [
-        {
-          "map": {
-            "var": "source.traAffected",
-            "as": "traAffectedItem",
-            
-              "in": [
-                {
-                  "var": "traAffectedItem"
-                },
-                {
-                  "service_data": "swa_codes"
-                }
-              ]
-        
-          }
-        }
-      ]
-    }
   }
-
 ]
-
-    

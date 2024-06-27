@@ -24,6 +24,15 @@ public class RecordManagementService : IRecordManagementService
             {
                 validationErrors.Add(new SemanticValidationError { Message = $"Traffic authority {ta} is not the creator or owner in the DTRO data submitted" });
             }
+
+            var affected = dtroSubmit.Data.GetExpando("source").GetValue<IList<object>>("traAffected");
+            if (affected.Any(it => (int)it == 0))
+            {
+                validationErrors.Add(new SemanticValidationError
+                {
+                    Message = "One or more traffic authorities affected identification is incorrect."
+                });
+            }
         }
 
         var sourceReference = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("reference");
@@ -77,7 +86,7 @@ public class RecordManagementService : IRecordManagementService
 
         List<string> provisionActionTypes = dtroSubmit.Data.GetValueOrDefault<IList<object>>("source.provision")
             .OfType<ExpandoObject>()
-            .Select(it=>it.GetValue<string>("actionType"))
+            .Select(it => it.GetValue<string>("actionType"))
             .ToList();
 
         if (!provisionActionTypes.TrueForAll(it => it.IsEnum("ProvisionActionType")))
