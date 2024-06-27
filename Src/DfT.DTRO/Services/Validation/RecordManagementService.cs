@@ -26,7 +26,7 @@ public class RecordManagementService : IRecordManagementService
             }
 
             var affected = dtroSubmit.Data.GetExpando("source").GetValue<IList<object>>("traAffected");
-            if (affected.Any(it => (int)it == 0))
+            if (affected.Any(it => it is not long))
             {
                 validationErrors.Add(new SemanticValidationError
                 {
