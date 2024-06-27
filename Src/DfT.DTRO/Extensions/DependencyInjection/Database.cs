@@ -69,7 +69,6 @@ public static class Database
         return services.AddPostgresDtroContext(host, user, password, useSsl, database, port, maxPoolSize);
     }
 
-
     /// <summary>
     /// with PostgreSQL backend using the provided connection parameters.
     /// </summary>
@@ -93,6 +92,18 @@ public static class Database
         int? maxPoolSize = null)
         => services.AddPostgresStorage(BuildPostgresConnectionString(host, user, password, useSsl, database, port, maxPoolSize));
 
+
+    /// <summary>
+    /// Builds a PostgreSQL connection string using the provided parameters.
+    /// </summary>
+    /// <param name="host">The address of the database host.</param>
+    /// <param name="user">The username used to log in.</param>
+    /// <param name="password">The password used to log in.</param>
+    /// <param name="useSsl">Enables encryption of connection with SSL/TLS.</param>
+    /// <param name="database">The name of the database. By default the same as <paramref name="user"/>.</param>
+    /// <param name="port">The port used to connect to the database. By default <c>5432</c>.</param>
+    /// <param name="maxPoolSize">The maximum size of the connection pool.</param>
+    /// <returns>The built PostgreSQL connection string.</returns>
     internal static string BuildPostgresConnectionString(
         string host,
         string user,
@@ -101,25 +112,25 @@ public static class Database
         string database = null,
         int port = 5432,
         int? maxPoolSize = null)
+    {
+        var connectionStringBuilder = new NpgsqlConnectionStringBuilder
         {
-            var connectionStringBuilder = new NpgsqlConnectionStringBuilder
-            {
-                Host = host,
-                Port = port,
-                Username = user,
-                Password = password,
-                Database = database ?? user,
-                SslMode = useSsl ? SslMode.Require : SslMode.Prefer
-            };
+            Host = host,
+            Port = port,
+            Username = user,
+            Password = password,
+            Database = database ?? user,
+            SslMode = useSsl ? SslMode.Require : SslMode.Prefer
+        };
 
-            if (maxPoolSize.HasValue)
-            {
-                connectionStringBuilder.Pooling = true;
-                connectionStringBuilder.MaxPoolSize = maxPoolSize.Value;
-            }
-
-            return connectionStringBuilder.ToString();
-
+        if (maxPoolSize.HasValue)
+        {
+            connectionStringBuilder.Pooling = true;
+            connectionStringBuilder.MaxPoolSize = maxPoolSize.Value;
         }
+
+        return connectionStringBuilder.ToString();
+
+    }
 
 }
