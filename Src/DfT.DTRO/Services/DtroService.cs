@@ -222,7 +222,7 @@ public class DtroService : IDtroService
     }
 
 
- 
+
     /// <inheritdoc/>
     public async Task<bool> AssignOwnershipAsync(Guid id, int? apiTraId, int assignToTraId, string correlationId)
     {
