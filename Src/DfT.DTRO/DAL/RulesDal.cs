@@ -61,9 +61,18 @@ public class RuleTemplateDal : IRuleTemplateDal
     public async Task<IEnumerable<JsonLogicValidationRule>> GetRuleTemplateDeserializeAsync(SchemaVersion schemaVersion)
     {
         var dalRule = await _dtroContext.RuleTemplate.FirstOrDefaultAsync(b => b.SchemaVersion == schemaVersion);
-        var rules = System.Text.Json.JsonSerializer.Deserialize<JsonLogicValidationRule[]>(dalRule.Template);
+        try
+        {
+            var rules = System.Text.Json.JsonSerializer.Deserialize<JsonLogicValidationRule[]>(dalRule.Template);
 
-        return rules.ToList();
+            return rules.ToList();
+        }
+        catch (Exception ex)
+        {
+
+            throw ex ;
+        }
+        
     }
 
     public async Task<List<RuleTemplate>> GetRuleTemplatesAsync()

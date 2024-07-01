@@ -1,19 +1,19 @@
-﻿using DfT.DTRO.Models.DtroDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DfT.DTRO.DAL;
+using DfT.DTRO.Extensions;
+using DfT.DTRO.Models.DataBase;
+using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.Filtering;
 using DfT.DTRO.Models.Pagination;
 using DfT.DTRO.Models.SchemaTemplate;
 using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DfT.DTRO.DAL;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Extensions;
 
 namespace DfT.DTRO.Services;
 
@@ -223,7 +223,7 @@ public class DtroService : IDtroService
     }
 
 
- 
+
     /// <inheritdoc/>
     public async Task<bool> AssignOwnershipAsync(Guid id, int? apiTraId, int assignToTraId, string correlationId)
     {
