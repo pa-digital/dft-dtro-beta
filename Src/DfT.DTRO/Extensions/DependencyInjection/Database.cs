@@ -56,15 +56,26 @@ public static class Database
     /// <returns>A reference to this instance after the operation has completed.</returns>
     public static IServiceCollection AddPostgresDtroContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var postgresConfig = configuration.GetRequiredSection("Postgres");
+        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ??
+            configuration.GetValue("Postgres:Host", "localhost");
 
-        var host = postgresConfig.GetValue("Host", "localhost");
-        var port = postgresConfig.GetValue("Port", 5432);
-        var user = postgresConfig.GetValue("User", "postgres");
-        var password = postgresConfig.GetValue("Password", "admin");
-        var database = postgresConfig.GetValue("DbName", "data");
-        var useSsl = postgresConfig.GetValue("UseSsl", false);
-        int? maxPoolSize = postgresConfig.GetValue<int?>("MaxPoolSize", null);
+        var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int envPort)
+            ? envPort : configuration.GetValue("Postgres:Port", 5432);
+
+        var user = Environment.GetEnvironmentVariable("POSTGRES_USER")
+            ?? configuration.GetValue("Postgres:User", "postgres");
+
+        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
+            ?? configuration.GetValue("Postgres:Password", "admin");
+
+        var database = Environment.GetEnvironmentVariable("POSTGRES_DB")
+            ?? configuration.GetValue("Postgres:DbName", "data");
+
+        var useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool envUseSsl)
+            ? envUseSsl : configuration.GetValue("Postgres:UseSsl", false);
+
+        int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int envMaxPoolSize)
+            ? envMaxPoolSize : configuration.GetValue<int?>("Postgres:MaxPoolSize", null);
 
         return services.AddPostgresDtroContext(host, user, password, useSsl, database, port, maxPoolSize);
     }
