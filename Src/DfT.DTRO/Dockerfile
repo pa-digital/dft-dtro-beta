@@ -6,7 +6,6 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 # Copy the project file and restore dependencies
 COPY *.csproj ./
 RUN dotnet restore -r alpine-x64
-RUN dotnet tool restore && dotnet ef database update
 
 # Copy the rest of the files and build
 COPY . .
