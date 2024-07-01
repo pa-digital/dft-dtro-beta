@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DfT.DTRO.DAL;
+using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
