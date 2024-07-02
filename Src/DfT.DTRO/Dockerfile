@@ -16,7 +16,7 @@ RUN dotnet publish -o out -c Release -r alpine-x64 \
     --self-contained true /p:PublishReadyToRun=true /p:PublishSingleFile=true
 
 # Base image to run application
-FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
+FROM --platform=amd64 mcr.microsoft.com/dotnet/sdk:6.0-alpine AS runtime
 WORKDIR /app
 
 # Copy the published application, as well as the dotnet tools and startup script
