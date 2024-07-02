@@ -5,11 +5,11 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 # Copy the project file and restore dependencies,
 COPY *.csproj ./
-RUN dotnet restore
+RUN dotnet restore -r alpine-x64
 
 # Copy the rest of the files and build
 COPY . .
-RUN dotnet publish -o out -c Release \
+RUN dotnet publish -o out -c Release -r alpine-x64 \
     --self-contained true /p:PublishReadyToRun=true /p:PublishSingleFile=true
 
 # Base image to run application
