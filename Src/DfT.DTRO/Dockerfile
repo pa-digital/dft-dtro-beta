@@ -7,7 +7,7 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 # install global tool for migration, and set path for tools
 COPY *.csproj ./
 RUN dotnet restore -r alpine-x64 && \
-    dotnet tool install --global dotnet-ef
+    dotnet tool install --global dotnet-ef --version 6.0.31
 
 # Copy the rest of the files and build
 COPY . .
