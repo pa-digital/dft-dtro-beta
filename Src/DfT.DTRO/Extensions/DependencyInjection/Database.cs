@@ -131,7 +131,7 @@ public static class Database
             Username = user,
             Password = password,
             Database = database ?? user,
-            SslMode = useSsl ? SslMode.Require : SslMode.Prefer
+            SslMode = SslMode.Disable,
         };
 
         if (maxPoolSize.HasValue)
