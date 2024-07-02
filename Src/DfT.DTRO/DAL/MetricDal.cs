@@ -62,7 +62,7 @@ public class MetricDal : IMetricDal
             case MetricType.SystemFailure:
                 metric.SystemFailureCount++;
                 break;
-            case MetricType.SubmissionFailure:
+            case MetricType.SubmissionValidationFailure:
                 metric.SubmissionFailureCount++;
                 break;
             case MetricType.Submission:

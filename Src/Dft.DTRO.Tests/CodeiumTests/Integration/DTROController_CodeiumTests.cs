@@ -24,7 +24,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     private readonly Mock<IRequestCorrelationProvider> _correlationProviderMock;
     private readonly Mock<ILogger<DTROsController>> _loggerMock;
     private readonly DTROsController _controller;
-
+    private readonly Mock<IMetricsService> _metricsMock;
     private readonly WebApplicationFactory<Program> _factory;
 
     private const string ValidDtroJsonPath = "./DtroJsonDataExamples/v3.2.0/valid-new-x.json";
@@ -36,7 +36,12 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
         _mockDtroService = new Mock<IDtroService>();
         _correlationProviderMock = new Mock<IRequestCorrelationProvider>();
         _loggerMock = new Mock<ILogger<DTROsController>>();
-        _controller = new DTROsController(_mockDtroService.Object,
+        _metricsMock = new Mock<IMetricsService>();
+
+        _metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), _taForTest)).ReturnsAsync(true);
+
+
+        _controller = new DTROsController(_mockDtroService.Object, _metricsMock.Object,
             _correlationProviderMock.Object, _loggerMock.Object);
 
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>

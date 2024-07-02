@@ -11,7 +11,7 @@ public enum MetricType
     /// <summary>
     /// Indicates a submission failure metric.
     /// </summary>
-    SubmissionFailure,
+    SubmissionValidationFailure,
 
     /// <summary>
     /// Indicates a submission metric.
