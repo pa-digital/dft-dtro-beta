@@ -3,10 +3,11 @@ FROM --platform=amd64 mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
 WORKDIR /app
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
-# Copy the project file and restore dependencies
+# Copy the project file, restore dependencies,
+# install global tool for migration, and set path for tools
 COPY *.csproj ./
-
-RUN dotnet restore -r alpine-x64 && dotnet tool restore
+RUN dotnet restore -r alpine-x64 && \
+    dotnet tool install --global dotnet-ef
 
 # Copy the rest of the files and build
 COPY . .
@@ -17,9 +18,8 @@ RUN dotnet publish -o out -c Release -r alpine-x64 \
 FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
 WORKDIR /app
 COPY --from=build /app/out .
-
-# Copy dotnet-ef for migration from build stage to runtime stage
-COPY --from=build /root/.dotnet/tools /root/.dotnet/tools
+COPY --from=build /root/.dotnet /root/.dotnet
+ENV PATH="$PATH:/root/.dotnet/tools"
 
 # Expose the application port and set environment variables
 EXPOSE 8080
