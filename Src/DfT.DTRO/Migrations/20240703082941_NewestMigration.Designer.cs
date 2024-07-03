@@ -14,8 +14,8 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    [Migration("20240612105620_DTROHistoryTableCreated")]
-    partial class DTROHistoryTableCreated
+    [Migration("20240703082941_NewestMigration")]
+    partial class NewestMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,9 +72,13 @@ namespace DfT.DTRO.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("TrafficAuthorityId")
+                    b.Property<int>("TrafficAuthorityCreatorId")
                         .HasColumnType("integer")
-                        .HasColumnName("TA");
+                        .HasColumnName("TraCreator");
+
+                    b.Property<int>("TrafficAuthorityOwnerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("CurrentTraOwner");
 
                     b.Property<string>("TroName")
                         .HasColumnType("text");
@@ -105,12 +109,23 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("DtroId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SchemaVersion")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("TrafficAuthorityCreatorId")
+                        .HasColumnType("integer")
+                        .HasColumnName("TraCreator");
+
+                    b.Property<int>("TrafficAuthorityOwnerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("CurrentTraOwner");
 
                     b.HasKey("Id");
 
