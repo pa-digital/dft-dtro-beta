@@ -33,6 +33,7 @@ public class DtroDal : IDtroDal
     private readonly IRedisCache _dtroCache;
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="DtroDal"/> class.
     /// The default constructor.
     /// </summary>
     /// <param name="dtroContext">An <see cref="DtroContext"/> instance.</param>
@@ -48,10 +49,8 @@ public class DtroDal : IDtroDal
     }
 
     /// <inheritdoc/>
-    public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime = null)
+    public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime)
     {
-        deletionTime ??= DateTime.UtcNow;
-
         Models.DataBase.DTRO existing = await _dtroContext.Dtros.FindAsync(id);
 
         if (existing is null || existing.Deleted)
@@ -153,8 +152,31 @@ public class DtroDal : IDtroDal
         existing.LastUpdated = DateTime.UtcNow;
         existing.LastUpdatedCorrelationId = correlationId;
 
+        _dtroContext.Entry(existing).Property(e => e.Data).IsModified = true;
+
         _dtroMappingService.InferIndexFields(ref existing);
         await _dtroCache.RemoveDtro(id);
+        await _dtroContext.SaveChangesAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId)
+    {
+        if (await _dtroContext.Dtros.FindAsync(id) is not Models.DataBase.DTRO existing || existing.Deleted)
+        {
+            throw new InvalidOperationException($"There is no DTRO with Id {id}");
+        }
+
+        _dtroMappingService.SetOwnership(ref existing, assignToTraId);
+        _dtroMappingService.SetSourceActionType(ref existing, Enums.SourceActionType.Amendment);
+        existing.LastUpdated = DateTime.UtcNow;
+        existing.LastUpdatedCorrelationId = correlationId;
+
+        _dtroMappingService.InferIndexFields(ref existing);
+        await _dtroCache.RemoveDtro(id);
+
+        _dtroContext.Entry(existing).Property(e => e.Data).IsModified = true;
+
         await _dtroContext.SaveChangesAsync();
     }
 
@@ -400,6 +422,7 @@ public class DtroDal : IDtroDal
         return await sqlQuery.ToListAsync();
     }
 
+    /// <inheritdoc/>
     public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
     {
         Models.DataBase.DTRO dtro = await _dtroContext.Dtros.FindAsync(id);

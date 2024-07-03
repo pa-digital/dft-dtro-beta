@@ -9,6 +9,7 @@ namespace DfT.DTRO.Services.Validation;
 
 public class RecordManagementService : IRecordManagementService
 {
+
     public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit, int? ta)
     {
         List<SemanticValidationError> validationErrors = new();
@@ -22,6 +23,15 @@ public class RecordManagementService : IRecordManagementService
             if (!isCreatorOrOwner)
             {
                 validationErrors.Add(new SemanticValidationError { Message = $"Traffic authority {ta} is not the creator or owner in the DTRO data submitted" });
+            }
+
+            var affected = dtroSubmit.Data.GetExpando("source").GetValue<IList<object>>("traAffected");
+            if (affected.Any(it => it is not long))
+            {
+                validationErrors.Add(new SemanticValidationError
+                {
+                    Message = "One or more traffic authorities affected identification is incorrect."
+                });
             }
         }
 
@@ -76,7 +86,7 @@ public class RecordManagementService : IRecordManagementService
 
         List<string> provisionActionTypes = dtroSubmit.Data.GetValueOrDefault<IList<object>>("source.provision")
             .OfType<ExpandoObject>()
-            .Select(it=>it.GetValue<string>("actionType"))
+            .Select(it => it.GetValue<string>("actionType"))
             .ToList();
 
         if (!provisionActionTypes.TrueForAll(it => it.IsEnum("ProvisionActionType")))

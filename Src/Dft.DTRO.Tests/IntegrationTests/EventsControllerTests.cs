@@ -18,22 +18,31 @@ public class EventsControllerTests
 
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockStorageService;
-
+    private readonly Mock<IMetricsService> _metricsMock;
+    private readonly int? _taForTest = 1585;
     public EventsControllerTests(WebApplicationFactory<Program> factory)
     {
         _mockStorageService = new Mock<IDtroService>(MockBehavior.Strict);
+        _metricsMock = new Mock<IMetricsService>();
+        _metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<int>())).ReturnsAsync(true);
+
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
             services.AddSingleton(_mockStorageService.Object);
+            services.AddSingleton(_metricsMock.Object);
         }));
     }
 
     [Fact]
     public async Task Post_Events_NoDtroIsMatchingTheCriteria_ReturnsEmptyResult()
     {
+
+       
+
         _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroEventSearch>()))
             .Returns(Task.FromResult(Array.Empty<DfT.DTRO.Models.DataBase.DTRO>().ToList()));
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         DtroEventSearch searchCriteria = new() { Since = DateTime.Today, Page = 1, PageSize = 10 };
         string payload = JsonConvert.SerializeObject(searchCriteria);
@@ -62,6 +71,7 @@ public class EventsControllerTests
         _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroEventSearch>()))
             .Returns(Task.FromResult(new[] { sampleDtro }.ToList()));
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         DtroEventSearch searchCriteria = new() { Since = DateTime.Today, Page = 1, PageSize = 10 };
         string payload = JsonConvert.SerializeObject(searchCriteria);

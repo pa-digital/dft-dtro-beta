@@ -1,13 +1,15 @@
-using System.Net.Http;
+using System;
+using System.Threading.Tasks;
 using Dft.DTRO.Admin.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 
-public class DtroDropEditModel : PageModel
+public class DtroEditModel : PageModel
 {
     private readonly DtroService _dtroService;
 
-    public DtroDropEditModel(DtroService dtroService, IConfiguration configuration)
+    public DtroEditModel(DtroService dtroService, IConfiguration configuration)
     {
         _dtroService = dtroService;
         ApiBaseUrl = configuration["ExternalApi:BaseUrl"];
@@ -19,18 +21,9 @@ public class DtroDropEditModel : PageModel
     [BindProperty]
     public string ApiBaseUrl { get; set; }
 
-    public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, string id)
+    public async Task<IActionResult> OnPostAsync(Guid id, int assignToTraId)
     {
- 
-        if (isEdit)
-        {
-            await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);
-        }
-        else
-        {
-            await _dtroService.CreateDtroAsync(file);
-        }
-
+        await _dtroService.ReassignDtroAsync(id, assignToTraId);
         return RedirectToPage("Search");
     }
 }

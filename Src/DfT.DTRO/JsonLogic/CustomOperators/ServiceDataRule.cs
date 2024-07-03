@@ -21,6 +21,8 @@ public class ServiceDataRule : Rule
     /// </summary>
     protected internal Rule Selector { get; }
 
+    public static ReadOnlyDictionary<string, JsonNode> Data => _data;
+
     private static readonly ReadOnlyDictionary<string, JsonNode> _data =
         new (new Dictionary<string, JsonNode>
         {

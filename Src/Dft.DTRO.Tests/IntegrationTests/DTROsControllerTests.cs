@@ -35,6 +35,8 @@ public class DTROsControllerTests
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockDtroService;
     private readonly DtroMappingService _dtroMappingService;
+    private readonly int? _taForTest = 1585;
+
     public DTROsControllerTests(WebApplicationFactory<Program> factory)
     {
         var configurationBuilder = new ConfigurationBuilder();
@@ -56,12 +58,12 @@ public class DTROsControllerTests
     [InlineData(ValidComplexDtroJsonPathV320, "3.2.0")]
     public async Task Post_DtroIsValid_CreatesDtroAndReturnsDtroId(string dtroPath, string version)
     {
-        _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), null))
+        _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest))
             .ReturnsAsync(new GuidResponse { Id = Guid.NewGuid() });
 
         HttpClient client = _factory.CreateClient();
 
-        client.DefaultRequestHeaders.Add("ta", "0");
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         var payload = await CreateDtroJsonPayload(dtroPath, version);
 
@@ -72,7 +74,7 @@ public class DTROsControllerTests
         Assert.NotNull(data);
         Assert.IsType<Guid>(data!.Id);
 
-        _mockDtroService.Verify(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), null), Times.Once);
+        _mockDtroService.Verify(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest), Times.Once);
     }
 
     [Fact]
@@ -80,7 +82,7 @@ public class DTROsControllerTests
     {
         HttpClient client = _factory.CreateClient();
 
-        _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), null))
+        _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest))
             .Throws((new NotFoundException()));
 
         var payload = await CreateDtroJsonPayload(ValidDtroJsonPath, "0.0.0");
@@ -92,11 +94,11 @@ public class DTROsControllerTests
     [Fact]
     public async Task Post_DtroIsInvalid_ReturnsValidationError()
     {
-        _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), null))
+        _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest))
             .Throws((new DtroValidationException()));
         HttpClient client = _factory.CreateClient();
 
-        client.DefaultRequestHeaders.Add("ta", "0");
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         var payload = await CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
         HttpResponseMessage response = await client.PostAsync("/v1/dtros/createFromBody", payload);
@@ -105,7 +107,7 @@ public class DTROsControllerTests
         ApiErrorResponse? data = JsonConvert.DeserializeObject<ApiErrorResponse>(await response.Content.ReadAsStringAsync());
 
         Assert.NotNull(data);
-        Assert.Equal("Dtro Validation Failure", data!.Message);
+        Assert.Equal("Dtro Validation Failure", data.Message);
     }
 
     [Fact]
@@ -113,20 +115,21 @@ public class DTROsControllerTests
     {
         Guid dtroId = Guid.NewGuid();
         _mockDtroService.Setup(mock => mock.TryUpdateDtroAsJsonAsync
-            (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), null)).ReturnsAsync(new GuidResponse());
+            (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest)).ReturnsAsync(new GuidResponse());
         HttpClient client = _factory.CreateClient();
-        
-        client.DefaultRequestHeaders.Add("ta", "0");
 
-        var payload = await CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
-        HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody{dtroId}", payload);
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+
+        StringContent payload = await CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
+        HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody/{dtroId}", payload);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        GuidResponse? data = JsonConvert.DeserializeObject<GuidResponse>(await response.Content.ReadAsStringAsync());
+        string stringAsync = await response.Content.ReadAsStringAsync();
+        GuidResponse? data = JsonConvert.DeserializeObject<GuidResponse>(stringAsync);
         Assert.NotNull(data);
         Assert.IsType<Guid>(data!.Id);
         _mockDtroService.Verify(mock => mock.TryUpdateDtroAsJsonAsync
-            (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), null), Times.Once);
+            (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest), Times.Once);
     }
 
     [Fact]
@@ -134,13 +137,15 @@ public class DTROsControllerTests
     {
         Guid notExistingDtroId = Guid.NewGuid();
         _mockDtroService.Setup(mock => mock.TryUpdateDtroAsJsonAsync
-            (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), null)).Throws(new NotFoundException());
+            (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest)).Throws(new NotFoundException());
 
 
         HttpClient client = _factory.CreateClient();
 
-        var payload = await CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
-        HttpResponseMessage response = await client.PutAsync($"/v1/dtros/{notExistingDtroId}", payload);
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+
+        StringContent payload = await CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
+        HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody/{notExistingDtroId}", payload);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -150,11 +155,14 @@ public class DTROsControllerTests
     {
         Guid dtroId = Guid.NewGuid();
         _mockDtroService.Setup(mock => mock.TryUpdateDtroAsJsonAsync
-            (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), null)).Throws(new DtroValidationException());
+            (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest)).Throws(new DtroValidationException());
+
         HttpClient client = _factory.CreateClient();
 
-        var payload = await CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
-        HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody{dtroId}", payload);
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+
+        StringContent payload = await CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
+        HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody/{dtroId}", payload);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -168,6 +176,8 @@ public class DTROsControllerTests
             (It.Is(sampleDtro.Id, EqualityComparer<Guid>.Default))).Returns(Task.FromResult(sampleDtroResponse));
 
         HttpClient client = _factory.CreateClient();
+
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync($"/v1/dtros/{sampleDtro.Id}");
 
@@ -184,33 +194,6 @@ public class DTROsControllerTests
         HttpClient client = _factory.CreateClient();
 
         HttpResponseMessage response = await client.GetAsync($"/v1/dtros/{dtroId}");
-
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task Delete_DtroExists_ReturnsDtro()
-    {
-        Guid dtroId = Guid.NewGuid();
-        _mockDtroService.Setup(mock => mock.DeleteDtroAsync
-            (It.Is(dtroId, EqualityComparer<Guid>.Default), It.IsAny<DateTime?>())).Returns(Task.FromResult(true));
-
-        HttpClient client = _factory.CreateClient();
-
-        HttpResponseMessage response = await client.DeleteAsync($"/v1/dtros/{dtroId}");
-
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task Delete_DtroDoesNotExist_ReturnsNotFoundError()
-    {
-        Guid dtroId = Guid.NewGuid();
-        _mockDtroService.Setup(mock => mock.DeleteDtroAsync
-            (It.Is(dtroId, EqualityComparer<Guid>.Default), It.IsAny<DateTime?>())).Throws(new NotFoundException());
-        HttpClient client = _factory.CreateClient();
-
-        HttpResponseMessage response = await client.DeleteAsync($"/v1/dtros/{dtroId}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }

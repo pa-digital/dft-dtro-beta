@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using DfT.DTRO.Attributes;
 using DfT.DTRO.Extensions;
@@ -26,18 +27,22 @@ namespace DfT.DTRO.Controllers;
 public class SearchController : ControllerBase
 {
     private readonly ISearchService _searchService;
+    private readonly IMetricsService _metricsService;
     private readonly ILogger<SearchController> _logger;
 
     /// <summary>
     /// The default constructor.
     /// </summary>
     /// <param name="searchService">An <see cref="ISearchService"/> instance.</param>
+    /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{SearchController}"/> instance.</param>
     public SearchController(
         ISearchService searchService,
+        IMetricsService metricsService,
         ILogger<SearchController> logger)
     {
         _searchService = searchService;
+        _metricsService = metricsService;
         _logger = logger;
     }
 
@@ -53,12 +58,13 @@ public class SearchController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.DtroRead)]
     [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]
-    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromBody] DtroSearch body)
+    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromHeader(Name = "TA")][Required] int? ta, [FromBody] DtroSearch body)
     {
         try
         {
             _logger.LogInformation("[{method}] Searching DTROs with criteria {searchCriteria}", "dtro.search", body.ToIndentedJsonString());
             var response = await _searchService.SearchAsync(body);
+            await _metricsService.IncrementMetric(MetricType.Search, ta);
             return Ok(response);
         }
         catch (InvalidOperationException err)
@@ -67,6 +73,7 @@ public class SearchController : ControllerBase
         }
         catch (Exception ex)
         {
+            await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
             _logger.LogError(ex, "An error occurred while processing GetById request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
