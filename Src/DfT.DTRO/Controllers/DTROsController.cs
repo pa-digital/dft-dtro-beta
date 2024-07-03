@@ -411,9 +411,9 @@ public class DTROsController : ControllerBase
             await _dtroService.AssignOwnershipAsync(id, ta, assignToTraId, _correlationProvider.CorrelationId);
             return NoContent();
         }
-        catch (NotFoundException)
+        catch (NotFoundException nfex)
         {
-            return NotFound(new ApiErrorResponse("Not found", "Dtro not found"));
+            return NotFound(new ApiErrorResponse("Not found", nfex.Message));
         }
         catch (Exception ex)
         {
