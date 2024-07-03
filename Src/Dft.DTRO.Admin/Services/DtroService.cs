@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +47,18 @@ public class DtroService
     {
         var search = new DtroSearch() { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { new() } };
 
-        var response = await _client.PostAsJsonAsync("/v1/search", search);
+        // Serialize the search object to JSON
+        var jsonContent = JsonSerializer.Serialize(search);
+        var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+        // Create the request message
+        var request = new HttpRequestMessage(HttpMethod.Post, "/v1/search")
+        {
+            Content = param
+        };
+
+        AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
+
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         var paginatedResponse = JsonSerializer.Deserialize<PaginatedResponse<DtroSearchResult>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
