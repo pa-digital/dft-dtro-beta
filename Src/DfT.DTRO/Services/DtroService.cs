@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using DfT.DTRO.DAL;
 using DfT.DTRO.Extensions;
+using DfT.DTRO.JsonLogic.CustomOperators;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
@@ -227,11 +229,32 @@ public class DtroService : IDtroService
     /// <inheritdoc/>
     public async Task<bool> AssignOwnershipAsync(Guid id, int? apiTraId, int assignToTraId, string correlationId)
     {
+        var dic = ServiceDataRule.Data;
+
+        bool found = false;
+        if (dic.TryGetValue("swa_codes", out JsonNode jsonNode))
+        {
+
+            var validTraIds = jsonNode.AsArray();
+            foreach (var item in validTraIds)
+            {
+                if (item.GetValue<int>() == assignToTraId)
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        if (!found)
+        {
+            throw new NotFoundException($"Invalid -assign To TRA Id-: {assignToTraId} , the TRA does not exist");
+        }
 
         var currentDtro = await _dtroDal.GetDtroByIdAsync(id);
         if (currentDtro is null)
         {
-            throw new NotFoundException();
+            throw new NotFoundException($"Invalid DTRO Id: {id}");
         }
 
         if (apiTraId != null)

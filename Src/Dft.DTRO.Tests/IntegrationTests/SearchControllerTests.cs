@@ -20,10 +20,14 @@ public class SearchControllerTests
 
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockStorageService;
-
+    private readonly Mock<IMetricsService> _metricsMock;
+    private readonly int? _taForTest = 1585;
     public SearchControllerTests(WebApplicationFactory<Program> factory)
     {
         _mockStorageService = new Mock<IDtroService>(MockBehavior.Strict);
+        _metricsMock = new Mock<IMetricsService>();
+        _metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<int>())).ReturnsAsync(true);
+
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
             services.AddSingleton(_mockStorageService.Object);
@@ -37,6 +41,7 @@ public class SearchControllerTests
             .Returns(Task.FromResult(
                 new PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>(Array.Empty<DfT.DTRO.Models.DataBase.DTRO>(), 0)));
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         DtroSearch search =
             new() { Queries = new[] { new SearchQuery { TraCreator = 1585 } }, Page = 1, PageSize = 10 };
@@ -65,6 +70,7 @@ public class SearchControllerTests
         _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroSearch>()))
             .Returns(Task.FromResult(new PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>(new[] { sampleDtro }.ToList(), 1)));
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         DtroSearch search =
             new() { Queries = new[] { new SearchQuery { TraCreator = 1585 } }, Page = 1, PageSize = 10 };

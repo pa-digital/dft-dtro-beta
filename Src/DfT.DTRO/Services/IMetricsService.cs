@@ -30,5 +30,5 @@ public interface IMetricsService
     /// <param name="type"></param>
     /// <param name="traId"></param>
     /// <returns>A <see cref="Task"/> representing the asynchronous increment operation.</returns>
-    Task<bool> IncrementMetric(MetricType type, int traId);
+    Task<bool> IncrementMetric(MetricType type, int? traId);
 }

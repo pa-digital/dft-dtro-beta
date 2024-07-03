@@ -17,16 +17,28 @@ public class MetricsService : IMetricsService
     /// The default constructor.
     /// </summary>
     /// <param name="metricDal">An <see cref="IMetricDal"/> instance.</param>
-
+    /// 
     public MetricsService(IMetricDal metricDal)
     {
         _metricDal = metricDal;
     }
 
     /// <inheritdoc/>
-    public async Task<bool> IncrementMetric(MetricType type, int traId)
+    public async Task<bool> IncrementMetric(MetricType type, int? traId)
     {
-        return await _metricDal.IncrementMetric(type, traId);
+        try
+        {
+            if (traId == null)
+            {
+                return false;
+            }
+            return await _metricDal.IncrementMetric(type, (int)traId);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+       
     }
 
     /// <inheritdoc/>
