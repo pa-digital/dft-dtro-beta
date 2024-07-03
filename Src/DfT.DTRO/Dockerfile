@@ -16,7 +16,7 @@ RUN dotnet publish -o out -c Release -r alpine-x64 \
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
 WORKDIR /app
 
-# Copy the published application as well as the dotnet tools and startup
+# Copy the published application from the build stage
 COPY --from=build /app/out .
 
 # Expose the application port and set environment variables
