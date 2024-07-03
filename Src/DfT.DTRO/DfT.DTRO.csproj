@@ -25,7 +25,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
-    <PackageReference Include="Google.Cloud.SecretManager.V1" Version="2.5.0" />
     <PackageReference Include="Google.Cloud.Storage.V1" Version="4.5.0" />
     <PackageReference Include="JsonLogic" Version="4.0.4" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.1.0.0" />
