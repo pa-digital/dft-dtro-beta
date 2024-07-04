@@ -1,7 +1,9 @@
 ﻿using DfT.DTRO.DAL;
 using DfT.DTRO.Enums;
+using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.Metrics;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace DfT.DTRO.Services;
@@ -42,9 +44,16 @@ public class MetricsService : IMetricsService
     }
 
     /// <inheritdoc/>
-    public async Task<MetricSummary> GetMetricsForTra(int traId, DateOnly fromDate, DateOnly toDate)
+    public async Task<MetricSummary> GetMetrics(MetricRequest metricRequest)
     {
-        return await _metricDal.GetMetricsForTra(traId, fromDate, toDate);
+        if (metricRequest.DateFrom > metricRequest.DateTo)
+        {
+            throw new ArgumentException("Start date must be before end date.");
+        }
+
+        return await _metricDal.GetMetricsForTra(metricRequest.TraId, 
+            new DateOnly(metricRequest.DateFrom.Year, metricRequest.DateFrom.Month, metricRequest.DateFrom.Day), 
+            new DateOnly(metricRequest.DateTo.Year, metricRequest.DateTo.Month, metricRequest.DateTo.Day));
     }
 
     /// <inheritdoc/>

@@ -16,7 +16,7 @@ public interface IMetricDal
     /// <param name="traId"></param>
     /// <param name="fromDate"></param>
     /// <param name="toDate"></param>
-    Task<MetricSummary> GetMetricsForTra(int traId, DateOnly fromDate, DateOnly toDate);
+    Task<MetricSummary> GetMetricsForTra(int? traId, DateOnly fromDate, DateOnly toDate);
 
     /// <summary>
     /// Incremens a metric of type <paramref name="type"/>.
