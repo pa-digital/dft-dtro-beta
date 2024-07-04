@@ -32,7 +32,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
-
+using DfT.DTRO.DAL;
 namespace DfT.DTRO;
 
 /// <summary>
@@ -115,6 +115,7 @@ public class Startup
         services.AddSingleton<ISchemaTemplateMappingService, SchemaTemplateMappingService>();
         services.AddSingleton<IRuleTemplateMappingService, RuleTemplateMappingService>();
         services.AddScoped<IDtroDal, DtroDal>();
+        services.AddScoped<IDtroHistoryDal, DtroHistoryDal>();
         services.AddScoped<ISchemaTemplateDal, SchemaTemplateDal>();
         services.AddScoped<IRuleTemplateDal, RuleTemplateDal>();
         services.AddScoped<IEventSearchService, EventSearchService>();
@@ -122,6 +123,8 @@ public class Startup
         services.AddScoped<IRuleTemplateService, RuleTemplateService>();
         services.AddScoped<IDtroService, DtroService>();
         services.AddScoped<ISearchService, SearchService>();
+        services.AddScoped<IMetricDal, MetricDal>();
+        services.AddScoped<IMetricsService, MetricsService>();
         services.AddStorage(Configuration);
         services.AddJsonLogic();
         services.AddRequestCorrelation();

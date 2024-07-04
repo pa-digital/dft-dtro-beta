@@ -1,18 +1,21 @@
-﻿using Castle.Core.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
+using System.Text;
+using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.SchemaTemplate;
+using DfT.DTRO.Services;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Serilog.Settings.Configuration;
-using System.Dynamic;
-using System.Text;
 
 namespace Dft.DTRO.Tests
 {
+    [ExcludeFromCodeCoverage]
     public static class Utils
     {
         public static DtroSubmit PrepareDtro(string jsonData, SchemaVersion? schemaVersion = null)
@@ -103,6 +106,74 @@ namespace Dft.DTRO.Tests
             return new StringContent(payload, Encoding.UTF8, "application/json");
         }
 
+        public static List<DtroHistorySourceResponse> CreateResponseDtroHistoryObject(string[] dtroJsonPath)
+        {
+            List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
 
+            DateTime createdAt = DateTime.Now;
+
+            List<DtroHistorySourceResponse> sampleDtroHistories = items
+                .Select(item => JsonConvert.DeserializeObject<ExpandoObject>(item, new ExpandoObjectConverter()))
+                .Select(_ => new DtroHistorySourceResponse
+                {
+                    Created = new DateTime(2024,6,19,16,38,00), 
+                    LastUpdated = createdAt, 
+                }).ToList();
+
+            return sampleDtroHistories;
+        }
+
+        public static List<DtroHistoryProvisionResponse> CreateResponseDtroProvisionHistory(string[] dtroJsonPath)
+        {
+            List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
+
+            List<IList<object>> objects = items
+                .Select(JsonConvert.DeserializeObject<ExpandoObject>)
+                .Select(item => item.GetValueOrDefault<IList<object>>("source.provision"))
+                .ToList();
+
+            List<DtroHistoryProvisionResponse> provisions = new();
+
+            foreach (IList<object> obj in objects)
+            {
+                DtroHistoryProvisionResponse provision = new();
+
+                var data = obj[0].ToIndentedJsonString();
+
+                provisions.Add(provision);
+            }
+
+            return provisions;
+        }
+
+        public static async Task<List<DTROHistory>> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
+        {
+            List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
+
+            List<ExpandoObject?> data = items.Select(item =>
+                JsonConvert.DeserializeObject<ExpandoObject>(item, new ExpandoObjectConverter()))
+                .ToList();
+
+
+            var requests = new List<DTROHistory>();
+            foreach (ExpandoObject? expando in data)
+            {
+                DTROHistory request = new()
+                {
+                    Id = Guid.NewGuid(),
+                    DtroId = Guid.Parse("C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4"),
+                    Created = new DateTime(2024, 6, 19, 16, 44, 00),
+                    LastUpdated = DateTime.Now,
+                    Data = expando,
+                    TrafficAuthorityOwnerId = 1585,
+                    TrafficAuthorityCreatorId = 1585,
+                    SchemaVersion = "3.1.2"
+                };
+
+                requests.Add(request);
+            }
+
+            return requests;
+        }
     }
 }

@@ -12,6 +12,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly ISchemaTemplateService _schemaTemplateService;
     private readonly ISemanticValidationService _semanticValidationService;
     private readonly IJsonLogicValidationService _jsonLogicValidationService;
+    private readonly IRecordManagementService _recordManagementService;
 
     /// <summary>
     /// Default constructor.
@@ -24,15 +25,17 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         IJsonSchemaValidationService jsonSchemaValidationService,
         ISemanticValidationService semanticValidationService,
         ISchemaTemplateService schemaTemplateService,
-        IJsonLogicValidationService jsonLogicValidationService)
+        IJsonLogicValidationService jsonLogicValidationService,
+        IRecordManagementService recordManagementService)
     {
         _jsonSchemaValidationService = jsonSchemaValidationService;
         _semanticValidationService = semanticValidationService;
         _schemaTemplateService = schemaTemplateService;
         _jsonLogicValidationService = jsonLogicValidationService;
+        _recordManagementService = recordManagementService;
     }
 
-    public async Task<DtroValidationException> ValidateDtro(DtroSubmit dtroSubmit)
+    public async Task<DtroValidationException> ValidateDtro(DtroSubmit dtroSubmit, int? headerTa)
     {
         var schemaVersion = dtroSubmit.SchemaVersion;
         var schema = await _schemaTemplateService.GetSchemaTemplateAsync(schemaVersion);
@@ -55,6 +58,12 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         if (requestComparedToSchema.Count > 0)
         {
             return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
+        }
+
+        var requests = _recordManagementService.ValidateCreationRequest(dtroSubmit, headerTa);
+        if (requests.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = requests.ToList() };
         }
 
         var requestComparedToRules = await _jsonLogicValidationService.ValidateCreationRequest(dtroSubmit);

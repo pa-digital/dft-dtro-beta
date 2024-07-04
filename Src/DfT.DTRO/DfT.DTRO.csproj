@@ -7,13 +7,17 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>DfT.DTRO</AssemblyName>
     <PackageId>DfT.DTRO</PackageId>
-    <CodeAnalysisRuleSet>stylecop.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="CustomErrors\**" />
+    <Compile Remove="Models\DtroSourceHistory\**" />
     <Content Remove="CustomErrors\**" />
+    <Content Remove="Models\DtroSourceHistory\**" />
     <EmbeddedResource Remove="CustomErrors\**" />
+    <EmbeddedResource Remove="Models\DtroSourceHistory\**" />
     <None Remove="CustomErrors\**" />
+    <None Remove="Models\DtroSourceHistory\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="JsonLogic\DataBaseRuleSource.cs" />
@@ -42,10 +46,6 @@
     <PackageReference Include="Serilog.Expressions" Version="3.4.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.GoogleCloudLogging" Version="5.0.0" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />

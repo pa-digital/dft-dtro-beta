@@ -1,4 +1,5 @@
-﻿@page
+﻿
+@page
 @model DtroDropEditModel
 @{
     bool isEdit = Request.Query["IsEdit"].ToString().ToLower() == "true";
@@ -24,45 +25,53 @@
     </div>
 </form>
 
+
 @section Scripts {
     <script>
-        const fileInput = document.getElementById('fileInput');
-        const saveButton = document.getElementById('saveButton');
-        const apiBaseUrl = '@Model.ApiBaseUrl';
-        const dropArea = document.getElementById('drop-area');
-        const id = '@id';
-        const isEdit = @isEdit.ToString().ToLower();
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const fileInput = document.getElementById('fileInput');
+            const saveButton = document.getElementById('saveButton');
+            const dropArea = document.getElementById('drop-area');
+            const reassignInput = document.getElementById('reassignInput');
+            const reassignButton = document.getElementById('reassignButton');
+            const apiBaseUrl = '@Model.ApiBaseUrl';
+            const id = '@id';
+            const isEdit = @isEdit.ToString().ToLower() === 'true';
 
-        dropArea.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            dropArea.classList.add('dragover');
+            dropArea.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                dropArea.classList.add('dragover');
+            });
+
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.classList.remove('dragover');
+            });
+
+            dropArea.addEventListener('drop', (event) => {
+                event.preventDefault();
+                dropArea.classList.remove('dragover');
+
+                const files = event.dataTransfer.files;
+                fileInput.files = files;
+                dropArea.querySelector('.drop-area-inner').textContent = files[0].name;
+                dropArea.style.backgroundColor = 'white';
+
+                checkEnableSaveButton();
+            });
+
+            fileInput.addEventListener('change', checkEnableSaveButton);
+
+            function checkEnableSaveButton() {
+                const isFileDropped = fileInput.files.length > 0;
+                saveButton.disabled = !isFileDropped;
+            }
+
+            if ('@isEdit.ToString().ToLower()' === 'true') {
+                reassignInput.addEventListener('input', function () {
+                    const isValidInteger = Number.isInteger(parseInt(reassignInput.value)) && reassignInput.value >= 0;
+                    reassignButton.disabled = !isValidInteger;
+                });
+            }
         });
-
-        dropArea.addEventListener('dragleave', () => {
-            dropArea.classList.remove('dragover');
-        });
-
-        dropArea.addEventListener('drop', (event) => {
-            event.preventDefault();
-            dropArea.classList.remove('dragover');
-
-            const files = event.dataTransfer.files;
-            fileInput.files = files;
-            dropArea.querySelector('.drop-area-inner').textContent = files[0].name;
-            dropArea.style.backgroundColor = 'white';
-
-            checkEnableSaveButton();
-        });
-
-        fileInput.addEventListener('change', function () {
-            checkEnableSaveButton();
-        });
-
-        function checkEnableSaveButton() {
-            const isFileDropped = fileInput.files.length > 0;
-            // Enable save button only if a file is dropped
-            saveButton.disabled = !isFileDropped;
-        }
-
     </script>
 }

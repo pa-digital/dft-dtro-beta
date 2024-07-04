@@ -1,20 +1,34 @@
-# IntelliJ project files
-.idea
-.env
-
-# Visual Studio configs
-.vs/
-
-# Default dev GCL configuration file location
-/src/DfT.DTRO/appsettings.Development.Serilog.Gcl.json
-
-# Local adjustments in docker compose
-docker-compose.override.yml
-.DS_Store
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
 *.lutconfig
-*.user
+/DfT.DTRO.sln.DotSettings.user
+/Src/DfT.DTRO/bin
+/Src/DfT.DTRO/bin/Debug/net6.0
+/Src/DfT.DTRO/obj
+/Src/Dft.DTRO.Tests/bin
+/Src/Dft.DTRO.Tests/bin/Debug/net6.0
+/Src/Dft.DTRO.Tests/obj
+/Src/Dft.DTRO.Admin/bin
+/Src/Dft.DTRO/Admin/bin/Debug/net6.0
+/Src/Dft.DTRO.Admin/obj
+/.vs
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/ref/Dft.DTRO.Admin.dll
 /Src/Dft.DTRO.Admin/bin/Debug/net6.0/Dft.DTRO.Admin.dll
-obj/
-bin/
-/Src/Dft.DTRO.Tests/Configurations/appsettings.SqlStorageServiceTests.json.example
-/Src/DfT.DTRO/appsettings.Development.Local.json.example
+/Src/Dft.DTRO.Admin/bin/Debug/net6.0/Dft.DTRO.Admin.exe
+/Src/Dft.DTRO.Admin/bin/Debug/net6.0/Dft.DTRO.Admin.pdb
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/refint/Dft.DTRO.Admin.dll
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/apphost.exe
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/Dft.DTRO.Admin.dll
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/Dft.DTRO.Admin.pdb
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/Dft.DTRO.Admin.sourcelink.json
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/Dft.DTRO.Admin.AssemblyInfoInputs.cache
+<<<<<<< HEAD
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/Dft.DTRO.Admin.assets.cache
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/Dft.DTRO.Admin.GeneratedMSBuildEditorConfig.editorconfig
+=======
+>>>>>>> 872d3a795b3d0b03cc032e97542c42324b5a6117
+/Src/Dft.DTRO.Admin/bin/Debug/net6.0/Dft.DTRO.Admin.staticwebassets.runtime.json
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/Dft.DTRO.Admin.csproj.FileListAbsolute.txt
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/project.razor.vs.bin
+/.idea/.idea.DfT.DTRO/.idea

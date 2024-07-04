@@ -17,22 +17,32 @@ namespace DfT.DTRO.DAL;
 public partial class DtroContext : DbContext
 {
     /// <summary>
-    /// Used to query the DTRO table.
+    /// Gets or sets used to query the DTRO table.
     /// </summary>
     public virtual DbSet<Models.DataBase.DTRO> Dtros { get; set; }
 
     /// <summary>
-    /// Used to query the SchemaTemplate table.
+    /// Gets or sets used to query the DTRO History table.
+    /// </summary>
+    public virtual DbSet<DTROHistory> DtroHistories { get; set; }
+
+    /// <summary>
+    /// Gets or sets used to query the SchemaTemplate table.
     /// </summary>
     public virtual DbSet<SchemaTemplate> SchemaTemplate { get; set; }
 
     /// <summary>
-    /// Used to query the RuleTemplate table.
+    /// Gets or sets used to query the RuleTemplate table.
     /// </summary>
     public virtual DbSet<RuleTemplate> RuleTemplate { get; set; }
 
     /// <summary>
-    /// Initializes a new instance of <see cref="DtroContext"/> using the specified options.
+    /// Gets or sets used to query the Metrics table.
+    /// </summary>
+    public virtual DbSet<Metric> Metrics { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DtroContext"/> class.
     /// </summary>
     /// <param name="options">The options for this context.</param>
     public DtroContext(DbContextOptions<DtroContext> options)

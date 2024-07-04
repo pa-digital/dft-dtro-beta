@@ -6,19 +6,25 @@
 <table class="table">
     <thead>
         <tr>
+            
             <th>Tro Name</th>
             <th>Published</th>
             <th>Regulation</th>
             <th>Vehicle</th>
             <th>ORP</th>
             <th>Period</th>
-            <th>Edit</th>
+            <th>File</th>
+            <th>Creator</th>
+            <th>Owner</th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var result in Model.Dtros.Results)
         {
             <tr>
+               
                 <td>@result.TroName</td>
                 <td>@result.PublicationTime</td>
                 <td>@Model.FormatOrderReportingPoint(result.RegulationType)</td>
@@ -34,7 +40,19 @@
                     }
                 </td>
                 <td>
-                    <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="true" asp-route-id="@result.Id">Edit</a>
+                    <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="true" asp-route-id="@result.Id">Upload</a>
+                </td>
+
+                <td>@result.TrafficAuthorityCreatorId</td>
+                <td>@result.TrafficAuthorityOwnerId</td>
+
+                <td>
+                    <a class="btn btn-primary" asp-page="DtroEdit" asp-route-id="@result.Id">Reassign</a>
+                </td>
+
+
+                <td>
+                    <a class="btn btn-secondary" asp-page="DtroHistory" asp-route-id="@result.Id">History</a>
                 </td>
             </tr>
         }

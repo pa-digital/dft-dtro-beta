@@ -1,14 +1,17 @@
-﻿using DfT.DTRO.Extensions;
+﻿using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using DfT.DTRO.Enums;
+using System.Linq;
+using DfT.DTRO.Extensions;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
+using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.DtroJson;
 using DfT.DTRO.Models.Search;
 using DfT.DTRO.Services.Conversion;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
 
 namespace DfT.DTRO.Services.Mapping;
 
@@ -25,8 +28,8 @@ public class DtroMappingService : IDtroMappingService
     /// <param name="projectionService">An <see cref="ISpatialProjectionService"/> instance.</param>
     public DtroMappingService(IConfiguration configuration, ISpatialProjectionService projectionService)
     {
-        _configuration = configuration;
-        _projectionService = projectionService;
+        this._configuration = configuration;
+        this._projectionService = projectionService;
     }
 
     /// <inheritdoc/>
@@ -108,16 +111,135 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc/>
+    public DTROHistory MapToDtroHistory(Models.DataBase.DTRO currentDtro) =>
+        new()
+        {
+            Id = Guid.NewGuid(),
+            DtroId = currentDtro.Id,
+            Created = currentDtro.Created,
+            Data = currentDtro.Data,
+            Deleted = currentDtro.Deleted,
+            DeletionTime = currentDtro.DeletionTime,
+            LastUpdated = DateTime.UtcNow,
+            SchemaVersion = currentDtro.SchemaVersion,
+            TrafficAuthorityCreatorId = currentDtro.TrafficAuthorityCreatorId,
+            TrafficAuthorityOwnerId = currentDtro.TrafficAuthorityOwnerId
+        };
+
+    /// <inheritdoc />
+    public DtroHistorySourceResponse GetSource(DTROHistory dtroHistory)
+    {
+        var sourceActionType = Get(dtroHistory, "source.actionType");
+        var sourceReference = Get(dtroHistory, "source.reference");
+        var sourceSection = Get(dtroHistory, "source.section");
+        var sourceTroName = Get(dtroHistory, "source.troName");
+
+        if (sourceActionType == SourceActionType.NoChange.GetDisplayName())
+        {
+            return null;
+        }
+
+        return new DtroHistorySourceResponse
+        {
+            ActionType = sourceActionType,
+            Created = dtroHistory.Created,
+            LastUpdated = dtroHistory.LastUpdated,
+            Reference = sourceReference,
+            SchemaVersion = dtroHistory.SchemaVersion.ToString(),
+            Section = sourceSection,
+            TrafficAuthorityCreatorId = dtroHistory.TrafficAuthorityCreatorId,
+            TrafficAuthorityOwnerId = dtroHistory.TrafficAuthorityOwnerId,
+            TroName = sourceTroName,
+        };
+    }
+
+    /// <inheritdoc />
+    public DtroOwner GetOwnership(Models.DataBase.DTRO dtro)
+    {
+        var traCreator = dtro.Data.GetValueOrDefault<int>("source.traCreator");
+        var currentTraOwner = dtro.Data.GetValueOrDefault<int>("source.currentTraOwner");
+
+        return new DtroOwner
+        {
+            TrafficAuthorityCreatorId = traCreator,
+            TrafficAuthorityOwnerId = currentTraOwner,
+        };
+    }
+
+    /// <inheritdoc />
+    public void SetOwnership(ref Models.DataBase.DTRO dtro, int currentTraOwner)
+    {
+       dtro.Data.PutValue("source.currentTraOwner", currentTraOwner);
+    }
+
+    public void SetSourceActionType(ref Models.DataBase.DTRO dtro, SourceActionType sourceActionType)
+    {
+        ExpandoObject source = dtro.Data;
+        var sourceDict = source as IDictionary<string, object>;
+        if (sourceDict == null)
+        {
+            throw new ArgumentException("Source must be an ExpandoObject", nameof(source));
+        }
+
+        if (sourceDict.TryGetValue("source", out var sourceObject) && sourceObject is IDictionary<string, object> sourceDetails)
+        {
+            sourceDetails["actionType"] = sourceActionType.GetDisplayName();
+
+            if (sourceDetails.TryGetValue("provision", out var provisionList) && provisionList is IEnumerable<object> provisions)
+            {
+                foreach (var provision in provisions)
+                {
+                    if (provision is IDictionary<string, object> provisionDict)
+                    {
+                        provisionDict["actionType"] = ProvisionActionType.NoChange.GetDisplayName();
+                    }
+                }
+            }
+        }
+    }
+
+    /// <inheritdoc />
+    public List<DtroHistoryProvisionResponse> GetProvision(DTROHistory dtroHistory)
+    {
+        IList<object> provisions = this.GetProvision(dtroHistory, "source.provision");
+        var ret = new List<DtroHistoryProvisionResponse>();
+        foreach (var provision in provisions)
+        {
+
+            DtroHistoryProvisionResponse provisionResponse = new()
+            {
+                Created = dtroHistory.Created,
+                Data = provision as ExpandoObject,
+                LastUpdated = dtroHistory.LastUpdated,
+            };
+            provisionResponse.Reference = provisionResponse.Data?.GetValueOrDefault<string>("reference");
+            provisionResponse.ActionType = provisionResponse.Data?.GetValueOrDefault<string>("actionType");
+            provisionResponse.SchemaVersion = dtroHistory.SchemaVersion.ToString();
+            if (provisionResponse.ActionType != ProvisionActionType.NoChange.GetDisplayName())
+            {
+                ret.Add(provisionResponse);
+            }
+        }
+
+        return ret.OrderByDescending(x => x.Reference).ThenByDescending(x => x.LastUpdated).ToList();
+    }
+
+    /// <inheritdoc/>
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
     {
-        var regulations = dtro.Data.GetValueOrDefault<IList<object>>("source.provision")
+        List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("source.provision")
             .OfType<ExpandoObject>()
             .SelectMany(it => it.GetValue<IList<object>>("regulations").OfType<ExpandoObject>())
         .ToList();
 
-        dtro.TrafficAuthorityId = dtro.Data.GetExpando("source").HasField("ta")
-        ? dtro.Data.GetValueOrDefault<int>("source.ta")
+        dtro.TrafficAuthorityCreatorId = dtro.Data.GetExpando("source").HasField("traCreator")
+            ? dtro.Data.GetValueOrDefault<int>("source.traCreator")
             : dtro.Data.GetValueOrDefault<int>("source.ha");
+
+        dtro.TrafficAuthorityOwnerId = dtro.Data.GetExpando("source").HasField("currentTraOwner")
+           ? dtro.Data.GetValueOrDefault<int>("source.currentTraOwner")
+           : dtro.Data.GetValueOrDefault<int>("source.ha");
+
         dtro.TroName = dtro.Data.GetValueOrDefault<string>("source.troName");
         dtro.RegulationTypes = regulations.Select(it => it.GetValueOrDefault<string>("regulationType"))
             .Where(it => it is not null)
@@ -147,23 +269,23 @@ public class DtroMappingService : IDtroMappingService
             .Where(it => it is not null)
             .Max();
 
-        IEnumerable<Coordinates> FlattenAndConvertCoordinates(ExpandoObject coordinates, string crs)
+        IEnumerable<Coordinates> FlattenAndConvertCoordinates(ExpandoObject expandoObject, string crs)
         {
-            var type = coordinates.GetValue<string>("type");
-            var coords = coordinates.GetValue<IList<object>>("coordinates");
+            var type = expandoObject.GetValue<string>("type");
+            IList<object> coordinates = expandoObject.GetValue<IList<object>>("coordinates");
 
-            var result = type switch
+            IEnumerable<Coordinates> result = type switch
             {
-                "Polygon" => coords.OfType<IList<object>>().SelectMany(it => it).OfType<IList<object>>()
-                    .Select(it => new Coordinates((double)it[0], (double)it[1])),
-                "LineString" => coords.OfType<IList<object>>()
-                    .Select(it => new Coordinates((double)it[0], (double)it[1])),
-                "Point" => new List<Coordinates> { new ((double)coords[0], (double)coords[1]) },
+                "Polygon" => coordinates.OfType<IList<object>>().SelectMany(objects => objects).OfType<IList<object>>()
+                    .Select(objects => new Coordinates((double)objects[0], (double)objects[1])),
+                "LineString" => coordinates.OfType<IList<object>>()
+                    .Select(objects => new Coordinates((double)objects[0], (double)objects[1])),
+                "Point" => new List<Coordinates> { new((double)coordinates[0], (double)coordinates[1]) },
                 _ => throw new InvalidOperationException($"Coordinate type '{type}' unsupported.")
             };
 
             return crs != "osgb36Epsg27700"
-                ? result.Select(coords => _projectionService.Wgs84ToOsgb36(coords))
+                ? result.Select(this._projectionService.Wgs84ToOsgb36)
             : result;
         }
 
@@ -181,8 +303,11 @@ public class DtroMappingService : IDtroMappingService
         return new DtroSearchResult
         {
             TroName = dtro.Data.GetValueOrDefault<string>("source.troName"),
-            TrafficAuthorityId = dtro.Data.GetExpando("source").HasField("ta")
-                ? dtro.Data.GetValueOrDefault<int>("source.ta")
+            TrafficAuthorityCreatorId = dtro.Data.GetExpando("source").HasField("traCreator")
+                ? dtro.Data.GetValueOrDefault<int>("source.traCreator")
+                : dtro.Data.GetValueOrDefault<int>("source.ha"),
+            TrafficAuthorityOwnerId = dtro.Data.GetExpando("source").HasField("currentTraOwner")
+                ? dtro.Data.GetValueOrDefault<int>("source.currentTraOwner")
                 : dtro.Data.GetValueOrDefault<int>("source.ha"),
             PublicationTime = dtro.Created.Value,
             RegulationType = dtro.RegulationTypes,
@@ -190,7 +315,13 @@ public class DtroMappingService : IDtroMappingService
             OrderReportingPoint = dtro.OrderReportingPoints,
             RegulationStart = regulationStartDates,
             RegulationEnd = regulationEndDates,
-            Id = dtro.Id
+            Id = dtro.Id,
         };
     }
+
+    private string Get(DTROHistory request, string key) => 
+        request.Data.GetValueOrDefault<string>(key);
+
+    private IList<object> GetProvision(DTROHistory request, string key) => 
+        request.Data.GetValueOrDefault<IList<object>>(key);
 }

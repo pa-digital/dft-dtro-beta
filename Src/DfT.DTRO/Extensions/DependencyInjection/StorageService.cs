@@ -1,4 +1,5 @@
-﻿using DfT.DTRO.Services;
+﻿using System;
+using DfT.DTRO.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,28 +32,36 @@ public static class StorageServiceDIExtensions
     {
         var postgresConfig = configuration.GetSection("Postgres");
 
-        var host = postgresConfig.GetValue("Host", "localhost");
-        var port = postgresConfig.GetValue("Port", 5432);
-        var user = postgresConfig.GetValue("User", "root");
-        var password = postgresConfig.GetValue("Password", "root");
-        var database = postgresConfig.GetValue("DbName", "data");
-        var useSsl = postgresConfig.GetValue("UseSsl", false);
-        int? maxPoolSize = postgresConfig.GetValue<int?>("MaxPoolSize", null);
+        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST")
+            ?? postgresConfig.GetValue("Host", "localhost");
 
-        if (configuration.GetValue("WriteToBucket", false))
+        var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int envPort)
+            ? envPort : postgresConfig.GetValue("Port", 5432);
+
+        var user = Environment.GetEnvironmentVariable("POSTGRES_USER")
+            ?? postgresConfig.GetValue("User", "postgres");
+
+        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
+            ?? postgresConfig.GetValue("Password", "admin");
+
+        var database = Environment.GetEnvironmentVariable("POSTGRES_DB")
+            ?? postgresConfig.GetValue("DbName", "data");
+
+        var useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool envUseSsl)
+            ? envUseSsl : postgresConfig.GetValue("UseSsl", false);
+
+        int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int envMaxPoolSize)
+            ? (int?)envMaxPoolSize : postgresConfig.GetValue<int?>("MaxPoolSize", null);
+
+        var writeToBucket = bool.TryParse(Environment.GetEnvironmentVariable("WRITE_TO_BUCKET"), out bool envWriteToBucket)
+            ? envWriteToBucket : configuration.GetValue("WriteToBucket", false);
+
+        if (writeToBucket)
         {
-            return
-                services
-                    .AddPostgresDtroContext(host, user, password, useSsl, database, port);
+            return services.AddPostgresDtroContext(host, user, password, useSsl, database, port);
         }
 
-        // if (configuration.GetValue("WriteToBucket", false))
-        // {
-        //    return
-        //        services
-        //            .AddPostgresDtroContext(host, user, password, useSsl, database, port)
-        //            .AddMultiStorageService<SqlStorageService, FileStorageService>();
-        // }
         return services.AddPostgresStorage(host, user, password, useSsl, database, port, maxPoolSize);
     }
+
 }

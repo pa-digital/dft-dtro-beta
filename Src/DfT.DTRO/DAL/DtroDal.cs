@@ -1,4 +1,10 @@
-﻿using DfT.DTRO.Caching;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using DfT.DTRO.Caching;
 using DfT.DTRO.DAL;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
@@ -9,14 +15,7 @@ using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using static DfT.DTRO.Extensions.ExpressionExtensions;
-using DateTime = System.DateTime;
 
 namespace DfT.DTRO.Services;
 
@@ -34,6 +33,7 @@ public class DtroDal : IDtroDal
     private readonly IRedisCache _dtroCache;
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="DtroDal"/> class.
     /// The default constructor.
     /// </summary>
     /// <param name="dtroContext">An <see cref="DtroContext"/> instance.</param>
@@ -49,11 +49,11 @@ public class DtroDal : IDtroDal
     }
 
     /// <inheritdoc/>
-    public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
+    public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime)
     {
-        deletionTime ??= DateTime.UtcNow;
+        Models.DataBase.DTRO existing = await _dtroContext.Dtros.FindAsync(id);
 
-        if (await _dtroContext.Dtros.FindAsync(id) is not Models.DataBase.DTRO existing || existing.Deleted)
+        if (existing is null || existing.Deleted)
         {
             return false;
         }
@@ -108,14 +108,11 @@ public class DtroDal : IDtroDal
 
         dtro.SchemaVersion = dtroSubmit.SchemaVersion;
 
-        // dtro.RegulationStart = dtroSubmit.RegulationStart;
-        // dtro.RegulationEnd = dtroSubmit.RegulationEnd;
-        // dtro.TrafficAuthorityId = dtroSubmit.TrafficAuthorityId;
-        // dtro.TroName = dtroSubmit.TroName;
-        dtro.Data = dtroSubmit.Data;
 
-        dtro.LastUpdated = DateTime.UtcNow;
-        dtro.Created = dtro.LastUpdated;
+        dtro.Data = dtroSubmit.Data;
+        var now = DateTime.UtcNow;
+        dtro.LastUpdated = now;
+        dtro.Created = now;
         dtro.LastUpdatedCorrelationId = correlationId;
         dtro.CreatedCorrelationId = dtro.LastUpdatedCorrelationId;
 
@@ -150,18 +147,36 @@ public class DtroDal : IDtroDal
         }
 
         existing.SchemaVersion = dtroSubmit.SchemaVersion;
-
-        // existing.RegulationStart = dtroSubmit.RegulationStart;
-        // existing.RegulationEnd = dtroSubmit.RegulationEnd;
-        // existing.TrafficAuthorityId = dtroSubmit.TrafficAuthorityId;
-        // existing.TroName = dtroSubmit.TroName;
         existing.Data = dtroSubmit.Data;
 
         existing.LastUpdated = DateTime.UtcNow;
         existing.LastUpdatedCorrelationId = correlationId;
 
+        _dtroContext.Entry(existing).Property(e => e.Data).IsModified = true;
+
         _dtroMappingService.InferIndexFields(ref existing);
         await _dtroCache.RemoveDtro(id);
+        await _dtroContext.SaveChangesAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId)
+    {
+        if (await _dtroContext.Dtros.FindAsync(id) is not Models.DataBase.DTRO existing || existing.Deleted)
+        {
+            throw new InvalidOperationException($"There is no DTRO with Id {id}");
+        }
+
+        _dtroMappingService.SetOwnership(ref existing, assignToTraId);
+        _dtroMappingService.SetSourceActionType(ref existing, Enums.SourceActionType.Amendment);
+        existing.LastUpdated = DateTime.UtcNow;
+        existing.LastUpdatedCorrelationId = correlationId;
+
+        _dtroMappingService.InferIndexFields(ref existing);
+        await _dtroCache.RemoveDtro(id);
+
+        _dtroContext.Entry(existing).Property(e => e.Data).IsModified = true;
+
         await _dtroContext.SaveChangesAsync();
     }
 
@@ -186,9 +201,14 @@ public class DtroDal : IDtroDal
                 expressionsToConjunct.Add(it => !it.Deleted);
             }
 
-            if (query.Ta is int ta)
+            if (query.TraCreator is int traCreator)
             {
-                expressionsToConjunct.Add(it => it.TrafficAuthorityId == ta);
+                expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == traCreator);
+            }
+
+            if (query.CurrentTraOwner is int currentTraOwner)
+            {
+                expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == currentTraOwner);
             }
 
             if (query.PublicationTime is DateTime publicationTime)
@@ -302,9 +322,14 @@ public class DtroDal : IDtroDal
             expressionsToConjunct.Add(it => it.DeletionTime >= deletionTime);
         }
 
-        if (search.Ta is int ta)
+        if (search.TraCreator is int traCreator)
         {
-            expressionsToConjunct.Add(it => it.TrafficAuthorityId == ta);
+            expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == traCreator);
+        }
+
+        if (search.CurrentTraOwner is int currentTraOwner)
+        {
+            expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == currentTraOwner);
         }
 
         if (search.Since is DateTime publicationTime)
@@ -395,5 +420,20 @@ public class DtroDal : IDtroDal
             .OrderBy(it => it.Id);
 
         return await sqlQuery.ToListAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
+    {
+        Models.DataBase.DTRO dtro = await _dtroContext.Dtros.FindAsync(id);
+
+        if (dtro is null)
+        {
+            return false;
+        }
+
+        _dtroContext.Dtros.Remove(dtro);
+        await _dtroContext.SaveChangesAsync();
+        return true;
     }
 }

@@ -1393,6 +1393,13 @@
 					"description": "unique identifier (per authority) for referenced provision",
 					"type": "number",
 					"minimum": 0
+				},
+				"reference": {
+					"description": "unique identifier (per authority) for future referencing",
+					"type": "string"
+				},
+				"actionType": {
+					"$def": "#/$defs/actionType"
 				}
 			},
 			"required": [
@@ -1401,7 +1408,9 @@
 				"addition",
 				"orderReportingPoint",
 				"provisionDescription",
-				"provisionIndex"
+				"provisionIndex",
+				"reference",
+				"actionType"
 			],
 			"type": "object"
 		},
@@ -1728,7 +1737,13 @@
 					},
 					"type": "array"
 				},
-				"ta": {
+				"currentTraOwner": {
+					"description": "Traffic authority (SWA code)",
+					"type": "number",
+					"minimum": 0,
+					"maximum": 9999
+				},
+				"traCreator": {
 					"description": "Traffic authority (SWA code)",
 					"type": "number",
 					"minimum": 0,
@@ -1741,13 +1756,32 @@
 				"troName": {
 					"description": "Published title of the Traffic Regulation Order",
 					"type": "string"
+				},
+				"reference": {
+					"description": "unique identifier (per authority) for future referencing",
+					"type": "string"
+				},
+				"actionType": {
+					"$def": "#/$defs/actionType"
+				},
+				"traAffected": {
+					"items": {
+						"description": "Traffic authority (SWA code) affected by D-TRO",
+						"type": "number",
+						"minimum": 0,
+						"maximum": 9999
+					},
+					"type": "array"
 				}
 			},
 			"required": [
 				"provision",
-				"ta",
+				"traCreator",
+				"currentTraOwner",
 				"section",
-				"troName"
+				"troName",
+				"reference",
+				"actionType"
 			],
 			"type": "object"
 		},
@@ -3056,11 +3090,25 @@
 				"unladen"
 			],
 			"type": "string"
+		},
+		"actionType": {
+			"description": "List of the action types",
+			"enum": [
+				"new",
+				"amendment",
+				"fullAmendment",
+				"partialAmendment",
+				"fullRevoke",
+				"partialRevoke",
+				"noChange",
+				"errorFix"
+			],
+			"type": "string"
 		}
 	},
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"additionalProperties": true,
-	"description": "DTRO v3.1.2 data model JSON schema",
+	"description": "DTRO v3.2.0 data model JSON schema",
 	"oneOf": [
 		{
 			"type": "object",

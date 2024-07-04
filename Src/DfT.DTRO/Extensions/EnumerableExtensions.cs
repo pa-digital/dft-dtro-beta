@@ -1,18 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 
 namespace DfT.DTRO.Extensions;
 
-/// <summary>
-/// Provides extension methods for manipulating enumerables.
-/// </summary>
 public static class EnumerableExtensions
 {
-    /// <summary>
-    /// Enumerates each pair of values from the source enumerable.
-    /// </summary>
-    /// <typeparam name="T">Type of elements.</typeparam>
-    /// <returns>Enumerated pairs.</returns>
     public static IEnumerable<(T, T)> Pairs<T>(this IEnumerable<T> source)
     {
         var i = 1;
@@ -26,4 +21,20 @@ public static class EnumerableExtensions
             i++;
         }
     }
+
+    public static IEnumerable<string> GetDisplayName<T>(this Type type) where T : Enum
+    {
+        T[] enums = (T[])Enum.GetValues(type);
+        return enums.Select(it=>it.GetDisplayName()).ToList();
+    }
+
+    public static string GetDisplayName(this Enum enumToDisplay) => 
+        enumToDisplay.GetAttribute<DisplayAttribute>().Name;
+
+    private static TAttribute GetAttribute<TAttribute>(this Enum enumValue) where TAttribute : Attribute => 
+        enumValue
+            .GetType()
+            .GetMember(enumValue.ToString())
+            .First()
+            .GetCustomAttribute<TAttribute>();
 }

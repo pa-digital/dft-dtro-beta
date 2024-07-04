@@ -6,14 +6,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 public class SearchModel : PageModel
 {
+    public PaginatedResponse<DtroSearchResult> Dtros { get; set; }
     private readonly DtroService? _dtroService;
 
     public SearchModel(DtroService dtroService)
     {
         _dtroService = dtroService;
     }
-
-    public PaginatedResponse<DtroSearchResult> Dtros { get; set; }
 
     public async Task OnGetAsync()
     {
