@@ -52,16 +52,15 @@ jobs:
   build-push-dtro:
     name: Build and Push DTRO Application to Artifact Registry - ${{ inputs.environment }}
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     permissions:
       id-token: write
       contents: read
       packages: read
       actions: read
+      pull-requests: write
     defaults:
       run:
         shell: bash
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -71,7 +70,6 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.workload_identity_provider }}
           service_account: ${{ secrets.wip_service_account }}
-
 
       - name: Authenticate Docker with the Artifact Registry repository
         run: gcloud auth configure-docker europe-west1-docker.pkg.dev
@@ -89,17 +87,16 @@ jobs:
     needs:
       - build-push-dtro
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     permissions:
       id-token: write
       contents: read
       packages: read
       actions: read
+      pull-requests: write
     defaults:
       run:
         shell: bash
         working-directory: terraform
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
