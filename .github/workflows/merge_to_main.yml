@@ -12,13 +12,17 @@ jobs:
     name: Deploy to Dev
     uses: ./.github/workflows/deploy_resources.yml
     secrets:
-      WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
+      execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
     with:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_DEV }}
+      gcp-project: ${{ vars.GCP_PROJECT_ID_DEV }}
       gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
       environment: dev
-      gcp-ar-dtro-repo: ''
-      dtro-image-name: ''
+      dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
+      dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
+  #      do-validation-checks: true
 
   deploy-test:
     name: Deploy to Test
@@ -26,10 +30,14 @@ jobs:
     needs:
       - deploy-dev
     secrets:
-      WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+      wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
+      execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
     with:
-      gcp-project-id: ${{ vars.GCP_PROJECT_ID_test }}
+      gcp-project-id: ${{ vars.GCP_PROJECT_ID_TEST }}
+      gcp-project: ${{ vars.GCP_PROJECT_ID_TEST }}
       gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
-      environment: test
-      gcp-ar-dtro-repo: ''
-      dtro-image-name: ''
+      environment: dev
+      dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
+      dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
+#      do-validation-checks: true
