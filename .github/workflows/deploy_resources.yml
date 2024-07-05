@@ -22,9 +22,6 @@ on:
       environment:
         type: string
         required: true
-      gcp-ar-dtro-repo:
-        type: string
-        required: true
       dtro-image-name:
         type: string
         required: true
