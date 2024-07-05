@@ -1,0 +1,143 @@
+name: Deploy Resources
+
+on:
+  workflow_call:
+    secrets:
+      workload_identity_provider:
+        required: true
+      wip_service_account:
+        required: true
+      cloud_run_service_account:
+        required: true
+    inputs:
+      gcp-project-id:
+        type: string
+        required: true
+      gcp-project:
+        type: string
+        required: true
+      gcp-region:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+      gcp-ar-dtro-repo:
+        type: string
+        required: true
+      dtro-image-name:
+        type: string
+        required: true
+      dtro-image-tag:
+        type: string
+        required: true
+
+env:
+  TF_VAR_tf_state_bucket: dft-d-tro-terraform-${{ inputs.environment }}
+  TF_VAR_environment: ${{ inputs.environment }}
+  TF_VAR_region: ${{ inputs.gcp-region }}
+  TF_VAR_project_id: ${{ inputs.gcp-project-id }}
+  TF_VAR_execution_service_account: ${{ secrets.execution_service_account }}
+  ar_repo_url: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ inputs.gcp-project }}-repository/${{ inputs.dtro-image-name }}:${{ inputs.dtro-image-tag }}
+  TF_VAR_dtro_service_image: ${{ secrets.dtro-image-name }}
+  TF_VAR_tag: ${{ secrets.dtro-image-tag }}
+
+permissions:
+  contents: read
+  packages: read
+  actions: read
+
+jobs:
+  build-push-dtro:
+    name: Build and Push DTRO Application to Artifact Registry - ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+      actions: read
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
+#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PA }}
+#          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PA }}
+
+      - name: Authenticate Docker with the Artifact Registry repository
+        run: gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+      - name: Build and push Docker image to Artifact Registry
+        uses: docker/build-push-action@v6.1.0
+        with:
+          context: dft-dtro-beta/Src/DfT.DTRO
+          push: true
+          provenance: false
+          tags: ${{ env.ar_repo_url }}
+
+  deploy-dtro:
+    name: Deploy DTRO Application to Cloud Run - ${{ inputs.environment }}
+    needs:
+      - build-push-dtro
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+      actions: read
+    defaults:
+      run:
+        shell: bash
+        working-directory: terraform
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
+#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PA }}
+#          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PA }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format
+        if: ${{ inputs.do-validation-checks }}
+        run: terraform fmt -check -recursive
+
+      - name: terraform validate
+        if: ${{ inputs.do-validation-checks }}
+        uses: dflook/terraform-validate@v1
+
+      - name: Checkov GitHub Action
+        if: ${{ inputs.do-validation-checks }}
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          # CKV2_GHA_1: to be addressed
+          skip_check: CKV2_GHA_1
+          output_format: github_failed_only
+          output_file_path: console
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+          -backend-config "bucket=${{env.TF_VAR_tf_state_bucket}}" \
+          -backend-config "prefix=terraform/cloudrun-state"
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -out terraform-plan-gcp-cr
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false terraform-plan-gcp-cr
