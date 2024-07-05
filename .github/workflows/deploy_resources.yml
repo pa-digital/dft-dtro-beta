@@ -7,7 +7,7 @@ on:
         required: true
       wip_service_account:
         required: true
-      cloud_run_service_account:
+      execution_service_account:
         required: true
     inputs:
       gcp-project-id:
@@ -28,6 +28,10 @@ on:
       dtro-image-tag:
         type: string
         required: true
+      do-validation-checks:
+        type: boolean
+        required: false
+        default: false
 
 env:
   TF_VAR_tf_state_bucket: dft-d-tro-terraform-${{ inputs.environment }}
