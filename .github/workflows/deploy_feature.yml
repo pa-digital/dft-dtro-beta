@@ -1,4 +1,4 @@
-name: Deploy Feature
+name: Deploy Feature Branch
 
 on:
   workflow_dispatch:
