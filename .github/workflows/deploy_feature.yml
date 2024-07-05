@@ -11,6 +11,9 @@ jobs:
       workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
       wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
       execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
+#      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PA }}
+#      wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PA }}
+#      execution_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PA }}
     with:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_DEV }}
       gcp-project: ${{ vars.GCP_PROJECT_ID_DEV }}

@@ -69,10 +69,9 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
-#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PA }}
-#          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PA }}
+          workload_identity_provider: ${{ secrets.workload_identity_provider }}
+          service_account: ${{ secrets.wip_service_account }}
+
 
       - name: Authenticate Docker with the Artifact Registry repository
         run: gcloud auth configure-docker europe-west1-docker.pkg.dev
@@ -108,10 +107,8 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
-#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PA }}
-#          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PA }}
+          workload_identity_provider: ${{ secrets.workload_identity_provider }}
+          service_account: ${{ secrets.wip_service_account }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
