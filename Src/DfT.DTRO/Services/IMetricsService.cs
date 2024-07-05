@@ -17,12 +17,10 @@ public interface IMetricsService
     Task<bool> CheckDataBase();
 
     /// <summary>
-    /// return a metric for the dates.
+    /// return a metric for the dates and a tra.
     /// </summary>
-    /// <param name="traId"></param>
-    /// <param name="fromDate"></param>
-    /// <param name="toDate"></param>
-    Task<MetricSummary> GetMetricsForTra(int traId, DateOnly fromDate, DateOnly toDate);
+    /// <param name="metricRequest"></param>
+    Task<MetricSummary> GetMetrics(MetricRequest metricRequest);
 
     /// <summary>
     /// Incremens a metric of type <paramref name="type"/>.

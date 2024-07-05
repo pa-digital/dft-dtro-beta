@@ -86,22 +86,43 @@ public class MetricDal : IMetricDal
     /// Get list of metrics from metric Table for a specific TRA.
     /// </summary>
     /// <returns>List of metrics</returns>
-    public async Task<MetricSummary> GetMetricsForTra(int traId, DateOnly fromDate, DateOnly toDate)
+    public async Task<MetricSummary> GetMetricsForTra(int? traId, DateOnly fromDate, DateOnly toDate)
     {
-        var aggregatedMetrics = await _dtroContext.Metrics
-               .Where(metric => metric.TraId == traId && metric.ForDate >= fromDate && metric.ForDate <= toDate)
-               .GroupBy(metric => 1)
-               .Select(group => new MetricSummary
-               {
-                   SystemFailureCount = group.Sum(metric => metric.SystemFailureCount),
-                   SubmissionFailureCount = group.Sum(metric => metric.SubmissionFailureCount),
-                   SubmissionCount = group.Sum(metric => metric.SubmissionCount),
-                   DeletionCount = group.Sum(metric => metric.DeletionCount),
-                   SearchCount = group.Sum(metric => metric.SearchCount),
-                   EventCount = group.Sum(metric => metric.EventCount),
-               })
-               .FirstOrDefaultAsync();
-        return aggregatedMetrics;
+        if (traId == null)
+        {
+            var aggregatedMetrics = await _dtroContext.Metrics
+                          .Where(metric => metric.ForDate >= fromDate && metric.ForDate <= toDate)
+                          .GroupBy(metric => 1)
+                          .Select(group => new MetricSummary
+                          {
+                              SystemFailureCount = group.Sum(metric => metric.SystemFailureCount),
+                              SubmissionFailureCount = group.Sum(metric => metric.SubmissionFailureCount),
+                              SubmissionCount = group.Sum(metric => metric.SubmissionCount),
+                              DeletionCount = group.Sum(metric => metric.DeletionCount),
+                              SearchCount = group.Sum(metric => metric.SearchCount),
+                              EventCount = group.Sum(metric => metric.EventCount),
+                          })
+                          .FirstOrDefaultAsync();
+            return aggregatedMetrics;
+        }
+        else
+        {
+            var aggregatedMetrics = await _dtroContext.Metrics
+              .Where(metric => metric.TraId == traId && metric.ForDate >= fromDate && metric.ForDate <= toDate)
+              .GroupBy(metric => 1)
+              .Select(group => new MetricSummary
+              {
+                  SystemFailureCount = group.Sum(metric => metric.SystemFailureCount),
+                  SubmissionFailureCount = group.Sum(metric => metric.SubmissionFailureCount),
+                  SubmissionCount = group.Sum(metric => metric.SubmissionCount),
+                  DeletionCount = group.Sum(metric => metric.DeletionCount),
+                  SearchCount = group.Sum(metric => metric.SearchCount),
+                  EventCount = group.Sum(metric => metric.EventCount),
+              })
+              .FirstOrDefaultAsync();
+            return aggregatedMetrics;
+        }
+       
     }
 
     /// <summary>
