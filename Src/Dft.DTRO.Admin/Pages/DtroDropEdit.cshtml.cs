@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 public class DtroDropEditModel : PageModel
 {
-    private readonly DtroService _dtroService;
+    private readonly IDtroService _dtroService;
 
-    public DtroDropEditModel(DtroService dtroService, IConfiguration configuration)
+    public DtroDropEditModel(IDtroService dtroService, IConfiguration configuration)
     {
         _dtroService = dtroService;
         ApiBaseUrl = configuration["ExternalApi:BaseUrl"];

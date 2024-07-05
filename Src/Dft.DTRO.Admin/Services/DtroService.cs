@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dft.DTRO.Admin.Services;
-public class DtroService
+public class DtroService : IDtroService
 {
     private readonly HttpClient _client;
 
@@ -56,7 +56,7 @@ public class DtroService
             Content = param
         };
 
-        AddHeaders(ref request);
+        Helper.AddHeaders(ref request);
         var response = await _client.SendAsync(request);
 
         response.EnsureSuccessStatusCode();
@@ -77,7 +77,7 @@ public class DtroService
             Content = content
         };
 
-        AddHeaders(ref request);
+        Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
@@ -96,7 +96,7 @@ public class DtroService
             Content = content
         };
 
-        AddHeaders(ref request);
+        Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
@@ -106,7 +106,7 @@ public class DtroService
     {
 
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"/v1/dtros/Ownership/{id}/{toTraId}");
-        AddHeaders(ref httpRequestMessage);
+        Helper.AddHeaders(ref httpRequestMessage);
 
         var response = await _client.SendAsync(httpRequestMessage);
         if (response.IsSuccessStatusCode)
@@ -115,11 +115,5 @@ public class DtroService
         }
 
         return new JsonResult(new { message = "Failed to reassign the DTRO." }) { StatusCode = (int)response.StatusCode };
-    }
-
-    private void AddHeaders(ref HttpRequestMessage httpRequestMessage)
-    {
-        int ta = 1585;
-        httpRequestMessage.Headers.Add("ta", ta.ToString());
     }
 }

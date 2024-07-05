@@ -12,10 +12,10 @@ builder.Services.AddHttpClient("ExternalApi", client =>
     client.BaseAddress = new Uri(apiBaseUrl);
 });
 
-builder.Services.AddScoped<SchemaService>();
-builder.Services.AddScoped<RuleService>();
-builder.Services.AddScoped<DtroService>();
-
+builder.Services.AddScoped<ISchemaService, SchemaService>();
+builder.Services.AddScoped<IRuleService, RuleService>();
+builder.Services.AddScoped<IDtroService, DtroService>();
+builder.Services.AddScoped<IMetricsService, MetricsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

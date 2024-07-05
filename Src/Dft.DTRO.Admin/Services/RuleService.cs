@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Dft.DTRO.Admin.Services;
-public class RuleService 
+public class RuleService : IRuleService
 {
     private readonly HttpClient _client;
 

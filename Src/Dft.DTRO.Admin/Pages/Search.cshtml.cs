@@ -1,15 +1,14 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Dft.DTRO.Admin.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 public class SearchModel : PageModel
 {
     public PaginatedResponse<DtroSearchResult> Dtros { get; set; }
-    private readonly DtroService? _dtroService;
+    private readonly IDtroService _dtroService;
 
-    public SearchModel(DtroService dtroService)
+    public SearchModel(IDtroService dtroService)
     {
         _dtroService = dtroService;
     }
