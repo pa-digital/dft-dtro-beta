@@ -32,3 +32,6 @@
 /Src/Dft.DTRO.Admin/obj/Debug/net6.0/Dft.DTRO.Admin.csproj.FileListAbsolute.txt
 /Src/Dft.DTRO.Admin/obj/Debug/net6.0/project.razor.vs.bin
 /.idea/.idea.DfT.DTRO/.idea
+/.idea/
+/.github/temp_storge_of_tf_files/.gitignore
+/terraform/.terraform.lock.hcl
