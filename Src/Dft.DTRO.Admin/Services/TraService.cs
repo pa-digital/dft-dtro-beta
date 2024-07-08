@@ -19,26 +19,24 @@ public class TraService : ITraService
     {
         List<LookupResponse> lookups = new();
 
-        var look = new LookupResponse() { Id = 1, Name = "Alpha" };
+        var look = new LookupResponse() { Id = 1, Name = "Peter Hopins" };
         lookups.Add(look);
 
-        look = new LookupResponse() { Id = 21, Name = "Beta" };
+        look = new LookupResponse() { Id = 21, Name = "John Peters" };
         lookups.Add(look);
 
-        look = new LookupResponse() { Id = 3, Name = "Gamma" };
+        look = new LookupResponse() { Id = 3, Name = "Paul Hope" };
         lookups.Add(look);
 
-        look = new LookupResponse() { Id = 41, Name = "Delta" };
+        look = new LookupResponse() { Id = 41, Name = "Peter Bowles" };
         lookups.Add(look);
 
-        look = new LookupResponse() { Id = 5, Name = "Zeta" };
+        look = new LookupResponse() { Id = 5, Name = "John Holly" };
         lookups.Add(look);
 
-        look = new LookupResponse() { Id = 6, Name = "Eta" };
+        look = new LookupResponse() { Id = 6, Name = "Paul Peters" };
         lookups.Add(look);
 
-        look = new LookupResponse() { Id = 7, Name = "Theta" };
-        lookups.Add(look);
         return lookups;
     }
 }

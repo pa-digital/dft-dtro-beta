@@ -10,89 +10,125 @@
 </div>
 
 
-<form method="post" style="display: flex;">
+<form method="post" asp-page-handler="Update" style="display: flex;">
     <div id="first">
 
-    
-    <div class="options-container" style="accent-color">
-        <label>
-            <input type="radio" name="PeriodOption" value="days" checked /> Days
-        </label>
-        <label>
-            <input type="radio" name="PeriodOption" value="weeks" /> Weeks
-        </label>
-        <label>
-            <input type="radio" name="PeriodOption" value="months" /> Months
-        </label>
-    
-        <select id="numberSelect" name="NumberSelect">
-            @for (int i = 1; i <= 31; i++)
-            {
-                <option value="@i">@i</option>
-            }
-        </select>
-    </div>
-    <div style="margin-top: 10px; width: 300px;">
-        <div style="display: flex; align-items: center;">
-            <label style="margin-right: 10px;">TRA</label>
-            <input type="text" id="traSearch" placeholder="Search..." style="margin-right: 10px;">
-            <button class="btn btn-primary" type="submit">Update</button>
+
+        <div class="options-container" style="accent-color">
+            <label>
+                <input type="radio" name="PeriodOption" value="days" checked="@((Model.PeriodOption == "days"))" /> Days
+            </label>
+            <label>
+                <input type="radio" name="PeriodOption" value="weeks" checked="@((Model.PeriodOption == "weeks"))" /> Weeks
+            </label>
+            <label>
+                <input type="radio" name="PeriodOption" value="months" checked="@((Model.PeriodOption == "months"))" /> Months
+            </label>
+
+            <select id="numberSelect" name="NumberSelect" asp-for="NumberSelect">
+                @for (int i = 1; i <= 7; i++)
+                {
+                    <option value="@i" selected="@((Model.NumberSelect == i))">@i</option>
+                }
+            </select>
         </div>
-        <div id="traSelectContainer" style="margin-top: 10px;">
-            <div id="traSelect" class="select-items" style="width: 100%;">
-                @{
-                    var first = true;
-                    foreach (var item in Model.LookupResponses)
-                    {
-                        if (!first)
+
+        <div style="margin-top: 10px; width: 300px;">
+
+            <div style="display: flex; align-items: center;">
+                <label style="margin-right: 10px;">TRA</label>
+                <input type="text" id="traSearch" placeholder="Search..." style="margin-right: 10px;" />
+                @* type="hidden" *@
+                <input type="hidden"  style="max-width: 30px; " id="selectedValue" name="TraSelect" />
+
+                <button class="btn btn-primary" type="submit">Update</button>
+            </div>
+
+            <div id="traSelectContainer" style="margin-top: 10px;">
+                <div id="traSelect" class="select-items" style="width: 100%;">
+                    @{
+                        foreach (var item in Model.LookupResponses)
                         {
-                            <div style="width: 100%;" class="item" data-value="@item.Id">
-                                @item.Name <span style="opacity: 0.5;">(@item.Id)</span>
-                            </div>
-                        }
-                        else
-                        {
-                            <div style="width: 100%;" class="item" data-value="@item.Id">@item.Name</div>
-                            first = false;
+
+                            if (item.Id == Model.TraSelect)
+                            {
+                               
+
+                                if (@item.Id == 0)// for 'all'
+                                {
+                                    <div style="width: 100%;" class="item selected" data-value="@item.Id">
+                                        @item.Name
+                                    </div>
+                                    <script>
+                                        document.getElementById('traSearch').value = '';
+                                        document.getElementById('selectedValue').value = '@item.Id';
+                                    </script>
+                                }
+                                else
+                                {
+                                    <div style="width: 100%;" class="item selected" data-value="@item.Id">
+                                        @item.Name <span style="opacity: 0.5;">(@item.Id)</span>
+                                    </div>
+                                    <script>
+                                        document.getElementById('traSearch').value = '@item.Name';
+                                        document.getElementById('selectedValue').value = '@item.Id';
+                                    </script>
+                                }
+
+                            }
+                            else
+                            {
+                                if (@item.Id == 0) // for 'all'
+                                {
+                                    <div style="width: 100%;" class="item" data-value="@item.Id">
+                                        @item.Name
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="width: 100%;" class="item" data-value="@item.Id">
+                                        @item.Name <span style="opacity: 0.5;">(@item.Id)</span>
+                                    </div>
+                                }
+                            }
+
                         }
                     }
-                }
+                </div>
             </div>
-            <input type="hidden" id="selectedValue" name="TraSelect" />
         </div>
     </div>
-    </div>
 
 
-    <div id="second"  style="display: flex;">
-    <div id="metrics" style="grey; padding: 10px; flex: 1; position: relative;">
-        <div style="display: flex; justify-content: center; align-items: center; height: 30vh;">
-            <div style="position: relative; width: 70vh;">
-                <canvas id="metricSummaryChart"></canvas>
+    <div id="second" style="display: flex;">
+        <div id="metrics" style="grey; padding: 10px; flex: 1; position: relative;">
+            <div style="display: flex; justify-content: center; align-items: center; height: 30vh;">
+                <div style="position: relative; width: 70vh;">
+                    <canvas id="metricSummaryChart"></canvas>
 
-                <div id="stats" style="position: absolute; bottom: 0; right: 0;">
-                    <div style="padding: 10px; flex: 1;">
-                        <div class="checkbox-container" style="border: 1px solid lightgrey; padding: 10px;border-radius: 5px;">
-                            <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
-                                <span>Api Health</span>
-                                <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthApi ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                    <div id="stats" style="position: absolute; bottom: 0; right: 0;">
+                        <div style="padding: 10px; flex: 1;">
+                            <div class="checkbox-container" style="border: 1px solid lightgrey; padding: 10px;border-radius: 5px;">
+                                <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
+                                    <span>Api Health</span>
+                                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthApi ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                                </div>
+                                <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
+                                    <span>TRA Id Match</span>
+                                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.TraIdMatch ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                                </div>
+                                <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
+                                    <span>Database Health</span>
+                                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthDatabase ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                                </div>
+
                             </div>
-                            <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
-                                <span>TRA Id Match</span>
-                                <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.TraIdMatch ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
-                            </div>
-                            <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
-                                <span>Database Health</span>
-                                <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthDatabase ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 </form>
 
@@ -144,6 +180,7 @@
 
             // Event listener for search input on traSelect
             traSearch.addEventListener('keyup', function () {
+
                 const searchValue = traSearch.value.trim().toLowerCase();
                 const items = traSelectContainer.getElementsByClassName('item');
 
@@ -155,11 +192,16 @@
                     const itemId = item.getAttribute('data-value');
                     const itemName = item.textContent.trim().toLowerCase();
 
-                    // Show item if matches search text or if search contains a number and item ID contains that number
-                    if (itemName.includes(searchValue) || (searchContainsNumber && itemId.includes(searchValue))) {
+                    if (searchValue === '') {
                         item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
+                    }
+                    else {
+                        // Show item if matches search text or if search contains a number and item ID contains that number
+                        if (itemName.includes(searchValue) || (searchContainsNumber && itemId.includes(searchValue))) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
                     }
                 });
 
@@ -170,10 +212,14 @@
 
             // Event listener for selecting an item in traSelect
             traSelectContainer.addEventListener('click', function (event) {
-                if (event.target.classList.contains('item')) {
-                    const selectedItem = event.target;
-                    selectedItemId = selectedItem.getAttribute('data-value');
-                    const selectedItemName = selectedItem.textContent.trim(); // Get the text content of the selected item
+                const selectedItem = event.target.closest('.item');
+                if (selectedItem) {
+                    const selectedItemId = selectedItem.getAttribute('data-value');
+
+                    // Extract the text before '('
+                    const selectedItemText = selectedItem.textContent.trim();
+                    const index = selectedItemText.indexOf('('); // Find the index of '('
+                    const selectedItemName = index !== -1 ? selectedItemText.slice(0, index).trim() : selectedItemText;
 
                     // Remove selection from previously selected item
                     clearSelection();
@@ -192,10 +238,10 @@
                 }
             });
 
-            // Set the search text box with the first item's name if LookupResponses has values
-            if (@Model.LookupResponses.Count > 0) {
-                traSearch.value = "@Html.Raw(Model.LookupResponses[0].Name)"; // Ensure proper encoding and escaping
-            }
+            // // Set the search text box with the first item's name if LookupResponses has values
+            // if (@Model.LookupResponses.Count > 0) {
+            //     traSearch.value = "@Html.Raw(Model.LookupResponses[0].Name)"; // Ensure proper encoding and escaping
+            // }
 
             // Event listener to clear search text box on first focus
             traSearch.addEventListener('focus', function () {
@@ -229,7 +275,7 @@
         @Model.Metrics.DeletionCount,
         @Model.Metrics.SearchCount,
         @Model.Metrics.EventCount
-                    ];
+                            ];
 
             var total = dataValues.reduce((acc, curr) => acc + curr, 0);
 
@@ -276,7 +322,7 @@
             var totalSubmissions = @Model.Metrics.SubmissionCount + @Model.Metrics.SubmissionFailureCount;
             var submissionPercentage = totalSubmissions > 0 ? (@Model.Metrics.SubmissionCount / totalSubmissions * 100).toFixed(2) : 0;
 
-                var options = {
+                        var options = {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
