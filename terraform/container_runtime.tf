@@ -54,6 +54,10 @@ resource "google_cloud_run_v2_service" "publish_service" {
 
     containers {
       image = "${var.region}-docker.pkg.dev/${local.project_id}/${local.artifact_registry_name}/${var.dtro_service_image}:${var.tag}"
+      # If container is destroyed, the default port must be explicitly referenced when re-creating the container.
+      #       ports {
+      #         container_port = 8080
+      #       }
 
       dynamic "env" {
         for_each = local.common_service_envs
