@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 public class SchemaOverviewModel : PageModel
 {
-    private readonly SchemaService? _schemaService;
+    private readonly ISchemaService _schemaService;
 
-    public SchemaOverviewModel(SchemaService schemaService)
+    public SchemaOverviewModel(ISchemaService schemaService)
     {
         _schemaService = schemaService;
     }

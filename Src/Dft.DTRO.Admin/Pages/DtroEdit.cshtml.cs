@@ -7,9 +7,9 @@ using Microsoft.Extensions.Configuration;
 
 public class DtroEditModel : PageModel
 {
-    private readonly DtroService _dtroService;
+    private readonly IDtroService _dtroService;
 
-    public DtroEditModel(DtroService dtroService, IConfiguration configuration)
+    public DtroEditModel(IDtroService dtroService, IConfiguration configuration)
     {
         _dtroService = dtroService;
         ApiBaseUrl = configuration["ExternalApi:BaseUrl"];

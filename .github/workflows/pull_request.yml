@@ -31,8 +31,6 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore
-
-##      TODO: Ross/Gabriel: Please uncomment the lines below and update if necessary once you are happy your code will pass the checks below
 #      - name: Test
 #        run: dotnet test --verbosity normal
 #
@@ -42,7 +40,6 @@ jobs:
 #      - name: Install .NET analyzers
 #        run: dotnet tool install -g dotnet-format
 #
-##      TODO: Note from Gabriel: the final command should have the '/warnerror' argument in the near future
 #      - name: Run .NET analyzers
 #        run: |
 #          dotnet tool install --global dotnet-format

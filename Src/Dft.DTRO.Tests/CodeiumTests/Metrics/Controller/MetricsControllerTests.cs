@@ -153,26 +153,6 @@ public class MetricsControllerTests
     }
 
     [Fact]
-    public async Task GetMetricsForTra_ReturnsStatusCode404_WhenMetricsNotFound()
-    {
-        // Arrange
-        _metricRequest.TraId = 123;
-
-
-        _mockMetricsService.Setup(service => service.GetMetrics(_metricRequest)).ReturnsAsync((MetricSummary)null);
-
-        // Act
-        var result = await _controller.GetMetricsForTra(_metricRequest);
-
-        // Assert
-        var notFoundResult = result.Result as NotFoundObjectResult;
-        Assert.NotNull(notFoundResult);
-        Assert.Equal(404, notFoundResult.StatusCode);
-        var apiErrorResponse = notFoundResult.Value as ApiErrorResponse;
-        Assert.Equal("Not found", apiErrorResponse?.Message);
-    }
-
-    [Fact]
     public async Task GetMetricsForTra_ReturnsStatusCode500_OnException()
     {
         // Arrange

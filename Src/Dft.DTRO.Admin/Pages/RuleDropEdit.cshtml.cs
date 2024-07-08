@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 public class RuleDropEditModel : PageModel
 {
-    private readonly RuleService _ruleService;
+    private readonly IRuleService _ruleService;
 
-    public RuleDropEditModel(RuleService ruleService, IConfiguration configuration)
+    public RuleDropEditModel(IRuleService ruleService)
     {
         _ruleService = ruleService;
-        ApiBaseUrl = configuration["ExternalApi:BaseUrl"];
     }
 
     [BindProperty(SupportsGet = true)]

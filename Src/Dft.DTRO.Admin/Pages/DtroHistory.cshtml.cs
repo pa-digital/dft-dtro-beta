@@ -6,7 +6,7 @@ namespace Dft.DTRO.Admin.Pages;
 
 public class DtroHistoryModel : PageModel
 {
-    private readonly DtroService _dtroService;
+    private readonly IDtroService _dtroService;
 
     [BindProperty(SupportsGet = true)]
     public Guid Id { get; set; }
@@ -18,7 +18,7 @@ public class DtroHistoryModel : PageModel
     public List<DtroHistorySourceResponse> SourceHistory { get; set; }
 
 
-    public DtroHistoryModel(DtroService dtroService, IConfiguration configuration)
+    public DtroHistoryModel(IDtroService dtroService)
     {
         _dtroService = dtroService;
     }
