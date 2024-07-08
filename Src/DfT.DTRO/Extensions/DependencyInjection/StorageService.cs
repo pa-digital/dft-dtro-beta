@@ -64,4 +64,15 @@ public static class StorageServiceDIExtensions
         return services.AddPostgresStorage(host, user, password, useSsl, database, port, maxPoolSize);
     }
 
+    /// <summary>
+    /// Implement SWA codes into services.
+    /// </summary>
+    /// <param name="services">services parameter passed</param>
+    public static void AddSwaCodes(this IServiceCollection services)
+    {
+        ServiceProvider provider = services.BuildServiceProvider();
+        ISwaSeeder seeder = provider.GetRequiredService<ISwaSeeder>();
+        seeder.Seed();
+    }
+
 }
