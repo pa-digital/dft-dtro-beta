@@ -10,7 +10,7 @@ namespace DfT.DTRO.Models.DataBase;
 public class SwaCode
 {
     /// <summary>
-    /// Gets or sets id of the SWA.
+    /// Gets or sets unique identifier of the TRA.
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
@@ -19,26 +19,32 @@ public class SwaCode
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Gets or sets the SWA code of the request.
+    /// Gets or sets the TRA id of the request.
     /// </summary>
     /// <example>1585</example>
-    [Required(ErrorMessage = "SWA code field must be included")]
-    [DataMember(Name = "code")]
-    public int Code { get; set; }
+    [Required(ErrorMessage = "TRA id field must be included")]
+    [DataMember(Name = "traId")]
+    public int TraId { get; set; }
 
     /// <summary>
-    /// Gets or sets the SWA name of the request.
+    /// Gets or sets the TRA name of the request.
     /// </summary>
-    [Required(ErrorMessage = "SWA name field must be included")]
+    [Required(ErrorMessage = "TRA name field must be included")]
     [DataMember(Name = "name")]
     [StringLength(int.MaxValue)]
     public string Name { get; set; }
 
     /// <summary>
-    /// Gets or sets the SWA prefix of the request.
+    /// Gets or sets the TRA prefix of the request.
     /// </summary>
-    [Required(ErrorMessage = "SWA prefix field must be included")]
+    [Required(ErrorMessage = "TRA prefix field must be included")]
     [DataMember(Name = "prefix")]
     [StringLength(20)]
     public string Prefix { get; set; }
+
+    /// <summary>
+    /// Gets or sets the TRA as administrator.
+    /// </summary>
+    [DataMember(Name = "IsAdmin")]
+    public bool IsAdmin { get; set; }
 }
