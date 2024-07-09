@@ -79,5 +79,7 @@ public static class StorageServiceDIExtensions
     /// Seed SWA Codes into the newly created entity.
     /// </summary>
     /// <param name="seeder">seeder service passed</param>
+
     public static void AddSwaCodes(this IApplicationBuilder app, ISwaSeeder seeder) => seeder.Seed();
+
 }

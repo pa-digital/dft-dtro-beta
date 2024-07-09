@@ -132,7 +132,6 @@ public class Startup
         services.AddCache(Configuration);
         services.TryAddSingleton<ISystemClock, SystemClock>();
         seeder = services.RegisterSwaEntity();
-       
         services.AddMvc();
     }
     ISwaSeeder seeder;
