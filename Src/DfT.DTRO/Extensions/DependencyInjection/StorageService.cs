@@ -65,14 +65,18 @@ public static class StorageServiceDIExtensions
     }
 
     /// <summary>
-    /// Implement SWA codes into services.
+    /// Create SWA entity.
     /// </summary>
     /// <param name="services">services parameter passed</param>
-    public static void AddSwaCodes(this IServiceCollection services)
+    public static ISwaSeeder RegisterSwaEntity(this IServiceCollection services)
     {
         ServiceProvider provider = services.BuildServiceProvider();
-        ISwaSeeder seeder = provider.GetRequiredService<ISwaSeeder>();
-        seeder.Seed();
+        return provider.GetRequiredService<ISwaSeeder>();
     }
 
+    /// <summary>
+    /// Seed SWA Codes into the newly created entity.
+    /// </summary>
+    /// <param name="seeder">seeder service passed</param>
+    public static void AddSwaCodes(this ISwaSeeder seeder) => seeder.Seed();
 }

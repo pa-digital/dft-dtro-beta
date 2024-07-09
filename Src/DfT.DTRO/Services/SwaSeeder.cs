@@ -13,6 +13,10 @@ public class SwaSeeder : ISwaSeeder
 {
     private readonly DtroContext _dtroContext;
 
+    /// <summary>
+    /// SwaSeeder constructor
+    /// </summary>
+    /// <param name="dtroContext">context parameter passed</param>
     public SwaSeeder(DtroContext dtroContext)
     {
         _dtroContext = dtroContext;
