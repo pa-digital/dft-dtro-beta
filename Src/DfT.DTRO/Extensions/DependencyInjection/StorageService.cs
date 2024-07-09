@@ -1,5 +1,6 @@
 ﻿using System;
 using DfT.DTRO.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -78,5 +79,7 @@ public static class StorageServiceDIExtensions
     /// Seed SWA Codes into the newly created entity.
     /// </summary>
     /// <param name="seeder">seeder service passed</param>
-    public static void AddSwaCodes(this ISwaSeeder seeder) => seeder.Seed();
+
+    public static void AddSwaCodes(this IApplicationBuilder app, ISwaSeeder seeder) => seeder.Seed();
+
 }

@@ -16,6 +16,8 @@ builder.Services.AddScoped<ISchemaService, SchemaService>();
 builder.Services.AddScoped<IRuleService, RuleService>();
 builder.Services.AddScoped<IDtroService, DtroService>();
 builder.Services.AddScoped<IMetricsService, MetricsService>();
+builder.Services.AddScoped<ITraService, TraService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
