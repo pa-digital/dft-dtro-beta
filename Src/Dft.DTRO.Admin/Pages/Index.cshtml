@@ -38,7 +38,6 @@
             <div style="display: flex; align-items: center;">
                 <label style="margin-right: 10px;">TRA</label>
                 <input type="text" id="traSearch" placeholder="Search..." style="margin-right: 10px;" />
-                @* type="hidden" *@
                 <input type="hidden"  style="max-width: 30px; " id="selectedValue" name="TraSelect" />
 
                 <button class="btn btn-primary" type="submit">Update</button>
@@ -146,8 +145,7 @@
             const traSelect = document.getElementById('traSelect');
             const selectedValueInput = document.getElementById('selectedValue');
             let selectedItemId = null; // Track the currently selected item ID
-            let firstFocus = true; // Flag to track first focus
-
+   
             // Event listener for period options (days, weeks, months)
             periodOptions.forEach(option => {
                 option.addEventListener('change', function () {
@@ -233,8 +231,6 @@
                     // Update the search text box with the selected item's name
                     traSearch.value = selectedItemName;
 
-                    // Reset firstFocus flag when an item is selected
-                    firstFocus = false;
                 }
             });
 
@@ -245,10 +241,11 @@
 
             // Event listener to clear search text box on first focus
             traSearch.addEventListener('focus', function () {
-                if (firstFocus) {
-                    traSearch.value = ''; // Clear the search text box
-                    firstFocus = false; // Update firstFocus flag
-                }
+                clearSelection();
+                // Update the hidden input value
+                selectedValueInput.value = 0;
+                traSearch.value = ''; // Clear the search text box
+         
             });
 
             // Function to clear selection highlight
