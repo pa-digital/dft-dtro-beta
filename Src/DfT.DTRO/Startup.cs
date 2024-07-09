@@ -131,7 +131,8 @@ public class Startup
         services.AddRequestCorrelation();
         services.AddCache(Configuration);
         services.TryAddSingleton<ISystemClock, SystemClock>();
-        services.AddSwaCodes();
+        ISwaSeeder seeder = services.RegisterSwaEntity();
+        seeder.AddSwaCodes();
         services.AddMvc();
     }
 
