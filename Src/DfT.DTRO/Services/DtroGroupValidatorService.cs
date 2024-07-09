@@ -1,9 +1,9 @@
-﻿using DfT.DTRO.Extensions;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Services.Validation;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DfT.DTRO.Services;
 public class DtroGroupValidatorService : IDtroGroupValidatorService
