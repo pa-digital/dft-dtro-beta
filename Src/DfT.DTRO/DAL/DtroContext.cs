@@ -1,4 +1,6 @@
-﻿using DfT.DTRO.Converters;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Dynamic;
+using DfT.DTRO.Converters;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroJson;
 using DfT.DTRO.Models.SchemaTemplate;
@@ -6,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions.Internal;
 using NpgsqlTypes;
-using System.Diagnostics.CodeAnalysis;
-using System.Dynamic;
 
 namespace DfT.DTRO.DAL;
 
@@ -40,6 +40,11 @@ public partial class DtroContext : DbContext
     /// Gets or sets used to query the Metrics table.
     /// </summary>
     public virtual DbSet<Metric> Metrics { get; set; }
+
+    /// <summary>
+    /// Gets or sets used to query Swa codes.
+    /// </summary>
+    public virtual DbSet<SwaCode> SwaCodes { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DtroContext"/> class.
