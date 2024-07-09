@@ -131,11 +131,11 @@ public class Startup
         services.AddRequestCorrelation();
         services.AddCache(Configuration);
         services.TryAddSingleton<ISystemClock, SystemClock>();
-        ISwaSeeder seeder = services.RegisterSwaEntity();
-        seeder.AddSwaCodes();
+        seeder = services.RegisterSwaEntity();
+       
         services.AddMvc();
     }
-
+    ISwaSeeder seeder;
     /// <summary>
     /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     /// </summary>
@@ -159,6 +159,8 @@ public class Startup
         {
             endpoints.MapControllers();
         });
+    
+        app.AddSwaCodes(seeder);
 
         app.UseHealthChecks("/health");
 
