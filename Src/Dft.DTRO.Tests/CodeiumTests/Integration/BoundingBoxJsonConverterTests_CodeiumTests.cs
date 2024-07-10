@@ -1,13 +1,7 @@
-﻿using DfT.DTRO.Converters;
+﻿using System.Diagnostics.CodeAnalysis;
+using DfT.DTRO.Converters;
 using DfT.DTRO.Models.DtroJson;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 
 namespace Dft.DTRO.Tests.CodeiumTests.JsonConverters;
 
@@ -40,10 +34,10 @@ public class BoundingBoxJsonConverterTests
         var reader = new JsonTextReader(new StringReader(json));
         var boundingBox = serializer.Deserialize<BoundingBox>(reader);
 
-        Assert.Equal(1.0, boundingBox.westLongitude);
-        Assert.Equal(2.0, boundingBox.southLatitude);
-        Assert.Equal(3.0, boundingBox.eastLongitude);
-        Assert.Equal(4.0, boundingBox.northLatitude);
+        Assert.Equal(1.0, boundingBox.WestLongitude);
+        Assert.Equal(2.0, boundingBox.SouthLatitude);
+        Assert.Equal(3.0, boundingBox.EastLongitude);
+        Assert.Equal(4.0, boundingBox.NorthLatitude);
     }
 
     [Fact]

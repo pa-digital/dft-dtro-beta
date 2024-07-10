@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using DfT.DTRO.Enums;
 using System.Linq;
+using DfT.DTRO.Enums;
 using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
@@ -169,7 +169,7 @@ public class DtroMappingService : IDtroMappingService
     /// <inheritdoc />
     public void SetOwnership(ref Models.DataBase.DTRO dtro, int currentTraOwner)
     {
-       dtro.Data.PutValue("source.currentTraOwner", currentTraOwner);
+        dtro.Data.PutValue("source.currentTraOwner", currentTraOwner);
     }
 
     public void SetSourceActionType(ref Models.DataBase.DTRO dtro, SourceActionType sourceActionType)
@@ -276,24 +276,35 @@ public class DtroMappingService : IDtroMappingService
 
             IEnumerable<Coordinates> result = type switch
             {
-                "Polygon" => coordinates.OfType<IList<object>>().SelectMany(objects => objects).OfType<IList<object>>()
+                "Polygon" => coordinates
+                    .OfType<IList<object>>()
+                    .SelectMany(objects => objects)
+                    .OfType<IList<object>>()
                     .Select(objects => new Coordinates((double)objects[0], (double)objects[1])),
-                "LineString" => coordinates.OfType<IList<object>>()
+                "LineString" => coordinates
+                    .OfType<IList<object>>()
                     .Select(objects => new Coordinates((double)objects[0], (double)objects[1])),
                 "Point" => new List<Coordinates> { new((double)coordinates[0], (double)coordinates[1]) },
                 _ => throw new InvalidOperationException($"Coordinate type '{type}' unsupported.")
             };
 
-            return crs != "osgb36Epsg27700"
-                ? result.Select(this._projectionService.Wgs84ToOsgb36)
-            : result;
+            if (crs != "osgb36Epsg27700")
+            {
+                return result.Select(_projectionService.Wgs84ToOsgb36);
+            }
+
+            return result;
         }
 
-        var coordinates = dtro.Data.GetValueOrDefault<IList<object>>("source.provision").OfType<ExpandoObject>()
-            .SelectMany(it => it.GetList("regulatedPlaces").OfType<ExpandoObject>())
-            .SelectMany(it => FlattenAndConvertCoordinates(
-                it.GetExpando("geometry").GetExpando("coordinates"),
-                it.GetExpando("geometry").GetValue<string>("crs")));
+        IEnumerable<Coordinates> coordinates = dtro
+            .Data
+            .GetValueOrDefault<IList<object>>("source.provision")
+            .OfType<ExpandoObject>()
+            .SelectMany(expandoObject => expandoObject.GetList("regulatedPlaces")
+                .OfType<ExpandoObject>())
+            .SelectMany(expandoObject => FlattenAndConvertCoordinates(
+                expandoObject.GetExpando("geometry").GetExpando("coordinates"),
+                expandoObject.GetExpando("geometry").GetValue<string>("crs")));
 
         dtro.Location = BoundingBox.Wrapping(coordinates);
     }
@@ -319,9 +330,9 @@ public class DtroMappingService : IDtroMappingService
         };
     }
 
-    private string Get(DTROHistory request, string key) => 
+    private string Get(DTROHistory request, string key) =>
         request.Data.GetValueOrDefault<string>(key);
 
-    private IList<object> GetProvision(DTROHistory request, string key) => 
+    private IList<object> GetProvision(DTROHistory request, string key) =>
         request.Data.GetValueOrDefault<IList<object>>(key);
 }
