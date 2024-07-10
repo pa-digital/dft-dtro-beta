@@ -35,7 +35,7 @@ namespace Dft.DTRO.Admin.Pages
         [BindProperty(SupportsGet = true)]
         public int? TraSelect { get; set; } // Nullable int for optional selection
 
-        public List<LookupResponse> LookupResponses { get; set; } = new List<LookupResponse>();
+        public List<SwaCodeResponse> swaCodes { get; set; } = new List<SwaCodeResponse>();
 
         public async Task OnGetAsync()
         {
@@ -45,11 +45,16 @@ namespace Dft.DTRO.Admin.Pages
 
             MetricRequest metricRequest = CreateRequest(GetPeriodEnum(PeriodOption), NumberSelect, TraSelect);
 
+            if (TraSelect == null)
+            {
+                var sss = "vvv";
+            }
+
             var metrics = await _metricsService.MetricsForTra(metricRequest);
             Metrics = metrics ?? new MetricSummary();
 
-            LookupResponses = await _traService.GetTraLookup();
-            LookupResponses.Insert(0, new LookupResponse { Id = 0, Name = "(all)" });
+            swaCodes = await _traService.GetSwaCodes();
+            swaCodes.Insert(0, new SwaCodeResponse { TraId = 0, Name = "[all]" });
         }
 
         private Period GetPeriodEnum(string periodOption)

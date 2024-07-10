@@ -128,6 +128,8 @@ public class Startup
         services.AddScoped<IRuleTemplateDal, RuleTemplateDal>();
         services.AddScoped<IMetricDal, MetricDal>();
         services.AddScoped<ISwaCodeDal, SwaCodeDal>();
+        services.AddScoped<ITraService, TraService>();
+
         services.AddStorage(Configuration);
         services.AddJsonLogic();
         services.AddRequestCorrelation();
