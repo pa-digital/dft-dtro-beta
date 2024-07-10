@@ -40,7 +40,7 @@
                 <input type="text" id="traSearch" placeholder="Search..." style="margin-right: 10px;" />
                 <input type="hidden"  style="max-width: 30px; " id="selectedValue" name="TraSelect" />
 
-                <button class="btn btn-primary" type="submit">Update</button>
+                <button id="updateButton" class="btn btn-primary" type="submit">Update</button>
             </div>
 
             <div id="traSelectContainer" style="margin-top: 10px;">
@@ -144,6 +144,7 @@
             const traSelectContainer = document.getElementById('traSelectContainer');
             const traSelect = document.getElementById('traSelect');
             const selectedValueInput = document.getElementById('selectedValue');
+            const updateButton = document.getElementById('updateButton');
             let selectedItemId = null; // Track the currently selected item ID
    
             // Event listener for period options (days, weeks, months)
@@ -160,8 +161,8 @@
                         case 'months':
                             max = 6;
                             break;
-                    }
-
+                    };
+                    alert('Max: ' + max);
                     // Update the number select options
                     numberSelect.innerHTML = '';
                     for (let i = 1; i <= max; i++) {
@@ -203,6 +204,8 @@
                     }
                 });
 
+                updateButton.disabled = searchContainsNumber;
+
                 // Clear selection highlight and reset selected item ID when search changes
                 clearSelection();
                 selectedItemId = null;
@@ -224,13 +227,14 @@
 
                     // Add selection to the clicked item
                     selectedItem.classList.add('selected-InList');
-
++
                     // Update the hidden input value
                     selectedValueInput.value = selectedItemId;
 
                     // Update the search text box with the selected item's name
                     traSearch.value = selectedItemName;
 
+                    updateButton.disabled = false;
                 }
             });
 

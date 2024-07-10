@@ -45,11 +45,6 @@ namespace Dft.DTRO.Admin.Pages
 
             MetricRequest metricRequest = CreateRequest(GetPeriodEnum(PeriodOption), NumberSelect, TraSelect);
 
-            if (TraSelect == null)
-            {
-                var sss = "vvv";
-            }
-
             var metrics = await _metricsService.MetricsForTra(metricRequest);
             Metrics = metrics ?? new MetricSummary();
 
