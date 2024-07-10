@@ -162,7 +162,7 @@
                             max = 6;
                             break;
                     };
-                    alert('Max: ' + max);
+     
                     // Update the number select options
                     numberSelect.innerHTML = '';
                     for (let i = 1; i <= max; i++) {
@@ -227,7 +227,7 @@
 
                     // Add selection to the clicked item
                     selectedItem.classList.add('selected-InList');
-+
+
                     // Update the hidden input value
                     selectedValueInput.value = selectedItemId;
 
@@ -237,6 +237,7 @@
                     updateButton.disabled = false;
                 }
             });
+
 
             // // Set the search text box with the first item's name if LookupResponses has values
             // if (@Model.swaCodes.Count > 0) {
