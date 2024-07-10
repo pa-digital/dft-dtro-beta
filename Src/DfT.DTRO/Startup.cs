@@ -41,6 +41,7 @@ namespace DfT.DTRO;
 public class Startup
 {
     private readonly IWebHostEnvironment _hostingEnv;
+    private ISwaSeeder _seeder;
 
     private IConfiguration Configuration { get; }
 
@@ -114,27 +115,28 @@ public class Startup
         services.AddSingleton<IDtroMappingService, DtroMappingService>();
         services.AddSingleton<ISchemaTemplateMappingService, SchemaTemplateMappingService>();
         services.AddSingleton<IRuleTemplateMappingService, RuleTemplateMappingService>();
-        services.AddScoped<IDtroDal, DtroDal>();
-        services.AddScoped<IDtroHistoryDal, DtroHistoryDal>();
-        services.AddScoped<ISchemaTemplateDal, SchemaTemplateDal>();
-        services.AddScoped<IRuleTemplateDal, RuleTemplateDal>();
         services.AddScoped<IEventSearchService, EventSearchService>();
         services.AddScoped<ISchemaTemplateService, SchemaTemplateService>();
         services.AddScoped<IRuleTemplateService, RuleTemplateService>();
         services.AddScoped<IDtroService, DtroService>();
         services.AddScoped<ISearchService, SearchService>();
-        services.AddScoped<IMetricDal, MetricDal>();
         services.AddScoped<IMetricsService, MetricsService>();
         services.AddScoped<ISwaSeeder, SwaSeeder>();
+        services.AddScoped<IDtroDal, DtroDal>();
+        services.AddScoped<IDtroHistoryDal, DtroHistoryDal>();
+        services.AddScoped<ISchemaTemplateDal, SchemaTemplateDal>();
+        services.AddScoped<IRuleTemplateDal, RuleTemplateDal>();
+        services.AddScoped<IMetricDal, MetricDal>();
+        services.AddScoped<ISwaCodeDal, SwaCodeDal>();
         services.AddStorage(Configuration);
         services.AddJsonLogic();
         services.AddRequestCorrelation();
         services.AddCache(Configuration);
         services.TryAddSingleton<ISystemClock, SystemClock>();
-        seeder = services.RegisterSwaEntity();
+        _seeder = services.RegisterSwaEntity();
         services.AddMvc();
     }
-    ISwaSeeder seeder;
+
     /// <summary>
     /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     /// </summary>
@@ -158,8 +160,8 @@ public class Startup
         {
             endpoints.MapControllers();
         });
-    
-        app.AddSwaCodes(seeder);
+
+        app.AddSwaCodes(_seeder);
 
         app.UseHealthChecks("/health");
 
