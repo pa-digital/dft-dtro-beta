@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
-using System.Collections.Generic;
 
 namespace DfT.DTRO.Services.Validation;
 
@@ -13,8 +13,7 @@ public class JsonSchemaValidationService : IJsonSchemaValidationService
         var parsedSchema = JSchema.Parse(jsonSchemaAsString);
         var parsedBody = JObject.Parse(inputJson);
 
-        IList<ValidationError> validationErrors = new List<ValidationError>();
-        parsedBody.IsValid(parsedSchema, out validationErrors);
+        parsedBody.IsValid(parsedSchema, out IList<ValidationError> validationErrors);
 
         return validationErrors;
     }
