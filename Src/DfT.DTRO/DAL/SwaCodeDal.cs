@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.SwaCode;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,13 +36,20 @@ public class SwaCodeDal : ISwaCodeDal
     /// An implementation of <see cref="GetAllCodes"/>
     /// </summary>
     /// <returns>List of swa code responses</returns>
-    public async Task<List<SwaCodeResponse>> GetAllCodes() =>
-        await _dtroContext.SwaCodes
-            .Select(swaCode => new SwaCodeResponse
-            {
-                TraId = swaCode.TraId,
-                Name = swaCode.Name,
-                Prefix = swaCode.Prefix,
-                IsAdmin = swaCode.IsAdmin
-            }).ToListAsync();
+    public async Task<List<SwaCodeResponse>> GetAllCodes()
+    {
+     var swaCodeResponses = await _dtroContext.SwaCodes
+                        .OrderBy(swaCode => swaCode.Name)  // Order by Name
+                        .Select(swaCode => new SwaCodeResponse
+                        {
+                            TraId = swaCode.TraId,
+                            Name = swaCode.Name,
+                            Prefix = swaCode.Prefix,
+                            IsAdmin = swaCode.IsAdmin
+                        })
+                        .ToListAsync();
+
+       
+        return swaCodeResponses;
+    }
 }

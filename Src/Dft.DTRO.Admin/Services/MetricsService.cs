@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Dft.DTRO.Admin.Services;
 public class MetricsService : IMetricsService
@@ -13,7 +10,6 @@ public class MetricsService : IMetricsService
     {
         _client = clientFactory.CreateClient("ExternalApi");
     }
-
 
     public async Task<bool> HealthApi()
     {
@@ -74,40 +70,28 @@ public class MetricsService : IMetricsService
         }
     }
 
-
     public async Task<MetricSummary> MetricsForTra(MetricRequest metricRequest)
     {
-        try
+        var jsonContent = JsonSerializer.Serialize(metricRequest);
+        var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+        // Create the request message
+        var request = new HttpRequestMessage(HttpMethod.Post, "/v1/metricsForTra")
         {
+            Content = param
+        };
 
-            var jsonContent = JsonSerializer.Serialize(metricRequest);
-            var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-            // Create the request message
-            var request = new HttpRequestMessage(HttpMethod.Post, "/v1/metricsForTra")
-            {
-                Content = param
-            };
+        Helper.AddHeaders(ref request);
 
-            Helper.AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
 
-            var response = await _client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
 
-            response.EnsureSuccessStatusCode();
-
-            var jsonResponse = await response.Content.ReadAsStringAsync();
-            var metricSummary = JsonSerializer.Deserialize<MetricSummary>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            if (metricSummary == null)
-            {
-                metricSummary = new MetricSummary();
-            }
-            return metricSummary;
-        }
-        catch (HttpRequestException ex)
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var metricSummary = JsonSerializer.Deserialize<MetricSummary>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        if (metricSummary == null)
         {
-
-            throw ex;
+            metricSummary = new MetricSummary();
         }
+        return metricSummary;
     }
-
-
 }

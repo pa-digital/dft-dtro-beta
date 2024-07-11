@@ -42,6 +42,6 @@ public class MetricSummary
     /// <summary>
     /// Gets or sets Event Count Metic.
     /// </summary>
-    [DataMember(Name = "eventCount ")]
+    [DataMember(Name = "eventCount")]
     public int EventCount { get; set; }
 }

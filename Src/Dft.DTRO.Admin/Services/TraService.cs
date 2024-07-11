@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Dft.DTRO.Admin.Services;
 public class TraService : ITraService
@@ -14,29 +13,21 @@ public class TraService : ITraService
         _client = clientFactory.CreateClient("ExternalApi");
     }
 
-
-    public async Task<List<LookupResponse>> GetTraLookup()
+    public async Task<List<SwaCodeResponse>> GetSwaCodes()
     {
-        List<LookupResponse> lookups = new();
+        var request = new HttpRequestMessage(HttpMethod.Get, "/v1/swaCodes");
+        Helper.AddHeaders(ref request);
 
-        var look = new LookupResponse() { Id = 1, Name = "Peter Hopins" };
-        lookups.Add(look);
+        var response = await _client.SendAsync(request);
 
-        look = new LookupResponse() { Id = 21, Name = "John Peters" };
-        lookups.Add(look);
+        response.EnsureSuccessStatusCode();
 
-        look = new LookupResponse() { Id = 3, Name = "Paul Hope" };
-        lookups.Add(look);
-
-        look = new LookupResponse() { Id = 41, Name = "Peter Bowles" };
-        lookups.Add(look);
-
-        look = new LookupResponse() { Id = 5, Name = "John Holly" };
-        lookups.Add(look);
-
-        look = new LookupResponse() { Id = 6, Name = "Paul Peters" };
-        lookups.Add(look);
-
-        return lookups;
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var swaCodeList = JsonSerializer.Deserialize<List<SwaCodeResponse>>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        if (swaCodeList == null)
+        {
+            swaCodeList = new List<SwaCodeResponse>();
+        }
+        return swaCodeList;
     }
 }
