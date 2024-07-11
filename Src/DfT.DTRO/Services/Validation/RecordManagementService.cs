@@ -1,39 +1,90 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using DfT.DTRO.DAL;
 using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.DtroDtos;
+using DfT.DTRO.Models.SwaCode;
 using DfT.DTRO.Models.Validation;
 
 namespace DfT.DTRO.Services.Validation;
 
+/// <summary>
+/// Implementation of <see cref="IRecordManagementService"/>
+/// </summary>
 public class RecordManagementService : IRecordManagementService
 {
+    private readonly ISwaCodeDal _swaCodeDal;
 
+    /// <summary>
+    /// main constructor
+    /// </summary>
+    /// <param name="swaCodeDal">injected service</param>
+    public RecordManagementService(ISwaCodeDal swaCodeDal)
+    {
+        _swaCodeDal = swaCodeDal;
+    }
+
+    /// <summary>
+    /// Validation service
+    /// </summary>
+    /// <param name="dtroSubmit">dtro parameter passed</param>
+    /// <param name="ta">TRA identification passed</param>
+    /// <returns>List of errors</returns>
     public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit, int? ta)
     {
         List<SemanticValidationError> validationErrors = new();
 
-        if (ta != null)
+        if (ta == null)
         {
-            var creator = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<int>("traCreator");
-            var owner = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<int>("currentTraOwner");
-
-            var isCreatorOrOwner = creator == ta | owner == ta;
-            if (!isCreatorOrOwner)
-            {
-                validationErrors.Add(new SemanticValidationError { Message = $"Traffic authority {ta} is not the creator or owner in the DTRO data submitted" });
-            }
-
-            var affected = dtroSubmit.Data.GetExpando("source").GetValue<IList<object>>("traAffected");
-            if (affected.Any(it => it is not long))
-            {
-                validationErrors.Add(new SemanticValidationError
-                {
-                    Message = "One or more traffic authorities affected identification is incorrect."
-                });
-            }
+            validationErrors.Add(new SemanticValidationError { Message = "TRA cannot be null" });
         }
+
+        List<SwaCodeResponse> swaCodes = _swaCodeDal.GetAllCodes().Result;
+
+        int creator = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<int>("traCreator");
+        bool isCreatorWithinSwaCodes = swaCodes.Select(response => response.TraId == creator).Any();
+        if (!isCreatorWithinSwaCodes)
+        {
+            validationErrors.Add(new SemanticValidationError
+            {
+                Message = $"TRA creator '{creator}' is not within accepted SWA codes."
+            });
+        }
+
+        int owner = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<int>("currentTraOwner");
+        bool isOwnerWithinSwaCodes = swaCodes.Select(response => response.TraId == owner).Any();
+        if (!isOwnerWithinSwaCodes)
+        {
+            validationErrors.Add(new SemanticValidationError
+            {
+                Message = $"TRA owner '{owner}' is not within accepted SWA codes."
+            });
+        }
+
+        IList<object> traAffected = dtroSubmit.Data.GetExpando("source").GetValue<IList<object>>("traAffected");
+        if (traAffected.Any(it => it is not long))
+        {
+            validationErrors.Add(new SemanticValidationError
+            {
+                Message = "One or more traffic authorities affected identification is incorrect."
+            });
+        }
+
+        validationErrors.AddRange(traAffected.Cast<long>()
+            .Select(item => new
+            {
+                item,
+                isTraAffectedWithinSwaCodes = swaCodes
+                    .Select(response => response.TraId == item)
+                    .Any()
+            })
+            .Where(it => !it.isTraAffectedWithinSwaCodes)
+            .Select(it =>
+                new SemanticValidationError
+                {
+                    Message = $"TRA affected '{it.item}' is not within the accepted SWA codes"
+                }));
 
         var sourceReference = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("reference");
         if (string.IsNullOrWhiteSpace(sourceReference))
