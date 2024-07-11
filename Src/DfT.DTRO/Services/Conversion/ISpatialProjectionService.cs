@@ -13,7 +13,7 @@ public interface ISpatialProjectionService
     /// <param name="coordinates">The coordinates to project.</param>
     /// <returns>The coordinates resulting from the projection.</returns>
     Coordinates Wgs84ToOsgb36(Coordinates coordinates)
-        => Wgs84ToOsgb36(coordinates.longitude, coordinates.latitude);
+        => Wgs84ToOsgb36(coordinates.Longitude, coordinates.Latitude);
 
     /// <summary>
     /// Projects coordinates from wgs84epsg4326 to osgb36epsg27700
@@ -29,10 +29,10 @@ public interface ISpatialProjectionService
     /// <returns>The coordinates resulting from the projection.</returns>
     BoundingBox Wgs84ToOsgb36(BoundingBox boundingBox)
         => Wgs84ToOsgb36(
-            boundingBox.westLongitude,
-            boundingBox.southLatitude,
-            boundingBox.eastLongitude,
-            boundingBox.northLatitude);
+            boundingBox.WestLongitude,
+            boundingBox.SouthLatitude,
+            boundingBox.EastLongitude,
+            boundingBox.NorthLatitude);
 
     /// <summary>
     /// Projects bounding box coordinates from wgs84epsg4326 to osgb36epsg27700

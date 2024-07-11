@@ -176,6 +176,7 @@ public class DtroService : IDtroService
         return completeList;
     }
 
+    /// <inheritdoc />
     public async Task<List<DtroHistoryProvisionResponse>> GetDtroProvisionHistoryAsync(Guid dtroId)
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);

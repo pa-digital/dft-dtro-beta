@@ -146,7 +146,7 @@ namespace Dft.DTRO.Tests
             return provisions;
         }
 
-        public static async Task<List<DTROHistory>> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
+        public static List<DTROHistory> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
         {
             List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
 

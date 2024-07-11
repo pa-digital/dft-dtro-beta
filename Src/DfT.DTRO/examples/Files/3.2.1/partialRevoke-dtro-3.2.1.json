@@ -2,10 +2,10 @@
     "schemaVersion": "3.2.1",
     "data": {
       "source": {
-        "actionType": "new",
+        "actionType": "amendment",
         "provision": [
           {
-            "actionType": "new",
+            "actionType": "partialRevoke",
             "addition": true,
             "orderReportingPoint": "ttroTtmoByNotice",
             "provisionDescription": "Prohibition of Waiting",
@@ -75,7 +75,7 @@
                           {
                             "vehicleCharacteristics": {
                               "vehicleType": [
-                                "anyVehicle"
+                                "bus"
                               ]
                             },
                             "negate": false
@@ -83,7 +83,7 @@
                           {
                             "vehicleCharacteristics": {
                               "vehicleType": [
-                                "taxi"
+                                "bus"
                               ]
                             },
                             "negate": true

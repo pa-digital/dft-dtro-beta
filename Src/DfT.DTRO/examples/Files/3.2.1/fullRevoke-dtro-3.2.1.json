@@ -2,10 +2,10 @@
     "schemaVersion": "3.2.1",
     "data": {
       "source": {
-        "actionType": "new",
+        "actionType": "amendment",
         "provision": [
           {
-            "actionType": "new",
+            "actionType": "fullRevoke",
             "addition": true,
             "orderReportingPoint": "ttroTtmoByNotice",
             "provisionDescription": "Prohibition of Waiting",
@@ -58,9 +58,7 @@
                 "conditions": [
                   {
                     "vehicleCharacteristics": {
-                      "vehicleType": [
-                        "taxi"
-                      ]
+
                     }
                   }
                 ],
@@ -74,17 +72,13 @@
                         "conditions": [
                           {
                             "vehicleCharacteristics": {
-                              "vehicleType": [
-                                "anyVehicle"
-                              ]
+
                             },
                             "negate": false
                           },
                           {
                             "vehicleCharacteristics": {
-                              "vehicleType": [
-                                "taxi"
-                              ]
+
                             },
                             "negate": true
                           }

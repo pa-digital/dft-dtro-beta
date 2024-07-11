@@ -37,6 +37,10 @@
                           45.94
                         ],
                         [
+                          10.22,
+                          -55.69
+                        ],
+                        [
                           -104.03,
                           45.94
                         ],
@@ -48,7 +52,7 @@
                     ],
                     "type": "Polygon"
                   },
-                  "crs": "osgb36Epsg27700",
+                  "crs": "wkt",
                   "geometryType": "polygon"
                 }
               }

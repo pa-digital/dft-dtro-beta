@@ -14,7 +14,7 @@ public class BoundingBoxValueConverter : ValueConverter<BoundingBox, NpgsqlBox>
     /// </summary>
     public BoundingBoxValueConverter()
         : base(
-        bbox => new NpgsqlBox(bbox.northLatitude, bbox.eastLongitude, bbox.southLatitude, bbox.westLongitude),
+        boundingBox => new NpgsqlBox(boundingBox.NorthLatitude, boundingBox.EastLongitude, boundingBox.SouthLatitude, boundingBox.WestLongitude),
         npgBox => new BoundingBox(npgBox.Left, npgBox.Bottom, npgBox.Right, npgBox.Top))
     {
     }

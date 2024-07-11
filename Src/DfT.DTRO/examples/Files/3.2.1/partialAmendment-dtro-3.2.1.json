@@ -2,10 +2,10 @@
     "schemaVersion": "3.2.1",
     "data": {
       "source": {
-        "actionType": "new",
+        "actionType": "amendment",
         "provision": [
           {
-            "actionType": "new",
+            "actionType": "partialAmendment",
             "addition": true,
             "orderReportingPoint": "ttroTtmoByNotice",
             "provisionDescription": "Prohibition of Waiting",
@@ -59,7 +59,7 @@
                   {
                     "vehicleCharacteristics": {
                       "vehicleType": [
-                        "taxi"
+                        "bus"
                       ]
                     }
                   }
