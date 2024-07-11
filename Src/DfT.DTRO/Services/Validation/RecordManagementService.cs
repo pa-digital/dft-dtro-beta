@@ -9,15 +9,28 @@ using DfT.DTRO.Models.Validation;
 
 namespace DfT.DTRO.Services.Validation;
 
+/// <summary>
+/// Implementation of <see cref="IRecordManagementService"/>
+/// </summary>
 public class RecordManagementService : IRecordManagementService
 {
     private readonly ISwaCodeDal _swaCodeDal;
 
+    /// <summary>
+    /// main constructor
+    /// </summary>
+    /// <param name="swaCodeDal">injected service</param>
     public RecordManagementService(ISwaCodeDal swaCodeDal)
     {
         _swaCodeDal = swaCodeDal;
     }
 
+    /// <summary>
+    /// Validation service
+    /// </summary>
+    /// <param name="dtroSubmit">dtro parameter passed</param>
+    /// <param name="ta">TRA identification passed</param>
+    /// <returns>List of errors</returns>
     public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit, int? ta)
     {
         List<SemanticValidationError> validationErrors = new();
@@ -58,7 +71,7 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        validationErrors.AddRange(traAffected.Cast<int>()
+        validationErrors.AddRange(traAffected.Cast<long>()
             .Select(item => new
             {
                 item,
