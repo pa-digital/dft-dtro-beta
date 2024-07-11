@@ -1,5 +1,5 @@
 {
-    "schemaVersion": "3.2.0",
+    "schemaVersion": "3.2.1",
     "data": {
       "source": {
         "actionType": "new",
@@ -218,7 +218,7 @@
         "section": "All sections",
         "traCreator": 1585,
         "currentTraOwner": 1585,
-        "traAffected": [ 10, 11, 12 ],
+        "traAffected": [ 1585, 7516, 7125 ],
         "troName": "The Essex County Council (Braintree District) (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"
       }
     }

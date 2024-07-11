@@ -126,55 +126,69 @@
 			],
 			"type": "object"
 		},
-		"Condition": {
+		"condition": {
 			"additionalProperties": false,
 			"description": "Abstract class that specifies a condition for the validity of a certain road feature such as time, weather conditions, vehicle type, vehicle propulsion fuel, vehicle occupancy, vehicle usage, restrictions of the vehicle driver’s licence permissions, vehicle dimensions or weight characteristics.",
 			"properties": {
-				"ConditionSet": {
-					"$ref": "#/$defs/ConditionSet"
+				"conditionSet": {
+					"items": {
+						"$ref": "#/$defs/conditionSet"
+					},
+					"minItems": 1,
+					"type": "array",
+					"required": false
 				},
-				"RateTable": {
-					"$ref": "#/$defs/RateTable"
-				},
-				"Regulation": {
-					"$ref": "#/$defs/Regulation"
+				"rateTable": {
+					"$ref": "#/$defs/rateTable"
 				},
 				"negate": {
 					"description": "If set to true means that the entire condition shall be negated.",
 					"type": "boolean"
 				}
 			},
-			"required": [
-				"Regulation"
-			],
 			"type": "object"
 		},
-		"ConditionSet": {
+		"conditionSet": {
 			"additionalProperties": false,
 			"description": "Groups a number of conditions into a condition set",
 			"properties": {
-				"ConditionSet": {
-					"$ref": "#/$defs/ConditionSet"
-				},
-				"RateTable": {
-					"$ref": "#/$defs/RateTable"
-				},
-				"Regulation": {
-					"$ref": "#/$defs/Regulation"
+				"rateTable": {
+					"$ref": "#/$defs/rateTable"
 				},
 				"conditions": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Condition"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Condition"
+					"items": {
+						"anyOf": [
+							{
+								"$ref": "#/$defs/RoadCondition"
 							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
+							{
+								"$ref": "#/$defs/occupantCondition"
+							},
+							{
+								"$ref": "#/$defs/driverCondition"
+							},
+							{
+								"$ref": "#/$defs/accessCondition"
+							},
+							{
+								"$ref": "#/$defs/validityCondition"
+							},
+							{
+								"$ref": "#/$defs/NonVehicularRoadUserCondition"
+							},
+							{
+								"$ref": "#/$defs/PermitCondition"
+							},
+							{
+								"$ref": "#/$defs/VehicleCondition"
+							},
+							{
+								"$ref": "#/$defs/conditionSet"
+							}
+						]
+					},
+					"minItems": 1,
+					"type": "array"
 				},
 				"negate": {
 					"description": "If set to true means that the entire condition shall be negated.",
@@ -182,41 +196,34 @@
 				},
 				"operator": {
 					"$ref": "#/$defs/conditionOperatorType",
-					"description": "The operator to be used in the characteristic comparison operation."
+					"description": "Operators as per CEN TS 16157-11:2022."
 				}
 			},
 			"required": [
-				"Regulation",
-				"conditions",
-				"operator"
+				"operator",
+				"negate",
+				"conditions"
 			],
 			"type": "object"
 		},
-		"Consultation": {
+		"consultation": {
 			"additionalProperties": false,
-			"description": "to be defined",
 			"properties": {
-				"Source": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Source"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Source"
-							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
+				"source": {
+					"items": {
+						"$ref": "#/$defs/source"
+					},
+					"minItems": 1,
+					"type": "array"
 				},
 				"consultationName": {
-					"description": "Free text descriptive name for the consultation given by the Local Authority.",
+					"description": "Free text descriptive name for the consultation given by the Local authority.",
 					"type": "string"
 				},
-				"endOfConsultation": {
+				"endOfconsultation": {
 					"description": "Time and date of the end of the consultation period",
-					"type": "string"
+					"type": "string",
+					"format": "date-time"
 				},
 				"howToComment": {
 					"description": "Free text description detailing how to comment on the proposal which is the subject of the consultation.",
@@ -230,13 +237,15 @@
 					"description": "Postal or office address location to support receipt of comments / objections to consultation proposals.",
 					"type": "string"
 				},
-				"point_of_contact_email": {
+				"pointOfContactEmail": {
 					"description": "Email address location to support receipt of comments / objections to consultation proposals.",
-					"type": "string"
+					"type": "string",
+					"format": "email"
 				},
-				"startOfConsultation": {
+				"startOfconsultation": {
 					"description": "Time and date of the start of the consultation period",
-					"type": "string"
+					"type": "string",
+					"format": "date-time"
 				},
 				"statementOfReason": {
 					"type": "string"
@@ -247,208 +256,88 @@
 				}
 			},
 			"required": [
-				"Source",
+				"source",
 				"consultationName",
-				"endOfConsultation",
+				"endOfconsultation",
 				"statementOfReason"
 			],
 			"type": "object"
 		},
-		"DayWeekMonth": {
+		"dayWeekMonth": {
 			"additionalProperties": false,
 			"description": "Specification of periods defined by the intersection of days or instances of them, calendar weeks and months.  [EN 16157-7:2018]",
 			"properties": {
-				"Period": {
-					"$ref": "#/$defs/Period"
-				},
 				"applicableDay": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/dayType",
-							"description": "Applicable day of the week. “All days of the week” is expressed by non-inclusion of this attribute. [EN 16157-7:2018]"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/dayType",
-								"description": "Applicable day of the week. “All days of the week” is expressed by non-inclusion of this attribute. [EN 16157-7:2018]"
-							},
-							"maxItems": 7,
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/dayType",
+						"description": "Applicable day of the week. “All days of the week” is expressed by non-inclusion of this attribute. [EN 16157-7:2018]"
+					},
+					"type": "array",
+					"uniqueItems": true
 				},
 				"applicableMonth": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/monthType",
-							"description": "Applicable  month  of  the  year. “All months of the year” is expressed by non- inclusion of this attribute."
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/monthType",
-								"description": "Applicable  month  of  the  year.  “All months of the year” is expressed by non- inclusion of this attribute."
-							},
-							"maxItems": 12,
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/monthType",
+						"description": "Applicable  month  of  the  year.  “All months of the year” is expressed by non- inclusion of this attribute."
+					},
+					"type": "array",
+					"uniqueItems": true
 				}
 			},
-			"required": [
-				"Period"
-			],
 			"type": "object"
 		},
-		"DirectedLinear": {
-			"additionalProperties": false,
-			"description": "Object indicating characteristics relating to specified direction linear geometric location",
-			"properties": {
-				"RegulatedPlace": {
-					"$ref": "#/$defs/RegulatedPlace"
-				},
-				"destination": {
-					"$ref": "#/$defs/ExternalReference"
-				},
-				"directedLineString": {
-					"$ref": "#/$defs/anyType"
-				},
-				"intermediateLocation": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/ExternalReference"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/ExternalReference"
-							},
-							"type": "array"
-						}
-					]
-				},
-				"origin": {
-					"$ref": "#/$defs/ExternalReference"
-				},
-				"version": {
-					"type": "integer"
-				}
-			},
-			"required": [
-				"RegulatedPlace",
-				"destination",
-				"directedLineString",
-				"origin",
-				"version"
-			],
-			"type": "object"
-		},
-		"DriverCondition": {
+		"driverCondition": {
 			"additionalProperties": false,
 			"description": "Object indicating condition related to driver characteristics",
 			"properties": {
-				"AgeOfDriver": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/AgeOfDriver"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/AgeOfDriver"
-							},
-							"maxItems": 2,
-							"type": "array"
-						}
-					]
+				"ageOfDriver": {
+					"items": {
+						"$ref": "#/$defs/ageOfDriver"
+					},
+					"type": "array"
 				},
-				"ConditionSet": {
-					"$ref": "#/$defs/ConditionSet"
+				"conditionSet": {
+					"items": {
+						"$ref": "#/$defs/conditionSet"
+					},
+					"minItems": 1,
+					"type": "array",
+					"required": false
 				},
-				"RateTable": {
-					"$ref": "#/$defs/RateTable"
-				},
-				"Regulation": {
-					"$ref": "#/$defs/Regulation"
-				},
-				"TimeDriversLicenseHeld": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/TimeDriversLicenseHeld"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/TimeDriversLicenseHeld"
-							},
-							"maxItems": 2,
-							"type": "array"
-						}
-					]
+				"rateTable": {
+					"$ref": "#/$defs/rateTable"
 				},
 				"driverCharacteristicsType": {
-					"$ref": "#/$defs/anyType",
-					"description": "indicates a specific type of driver characteristic"
+					"description": "indicates a specific type of driver characteristic",
+					"type": "string"
 				},
 				"licenseCharacteristics": {
-					"$ref": "#/$defs/anyType",
-					"description": "indicates a characteristic relating to the driver's license"
+					"description": "indicates a characteristic relating to the driver's license",
+					"type": "string"
 				},
 				"negate": {
 					"description": "If set to true means that the entire condition shall be negated.",
 					"type": "boolean"
 				}
 			},
-			"required": [
-				"Regulation"
-			],
 			"type": "object"
 		},
-		"ElementaryStreetUnit": {
-			"additionalProperties": false,
-			"description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer",
-			"properties": {
-				"UniqueStreetReferenceNumber": {
-					"$ref": "#/$defs/UniqueStreetReferenceNumber"
-				},
-				"esu": {
-					"maximum": 9223372036854775807,
-					"minimum": -9223372036854775808,
-					"type": "integer"
-				}
-			},
-			"required": [
-				"UniqueStreetReferenceNumber",
-				"esu"
-			],
-			"type": "object"
-		},
-		"Emissions": {
+		"emissions": {
 			"additionalProperties": false,
 			"description": "Emission characteristics of vehicles.",
 			"properties": {
-				"VehicleCharacteristics": {
-					"$ref": "#/$defs/VehicleCharacteristics"
-				},
 				"emissionClassificationEuro": {
-					"$ref": "#/$defs/anyType",
-					"description": "The minimum Euro emission classification the vehicle(s) have to comply   with   according   to   the   1970\nDirective 70/220/EEC   and   its   several amendments. Note that vehicleType and\nfuelType need to be provided in order to\nmake this classification explicit."
+					"description": "The minimum Euro emission classification the vehicle(s) have to comply   with   according   to   the   1970\r\nDirective 70/220/EEC   and   its   several amendments. Note that vehicleType and\r\nfuelType need to be provided in order to\r\nmake this classification explicit.",
+					"type": "string"
 				},
 				"emissionClassificationOther": {
-					"anyOf": [
-						{
-							"description": "Some  other  (probably  locally  defined)\nvalue(s) for emission classification.",
-							"type": "string"
-						},
-						{
-							"items": {
-								"description": "Some  other  (probably  locally  defined)\nvalue(s) for emission classification.",
-								"type": "string"
-							},
-							"type": "array"
-						}
-					]
+					"items": {
+						"description": "Some  other  (probably  locally  defined)\r\nvalue(s) for emission classification.",
+						"type": "string"
+					},
+					"type": "array"
 				}
 			},
-			"required": [
-				"VehicleCharacteristics"
-			],
 			"type": "object"
 		},
 		"ExtensionEnumeration": {
@@ -464,7 +353,6 @@
 					"description": "enumeration list that the next list entry is to be applied to"
 				},
 				"value": {
-					"description": "{none}",
 					"type": "string"
 				}
 			},
@@ -475,43 +363,25 @@
 			],
 			"type": "object"
 		},
-		"ExternalReference": {
+		"externalReference": {
 			"additionalProperties": false,
 			"description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer",
 			"properties": {
-				"DirectedLinear": {
-					"$ref": "#/$defs/DirectedLinear"
-				},
-				"LinearGeometry": {
-					"$ref": "#/$defs/LinearGeometry"
-				},
-				"PointGeometry": {
-					"$ref": "#/$defs/PointGeometry"
-				},
-				"Polygon": {
-					"$ref": "#/$defs/Polygon"
-				},
-				"UniqueStreetReferenceNumber": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/UniqueStreetReferenceNumber"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/UniqueStreetReferenceNumber"
-							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
-				},
 				"lastUpdateDate": {
-					"type": "string"
+					"description": "the last update data for the referenced USRN",
+					"type": "string",
+					"format": "date-time"
+				},
+				"usrn": {
+					"description": "Reference to the Unique Street Reference Number",
+					"maximum": 99999999,
+					"minimum": 0,
+					"type": "integer"
 				}
 			},
 			"required": [
-				"UniqueStreetReferenceNumber",
-				"lastUpdateDate"
+				"lastUpdateDate",
+				"usrn"
 			],
 			"type": "object"
 		},
@@ -525,9 +395,6 @@
 				"changeableTimePeriodStart": {
 					"$ref": "#/$defs/changeableTimePeriodStart"
 				},
-				"OverallPeriod": {
-					"$ref": "#/$defs/OverallPeriod"
-				},
 				"endOfPeriod": {
 					"description": "end date time of period",
 					"type": "string",
@@ -537,51 +404,23 @@
 					"description": "Free text name of the period.",
 					"type": "string"
 				},
-				"recurrents": {
-					"description": "the number of repetitions of a repeating period",
-					"type": "integer"
-				},
 				"recurringDayWeekMonthPeriod": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/dayWeekMonth"
-						},
-						{
-							"items": {
-							"$ref": "#/$defs/dayWeekMonth"
-							},
-							"type": "array"
-						}
-					]
-				},
-				"recurringPeriod": {
-					"description": "the duration between the start of instances of repeating periods.\nWhere changeable start and end time concepts are defined (such as Easter) this duration should be set to an appropriate duration (e.g. one year) if the changeable time concept follows a known pattern.",
-					"type": "string"
+					"items": {
+						"$ref": "#/$defs/dayWeekMonth"
+					},
+					"type": "array"
 				},
 				"recurringSpecialDay": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/specialDay"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/specialDay"
-							},
-							"type": "array"
-						}
-					],				},
+					"items": {
+						"$ref": "#/$defs/specialDay"
+					},
+					"type": "array"
+				},
 				"recurringTimePeriodOfDay": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/timePeriodOfDay"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/timePeriodOfDay"
-							},
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/timePeriodOfDay"
+					},
+					"type": "array"
 				},
 				"startOfPeriod": {
 					"description": "start date time of period",
@@ -589,112 +428,56 @@
 					"format": "date-time"
 				}
 			},
-			"required": [
-				"OverallPeriod"
-			],
 			"type": "object"
 		},
 		"changeableTimePeriodEnd": {
 			"additionalProperties": false,
 			"description": "Object indicating end of the time period with non-precise characteristics",
 			"properties": {
-				"changeableTimePeriod": {
-					"$ref": "#/$defs/changeableTimePeriod"
-				},
-				"endType": {
-					"description": "indicates the type of non-precise characteristic time measure used",
-					"$ref": "#/$defs/changeableTimeType"
-				},
-				"specialDay": {
-					"$ref": "#/$defs/specialDay"
-				}
-			},
-			"required": [
-				"changeableTimePeriod",
-				"endType"
-			],
-			"type": "object"
-		},
-		"changeableTimePeriodEntry": {
-			"additionalProperties": false,
-			"description": "Object provides information concerning one instance of a changeable time entry",
-			"properties": {
-				"ChangeableTimePeriodStart": {
-					"$ref": "#/$defs/ChangeableTimePeriodStart"
-				},
-				"entry": {
-					"description": "one value in a changeable time set",
-					"type": "string"
-				}
-			},
-			"required": [
-				"ChangeableTimePeriodStart",
-				"entry"
-			],
-			"type": "object"
-		},
-		"ChangeableTimePeriodSource": {
-			"additionalProperties": false,
-			"description": "Object provides information concerning where details of the changeable time period are to be found",
-			"properties": {
-				"ChangeableTimePeriodStart": {
-					"$ref": "#/$defs/ChangeableTimePeriodStart"
-				},
 				"definition": {
+					"description": "definition of the flexible time concept referenced",
+					"type": "string"
+				},
+				"changeableEndType": {
 					"description": "indicates the type of non-precise characteristic time measure used",
 					"type": "string"
 				},
 				"sourceLocator": {
-					"$ref": "#/$defs/anyType",
-					"description": "URL where values and related dates of flexible time concepts are found"
+					"description": "URL where values and related dates of flexible time concepts are found",
+					"type": "string"
 				}
 			},
 			"required": [
-				"ChangeableTimePeriodStart",
 				"definition",
-				"sourceLocator"
+				"changeableEndType"
 			],
 			"type": "object"
 		},
-		"ChangeableTimePeriodStart": {
+		"changeableTimePeriodStart": {
 			"additionalProperties": false,
-			"description": "Object indicating start of the time period with changeable (but defined) characteristics",
+			"description": "Object indicating start of the time period with non-precise characteristics",
 			"properties": {
-				"ChangeableTimePeriod": {
-					"$ref": "#/$defs/ChangeableTimePeriod"
+				"definition": {
+					"description": "definition of the flexible time concept referenced",
+					"type": "string"
 				},
-				"ChangeableTimePeriodEntry": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/ChangeableTimePeriodEntry"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/ChangeableTimePeriodEntry"
-							},
-							"type": "array"
-						}
-					]
+				"changeableStartType": {
+					"description": "indicates the type of non-precise characteristic time measure used",
+					"type": "string"
 				},
-				"ChangeableTimePeriodSource": {
-					"$ref": "#/$defs/ChangeableTimePeriodSource"
-				},
-				"SpecialDay": {
-					"$ref": "#/defs/SpecialDay"
-				},
-				"startType": {
-					"$ref": "#/$defs/changeableTimeType",
-					"description": "indicates the type of non-precise characteristic time measure used"
+				"sourceLocator": {
+					"description": "URL where values and related dates of flexible time concepts are found",
+					"type": "string"
 				}
 			},
 			"required": [
-				"ChangeableTimePeriod",
-				"startType"
+				"definition",
+				"changeableStartType"
 			],
 			"type": "object"
 		},
-		"PolygonGeometry": {
-			"description": "Well-known text PolygonGeometry",
+		"Polygon": {
+			"description": "WKT Polygon",
 			"additionalProperties": false,
 			"type": "object",
 			"required": [
@@ -709,12 +492,54 @@
 					]
 				},
 				"coordinates": {
-					"type": "string"
+					"type": "array",
+					"items": {
+						"type": "array",
+						"minItems": 4,
+						"items": {
+							"type": "array",
+							"minItems": 2,
+							"items": {
+								"type": "number"
+							}
+						}
+					}
+				}
+			}
+		},
+		"DirectedLinear": {
+			"description": "WKT Directed Linear",
+			"additionalProperties": false,
+			"type": "object",
+			"required": [
+				"type",
+				"coordinates"
+			],
+			"properties": {
+				"type": {
+					"type": "string",
+					"enum": [
+						"DirectedLinear"
+					]
+				},
+				"coordinates": {
+					"type": "array",
+					"items": {
+						"type": "array",
+						"minItems": 4,
+						"items": {
+							"type": "array",
+							"minItems": 2,
+							"items": {
+								"type": "number"
+							}
+						}
+					}
 				}
 			}
 		},
 		"PointGeometry": {
-			"description": "Well-known text PointGeometry",
+			"description": "WKT Point",
 			"additionalProperties": false,
 			"type": "object",
 			"required": [
@@ -729,12 +554,16 @@
 					]
 				},
 				"coordinates": {
-					"type": "string"
+					"type": "array",
+					"minItems": 2,
+					"items": {
+						"type": "number"
+					}
 				}
 			}
 		},
-		"LinearGeomtry": {
-			"description": "Well-known text LinearGeometry",
+		"LinearGeometry": {
+			"description": "WKT linearGeometry",
 			"additionalProperties": false,
 			"type": "object",
 			"required": [
@@ -745,7 +574,7 @@
 				"type": {
 					"type": "string",
 					"enum": [
-						"Linear"
+						"linearGeometry"
 					]
 				},
 				"coordinates": {
@@ -765,68 +594,70 @@
 			"additionalProperties": false,
 			"description": "Object indicating a specific regulation (other than speed limit or user-defined offlist regulation)",
 			"properties": {
-				"Condition": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Condition"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Condition"
+				"conditions": {
+					"items": {
+						"oneOf": [
+							{
+								"$ref": "#/$defs/RoadCondition"
 							},
-							"type": "array"
-						}
-					]
-				},
-				"OverallPeriod": {
-					"$ref": "#/$defs/OverallPeriod"
-				},
-				"Provision": {
-					"$ref": "#/$defs/Provision"
-				},
-				"TemporaryRegulation": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/TemporaryRegulation"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/TemporaryRegulation"
+							{
+								"$ref": "#/$defs/occupantCondition"
 							},
-							"type": "array"
-						}
-					]
+							{
+								"$ref": "#/$defs/driverCondition"
+							},
+							{
+								"$ref": "#/$defs/accessCondition"
+							},
+							{
+								"$ref": "#/$defs/validityCondition"
+							},
+							{
+								"$ref": "#/$defs/NonVehicularRoadUserCondition"
+							},
+							{
+								"$ref": "#/$defs/PermitCondition"
+							},
+							{
+								"$ref": "#/$defs/VehicleCondition"
+							},
+							{
+								"$ref": "#/$defs/conditionSet"
+							}
+						]
+					},
+					"type": "array"
+				},
+				"overallPeriod": {
+					"$ref": "#/$defs/overallPeriod"
+				},
+				"temporaryRegulation": {
+					"items": {
+						"$ref": "#/$defs/temporaryRegulation"
+					},
+					"type": "array"
 				},
 				"isDynamic": {
 					"description": "Indicates if the regulation is dynamic in nature",
 					"type": "boolean"
 				},
+				"regulationStatus": {
+					"$ref": "#/$defs/regulationStatusType",
+					"description": "Indicates the status of this Regulation"
+				},
 				"regulationType": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/regulationType",
-							"description": "Indicates the status of this Regulation"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/regulationType",
-								"description": "Indicates the status of this Regulation"
-							},
-							"maxItems": 2,
-							"minItems": 2,
-							"type": "array"
-						}
-					]
+					"$ref": "#/$defs/regulationType",
+					"description": "indicates the type of regulation referenced"
 				},
 				"timeZone": {
-					"description": "IANA time-zone (see http://www.iana.org/time-zones)",
-					"type": "string"
+					"$ref": "#/$defs/timeZone",
+					"description": "IANA time-zone (see http://www.iana.org/time-zones)"
 				}
 			},
 			"required": [
-				"OverallPeriod",
-				"Provision",
+				"overallPeriod",
 				"isDynamic",
+				"regulationStatus",
 				"regulationType",
 				"timeZone"
 			],
@@ -834,28 +665,25 @@
 		},
 		"geometry": {
 			"additionalProperties": false,
-			"description": "Geometry string defined as per WKT (ISO/IEC 13249-3:2016).\r\n\r\nFor moving traffic TROs, the geometry is expected to be defined as appropriate. Often this can by use of the linestring, with coordinates derived from a well-known linear road network model (such as OS Highways). For kerbside restriction TROs, the geometry would normally be represented by a zone (polygon) or linestring representing the shape of the related kerbline.",
+			"description": "Geometry string defined as per WKT (RFC7946).\r\n\r\nFor moving traffic TROs, the geometry is expected to be defined as appropriate. Often this can by use of the linearGeometry, with coordinates derived from a well-known linear road network model (such as OS Highways). For kerbside restriction TROs, the geometry would normally be represented by a zone (polygon) or linearGeometry representing the shape of the related kerbline.",
 			"properties": {
 				"coordinates": {
 					"description": "coordinate pairs defined in WKT format",
 					"type": "object"
 				},
+				"crs": {
+					"$ref": "#/$defs/crsType",
+					"description": "Coordinate referencing system"
+				},
 				"geometryType": {
 					"$ref": "#/$defs/geometryType",
 					"description": "Indicates the type of geometry defined"
-				},
-				"RegulatedPlace": {
-					"$ref": "#/defs/RegulatedPlace"
-				},
-				"Version": {
-					"type": "integer"
 				}
 			},
 			"required": [
 				"coordinates",
-				"geometryType",
-				"RegulatedPlace",
-				"Version"
+				"crs",
+				"geometryType"
 			],
 			"type": "object",
 			"allOf": [
@@ -863,14 +691,14 @@
 					"if": {
 						"properties": {
 							"geometryType": {
-								"const": "polygonGeometry"
+								"const": "polygon"
 							}
 						}
 					},
 					"then": {
 						"properties": {
 							"coordinates": {
-								"$ref": "#/$defs/PolygonGeometry"
+								"$ref": "#/$defs/Polygon"
 							}
 						}
 					}
@@ -879,7 +707,7 @@
 					"if": {
 						"properties": {
 							"geometryType": {
-								"const": "pointGeometry"
+								"const": "point"
 							}
 						}
 					},
@@ -906,47 +734,27 @@
 							}
 						}
 					}
-				},
-				{
-					"if": {
-						"properties": {
-							"geometryType": {
-								"const": "directedLinear"
-							}
-						}
-					},
-					"then": {
-						"properties": {
-							"coordinates": {
-								"$ref": "#/$defs/DirectedLinear"
-							}
-						}
-					}
 				}
 			]
 		},
-		"GrossWeightCharacteristic": {
+		"grossWeightCharacteristic": {
 			"additionalProperties": false,
 			"description": "Gross weight characteristic of a vehicle.",
 			"properties": {
-				"VehicleCharacteristics": {
-					"$ref": "#/$defs/VehicleCharacteristics"
-				},
 				"comparisonOperator": {
-					"$ref": "#/$defs/anyType",
+					"$ref": "#/$defs/comparisonOperatorType",
 					"description": "The operator  to  be used in  the  vehicle characteristic comparison operation."
 				},
 				"grossVehicleWeight": {
-					"$ref": "#/$defs/anyType",
-					"description": "The gross weight of the vehicle and its load, including any trailers."
+					"description": "The gross weight of the vehicle and its load, including any trailers.",
+					"type": "integer"
 				},
 				"typeOfWeight": {
-					"$ref": "#/$defs/anyType",
-					"description": "The meaning of the weight value"
+					"description": "The meaning of the weight value",
+					"type": "string"
 				}
 			},
 			"required": [
-				"VehicleCharacteristics",
 				"comparisonOperator",
 				"grossVehicleWeight",
 				"typeOfWeight"
@@ -972,47 +780,20 @@
 			],
 			"type": "object"
 		},
-		"HeaviestAxleWeightCharacteristic": {
-			"additionalProperties": false,
-			"description": "Object indicating condition related to the heaviest axle of vehicle",
-			"properties": {
-				"VehicleCharacteristics": {
-					"$ref": "#/$defs/VehicleCharacteristics"
-				},
-				"comparisonOperator": {
-					"$ref": "#/$defs/anyType",
-					"description": "The operator  to  be used in  the  vehicle characteristic comparison operation."
-				},
-				"heaviestAxleWeight": {
-					"$ref": "#/$defs/anyType",
-					"description": "indicates a characteristic relating to the heaviest axle of vehicle"
-				}
-			},
-			"required": [
-				"VehicleCharacteristics",
-				"comparisonOperator",
-				"heaviestAxleWeight"
-			],
-			"type": "object"
-		},
-		"HeightCharacteristic": {
+		"heightCharacteristic": {
 			"additionalProperties": false,
 			"description": "height characteristic of a vehicle",
 			"properties": {
-				"VehicleCharacteristics": {
-					"$ref": "#/$defs/VehicleCharacteristics"
-				},
 				"comparisonOperator": {
-					"$ref": "#/$defs/anyType",
+					"$ref": "#/$defs/comparisonOperatorType",
 					"description": "The operator  to  be used in  the  vehicle characteristic comparison operation."
 				},
 				"vehicleHeight": {
-					"$ref": "#/$defs/anyType",
-					"description": "height of the highest part, excluding \nantennae, of an individual vehicle from the \nreference plane defined by the bottom of the \nwheels touching the ground, in metres"
+					"description": "height of the highest part, excluding \r\nantennae, of an individual vehicle from the \r\nreference plane defined by the bottom of the \r\nwheels touching the ground, in metres",
+					"type": "integer"
 				}
 			},
 			"required": [
-				"VehicleCharacteristics",
 				"comparisonOperator",
 				"vehicleHeight"
 			],
@@ -1022,136 +803,53 @@
 			"additionalProperties": false,
 			"description": "Instances of a day of the week in a month",
 			"properties": {
-				"Period": {
-					"$ref": "#/$defs/Period"
-				},
 				"applicableDay": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/dayType",
-							"description": "Applicable day of the week. “All days of the week” is expressed by non-inclusion of this attribute. [EN 16157-7:2018]"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/dayType",
-								"description": "Applicable day of the week. “All days of the week” is expressed by non-inclusion of this attribute. [EN 16157-7:2018]"
-							},
-							"maxItems": 7,
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/dayType",
+						"description": "Applicable day of the week. “All days of the week” is expressed by non-inclusion of this attribute. [EN 16157-7:2018]"
+					},
+					"type": "array",
+					"uniqueItems": true
 				},
 				"applicableInstanceOfDayWithinMonth": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/instanceOfDayInMonth",
-							"description": "defines instances of a day in a month (e.g. second Tuesday)"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/instanceOfDayInMonth",
-								"description": "defines instances of a day in a month (e.g. second Tuesday)"
-							},
-							"maxItems": 5,
-							"minItems": 1,
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/instanceOfDayInMonth",
+						"description": "defines instances of a day in a month (e.g. second Tuesday)"
+					},
+					"minItems": 1,
+					"type": "array",
+					"uniqueItems": true
 				},
 				"applicableMonth": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/monthType",
-							"description": "Applicable  month  of  the  year.  “All months of the year” is expressed by non- inclusion of this attribute."
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/monthType",
-								"description": "Applicable  month  of  the  year.  “All months of the year” is expressed by non- inclusion of this attribute."
-							},
-							"maxItems": 12,
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/monthType",
+						"description": "Applicable  month  of  the  year.  “All months of the year” is expressed by non- inclusion of this attribute."
+					},
+					"type": "array",
+					"uniqueItems": true
 				}
 			},
 			"required": [
-				"Period",
 				"applicableInstanceOfDayWithinMonth"
 			],
 			"type": "object"
 		},
-		"LengthCharacteristic": {
+		"lengthCharacteristic": {
 			"additionalProperties": false,
 			"description": "Length characteristic of a vehicle.",
 			"properties": {
-				"VehicleCharacteristics": {
-					"$ref": "#/$defs/VehicleCharacteristics"
-				},
 				"comparisonOperator": {
-					"$ref": "#/$defs/anyType",
+					"$ref": "#/$defs/comparisonOperatorType",
 					"description": "The operator  to  be used in  the  vehicle characteristic comparison operation"
 				},
 				"vehicleLength": {
-					"$ref": "#/$defs/anyType",
-					"description": "The overall distance between the front and back of an individual vehicle, including the length of any trailers, couplings, embedded features etc."
-				}
-			},
-			"required": [
-				"VehicleCharacteristics",
-				"comparisonOperator",
-				"vehicleLength"
-			],
-			"type": "object"
-		},
-		"LinearGeometry": {
-			"additionalProperties": false,
-			"description": "Object indicating characteristics relating to a linear geometric location",
-			"properties": {
-				"ExternalReference": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/ExternalReference"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/ExternalReference"
-							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
-				},
-				"RegulatedPlace": {
-					"$ref": "#/$defs/RegulatedPlace"
-				},
-				"direction": {
-					"$ref": "#/$defs/linearDirectionType",
-					"description": "indicates the direction of the applicability of the referenced regulation"
-				},
-				"lateralPosition": {
-					"$ref": "#/$defs/linearLateralPositionType",
-					"description": "indicates the lateral position across a road of the linear representation of a regulated place."
-				},
-				"linestring": {
-					"$ref": "#/$defs/anyType"
-				},
-				"representation": {
-					"$ref": "#/$defs/linearType",
-					"description": "indicates the nature of the point location for a linear representation of a regulated place."
-				},
-				"version": {
+					"description": "The overall distance between the front and back of an individual vehicle, including the length of any trailers, couplings, embedded features etc.",
 					"type": "integer"
 				}
 			},
 			"required": [
-				"ExternalReference",
-				"RegulatedPlace",
-				"direction",
-				"lateralPosition",
-				"linestring",
-				"representation",
-				"version"
+				"comparisonOperator",
+				"vehicleLength"
 			],
 			"type": "object"
 		},
@@ -1159,40 +857,38 @@
 			"additionalProperties": false,
 			"description": "Object indicating characteristics about non-vehicular road users",
 			"properties": {
-				"ConditionSet": {
-					"$ref": "#/$defs/ConditionSet"
+				"conditionSet": {
+					"items": {
+						"$ref": "#/$defs/conditionSet"
+					},
+					"minItems": 1,
+					"type": "array",
+					"required": false
 				},
-				"RateTable": {
-					"$ref": "#/$defs/RateTable"
-				},
-				"Regulation": {
-					"$ref": "#/$defs/Regulation"
+				"rateTable": {
+					"$ref": "#/$defs/rateTable"
 				},
 				"negate": {
 					"description": "If set to true means that the entire condition shall be negated.",
 					"type": "boolean"
 				},
 				"nonVehicularRoadUser": {
-					"$ref": "#/$defs/anyType",
-					"description": "Indicates the type of non-vehicular road user"
+					"description": "Indicates the type of non-vehicular road user",
+					"type": "string"
 				}
 			},
 			"required": [
-				"Regulation",
 				"nonVehicularRoadUser"
 			],
 			"type": "object"
 		},
-		"NumberOfAxlesCharacteristic": {
+		"numberOfAxlesCharacteristic": {
 			"additionalProperties": false,
 			"description": "Number of axles characteristic of a vehicle.",
 			"properties": {
-				"VehicleCharacteristics": {
-					"$ref": "#/$defs/VehicleCharacteristics"
-				},
 				"comparisonOperator": {
-					"$ref": "#/$defs/anyType",
-					"description": "The operator  to  be used in  the  vehicle characteristic comparison operation."
+					"description": "The operator  to  be used in  the  vehicle characteristic comparison operation.",
+					"type": "string"
 				},
 				"numberOfAxles": {
 					"description": "The    total    number    of    axles    of    an individual vehicle.",
@@ -1200,7 +896,6 @@
 				}
 			},
 			"required": [
-				"VehicleCharacteristics",
 				"comparisonOperator",
 				"numberOfAxles"
 			],
@@ -1210,51 +905,38 @@
 			"additionalProperties": false,
 			"description": "Object indicating conditional restrictions based on the number of vehicle occupants",
 			"properties": {
-				"OccupantCondition": {
-					"$ref": "#/$defs/OccupantCondition"
+				"occupantCondition": {
+					"$ref": "#/$defs/occupantCondition"
 				},
 				"operator": {
 					"$ref": "#/$defs/comparisonOperatorType",
 					"description": "The operator to be used in the characteristic comparison operation."
 				},
 				"value": {
-					"description": "{none}",
 					"type": "integer"
 				}
 			},
 			"required": [
-				"OccupantCondition",
+				"occupantCondition",
 				"operator",
 				"value"
 			],
 			"type": "object"
 		},
-		"OccupantCondition": {
+		"occupantCondition": {
 			"additionalProperties": false,
 			"description": "Object indicating specific vehicle occupant condition restrictions",
 			"properties": {
-				"ConditionSet": {
-					"$ref": "#/$defs/ConditionSet"
+				"conditionSet": {
+					"items": {
+						"$ref": "#/$defs/conditionSet"
+					},
+					"minItems": 1,
+					"type": "array",
+					"required": false
 				},
-				"NumbersOfOccupants": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/NumbersOfOccupants"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/NumbersOfOccupants"
-							},
-							"maxItems": 2,
-							"type": "array"
-						}
-					]
-				},
-				"RateTable": {
-					"$ref": "#/$defs/RateTable"
-				},
-				"Regulation": {
-					"$ref": "#/$defs/Regulation"
+				"rateTable": {
+					"$ref": "#/$defs/rateTable"
 				},
 				"disabledWithPermit": {
 					"description": "Indicates registered disabled permit holder",
@@ -1265,65 +947,65 @@
 					"type": "boolean"
 				}
 			},
-			"required": [
-				"Regulation"
-			],
 			"type": "object"
 		},
 		"OffListRegulation": {
 			"additionalProperties": false,
 			"description": "Object indicating type of regulation other than those already listed (extension mechanism)",
 			"properties": {
-				"Condition": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Condition"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Condition"
+				"conditions": {
+					"items": {
+						"oneOf": [
+							{
+								"$ref": "#/$defs/RoadCondition"
 							},
-							"type": "array"
-						}
-					]
-				},
-				"OverallPeriod": {
-					"$ref": "#/$defs/OverallPeriod"
-				},
-				"Provision": {
-					"$ref": "#/$defs/Provision"
-				},
-				"TemporaryRegulation": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/TemporaryRegulation"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/TemporaryRegulation"
+							{
+								"$ref": "#/$defs/occupantCondition"
 							},
-							"type": "array"
-						}
-					]
+							{
+								"$ref": "#/$defs/driverCondition"
+							},
+							{
+								"$ref": "#/$defs/accessCondition"
+							},
+							{
+								"$ref": "#/$defs/validityCondition"
+							},
+							{
+								"$ref": "#/$defs/NonVehicularRoadUserCondition"
+							},
+							{
+								"$ref": "#/$defs/PermitCondition"
+							},
+							{
+								"$ref": "#/$defs/VehicleCondition"
+							},
+							{
+								"$ref": "#/$defs/conditionSet"
+							}
+						]
+					},
+					"type": "array"
+				},
+				"overallPeriod": {
+					"$ref": "#/$defs/overallPeriod"
+				},
+				"temporaryRegulation": {
+					"items": {
+						"$ref": "#/$defs/temporaryRegulation"
+					},
+					"type": "array"
 				},
 				"isDynamic": {
 					"description": "Indicates if the regulation is dynamic in nature",
 					"type": "boolean"
 				},
-				"legisationCrossReference": {
-					"anyOf": [
-						{
-							"description": "Cross referernce to legislative instruments and orders for this regulation",
-							"type": "string"
-						},
-						{
-							"items": {
-								"description": "Cross referernce to legislative instruments and orders for this regulation",
-								"type": "string"
-							},
-							"type": "array"
-						}
-					]
+				"legislationCrossReference": {
+					"items": {
+						"description": "Cross reference to legislative instruments and orders for this regulation",
+						"type": "string"
+					},
+					"type": "array"
 				},
 				"regulationFullText": {
 					"description": "Full description of the other type of regulation",
@@ -1333,195 +1015,153 @@
 					"description": "User-defined short name for other type of regulation",
 					"type": "string"
 				},
-				"regulationType": {
-					"$ref": "#/$defs/regulationType",
+				"regulationStatus": {
+					"$ref": "#/$defs/regulationStatusType",
 					"description": "Indicates the status of this Regulation"
 				},
 				"timeZone": {
-					"description": "IANA time-zone (see http://www.iana.org/time-zones)",
-					"type": "string"
+					"$ref": "#/$defs/timeZone",
+					"description": "IANA time-zone (see http://www.iana.org/time-zones)"
 				}
 			},
 			"required": [
-				"OverallPeriod",
-				"Provision",
+				"overallPeriod",
 				"isDynamic",
 				"regulationFullText",
 				"regulationShortName",
-				"regulationType",
+				"regulationStatus",
 				"timeZone"
 			],
 			"type": "object"
 		},
-		"OverallPeriod": {
+		"overallPeriod": {
 			"additionalProperties": false,
 			"description": "A  continuous  or  discontinuous  period  of  validity  defined  by overall   bounding   start   and   end   times   and   the   possible intersection of valid periods (potentially recurring) with the complement of exception periods (also potentially recurring). [EN 16157-7:2018]",
 			"properties": {
-				"Regulation": {
-					"$ref": "#/$defs/Regulation"
-				},
-				"ValidityCondition": {
-					"$ref": "#/$defs/ValidityCondition"
+				"validityCondition": {
+					"$ref": "#/$defs/validityCondition"
 				},
 				"end": {
 					"description": "End of Overall Period.",
-					"type": "string"
+					"type": "string",
+					"format": "date-time"
 				},
 				"exceptionPeriod": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Period"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Period"
-							},
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/period"
+					},
+					"type": "array"
 				},
 				"start": {
 					"description": "Start of Overall Period",
-					"type": "string"
+					"type": "string",
+					"format": "date-time"
 				},
 				"validPeriod": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Period"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Period"
-							},
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/period"
+					},
+					"type": "array"
 				}
 			},
 			"required": [
-				"Regulation",
-				"ValidityCondition",
+				"validityCondition",
 				"start"
 			],
 			"type": "object"
 		},
-		"Period": {
+		"period": {
 			"additionalProperties": false,
-			"description": "continuous time period or a set of discontinuous time periods defined \nby the intersection of a set of criteria all within an overall delimiting \ninterval",
+			"description": "continuous time period or a set of discontinuous time periods defined \r\nby the intersection of a set of criteria all within an overall delimiting \r\ninterval",
 			"properties": {
-				"OverallPeriod": {
-					"$ref": "#/$defs/OverallPeriod"
-				},
 				"endOfPeriod": {
 					"description": "end date time of period",
-					"type": "string"
+					"type": "string",
+					"format": "date-time"
 				},
 				"periodName": {
 					"description": "Free text name of the period.",
 					"type": "string"
 				},
-				"recurrents": {
-					"description": "the number of repetitions of a repeating period",
-					"type": "integer"
-				},
 				"recurringDayWeekMonthPeriod": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/DayWeekMonth"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/DayWeekMonth"
+					"items": {
+						"anyOf": [
+							{
+								"$ref": "#/$defs/dayWeekMonth"
 							},
-							"type": "array"
-						}
-					]
-				},
-				"recurringPeriod": {
-					"description": "the duration between the start of instances of repeating periods. Where changeable start and end time concepts are defined (such as Easter) this duration should be set to an appropriate duration (e.g. one year) if the changeable time concept follows a known pattern.",
-					"type": "string"
+							{
+								"$ref": "#/$defs/CalendarWeekInMonth"
+							},
+							{
+								"$ref": "#/$defs/WeekOfMonth"
+							},
+							{
+								"$ref": "#/$defs/InstanceOfDayWithinMonth"
+							}
+						]
+					},
+					"type": "array"
 				},
 				"recurringSpecialDay": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/SpecialDay"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/SpecialDay"
-							},
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/specialDay"
+					},
+					"type": "array"
 				},
 				"recurringTimePeriodOfDay": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/TimePeriodOfDay"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/TimePeriodOfDay"
-							},
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/timePeriodOfDay"
+					},
+					"type": "array"
 				},
 				"startOfPeriod": {
 					"description": "start date time of period",
-					"type": "string"
+					"type": "string",
+					"format": "date-time"
 				}
 			},
-			"required": [
-				"OverallPeriod"
-			],
 			"type": "object"
 		},
 		"PermitCondition": {
 			"additionalProperties": false,
 			"description": "Object supporting the characteristics of a permit related condition",
 			"properties": {
-				"Authority": {
-					"$ref": "#/$defs/Authority"
+				"authority": {
+					"$ref": "#/$defs/authority"
 				},
-				"ConditionSet": {
-					"$ref": "#/$defs/ConditionSet"
+				"conditionSet": {
+					"items": {
+						"$ref": "#/$defs/conditionSet"
+					},
+					"minItems": 1,
+					"type": "array",
+					"required": false
 				},
-				"PermitSubjectToFee": {
-					"$ref": "#/$defs/PermitSubjectToFee"
+				"permitSubjectToFee": {
+					"$ref": "#/$defs/permitSubjectToFee"
 				},
-				"RateTable": {
-					"$ref": "#/$defs/RateTable"
-				},
-				"Regulation": {
-					"$ref": "#/$defs/Regulation"
+				"rateTable": {
+					"$ref": "#/$defs/rateTable"
 				},
 				"locationRelatedPermit": {
 					"description": "is the referenced permit related to a specified geography?",
 					"type": "boolean"
 				},
 				"maxDurationOfPermit": {
-					"description": "he maximum validity duration a permit could have in hours",
-					"type": "string"
+					"description": "The maximum validity duration a permit could have in hours",
+					"type": "string",
+					"format": "duration"
 				},
 				"negate": {
 					"description": "If set to true means that the entire condition shall be negated.",
 					"type": "boolean"
 				},
 				"permitIdentifer": {
-					"anyOf": [
-						{
-							"description": "identifier for the permit scheme referenced (e.g. resident parking zone A)",
-							"type": "string"
-						},
-						{
-							"items": {
-								"description": "identifier for the permit scheme referenced (e.g. resident parking zone A)",
-								"type": "string"
-							},
-							"type": "array"
-						}
-					]
+					"items": {
+						"description": "identifier for the permit scheme referenced (e.g. resident parking zone A)",
+						"type": "string"
+					},
+					"type": "array"
 				},
 				"schemeIdentifer": {
 					"description": "free text name for the permit scheme referenced",
@@ -1532,8 +1172,8 @@
 					"description": "the type of the referenced permit"
 				},
 				"whereToApplyForPermit": {
-					"$ref": "#/$defs/anyType",
-					"description": "URL of the competent authority where an application for a permit can be requested"
+					"description": "URL of the competent authority where an application for a permit can be requested",
+					"type": "string"
 				},
 				"whereToCallForPermit": {
 					"description": "Contact telephone number of the competent authority where an application for a permit can be requested",
@@ -1541,113 +1181,148 @@
 				}
 			},
 			"required": [
-				"Regulation",
 				"type"
 			],
 			"type": "object"
 		},
-		"PermitSubjectToFee": {
+		"permitSubjectToFee": {
 			"additionalProperties": false,
 			"description": "Object containing information relating to the cost and restrictions relating to use of a permit",
 			"properties": {
-				"PermitCondition": {
-					"$ref": "#/$defs/PermitCondition"
-				},
 				"amountDue": {
 					"description": "Monetary amount related to use of or purchase of permit",
 					"type": "number"
 				},
 				"maximumAccessDuration": {
 					"description": "Maximum duration that is permitted in relationship to use of this permit",
-					"type": "string"
+					"type": "string",
+					"format": "duration"
 				},
 				"minimumTimeToNextEntry": {
 					"description": "Minimum duration between last use of permit and next permitted use of permit",
-					"type": "string"
+					"type": "string",
+					"format": "duration"
 				},
 				"paymentInformation": {
-					"$ref": "#/$defs/anyType",
-					"description": "URL for further information on permit and related payment"
+					"description": "URL for further information on permit and related payment",
+					"type": "string"
+				}
+			},
+			"type": "object"
+		},
+		"pointGeometry": {
+			"additionalProperties": false,
+			"description": "Object indicating characteristic for a point geometry location",
+			"properties": {
+				"coordinates": {
+					"description": "coordinate pairs defined in WKT format",
+					"type": "object"
+				},
+				"crs": {
+					"$ref": "#/$defs/crsType",
+					"description": "Coordinate referencing system"
+				},
+				"geometryType": {
+					"$ref": "#/$defs/geometryType",
+					"description": "Indicates the type of geometry defined"
+				},
+				"representation": {
+					"$ref": "#/$defs/pointType",
+					"description": "indicates the nature of the point location for a point representation of a regulated place."
 				}
 			},
 			"required": [
-				"PermitCondition"
+				"coordinates",
+				"crs",
+				"geometryType",
+				"representation"
 			],
-			"type": "object"
-		},
-		"Polygon": {
-			"additionalProperties": false,
-			"description": "Object indicating characteristics relating to polygon geometric location",
-			"properties": {
-				"ExternalReference": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/ExternalReference"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/ExternalReference"
-							},
-							"minItems": 1,
-							"type": "array"
+			"type": "object",
+			"allOf": [
+				{
+					"if": {
+						"properties": {
+							"geometryType": {
+								"const": "polygon"
+							}
 						}
-					]
+					},
+					"then": {
+						"properties": {
+							"coordinates": {
+								"$ref": "#/$defs/Polygon"
+							}
+						}
+					}
 				},
-				"RegulatedPlace": {
-					"$ref": "#/$defs/RegulatedPlace"
+				{
+					"if": {
+						"properties": {
+							"geometryType": {
+								"const": "point"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"coordinates": {
+								"$ref": "#/$defs/PointGeometry"
+							}
+						}
+					}
 				},
-				"polygon": {
-					"$ref": "#/$defs/anyType"
-				},
-				"version": {
-					"type": "integer"
+				{
+					"if": {
+						"properties": {
+							"geometryType": {
+								"const": "linearGeometry"
+							}
+						}
+					},
+					"then": {
+						"properties": {
+							"coordinates": {
+								"$ref": "#/$defs/LinearGeometry"
+							}
+						}
+					}
 				}
-			},
-			"required": [
-				"ExternalReference",
-				"RegulatedPlace",
-				"polygon",
-				"version"
-			],
-			"type": "object"
+			]
 		},
-		"Provision": {
+		"provision": {
 			"additionalProperties": false,
-			"description": "Attribute identifying whether the specified Provision is an addition or deletion. TRUE = addition; FALSE = deletion.\nTRO provisions amending regulations should provide two Provision records - one, marked as Deletion, indicating the state of the regulation before amendment; and a second, marked as Addition, indicating the intended state of the regulation post amendment.",
+			"description": "Attribute identifying whether the specified Provision is an addition or deletion. TRUE = addition; FALSE = deletion.\r\n\r\nTRO provisions amending regulations should provide two Provision records - one, marked as Deletion, indicating the state of the regulation before amendment; and a second, marked as Addition, indicating the intended state of the regulation post amendment.",
 			"properties": {
-				"RegulatedPlace": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/RegulatedPlace"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/RegulatedPlace"
+				"regulatedPlaces": {
+					"items": {
+						"$ref": "#/$defs/regulatedPlace"
+					},
+					"minItems": 1,
+					"type": "array"
+				},
+				"regulations": {
+					"items": {
+						"oneOf": [
+							{
+								"$ref": "#/$defs/GeneralRegulation"
 							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
-				},
-				"Regulation": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Regulation"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Regulation"
+							{
+								"$ref": "#/$defs/OffListRegulation"
 							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
+							{
+								"$ref": "#/$defs/SpeedLimitValueBased"
+							},
+							{
+								"$ref": "#/$defs/SpeedLimitProfileBased"
+							}
+						]
+					},
+					"minItems": 1,
+					"type": "array"
 				},
-				"Source": {
-					"$ref": "#/$defs/Source"
-				},
-				"actionType": {
-					"$ref": "#/$defs/anyType"
+				"addition": {
+					"description": "showing whether the provision is an Addition or Removal",
+					"type": "boolean"
 				},
 				"orderReportingPoint": {
 					"$ref": "#/$defs/orderReportingPointType"
@@ -1658,21 +1333,26 @@
 				},
 				"provisionIndex": {
 					"description": "unique identifier (per authority) for referenced provision",
-					"type": "integer"
+					"type": "number",
+					"minimum": 0
 				},
 				"reference": {
+					"description": "unique identifier (per authority) for future referencing",
 					"type": "string"
+				},
+				"actionType": {
+					"$def": "#/$defs/actionType"
 				}
 			},
 			"required": [
-				"RegulatedPlace",
-				"Regulation",
-				"Source",
-				"actionType",
+				"regulatedPlaces",
+				"regulations",
+				"addition",
 				"orderReportingPoint",
 				"provisionDescription",
 				"provisionIndex",
-				"reference"
+				"reference",
+				"actionType"
 			],
 			"type": "object"
 		},
@@ -1680,15 +1360,6 @@
 			"additionalProperties": false,
 			"description": "Object indicating characteristics relating to a public holiday",
 			"properties": {
-				"ChangeableTimePeriodEnd": {
-					"$ref": "#/$defs/ChangeableTimePeriodEnd"
-				},
-				"ChangeableTimePeriodStart": {
-					"$ref": "#/$defs/ChangeableTimePeriodStart"
-				},
-				"Period": {
-					"$ref": "#/$defs/Period"
-				},
 				"intersectWithApplicableDays": {
 					"description": "When true, the period is the intersection of applicable days and this special day. When false, the period is the union of applicable days and this special day.",
 					"type": "boolean"
@@ -1707,50 +1378,49 @@
 				}
 			},
 			"required": [
-				"ChangeableTimePeriodEnd",
-				"ChangeableTimePeriodStart",
-				"Period",
 				"intersectWithApplicableDays",
 				"publicHolidayName",
 				"specialDayType"
 			],
 			"type": "object"
 		},
-		"RateLine": {
+		"rateLine": {
 			"additionalProperties": false,
 			"description": "Object indicating characteristics for a rate line within a rate table",
 			"properties": {
-				"RateLineCollection": {
-					"$ref": "#/$defs/RateLineCollection"
-				},
 				"description": {
-					"$ref": "#/$defs/anyType",
-					"description": "free-text description associated with this rate line. [Defined by APDS - ISO/TS 5206-1]"
+					"description": "free-text description associated with this rate line. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string"
 				},
 				"durationEnd": {
 					"description": "If used, indicates the end time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session. e.g. the end of a time-based tier charge rate. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "string"
+					"type": "string",
+					"format": "time"
 				},
 				"durationStart": {
 					"description": "If used, indicates the start time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session. e.g. the start of a time-based tier charge rate. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "string"
+					"type": "string",
+					"format": "time"
 				},
 				"incrementPeriod": {
 					"description": "the time period for incrementing the rate line charge. If set to the same as the duration of the period between the durationStart and durationEnd the increment will occur once per period, i.e. a flat rate time-based tier charge rate.  [Defined by APDS - ISO/TS 5206-1]",
-					"type": "string"
+					"type": "string",
+					"format": "duration"
 				},
 				"maxValue": {
 					"description": "The maximum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "number"
+					"type": "number",
+					"minimum": 0
 				},
 				"minValue": {
 					"description": "The minimum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "number"
+					"type": "number",
+					"minimum": 0
 				},
 				"sequence": {
 					"description": "the ordered sequence of this RateLine instance within the RateLineCollection. Used to define the order of operation of multiple rate lines. Typically used to ensure taxes and surcharges are applied correctly. [Defined by APDS - ISO/TS 5206-1]",
-					"minimum": 0,
-					"type": "integer"
+					"type": "integer",
+					"minimum": 0
 				},
 				"type": {
 					"$ref": "#/$defs/rateLineType",
@@ -1762,37 +1432,27 @@
 				},
 				"value": {
 					"description": "the value of the fee to be charged in respect of this rate line. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "number"
+					"type": "number",
+					"minimum": 0
 				}
 			},
 			"required": [
-				"RateLineCollection",
 				"sequence",
 				"type",
 				"value"
 			],
 			"type": "object"
 		},
-		"RateLineCollection": {
+		"rateLineCollection": {
 			"additionalProperties": false,
-			"description": "group of rate line elements that logically group together within one \nrate table, e.g. such as the rate lines for the different tiers of a time based tier rate table",
+			"description": "group of rate line elements that logically group together within one \r\nrate table, e.g. such as the rate lines for the different tiers of a time based tier rate table",
 			"properties": {
-				"RateLine": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/RateLine"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/RateLine"
-							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
-				},
-				"RateTable": {
-					"$ref": "#/$defs/RateTable"
+				"rateLine": {
+					"items": {
+						"$ref": "#/$defs/rateLine"
+					},
+					"minItems": 1,
+					"type": "array"
 				},
 				"applicableCurrency": {
 					"$ref": "#/$defs/currencyType",
@@ -1800,70 +1460,67 @@
 				},
 				"endValidUsagePeriod": {
 					"description": "the end time for the validity of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "string"
+					"type": "string",
+					"format": "time"
 				},
 				"maxTime": {
 					"description": "A maximum session duration to be applied to this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "string"
+					"type": "string",
+					"format": "duration"
 				},
 				"maxValueCollection": {
 					"description": "The maximum monetary amount to be applied in conjunction with use of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "number"
+					"type": "number",
+					"minimum": 0
 				},
 				"minTime": {
 					"description": "A minimum session duration to be applied to this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "string"
+					"type": "string",
+					"format": "duration"
 				},
 				"minValueCollection": {
 					"description": "The minimum monetary amount to be applied in conjunction with use of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "number"
+					"type": "number",
+					"minimum": 0
 				},
 				"resetTime": {
-					"description": "Time that rate resets.  Example a rate table that charges &#163;2 per hour with a max value collection of &#163;10, resets at 2 am.  At 2 am the &#163;2 per hour fee would start to charge until the &#163;10 is reached. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "string"
+					"description": "Time that rate resets.  Example a rate table that charges £2 per hour with a max value collection of £10, resets at 2 am.  At 2 am the £2 per hour fee would start to charge until the £10 is reached. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string",
+					"format": "time"
 				},
 				"sequence": {
 					"description": "An indicator giving the place in sequence of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "integer"
+					"type": "integer",
+					"minimum": 0
 				},
 				"startValidUsagePeriod": {
-					"description": "the start time for the validity of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
-					"type": "string"
+					"description": "The start time for the validity of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string",
+					"format": "time"
 				}
 			},
 			"required": [
-				"RateLine",
-				"RateTable",
+				"rateLine",
 				"applicableCurrency",
 				"sequence",
 				"startValidUsagePeriod"
 			],
 			"type": "object"
 		},
-		"RateTable": {
+		"rateTable": {
 			"additionalProperties": false,
 			"description": "specific set of rate charges relating to one or more locations and optionally one set of eligibility criteria",
 			"properties": {
-				"Condition": {
-					"$ref": "#/$defs/Condition"
-				},
-				"RateLineCollection": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/RateLineCollection"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/RateLineCollection"
-							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
+				"rateLineCollection": {
+					"items": {
+						"$ref": "#/$defs/rateLineCollection"
+					},
+					"minItems": 1,
+					"type": "array"
 				},
 				"additionalInformation": {
-					"$ref": "#/$defs/anyType",
-					"description": "URI locator for supplementary additional information concerning use of the rate table. [Defined by APDS - ISO/TS 5206-1]"
+					"description": "URI locator for supplementary additional information concerning use of the rate table. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string"
 				},
 				"type": {
 					"$ref": "#/$defs/rateType",
@@ -1871,42 +1528,23 @@
 				}
 			},
 			"required": [
-				"Condition",
-				"RateLineCollection"
+				"rateLineCollection"
 			],
 			"type": "object"
 		},
-		"RegulatedPlace": {
+		"regulatedPlace": {
 			"additionalProperties": false,
 			"description": "Object indicating the geographical and spatial location subject to a regulation",
 			"properties": {
-				"Geometry": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Geometry"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Geometry"
-							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
+				"externalReference": {
+					"items": {
+						"$ref": "#/$defs/externalReference"
+					},
+					"minItems": 1,
+					"type": "array"
 				},
-				"Provision": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Provision"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Provision"
-							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
+				"geometry": {
+					"$ref": "#/$defs/geometry"
 				},
 				"description": {
 					"description": "Free text description of the regulated place",
@@ -1914,67 +1552,83 @@
 				}
 			},
 			"required": [
-				"Geometry",
-				"Provision",
+				"externalReference",
+				"geometry",
 				"description"
 			],
 			"type": "object"
 		},
-		"Regulation": {
+		"RelativeTimeRates": {
 			"additionalProperties": false,
-			"description": "Object indicating the characteristics of a regulation",
+			"description": "supporting the specification of times for defining rate  applicability that are relative to a defined referenceTimeStart of an event (e.g. 2 hours from the start of an event)",
 			"properties": {
-				"Condition": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Condition"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Condition"
-							},
-							"type": "array"
-						}
-					]
+				"rateLine": {
+					"items": {
+						"$ref": "#/$defs/rateLine"
+					},
+					"minItems": 1,
+					"type": "array"
 				},
-				"OverallPeriod": {
-					"$ref": "#/$defs/OverallPeriod"
+				"applicableCurrency": {
+					"$ref": "#/$defs/currencyType",
+					"description": "The monetary currency that rates are specified in this rate line collection. [Defined by APDS - ISO/TS 5206-1]"
 				},
-				"Provision": {
-					"$ref": "#/$defs/Provision"
+				"endValidUsagePeriod": {
+					"description": "the end time for the validity of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string",
+					"format": "time"
 				},
-				"TemporaryRegulation": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/TemporaryRegulation"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/TemporaryRegulation"
-							},
-							"type": "array"
-						}
-					]
+				"maxTime": {
+					"description": "A maximum session duration to be applied to this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string",
+					"format": "duration"
 				},
-				"isDynamic": {
-					"description": "Indicates if the regulation is dynamic in nature",
-					"type": "boolean"
+				"maxValueCollection": {
+					"description": "The maximum monetary amount to be applied in conjunction with use of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "number",
+					"minimum": 0
 				},
-				"regulationType": {
-					"$ref": "#/$defs/regulationType",
-					"description": "Indicates the status of this Regulation"
+				"minTime": {
+					"description": "A minimum session duration to be applied to this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string",
+					"format": "duration"
 				},
-				"timeZone": {
-					"description": "IANA time-zone (see http://www.iana.org/time-zones)",
-					"type": "string"
+				"minValueCollection": {
+					"description": "The minimum monetary amount to be applied in conjunction with use of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "number",
+					"minimum": 0
+				},
+				"referenceTimeEnd": {
+					"description": "Event-related reference end time. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string",
+					"format": "time"
+				},
+				"referenceTimeStart": {
+					"description": "Event-related reference start time. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string",
+					"format": "time"
+				},
+				"resetTime": {
+					"description": "Time that rate resets.  Example a rate table that charges £2 per hour with a max value collection of £10, resets at 2 am.  At 2 am the £2 per hour fee would start to charge until the £10 is reached. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string",
+					"format": "time"
+				},
+				"sequence": {
+					"description": "An indicator giving the place in sequence of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "integer",
+					"minimum": 0
+				},
+				"startValidUsagePeriod": {
+					"description": "the start time for the validity of this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
+					"type": "string",
+					"format": "time"
 				}
 			},
 			"required": [
-				"OverallPeriod",
-				"Provision",
-				"isDynamic",
-				"regulationType",
-				"timeZone"
+				"rateLine",
+				"applicableCurrency",
+				"sequence",
+				"startValidUsagePeriod"
 			],
 			"type": "object"
 		},
@@ -1982,111 +1636,101 @@
 			"additionalProperties": false,
 			"description": "Object indicating characteristics concerning the type of road.",
 			"properties": {
-				"ConditionSet": {
-					"$ref": "#/$defs/ConditionSet"
+				"conditionSet": {
+					"items": {
+						"$ref": "#/$defs/conditionSet"
+					},
+					"minItems": 1,
+					"type": "array",
+					"required": false
 				},
-				"RateTable": {
-					"$ref": "#/$defs/RateTable"
-				},
-				"Regulation": {
-					"$ref": "#/$defs/Regulation"
+				"rateTable": {
+					"$ref": "#/$defs/rateTable"
 				},
 				"negate": {
 					"description": "If set to true means that the entire condition shall be negated.",
 					"type": "boolean"
 				},
 				"roadType": {
-					"$ref": "#/$defs/anyType",
-					"description": "Indicates the type of road"
+					"description": "Indicates the type of road",
+					"type": "string"
 				}
 			},
 			"required": [
-				"Regulation",
 				"roadType"
 			],
 			"type": "object"
 		},
-		"Source": {
+		"source": {
 			"additionalProperties": false,
 			"properties": {
-				"Consultation": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Consultation"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Consultation"
-							},
-							"type": "array"
-						}
-					]
+				"provision": {
+					"items": {
+						"$ref": "#/$defs/provision"
+					},
+					"minItems": 1,
+					"type": "array"
 				},
-				"Provision": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Provision"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Provision"
-							},
-							"minItems": 1,
-							"type": "array"
-						}
-					]
-				},
-				"actionType": {
-					"$ref": "#/$defs/actionType"
+				"crossRefTro": {
+					"items": {
+						"description": "Unique identifier of a published D-TRO",
+						"type": "string",
+						"format": "uuid"
+					},
+					"type": "array"
 				},
 				"currentTraOwner": {
-					"description": "Trafic regulation authority (SWA code)",
-					"type": "integer"
+					"description": "Traffic authority (SWA code)",
+					"type": "number",
+					"minimum": 0,
+					"maximum": 9999
 				},
-				"reference": {
-					"type": "string"
+				"traCreator": {
+					"description": "Traffic authority (SWA code)",
+					"type": "number",
+					"minimum": 0,
+					"maximum": 9999
 				},
 				"section": {
 					"description": "Reference to the section of the TRO",
 					"type": "string"
 				},
-				"traAffected": {
-					"$ref": "#/$defs/anyType"
-				},
-				"traCreator": {
-					"description": "Highway authority (SWA code)",
-					"type": "integer"
-				},
 				"troName": {
 					"description": "Published title of the Traffic Regulation Order",
 					"type": "string"
+				},
+				"reference": {
+					"description": "unique identifier (per authority) for future referencing",
+					"type": "string"
+				},
+				"actionType": {
+					"$def": "#/$defs/actionType"
+				},
+				"traAffected": {
+					"items": {
+						"description": "Traffic authority (SWA code) affected by D-TRO",
+						"type": "number",
+						"minimum": 0,
+						"maximum": 9999
+					},
+					"type": "array"
 				}
 			},
 			"required": [
-				"Provision",
-				"actionType",
-				"currentTraOwner",
-				"reference",
-				"section",
-				"traAffected",
+				"provision",
 				"traCreator",
-				"troName"
+				"currentTraOwner",
+				"section",
+				"troName",
+				"reference",
+				"actionType"
 			],
 			"type": "object"
 		},
-		"SpecialDay": {
+		"specialDay": {
 			"additionalProperties": false,
 			"description": "Object indicating the characteristics of an identified (special) day",
 			"properties": {
-				"ChangeableTimePeriodEnd": {
-					"$ref": "#/$defs/ChangeableTimePeriodEnd"
-				},
-				"ChangeableTimePeriodStart": {
-					"$ref": "#/$defs/ChangeableTimePeriodStart"
-				},
-				"Period": {
-					"$ref": "#/$defs/Period"
-				},
 				"intersectWithApplicableDays": {
 					"description": "When true, the period is the intersection of applicable days and this special day. When false, the period is the union of applicable days and this special day.",
 					"type": "boolean"
@@ -2101,69 +1745,8 @@
 				}
 			},
 			"required": [
-				"ChangeableTimePeriodEnd",
-				"ChangeableTimePeriodStart",
-				"Period",
 				"intersectWithApplicableDays",
 				"specialDayType"
-			],
-			"type": "object"
-		},
-		"SpeedLimit": {
-			"additionalProperties": false,
-			"description": "Abstract object representing a speed limit regulation",
-			"properties": {
-				"Condition": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Condition"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Condition"
-							},
-							"type": "array"
-						}
-					]
-				},
-				"OverallPeriod": {
-					"$ref": "#/$defs/OverallPeriod"
-				},
-				"Provision": {
-					"$ref": "#/$defs/Provision"
-				},
-				"TemporaryRegulation": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/TemporaryRegulation"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/TemporaryRegulation"
-							},
-							"type": "array"
-						}
-					]
-				},
-				"isDynamic": {
-					"description": "Indicates if the regulation is dynamic in nature",
-					"type": "boolean"
-				},
-				"regulationType": {
-					"$ref": "#/$defs/regulationType",
-					"description": "Indicates the status of this Regulation"
-				},
-				"timeZone": {
-					"description": "IANA time-zone (see http://www.iana.org/time-zones)",
-					"type": "string"
-				}
-			},
-			"required": [
-				"OverallPeriod",
-				"Provision",
-				"isDynamic",
-				"regulationType",
-				"timeZone"
 			],
 			"type": "object"
 		},
@@ -2171,49 +1754,60 @@
 			"additionalProperties": false,
 			"description": "Object indicating characterisitics related to speed limits defined by profile",
 			"properties": {
-				"Condition": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Condition"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Condition"
+				"conditions": {
+					"items": {
+						"oneOf": [
+							{
+								"$ref": "#/$defs/RoadCondition"
 							},
-							"type": "array"
-						}
-					]
-				},
-				"OverallPeriod": {
-					"$ref": "#/$defs/OverallPeriod"
-				},
-				"Provision": {
-					"$ref": "#/$defs/Provision"
-				},
-				"TemporaryRegulation": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/TemporaryRegulation"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/TemporaryRegulation"
+							{
+								"$ref": "#/$defs/occupantCondition"
 							},
-							"type": "array"
-						}
-					]
+							{
+								"$ref": "#/$defs/driverCondition"
+							},
+							{
+								"$ref": "#/$defs/accessCondition"
+							},
+							{
+								"$ref": "#/$defs/validityCondition"
+							},
+							{
+								"$ref": "#/$defs/NonVehicularRoadUserCondition"
+							},
+							{
+								"$ref": "#/$defs/PermitCondition"
+							},
+							{
+								"$ref": "#/$defs/VehicleCondition"
+							},
+							{
+								"$ref": "#/$defs/conditionSet"
+							}
+						]
+					},
+					"type": "array"
+				},
+				"overallPeriod": {
+					"$ref": "#/$defs/overallPeriod"
+				},
+				"temporaryRegulation": {
+					"items": {
+						"$ref": "#/$defs/temporaryRegulation"
+					},
+					"type": "array"
 				},
 				"isDynamic": {
 					"description": "Indicates if the regulation is dynamic in nature",
 					"type": "boolean"
 				},
-				"regulationType": {
-					"$ref": "#/$defs/regulationType",
+				"regulationStatus": {
+					"$ref": "#/$defs/regulationStatusType",
 					"description": "Indicates the status of this Regulation"
 				},
 				"timeZone": {
-					"description": "IANA time-zone (see http://www.iana.org/time-zones)",
-					"type": "string"
+					"$ref": "#/$defs/timeZone",
+					"description": "IANA time-zone (see http://www.iana.org/time-zones)"
 				},
 				"type": {
 					"$ref": "#/$defs/speedLimitProfileType",
@@ -2221,10 +1815,9 @@
 				}
 			},
 			"required": [
-				"OverallPeriod",
-				"Provision",
+				"overallPeriod",
 				"isDynamic",
-				"regulationType",
+				"regulationStatus",
 				"timeZone",
 				"type"
 			],
@@ -2234,37 +1827,48 @@
 			"additionalProperties": false,
 			"description": "Object indicating speed limit regulation - defined by speed value",
 			"properties": {
-				"Condition": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/Condition"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/Condition"
+				"conditions": {
+					"items": {
+						"oneOf": [
+							{
+								"$ref": "#/$defs/RoadCondition"
 							},
-							"type": "array"
-						}
-					]
-				},
-				"OverallPeriod": {
-					"$ref": "#/$defs/OverallPeriod"
-				},
-				"Provision": {
-					"$ref": "#/$defs/Provision"
-				},
-				"TemporaryRegulation": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/TemporaryRegulation"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/TemporaryRegulation"
+							{
+								"$ref": "#/$defs/occupantCondition"
 							},
-							"type": "array"
-						}
-					]
+							{
+								"$ref": "#/$defs/driverCondition"
+							},
+							{
+								"$ref": "#/$defs/accessCondition"
+							},
+							{
+								"$ref": "#/$defs/validityCondition"
+							},
+							{
+								"$ref": "#/$defs/NonVehicularRoadUserCondition"
+							},
+							{
+								"$ref": "#/$defs/PermitCondition"
+							},
+							{
+								"$ref": "#/$defs/VehicleCondition"
+							},
+							{
+								"$ref": "#/$defs/conditionSet"
+							}
+						]
+					},
+					"type": "array"
+				},
+				"overallPeriod": {
+					"$ref": "#/$defs/overallPeriod"
+				},
+				"temporaryRegulation": {
+					"items": {
+						"$ref": "#/$defs/temporaryRegulation"
+					},
+					"type": "array"
 				},
 				"isDynamic": {
 					"description": "Indicates if the regulation is dynamic in nature",
@@ -2272,15 +1876,27 @@
 				},
 				"mphValue": {
 					"description": "speed limit value in mph",
-					"type": "integer"
+					"maximum": 70,
+					"minimum": 5,
+					"type": "integer",
+					"enum": [
+						5,
+						10,
+						20,
+						30,
+						40,
+						50,
+						60,
+						70
+					]
 				},
-				"regulationType": {
-					"$ref": "#/$defs/regulationType",
+				"regulationStatus": {
+					"$ref": "#/$defs/regulationStatusType",
 					"description": "Indicates the status of this Regulation"
 				},
 				"timeZone": {
-					"description": "IANA time-zone (see http://www.iana.org/time-zones)",
-					"type": "string"
+					"$ref": "#/$defs/timeZone",
+					"description": "IANA time-zone (see http://www.iana.org/time-zones)"
 				},
 				"type": {
 					"$ref": "#/$defs/speedLimitValueType",
@@ -2288,30 +1904,38 @@
 				}
 			},
 			"required": [
-				"OverallPeriod",
-				"Provision",
+				"overallPeriod",
 				"isDynamic",
 				"mphValue",
-				"regulationType",
+				"regulationStatus",
 				"timeZone",
 				"type"
 			],
 			"type": "object"
 		},
-		"TemporaryRegulation": {
+		"temporaryRegulation": {
 			"additionalProperties": false,
 			"description": "Object indicating the presence of a temporary regulation",
 			"properties": {
-				"Regulation": {
-					"$ref": "#/$defs/Regulation"
-				},
 				"temporarilyOverriddenRegulations": {
-					"$ref": "#/$defs/Regulation",
+					"oneOf": [
+						{
+							"$ref": "#/$defs/GeneralRegulation"
+						},
+						{
+							"$ref": "#/$defs/OffListRegulation"
+						},
+						{
+							"$ref": "#/$defs/SpeedLimitValueBased"
+						},
+						{
+							"$ref": "#/$defs/SpeedLimitProfileBased"
+						}
+					],
 					"description": "Indicates the identity of regulations overridden by this temporary regulation"
 				}
 			},
 			"required": [
-				"Regulation",
 				"temporarilyOverriddenRegulations"
 			],
 			"type": "object"
@@ -2320,8 +1944,8 @@
 			"additionalProperties": false,
 			"description": "Object indicating characteristics about the timing a driver's license has been held.",
 			"properties": {
-				"DriverCondition": {
-					"$ref": "#/$defs/DriverCondition"
+				"driverCondition": {
+					"$ref": "#/$defs/driverCondition"
 				},
 				"operator": {
 					"$ref": "#/$defs/comparisonOperatorType",
@@ -2333,318 +1957,149 @@
 				}
 			},
 			"required": [
-				"DriverCondition",
+				"driverCondition",
 				"operator",
 				"value"
 			],
 			"type": "object"
 		},
-		"TimePeriodOfDay": {
+		"timePeriodOfDay": {
 			"additionalProperties": false,
 			"description": "specification of a continuous period of time within a 24 hour period",
 			"properties": {
-				"Period": {
-					"$ref": "#/$defs/Period"
-				},
 				"endTimeOfPeriod": {
 					"description": "End of time period.",
-					"type": "string"
+					"type": "string",
+					"format": "time"
 				},
 				"startTimeOfPeriod": {
 					"description": "Start of time period.",
-					"type": "string"
+					"type": "string",
+					"format": "time"
 				}
 			},
 			"required": [
-				"Period",
 				"endTimeOfPeriod",
 				"startTimeOfPeriod"
 			],
 			"type": "object"
 		},
-		"TroProvisionStatusUpdate": {
-			"additionalProperties": false,
-			"properties": {
-				"TroStatusUpdate": {
-					"$ref": "#/defs/TroStatusUpdate"
-				},
-				"roadOccupancyProvisionSubmit": {
-					"description": "true indicates that the specific Provision of the TTRO is live on the road network; false indicates that the specific Provisions of the TTRO is removed from the road network",
-					"type": "boolean"
-				},
-				"troProvisionReferenceId": {
-					"$ref": "#/defs/IDREF",
-					"description": "identification for this TTRO D-TRO provision record"
-				}
-			},
-			"required": [
-				"TroStatusUpdate",
-				"roadOccupancyProvisionSubmit",
-				"troProvisionReferenceId"
-			],
-			"type": "object"
-		},
-		"TroStatusUpdate": {
-			"additionalProperties": false,
-			"description": "Object indicating the characteristics of a regulation",
-			"properties": {
-				"TroProvisionStatusUpdate": {
-					"anyOf": [
-						{
-							"$ref": "#/defs/TroProvisionStatusUpdate"
-						},
-						{
-							"items": {
-								"$ref": "#/defs/TroProvisionStatusUpdate"
-							},
-							"type": "array"
-						}
-					]
-				},
-				"roadOccupancyDTROSubmit": {
-					"description": "true indicates that the Provisions of the TTRO are live on the road network; false indicates that the Provisions of the TTRO are removed from the road network",
-					"type": "boolean"
-				},
-				"submitDateTime": {
-					"description": "the date / time of the on road status update",
-					"type": "string"
-				},
-				"troReferenceId": {
-					"$ref": "#/defs/IDREF",
-					"description": "identification for this TTRO D-TRO record"
-				}
-			},
-			"required": [
-				"submitDateTime",
-				"troReferenceId"
-			],
-			"type": "object"
-		},
-		"UniqueStreetReferenceNumber": {
-			"additionalProperties": false,
-			"description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer",
-			"properties": {
-				"ElementaryStreetUnit": {
-					"anyOf": [
-						{
-							"$ref": "#/defs/ElementaryStreetUnit"
-						},
-						{
-							"items": {
-								"$ref": "#/defs/ElementaryStreetUnit"
-							},
-							"type": "array"
-						}
-					]
-				},
-				"ExternalReference": {
-					"$ref": "#/defs/ExternalReference"
-				},
-				"nsgStreetName": {
-					"type": "string"
-				},
-				"nsgStreetNumber": {
-					"type": "string"
-				},
-				"usrn": {
-					"maximum": 9223372036854775807,
-					"minimum": -9223372036854775808,
-					"type": "integer"
-				}
-			},
-			"required": [
-				"usrn"
-			],
-			"type": "object"
-		},
-		"ValidityCondition": {
+		"validityCondition": {
 			"additionalProperties": false,
 			"description": "Object indicating conditional restrictions based on times/timing.",
 			"properties": {
-				"ConditionSet": {
-					"$ref": "#/defs/ConditionSet"
+				"conditionSet": {
+					"items": {
+						"$ref": "#/$defs/conditionSet"
+					},
+					"minItems": 1,
+					"type": "array",
+					"required": false
 				},
-				"OverallPeriod": {
-					"$ref": "#/defs/OverallPeriod"
-				},
-				"RateTable": {
-					"$ref": "#/defs/RateTable"
-				},
-				"Regulation": {
-					"$ref": "#/defs/Regulation"
+				"rateTable": {
+					"$ref": "#/$defs/rateTable"
 				},
 				"negate": {
 					"description": "If set to true means that the entire condition shall be negated.",
 					"type": "boolean"
 				}
 			},
-			"required": [
-				"OverallPeriod",
-				"Regulation"
-			],
 			"type": "object"
 		},
-		"VehicleCharacteristics": {
+		"vehicleCharacteristics": {
 			"additionalProperties": false,
 			"description": "The characteristics of a vehicle, e.g. lorry of gross weight greater than 30 tonnes.",
 			"properties": {
-				"Emissions": {
-					"$ref": "#/$defs/Emissions"
+				"emissions": {
+					"$ref": "#/$defs/emissions"
 				},
-				"GrossWeightCharacteristic": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/GrossWeightCharacteristic"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/GrossWeightCharacteristic"
-							},
-							"maxItems": 2,
-							"type": "array"
-						}
-					]
+				"grossWeightCharacteristic": {
+					"items": {
+						"$ref": "#/$defs/grossWeightCharacteristic"
+					},
+					"type": "array"
 				},
-				"HeaviestAxleWeightCharacteristic": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/HeaviestAxleWeightCharacteristic"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/HeaviestAxleWeightCharacteristic"
-							},
-							"maxItems": 2,
-							"type": "array"
-						}
-					]
+				"heightCharacteristic": {
+					"items": {
+						"$ref": "#/$defs/heightCharacteristic"
+					},
+					"type": "array"
 				},
-				"HeightCharacteristic": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/HeightCharacteristic"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/HeightCharacteristic"
-							},
-							"maxItems": 2,
-							"type": "array"
-						}
-					]
+				"heaviestAxleWeightCharacteristic": {
+					"items": {
+						"$ref": "#/$defs/heaviestAxleWeightCharacteristic"
+					},
+					"type": "array"
 				},
-				"LengthCharacteristic": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/LengthCharacteristic"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/LengthCharacteristic"
-							},
-							"maxItems": 2,
-							"type": "array"
-						}
-					]
+				"lengthCharacteristic": {
+					"items": {
+						"$ref": "#/$defs/lengthCharacteristic"
+					},
+					"type": "array"
 				},
-				"NumberOfAxlesCharacteristic": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/NumberOfAxlesCharacteristic"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/NumberOfAxlesCharacteristic"
-							},
-							"maxItems": 2,
-							"type": "array"
-						}
-					]
+				"numberOfAxlesCharacteristic": {
+					"items": {
+						"$ref": "#/$defs/numberOfAxlesCharacteristic"
+					},
+					"type": "array"
 				},
-				"VehicleCondition": {
-					"$ref": "#/$defs/VehicleCondition"
-				},
-				"WidthCharacteristic": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/WidthCharacteristic"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/WidthCharacteristic"
-							},
-							"maxItems": 2,
-							"type": "array"
-						}
-					]
+				"widthCharacteristic": {
+					"items": {
+						"$ref": "#/$defs/widthCharacteristic"
+					},
+					"type": "array"
 				},
 				"fuelType": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/anyType",
-							"description": "The type of fuel used by the vehicle."
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/anyType",
-								"description": "The type of fuel used by the vehicle."
-							},
-							"type": "array"
-						}
-					]
+					"items": {
+						"description": "The type of fuel used by the vehicle.",
+						"$ref": "#/$defs/fuelType"
+					},
+					"type": "array"
 				},
 				"loadType": {
-					"$ref": "#/$defs/anyType",
-					"description": "The type of load carried by the vehicle, especially in respect of hazardous loads."
+					"description": "The type of load carried by the vehicle, especially in respect of hazardous loads.",
+					"type": "string"
 				},
 				"vehicleEquipment": {
-					"$ref": "#/$defs/anyType",
-					"description": "The type of equipment in use or on board the vehicle."
+					"description": "The type of equipment in use or on board the vehicle.",
+					"type": "string"
 				},
 				"vehicleType": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/anyType",
-							"description": "Vehicle type"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/anyType",
-								"description": "Vehicle type"
-							},
-							"type": "array"
-						}
-					]
+					"items": {
+						"description": "Vehicle type",
+						"$ref": "#/$defs/vehicleType"
+					},
+					"type": "array"
 				},
 				"vehicleUsage": {
-					"$ref": "#/$defs/anyType",
-					"description": "The type of usage of the vehicle (i.e. for what purpose is the vehicle being used)."
+					"description": "The type of usage of the vehicle (i.e. for what purpose is the vehicle being used).",
+					"type": "string"
 				},
 				"yearOfFirstRegistration": {
-					"$ref": "#/$defs/integer",
-					"description": "Year of first registration of the vehicle"
+					"description": "Year of first registration of the vehicle",
+					"type": "integer",
+					"minimum": 1901
 				}
 			},
-			"required": [
-				"VehicleCondition"
-			],
 			"type": "object"
 		},
 		"VehicleCondition": {
 			"additionalProperties": false,
 			"description": "Conditions for a vehicle",
 			"properties": {
-				"ConditionSet": {
-					"$ref": "#/$defs/ConditionSet"
+				"conditionSet": {
+					"items": {
+						"$ref": "#/$defs/conditionSet"
+					},
+					"minItems": 1,
+					"type": "array",
+					"required": false
 				},
-				"RateTable": {
-					"$ref": "#/$defs/RateTable"
+				"rateTable": {
+					"$ref": "#/$defs/rateTable"
 				},
-				"Regulation": {
-					"$ref": "#/$defs/Regulation"
-				},
-				"VehicleCharacteristics": {
-					"$ref": "#/$defs/VehicleCharacteristics"
+				"vehicleCharacteristics": {
+					"$ref": "#/$defs/vehicleCharacteristics"
 				},
 				"negate": {
 					"description": "If set to true means that the entire condition shall be negated.",
@@ -2652,8 +2107,7 @@
 				}
 			},
 			"required": [
-				"Regulation",
-				"VehicleCharacteristics"
+				"vehicleCharacteristics"
 			],
 			"type": "object"
 		},
@@ -2661,79 +2115,48 @@
 			"additionalProperties": false,
 			"description": "provides information concerning an identifiable week in a calendar month - where the week starts on the same day of the week as the month",
 			"properties": {
-				"Period": {
-					"$ref": "#/$defs/Period"
-				},
 				"applicableDay": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/dayType",
-							"description": "Applicable day of the week. “All days of the week” is expressed by non-inclusion of this attribute. [EN 16157-7:2018]"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/dayType",
-								"description": "Applicable day of the week. “All days of the week” is expressed by non-inclusion of this attribute. [EN 16157-7:2018]"
-							},
-							"maxItems": 7,
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/dayType",
+						"description": "Applicable day of the week. “All days of the week” is expressed by non-inclusion of this attribute. [EN 16157-7:2018]"
+					},
+					"type": "array",
+					"uniqueItems": true
 				},
 				"applicableMonth": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/monthType",
-							"description": "Applicable  month  of  the  year.  “All months of the year” is expressed by non- inclusion of this attribute."
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/monthType",
-								"description": "Applicable  month  of  the  year.  “All months of the year” is expressed by non- inclusion of this attribute."
-							},
-							"maxItems": 12,
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/monthType",
+						"description": "Applicable  month  of  the  year.  “All months of the year” is expressed by non- inclusion of this attribute."
+					},
+					"type": "array",
+					"uniqueItems": true
 				},
 				"applicableWeek": {
-					"anyOf": [
-						{
-							"$ref": "#/$defs/weekInMonthType"
-						},
-						{
-							"items": {
-								"$ref": "#/$defs/weekInMonthType"
-							},
-							"maxItems": 5,
-							"type": "array"
-						}
-					]
+					"items": {
+						"$ref": "#/$defs/weekInMonthType"
+					},
+					"type": "array",
+					"uniqueItems": true,
+					"minItems": 1,
+					"maxItems": 5
 				}
 			},
-			"required": [
-				"Period"
-			],
 			"type": "object"
 		},
-		"WidthCharacteristic": {
+		"widthCharacteristic": {
 			"additionalProperties": false,
 			"description": "Width characteristic of a vehicle.",
 			"properties": {
-				"VehicleCharacteristics": {
-					"$ref": "#/$defs/VehicleCharacteristics"
-				},
 				"comparisonOperator": {
-					"$ref": "#/$defs/anyType",
+					"$ref": "#/$defs/comparisonOperatorType",
 					"description": "The operator  to  be used in  the  vehicle characteristic comparison operation."
 				},
 				"vehicleWidth": {
-					"$ref": "#/$defs/anyType",
-					"description": "The maximum width of an individual vehicle, including any features embedded or fixed on it, in metres."
+					"description": "The maximum width of an individual vehicle, including any features embedded or fixed on it, in metres.",
+					"type": "integer"
 				}
 			},
 			"required": [
-				"VehicleCharacteristics",
 				"comparisonOperator",
 				"vehicleWidth"
 			],
@@ -2753,24 +2176,14 @@
 			"type": "string"
 		},
 		"calendarWeekInMonthType": {
-			"description": "Specification of periods defined by relevant calendar weeks in a month, see ISO 8601.\nNOTE   Calendar  weeks  start  with  Monday.  First  week  is  the week containing the first of the month.",
+			"description": "Specification of periods defined by relevant calendar weeks in a month, see ISO 8601.\r\nNOTE   Calendar  weeks  start  with  Monday.  First  week  is  the week containing the first of the month.",
 			"enum": [
-				"fifthWeekOfMonth",
 				"firstWeekOfMonth",
-				"fourthWeekOfMonth",
-				"secondWeekOfMonth",
 				"sixthWeekOfMonth",
-				"thirdWeekOfMonth"
-			],
-			"type": "string"
-		},
-		"changeableTimeType": {
-			"description": "List of available changeable time types",
-			"enum": [
-				"dawn",
-				"dusk",
-				"external",
-				"holiday"
+				"secondWeekOfMonth",
+				"thirdWeekOfMonth",
+				"fourthWeekOfMonth",
+				"fifthWeekOfMonth"
 			],
 			"type": "string"
 		},
@@ -2786,7 +2199,7 @@
 			"type": "string"
 		},
 		"conditionOperatorType": {
-			"description": "The operator  to  be used in  the  vehicle characteristic comparison operation.",
+			"description": "Operators as per CEN TS 16157-11:2022.",
 			"enum": [
 				"and",
 				"or",
@@ -2799,10 +2212,29 @@
 			"enum": [
 				"osgb36Epsg27700",
 				"wgs84Epsg4326",
-				"WKT"
+				"wkt"
 			],
 			"type": "string"
 		},
+		"ElementaryStreetUnit": {
+            "type": "object",
+            "required": [
+                "UniqueStreetReferenceNumber",
+                "esu"
+            ],
+            "properties": {
+                "esu": {
+                    "type": "integer",
+                    "maximum": 9.22337203685478E+18,
+                    "minimum": -9.22337203685478E+18
+                },
+                "UniqueStreetReferenceNumber": {
+                    "$ref": "#/defs/UniqueStreetReferenceNumber"
+                }
+            },
+            "description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer",
+            "additionalProperties": false
+        },
 		"currencyType": {
 			"description": "Standard specified three-letter (\"Alpha-3\") codes for currencies worldwide in accordance with ISO 4217. Note this is a select subset based on UK usage but permits extension.",
 			"enum": [
@@ -2892,10 +2324,10 @@
 		"geometryType": {
 			"description": "List of geometry types",
 			"enum": [
-				"point",
-				"linear",
+				"pointGeometry",
+				"linearGeometry",
 				"polygon",
-				"directedLinear"
+				"DirectedLinear"
 			],
 			"type": "string"
 		},
@@ -2911,7 +2343,6 @@
 			"type": "string"
 		},
 		"licenseCharacteristicsType": {
-			"description": "{none}",
 			"enum": [
 				"permanent",
 				"provisional"
@@ -2976,22 +2407,13 @@
 		"orderReportingPointType": {
 			"description": "Candidate - Nature of the TRO process Reporting Point represented in this record",
 			"enum": [
-				"experimentalAmendment",
-				"experimentalMakingPermanent",
-				"experimentalNoticeOfMaking",
-				"experimentalRevocation",
-				"permanentAmendment",
 				"permanentNoticeOfMaking",
-				"permanentNoticeOfProposal",
 				"permanentRevocation",
-				"specialEventOrderNoticeOfMaking",
-				"troOnRoadActiveStatus",
 				"ttroTtmoByNotice",
-				"ttroTtmoExtension",
 				"ttroTtmoNoticeAfterMaking",
-				"ttroTtmoNoticeOfIntention",
 				"ttroTtmoRevocation",
-				"variationByNotice"
+				"experimentalMakingPermanent",
+				"permanentAmendment"
 			],
 			"type": "string"
 		},
@@ -3007,12 +2429,10 @@
 		"permitType": {
 			"description": "List of permit types",
 			"enum": [
-				"business",
 				"doctor",
-				"other",
+				"business",
 				"resident",
-				"residentExcludesNonResidentBlueBadge",
-				"residentWithNonResidentBlueBadge"
+				"other"
 			],
 			"type": "string"
 		},
@@ -3119,11 +2539,12 @@
 			],
 			"type": "string"
 		},
-		"recordStatusType": {
-			"description": "Indicates the applicable direction for a linear direction",
+		"regulationStatusType": {
+			"description": "Listing containing status values for regulations",
 			"enum": [
-				"active",
-				"expired"
+				"valid",
+				"not valid",
+				"suspended"
 			],
 			"type": "string"
 		},
@@ -3184,17 +2605,26 @@
 		"roadType": {
 			"description": "List of road types",
 			"enum": [
-				"aRoad",
-				"bRoad",
-				"cRoad",
 				"motorway",
-				"other",
-				"trunkRoad"
+				"trunkRoad",
+				"mainRoad",
+				"other"
 			],
 			"type": "string"
 		},
 		"specialDayType": {
 			"description": "Collection of special types of days. [EN 16157-7:2018]",
+			"enum": [
+				"easter",
+				"marketDay",
+				"other",
+				"matchDay",
+				"schoolDay",
+				"nonSchoolDay",
+				"publicHoliday",
+				"eventDay",
+				"goodFriday"
+			],
 			"type": "string"
 		},
 		"speedLimitProfileType": {
@@ -3217,13 +2647,330 @@
 		"targetEnumeratedList": {
 			"description": "List of enumeration lists that may be extended",
 			"enum": [
+				"regulationType",
+				"permitType",
+				"payloadType",
+				"vehicleUsageType",
 				"emissionsClassificationEuroType",
 				"fuelType",
-				"payloadType",
-				"permitType",
-				"regulationType",
-				"vehicleEquipmentType",
-				"vehicleUsageType"
+				"vehicleEquipmentType"
+			],
+			"type": "string"
+		},
+		"timeZone": {
+			"description": "IANA time-zone (see http://www.iana.org/time-zones)",
+			"enum": [
+				"Europe/Andorra",
+				"Asia/Dubai",
+				"Asia/Kabul",
+				"Europe/Tirane",
+				"Asia/Yerevan",
+				"Antarctica/Casey",
+				"Antarctica/Davis",
+				"Antarctica/Mawson",
+				"Antarctica/Palmer",
+				"Antarctica/Rothera",
+				"Antarctica/Troll",
+				"America/Argentina/Buenos_Aires",
+				"America/Argentina/Cordoba",
+				"America/Argentina/Salta",
+				"America/Argentina/Jujuy",
+				"America/Argentina/Tucuman",
+				"America/Argentina/Catamarca",
+				"America/Argentina/La_Rioja",
+				"America/Argentina/San_Juan",
+				"America/Argentina/Mendoza",
+				"America/Argentina/San_Luis",
+				"America/Argentina/Rio_Gallegos",
+				"America/Argentina/Ushuaia",
+				"Pacific/Pago_Pago",
+				"Europe/Vienna",
+				"Australia/Lord_Howe",
+				"Antarctica/Macquarie",
+				"Australia/Hobart",
+				"Australia/Melbourne",
+				"Australia/Sydney",
+				"Australia/Broken_Hill",
+				"Australia/Brisbane",
+				"Australia/Lindeman",
+				"Australia/Adelaide",
+				"Australia/Darwin",
+				"Australia/Perth",
+				"Australia/Eucla",
+				"Asia/Baku",
+				"America/Barbados",
+				"Asia/Dhaka",
+				"Europe/Brussels",
+				"Europe/Sofia",
+				"Atlantic/Bermuda",
+				"America/La_Paz",
+				"America/Noronha",
+				"America/Belem",
+				"America/Fortaleza",
+				"America/Recife",
+				"America/Araguaina",
+				"America/Maceio",
+				"America/Bahia",
+				"America/Sao_Paulo",
+				"America/Campo_Grande",
+				"America/Cuiaba",
+				"America/Santarem",
+				"America/Porto_Velho",
+				"America/Boa_Vista",
+				"America/Manaus",
+				"America/Eirunepe",
+				"America/Rio_Branco",
+				"Asia/Thimphu",
+				"Europe/Minsk",
+				"America/Belize",
+				"America/St_Johns",
+				"America/Halifax",
+				"America/Glace_Bay",
+				"America/Moncton",
+				"America/Goose_Bay",
+				"America/Toronto",
+				"America/Iqaluit",
+				"America/Winnipeg",
+				"America/Resolute",
+				"America/Rankin_Inlet",
+				"America/Regina",
+				"America/Swift_Current",
+				"America/Edmonton",
+				"America/Cambridge_Bay",
+				"America/Inuvik",
+				"America/Dawson_Creek",
+				"America/Fort_Nelson",
+				"America/Whitehorse",
+				"America/Dawson",
+				"America/Vancouver",
+				"Europe/Zurich",
+				"Africa/Abidjan",
+				"Pacific/Rarotonga",
+				"America/Santiago",
+				"America/Punta_Arenas",
+				"Pacific/Easter",
+				"Asia/Shanghai",
+				"Asia/Urumqi",
+				"America/Bogota",
+				"America/Costa_Rica",
+				"America/Havana",
+				"Atlantic/Cape_Verde",
+				"Asia/Nicosia",
+				"Asia/Famagusta",
+				"Europe/Prague",
+				"Europe/Berlin",
+				"America/Santo_Domingo",
+				"Africa/Algiers",
+				"America/Guayaquil",
+				"Pacific/Galapagos",
+				"Europe/Tallinn",
+				"Africa/Cairo",
+				"Africa/El_Aaiun",
+				"Europe/Madrid",
+				"Africa/Ceuta",
+				"Atlantic/Canary",
+				"Europe/Helsinki",
+				"Pacific/Fiji",
+				"Atlantic/Stanley",
+				"Pacific/Kosrae",
+				"Atlantic/Faroe",
+				"Europe/Paris",
+				"Europe/London",
+				"Asia/Tbilisi",
+				"America/Cayenne",
+				"Europe/Gibraltar",
+				"America/Nuuk",
+				"America/Danmarkshavn",
+				"America/Scoresbysund",
+				"America/Thule",
+				"Europe/Athens",
+				"Atlantic/South_Georgia",
+				"America/Guatemala",
+				"Pacific/Guam",
+				"Africa/Bissau",
+				"America/Guyana",
+				"Asia/Hong_Kong",
+				"America/Tegucigalpa",
+				"America/Port-au-Prince",
+				"Europe/Budapest",
+				"Asia/Jakarta",
+				"Asia/Pontianak",
+				"Asia/Makassar",
+				"Asia/Jayapura",
+				"Europe/Dublin",
+				"Asia/Jerusalem",
+				"Asia/Kolkata",
+				"Indian/Chagos",
+				"Asia/Baghdad",
+				"Asia/Tehran",
+				"Europe/Rome",
+				"America/Jamaica",
+				"Asia/Amman",
+				"Asia/Tokyo",
+				"Africa/Nairobi",
+				"Asia/Bishkek",
+				"Pacific/Tarawa",
+				"Pacific/Kanton",
+				"Pacific/Kiritimati",
+				"Asia/Pyongyang",
+				"Asia/Seoul",
+				"Asia/Almaty",
+				"Asia/Qyzylorda",
+				"Asia/Qostanay",
+				"Asia/Aqtobe",
+				"Asia/Aqtau",
+				"Asia/Atyrau",
+				"Asia/Oral",
+				"Asia/Beirut",
+				"Asia/Colombo",
+				"Africa/Monrovia",
+				"Europe/Vilnius",
+				"Europe/Riga",
+				"Africa/Tripoli",
+				"Africa/Casablanca",
+				"Europe/Chisinau",
+				"Pacific/Kwajalein",
+				"Asia/Yangon",
+				"Asia/Ulaanbaatar",
+				"Asia/Hovd",
+				"Asia/Choibalsan",
+				"Asia/Macau",
+				"America/Martinique",
+				"Europe/Malta",
+				"Indian/Mauritius",
+				"Indian/Maldives",
+				"America/Mexico_City",
+				"America/Cancun",
+				"America/Merida",
+				"America/Monterrey",
+				"America/Matamoros",
+				"America/Chihuahua",
+				"America/Ciudad_Juarez",
+				"America/Ojinaga",
+				"America/Mazatlan",
+				"America/Bahia_Banderas",
+				"America/Hermosillo",
+				"America/Tijuana",
+				"Asia/Kuching",
+				"Africa/Maputo",
+				"Africa/Windhoek",
+				"Pacific/Noumea",
+				"Pacific/Norfolk",
+				"Africa/Lagos",
+				"America/Managua",
+				"Asia/Kathmandu",
+				"Pacific/Nauru",
+				"Pacific/Niue",
+				"Pacific/Auckland",
+				"Pacific/Chatham",
+				"America/Panama",
+				"America/Lima",
+				"Pacific/Tahiti",
+				"Pacific/Marquesas",
+				"Pacific/Gambier",
+				"Pacific/Port_Moresby",
+				"Pacific/Bougainville",
+				"Asia/Manila",
+				"Asia/Karachi",
+				"Europe/Warsaw",
+				"America/Miquelon",
+				"Pacific/Pitcairn",
+				"America/Puerto_Rico",
+				"Asia/Gaza",
+				"Asia/Hebron",
+				"Europe/Lisbon",
+				"Atlantic/Madeira",
+				"Atlantic/Azores",
+				"Pacific/Palau",
+				"America/Asuncion",
+				"Asia/Qatar",
+				"Europe/Bucharest",
+				"Europe/Belgrade",
+				"Europe/Kaliningrad",
+				"Europe/Moscow",
+				"Europe/Simferopol",
+				"Europe/Kirov",
+				"Europe/Volgograd",
+				"Europe/Astrakhan",
+				"Europe/Saratov",
+				"Europe/Ulyanovsk",
+				"Europe/Samara",
+				"Asia/Yekaterinburg",
+				"Asia/Omsk",
+				"Asia/Novosibirsk",
+				"Asia/Barnaul",
+				"Asia/Tomsk",
+				"Asia/Novokuznetsk",
+				"Asia/Krasnoyarsk",
+				"Asia/Irkutsk",
+				"Asia/Chita",
+				"Asia/Yakutsk",
+				"Asia/Khandyga",
+				"Asia/Vladivostok",
+				"Asia/Ust-Nera",
+				"Asia/Magadan",
+				"Asia/Sakhalin",
+				"Asia/Srednekolymsk",
+				"Asia/Kamchatka",
+				"Asia/Anadyr",
+				"Asia/Riyadh",
+				"Pacific/Guadalcanal",
+				"Africa/Khartoum",
+				"Asia/Singapore",
+				"America/Paramaribo",
+				"Africa/Juba",
+				"Africa/Sao_Tome",
+				"America/El_Salvador",
+				"Asia/Damascus",
+				"America/Grand_Turk",
+				"Africa/Ndjamena",
+				"Asia/Bangkok",
+				"Asia/Dushanbe",
+				"Pacific/Fakaofo",
+				"Asia/Dili",
+				"Asia/Ashgabat",
+				"Africa/Tunis",
+				"Pacific/Tongatapu",
+				"Europe/Istanbul",
+				"Asia/Taipei",
+				"Europe/Kyiv",
+				"America/New_York",
+				"America/Detroit",
+				"America/Kentucky/Louisville",
+				"America/Kentucky/Monticello",
+				"America/Indiana/Indianapolis",
+				"America/Indiana/Vincennes",
+				"America/Indiana/Winamac",
+				"America/Indiana/Marengo",
+				"America/Indiana/Petersburg",
+				"America/Indiana/Vevay",
+				"America/Chicago",
+				"America/Indiana/Tell_City",
+				"America/Indiana/Knox",
+				"America/Menominee",
+				"America/North_Dakota/Center",
+				"America/North_Dakota/New_Salem",
+				"America/North_Dakota/Beulah",
+				"America/Denver",
+				"America/Boise",
+				"America/Phoenix",
+				"America/Los_Angeles",
+				"America/Anchorage",
+				"America/Juneau",
+				"America/Sitka",
+				"America/Metlakatla",
+				"America/Yakutat",
+				"America/Nome",
+				"America/Adak",
+				"Pacific/Honolulu",
+				"America/Montevideo",
+				"Asia/Samarkand",
+				"Asia/Tashkent",
+				"America/Caracas",
+				"Asia/Ho_Chi_Minh",
+				"Pacific/Efate",
+				"Pacific/Apia",
+				"Africa/Johannesburg"
 			],
 			"type": "string"
 		},
@@ -3307,35 +3054,6 @@
 			],
 			"type": "string"
 		},
-		"anyType": {
-			"additionalProperties": false,
-			"patternProperties": {
-				"^@\\w+$": {
-					"type": [
-						"string",
-						"number",
-						"boolean"
-					]
-				},
-				"^\\w+$": {
-				}
-			},
-			"properties": {
-				"$": {
-					"type": [
-						"string",
-						"number",
-						"boolean"
-					]
-				}
-			},
-			"type": [
-				"object",
-				"string",
-				"number",
-				"boolean"
-			]
-		},
 		"actionType": {
 			"description": "List of the action types",
 			"enum": [
@@ -3349,11 +3067,48 @@
 				"errorFix"
 			],
 			"type": "string"
-		}
+		},
+		"UniqueStreetReferenceNumber": {
+            "type": "object",
+            "required": [
+                "usrn"
+            ],
+            "properties": {
+                "usrn": {
+                    "type": "integer",
+                    "maximum": 9.22337203685478E+18,
+                    "minimum": -9.22337203685478E+18
+                },
+                "nsgStreetName": {
+                    "type": "string"
+                },
+                "nsgStreetNumber": {
+                    "type": "string"
+                },
+                "ExternalReference": {
+                    "$ref": "#/defs/ExternalReference"
+                },
+                "ElementaryStreetUnit": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/defs/ElementaryStreetUnit"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/defs/ElementaryStreetUnit"
+                            }
+                        }
+                    ]
+                }
+            },
+            "description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer",
+            "additionalProperties": false
+        }
 	},
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"additionalProperties": true,
-	"description": "DTRO v3.2.0 data model JSON schema",
+	"description": "DTRO v3.2.1 data model JSON schema",
 	"oneOf": [
 		{
 			"type": "object",

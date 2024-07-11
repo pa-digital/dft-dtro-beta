@@ -382,7 +382,7 @@ public class DTROsController : ControllerBase
         }
         catch (NotFoundException nFex)
         {
-          
+
             return NotFound(new ApiErrorResponse(nFex.Message, "Dtro History not found."));
         }
         catch (Exception ex)
