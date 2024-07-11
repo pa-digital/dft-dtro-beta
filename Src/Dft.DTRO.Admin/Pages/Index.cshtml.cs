@@ -35,7 +35,7 @@ namespace Dft.DTRO.Admin.Pages
         [BindProperty(SupportsGet = true)]
         public int? TraSelect { get; set; } // Nullable int for optional selection
 
-        public List<LookupResponse> LookupResponses { get; set; } = new List<LookupResponse>();
+        public List<SwaCodeResponse> swaCodes { get; set; } = new List<SwaCodeResponse>();
 
         public async Task OnGetAsync()
         {
@@ -48,8 +48,8 @@ namespace Dft.DTRO.Admin.Pages
             var metrics = await _metricsService.MetricsForTra(metricRequest);
             Metrics = metrics ?? new MetricSummary();
 
-            LookupResponses = await _traService.GetTraLookup();
-            LookupResponses.Insert(0, new LookupResponse { Id = 0, Name = "(all)" });
+            swaCodes = await _traService.GetSwaCodes();
+            swaCodes.Insert(0, new SwaCodeResponse { TraId = 0, Name = "[all]" });
         }
 
         private Period GetPeriodEnum(string periodOption)
@@ -68,9 +68,19 @@ namespace Dft.DTRO.Admin.Pages
                 TraId = traId == 0 ? null : traId
             };
 
+            int deductDays = number;
+            if (deductDays == 0)
+            {
+                deductDays = 1;
+            }
+            if (period == Period.Days)
+            {
+                deductDays -=1;
+            }
+
             metricRequest.DateFrom = period switch
             {
-                Period.Days => DateTime.Now.AddDays(-number),
+                Period.Days => DateTime.Now.AddDays(-deductDays),
                 Period.Weeks => DateTime.Now.AddDays(-number * 7),
                 Period.Months => DateTime.Now.AddMonths(-number),
                 _ => DateTime.Now // default case
