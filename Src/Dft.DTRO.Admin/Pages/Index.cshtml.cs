@@ -68,9 +68,19 @@ namespace Dft.DTRO.Admin.Pages
                 TraId = traId == 0 ? null : traId
             };
 
+            int deductDays = number;
+            if (deductDays == 0)
+            {
+                deductDays = 1;
+            }
+            if (period == Period.Days)
+            {
+                deductDays -=1;
+            }
+
             metricRequest.DateFrom = period switch
             {
-                Period.Days => DateTime.Now.AddDays(-number),
+                Period.Days => DateTime.Now.AddDays(-deductDays),
                 Period.Weeks => DateTime.Now.AddDays(-number * 7),
                 Period.Months => DateTime.Now.AddMonths(-number),
                 _ => DateTime.Now // default case
