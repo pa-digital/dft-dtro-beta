@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
+using DfT.DTRO.DAL;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.Validation;
 using DfT.DTRO.Services.Validation;
@@ -21,17 +22,21 @@ public class RecordManagementServiceTests
     [InlineData("3.2.0", "invalid-duplicate-provision-reference", false)]
     public void ProducesCorrectResults(string schemaVersion, string file, bool isValid)
     {
-        IRecordManagementService sut = new RecordManagementService();
+        var mockSwaCodeDal = new Mock<ISwaCodeDal>();
+        IRecordManagementService sut = new RecordManagementService(mockSwaCodeDal.Object);
+
+
+        mockSwaCodeDal.Setup(it => it.GetAllCodes().Result).Returns(() => SwaCodesResponse);
 
         var input = File.ReadAllText(Path.Join(SourceJsonBasePath, $"{file}.json"));
 
         DtroSubmit dtroSubmit = new()
         {
-            SchemaVersion = schemaVersion, 
+            SchemaVersion = schemaVersion,
             Data = JsonConvert.DeserializeObject<ExpandoObject>(input)
         };
 
-        List<SemanticValidationError> actual = sut.ValidateCreationRequest(dtroSubmit,null);
+        List<SemanticValidationError> actual = sut.ValidateCreationRequest(dtroSubmit, 0);
 
         Assert.Equal(isValid, !actual.Any());
     }
