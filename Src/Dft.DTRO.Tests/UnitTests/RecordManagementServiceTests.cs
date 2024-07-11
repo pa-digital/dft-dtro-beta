@@ -36,7 +36,7 @@ public class RecordManagementServiceTests
             Data = JsonConvert.DeserializeObject<ExpandoObject>(input)
         };
 
-        List<SemanticValidationError> actual = sut.ValidateCreationRequest(dtroSubmit, 0);
+        List<SemanticValidationError> actual = sut.ValidateCreationRequest(dtroSubmit, 1585);
 
         Assert.Equal(isValid, !actual.Any());
     }
