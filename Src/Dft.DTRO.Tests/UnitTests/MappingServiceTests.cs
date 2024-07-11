@@ -29,9 +29,9 @@ public class MappingServiceTests
     }
 
     [Fact]
-    public async Task GetSource_Returns_DtroHistoryResponse()
+    public void GetSource_Returns_DtroHistoryResponse()
     {
-        List<DTROHistory> histories = await CreateRequestDtroHistoryObject(ValidDtroHistories);
+        List<DTROHistory> histories = CreateRequestDtroHistoryObject(ValidDtroHistories);
         List<DtroHistorySourceResponse> actual = histories
             .Select(_sut.GetSource)
             .Where(response => response != null)
@@ -47,9 +47,9 @@ public class MappingServiceTests
     }
 
     [Fact]
-    public async Task GetProvision_Returns_DtroHistoryProvision()
+    public void GetProvision_Returns_DtroHistoryProvision()
     {
-        List<DTROHistory> histories = await CreateRequestDtroHistoryObject(ValidDtroHistories);
+        List<DTROHistory> histories = CreateRequestDtroHistoryObject(ValidDtroHistories);
         List<DtroHistoryProvisionResponse> actual = histories
             .SelectMany(_sut.GetProvision)
             .Where(response => response != null)

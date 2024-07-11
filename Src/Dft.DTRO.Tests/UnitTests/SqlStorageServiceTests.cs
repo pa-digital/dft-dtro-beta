@@ -31,7 +31,7 @@ public class SqlStorageServiceTests : IDisposable
     private readonly Guid _dtroWithRegulationTypesKey = Guid.NewGuid();
     private readonly Guid _dtroWithOrderReportingPointKey = Guid.NewGuid();
 
-    private readonly DfT.DTRO.Models.DataBase.DTRO _existingDtro;   
+    private readonly DfT.DTRO.Models.DataBase.DTRO _existingDtro;
     private readonly DfT.DTRO.Models.DataBase.DTRO _deletedDtro;
     private readonly DfT.DTRO.Models.DataBase.DTRO _dtroWithTa1234;
     private readonly DfT.DTRO.Models.DataBase.DTRO _dtroWithCreationDate;
@@ -42,7 +42,6 @@ public class SqlStorageServiceTests : IDisposable
     private readonly DfT.DTRO.Models.DataBase.DTRO _dtroWithOrderReportingPoint;
 
     private readonly Mock<IDtroMappingService> _mappingServiceMock = new();
-    private int? _traHeader = 1585;
 
     public SqlStorageServiceTests()
     {
@@ -232,7 +231,7 @@ public class SqlStorageServiceTests : IDisposable
 
         Assert.False(result);
     }
-    
+
 
     [Fact]
     public async Task SoftDeleteDtro_ReturnsTrue_OnSuccessfulDelete()
