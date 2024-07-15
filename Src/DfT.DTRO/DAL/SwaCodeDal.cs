@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.SwaCode;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,29 +24,21 @@ public class SwaCodeDal : ISwaCodeDal
     /// An instance of <see cref="DtroContext"/>
     /// representing the current database session.
     /// </param>
-    public SwaCodeDal(DtroContext dtroContext)
-    {
-        _dtroContext = dtroContext;
-    }
+    public SwaCodeDal(DtroContext dtroContext) => _dtroContext = dtroContext;
 
     /// <summary>
     /// An implementation of <see cref="GetAllCodes"/>
     /// </summary>
     /// <returns>List of swa code responses</returns>
-    public async Task<List<SwaCodeResponse>> GetAllCodes()
-    {
-     var swaCodeResponses = await _dtroContext.SwaCodes
-                        .OrderBy(swaCode => swaCode.Name)  // Order by Name
-                        .Select(swaCode => new SwaCodeResponse
-                        {
-                            TraId = swaCode.TraId,
-                            Name = swaCode.Name,
-                            Prefix = swaCode.Prefix,
-                            IsAdmin = swaCode.IsAdmin
-                        })
-                        .ToListAsync();
-
-       
-        return swaCodeResponses;
-    }
+    public async Task<List<SwaCodeResponse>> GetAllCodes() =>
+        await _dtroContext.SwaCodes
+            .OrderBy(swaCode => swaCode.Name)
+            .Select(swaCode => new SwaCodeResponse
+            {
+                TraId = swaCode.TraId,
+                Name = swaCode.Name,
+                Prefix = swaCode.Prefix,
+                IsAdmin = swaCode.IsAdmin
+            })
+            .ToListAsync();
 }
