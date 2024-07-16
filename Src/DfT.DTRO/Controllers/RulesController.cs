@@ -16,9 +16,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 
-/// <summary>
-/// Prototype controller for sourcing data model information.
-/// </summary>
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
@@ -29,12 +26,6 @@ public class RulesController : ControllerBase
     private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<RulesController> _logger;
 
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    /// <param name="ruleTemplateService">A <see cref="IRuleTemplateService"/> instance.</param>
-    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
-    /// <param name="logger">An <see cref="ILogger{RulesController}"/> instance.</param>
     public RulesController(
         IRuleTemplateService ruleTemplateService,
         IRequestCorrelationProvider correlationProvider,
@@ -45,12 +36,6 @@ public class RulesController : ControllerBase
         _logger = logger;
     }
 
-    /// <summary>
-    /// Gets available ruleTemplate versions.
-    /// </summary>
-    /// <response code="200">Ok.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Rule Versions.</returns>
     [HttpGet]
     [Route("/v1/rules/versions")]
     [FeatureGate(FeatureNames.SchemasRead)]
@@ -68,12 +53,6 @@ public class RulesController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Gets available rule Templates.
-    /// </summary>
-    /// <response code="200">Ok.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Rules.</returns>
     [HttpGet]
     [Route("/v1/rules")]
     [FeatureGate(FeatureNames.SchemasRead)]
@@ -91,15 +70,6 @@ public class RulesController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Gets a rule by a named identifier.
-    /// </summary>
-    /// <param name="version">The version.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Rule.</returns>
     [HttpGet]
     [Route("/v1/rules/{version}")]
     [FeatureGate(FeatureNames.SchemasRead)]
@@ -125,14 +95,6 @@ public class RulesController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Gets a rule by a identifier.
-    /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Rule.</returns>
     [HttpGet]
     [Route("/v1/rules/{id:guid}")]
     [FeatureGate(FeatureNames.SchemasRead)]
@@ -158,15 +120,6 @@ public class RulesController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Creates a new Rule.
-    /// </summary>
-    /// <param name="version">The new version.</param>
-    /// <param name="file">The new rule.</param>
-    /// <response code="201">Created.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the Rule.</returns>
     [HttpPost]
     [Route("/v1/rules/createFromFile/{version}")]
     [Consumes("multipart/form-data")]
@@ -200,19 +153,6 @@ public class RulesController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Updates an existing rule.
-    /// </summary>
-    /// <remarks>
-    /// The payload requires a rule which will replace the rule with the quoted schema version.
-    /// </remarks>
-    /// <param name="version">The existing version.</param>
-    /// <param name="file">The replacement rule file.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the updated rule.</returns>
     [HttpPut]
     [Route("/v1/rules/updateFromFile/{version}")]
     [ValidateModelState]

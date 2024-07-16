@@ -15,24 +15,17 @@ using Microsoft.Extensions.Configuration;
 
 namespace DfT.DTRO.Services.Mapping;
 
-/// <inheritdoc cref="IDtroMappingService"/>
 public class DtroMappingService : IDtroMappingService
 {
     private readonly IConfiguration _configuration;
     private readonly ISpatialProjectionService _projectionService;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DtroMappingService"/> class.
-    /// </summary>
-    /// <param name="configuration">An <see cref="IConfiguration"/> instance.</param>
-    /// <param name="projectionService">An <see cref="ISpatialProjectionService"/> instance.</param>
     public DtroMappingService(IConfiguration configuration, ISpatialProjectionService projectionService)
     {
         this._configuration = configuration;
         this._projectionService = projectionService;
     }
 
-    /// <inheritdoc/>
     public IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros)
     {
         var results = new List<DtroEvent>();
@@ -71,7 +64,6 @@ public class DtroMappingService : IDtroMappingService
         return results;
     }
 
-    /// <inheritdoc/>
     public DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro)
     {
         var result = new DtroResponse()
@@ -83,7 +75,6 @@ public class DtroMappingService : IDtroMappingService
         return result;
     }
 
-    /// <inheritdoc/>
     public IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros)
     {
         var results = new List<DtroSearchResult>();
@@ -110,7 +101,6 @@ public class DtroMappingService : IDtroMappingService
         return results;
     }
 
-    /// <inheritdoc/>
     public DTROHistory MapToDtroHistory(Models.DataBase.DTRO currentDtro) =>
         new()
         {
@@ -126,7 +116,6 @@ public class DtroMappingService : IDtroMappingService
             TrafficAuthorityOwnerId = currentDtro.TrafficAuthorityOwnerId
         };
 
-    /// <inheritdoc />
     public DtroHistorySourceResponse GetSource(DTROHistory dtroHistory)
     {
         var sourceActionType = Get(dtroHistory, "source.actionType");
@@ -153,7 +142,6 @@ public class DtroMappingService : IDtroMappingService
         };
     }
 
-    /// <inheritdoc />
     public DtroOwner GetOwnership(Models.DataBase.DTRO dtro)
     {
         var traCreator = dtro.Data.GetValueOrDefault<int>("source.traCreator");
@@ -166,7 +154,6 @@ public class DtroMappingService : IDtroMappingService
         };
     }
 
-    /// <inheritdoc />
     public void SetOwnership(ref Models.DataBase.DTRO dtro, int currentTraOwner)
     {
         dtro.Data.PutValue("source.currentTraOwner", currentTraOwner);
@@ -198,7 +185,6 @@ public class DtroMappingService : IDtroMappingService
         }
     }
 
-    /// <inheritdoc />
     public List<DtroHistoryProvisionResponse> GetProvision(DTROHistory dtroHistory)
     {
         IList<object> provisions = this.GetProvision(dtroHistory, "source.provision");
@@ -224,7 +210,6 @@ public class DtroMappingService : IDtroMappingService
         return ret.OrderByDescending(x => x.Reference).ThenByDescending(x => x.LastUpdated).ToList();
     }
 
-    /// <inheritdoc/>
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
     {
         List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("source.provision")

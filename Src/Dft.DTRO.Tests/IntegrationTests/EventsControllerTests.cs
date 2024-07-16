@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using DfT.DTRO;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Services;
@@ -5,8 +7,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace Dft.DTRO.Tests.IntegrationTests;
 
@@ -37,7 +37,7 @@ public class EventsControllerTests
     public async Task Post_Events_NoDtroIsMatchingTheCriteria_ReturnsEmptyResult()
     {
 
-       
+
 
         _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroEventSearch>()))
             .Returns(Task.FromResult(Array.Empty<DfT.DTRO.Models.DataBase.DTRO>().ToList()));

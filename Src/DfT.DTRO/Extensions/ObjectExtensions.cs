@@ -29,7 +29,7 @@ public static class ObjectExtensions
     {
         if (obj == null || other == null)
         {
-            return false; // If either object is null, they are not equal
+            return false;
         }
 
         Type type = typeof(T);
@@ -42,18 +42,18 @@ public static class ObjectExtensions
 
             if (value1 == null && value2 == null)
             {
-                continue; // Both values are null, consider them equal
+                continue;
             }
             else if (value1 == null || value2 == null)
             {
-                return false; // One value is null, the other is not, consider them not equal
+                return false;
             }
             else if (!value1.Equals(value2))
             {
-                return false; // Values are not equal, objects are not equal
+                return false;
             }
         }
 
-        return true; // All properties are equal
+        return true;
     }
 }

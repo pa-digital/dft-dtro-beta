@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.Conditions;
 using DfT.DTRO.Models.Conditions.Base;
@@ -8,27 +13,15 @@ using DfT.DTRO.Models.SchemaTemplate;
 using DfT.DTRO.Models.Validation;
 using Microsoft.Extensions.Internal;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace DfT.DTRO.Services.Validation;
 
-/// <inheritdoc />
 public class SemanticValidationService : ISemanticValidationService
 {
     private readonly ISystemClock _clock;
     private readonly IDtroDal _dtroDal;
     private readonly IConditionValidationService _conditionValidationService;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="clock">An <see cref="ISystemClock"/> instance to facilitate testing.</param>
-    /// <param name="dtroDal">An <see cref="IDtroService" /> instance.</param>
-    /// <param name="conditionValidationService">An <see cref="IConditionValidationService"/> instance.</param>
     public SemanticValidationService(
         ISystemClock clock,
         IDtroDal dtroDal,
@@ -39,7 +32,6 @@ public class SemanticValidationService : ISemanticValidationService
         _conditionValidationService = conditionValidationService;
     }
 
-    /// <inheritdoc />
     public Task<List<SemanticValidationError>> ValidateCreationRequest(DtroSubmit dtroSubmit)
     {
         return Validate(dtroSubmit.Data.ToIndentedJsonString(), dtroSubmit.SchemaVersion);

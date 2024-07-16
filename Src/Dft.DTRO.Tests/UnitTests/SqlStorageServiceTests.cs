@@ -52,8 +52,6 @@ public class SqlStorageServiceTests : IDisposable
                 (host, services) => services.AddStorage(host.Configuration))
             .Build();
 
-        //_context = host.Services.GetRequiredService<DtroContext>();
-
         _context = host.Services.GetService<DtroContext>();
 
         _context.Database.Migrate();

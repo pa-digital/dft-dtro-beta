@@ -1,30 +1,21 @@
-﻿using DfT.DTRO.DAL;
-using DfT.DTRO.Models.SwaCode;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
+using DfT.DTRO.DAL;
+using DfT.DTRO.Models.SwaCode;
 
 namespace DfT.DTRO.Services;
 
-/// <summary>
-/// An implementation of <see cref="ITraService"/>
-/// </summary>
 public class TraService : ITraService
 {
     private readonly ISwaCodeDal _swaCodeDal;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="swaCodeDal">An <see cref="ISwaCodeDal"/> instance.</param>
-    /// 
     public TraService(ISwaCodeDal swaCodeDal)
     {
         _swaCodeDal = swaCodeDal;
     }
 
-    /// <inheritdoc/>
     public async Task<List<SwaCodeResponse>> GetUiFormattedSwaCodeAsync()
     {
         var swaCodeResponses = await _swaCodeDal.GetAllCodes();

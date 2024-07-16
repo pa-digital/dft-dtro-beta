@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using DfT.DTRO;
-using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Errors;
@@ -27,8 +26,8 @@ public class DTROsControllerTests
     private const string InvalidDtroJsonPath = "./DtroJsonDataExamples/v3.1.1/provision-empty.json";
     private static readonly string[] ValidDtroHistories =
     {
-        "./DtroJsonDataExamples/v3.2.0/valid-new-x.json", 
-        "./DtroJsonDataExamples/v3.2.0/valid-fullAmendment.json", 
+        "./DtroJsonDataExamples/v3.2.0/valid-new-x.json",
+        "./DtroJsonDataExamples/v3.2.0/valid-fullAmendment.json",
         "./DtroJsonDataExamples/v3.2.0/valid-fullRevoke.json"
     };
 

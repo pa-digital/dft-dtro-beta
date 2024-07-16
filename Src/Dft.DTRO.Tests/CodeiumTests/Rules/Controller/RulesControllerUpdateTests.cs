@@ -32,30 +32,23 @@ public class RulesControllerUpdateTests
     [Fact]
     public async Task UpdateRule_WithNullFile_ReturnsBadRequest()
     {
-        // Arrange
         string version = "1.0";
         IFormFile? file = null;
-        // Act
         var result = await _controller.UpdateFromFile(version, file);
-        // Assert
         Assert.IsType<BadRequestObjectResult>(result);
     }
     [Fact]
     public async Task UpdateRule_WithEmptyFile_ReturnsBadRequest()
     {
-        // Arrange
         string version = "1.0";
         var file = new Mock<IFormFile>();
         file.Setup(f => f.Length).Returns(0);
-        // Act
         var result = await _controller.UpdateFromFile(version, file.Object);
-        // Assert
         Assert.IsType<BadRequestObjectResult>(result);
     }
     [Fact]
     public async Task UpdateRule_WithValidFile_ReturnsCreatedAtAction()
     {
-        // Arrange
         string version = "1.0";
         var file = new Mock<IFormFile>();
         var fileContent = "valid content";
@@ -67,15 +60,12 @@ public class RulesControllerUpdateTests
         _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
             .ReturnsAsync(response);
         _mockCorrelationProvider.Setup(c => c.CorrelationId).Returns("correlation-id");
-        // Act
         var result = await _controller.UpdateFromFile(version, file.Object);
-        // Assert
         Assert.IsType<OkObjectResult>(result);
     }
     [Fact]
     public async Task UpdateRule_WithInvalidOperationException_ReturnsBadRequest()
     {
-        // Arrange
         string version = "1.0";
         var file = new Mock<IFormFile>();
         var fileContent = "invalid content";
@@ -85,15 +75,12 @@ public class RulesControllerUpdateTests
             .Callback<Stream, CancellationToken>((stream, token) => memoryStream.CopyTo(stream));
         _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
             .ThrowsAsync(new InvalidOperationException("Invalid operation"));
-        // Act
         var result = await _controller.UpdateFromFile(version, file.Object);
-        // Assert
         Assert.IsType<BadRequestObjectResult>(result);
     }
     [Fact]
     public async Task UpdateRule_WithException_ReturnsInternalServerError()
     {
-        // Arrange
         string version = "1.0";
         var file = new Mock<IFormFile>();
         var fileContent = "content causing exception";
@@ -103,9 +90,7 @@ public class RulesControllerUpdateTests
             .Callback<Stream, CancellationToken>((stream, token) => memoryStream.CopyTo(stream));
         _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
             .ThrowsAsync(new Exception("General exception"));
-        // Act
         var result = await _controller.UpdateFromFile(version, file.Object);
-        // Assert
         Assert.IsType<ObjectResult>(result);
         var objectResult = result as ObjectResult;
         Assert.Equal(500, objectResult?.StatusCode);

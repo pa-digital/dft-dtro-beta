@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Dft.DTRO.Admin.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-using Dft.DTRO.Admin.Services;
 
 namespace Dft.DTRO.Admin.Pages
 {
@@ -27,13 +23,13 @@ namespace Dft.DTRO.Admin.Pages
         public bool HealthDatabase { get; set; } = true;
 
         [BindProperty(SupportsGet = true)]
-        public string PeriodOption { get; set; } = "days"; // Default value
+        public string PeriodOption { get; set; } = "days";
 
         [BindProperty(SupportsGet = true)]
-        public int NumberSelect { get; set; } = 1; // Default value
+        public int NumberSelect { get; set; } = 1;
 
         [BindProperty(SupportsGet = true)]
-        public int? TraSelect { get; set; } // Nullable int for optional selection
+        public int? TraSelect { get; set; }
 
         public List<SwaCodeResponse> swaCodes { get; set; } = new List<SwaCodeResponse>();
 
@@ -58,7 +54,7 @@ namespace Dft.DTRO.Admin.Pages
             {
                 return period;
             }
-            return Period.Days; // default to days if parsing fails
+            return Period.Days;
         }
 
         private MetricRequest CreateRequest(Period period, int number, int? traId = null)
@@ -75,7 +71,7 @@ namespace Dft.DTRO.Admin.Pages
             }
             if (period == Period.Days)
             {
-                deductDays -=1;
+                deductDays -= 1;
             }
 
             metricRequest.DateFrom = period switch
@@ -83,7 +79,7 @@ namespace Dft.DTRO.Admin.Pages
                 Period.Days => DateTime.Now.AddDays(-deductDays),
                 Period.Weeks => DateTime.Now.AddDays(-number * 7),
                 Period.Months => DateTime.Now.AddMonths(-number),
-                _ => DateTime.Now // default case
+                _ => DateTime.Now
             };
 
             metricRequest.DateTo = DateTime.Now;
@@ -98,7 +94,6 @@ namespace Dft.DTRO.Admin.Pages
 
         public IActionResult OnGetRefresh()
         {
-            // Retrieve values from TempData to set them back into the page
             if (TempData.TryGetValue("PeriodOption", out object periodOption))
                 PeriodOption = periodOption as string;
 

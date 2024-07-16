@@ -1,31 +1,22 @@
-﻿using DfT.DTRO.Models.DtroEvent;
-using DfT.DTRO.Services.Mapping;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DfT.DTRO.Models.DtroEvent;
+using DfT.DTRO.Services.Mapping;
 
 namespace DfT.DTRO.Services;
 
-/// <summary>
-/// An implementation of <see cref="IEventSearchService"/>
-/// </summary>
 public class EventSearchService : IEventSearchService
 {
     private readonly IDtroService _dtroService;
     private readonly IDtroMappingService _dtroMappingService;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
-    /// <param name="dtroMappingService">An <see cref="IDtroMappingService"/> instance.</param>
     public EventSearchService(IDtroService dtroService, IDtroMappingService dtroMappingService)
     {
         _dtroService = dtroService;
         _dtroMappingService = dtroMappingService;
     }
 
-    /// <inheritdoc/>
     public async Task<DtroEventSearchResult> SearchAsync(DtroEventSearch search)
     {
         if (search.Since is not null && search.Since > DateTime.Now)

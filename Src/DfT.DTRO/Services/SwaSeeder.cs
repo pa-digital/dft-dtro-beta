@@ -6,25 +6,15 @@ using DfT.DTRO.Models.DataBase;
 
 namespace DfT.DTRO.Services;
 
-/// <summary>
-/// SWA class seeder.
-/// </summary>
 public class SwaSeeder : ISwaSeeder
 {
     private readonly DtroContext _dtroContext;
 
-    /// <summary>
-    /// SwaSeeder constructor
-    /// </summary>
-    /// <param name="dtroContext">context parameter passed</param>
     public SwaSeeder(DtroContext dtroContext)
     {
         _dtroContext = dtroContext;
     }
 
-    /// <summary>
-    /// Seed SWA codes implementation
-    /// </summary>
     public void Seed()
     {
         if (!_dtroContext.Database.CanConnect())

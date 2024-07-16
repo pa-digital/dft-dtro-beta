@@ -22,9 +22,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 
-/// <summary>
-/// Controller for capturing DTROs.
-/// </summary>
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
@@ -36,14 +33,6 @@ public class DTROsController : ControllerBase
     private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<DTROsController> _logger;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DTROsController"/> class.
-    /// Default constructor.
-    /// </summary>
-    /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
-    /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
-    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
-    /// <param name="logger">An <see cref="ILogger{DTROsController}"/> instance.</param>
     public DTROsController(
         IDtroService dtroService,
         IMetricsService metricsService,
@@ -56,16 +45,6 @@ public class DTROsController : ControllerBase
         _logger = logger;
     }
 
-    /// <summary>
-    /// Creates a new DTRO.
-    /// </summary>
-    /// <param name="ta">Traffic Authority that is creating this D-TRO</param>
-    /// <param name="file">The new Dtro.</param>
-    /// <response code="201">Created.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the DTRO.</returns>
     [HttpPost]
     [Route("/v1/dtros/createFromFile")]
     [Consumes("multipart/form-data")]
@@ -116,20 +95,6 @@ public class DTROsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Updates an existing dtro.
-    /// </summary>
-    /// <remarks>
-    /// The payload requires a dtro, which will replace the dtro with the quoted dtro version.
-    /// </remarks>
-    /// <param name="ta">Traffic Authority that is creating this D-TRO</param>
-    /// <param name="id">The existing dtro id.</param>
-    /// <param name="file">The replacement dtro.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the updated dtro.</returns>
     [HttpPut]
     [Route("/v1/dtros/updateFromFile/{id:guid}")]
     [Consumes("multipart/form-data")]
@@ -180,16 +145,6 @@ public class DTROsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Creates a new DTRO.
-    /// </summary>
-    /// <param name="ta">Traffic Authority that is creating this D-TRO</param>
-    /// <param name="dtroSubmit">A DTRO submission that satisfies the schema for the model version being submitted.</param>
-    /// <response code="201">Created.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the DTRO.</returns>
     [HttpPost]
     [Route("/v1/dtros/createFromBody")]
     [ValidateModelState]
@@ -227,19 +182,6 @@ public class DTROsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Updates an existing DTRO.
-    /// </summary>
-    /// <param name="ta">Traffic Authority that is creating this D-TRO</param>
-    /// <param name="id">The ID of the DTRO to update.</param>
-    /// <param name="dtroSubmit">A DTRO submission that satisfies the schema for the model version being submitted.</param>
-    /// <remarks>
-    /// The payload requires a full DTRO which will replace the TRO with the quoted ID.
-    /// </remarks>
-    /// <response code="200">OK.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <returns>ID of the updated DTRO.</returns>
     [HttpPut]
     [Route("/v1/dtros/updateFromBody/{id:guid}")]
     [ValidateModelState]
@@ -277,13 +219,6 @@ public class DTROsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Gets a DTRO by ID.
-    /// </summary>
-    /// <param name="id">The ID of the DTRO to retrieve.</param>
-    /// <response code="200">OK.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
     [HttpGet]
     [Route("/v1/dtros/{id:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
@@ -305,14 +240,6 @@ public class DTROsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Marks a DTRO as deleted.
-    /// </summary>
-    /// <param name="ta">Traffic Authority that is creating this D-TRO</param>
-    /// <param name="id">Id of the DTRO.</param>
-    /// <response code="204">Okay.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
     [HttpDelete("/v1/dtros/{id:guid}")]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
@@ -337,13 +264,6 @@ public class DTROsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Get D-TRO source history.
-    /// </summary>
-    /// <param name="dtroId">The D-TRO ID reference.</param>
-    /// <response code="200">OK</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
     [HttpGet]
     [Route("/v1/dtros/sourceHistory/{dtroId:guid}")]
     public async Task<ActionResult<List<DtroHistorySourceResponse>>> GetSourceHistory(Guid dtroId)
@@ -364,13 +284,6 @@ public class DTROsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Get D-TRO provision history.
-    /// </summary>
-    /// <param name="dtroId">The D-TRO ID reference.</param>
-    /// <response code="200">OK</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
     [HttpGet]
     [Route("/v1/dtros/provisionHistory/{dtroId:guid}")]
     public async Task<ActionResult<List<DtroHistoryProvisionResponse>>> GetProvisionHistory(Guid dtroId)
@@ -392,14 +305,6 @@ public class DTROsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Assign a DTRO to anoth TRA.
-    /// </summary>
-    /// <param name="id">The D-TRO ID reference.</param>
-    /// <param name="assignToTraId">Id of tra to which ownership is to be assigned.</param>
-    /// <response code="204">Okay.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
     [HttpPost("v1/dtros/Ownership/{id:guid}/{assignToTraId:int}")]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]

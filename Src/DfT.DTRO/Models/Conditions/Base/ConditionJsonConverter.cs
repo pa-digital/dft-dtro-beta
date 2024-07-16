@@ -5,12 +5,8 @@ using System.Text.Json.Serialization;
 
 namespace DfT.DTRO.Models.Conditions.Base;
 
-/// <summary>
-/// Converts <see cref="Condition"/> from JSON.
-/// </summary>
 public class ConditionJsonConverter : JsonConverter<Condition>
 {
-    /// <inheritdoc/>
     public override Condition Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var json = JsonSerializer.Deserialize<JsonNode>(ref reader, options);
@@ -66,7 +62,6 @@ public class ConditionJsonConverter : JsonConverter<Condition>
         throw new JsonException("Unknown condition type.");
     }
 
-    /// <inheritdoc/>
     public override void Write(Utf8JsonWriter writer, Condition value, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
