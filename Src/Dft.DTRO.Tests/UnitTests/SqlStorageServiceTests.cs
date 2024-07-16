@@ -49,10 +49,10 @@ public class SqlStorageServiceTests : IDisposable
             .ConfigureAppConfiguration(opt =>
                 opt.AddJsonFile("./Configurations/appsettings.SqlStorageServiceTests.json", true))
             .ConfigureServices(
-                (host, services) => services.AddPostgresDtroContext(host.Configuration))
+                (host, services) => services.AddStorage(host.Configuration))
             .Build();
 
-        //_context = host.Services.GetRequiredService<DfT.DTRO.DAL.DtroContext>();
+        //_context = host.Services.GetRequiredService<DtroContext>();
 
         _context = host.Services.GetService<DtroContext>();
 
