@@ -1,35 +1,23 @@
-﻿using DfT.DTRO.DAL;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Threading.Tasks;
+using DfT.DTRO.DAL;
 using DfT.DTRO.JsonLogic;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.RuleTemplate;
 using DfT.DTRO.Models.SharedResponse;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
 using SchemaVersion = DfT.DTRO.Models.SchemaTemplate.SchemaVersion;
 
 namespace DfT.DTRO.Services;
 
-/// <summary>
-/// An implementation of <see cref="IRuleTemplateDal"/>
-/// that uses an SQL database as its store.
-/// </summary>
-///
 [ExcludeFromCodeCoverage]
 public class RuleTemplateDal : IRuleTemplateDal
 {
     private readonly DtroContext _dtroContext;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="dtroContext">
-    /// An instance of <see cref="DtroContext"/>
-    /// representing the current database session.
-    /// </param>
     public RuleTemplateDal(DtroContext dtroContext)
     {
         _dtroContext = dtroContext;
@@ -70,9 +58,9 @@ public class RuleTemplateDal : IRuleTemplateDal
         catch (Exception ex)
         {
 
-            throw ex ;
+            throw ex;
         }
-        
+
     }
 
     public async Task<List<RuleTemplate>> GetRuleTemplatesAsync()

@@ -14,9 +14,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 
-/// <summary>
-/// Controller implementation that allows users to query data store events (e.g., D-TROs being created, updated or deleted).
-/// </summary>
 [Tags("Events")]
 [ApiController]
 public class EventsController : ControllerBase
@@ -25,12 +22,6 @@ public class EventsController : ControllerBase
     private readonly IMetricsService _metricsService;
     private readonly ILogger<EventsController> _logger;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="eventSearchService">An <see cref="IEventSearchService"/> instance.</param>
-    /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
-    /// <param name="logger">An <see cref="ILogger{EventsController}"/> instance.</param>
     public EventsController(
         IEventSearchService eventSearchService,
         IMetricsService metricsService,
@@ -41,14 +32,6 @@ public class EventsController : ControllerBase
         _logger = logger;
     }
 
-    /// <summary>
-    /// Endpoint for querying central data store events (e.g., D-TROs being created, updated or deleted).
-    /// </summary>
-    /// <param name="search">A search query object.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Search Result.</returns>
     [HttpPost("/v1/events")]
     [FeatureGate(FeatureNames.DtroRead)]
     [ValidateModelState]

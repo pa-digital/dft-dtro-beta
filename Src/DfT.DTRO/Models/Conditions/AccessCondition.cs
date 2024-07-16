@@ -1,25 +1,14 @@
-﻿using DfT.DTRO.Models.Conditions.Base;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DfT.DTRO.Models.Conditions.Base;
 
 namespace DfT.DTRO.Models.Conditions;
 
-/// <summary>
-/// Represents an access restriction condition.
-/// </summary>
 public class AccessCondition : Condition
 {
-    /// <summary>
-    /// Indicates an access restriction type. Permissible values include
-    /// ‘accessOnly’, ‘loadingAndUnloading’, ‘throughTraffic’, etc.
-    /// </summary>
     public List<string> AccessConditionType { get; init; }
 
-    /// <summary>
-    /// Indicates additional condition controlling access.
-    /// </summary>
     public string OtherAccessRestriction { get; init; }
 
-    /// <inheritdoc/>
     public override object Clone()
     {
         return new AccessCondition
@@ -30,13 +19,11 @@ public class AccessCondition : Condition
         };
     }
 
-    /// <inheritdoc/>
     public override bool Contradicts(Condition other)
     {
         return false;
     }
 
-    /// <inheritdoc/>
     public override Condition Negated()
     {
         return new AccessCondition

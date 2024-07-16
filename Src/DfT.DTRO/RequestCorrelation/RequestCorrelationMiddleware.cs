@@ -1,26 +1,18 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DfT.DTRO.RequestCorrelation;
 
-/// <summary>
-/// A middleware function for logging correlation ID header values.
-/// </summary>
 public class RequestCorrelationMiddleware : IMiddleware
 {
     private readonly ILogger _logger;
     private readonly RequestCorrelationOptions _options;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="logger">An <see cref="ILogger"/> instance.</param>
-    /// <param name="options">The request correlation configuration.</param>
     public RequestCorrelationMiddleware(ILogger<RequestCorrelationMiddleware> logger, IOptions<RequestCorrelationOptions> options)
     {
         _logger = logger;
@@ -29,7 +21,6 @@ public class RequestCorrelationMiddleware : IMiddleware
         _logger.LogInformation("header {header}, prop {prop}", _options.HeaderName, _options.LogPropertyName);
     }
 
-    /// <inheritdoc/>
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         string correlationId = null;

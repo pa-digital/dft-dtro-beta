@@ -1,30 +1,24 @@
-﻿using Json.Logic;
-using Json.More;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Json.Logic;
+using Json.More;
 
 namespace DfT.DTRO.JsonLogic.CustomOperators;
 
-/// <summary>
-/// Retrieves data by key from a set of static data stored within the service.
-/// </summary>
 [Operator("service_data")]
 [JsonConverter(typeof(ServiceDataRuleJsonConverter))]
 public class ServiceDataRule : Rule
 {
-    /// <summary>
-    /// A <see cref="Rule"/> that should evaluate to a string key of the data.
-    /// </summary>
     protected internal Rule Selector { get; }
 
     public static ReadOnlyDictionary<string, JsonNode> Data => _data;
 
     private static readonly ReadOnlyDictionary<string, JsonNode> _data =
-        new (new Dictionary<string, JsonNode>
+        new(new Dictionary<string, JsonNode>
         {
             {
                 "swa_codes", JsonNode.Parse(
@@ -32,16 +26,11 @@ public class ServiceDataRule : Rule
             }
         });
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="selector">A <see cref="Rule"/> that should evaluate to a string key of the data.</param>
     public ServiceDataRule(Rule selector)
     {
         Selector = selector;
     }
 
-    /// <inheritdoc/>
     public override JsonNode Apply(JsonNode data, JsonNode contextData = null)
     {
         string key;
@@ -66,19 +55,15 @@ public class ServiceDataRule : Rule
     }
 }
 
-/// <summary>
-/// Converts <see cref="ServiceDataRule"/> to and from JSON.
-/// </summary>
 public class ServiceDataRuleJsonConverter : JsonConverter<ServiceDataRule>
 {
-    /// <inheritdoc/>
     public override ServiceDataRule Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var node = JsonSerializer.Deserialize<JsonNode>(ref reader, options);
 
         var parameters = node is JsonArray
             ? node.Deserialize<Rule[]>()
-            : new[] { node.Deserialize<Rule>() ! };
+            : new[] { node.Deserialize<Rule>()! };
 
         if (parameters is not { Length: 1 })
         {
@@ -88,7 +73,6 @@ public class ServiceDataRuleJsonConverter : JsonConverter<ServiceDataRule>
         return new ServiceDataRule(parameters[0]);
     }
 
-    /// <inheritdoc/>
     public override void Write(Utf8JsonWriter writer, ServiceDataRule value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();

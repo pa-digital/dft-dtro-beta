@@ -1,13 +1,10 @@
-using DfT.DTRO.Models.Validation;
-using Newtonsoft.Json.Schema;
 using System;
 using System.Collections.Generic;
+using DfT.DTRO.Models.Validation;
+using Newtonsoft.Json.Schema;
 
 namespace DfT.DTRO.Models.Errors;
 
-/// <summary>
-/// Model for capturing semantic validation errors.
-/// </summary>
 public class DtroValidationException : Exception
 {
     public DtroValidationException()

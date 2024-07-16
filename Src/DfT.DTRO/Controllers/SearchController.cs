@@ -17,9 +17,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 
-/// <summary>
-/// Controller for searching DTROs.
-/// </summary>
 [Tags("Search")]
 [ApiController]
 [Consumes("application/json")]
@@ -30,12 +27,6 @@ public class SearchController : ControllerBase
     private readonly IMetricsService _metricsService;
     private readonly ILogger<SearchController> _logger;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="searchService">An <see cref="ISearchService"/> instance.</param>
-    /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
-    /// <param name="logger">An <see cref="ILogger{SearchController}"/> instance.</param>
     public SearchController(
         ISearchService searchService,
         IMetricsService metricsService,
@@ -46,13 +37,6 @@ public class SearchController : ControllerBase
         _logger = logger;
     }
 
-    /// <summary>
-    /// Finds existing DTROs that match the requested criteria.
-    /// </summary>
-    /// <param name="body">A DTRO search criteria object.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="400">Bad request.</response>
-    /// <returns>Dtros matching search criteria.</returns>
     [HttpPost]
     [Route("/v1/search")]
     [ValidateModelState]

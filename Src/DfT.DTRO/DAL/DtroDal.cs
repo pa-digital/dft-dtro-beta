@@ -19,11 +19,6 @@ using static DfT.DTRO.Extensions.ExpressionExtensions;
 
 namespace DfT.DTRO.Services;
 
-/// <summary>
-/// An implementation of <see cref="IDtroDal"/>
-/// that uses an SQL database as its store.
-/// </summary>
-///
 [ExcludeFromCodeCoverage]
 public class DtroDal : IDtroDal
 {
@@ -32,14 +27,6 @@ public class DtroDal : IDtroDal
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IRedisCache _dtroCache;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DtroDal"/> class.
-    /// The default constructor.
-    /// </summary>
-    /// <param name="dtroContext">An <see cref="DtroContext"/> instance.</param>
-    /// <param name="projectionService">An <see cref="ISpatialProjectionService"/> instance.</param>
-    /// <param name="dtroMappingService">An <see cref="IDtroMappingService"/> instance.</param>
-    /// <param name="dtroCache">An <see cref="IRedisCache"/> instance.</param>
     public DtroDal(DtroContext dtroContext, ISpatialProjectionService projectionService, IDtroMappingService dtroMappingService, IRedisCache dtroCache)
     {
         _dtroContext = dtroContext;
@@ -48,7 +35,6 @@ public class DtroDal : IDtroDal
         _dtroCache = dtroCache;
     }
 
-    /// <inheritdoc/>
     public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime)
     {
         Models.DataBase.DTRO existing = await _dtroContext.Dtros.FindAsync(id);
@@ -68,7 +54,6 @@ public class DtroDal : IDtroDal
         return true;
     }
 
-    /// <inheritdoc/>
     public async Task<bool> DtroExistsAsync(Guid id)
     {
         return await _dtroContext.Dtros.AnyAsync(it => it.Id == id && !it.Deleted);
@@ -79,7 +64,6 @@ public class DtroDal : IDtroDal
         return await _dtroContext.Dtros.CountAsync(it => it.SchemaVersion == schemaVersion);
     }
 
-    /// <inheritdoc/>
     public async Task<Models.DataBase.DTRO> GetDtroByIdAsync(Guid id)
     {
         var cachedDtro = await _dtroCache.GetDtro(id);
@@ -99,7 +83,6 @@ public class DtroDal : IDtroDal
         return dtro;
     }
 
-    /// <inheritdoc/>
     public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId)
     {
         var dtro = new Models.DataBase.DTRO();
@@ -124,7 +107,6 @@ public class DtroDal : IDtroDal
         return response;
     }
 
-    /// <inheritdoc/>
     public async Task<bool> TryUpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId)
     {
         try
@@ -138,7 +120,6 @@ public class DtroDal : IDtroDal
         }
     }
 
-    /// <inheritdoc/>
     public async Task UpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId)
     {
         if (await _dtroContext.Dtros.FindAsync(id) is not Models.DataBase.DTRO existing || existing.Deleted)
@@ -159,7 +140,6 @@ public class DtroDal : IDtroDal
         await _dtroContext.SaveChangesAsync();
     }
 
-    /// <inheritdoc/>
     public async Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId)
     {
         if (await _dtroContext.Dtros.FindAsync(id) is not Models.DataBase.DTRO existing || existing.Deleted)
@@ -180,7 +160,6 @@ public class DtroDal : IDtroDal
         await _dtroContext.SaveChangesAsync();
     }
 
-    /// <inheritdoc/>
     public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
     {
         IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
@@ -308,7 +287,6 @@ public class DtroDal : IDtroDal
         return new PaginatedResult<Models.DataBase.DTRO>(await paginatedQuery.ToListAsync(), await dataQuery.CountAsync());
     }
 
-    /// <inheritdoc />
     public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search)
     {
         IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
@@ -422,7 +400,6 @@ public class DtroDal : IDtroDal
         return await sqlQuery.ToListAsync();
     }
 
-    /// <inheritdoc/>
     public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
     {
         Models.DataBase.DTRO dtro = await _dtroContext.Dtros.FindAsync(id);

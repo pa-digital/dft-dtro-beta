@@ -14,13 +14,6 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly IJsonLogicValidationService _jsonLogicValidationService;
     private readonly IRecordManagementService _recordManagementService;
 
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    /// <param name="jsonSchemaValidationService">An <see cref="IJsonSchemaValidationService"/> instance.</param>
-    /// <param name="semanticValidationService">An <see cref="ISemanticValidationService"/> instance.</param>
-    /// <param name="schemaTemplateService">An <see cref="ISchemaTemplateService"/> instance.</param>
-    /// <param name="jsonLogicValidationService">An <see cref="IJsonLogicValidationService"/> instance.</param>
     public DtroGroupValidatorService(
         IJsonSchemaValidationService jsonSchemaValidationService,
         ISemanticValidationService semanticValidationService,

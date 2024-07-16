@@ -33,7 +33,6 @@ public class RulesControllerTests
     [Fact]
     public async Task GetRulesVersions_ReturnsOk_WithVersions()
     {
-        // Arrange
         var expectedVersions = new List<RuleTemplateOverview>
         {
             new RuleTemplateOverview() { SchemaVersion = new SchemaVersion("1.0.0") },
@@ -44,9 +43,7 @@ public class RulesControllerTests
         _mockRuleTemplateService.Setup(mock => mock.GetRuleTemplatesVersionsAsync())
             .ReturnsAsync(expectedVersions);
 
-        // Act
         var result = await _controller.GetVersions();
-        // Assert
         var okResult = result as OkObjectResult;
         Assert.NotNull(okResult);
         Assert.Equal(200, okResult?.StatusCode);
@@ -55,13 +52,9 @@ public class RulesControllerTests
     [Fact]
     public async Task GetRulesVersions_ReturnsInternalServerError_OnException()
     {
-        // Arrange
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplatesVersionsAsync())
             .ThrowsAsync(new Exception("Test exception"));
-        // Act
         var result = await _controller.GetVersions();
-        // Assert
-
         var objectResult = result as ObjectResult;
         Assert.NotNull(objectResult);
         Assert.Equal(500, objectResult?.StatusCode);
@@ -73,7 +66,6 @@ public class RulesControllerTests
     [Fact]
     public async Task GetRules_ReturnsOkResult_WithTemplates()
     {
-        // Arrange
         var ruleTemplateResponse = new RuleTemplateResponse();
         ruleTemplateResponse.Template = "";
         ruleTemplateResponse.SchemaVersion = new SchemaVersion("1.0.0");
@@ -82,9 +74,7 @@ public class RulesControllerTests
         expected.Add(ruleTemplateResponse);
 
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplatesAsync()).ReturnsAsync(expected);
-        // Act
         var result = await _controller.Get();
-        // Assert
         var okResult = result as OkObjectResult;
         Assert.Equal(expected, okResult?.Value);
     }
@@ -92,11 +82,8 @@ public class RulesControllerTests
     [Fact]
     public async Task GetRules_ReturnsInternalServerError_OnException()
     {
-        // Arrange
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplatesAsync()).ThrowsAsync(new Exception());
-        // Act
         var result = await _controller.Get();
-        // Assert
         var objectResult = result as ObjectResult;
         Assert.Equal(500, objectResult?.StatusCode);
         var apiErrorResponse = objectResult?.Value as ApiErrorResponse;
@@ -106,14 +93,10 @@ public class RulesControllerTests
     [Fact]
     public async Task GetRule_ReturnsOk_WithValidVersion()
     {
-        // Arrange
         var version = new SchemaVersion("1.0.0");
         var expectedRule = new RuleTemplateResponse();
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplateAsync(version)).ReturnsAsync(expectedRule);
-        // Act
         var result = await _controller.GetByVersion(version.ToString());
-        // Assert
-
         Assert.IsType<OkObjectResult>(result);
         var okResult = result as OkObjectResult;
         Assert.Equal(expectedRule, okResult?.Value);
@@ -121,24 +104,18 @@ public class RulesControllerTests
     [Fact]
     public async Task GetRule_ReturnsNotFound_WhenNotFoundExceptionIsThrown()
     {
-        // Arrange
         var version = new SchemaVersion("1.0.0");
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplateAsync(version)).ThrowsAsync(new NotFoundException());
-        // Act
         var result = await _controller.GetByVersion(version.ToString());
-        // Assert
         Assert.IsType<NotFoundObjectResult>(result);
     }
     [Fact]
     public async Task GetRule_ReturnsBadRequest_WhenInvalidOperationExceptionIsThrown()
     {
-        // Arrange
         var version = new SchemaVersion("1.0.0");
         var exceptionMessage = "Invalid operation";
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplateAsync(version)).ThrowsAsync(new InvalidOperationException(exceptionMessage));
-        // Act
         var result = await _controller.GetByVersion(version.ToString());
-        // Assert
         Assert.IsType<BadRequestObjectResult>(result);
         var badRequestResult = result as BadRequestObjectResult;
         var errorResponse = badRequestResult?.Value as ApiErrorResponse;
@@ -148,12 +125,9 @@ public class RulesControllerTests
     [Fact]
     public async Task GetRule_ReturnsInternalServerError_WhenExceptionIsThrown()
     {
-        // Arrange
         var version = new SchemaVersion("1.0.0");
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplateAsync(version)).ThrowsAsync(new Exception());
-        // Act
         var result = await _controller.GetByVersion(version.ToString());
-        // Assert
         Assert.IsType<ObjectResult>(result);
         var objectResult = result as ObjectResult;
         Assert.Equal(500, objectResult?.StatusCode);

@@ -14,9 +14,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 
-/// <summary>
-/// Controller implementation that allows users to obtain swa codes.
-/// </summary>
 [Tags("Tra")]
 [ApiController]
 public class TraController : ControllerBase
@@ -24,11 +21,6 @@ public class TraController : ControllerBase
     private readonly ITraService _traService;
     private readonly ILogger<TraController> _logger;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="traService">An <see cref="ITraService"/> instance.</param>
-    /// <param name="logger">An <see cref="ILogger{TraController}"/> instance.</param>
     public TraController(
         ITraService traService,
         ILogger<TraController> logger)
@@ -36,12 +28,6 @@ public class TraController : ControllerBase
         _traService = traService;
         _logger = logger;
     }
-
-    /// <summary>
-    /// Gets all swa codes.
-    /// </summary>
-    /// <response code="200">Swa Codes retrieved successfully.</response>
-    /// <response code="500">Internal server error.</response>
 
     [HttpGet("/v1/swaCodes")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]

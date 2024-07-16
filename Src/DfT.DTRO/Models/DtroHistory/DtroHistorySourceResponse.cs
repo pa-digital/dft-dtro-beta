@@ -1,5 +1,4 @@
 ﻿using System;
-using DfT.DTRO.Models.SchemaTemplate;
 
 namespace DfT.DTRO.Models.DtroHistory;
 

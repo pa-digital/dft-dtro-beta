@@ -18,9 +18,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 
-/// <summary>
-/// Prototype controller for sourcing data model information.
-/// </summary>
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
@@ -31,12 +28,6 @@ public class SchemasController : ControllerBase
     private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<SchemasController> _logger;
 
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    /// <param name="schemaTemplateService">A <see cref="ISchemaTemplateService"/> instance.</param>
-    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
-    /// <param name="logger">An <see cref="ILogger{SchemasController}"/> instance.</param>
     public SchemasController(
         ISchemaTemplateService schemaTemplateService,
         IRequestCorrelationProvider correlationProvider,
@@ -47,12 +38,6 @@ public class SchemasController : ControllerBase
         _logger = logger;
     }
 
-    /// <summary>
-    /// Gets available schemaTemplate versions.
-    /// </summary>
-    /// <response code="200">Ok.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Schema Versions.</returns>
     [HttpGet]
     [Route("/v1/schemas/versions")]
     [FeatureGate(FeatureNames.SchemasRead)]
@@ -70,12 +55,6 @@ public class SchemasController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Gets available schemas Templates.
-    /// </summary>
-    /// <response code="200">Ok.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Schemas.</returns>
     [HttpGet]
     [Route("/v1/schemas")]
     [FeatureGate(FeatureNames.SchemasRead)]
@@ -93,15 +72,6 @@ public class SchemasController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Gets a schema by a named identifier.
-    /// </summary>
-    /// <param name="version">The version.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Schema.</returns>
     [HttpGet]
     [Route("/v1/schemas/{version}")]
     [FeatureGate(FeatureNames.SchemasRead)]
@@ -127,14 +97,6 @@ public class SchemasController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Gets a schema by a identifier.
-    /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Schema.</returns>
     [HttpGet]
     [Route("/v1/schemas/{id:guid}")]
     [FeatureGate(FeatureNames.SchemasRead)]
@@ -160,15 +122,6 @@ public class SchemasController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Creates a new Schema.
-    /// </summary>
-    /// <param name="version">The new version.</param>
-    /// <param name="file">The new Schema.</param>
-    /// <response code="201">Created.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the Schema.</returns>
     [HttpPost]
     [Route("/v1/schemas/createFromFile/{version}")]
     [Consumes("multipart/form-data")]
@@ -204,15 +157,6 @@ public class SchemasController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Creates a new Schema.
-    /// </summary>
-    /// <param name="version">The new version.</param>
-    /// <param name="body">The new schema.</param>
-    /// <response code="201">Created.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the Schema.</returns>
     [HttpPost]
     [Route("/v1/schemas/createFromBody/{version}")]
     [ValidateModelState]
@@ -238,19 +182,6 @@ public class SchemasController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Updates an existing schema.
-    /// </summary>
-    /// <remarks>
-    /// The payload requires a schema which will replace the schema with the quoted schema version.
-    /// </remarks>
-    /// <param name="version">The existing version.</param>
-    /// <param name="file">The replacement schema.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the updated schema.</returns>
     [HttpPut]
     [Route("/v1/schemas/updateFromFile/{version}")]
     [Consumes("multipart/form-data")]
@@ -293,19 +224,6 @@ public class SchemasController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Updates an existing schema.
-    /// </summary>
-    /// <remarks>
-    /// The payload requires a schema which will replace the schema with the quoted schema version.
-    /// </remarks>
-    /// <param name="version">The existing version.</param>
-    /// <param name="body">The replacement schema.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the updated schema.</returns>
     [HttpPut]
     [Route("/v1/schemas/updateFromBody/{version}")]
     [ValidateModelState]
@@ -334,15 +252,6 @@ public class SchemasController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Activates an existing schema.
-    /// </summary>
-    /// <param name="version">The existing version to activate.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the activated schema.</returns>
     [HttpPatch]
     [Route("/v1/schemas/activate/{version}")]
     [ValidateModelState]
@@ -371,15 +280,6 @@ public class SchemasController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// DeActivates an existing schema.
-    /// </summary>
-    /// <param name="version">The existing version to deactivate.</param>
-    /// <response code="200">Ok.</response>
-    /// <response code="400">Bad request.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    /// <returns>Id of the deactivated schema.</returns>
     [HttpPatch]
     [Route("/v1/schemas/deactivate/{version}")]
     [ValidateModelState]

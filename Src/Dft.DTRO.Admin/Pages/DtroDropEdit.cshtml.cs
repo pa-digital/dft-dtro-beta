@@ -1,4 +1,3 @@
-using System.Net.Http;
 using Dft.DTRO.Admin.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -21,7 +20,7 @@ public class DtroDropEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, string id)
     {
- 
+
         if (isEdit)
         {
             await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);

@@ -3,9 +3,6 @@ using System.Threading.Tasks;
 
 namespace DfT.DTRO.Caching;
 
-/// <summary>
-/// Provides methods that support caching DTRO extraction API response data.
-/// </summary>
 public interface IRedisCache
 {
     Task<Models.DataBase.DTRO> GetDtro(Guid key);

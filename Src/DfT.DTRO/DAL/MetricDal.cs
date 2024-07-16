@@ -2,45 +2,21 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using DfT.DTRO.Enums;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.Metrics;
 using Microsoft.EntityFrameworkCore;
 
 namespace DfT.DTRO.DAL;
-/// <summary>
-/// An implementation of <see cref="IMetricDal"/>
-/// that uses an SQL database as its store.
-/// </summary>
-///
 
 [ExcludeFromCodeCoverage]
 public class MetricDal : IMetricDal
 {
     private readonly DtroContext _dtroContext;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="dtroContext">
-    /// An instance of <see cref="DtroContext"/>
-    /// representing the current database session.
-    /// </param>
     public MetricDal(DtroContext dtroContext)
     {
         _dtroContext = dtroContext;
     }
-
-    /// <summary>
-    /// Save metric to metric Table
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="traId"></param>
-    /// <returns>
-    /// A <see cref="Task"/> that resolved to <see langword="true"/>
-    /// if the Metric was successfully saved
-    /// or <see langword="false"/> if it was not.
-    /// </returns>
 
     public async Task<bool> IncrementMetric(MetricType type, int traId)
     {
@@ -82,10 +58,6 @@ public class MetricDal : IMetricDal
         return true;
     }
 
-    /// <summary>
-    /// Get list of metrics from metric Table for a specific TRA.
-    /// </summary>
-    /// <returns>List of metrics</returns>
     public async Task<MetricSummary> GetMetricsForTra(int? traId, DateOnly fromDate, DateOnly toDate)
     {
         if (traId == null)
@@ -122,16 +94,9 @@ public class MetricDal : IMetricDal
               .FirstOrDefaultAsync();
             return aggregatedMetrics;
         }
-       
+
     }
 
-    /// <summary>
-    /// Checks if the database context has a valid connection.
-    /// </summary>
-    /// <returns>
-    /// A <see cref="Task"/> that resolves to <see langword="true"/>
-    /// if the connection is valid, or <see langword="false"/> if it is not.
-    /// </returns>
     public async Task<bool> HasValidConnectionAsync()
     {
         try

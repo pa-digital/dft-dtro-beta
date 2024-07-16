@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dft.DTRO.Admin.Services;
@@ -15,10 +12,6 @@ public class DtroService : IDtroService
         _client = clientFactory.CreateClient("ExternalApi");
     }
 
-
-    //[HttpGet]
-    //[Route("/v1/dtros/provisionHistory/{dtroId:guid}")]
-    //public async Task<ActionResult<List<DtroHistoryProvisionResponse>>> GetProvisionHistory(Guid dtroId)
 
     public async Task<List<DtroHistoryProvisionResponse>> DtroProvisionHistory(Guid id)
     {
@@ -47,10 +40,8 @@ public class DtroService : IDtroService
     {
         var search = new DtroSearch() { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { new() } };
 
-        // Serialize the search object to JSON
         var jsonContent = JsonSerializer.Serialize(search);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-        // Create the request message
         var request = new HttpRequestMessage(HttpMethod.Post, "/v1/search")
         {
             Content = param

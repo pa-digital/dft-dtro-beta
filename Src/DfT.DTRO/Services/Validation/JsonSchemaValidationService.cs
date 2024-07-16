@@ -4,10 +4,8 @@ using Newtonsoft.Json.Schema;
 
 namespace DfT.DTRO.Services.Validation;
 
-/// <inheritdoc />
 public class JsonSchemaValidationService : IJsonSchemaValidationService
 {
-    /// <inheritdoc />
     public IList<ValidationError> ValidateRequestAgainstJsonSchema(string jsonSchemaAsString, string inputJson)
     {
         var parsedSchema = JSchema.Parse(jsonSchemaAsString);

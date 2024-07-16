@@ -1,21 +1,13 @@
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace DfT.DTRO.Filters;
 
-/// <summary>
-/// Path Parameter Validation Rules Filter.
-/// </summary>
 public class GeneratePathParamsValidationFilter : IOperationFilter
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="operation">Operation.</param>
-    /// <param name="context">OperationFilterContext.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         var pars = context.ApiDescription.ParameterDescriptions;
@@ -28,14 +20,12 @@ public class GeneratePathParamsValidationFilter : IOperationFilter
 
             if (attributes != null && attributes.Count() > 0 && swaggerParam != null)
             {
-                // Required - [Required]
                 var requiredAttr = attributes.FirstOrDefault(p => p.AttributeType == typeof(RequiredAttribute));
                 if (requiredAttr != null)
                 {
                     swaggerParam.Required = true;
                 }
 
-                // Regex Pattern [RegularExpression]
                 var regexAttr = attributes.FirstOrDefault(p => p.AttributeType == typeof(RegularExpressionAttribute));
                 if (regexAttr != null)
                 {
@@ -46,7 +36,6 @@ public class GeneratePathParamsValidationFilter : IOperationFilter
                     }
                 }
 
-                // String Length [StringLength]
                 int? minLenght = null, maxLength = null;
                 var stringLengthAttr = attributes.FirstOrDefault(p => p.AttributeType == typeof(StringLengthAttribute));
                 if (stringLengthAttr != null)
@@ -77,7 +66,6 @@ public class GeneratePathParamsValidationFilter : IOperationFilter
                     swaggerParam.Schema.MaxLength = maxLength;
                 }
 
-                // Range [Range]
                 var rangeAttr = attributes.FirstOrDefault(p => p.AttributeType == typeof(RangeAttribute));
                 if (rangeAttr != null)
                 {

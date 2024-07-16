@@ -5,22 +5,8 @@ using System.Linq.Expressions;
 
 namespace DfT.DTRO.Extensions;
 
-/// <summary>
-/// Provides extensions and helpers for <see cref="Expression"/> types.
-/// </summary>
 public static class ExpressionExtensions
 {
-    /// <summary>
-    /// Produces an <see cref="Expression"/> that is the conjunction (logical AND)
-    /// of the current expression and the expression provided in the argument.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The input argument of the boolean functions
-    /// that are represented by the expressions.
-    /// </typeparam>
-    /// <param name="current">The current <see cref="Expression"/>.</param>
-    /// <param name="other">The <see cref="Expression"/> to conjunct the current expression with.</param>
-    /// <returns>The produced <see cref="Expression"/>.</returns>
     public static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> current, Expression<Func<T, bool>> other)
     {
         ParameterExpression parameter1 = current.Parameters[0];
@@ -29,17 +15,6 @@ public static class ExpressionExtensions
         return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(current.Body, body2WithParam1), parameter1);
     }
 
-    /// <summary>
-    /// Produces an <see cref="Expression"/> that is the disjunction (logical OR)
-    /// of the current expression and the expression provided in the argument.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The input argument of the boolean functions
-    /// that are represented by the expressions.
-    /// </typeparam>
-    /// <param name="current">The current <see cref="Expression"/>.</param>
-    /// <param name="other">The <see cref="Expression"/> to disjunct the current expression with.</param>
-    /// <returns>The produced <see cref="Expression"/>.</returns>
     public static Expression<Func<T, bool>> OrElse<T>(this Expression<Func<T, bool>> current, Expression<Func<T, bool>> other)
     {
         ParameterExpression parameter1 = current.Parameters[0];
@@ -48,16 +23,6 @@ public static class ExpressionExtensions
         return Expression.Lambda<Func<T, bool>>(Expression.OrElse(current.Body, body2WithParam1), parameter1);
     }
 
-    /// <summary>
-    /// Produces an <see cref="Expression"/> that is a conjunction (logical AND)
-    /// of all the provided expressions.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The input argument of the boolean functions
-    /// that are represented by the expressions.
-    /// </typeparam>
-    /// <param name="expressions">The expressions to conjunct.</param>
-    /// <returns>The produced <see cref="Expression"/>.</returns>
     public static Expression<Func<T, bool>> AllOf<T>(IEnumerable<Expression<Func<T, bool>>> expressions)
     {
         var expr = expressions.First();
@@ -70,16 +35,6 @@ public static class ExpressionExtensions
         return expr;
     }
 
-    /// <summary>
-    /// Produces an <see cref="Expression"/> that is a disjunction (logical OR)
-    /// of all the provided expressions.
-    /// </summary>
-    /// <typeparam name="T">
-    /// The input argument of the boolean functions
-    /// that are represented by the expressions.
-    /// </typeparam>
-    /// <param name="expressions">The expressions to disjunct.</param>
-    /// <returns>The produced <see cref="Expression"/>.</returns>
     public static Expression<Func<T, bool>> AnyOf<T>(IEnumerable<Expression<Func<T, bool>>> expressions)
     {
         var expr = expressions.First();

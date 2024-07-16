@@ -28,7 +28,7 @@ public class MetricsService : IMetricsService
             return false;
         }
     }
-  
+
     public async Task<bool> HealthDatabase()
     {
         try
@@ -74,7 +74,6 @@ public class MetricsService : IMetricsService
     {
         var jsonContent = JsonSerializer.Serialize(metricRequest);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-        // Create the request message
         var request = new HttpRequestMessage(HttpMethod.Post, "/v1/metricsForTra")
         {
             Content = param

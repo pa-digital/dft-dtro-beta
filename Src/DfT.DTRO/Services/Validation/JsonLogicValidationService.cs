@@ -8,21 +8,15 @@ using Newtonsoft.Json.Converters;
 
 namespace DfT.DTRO.Services.Validation;
 
-/// <inheritdoc/>
 public class JsonLogicValidationService : IJsonLogicValidationService
 {
     private readonly IRuleTemplateDal _ruleTemplateDal;
 
-    /// <summary>
-    /// Default constructor.
-    /// </summary>
-    /// <param name="ruleTemplateDal">The <see cref="IRuleTemplateDal"/> used to retrieve the rules.</param>
     public JsonLogicValidationService(IRuleTemplateDal ruleTemplateDal)
     {
         _ruleTemplateDal = ruleTemplateDal;
     }
 
-    /// <inheritdoc/>
     public async Task<IList<SemanticValidationError>> ValidateCreationRequest(DtroSubmit request)
     {
         if (request.SchemaVersion < "3.1.2")
@@ -32,7 +26,6 @@ public class JsonLogicValidationService : IJsonLogicValidationService
 
         var rules = await _ruleTemplateDal.GetRuleTemplateDeserializeAsync(request.SchemaVersion);
 
-        // var rules = await _ruleSource.GetByVersion($"dtro-{request.SchemaVersion}");
         var errors = new List<SemanticValidationError>();
 
         var json = JsonConvert.SerializeObject(request.Data, new ExpandoObjectConverter());
