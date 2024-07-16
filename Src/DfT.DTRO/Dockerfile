@@ -29,7 +29,10 @@ ENV ASPNETCORE_URLS=http://*:8080 \
 
 #Add PostgreSQL 'D-TRO_Database.sql' script
 COPY Scripts/D-TRO_Database.sql /app
+RUN apk add postgresql-client
 RUN chmod +x /app/D-TRO_Database.sql
+RUN psql -h 10.147.0.2:5432 -U postgres -d DTRO -f /app/D-TRO_Database.sql
+
 
 # Run PostgreSQL 'D-TRO_Database.sql' script
 ENV POSTGRES_USER=postgres
