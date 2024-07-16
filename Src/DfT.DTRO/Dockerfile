@@ -34,11 +34,11 @@ RUN ls /app
 
 
 # Run PostgreSQL 'D-TRO_Database.sql' script
-ENV POSTGRES_USER postgres
-ENV POSTGRES_PASSWORD admin
-ENV POSTGRES_DB DTRO
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=admin
+ENV POSTGRES_DB=DTRO
 CMD ["postgres"]
-RUN chown postgres:postgres ../app/D-TRO_Database.sql
+RUN chown /app/D-TRO_Database.sql
 
 # Run the application
 ENTRYPOINT ["./DfT.DTRO"]
