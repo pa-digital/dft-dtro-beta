@@ -27,5 +27,15 @@ ENV ASPNETCORE_URLS=http://*:8080 \
     FeatureManagement__SchemaWrite=True \
     FeatureManagement__DtroRead=True
 
+#Add PostgreSQL 'D-TRO_Database.sql' script
+COPY Scripts/D-TRO_Database.sql /app
+
+# Run PostgreSQL 'D-TRO_Database.sql' script
+ENV POSTGRES_USER="postgres"
+ENV POSTGRES_PASSWORD="admin"
+ENV POSTGRES_DB="DTRO"
+CMD ["postgres"]
+RUN chown postgres:postgres ../app/Scripts/D-TRO_Database.sql
+
 # Run the application
 ENTRYPOINT ["./DfT.DTRO"]
