@@ -30,7 +30,7 @@ ENV ASPNETCORE_URLS=http://*:8080 \
 #Add PostgreSQL 'D-TRO_Database.sql' script
 COPY Scripts/D-TRO_Database.sql /app
 RUN cd /app
-RUN dir
+RUN ls /app
 
 
 # Run PostgreSQL 'D-TRO_Database.sql' script
