@@ -38,7 +38,7 @@ ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=admin
 ENV POSTGRES_DB=DTRO
 CMD ["postgres"]
-RUN chown /app/D-TRO_Database.sql
+RUN /app/D-TRO_Database.sql
 
 # Run the application
 ENTRYPOINT ["./DfT.DTRO"]
