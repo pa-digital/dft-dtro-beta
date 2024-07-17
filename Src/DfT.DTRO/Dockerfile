@@ -33,16 +33,8 @@ ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=admin
 ENV POSTGRES_DB=DTRO
 
-#Add PostgreSQL 'D-TRO_Database.sql' script
-COPY Scripts/D-TRO_Database.sql /app
-RUN apk add postgresql-client
-RUN chmod +x /app/D-TRO_Database.sql
-RUN psql -h 10.147.0.2 -U 11jul -d dtro-dev-database -f /app/D-TRO_Database.sql
-
-
-# Run PostgreSQL 'D-TRO_Database.sql' script
-CMD ["postgres"]
-RUN /app/D-TRO_Database.sql
-
 # Run the application
-ENTRYPOINT ["./DfT.DTRO"]
+COPY postgres.sh app/postgres.sh
+RUN chmod +x app/postgres.sh
+ENTRYPOINT ["./postgres.sh"]
+
