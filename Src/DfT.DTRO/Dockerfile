@@ -34,7 +34,7 @@ ENV POSTGRES_PASSWORD=admin
 ENV POSTGRES_DB=DTRO
 
 # Copy scripts
-COPY Scripts/D-TRO_Database.sql app/DTRO_Database.sql
+COPY Scripts/D-TRO_Database.sql app/D-TRO_Database.sql
 COPY postgres.sh app/postgres.sh
  
 # Set the entry point
