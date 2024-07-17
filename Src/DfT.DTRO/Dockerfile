@@ -36,5 +36,5 @@ ENV POSTGRES_DB=DTRO
 # Run the application
 COPY postgres.sh app/postgres.sh
 RUN chmod +x app/postgres.sh
-ENTRYPOINT ["./app/postgres.sh"]
+ENTRYPOINT ["./postgres.sh"]
 
