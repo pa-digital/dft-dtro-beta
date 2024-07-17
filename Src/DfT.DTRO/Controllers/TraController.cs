@@ -1,12 +1,4 @@
-﻿using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.SwaCode;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.FeatureManagement;
-using Microsoft.FeatureManagement.Mvc;
-
-namespace DfT.DTRO.Controllers;
+﻿namespace DfT.DTRO.Controllers;
 
 [Tags("Tra")]
 [ApiController]
@@ -32,16 +24,13 @@ public class TraController : ControllerBase
     {
         try
         {
-            var swaCodeResponses = await _traService.GetUiFormattedSwaCodeAsync();
-            if (swaCodeResponses == null)
-            {
-                swaCodeResponses = new List<SwaCodeResponse>();
-            }
+            List<SwaCodeResponse> swaCodeResponses = await _traService.GetUiFormattedSwaCodeAsync() ?? new List<SwaCodeResponse>();
+            _logger.LogInformation($"'{nameof(GetSwaCodes)}' method called");
             return Ok(swaCodeResponses);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while retrieving swa codes for TRA.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
