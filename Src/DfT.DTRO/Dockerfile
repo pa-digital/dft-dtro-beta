@@ -34,6 +34,6 @@ ENV POSTGRES_PASSWORD=admin
 ENV POSTGRES_DB=DTRO
 
 # Run the application
-COPY ./Dft.DTRO/postgres.sh /app/postgres.sh
-ENTRYPOINT ["./DfT.DTRO/postgres.sh"]
+COPY ./Dft.DTRO/postgres.sh app/postgres.sh
+ENTRYPOINT ["./app/postgres.sh"]
 
