@@ -39,5 +39,5 @@ COPY postgres.sh app/postgres.sh
  
 # Set the entry point
 RUN chmod +x app/postgres.sh
-ENTRYPOINT ["/app/postgres.sh"]
+ENTRYPOINT ["/postgres.sh"]
 
