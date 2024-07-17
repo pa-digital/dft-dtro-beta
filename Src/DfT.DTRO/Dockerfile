@@ -33,8 +33,11 @@ ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=admin
 ENV POSTGRES_DB=DTRO
 
-# Run the application
+# Copy scripts
+COPY Scripts/DTRO_Database.sql app/DTRO_Database.sql
 COPY postgres.sh app/postgres.sh
+ 
+# Set the entry point
 RUN chmod +x app/postgres.sh
-ENTRYPOINT ["./postgres.sh"]
+ENTRYPOINT ["/app/postgres.sh"]
 
