@@ -1,11 +1,4 @@
-﻿using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.DtroEvent;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.FeatureManagement.Mvc;
-
-namespace DfT.DTRO.Controllers;
+﻿namespace DfT.DTRO.Controllers;
 
 [Tags("Events")]
 [ApiController]

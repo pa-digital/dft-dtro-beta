@@ -1,12 +1,3 @@
-using System.IO;
-using System.Text;
-using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.FeatureManagement;
-using Microsoft.FeatureManagement.Mvc;
 using Newtonsoft.Json;
 
 namespace DfT.DTRO.Controllers;
@@ -52,34 +43,34 @@ public class DTROsController : ControllerBase
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
-
-                _logger.LogInformation("[{method}] Creating DTRO", "dtro.create");
-
                 GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, ta);
-
                 await _metricsService.IncrementMetric(MetricType.Submission, ta);
+                _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using TRA Id: '{ta}' and file '{file.Name}'");
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }
         catch (DtroValidationException err)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            _logger.LogError(err.Message);
             return BadRequest(err);
         }
         catch (NotFoundException nFex)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("DTRO", nFex.Message));
         }
         catch (InvalidOperationException err)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
-            _logger.LogError(ex, "An error occurred while processing CreateFromFileByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -105,31 +96,34 @@ public class DTROsController : ControllerBase
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
-                _logger.LogInformation("[{method}] Updating dtro with dtro version {dtroVersion}", "dtro.update", id.ToString());
                 GuidResponse response = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId, ta);
                 await _metricsService.IncrementMetric(MetricType.Submission, ta);
+                _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using TRA Id: '{ta}', unique identifier: '{id}' and file: '{file.Name}'");
                 return Ok(response);
             }
         }
         catch (DtroValidationException err)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            _logger.LogError(err.Message);
             return BadRequest(err);
         }
-        catch (NotFoundException nfex)
+        catch (NotFoundException nFex)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
-            return NotFound(new ApiErrorResponse("DTRO", nfex.Message));
+            _logger.LogError(nFex.Message);
+            return NotFound(new ApiErrorResponse("DTRO", nFex.Message));
         }
         catch (InvalidOperationException err)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
-            _logger.LogError(ex, "An error occurred while processing UpdateFromBody request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -143,30 +137,33 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("[{method}] Creating DTRO", "dtro.create");
             GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, ta);
             await _metricsService.IncrementMetric(MetricType.Submission, ta);
+            _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using TRA Id: '{ta}' and body '{dtroSubmit}'");
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
         catch (DtroValidationException err)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            _logger.LogError(err.Message);
             return BadRequest(err);
         }
-        catch (NotFoundException nfex)
+        catch (NotFoundException nFex)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
-            return NotFound(new ApiErrorResponse("DTRO", nfex.Message));
+            _logger.LogError(nFex.Message);
+            return NotFound(new ApiErrorResponse("DTRO", nFex.Message));
         }
         catch (InvalidOperationException err)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
-            _logger.LogError(ex, "An error occurred while processing CreateFromFileByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -180,30 +177,33 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("[{method}] Updating DTRO with ID {dtroId}", "dtro.update", id);
             GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId, ta);
             await _metricsService.IncrementMetric(MetricType.Submission, ta);
+            _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using TRA Id: '{ta}', unique identifier: '{id}' and body: '{dtroSubmit}'");
             return Ok(guidResponse);
         }
         catch (DtroValidationException err)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            _logger.LogError(err.Message);
             return BadRequest(err);
         }
-        catch (NotFoundException nfex)
+        catch (NotFoundException nFex)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
-            return NotFound(new ApiErrorResponse("DTRO", nfex.Message));
+            _logger.LogError(nFex.Message);
+            return NotFound(new ApiErrorResponse("DTRO", nFex.Message));
         }
         catch (InvalidOperationException err)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
-            _logger.LogError(ex, "An error occurred while processing CreateFromFileByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -215,16 +215,18 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            var dtroResponse = await _dtroService.GetDtroByIdAsync(id);
+            DtroResponse dtroResponse = await _dtroService.GetDtroByIdAsync(id);
+            _logger.LogInformation($"'{nameof(GetById)}' method called using '{id}' unique identifier");
             return Ok(dtroResponse);
         }
-        catch (NotFoundException)
+        catch (NotFoundException nFex)
         {
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Not found", "Dtro not found"));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while processing {nameof(GetById)} request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -238,17 +240,19 @@ public class DTROsController : ControllerBase
         try
         {
             await _dtroService.DeleteDtroAsync(ta, id);
+            _logger.LogInformation($"'{nameof(Delete)}' method called using TRA Id: '{ta}' and unique identifier '{id}'");
             return NoContent();
         }
-        catch (NotFoundException)
+        catch (NotFoundException nFex)
         {
             await _metricsService.IncrementMetric(MetricType.Deletion, ta);
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Not found", "Dtro not found"));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
-            _logger.LogError(ex, $"An error occurred while processing {nameof(Delete)} request.request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -260,15 +264,17 @@ public class DTROsController : ControllerBase
         try
         {
             List<DtroHistorySourceResponse> response = await _dtroService.GetDtroSourceHistoryAsync(dtroId);
+            _logger.LogInformation($"'{nameof(GetSourceHistory)}' method called using unique identifier '{dtroId}'");
             return Ok(response);
         }
         catch (NotFoundException nFex)
         {
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse(nFex.Message, "Dtro History not found."));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while processing {nameof(GetSourceHistory)} request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -280,16 +286,17 @@ public class DTROsController : ControllerBase
         try
         {
             List<DtroHistoryProvisionResponse> response = await _dtroService.GetDtroProvisionHistoryAsync(dtroId);
+            _logger.LogInformation($"'{nameof(GetProvisionHistory)}' method called using unique identifier '{dtroId}'");
             return Ok(response);
         }
         catch (NotFoundException nFex)
         {
-
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse(nFex.Message, "Dtro History not found."));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while processing {nameof(GetProvisionHistory)} request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -303,15 +310,17 @@ public class DTROsController : ControllerBase
         try
         {
             await _dtroService.AssignOwnershipAsync(id, ta, assignToTraId, _correlationProvider.CorrelationId);
+            _logger.LogInformation($"'{nameof(AssignOwnership)}' method called using TRA Id '{ta}', unique identifier '{id}' and new assigned TRA Id '{assignToTraId}'");
             return NoContent();
         }
-        catch (NotFoundException nfex)
+        catch (NotFoundException nFex)
         {
-            return NotFound(new ApiErrorResponse("Not found", nfex.Message));
+            _logger.LogError(nFex.Message);
+            return NotFound(new ApiErrorResponse("Not found", nFex.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An error occurred while processing {nameof(AssignOwnership)} request.request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }

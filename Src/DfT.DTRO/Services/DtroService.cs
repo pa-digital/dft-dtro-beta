@@ -2,8 +2,6 @@
 using DfT.DTRO.DAL;
 using DfT.DTRO.Extensions;
 using DfT.DTRO.JsonLogic.CustomOperators;
-using DfT.DTRO.Models.DtroEvent;
-using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Filtering;
 using DfT.DTRO.Models.Pagination;
 using DfT.DTRO.Services.Mapping;
