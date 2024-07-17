@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Models.DtroJson;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NpgsqlTypes;
 
 namespace DfT.DTRO.Converters;

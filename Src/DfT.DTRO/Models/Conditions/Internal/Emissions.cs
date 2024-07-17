@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace DfT.DTRO.Models.Conditions.Internal;
+﻿namespace DfT.DTRO.Models.Conditions.Internal;
 
 public class Emissions : IEquatable<Emissions>
 {

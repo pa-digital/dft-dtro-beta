@@ -1,11 +1,5 @@
 ﻿using DfT.DTRO.JsonLogic;
-using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.RuleTemplate;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SharedResponse;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace DfT.DTRO.Services;
 public interface IRuleTemplateDal

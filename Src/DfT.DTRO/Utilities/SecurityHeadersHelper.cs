@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 
 namespace DfT.DTRO.Utilities;

@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.SchemaTemplate;
-
-namespace DfT.DTRO.Services.Mapping;
+﻿namespace DfT.DTRO.Services.Mapping;
 
 public class SchemaTemplateMappingService : ISchemaTemplateMappingService
 {

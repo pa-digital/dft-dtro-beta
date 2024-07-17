@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using DfT.DTRO.Models.DtroJson;
 using Newtonsoft.Json;
 
 namespace DfT.DTRO.Converters;

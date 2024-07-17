@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DfT.DTRO.Models.Conditions;
+﻿namespace DfT.DTRO.Models.Conditions;
 
 public class PermitSubjectToFee
 {

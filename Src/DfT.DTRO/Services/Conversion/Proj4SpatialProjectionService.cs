@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Models.DtroJson;
-using DotSpatial.Projections;
+﻿using DotSpatial.Projections;
 
 namespace DfT.DTRO.Services.Conversion;
 

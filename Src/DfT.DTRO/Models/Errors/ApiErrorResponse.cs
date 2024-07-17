@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace DfT.DTRO.Models.Errors;
 
 public class ApiErrorResponse

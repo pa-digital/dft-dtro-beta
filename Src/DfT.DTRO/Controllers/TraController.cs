@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.Errors;
+﻿using DfT.DTRO.FeatureManagement;
 using DfT.DTRO.Models.SwaCode;
 using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DfT.DTRO.Models.Conditions.ValueRules;
+﻿namespace DfT.DTRO.Models.Conditions.ValueRules;
 public readonly record struct OrRule<T>(IValueRule<T> first, IValueRule<T> second)
     : IValueRule<T>
     where T : IComparable<T>

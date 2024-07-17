@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Models.DtroJson;
-
-namespace DfT.DTRO.Services.Conversion;
+﻿namespace DfT.DTRO.Services.Conversion;
 
 public interface ISpatialProjectionService
 {

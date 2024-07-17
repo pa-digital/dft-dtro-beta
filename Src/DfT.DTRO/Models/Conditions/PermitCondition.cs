@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using DfT.DTRO.Models.Conditions.Base;
 using DfT.DTRO.Models.Conditions.Internal;
 

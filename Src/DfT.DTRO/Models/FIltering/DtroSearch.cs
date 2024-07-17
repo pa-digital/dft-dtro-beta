@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using DfT.DTRO.Models.Pagination;
 
 namespace DfT.DTRO.Models.Filtering;

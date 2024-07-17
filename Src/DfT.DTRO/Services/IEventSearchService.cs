@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using DfT.DTRO.Models.DtroEvent;
+﻿using DfT.DTRO.Models.DtroEvent;
 
 namespace DfT.DTRO.Services;
 

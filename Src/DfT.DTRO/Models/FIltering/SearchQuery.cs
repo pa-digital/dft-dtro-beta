@@ -1,8 +1,3 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-using DfT.DTRO.Models.DtroJson;
-
 namespace DfT.DTRO.Models.Filtering;
 
 public class SearchQuery

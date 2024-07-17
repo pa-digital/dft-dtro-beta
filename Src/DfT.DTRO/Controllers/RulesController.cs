@@ -1,18 +1,10 @@
-using System;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
-using DfT.DTRO.Attributes;
 using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.SharedResponse;
-using DfT.DTRO.RequestCorrelation;
 using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 

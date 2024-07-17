@@ -1,10 +1,4 @@
-﻿using DfT.DTRO.RequestCorrelation;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-
-namespace DfT.DTRO.Extensions.Configuration;
+﻿namespace DfT.DTRO.Extensions.Configuration;
 
 public static class RequestCorrelationConfigurationExtensions
 {

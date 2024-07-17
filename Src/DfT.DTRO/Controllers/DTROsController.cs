@@ -1,24 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
-using DfT.DTRO.Attributes;
 using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.SharedResponse;
-using DfT.DTRO.RequestCorrelation;
 using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 

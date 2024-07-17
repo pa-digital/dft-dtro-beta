@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace DfT.DTRO.Models.Metrics;
+﻿namespace DfT.DTRO.Models.Metrics;
 
 [DataContract]
 public class MetricRequest

@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.Filtering;
 using DfT.DTRO.Models.Pagination;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SharedResponse;
 
 namespace DfT.DTRO.Services;
 

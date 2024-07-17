@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Models.SchemaTemplate;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DfT.DTRO.Converters;
 

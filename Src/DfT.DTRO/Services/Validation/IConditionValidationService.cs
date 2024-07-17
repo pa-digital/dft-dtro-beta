@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using DfT.DTRO.Models.Conditions;
+﻿using DfT.DTRO.Models.Conditions;
 using DfT.DTRO.Models.Validation;
 
 namespace DfT.DTRO.Services.Validation;

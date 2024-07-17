@@ -1,5 +1,4 @@
-﻿using System;
-using NpgsqlTypes;
+﻿using NpgsqlTypes;
 
 namespace DfT.DTRO.DAL;
 

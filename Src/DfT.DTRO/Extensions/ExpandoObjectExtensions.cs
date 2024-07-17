@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-
-namespace DfT.DTRO.Extensions;
+﻿namespace DfT.DTRO.Extensions;
 
 public static class ExpandoObjectExtensions
 {

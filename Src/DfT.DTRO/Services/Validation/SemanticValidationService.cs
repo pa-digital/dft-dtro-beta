@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.Conditions;
 using DfT.DTRO.Models.Conditions.Base;
 using DfT.DTRO.Models.Conditions.ValueRules;
-using DfT.DTRO.Models.DtroDtos;
-using DfT.DTRO.Models.DtroJson;
-using DfT.DTRO.Models.SchemaTemplate;
 using DfT.DTRO.Models.Validation;
 using Microsoft.Extensions.Internal;
 using Newtonsoft.Json.Linq;

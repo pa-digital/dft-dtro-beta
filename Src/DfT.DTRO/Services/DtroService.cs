@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Nodes;
 using DfT.DTRO.DAL;
 using DfT.DTRO.Extensions;
 using DfT.DTRO.JsonLogic.CustomOperators;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Models.Errors;
 using DfT.DTRO.Models.Filtering;
 using DfT.DTRO.Models.Pagination;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SharedResponse;
 using DfT.DTRO.Services.Mapping;
 
 namespace DfT.DTRO.Services;

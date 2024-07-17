@@ -1,8 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.Serialization;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DfT.DTRO.Models.DataBase;
 

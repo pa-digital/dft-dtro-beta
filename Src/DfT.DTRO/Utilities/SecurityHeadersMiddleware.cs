@@ -1,6 +1,3 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-
 namespace DfT.DTRO.Utilities;
 
 public class SecurityHeadersMiddleware

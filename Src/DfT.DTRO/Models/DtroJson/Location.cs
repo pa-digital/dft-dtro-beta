@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using DfT.DTRO.Converters;
 using Newtonsoft.Json;
 
 namespace DfT.DTRO.Models.DtroJson;

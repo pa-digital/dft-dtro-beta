@@ -1,7 +1,3 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-using DfT.DTRO.Models.DtroJson;
 using DfT.DTRO.Models.Filtering;
 
 namespace DfT.DTRO.Models.DtroEvent;

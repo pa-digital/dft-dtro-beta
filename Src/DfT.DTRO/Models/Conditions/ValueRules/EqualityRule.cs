@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DfT.DTRO.Models.Conditions.ValueRules;
+﻿namespace DfT.DTRO.Models.Conditions.ValueRules;
 public readonly record struct EqualityRule<T>(T value)
     : IValueRule<T>
     where T : IComparable<T>

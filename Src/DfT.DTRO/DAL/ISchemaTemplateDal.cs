@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Threading.Tasks;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SharedResponse;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services;
 public interface ISchemaTemplateDal
 {
     Task<GuidResponse> ActivateSchemaTemplateAsync(SchemaVersion schemaVersion);

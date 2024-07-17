@@ -1,8 +1,6 @@
 using DfT.DTRO.Extensions.Configuration;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 
 namespace DfT.DTRO;
 
@@ -13,9 +11,8 @@ public class Program
         CreateHostBuilder(args).Build().Run();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args)
-    {
-        return Host.CreateDefaultBuilder(args)
+    private static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
             .ConfigureSerilog()
             .ConfigureAppConfiguration((context, config) =>
             {
@@ -26,15 +23,14 @@ public class Program
                 }
 
                 config.AddEnvironmentVariables();
-                config.AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.Local.example.json", optional: true, reloadOnChange: false);
+                config.AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: false);
             })
-             .ConfigureWebHostDefaults(webBuilder =>
-             {
-                 webBuilder.ConfigureKestrel(serverOptions =>
-                 {
-                     serverOptions.Limits.MaxRequestBodySize = 100_000_000;
-                 })
-                 .UseStartup<Startup>();
-             });
-    }
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.Limits.MaxRequestBodySize = 100_000_000;
+                    })
+                    .UseStartup<Startup>();
+            });
 }

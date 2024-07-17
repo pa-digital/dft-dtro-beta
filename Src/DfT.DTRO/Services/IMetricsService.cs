@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using DfT.DTRO.Models.Metrics;
+﻿using DfT.DTRO.Models.Metrics;
 
 namespace DfT.DTRO.Services;
 

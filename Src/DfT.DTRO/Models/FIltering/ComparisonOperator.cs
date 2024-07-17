@@ -1,5 +1,3 @@
-using System.Runtime.Serialization;
-
 namespace DfT.DTRO.Models.Filtering;
 
 [DataContract]

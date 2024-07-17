@@ -1,7 +1,4 @@
-﻿using System;
-using System.Dynamic;
-
-namespace DfT.DTRO.Models.DtroHistory;
+﻿namespace DfT.DTRO.Models.DtroHistory;
 
 public class DtroHistoryProvisionResponse
 {
