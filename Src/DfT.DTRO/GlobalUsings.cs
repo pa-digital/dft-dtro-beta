@@ -18,6 +18,7 @@ global using DfT.DTRO.Models.DtroEvent;
 global using DfT.DTRO.Models.DtroHistory;
 global using DfT.DTRO.Models.DtroJson;
 global using DfT.DTRO.Models.Errors;
+global using DfT.DTRO.Models.Metrics;
 global using DfT.DTRO.Models.SchemaTemplate;
 global using DfT.DTRO.Models.SharedResponse;
 global using DfT.DTRO.RequestCorrelation;

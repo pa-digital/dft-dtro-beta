@@ -27,18 +27,20 @@ public class EventsController : ControllerBase
     {
         try
         {
-            var response = await _eventSearchService.SearchAsync(search);
+            DtroEventSearchResult response = await _eventSearchService.SearchAsync(search);
             await _metricsService.IncrementMetric(MetricType.Event, ta);
+            _logger.LogInformation($"'{nameof(Events)}' method called using TRA Id: '{ta}' and body '{search}'");
             return Ok(response);
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
-            _logger.LogError(ex, "An error occurred while processing GetById request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
