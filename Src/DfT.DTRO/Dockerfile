@@ -27,12 +27,6 @@ ENV ASPNETCORE_URLS=http://*:8080 \
     FeatureManagement__SchemaWrite=True \
     FeatureManagement__DtroRead=True
 
-
-# Set up the environment variables
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=admin
-ENV POSTGRES_DB=DTRO
-
 # Copy scripts
 COPY Scripts/D-TRO_Database.sql ./
 COPY postgres.sh ./
