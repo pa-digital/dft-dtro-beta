@@ -36,5 +36,8 @@ RUN chmod +x postgreSQL.sh
 RUN apk --no-cache -U upgrade \
 && apk add --no-cache postgresql15-client \
 && chmod +x D-TRO_Database.sql
-CMD ["postgreSQL.sh"]
+
+CMD ls
+
+ENTRYPOINT ["/bin/sh","postgreSQL.sh"]
 
