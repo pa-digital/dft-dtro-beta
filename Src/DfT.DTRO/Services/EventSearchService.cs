@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using DfT.DTRO.Models.DtroEvent;
+﻿using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Services.Mapping;
 
 namespace DfT.DTRO.Services;

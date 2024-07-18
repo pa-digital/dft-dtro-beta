@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using DfT.DTRO.Models.SwaCode;
+﻿using DfT.DTRO.Models.SwaCode;
 
 namespace DfT.DTRO.DAL;
 

@@ -1,6 +1,3 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using Serilog.Context;
 
 namespace DfT.DTRO.RequestCorrelation;

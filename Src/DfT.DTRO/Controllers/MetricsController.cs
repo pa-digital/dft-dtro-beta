@@ -1,19 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using DfT.DTRO.Attributes;
-using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.Metrics;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.FeatureManagement;
-using Microsoft.FeatureManagement.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-
-namespace DfT.DTRO.Controllers;
+﻿namespace DfT.DTRO.Controllers;
 
 [Tags("Metrics")]
 [ApiController]
@@ -39,11 +24,12 @@ public class MetricsController : ControllerBase
     {
         try
         {
+            _logger.LogInformation($"'{nameof(HealthApi)}' method called");
             return Ok(true);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing ApiHealth request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -59,15 +45,17 @@ public class MetricsController : ControllerBase
     {
         try
         {
-            if (ta == null)
-            {
-                return NotFound(new ApiErrorResponse("Not found", "ta not found in header"));
-            }
+            _logger.LogInformation($"'{nameof(HealthTraId)}' method called using TRA Id: '{ta}'");
             return Ok(ta);
+        }
+        catch (NotFoundException nFex)
+        {
+            _logger.LogError(nFex.Message);
+            return NotFound(new ApiErrorResponse("Not found", "ta not found in header"));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing TraIdHealth request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -81,19 +69,19 @@ public class MetricsController : ControllerBase
     {
         try
         {
-            var check = await _metricsService.CheckDataBase();
+            bool check = await _metricsService.CheckDataBase();
             if (check)
             {
+                _logger.LogInformation($"'{nameof(HealthDatabase)}' method called");
                 return Ok(true);
             }
-            else
-            {
-                return NotFound(new ApiErrorResponse("Not found", "Database is not available"));
-            }
+
+            _logger.LogInformation($"'{nameof(HealthDatabase)}' method called");
+            return NotFound(new ApiErrorResponse("Not found", "Database is not available"));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing HealthDatabase request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "Database is not available"));
         }
     }
@@ -108,19 +96,18 @@ public class MetricsController : ControllerBase
     {
         try
         {
-            var metrics = await _metricsService.GetMetrics(metricRequest);
-            if (metrics == null)
-            {
-                metrics = new MetricSummary();
-            }
+            MetricSummary metrics = await _metricsService.GetMetrics(metricRequest) ?? new MetricSummary();
+            _logger.LogInformation($"'{nameof(GetMetricsForTra)}' method called using TRA Id '{metricRequest.TraId}'");
             return Ok(metrics);
         }
         catch (ArgumentException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
             _logger.LogError(ex, "An error occurred while retrieving metrics for TRA.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }

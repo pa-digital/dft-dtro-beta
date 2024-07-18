@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using DfT.DTRO.DAL;
+﻿using DfT.DTRO.DAL;
 using DfT.DTRO.Extensions;
-using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.SwaCode;
 using DfT.DTRO.Models.Validation;
 

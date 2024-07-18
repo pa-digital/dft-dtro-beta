@@ -1,20 +1,4 @@
-using System;
-using System.Dynamic;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using DfT.DTRO.Attributes;
-using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.SharedResponse;
-using DfT.DTRO.RequestCorrelation;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.FeatureManagement.Mvc;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Controllers;
 
@@ -45,12 +29,13 @@ public class SchemasController : ControllerBase
     {
         try
         {
-            var versions = await _schemaTemplateService.GetSchemaTemplatesVersionsAsync();
+            List<SchemaTemplateOverview> versions = await _schemaTemplateService.GetSchemaTemplatesVersionsAsync();
+            _logger.LogInformation($"'{nameof(GetVersions)}' method called");
             return Ok(versions);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetVersions request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -62,12 +47,13 @@ public class SchemasController : ControllerBase
     {
         try
         {
-            var templates = await _schemaTemplateService.GetSchemaTemplatesAsync();
+            List<SchemaTemplateResponse> templates = await _schemaTemplateService.GetSchemaTemplatesAsync();
+            _logger.LogInformation($"'{nameof(Get)}' method called");
             return Ok(templates);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -79,19 +65,23 @@ public class SchemasController : ControllerBase
     {
         try
         {
-            var result = await _schemaTemplateService.GetSchemaTemplateAsync(version);
+            SchemaTemplateResponse result = await _schemaTemplateService.GetSchemaTemplateAsync(version);
+            _logger.LogInformation($"'{nameof(GetByVersion)}' method called using version '{version}'");
             return Ok(result);
         }
-        catch (NotFoundException)
+        catch (NotFoundException nFex)
         {
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
             _logger.LogError(ex, "An error occurred while processing GetByVersion request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
@@ -104,20 +94,23 @@ public class SchemasController : ControllerBase
     {
         try
         {
-            var response = await _schemaTemplateService.GetSchemaTemplateByIdAsync(id);
+            SchemaTemplateResponse response = await _schemaTemplateService.GetSchemaTemplateByIdAsync(id);
+            _logger.LogInformation($"'{nameof(GetById)}' method called using unique identifier '{id}'");
             return Ok(response);
         }
-        catch (NotFoundException)
+        catch (NotFoundException nFex)
         {
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetById request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -135,24 +128,24 @@ public class SchemasController : ControllerBase
 
         try
         {
-            using (MemoryStream memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
-                dynamic expandon = JsonConvert.DeserializeObject<ExpandoObject>(fileContent);
-
-                _logger.LogInformation("[{method}] Creating schema", "schema.create");
-                var response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, expandon, _correlationProvider.CorrelationId);
+                dynamic expand = JsonConvert.DeserializeObject<ExpandoObject>(fileContent);
+                dynamic response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, expand, _correlationProvider.CorrelationId);
+                _logger.LogInformation($"'{nameof(CreateFromFileByVersion)}' method called using version '{version}' and file '{file.Name}'");
                 return CreatedAtAction(nameof(CreateFromFileByVersion), new { id = response.Id }, response);
             }
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing CreateFromFileByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -167,17 +160,18 @@ public class SchemasController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("[{method}] Creating schema", "schema.create");
-            var response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, body, _correlationProvider.CorrelationId);
+            GuidResponse response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, body, _correlationProvider.CorrelationId);
+            _logger.LogInformation($"'{nameof(CreateFromBodyByVersion)}' method called using version '{version}' and body '{body}'");
             return CreatedAtAction(nameof(CreateFromFileByVersion), new { id = response.Id }, response);
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing CreateFromFileByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -198,28 +192,29 @@ public class SchemasController : ControllerBase
 
         try
         {
-            using (MemoryStream memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
-                dynamic expandon = JsonConvert.DeserializeObject<ExpandoObject>(fileContent);
-
-                _logger.LogInformation("[{method}] Updating schema with schema version {schemaVersion}", "schema.update", version);
-                var response = await _schemaTemplateService.UpdateSchemaTemplateAsJsonAsync(version, expandon, _correlationProvider.CorrelationId);
+                dynamic expand = JsonConvert.DeserializeObject<ExpandoObject>(fileContent);
+                dynamic response = await _schemaTemplateService.UpdateSchemaTemplateAsJsonAsync(version, expand, _correlationProvider.CorrelationId);
+                _logger.LogInformation($"'{nameof(UpdateFromBodyByVersion)}' method called using version '{version}' and file '{file.Name}'");
                 return Ok(response);
             }
         }
-        catch (NotFoundException)
+        catch (NotFoundException nFex)
         {
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing UpdateFromFileByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -233,21 +228,23 @@ public class SchemasController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("[{method}] Updating schema with schema version {schemaVersion}", "schema.update", version);
-            var response = await _schemaTemplateService.UpdateSchemaTemplateAsJsonAsync(version, body, _correlationProvider.CorrelationId);
+            GuidResponse response = await _schemaTemplateService.UpdateSchemaTemplateAsJsonAsync(version, body, _correlationProvider.CorrelationId);
+            _logger.LogInformation($"'{nameof(UpdateFromBodyByVersion)}' method called using version '{version}' and body '{body}'");
             return Ok(response);
         }
-        catch (NotFoundException)
+        catch (NotFoundException nFex)
         {
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing UpdateFromFileByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -261,21 +258,23 @@ public class SchemasController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("[{method}] activate schema with schema version {schemaVersion}", "schema.activate", version);
-            var response = await _schemaTemplateService.ActivateSchemaTemplateAsync(version);
+            GuidResponse response = await _schemaTemplateService.ActivateSchemaTemplateAsync(version);
+            _logger.LogInformation($"'{nameof(ActivateByVersion)}' method called using version '{version}'");
             return Ok(response);
         }
-        catch (NotFoundException exnf)
+        catch (NotFoundException nFex)
         {
-            return NotFound(new ApiErrorResponse("Not found", exnf.Message));
+            _logger.LogError(nFex.Message);
+            return NotFound(new ApiErrorResponse("Not found", nFex.Message));
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing ActivateByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -289,21 +288,23 @@ public class SchemasController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("[{method}] deactivate schema with schema version {schemaVersion}", "schema.deactivate", version);
-            var response = await _schemaTemplateService.DeActivateSchemaTemplateAsync(version);
+            GuidResponse response = await _schemaTemplateService.DeActivateSchemaTemplateAsync(version);
+            _logger.LogInformation($"'{nameof(DeactivateByVersion)}' method called using version '{version}'");
             return Ok(response);
         }
-        catch (NotFoundException)
+        catch (NotFoundException nFex)
         {
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Not found", "Schema version not found"));
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing ActivateByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }

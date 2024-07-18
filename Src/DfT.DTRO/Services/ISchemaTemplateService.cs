@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Threading.Tasks;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SharedResponse;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services;
 
 public interface ISchemaTemplateService
 {

@@ -1,20 +1,3 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using DfT.DTRO.Attributes;
-using DfT.DTRO.Extensions;
-using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.Filtering;
-using DfT.DTRO.Models.Pagination;
-using DfT.DTRO.Models.Search;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.FeatureManagement.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-
 namespace DfT.DTRO.Controllers;
 
 [Tags("Search")]
@@ -46,19 +29,20 @@ public class SearchController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("[{method}] Searching DTROs with criteria {searchCriteria}", "dtro.search", body.ToIndentedJsonString());
-            var response = await _searchService.SearchAsync(body);
+            PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
             await _metricsService.IncrementMetric(MetricType.Search, ta);
+            _logger.LogInformation($"'{nameof(SearchDtros)}' method called using TRA Id: '{ta}' and body '{body}'");
             return Ok(response);
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
-            _logger.LogError(ex, "An error occurred while processing GetById request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }

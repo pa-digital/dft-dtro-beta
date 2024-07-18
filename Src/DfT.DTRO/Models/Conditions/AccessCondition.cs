@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using DfT.DTRO.Models.Conditions.Base;
+﻿using DfT.DTRO.Models.Conditions.Base;
 
 namespace DfT.DTRO.Models.Conditions;
 

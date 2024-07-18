@@ -1,12 +1,5 @@
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.Serialization;
-using DfT.DTRO.Attributes;
-using DfT.DTRO.Converters;
-using DfT.DTRO.Models.SchemaTemplate;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace DfT.DTRO.Models.DataBase;
 

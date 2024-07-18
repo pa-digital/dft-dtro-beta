@@ -1,8 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.Dynamic;
-using System.Runtime.Serialization;
-using DfT.DTRO.Converters;
-using DfT.DTRO.Models.SchemaTemplate;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

@@ -1,9 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Dynamic;
-using DfT.DTRO.Converters;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroJson;
-using DfT.DTRO.Models.SchemaTemplate;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions.Internal;

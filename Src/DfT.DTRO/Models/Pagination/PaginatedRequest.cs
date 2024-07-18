@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace DfT.DTRO.Models.Pagination;
 
 public class PaginatedRequest

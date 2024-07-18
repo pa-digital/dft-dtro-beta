@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DfT.DTRO.Models.DtroHistory;
+﻿namespace DfT.DTRO.Models.DtroHistory;
 
 public class DtroHistorySourceResponse
 {

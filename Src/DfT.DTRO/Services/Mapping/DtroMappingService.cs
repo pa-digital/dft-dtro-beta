@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using DfT.DTRO.Enums;
+﻿using DfT.DTRO.Enums;
 using DfT.DTRO.Extensions;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Models.DtroJson;
 using DfT.DTRO.Models.Search;
 using DfT.DTRO.Services.Conversion;
 using Microsoft.Extensions.Configuration;

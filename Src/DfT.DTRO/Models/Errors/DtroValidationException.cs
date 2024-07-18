@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using DfT.DTRO.Models.Validation;
 using Newtonsoft.Json.Schema;
 

@@ -1,6 +1,4 @@
-﻿using System;
-using DfT.DTRO.Models.SchemaTemplate;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace DfT.DTRO.Converters;
 

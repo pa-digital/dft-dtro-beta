@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using DfT.DTRO.Models.Filtering;
+﻿using DfT.DTRO.Models.Filtering;
 using DfT.DTRO.Models.Pagination;
 using DfT.DTRO.Models.Search;
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace DfT.DTRO.Caching;
+﻿namespace DfT.DTRO.Caching;
 
 public interface IRedisCache
 {

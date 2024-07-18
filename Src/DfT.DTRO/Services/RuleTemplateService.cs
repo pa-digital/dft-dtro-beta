@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.RuleTemplate;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SharedResponse;
+﻿using DfT.DTRO.Models.RuleTemplate;
 using DfT.DTRO.Services.Mapping;
 
 namespace DfT.DTRO.Services;

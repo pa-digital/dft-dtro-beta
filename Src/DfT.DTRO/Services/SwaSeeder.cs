@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DfT.DTRO.DAL;
-using DfT.DTRO.Models.DataBase;
+﻿using DfT.DTRO.DAL;
 
 namespace DfT.DTRO.Services;
 

@@ -1,11 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
-
 namespace DfT.DTRO.RequestCorrelation;
 
 public class RequestCorrelationMiddleware : IMiddleware

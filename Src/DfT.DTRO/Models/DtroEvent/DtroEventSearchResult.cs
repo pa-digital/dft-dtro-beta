@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace DfT.DTRO.Models.DtroEvent;
 
 public class DtroEventSearchResult

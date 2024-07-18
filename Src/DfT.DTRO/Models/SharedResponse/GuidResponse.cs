@@ -1,5 +1,3 @@
-using System;
-
 namespace DfT.DTRO.Models.SharedResponse;
 
 public class GuidResponse

@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace DfT.DTRO.Models.SchemaTemplate;
+﻿namespace DfT.DTRO.Models.SchemaTemplate;
 
 [DataContract]
 public class SchemaTemplateOverview

@@ -1,19 +1,3 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using DfT.DTRO.Attributes;
-using DfT.DTRO.FeatureManagement;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.SharedResponse;
-using DfT.DTRO.RequestCorrelation;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.FeatureManagement.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-
 namespace DfT.DTRO.Controllers;
 
 [ApiController]
@@ -43,12 +27,13 @@ public class RulesController : ControllerBase
     {
         try
         {
-            var versions = await _ruleTemplateService.GetRuleTemplatesVersionsAsync();
+            List<RuleTemplateOverview> versions = await _ruleTemplateService.GetRuleTemplatesVersionsAsync();
+            _logger.LogInformation($"'{nameof(GetVersions)}' method called");
             return Ok(versions);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetVersions request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -60,12 +45,13 @@ public class RulesController : ControllerBase
     {
         try
         {
-            var templates = await _ruleTemplateService.GetRuleTemplatesAsync();
+            List<RuleTemplateResponse> templates = await _ruleTemplateService.GetRuleTemplatesAsync();
+            _logger.LogInformation($"'{nameof(Get)}' method called");
             return Ok(templates);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -77,20 +63,23 @@ public class RulesController : ControllerBase
     {
         try
         {
-            var result = await _ruleTemplateService.GetRuleTemplateAsync(version);
+            RuleTemplateResponse result = await _ruleTemplateService.GetRuleTemplateAsync(version);
+            _logger.LogInformation($"'{nameof(GetByVersion)}' method called using version '{version}'");
             return Ok(result);
         }
-        catch (NotFoundException)
+        catch (NotFoundException nFex)
         {
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetByVersion request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -102,20 +91,23 @@ public class RulesController : ControllerBase
     {
         try
         {
-            var response = await _ruleTemplateService.GetRuleTemplateByIdAsync(id);
+            RuleTemplateResponse response = await _ruleTemplateService.GetRuleTemplateByIdAsync(id);
+            _logger.LogInformation($"'{nameof(GetById)}' method called using unique identifier'{id}'");
             return Ok(response);
         }
-        catch (NotFoundException)
+        catch (NotFoundException nFex)
         {
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing GetById request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -133,21 +125,23 @@ public class RulesController : ControllerBase
 
         try
         {
-            using (MemoryStream memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
-
-                var response = await _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
+                GuidResponse response = await _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
+                _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using version '{version}' and file '{file.Name}'");
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
             _logger.LogError(ex, "An error occurred while processing CreateFromFile request.");
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
@@ -169,27 +163,28 @@ public class RulesController : ControllerBase
 
         try
         {
-            using (MemoryStream memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
-
-                _logger.LogInformation("[{method}] Updating rule for schema version {schemaVersion}", "rule.update", version);
-                var response = await _ruleTemplateService.UpdateRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
+                GuidResponse response = await _ruleTemplateService.UpdateRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
+                _logger.LogInformation($"'{nameof(UpdateFromFile)}' method called using version '{version}' and file '{file.Name}'");
                 return Ok(response);
             }
         }
-        catch (NotFoundException)
+        catch (NotFoundException nFex)
         {
+            _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Rule for Schema version not found"));
         }
         catch (InvalidOperationException err)
         {
+            _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing UpdateFromFile request.");
+            _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
