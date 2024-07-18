@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #Add PostgreSQL 'D-TRO_Database.sql' script
 apk add postgresql-client
