@@ -27,14 +27,14 @@ ENV ASPNETCORE_URLS=http://*:8080 \
     FeatureManagement__SchemaWrite=True \
     FeatureManagement__DtroRead=True
 
+# Copy scripts
+COPY Scripts/D-TRO_Database.sql ./
+COPY postgreSQL.sh ./
+RUN chmod +x postgreSQL.sh
 
-# Set up the environment variables
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=admin
-ENV POSTGRES_DB=DTRO
+# Set the entry point
+RUN apk --no-cache -U upgrade \
+&& apk add --no-cache postgresql15-client \
+&& chmod +x D-TRO_Database.sql
 
-# Run the application
-COPY postgres.sh app/postgres.sh
-RUN chmod +x app/postgres.sh
-ENTRYPOINT ["./postgres.sh"]
-
+ENTRYPOINT ["/bin/sh","postgreSQL.sh"]

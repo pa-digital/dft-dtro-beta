@@ -12,11 +12,13 @@ public static class StorageServiceDIExtensions
 {
     public static void AddStorage(this IServiceCollection services, IConfiguration configuration)
     {
-        string assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
         string connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<DtroContext>(options =>
             options.UseNpgsql(connectionString, builder =>
-                builder.MigrationsAssembly(assemblyName)));
+            {
+                string assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+                builder.MigrationsAssembly(assemblyName);
+            }));
     }
 
     public static ISwaSeeder RegisterSwaEntity(this IServiceCollection services)
