@@ -36,9 +36,8 @@ ENV POSTGRES_DB=DTRO
 # Copy scripts
 COPY Scripts/D-TRO_Database.sql ./
 COPY postgres.sh ./
-RUN ls ./
 
 # Set the entry point
-RUN chmod +x postgres.sh
-ENTRYPOINT ["/bin/sh","/postgres.sh"]
+RUN chmod +x ./postgres.sh
+ENTRYPOINT ["/bin/sh","./postgres.sh"]
 
