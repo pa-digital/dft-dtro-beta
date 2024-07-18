@@ -45,6 +45,11 @@ public class MetricsController : ControllerBase
     {
         try
         {
+            if (ta == null)
+            {
+                _logger.LogError($"TRA Id '{null}' is null");
+                return NotFound(new ApiErrorResponse("Not found", "ta not found in header"));
+            }
             _logger.LogInformation($"'{nameof(HealthTraId)}' method called using TRA Id: '{ta}'");
             return Ok(ta);
         }
