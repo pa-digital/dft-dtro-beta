@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using DfT.DTRO.DAL;
-using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace DfT.DTRO.Extensions.DependencyInjection;
@@ -17,14 +16,6 @@ public static class StorageServiceDIExtensions
                 builder.MigrationsAssembly(assemblyName);
             }));
     }
-
-    public static ISwaSeeder RegisterSwaEntity(this IServiceCollection services)
-    {
-        ServiceProvider provider = services.BuildServiceProvider();
-        return provider.GetRequiredService<ISwaSeeder>();
-    }
-
-    public static void AddSwaCodes(this IApplicationBuilder app, ISwaSeeder seeder) => seeder.Seed();
 
     private static string Build(IServiceCollection services, IConfiguration configuration)
     {
