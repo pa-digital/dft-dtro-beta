@@ -41,4 +41,4 @@ jobs:
           platforms: linux/amd64
           push: true
           provenance: false
-          tags: europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-repository/dft-dtro-beta_test:latest
+          tags: europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-repository/dft-dtro-beta:latest
