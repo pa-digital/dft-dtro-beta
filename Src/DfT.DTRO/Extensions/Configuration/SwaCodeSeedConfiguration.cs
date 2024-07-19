@@ -1,38 +1,16 @@
-﻿using DfT.DTRO.DAL;
+﻿namespace DfT.DTRO.Extensions.Configuration;
 
-namespace DfT.DTRO.Services;
-
-public class SwaSeeder : ISwaSeeder
+public class SwaCodeSeedConfiguration : IEntityTypeConfiguration<SwaCode>
 {
-    private readonly DtroContext _dtroContext;
-
-    public SwaSeeder(DtroContext dtroContext)
+    public void Configure(EntityTypeBuilder<SwaCode> builder)
     {
-        _dtroContext = dtroContext;
+        builder.HasData(SwaCodes);
     }
 
-    public void Seed()
+
+    #region swaCodes
+    private readonly IEnumerable<SwaCode> SwaCodes = new List<SwaCode>
     {
-        if (!_dtroContext.Database.CanConnect())
-        {
-            return;
-        }
-
-        if (_dtroContext.SwaCodes.Any())
-        {
-            return;
-        }
-
-        IEnumerable<SwaCode> swaCodes = InitiateSwaCodes();
-        _dtroContext.SwaCodes.AddRange(swaCodes);
-        _dtroContext.SaveChanges();
-    }
-
-    #region SwaCodes
-
-    private IEnumerable<SwaCode> InitiateSwaCodes() =>
-        new List<SwaCode>
-        {
             new() { Id = Guid.NewGuid(), Name = "Department of Transport", TraId = 0, Prefix = "DfT", IsAdmin = true },
             new() { Id = Guid.NewGuid(), Name = "(AQ) LIMITED", TraId = 7334, Prefix = "SK", IsAdmin = false },
             new() { Id = Guid.NewGuid(), Name = "1310 Ltd", TraId = 7550, Prefix = "M3", IsAdmin = false },

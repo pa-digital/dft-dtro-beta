@@ -19,7 +19,6 @@ namespace DfT.DTRO;
 public class Startup
 {
     private readonly IWebHostEnvironment _hostingEnv;
-    private ISwaSeeder _seeder;
 
     private IConfiguration Configuration { get; }
 
@@ -88,7 +87,6 @@ public class Startup
         services.AddScoped<IDtroService, DtroService>();
         services.AddScoped<ISearchService, SearchService>();
         services.AddScoped<IMetricsService, MetricsService>();
-        services.AddScoped<ISwaSeeder, SwaSeeder>();
         services.AddScoped<IDtroDal, DtroDal>();
         services.AddScoped<IDtroHistoryDal, DtroHistoryDal>();
         services.AddScoped<ISchemaTemplateDal, SchemaTemplateDal>();
@@ -102,7 +100,6 @@ public class Startup
         services.AddRequestCorrelation();
         services.AddCache(Configuration);
         services.TryAddSingleton<ISystemClock, SystemClock>();
-        _seeder = services.RegisterSwaEntity();
         services.AddMvc();
     }
 
@@ -126,8 +123,6 @@ public class Startup
         {
             endpoints.MapControllers();
         });
-
-        app.AddSwaCodes(_seeder);
 
         app.UseHealthChecks("/health");
 
