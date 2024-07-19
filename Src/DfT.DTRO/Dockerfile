@@ -27,14 +27,19 @@ ENV ASPNETCORE_URLS=http://*:8080 \
     FeatureManagement__SchemaWrite=True \
     FeatureManagement__DtroRead=True
 
+
+#Revert all changes while Vighnesh is checking the pipelines.
+
+ENTRYPOINT ["./DfT.DTRO"]
+
 # Copy scripts
-COPY Scripts/D-TRO_Database.sql ./
-COPY postgreSQL.sh ./
-RUN chmod +x postgreSQL.sh
+# COPY Scripts/D-TRO_Database.sql ./
+# COPY postgreSQL.sh ./
+# RUN chmod +x postgreSQL.sh
 
 # Set the entry point
-RUN apk --no-cache -U upgrade \
-&& apk add --no-cache postgresql15-client \
-&& chmod +x D-TRO_Database.sql
+# RUN apk --no-cache -U upgrade \
+# && apk add --no-cache postgresql15-client \
+# && chmod +x D-TRO_Database.sql
 
-ENTRYPOINT ["/bin/sh","postgreSQL.sh"]
+# ENTRYPOINT ["/bin/sh","postgreSQL.sh"]
