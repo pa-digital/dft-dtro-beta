@@ -29,13 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="DtroJsonDataExamples\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
 		<Content Include="Configurations\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="SchemaJsonExamples\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
@@ -58,21 +52,5 @@
 		<None Remove="CodeiumTests\" />
 		<None Remove="CodeiumTests\Integration\" />
 		<None Remove="CodeiumTests\Unit\" />
-		<None Remove="DtroJsonDataExamples\3.2.0-valid-complex-dtro.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\invalid-duplicate-provision-reference.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\invalid-provision-actionType.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\invalid-provision-reference.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\invalid-source-actionType.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\invalid-source-reference.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\valid-fullAmendment.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\valid-fullRevoke.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\valid-new-x.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\valid-noChange.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\valid-partialAmendment.json" />
-		<None Remove="DtroJsonDataExamples\v3.2.0\valid-partialRevoke.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="A Readme\" />
 	</ItemGroup>
 </Project>
