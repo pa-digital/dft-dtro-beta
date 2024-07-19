@@ -19,7 +19,7 @@ public class Program
                 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
                 if (context.HostingEnvironment.IsDevelopment())
                 {
-                    config.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: false);
+                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
                 }
 
                 config.AddEnvironmentVariables();

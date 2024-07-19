@@ -27,18 +27,6 @@ ENV ASPNETCORE_URLS=http://*:8080 \
     FeatureManagement__SchemaWrite=True \
     FeatureManagement__DtroRead=True
 
-# Expose the database environments
-ENV POSTGRES_DB = ${POSTGRES_DB} \
-    POSTGRES_HOST = ${POSTGRES_HOST} \
-    POSTGRES_MAX_POOL_SIZE = ${POSTGRES_MAX_POOL_SIZE} \	
-    POSTGRES_PORT = ${POSTGRES_PORT} \
-    POSTGRES_SSL = ${POSTGRES_SSL} \
-    POSTGRES_USER = ${POSTGRES_USER} \
-    POSTGRES_PROJECTID = ${PROJECTID} \	
-    POSTGRES_PASSWORD = ${POSTGRES_PASSWORD} 
-
-
-
 #Revert all changes while Vighnesh is checking the pipelines.
 
 ENTRYPOINT ["./DfT.DTRO"]
