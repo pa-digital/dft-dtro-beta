@@ -1,11 +1,9 @@
 name: Merge To Main
 
 on:
-  workflow_dispatch:
-# TODO: Once GCP infrastructure are in place, this workflow will be triggered by merging of a PR to Main
-#  push:
-#    branches:
-#      - main
+  push:
+    branches:
+      - main
 
 jobs:
   deploy-dev:

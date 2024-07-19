@@ -62,8 +62,13 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          path: dft-dtro-beta
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3.3.0
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
@@ -82,59 +87,59 @@ jobs:
           provenance: false
           tags: ${{ env.ar_repo_url }}
 
-  deploy-dtro:
-    name: Deploy DTRO Application to Cloud Run - ${{ inputs.environment }}
-    needs:
-      - build-push-dtro
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-      packages: read
-      actions: read
-      pull-requests: write
-    defaults:
-      run:
-        shell: bash
-        working-directory: terraform
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.workload_identity_provider }}
-          service_account: ${{ secrets.wip_service_account }}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform Format
-        if: ${{ inputs.do-validation-checks }}
-        run: terraform fmt -check -recursive
-
-      - name: terraform validate
-        if: ${{ inputs.do-validation-checks }}
-        uses: dflook/terraform-validate@v1
-
-      - name: Checkov GitHub Action
-        if: ${{ inputs.do-validation-checks }}
-        uses: bridgecrewio/checkov-action@v12
-        with:
-          # CKV2_GHA_1: to be addressed
-          skip_check: CKV2_GHA_1
-          output_format: github_failed_only
-          output_file_path: console
-
-      - name: Terraform Init
-        run: |
-          terraform init \
-          -backend-config "bucket=${{env.TF_VAR_tf_state_bucket}}" \
-          -backend-config "prefix=terraform/cloudrun-state"
-
-      - name: Terraform Plan
-        run: terraform plan -input=false -out terraform-plan-gcp-cr
+#  deploy-dtro:
+#    name: Deploy DTRO Application to Cloud Run - ${{ inputs.environment }}
+#    needs:
+#      - build-push-dtro
+#    runs-on: ubuntu-latest
+#    permissions:
+#      id-token: write
+#      contents: read
+#      packages: read
+#      actions: read
+#      pull-requests: write
+#    defaults:
+#      run:
+#        shell: bash
+#        working-directory: terraform
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#
+#      - name: Authenticate to Google Cloud
+#        uses: google-github-actions/auth@v2
+#        with:
+#          workload_identity_provider: ${{ secrets.workload_identity_provider }}
+#          service_account: ${{ secrets.wip_service_account }}
+#
+#      - name: Setup Terraform
+#        uses: hashicorp/setup-terraform@v3
+#
+#      - name: Terraform Format
+#        if: ${{ inputs.do-validation-checks }}
+#        run: terraform fmt -check -recursive
+#
+#      - name: terraform validate
+#        if: ${{ inputs.do-validation-checks }}
+#        uses: dflook/terraform-validate@v1
+#
+#      - name: Checkov GitHub Action
+#        if: ${{ inputs.do-validation-checks }}
+#        uses: bridgecrewio/checkov-action@v12
+#        with:
+#          # CKV2_GHA_1: to be addressed
+#          skip_check: CKV2_GHA_1
+#          output_format: github_failed_only
+#          output_file_path: console
+#
+#      - name: Terraform Init
+#        run: |
+#          terraform init \
+#          -backend-config "bucket=${{env.TF_VAR_tf_state_bucket}}" \
+#          -backend-config "prefix=terraform/cloudrun-state"
+#
+#      - name: Terraform Plan
+#        run: terraform plan -input=false -out terraform-plan-gcp-cr
 
 #      - name: Terraform Apply
 #        run: terraform apply -auto-approve -input=false terraform-plan-gcp-cr
