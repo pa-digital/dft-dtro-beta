@@ -4,5 +4,5 @@ namespace DfT.DTRO.Services.Validation;
 
 public interface IJsonLogicValidationService
 {
-    Task<IList<SemanticValidationError>> ValidateCreationRequest(DtroSubmit request);
+    Task<IList<SemanticValidationError>> ValidateCreationRequest(DtroSubmit request, string schemaVersion);
 }

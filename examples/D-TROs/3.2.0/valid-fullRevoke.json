@@ -1,0 +1,216 @@
+{
+  "source": {
+    "actionType": "amendment",
+    "provision": [
+      {
+        "actionType": "fullRevoke",
+        "addition": true,
+        "orderReportingPoint": "ttroTtmoByNotice",
+        "provisionDescription": "Prohibition of Waiting",
+        "provisionIndex": 0,
+        "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
+        "regulatedPlaces": [
+          {
+            "description": "Zone 5, Kenworthy Road, All Odd, All Even",
+            "externalReference": [
+              {
+                "lastUpdateDate": "1981-02-08T11:30:43.0Z",
+                "usrn": 96854586
+              }
+            ],
+            "geometry": {
+              "coordinates": {
+                "coordinates": [
+                  [
+                    [
+                      -104.05,
+                      48.99
+                    ],
+                    [
+                      -97.22,
+                      48.98
+                    ],
+                    [
+                      -96.58,
+                      45.94
+                    ],
+                    [
+                      -104.03,
+                      45.94
+                    ],
+                    [
+                      -104.05,
+                      48.99
+                    ]
+                  ]
+                ],
+                "type": "Polygon"
+              },
+              "crs": "osgb36Epsg27700",
+              "geometryType": "polygon"
+            }
+          }
+        ],
+        "regulations": [
+          {
+            "conditions": [
+              {
+                "vehicleCharacteristics": {
+
+                }
+              }
+            ],
+            "isDynamic": false,
+            "overallPeriod": {
+              "validityCondition": {
+                "conditionSet": [
+                  {
+                    "operator": "and",
+                    "negate": false,
+                    "conditions": [
+                      {
+                        "vehicleCharacteristics": {
+
+                        },
+                        "negate": false
+                      },
+                      {
+                        "vehicleCharacteristics": {
+
+                        },
+                        "negate": true
+                      }
+                    ]
+                  }
+                ],
+                "rateTable": {
+                  "rateLineCollection": [
+                    {
+                      "rateLine": [
+                        {
+                          "sequence": 0,
+                          "type": "flatRateTier",
+                          "value": 15,
+                          "durationEnd": "19:00:00.0Z"
+                        },
+                        {
+                          "sequence": 1,
+                          "type": "flatRate",
+                          "value": 20,
+                          "maxValue": 40,
+                          "durationStart": "19:00:00.0Z",
+                          "incrementPeriod": "PT1H",
+                          "durationEnd": "19:30:00.0Z",
+                          "usageCondition": "unlimited",
+                          "description": "eiusmod nisi",
+                          "minValue": 10
+                        }
+                      ],
+                      "applicableCurrency": "GBP",
+                      "sequence": 0,
+                      "startValidUsagePeriod": "13:00:00.0Z"
+                    }
+                  ],
+                  "type": "hourly",
+                  "additionalInformation": "id"
+                }
+              },
+              "start": "1983-01-05T22:50:50.0Z",
+              "exceptionPeriod": [
+                {
+                  "recurringSpecialDay": [
+                    {
+                      "intersectWithApplicableDays": true,
+                      "specialDayType": "matchDay"
+                    },
+                    {
+                      "intersectWithApplicableDays": false,
+                      "specialDayType": "matchDay",
+                      "publicEvent": "footballMatch"
+                    }
+                  ],
+                  "recurringTimePeriodOfDay": [
+                    {
+                      "startTimeOfPeriod": "17:00:00.0Z",
+                      "endTimeOfPeriod": "18:00:00.0Z"
+                    }
+                  ],
+                  "recurringDayWeekMonthPeriod": [
+                    {
+                      "applicableDay": [
+                        "monday"
+                      ],
+                      "applicableMonth": [
+                        "october"
+                      ]
+                    }
+                  ],
+                  "startOfPeriod": "1983-01-05T22:50:50.0Z",
+                  "periodName": "adipisicing incididunt Lorem",
+                  "endOfPeriod": "1983-03-17T16:47:01.0Z"
+                }
+              ],
+              "validPeriod": [
+                {
+                  "recurringTimePeriodOfDay": [
+                    {
+                      "startTimeOfPeriod": "07:30:00.0Z",
+                      "endTimeOfPeriod": "09:00:00.0Z"
+                    },
+                    {
+                      "startTimeOfPeriod": "17:00:00.0Z",
+                      "endTimeOfPeriod": "18:00:00.0Z"
+                    }
+                  ],
+                  "startOfPeriod": "1985-07-01T21:12:04.0Z",
+                  "recurringSpecialDay": [
+                    {
+                      "intersectWithApplicableDays": true,
+                      "specialDayType": "eventDay"
+                    },
+                    {
+                      "intersectWithApplicableDays": true,
+                      "specialDayType": "eventDay"
+                    }
+                  ],
+                  "periodName": "ea et eiusmod",
+                  "recurringDayWeekMonthPeriod": [
+                    {
+                      "applicableDay": [
+                        "tuesday"
+                      ]
+                    },
+                    {
+                      "applicableMonth": [
+                        "june"
+                      ],
+                      "applicableDay": [
+                        "monday"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "startOfPeriod": "1989-05-12T13:42:51.0Z",
+                  "periodName": "dolor in cillum adipisicing nisi",
+                  "endOfPeriod": "1990-11-03T17:54:21.0Z",
+                  "recurringDayWeekMonthPeriod": []
+                }
+              ],
+              "end": "1996-01-05T22:50:50.0Z"
+            },
+            "regulationStatus": "not valid",
+            "regulationType": "bannedMovementNoEntry",
+            "timeZone": "Europe/London"
+          }
+        ]
+      }
+    ],
+    "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
+    "section": "All sections",
+    "traCreator": 1585,
+    "currentTraOwner": 1585,
+    "traAffected": [ 7563, 1585 ],
+    "troName": "The Essex County Council (Braintree District) (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"
+  }
+}

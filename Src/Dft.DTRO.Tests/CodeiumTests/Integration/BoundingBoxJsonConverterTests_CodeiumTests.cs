@@ -1,20 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.Converters;
-using DfT.DTRO.Models.DtroJson;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace Dft.DTRO.Tests.CodeiumTests.JsonConverters;
+namespace Dft.DTRO.Tests.CodeiumTests.Integration;
 
 [ExcludeFromCodeCoverage]
 public class BoundingBoxJsonConverterTests
 {
-    private JsonSerializer serializer;
-
+    private readonly JsonSerializer _serializer;
 
     public BoundingBoxJsonConverterTests()
     {
-        serializer = new JsonSerializer();
-        serializer.Converters.Add(new BoundingBoxJsonConverter());
+        _serializer = new JsonSerializer();
+        _serializer.Converters.Add(new BoundingBoxJsonConverter());
     }
 
     [Fact]
@@ -22,7 +18,7 @@ public class BoundingBoxJsonConverterTests
     {
         var boundingBox = new BoundingBox(1.0, 2.0, 3.0, 4.0);
         var writer = new StringWriter();
-        serializer.Serialize(writer, boundingBox);
+        _serializer.Serialize(writer, boundingBox);
 
         Assert.Equal("[1.0,2.0,3.0,4.0]", writer.ToString());
     }
@@ -32,7 +28,7 @@ public class BoundingBoxJsonConverterTests
     {
         var json = "[1.0,2.0,3.0,4.0]";
         var reader = new JsonTextReader(new StringReader(json));
-        var boundingBox = serializer.Deserialize<BoundingBox>(reader);
+        var boundingBox = _serializer.Deserialize<BoundingBox>(reader);
 
         Assert.Equal(1.0, boundingBox.WestLongitude);
         Assert.Equal(2.0, boundingBox.SouthLatitude);
@@ -46,6 +42,6 @@ public class BoundingBoxJsonConverterTests
         var json = "[1.0,2.0,3.0]";
         var reader = new JsonTextReader(new StringReader(json));
 
-        Assert.Throws<JsonReaderException>(() => serializer.Deserialize<BoundingBox>(reader));
+        Assert.Throws<JsonReaderException>(() => _serializer.Deserialize<BoundingBox>(reader));
     }
 }

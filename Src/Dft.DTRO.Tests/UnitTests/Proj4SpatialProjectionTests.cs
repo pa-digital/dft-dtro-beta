@@ -1,12 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.Services.Conversion;
-
-namespace Dft.DTRO.Tests;
+﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
 public class Proj4SpatialProjectionTests
 {
-    const double ErrorMarginPercent = 1.2;
+    private const double ErrorMarginPercent = 1.2;
 
     [Theory]
     [InlineData(-0.1272, 51.5074, 530068.1072096, 180380.3079476)]
@@ -18,9 +15,9 @@ public class Proj4SpatialProjectionTests
         double expectedLongitude,
         double expectedLatitude)
     {
-        var sut = new Proj4SpatialProjectionService();
+        Proj4SpatialProjectionService sut = new();
 
-        var result = sut.Wgs84ToOsgb36(longitude, latitude);
+        Coordinates result = sut.Wgs84ToOsgb36(longitude, latitude);
 
         WithinErrorMarginPercent(result.Longitude, expectedLongitude, ErrorMarginPercent);
         WithinErrorMarginPercent(result.Latitude, expectedLatitude, ErrorMarginPercent);
@@ -32,9 +29,9 @@ public class Proj4SpatialProjectionTests
         double westLongitude, double southLatitude, double eastLongitude, double northLatitude,
         double expectedWestLongitude, double expectedSouthLatitude, double expectedEastLongitude, double expectedNorthLatitude)
     {
-        var sut = new Proj4SpatialProjectionService();
+        Proj4SpatialProjectionService sut = new();
 
-        var result = sut.Wgs84ToOsgb36(westLongitude, southLatitude, eastLongitude, northLatitude);
+        BoundingBox result = sut.Wgs84ToOsgb36(westLongitude, southLatitude, eastLongitude, northLatitude);
 
         WithinErrorMarginPercent(result.WestLongitude, expectedWestLongitude, ErrorMarginPercent);
         WithinErrorMarginPercent(result.SouthLatitude, expectedSouthLatitude, ErrorMarginPercent);
@@ -48,9 +45,9 @@ public class Proj4SpatialProjectionTests
         double westLongitude, double southLatitude, double eastLongitude, double northLatitude,
         double expectedWestLongitude, double expectedSouthLatitude, double expectedEastLongitude, double expectedNorthLatitude)
     {
-        var sut = new Proj4SpatialProjectionService();
+        Proj4SpatialProjectionService sut = new();
 
-        var result = sut.Osgb36ToWgs84(westLongitude, southLatitude, eastLongitude, northLatitude);
+        BoundingBox result = sut.Osgb36ToWgs84(westLongitude, southLatitude, eastLongitude, northLatitude);
 
         WithinErrorMarginPercent(result.WestLongitude, expectedWestLongitude, ErrorMarginPercent);
         WithinErrorMarginPercent(result.SouthLatitude, expectedSouthLatitude, ErrorMarginPercent);

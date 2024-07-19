@@ -1,20 +1,13 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Services.Conversion;
-using DfT.DTRO.Services.Mapping;
-using Microsoft.Extensions.Configuration;
-
-namespace Dft.DTRO.Tests;
+﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
 public class MappingServiceTests
 {
     private static readonly string[] ValidDtroHistories =
     {
-        "./DtroJsonDataExamples/v3.2.0/valid-new-x.json",
-        "./DtroJsonDataExamples/v3.2.0/valid-noChange.json",
-        "./DtroJsonDataExamples/v3.2.0/valid-fullRevoke.json"
+        "../../../../../examples/D-TROs/3.2.0/valid-new-x.json",
+        "../../../../../examples/D-TROs/3.2.0/valid-noChange.json",
+        "../../../../../examples/D-TROs/3.2.0/valid-fullRevoke.json"
     };
 
     private readonly IDtroMappingService _sut;
@@ -31,7 +24,7 @@ public class MappingServiceTests
     [Fact]
     public void GetSource_Returns_DtroHistoryResponse()
     {
-        List<DTROHistory> histories = CreateRequestDtroHistoryObject(ValidDtroHistories);
+        List<DTROHistory> histories = Utils.CreateRequestDtroHistoryObject(ValidDtroHistories);
         List<DtroHistorySourceResponse> actual = histories
             .Select(_sut.GetSource)
             .Where(response => response != null)
@@ -49,7 +42,7 @@ public class MappingServiceTests
     [Fact]
     public void GetProvision_Returns_DtroHistoryProvision()
     {
-        List<DTROHistory> histories = CreateRequestDtroHistoryObject(ValidDtroHistories);
+        List<DTROHistory> histories = Utils.CreateRequestDtroHistoryObject(ValidDtroHistories);
         List<DtroHistoryProvisionResponse> actual = histories
             .SelectMany(_sut.GetProvision)
             .Where(response => response != null)

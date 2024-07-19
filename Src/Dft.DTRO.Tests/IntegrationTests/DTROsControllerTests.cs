@@ -1,17 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Net;
-using DfT.DTRO;
-using DfT.DTRO.Models.DtroDtos;
-using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.SharedResponse;
-using DfT.DTRO.Services;
-using DfT.DTRO.Services.Conversion;
-using DfT.DTRO.Services.Mapping;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
 namespace Dft.DTRO.Tests.IntegrationTests;
@@ -20,15 +6,15 @@ namespace Dft.DTRO.Tests.IntegrationTests;
 public class DTROsControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {
-    private const string ValidDtroJsonPath = "./DtroJsonDataExamples/v3.1.1/proper-data.json";
-    private const string ValidComplexDtroJsonPath = "./DtroJsonDataExamples/v3.1.2/3.1.2-valid-complex-dtro.json";
-    private const string ValidComplexDtroJsonPathV320 = "./DtroJsonDataExamples/v3.2.0/valid-new-x.json";
-    private const string InvalidDtroJsonPath = "./DtroJsonDataExamples/v3.1.1/provision-empty.json";
+    private const string ValidDtroJsonPath = "../../../../../examples/D-TROs/3.1.1/proper-data.json";
+    private const string ValidComplexDtroJsonPath = "../../../../../examples/D-TROs/3.1.2/3.1.2-valid-complex-dtro.json";
+    private const string ValidComplexDtroJsonPathV320 = "../../../../../examples/D-TROs/3.2.0/valid-new-x.json";
+    private const string InvalidDtroJsonPath = "../../../../../examples/D-TROs/3.1.1/provision-empty.json";
     private static readonly string[] ValidDtroHistories =
     {
-        "./DtroJsonDataExamples/v3.2.0/valid-new-x.json",
-        "./DtroJsonDataExamples/v3.2.0/valid-fullAmendment.json",
-        "./DtroJsonDataExamples/v3.2.0/valid-fullRevoke.json"
+        "../../../../../examples/D-TROs/3.2.0/valid-new-x.json",
+        "../../../../../examples/D-TROs/3.2.0/valid-fullAmendment.json",
+        "../../../../../examples/D-TROs/3.2.0/valid-fullRevoke.json"
     };
 
     private readonly WebApplicationFactory<Program> _factory;
@@ -38,8 +24,8 @@ public class DTROsControllerTests
 
     public DTROsControllerTests(WebApplicationFactory<Program> factory)
     {
-        var configurationBuilder = new ConfigurationBuilder();
-        var configuration = configurationBuilder.Build();
+        ConfigurationBuilder configurationBuilder = new();
+        IConfigurationRoot? configuration = configurationBuilder.Build();
 
         _dtroMappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
         _mockDtroService = new Mock<IDtroService>(MockBehavior.Strict);
@@ -64,14 +50,14 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        var payload = await CreateDtroJsonPayload(dtroPath, version);
+        var payload = await Utils.CreateDtroJsonPayload(dtroPath, version);
 
         HttpResponseMessage response = await client.PostAsync("/v1/dtros/createFromBody", payload);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         GuidResponse? data = JsonConvert.DeserializeObject<GuidResponse>(await response.Content.ReadAsStringAsync());
         Assert.NotNull(data);
-        Assert.IsType<Guid>(data!.Id);
+        Assert.IsType<Guid>(data.Id);
 
         _mockDtroService.Verify(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest), Times.Once);
     }
@@ -84,7 +70,7 @@ public class DTROsControllerTests
         _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest))
             .Throws((new NotFoundException()));
 
-        var payload = await CreateDtroJsonPayload(ValidDtroJsonPath, "0.0.0");
+        StringContent payload = await Utils.CreateDtroJsonPayload(ValidDtroJsonPath, "0.0.0");
         HttpResponseMessage response = await client.PostAsync("/v1/dtros", payload);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -99,7 +85,7 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        var payload = await CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
+        StringContent payload = await Utils.CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
         HttpResponseMessage response = await client.PostAsync("/v1/dtros/createFromBody", payload);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -119,14 +105,14 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        StringContent payload = await CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
+        StringContent payload = await Utils.CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
         HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody/{dtroId}", payload);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         string stringAsync = await response.Content.ReadAsStringAsync();
         GuidResponse? data = JsonConvert.DeserializeObject<GuidResponse>(stringAsync);
         Assert.NotNull(data);
-        Assert.IsType<Guid>(data!.Id);
+        Assert.IsType<Guid>(data.Id);
         _mockDtroService.Verify(mock => mock.TryUpdateDtroAsJsonAsync
             (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest), Times.Once);
     }
@@ -143,7 +129,7 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        StringContent payload = await CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
+        StringContent payload = await Utils.CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
         HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody/{notExistingDtroId}", payload);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -160,7 +146,7 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        StringContent payload = await CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
+        StringContent payload = await Utils.CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
         HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody/{dtroId}", payload);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -168,7 +154,7 @@ public class DTROsControllerTests
     [Fact]
     public async Task Get_DtroExists_ReturnsDtro()
     {
-        var sampleDtro = await CreateDtroObject(ValidDtroJsonPath);
+        var sampleDtro = await Utils.CreateDtroObject(ValidDtroJsonPath);
         var sampleDtroResponse = _dtroMappingService.MapToDtroResponse(sampleDtro);
 
         _mockDtroService.Setup(mock => mock.GetDtroByIdAsync
@@ -200,7 +186,7 @@ public class DTROsControllerTests
     [Fact]
     public async Task Get_SourceHistory_ReturnsListOfHistoricSources()
     {
-        List<DtroHistorySourceResponse> sourceResponses = CreateResponseDtroHistoryObject(ValidDtroHistories);
+        List<DtroHistorySourceResponse> sourceResponses = Utils.CreateResponseDtroHistoryObject(ValidDtroHistories);
 
 
         _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<Guid>()))
@@ -242,7 +228,7 @@ public class DTROsControllerTests
     [Fact]
     public async Task Get_ProvisionHistory_ReturnsListOfHistoricProvisions()
     {
-        List<DtroHistoryProvisionResponse> provisionResponses = CreateResponseDtroProvisionHistory(ValidDtroHistories);
+        List<DtroHistoryProvisionResponse> provisionResponses = Utils.CreateResponseDtroProvisionHistory(ValidDtroHistories);
 
         _mockDtroService.Setup(it => it.GetDtroProvisionHistoryAsync(It.IsAny<Guid>()))
             .Returns(Task.FromResult(provisionResponses));

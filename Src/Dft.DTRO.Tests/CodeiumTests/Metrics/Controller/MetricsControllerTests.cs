@@ -1,49 +1,45 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.Controllers;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.Metrics;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿namespace Dft.DTRO.Tests.CodeiumTests.Metrics.Controller;
 
-
-namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller;
 [ExcludeFromCodeCoverage]
 public class MetricsControllerTests
 {
-    private Mock<IMetricsService> _mockMetricsService;
-    private Mock<ILogger<MetricsController>> _mockLogger;
-    private MetricsController _controller;
-    private MetricRequest _metricRequest = new MetricRequest() { DateFrom = new DateTime(2024, 1, 2), DateTo = new DateTime(2024, 1, 12) };
+    private readonly MetricsController _controller;
+
+    private readonly MetricRequest _metricRequest =
+        new() { DateFrom = new DateTime(2024, 1, 2), DateTo = new DateTime(2024, 1, 12) };
+
+    private readonly Mock<IMetricsService> _mockMetricsService;
+
     public MetricsControllerTests()
     {
         _mockMetricsService = new Mock<IMetricsService>();
-        _mockLogger = new Mock<ILogger<MetricsController>>();
+        Mock<ILogger<MetricsController>> mockLogger = new();
 
         _controller = new MetricsController(
-         _mockMetricsService.Object,
-         _mockLogger.Object);
+            _mockMetricsService.Object,
+            mockLogger.Object);
     }
+
     [Fact]
     public void HealthApi_ReturnsOkWithTrue()
     {
-        var expected = true;
-        var result = _controller.HealthApi();
-        var okResult = result.Result as ObjectResult;
+        const bool expected = true;
+        ActionResult<bool>? result = _controller.HealthApi();
+        ObjectResult? okResult = result.Result as ObjectResult;
         Assert.NotNull(okResult);
         Assert.Equal(200, okResult.StatusCode);
-        Assert.Equal(expected, okResult?.Value);
+        Assert.Equal(expected, okResult.Value);
     }
 
 
     [Fact]
     public void HealthTraId_ReturnsStatusCode200_WhenTraIdIsProvided()
     {
-        int traId = 123;
+        const int traId = 123;
 
-        var result = _controller.HealthTraId(traId);
+        ActionResult<int?>? result = _controller.HealthTraId(traId);
 
-        var okResult = result.Result as ObjectResult;
+        ObjectResult? okResult = result.Result as ObjectResult;
         Assert.NotNull(okResult);
         Assert.Equal(200, okResult.StatusCode);
         Assert.Equal(traId, okResult.Value);
@@ -54,12 +50,12 @@ public class MetricsControllerTests
     {
         int? traId = null;
 
-        var result = _controller.HealthTraId(traId);
+        ActionResult<int?>? result = _controller.HealthTraId(traId);
 
-        var notFoundResult = result.Result as NotFoundObjectResult;
+        NotFoundObjectResult? notFoundResult = result.Result as NotFoundObjectResult;
         Assert.NotNull(notFoundResult);
         Assert.Equal(404, notFoundResult.StatusCode);
-        var apiErrorResponse = notFoundResult.Value as ApiErrorResponse;
+        ApiErrorResponse? apiErrorResponse = notFoundResult.Value as ApiErrorResponse;
         Assert.Equal("Not found", apiErrorResponse?.Message);
     }
 
@@ -68,12 +64,12 @@ public class MetricsControllerTests
     {
         _mockMetricsService.Setup(service => service.CheckDataBase()).ReturnsAsync(true);
 
-        var result = await _controller.HealthDatabase();
+        ActionResult<bool>? result = await _controller.HealthDatabase();
 
-        var okResult = result.Result as OkObjectResult;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.NotNull(okResult);
         Assert.Equal(200, okResult.StatusCode);
-        Assert.True((bool)okResult.Value);
+        Assert.True((bool)(okResult.Value ?? false));
     }
 
     [Fact]
@@ -81,12 +77,12 @@ public class MetricsControllerTests
     {
         _mockMetricsService.Setup(service => service.CheckDataBase()).ReturnsAsync(false);
 
-        var result = await _controller.HealthDatabase();
+        ActionResult<bool>? result = await _controller.HealthDatabase();
 
-        var notFoundResult = result.Result as NotFoundObjectResult;
+        NotFoundObjectResult? notFoundResult = result.Result as NotFoundObjectResult;
         Assert.NotNull(notFoundResult);
         Assert.Equal(404, notFoundResult.StatusCode);
-        var apiErrorResponse = notFoundResult.Value as ApiErrorResponse;
+        ApiErrorResponse? apiErrorResponse = notFoundResult.Value as ApiErrorResponse;
         Assert.Equal("Not found", apiErrorResponse?.Message);
     }
 
@@ -95,12 +91,12 @@ public class MetricsControllerTests
     {
         _mockMetricsService.Setup(service => service.CheckDataBase()).ThrowsAsync(new Exception("Test exception"));
 
-        var result = await _controller.HealthDatabase();
+        ActionResult<bool>? result = await _controller.HealthDatabase();
 
-        var objectResult = result.Result as ObjectResult;
+        ObjectResult? objectResult = result.Result as ObjectResult;
         Assert.NotNull(objectResult);
         Assert.Equal(500, objectResult.StatusCode);
-        var apiErrorResponse = objectResult.Value as ApiErrorResponse;
+        ApiErrorResponse? apiErrorResponse = objectResult.Value as ApiErrorResponse;
         Assert.Equal("Internal Server Error", apiErrorResponse?.Message);
     }
 
@@ -108,7 +104,7 @@ public class MetricsControllerTests
     public async Task GetMetricsForTra_ReturnsStatusCode200_WithValidInput()
     {
         _metricRequest.TraId = 123;
-        var metricSummary = new MetricSummary
+        MetricSummary metricSummary = new()
         {
             SystemFailureCount = 1,
             SubmissionFailureCount = 2,
@@ -120,9 +116,9 @@ public class MetricsControllerTests
 
         _mockMetricsService.Setup(service => service.GetMetrics(_metricRequest)).ReturnsAsync(metricSummary);
 
-        var result = await _controller.GetMetricsForTra(_metricRequest);
+        ActionResult<MetricSummary>? result = await _controller.GetMetricsForTra(_metricRequest);
 
-        var okResult = result.Result as OkObjectResult;
+        OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.NotNull(okResult);
         Assert.Equal(200, okResult.StatusCode);
         Assert.Equal(metricSummary, okResult.Value);
@@ -133,17 +129,15 @@ public class MetricsControllerTests
     {
         _metricRequest.TraId = 123;
 
-        _mockMetricsService.Setup(service => service.GetMetrics(_metricRequest)).ThrowsAsync(new Exception("Test exception"));
+        _mockMetricsService.Setup(service => service.GetMetrics(_metricRequest))
+            .ThrowsAsync(new Exception("Test exception"));
 
-        var result = await _controller.GetMetricsForTra(_metricRequest);
+        ActionResult<MetricSummary>? result = await _controller.GetMetricsForTra(_metricRequest);
 
-        var objectResult = result.Result as ObjectResult;
+        ObjectResult? objectResult = result.Result as ObjectResult;
         Assert.NotNull(objectResult);
         Assert.Equal(500, objectResult.StatusCode);
-        var apiErrorResponse = objectResult.Value as ApiErrorResponse;
+        ApiErrorResponse? apiErrorResponse = objectResult.Value as ApiErrorResponse;
         Assert.Equal("Internal Server Error", apiErrorResponse?.Message);
     }
 }
-
-
-

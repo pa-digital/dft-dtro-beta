@@ -1,16 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Dynamic;
-using System.Text;
-using DfT.DTRO.Extensions;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroDtos;
-using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SwaCode;
-using DfT.DTRO.Services.Conversion;
-using DfT.DTRO.Services.Mapping;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Dft.DTRO.Tests
@@ -18,11 +6,11 @@ namespace Dft.DTRO.Tests
     [ExcludeFromCodeCoverage]
     public static class Utils
     {
-        public static DtroSubmit PrepareDtro(string jsonData, SchemaVersion? schemaVersion = null)
-            => new()
+        public static DtroSubmit PrepareDtro(string jsonData) =>
+            new()
             {
-                SchemaVersion = schemaVersion ?? "3.1.2",
-                Data = JsonConvert.DeserializeObject<ExpandoObject>(jsonData, new ExpandoObjectConverter())
+                Data = JsonConvert.DeserializeObject<ExpandoObject>(jsonData, new ExpandoObjectConverter()),
+                SchemaVersion = new SchemaVersion(3, 2, 0)
             };
 
         public static async Task<StringContent> CreateSchemaPayload(string schemaPath, string schemaVersion)
@@ -55,8 +43,8 @@ namespace Dft.DTRO.Tests
                 IsActive = true,
                 Template = schemaData
             };
-            var builder = new ConfigurationBuilder();
-            var mappingService = new SchemaTemplateMappingService();
+
+            SchemaTemplateMappingService mappingService = new();
             mappingService.MapToSchemaTemplateResponse(schemaTemplate);
 
             return schemaTemplate;
@@ -138,7 +126,7 @@ namespace Dft.DTRO.Tests
             {
                 DtroHistoryProvisionResponse provision = new();
 
-                var data = obj[0].ToIndentedJsonString();
+                string? data = obj[0].ToIndentedJsonString();
 
                 provisions.Add(provision);
             }

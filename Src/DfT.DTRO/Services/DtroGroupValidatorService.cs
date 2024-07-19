@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Extensions;
-using DfT.DTRO.Services.Validation;
+﻿using DfT.DTRO.Services.Validation;
 
 namespace DfT.DTRO.Services;
 public class DtroGroupValidatorService : IDtroGroupValidatorService
@@ -55,7 +54,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToRules = requests.ToList() };
         }
 
-        var requestComparedToRules = await _jsonLogicValidationService.ValidateCreationRequest(dtroSubmit);
+        var requestComparedToRules = await _jsonLogicValidationService.ValidateCreationRequest(dtroSubmit, schemaVersion.ToString());
         if (requestComparedToRules.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requestComparedToRules.ToList() };

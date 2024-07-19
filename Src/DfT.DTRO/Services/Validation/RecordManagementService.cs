@@ -1,6 +1,4 @@
 ﻿using DfT.DTRO.DAL;
-using DfT.DTRO.Extensions;
-using DfT.DTRO.Models.SwaCode;
 using DfT.DTRO.Models.Validation;
 
 namespace DfT.DTRO.Services.Validation;
