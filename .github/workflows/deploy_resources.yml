@@ -7,7 +7,7 @@ on:
         required: true
       wip_service_account:
         required: true
-      cloud_run_service_account:
+      execution_service_account:
         required: true
     inputs:
       gcp-project-id:
@@ -22,15 +22,16 @@ on:
       environment:
         type: string
         required: true
-      gcp-ar-dtro-repo:
-        type: string
-        required: true
       dtro-image-name:
         type: string
         required: true
       dtro-image-tag:
         type: string
         required: true
+      do-validation-checks:
+        type: boolean
+        required: false
+        default: false
 
 env:
   TF_VAR_tf_state_bucket: dft-d-tro-terraform-${{ inputs.environment }}
@@ -51,16 +52,15 @@ jobs:
   build-push-dtro:
     name: Build and Push DTRO Application to Artifact Registry - ${{ inputs.environment }}
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     permissions:
       id-token: write
       contents: read
       packages: read
       actions: read
+      pull-requests: write
     defaults:
       run:
         shell: bash
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -68,10 +68,8 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
-#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PA }}
-#          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PA }}
+          workload_identity_provider: ${{ secrets.workload_identity_provider }}
+          service_account: ${{ secrets.wip_service_account }}
 
       - name: Authenticate Docker with the Artifact Registry repository
         run: gcloud auth configure-docker europe-west1-docker.pkg.dev
@@ -89,17 +87,16 @@ jobs:
     needs:
       - build-push-dtro
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     permissions:
       id-token: write
       contents: read
       packages: read
       actions: read
+      pull-requests: write
     defaults:
       run:
         shell: bash
         working-directory: terraform
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -107,10 +104,8 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
-#          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PA }}
-#          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PA }}
+          workload_identity_provider: ${{ secrets.workload_identity_provider }}
+          service_account: ${{ secrets.wip_service_account }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -141,5 +136,5 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -input=false -out terraform-plan-gcp-cr
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -input=false terraform-plan-gcp-cr
+#      - name: Terraform Apply
+#        run: terraform apply -auto-approve -input=false terraform-plan-gcp-cr

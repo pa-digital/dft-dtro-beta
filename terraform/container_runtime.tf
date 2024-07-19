@@ -20,9 +20,7 @@ locals {
   project_id             = data.google_project.project.project_id
   artifact_registry_name = "${data.google_project.project.name}-repository"
 }
-resource "google_sql_database_instance" "npp-instance" {
-  database_version = ""
-}
+
 ## TODO: Move this File to dft-dtro-beta repo
 resource "google_cloud_run_v2_service" "publish_service" {
   name     = local.cloud_run_service_name
@@ -47,13 +45,13 @@ resource "google_cloud_run_v2_service" "publish_service" {
     vpc_access {
       connector = data.google_vpc_access_connector.serverless_connector.id
       egress    = "PRIVATE_RANGES_ONLY"
-      #       network_interfaces {
-      #         network = google_vpc_access_connector.serverless_connector.id
-      #       }
     }
 
     containers {
       image = "${var.region}-docker.pkg.dev/${local.project_id}/${local.artifact_registry_name}/${var.dtro_service_image}:${var.tag}"
+      ports {
+        container_port = 8080
+      }
 
       dynamic "env" {
         for_each = local.common_service_envs
