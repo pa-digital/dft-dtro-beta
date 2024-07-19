@@ -1,23 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using DfT.DTRO.Enums;
+﻿namespace DfT.DTRO.Extensions;
 
-namespace DfT.DTRO.Extensions;
-
-/// <summary>
-/// Provides extension methods to retrieve data by path from <see cref="ExpandoObject"/> instances.
-/// </summary>
 public static class ExpandoObjectExtensions
 {
-    /// <summary>
-    /// Extension to retrieve an object value from a collection of Expando Object key paths else the default for the data type.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="paths">The path to the field to be retrieved.</param>
-    /// <typeparam name="T">The field type.</typeparam>
-    /// <returns>An object value from a collection of Expando Object key paths else the default for the data type.</returns>
     public static T GetValueOrDefault<T>(this ExpandoObject source, IEnumerable<string> paths)
     {
         if (source is null)
@@ -36,7 +20,6 @@ public static class ExpandoObjectExtensions
 
         if (bracketIndex != -1)
         {
-            // TODO: Implement paths with indexes once needed.
             return default;
         }
 
@@ -52,13 +35,6 @@ public static class ExpandoObjectExtensions
         return next.GetValueOrDefault<T>(remaining);
     }
 
-    /// <summary>
-    /// Extension to retrieve an object path value from an Expando Object from a list collection, else the default for the data type.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="paths">The path to the field to be retrieved.</param>
-    /// <typeparam name="T">The field type.</typeparam>
-    /// <returns>An object path value from an Expando Object from a list collection, else the default for the data type.</returns>
     public static T GetValueOrDefault<T>(this IList<T> source, IEnumerable<string> paths)
     {
         if (!paths.Any())
@@ -68,13 +44,6 @@ public static class ExpandoObjectExtensions
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// Extension to retrieve an object value from a single Expando Object key path else the default for the data type.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="path">The path to the field to be retrieved.</param>
-    /// <typeparam name="T">The field type.</typeparam>
-    /// <returns>An object value from a single Expando Object key path else the default for the data type.</returns>
     public static T GetValueOrDefault<T>(this ExpandoObject source, string path)
         => (path.Split('.') is string[] split && split.Length > 1)
             ? source.GetValueOrDefault<T>(split)
@@ -121,12 +90,6 @@ public static class ExpandoObjectExtensions
         current[path.Last()] = value;
     }
 
-    /// <summary>
-    /// Extension to retrieve a field from an Expando object.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="key">The key for a field to be retrieved.</param>
-    /// <returns>A field from an Expando object.</returns>
     public static object GetField(this ExpandoObject source, string key)
     {
         var dict = source as IDictionary<string, object>;
@@ -134,12 +97,6 @@ public static class ExpandoObjectExtensions
         return dict[key];
     }
 
-    /// <summary>
-    /// Extension to check if Expando object has field with given name.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="key">The key for a field to be checked for existence.</param>
-    /// <returns>A field from an Expando object.</returns>
     public static bool HasField(this ExpandoObject source, string key)
     {
         var dict = source as IDictionary<string, object>;
@@ -147,12 +104,6 @@ public static class ExpandoObjectExtensions
         return dict.ContainsKey(key);
     }
 
-    /// <summary>
-    /// Extension to retrieve an inner Expando object from another.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="key">The key for the inner object.</param>
-    /// <returns>An inner Expando object contained in another.</returns>
     public static ExpandoObject GetExpando(this ExpandoObject source, string key)
     {
         if (source.GetField(key) is not ExpandoObject expando)
@@ -163,13 +114,6 @@ public static class ExpandoObjectExtensions
         return expando;
     }
 
-    /// <summary>
-    /// Extension to retrieve an inner Expando object value.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="key">The key for the inner object.</param>
-    /// <returns>An inner Expando object value.</returns>
-    /// <typeparam name="T">Type of returned value.</typeparam>
     public static T GetValue<T>(this ExpandoObject source, string key)
     {
         if (source.GetField(key) is not T result)
@@ -180,12 +124,6 @@ public static class ExpandoObjectExtensions
         return result;
     }
 
-    /// <summary>
-    /// Extension to retrieve DateTime or null from ExpandoObject.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="key">The key for the DateTime object.</param>
-    /// <returns>A DateTime object.</returns>
     public static DateTime? GetDateTimeOrNull(this ExpandoObject source, string key)
     {
         if (!(source as IDictionary<string, object>).ContainsKey(key))
@@ -201,12 +139,6 @@ public static class ExpandoObjectExtensions
         return result;
     }
 
-    /// <summary>
-    /// Extension to retrieve a list of Expando Object values filtered by key.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="key">The key for the field to be retrieved.</param>
-    /// <returns>A list of Expando Object values filtered by key.</returns>
     public static IList<object> GetList(this ExpandoObject source, string key)
     {
         IDictionary<string, object> dict = source;
@@ -219,12 +151,6 @@ public static class ExpandoObjectExtensions
         return array;
     }
 
-    /// <summary>
-    /// Extension to retrieve a list of Expando Object values filtered by key, else an empty dictionary of default data types.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="key">The key for the field to be retrieved.</param>
-    /// <returns>A list of Expando Object values filtered by key, else an empty dictionary of default data types.</returns>
     public static IList<object> GetListOrDefault(this ExpandoObject source, string key)
     {
         IDictionary<string, object> dict = source;
@@ -237,12 +163,6 @@ public static class ExpandoObjectExtensions
         return default;
     }
 
-    /// <summary>
-    /// Gets an inner-expando object, else returns the default data type.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="key">The key for the field to be retrieved.</param>
-    /// <returns>An inner-expando object, else returns the default data type.</returns>
     public static ExpandoObject GetExpandoOrDefault(this ExpandoObject source, string key)
     {
         IDictionary<string, object> dict = source;
@@ -255,13 +175,6 @@ public static class ExpandoObjectExtensions
         return default;
     }
 
-    /// <summary>
-    /// Gets a value from an Expando object by it's named key.
-    /// </summary>
-    /// <param name="source">Object to be queried.</param>
-    /// <param name="key">The key for the field to be retrieved.</param>
-    /// <typeparam name="T">The field type.</typeparam>
-    /// <returns>A value from an Expando object by it's named key.</returns>
     private static T GetFieldValueOrDefault<T>(this ExpandoObject source, string key)
     {
         var dict = source as IDictionary<string, object>;

@@ -33,7 +33,6 @@ public class RulesControllerVersionTests
     [Fact]
     public async Task GetRulesVersions_ReturnsOk_WithVersions()
     {
-        // Arrange
         var expectedVersions = new List<RuleTemplateOverview>
         {
             new RuleTemplateOverview() { SchemaVersion = new SchemaVersion("1.0.0") },
@@ -44,9 +43,7 @@ public class RulesControllerVersionTests
         _mockRuleTemplateService.Setup(mock => mock.GetRuleTemplatesVersionsAsync())
             .ReturnsAsync(expectedVersions);
 
-        // Act
         var result = await _controller.GetVersions();
-        // Assert
         var okResult = result as OkObjectResult;
         Assert.NotNull(okResult);
         Assert.Equal(200, okResult?.StatusCode);
@@ -55,13 +52,9 @@ public class RulesControllerVersionTests
     [Fact]
     public async Task GetRulesVersions_ReturnsInternalServerError_OnException()
     {
-        // Arrange
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplatesVersionsAsync())
             .ThrowsAsync(new Exception("Test exception"));
-        // Act
         var result = await _controller.GetVersions();
-        // Assert
-
         var objectResult = result as ObjectResult;
         Assert.NotNull(objectResult);
         Assert.Equal(500, objectResult?.StatusCode);

@@ -1,7 +1,4 @@
-﻿using System;
-using DfT.DTRO.Models.SchemaTemplate;
-
-namespace DfT.DTRO.Models.DtroHistory;
+﻿namespace DfT.DTRO.Models.DtroHistory;
 
 public class DtroOwner
 {

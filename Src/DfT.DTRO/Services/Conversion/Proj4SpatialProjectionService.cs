@@ -1,11 +1,7 @@
-﻿using DfT.DTRO.Models.DtroJson;
-using DotSpatial.Projections;
+﻿using DotSpatial.Projections;
 
 namespace DfT.DTRO.Services.Conversion;
 
-/// <summary>
-/// Implements <see cref="ISpatialProjectionService"/> using the Proj4 projection.
-/// </summary>
 public class Proj4SpatialProjectionService : ISpatialProjectionService
 {
     private static readonly ProjectionInfo Osgb36ProjectionInfo =
@@ -17,7 +13,6 @@ public class Proj4SpatialProjectionService : ISpatialProjectionService
     private static readonly ProjectionInfo Wgs84ProjectionInfo =
         ProjectionInfo.FromProj4String("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs");
 
-    /// <inheritdoc/>
     public Coordinates Wgs84ToOsgb36(double longitude, double latitude)
     {
         var coordinateArray = new double[2] { longitude, latitude };
@@ -34,7 +29,6 @@ public class Proj4SpatialProjectionService : ISpatialProjectionService
         return new Coordinates(coordinateArray[0], coordinateArray[1]);
     }
 
-    /// <inheritdoc/>
     public BoundingBox Wgs84ToOsgb36(double eastLongitude, double southLatitude, double westLongitude, double northLatitude)
     {
         var coordinateArray = new double[4] { eastLongitude, southLatitude, westLongitude, northLatitude };
@@ -51,7 +45,6 @@ public class Proj4SpatialProjectionService : ISpatialProjectionService
         return new BoundingBox(coordinateArray[0], coordinateArray[1], coordinateArray[2], coordinateArray[3]);
     }
 
-    /// <inheritdoc/>
     public BoundingBox Osgb36ToWgs84(double eastLongitude, double southLatitude, double westLongitude, double northLatitude)
     {
         var coordinateArray = new double[4] { eastLongitude, southLatitude, westLongitude, northLatitude };

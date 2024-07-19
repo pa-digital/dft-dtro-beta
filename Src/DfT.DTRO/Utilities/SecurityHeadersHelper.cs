@@ -1,17 +1,9 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 
 namespace DfT.DTRO.Utilities;
 
-/// <summary>
-/// Helper class for dealing with HTTP response headers concerning security.
-/// </summary>
 public static class SecurityHeadersHelper
 {
-    /// <summary>
-    /// Helper method to set common security headers.
-    /// </summary>
-    /// <param name="ctx">HttpContext to be configured.</param>
     public static void ConfigureCommonSecurityHeaders(HttpContext ctx)
     {
         ctx.Response.Headers.Add("Cross-Origin-Embedder-Policy", "unsafe-none");
@@ -25,12 +17,8 @@ public static class SecurityHeadersHelper
         ctx.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
         ctx.Response.Headers.Add("X-UA-Compatible", "IE=Edge");
 
-        // Note this is used as a fallback from app.useHsts() as this helper only applies when accessed over https.
-        // In a load balanced scenario where SSL is terminated at the ALB this would not apply so needs manually set.
         ctx.Response.Headers.Add(HeaderNames.StrictTransportSecurity, "max-age=31536000");
 
-        // Caching pragmas are set here to avoid security issues if someone forgets to append the ResponseCache attribute to
-        // a controller method
         ctx.Response.Headers.Add(HeaderNames.CacheControl, "no-store,no-cache,must-revalidate");
         ctx.Response.Headers.Add(HeaderNames.Pragma, "no-cache");
     }

@@ -1,10 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-
-namespace Dft.DTRO.Admin.Services;
-public class RuleService 
+﻿namespace Dft.DTRO.Admin.Services;
+public class RuleService : IRuleService
 {
     private readonly HttpClient _client;
 

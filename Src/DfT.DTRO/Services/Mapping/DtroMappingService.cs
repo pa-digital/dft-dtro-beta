@@ -1,38 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using DfT.DTRO.Enums;
-using System.Linq;
+﻿using DfT.DTRO.Enums;
 using DfT.DTRO.Extensions;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroEvent;
 using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Models.DtroJson;
 using DfT.DTRO.Models.Search;
 using DfT.DTRO.Services.Conversion;
 using Microsoft.Extensions.Configuration;
 
 namespace DfT.DTRO.Services.Mapping;
 
-/// <inheritdoc cref="IDtroMappingService"/>
 public class DtroMappingService : IDtroMappingService
 {
     private readonly IConfiguration _configuration;
     private readonly ISpatialProjectionService _projectionService;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DtroMappingService"/> class.
-    /// </summary>
-    /// <param name="configuration">An <see cref="IConfiguration"/> instance.</param>
-    /// <param name="projectionService">An <see cref="ISpatialProjectionService"/> instance.</param>
     public DtroMappingService(IConfiguration configuration, ISpatialProjectionService projectionService)
     {
         this._configuration = configuration;
         this._projectionService = projectionService;
     }
 
-    /// <inheritdoc/>
     public IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros)
     {
         var results = new List<DtroEvent>();
@@ -71,7 +57,6 @@ public class DtroMappingService : IDtroMappingService
         return results;
     }
 
-    /// <inheritdoc/>
     public DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro)
     {
         var result = new DtroResponse()
@@ -83,7 +68,6 @@ public class DtroMappingService : IDtroMappingService
         return result;
     }
 
-    /// <inheritdoc/>
     public IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros)
     {
         var results = new List<DtroSearchResult>();
@@ -110,7 +94,6 @@ public class DtroMappingService : IDtroMappingService
         return results;
     }
 
-    /// <inheritdoc/>
     public DTROHistory MapToDtroHistory(Models.DataBase.DTRO currentDtro) =>
         new()
         {
@@ -126,7 +109,6 @@ public class DtroMappingService : IDtroMappingService
             TrafficAuthorityOwnerId = currentDtro.TrafficAuthorityOwnerId
         };
 
-    /// <inheritdoc />
     public DtroHistorySourceResponse GetSource(DTROHistory dtroHistory)
     {
         var sourceActionType = Get(dtroHistory, "source.actionType");
@@ -153,7 +135,6 @@ public class DtroMappingService : IDtroMappingService
         };
     }
 
-    /// <inheritdoc />
     public DtroOwner GetOwnership(Models.DataBase.DTRO dtro)
     {
         var traCreator = dtro.Data.GetValueOrDefault<int>("source.traCreator");
@@ -166,10 +147,9 @@ public class DtroMappingService : IDtroMappingService
         };
     }
 
-    /// <inheritdoc />
     public void SetOwnership(ref Models.DataBase.DTRO dtro, int currentTraOwner)
     {
-       dtro.Data.PutValue("source.currentTraOwner", currentTraOwner);
+        dtro.Data.PutValue("source.currentTraOwner", currentTraOwner);
     }
 
     public void SetSourceActionType(ref Models.DataBase.DTRO dtro, SourceActionType sourceActionType)
@@ -198,7 +178,6 @@ public class DtroMappingService : IDtroMappingService
         }
     }
 
-    /// <inheritdoc />
     public List<DtroHistoryProvisionResponse> GetProvision(DTROHistory dtroHistory)
     {
         IList<object> provisions = this.GetProvision(dtroHistory, "source.provision");
@@ -224,7 +203,6 @@ public class DtroMappingService : IDtroMappingService
         return ret.OrderByDescending(x => x.Reference).ThenByDescending(x => x.LastUpdated).ToList();
     }
 
-    /// <inheritdoc/>
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
     {
         List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("source.provision")
@@ -276,24 +254,35 @@ public class DtroMappingService : IDtroMappingService
 
             IEnumerable<Coordinates> result = type switch
             {
-                "Polygon" => coordinates.OfType<IList<object>>().SelectMany(objects => objects).OfType<IList<object>>()
+                "Polygon" => coordinates
+                    .OfType<IList<object>>()
+                    .SelectMany(objects => objects)
+                    .OfType<IList<object>>()
                     .Select(objects => new Coordinates((double)objects[0], (double)objects[1])),
-                "LineString" => coordinates.OfType<IList<object>>()
+                "LineString" => coordinates
+                    .OfType<IList<object>>()
                     .Select(objects => new Coordinates((double)objects[0], (double)objects[1])),
                 "Point" => new List<Coordinates> { new((double)coordinates[0], (double)coordinates[1]) },
                 _ => throw new InvalidOperationException($"Coordinate type '{type}' unsupported.")
             };
 
-            return crs != "osgb36Epsg27700"
-                ? result.Select(this._projectionService.Wgs84ToOsgb36)
-            : result;
+            if (crs != "osgb36Epsg27700")
+            {
+                return result.Select(_projectionService.Wgs84ToOsgb36);
+            }
+
+            return result;
         }
 
-        var coordinates = dtro.Data.GetValueOrDefault<IList<object>>("source.provision").OfType<ExpandoObject>()
-            .SelectMany(it => it.GetList("regulatedPlaces").OfType<ExpandoObject>())
-            .SelectMany(it => FlattenAndConvertCoordinates(
-                it.GetExpando("geometry").GetExpando("coordinates"),
-                it.GetExpando("geometry").GetValue<string>("crs")));
+        IEnumerable<Coordinates> coordinates = dtro
+            .Data
+            .GetValueOrDefault<IList<object>>("source.provision")
+            .OfType<ExpandoObject>()
+            .SelectMany(expandoObject => expandoObject.GetList("regulatedPlaces")
+                .OfType<ExpandoObject>())
+            .SelectMany(expandoObject => FlattenAndConvertCoordinates(
+                expandoObject.GetExpando("geometry").GetExpando("coordinates"),
+                expandoObject.GetExpando("geometry").GetValue<string>("crs")));
 
         dtro.Location = BoundingBox.Wrapping(coordinates);
     }
@@ -319,9 +308,9 @@ public class DtroMappingService : IDtroMappingService
         };
     }
 
-    private string Get(DTROHistory request, string key) => 
+    private string Get(DTROHistory request, string key) =>
         request.Data.GetValueOrDefault<string>(key);
 
-    private IList<object> GetProvision(DTROHistory request, string key) => 
+    private IList<object> GetProvision(DTROHistory request, string key) =>
         request.Data.GetValueOrDefault<IList<object>>(key);
 }

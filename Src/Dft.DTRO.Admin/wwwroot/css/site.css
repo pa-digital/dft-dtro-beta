@@ -49,3 +49,45 @@ body {
     background-color: #cbc3c3;
 }
 
+.select-items {
+    max-height: 150px; /* Adjust height as needed */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+.item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+    .item:hover {
+        background-color: #f0f0f0;
+    }
+
+.selected-InList {
+    background-color: #cfe2ff; /* Pastel blue background color */
+    color: #333; /* Darker text color */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Light shadow */
+    border-radius: 3px; /* Rounded corners */
+    /* Add any other styling you want for the selected item */
+}
+
+.options-container {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    width: 350px;
+}
+
+.options-container label {
+    margin-bottom: 0;
+}
+
+#numberSelect {
+    width: 50px; /* Adjust width as needed */
+}

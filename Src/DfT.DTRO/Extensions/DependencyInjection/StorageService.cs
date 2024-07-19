@@ -1,67 +1,70 @@
-﻿using System;
-using DfT.DTRO.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using DfT.DTRO.DAL;
+using Npgsql;
 
 namespace DfT.DTRO.Extensions.DependencyInjection;
 
-/// <summary>
-/// Provides extension methods for injecting <see cref="IDtroService"/> implementations.
-/// </summary>
 public static class StorageServiceDIExtensions
 {
-    /// <summary>
-    /// Adds PostgresDtroContext.
-    /// </summary>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
-    /// <param name="connectionString">The connection string to the database.</param>
-    /// <returns>A reference to this instance after the operation has completed.</returns>
-    public static IServiceCollection AddPostgresStorage(this IServiceCollection services, string connectionString)
+    public static void AddStorage(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddPostgresDtroContext(connectionString);
-        return services;
+        string connectionString = Build(services, configuration);
+        services.AddDbContext<DtroContext>(options =>
+            options.UseNpgsql(connectionString, builder =>
+            {
+                string assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+                builder.MigrationsAssembly(assemblyName);
+            }));
     }
 
-    /// <summary>
-    /// Adds Storage.
-    /// </summary>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
-    /// <param name="configuration">The configuration that the storage service is infered from.</param>
-    /// <returns>A reference to this instance after the operation has completed.</returns>
-    public static IServiceCollection AddStorage(this IServiceCollection services, IConfiguration configuration)
+    private static string Build(IServiceCollection services, IConfiguration configuration)
     {
-        var postgresConfig = configuration.GetSection("Postgres");
+        string host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ??
+                      configuration.GetValue("Postgres:Host", "localhost");
 
-        var host = Environment.GetEnvironmentVariable("POSTGRES_HOST")
-            ?? postgresConfig.GetValue("Host", "localhost");
+        int port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int envPort)
+            ? envPort : configuration.GetValue("Postgres:Port", 5432);
 
-        var port = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_PORT"), out int envPort)
-            ? envPort : postgresConfig.GetValue("Port", 5432);
+        string user = Environment.GetEnvironmentVariable("POSTGRES_USER")
+                      ?? configuration.GetValue("Postgres:User", "postgres");
 
-        var user = Environment.GetEnvironmentVariable("POSTGRES_USER")
-            ?? postgresConfig.GetValue("User", "postgres");
+        string password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
+                          ?? configuration.GetValue("Postgres:Password", "admin");
 
-        var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
-            ?? postgresConfig.GetValue("Password", "admin");
+        string database = Environment.GetEnvironmentVariable("POSTGRES_DB")
+                          ?? configuration.GetValue("Postgres:DbName", "data");
 
-        var database = Environment.GetEnvironmentVariable("POSTGRES_DB")
-            ?? postgresConfig.GetValue("DbName", "data");
-
-        var useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool envUseSsl)
-            ? envUseSsl : postgresConfig.GetValue("UseSsl", false);
+        bool useSsl = bool.TryParse(Environment.GetEnvironmentVariable("POSTGRES_USE_SSL"), out bool envUseSsl)
+            ? envUseSsl : configuration.GetValue("Postgres:UseSsl", false);
 
         int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int envMaxPoolSize)
-            ? (int?)envMaxPoolSize : postgresConfig.GetValue<int?>("MaxPoolSize", null);
+            ? envMaxPoolSize : configuration.GetValue<int?>("Postgres:MaxPoolSize", null);
 
-        var writeToBucket = bool.TryParse(Environment.GetEnvironmentVariable("WRITE_TO_BUCKET"), out bool envWriteToBucket)
-            ? envWriteToBucket : configuration.GetValue("WriteToBucket", false);
-
-        if (writeToBucket)
-        {
-            return services.AddPostgresDtroContext(host, user, password, useSsl, database, port);
-        }
-
-        return services.AddPostgresStorage(host, user, password, useSsl, database, port, maxPoolSize);
+        return services.AddPostgresContext(host, port, user, password, database, useSsl, maxPoolSize);
     }
 
+    private static string AddPostgresContext(this IServiceCollection services, string host, int port,
+        string user,
+        string password, string database, bool useSsl, int? maxPoolSize)
+    {
+        NpgsqlConnectionStringBuilder connectionStringBuilder = new()
+        {
+            Host = host,
+            Port = port,
+            Username = user,
+            Password = password,
+            Database = database ?? user,
+            SslMode = SslMode.Disable,
+        };
+
+        if (!maxPoolSize.HasValue)
+        {
+            return connectionStringBuilder.ToString();
+        }
+
+        connectionStringBuilder.Pooling = true;
+        connectionStringBuilder.MaxPoolSize = maxPoolSize.Value;
+
+        return connectionStringBuilder.ToString();
+    }
 }

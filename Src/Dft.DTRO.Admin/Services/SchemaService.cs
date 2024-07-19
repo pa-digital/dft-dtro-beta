@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace Dft.DTRO.Admin.Services;
-public class SchemaService 
+public class SchemaService : ISchemaService
 {
     private readonly HttpClient _client;
 

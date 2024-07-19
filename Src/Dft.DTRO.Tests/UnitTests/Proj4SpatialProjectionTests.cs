@@ -1,10 +1,5 @@
-﻿using DfT.DTRO.Services.Conversion;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using DfT.DTRO.Services.Conversion;
 
 namespace Dft.DTRO.Tests;
 
@@ -27,8 +22,8 @@ public class Proj4SpatialProjectionTests
 
         var result = sut.Wgs84ToOsgb36(longitude, latitude);
 
-        WithinErrorMarginPercent(result.longitude, expectedLongitude, ErrorMarginPercent);
-        WithinErrorMarginPercent(result.latitude, expectedLatitude, ErrorMarginPercent);
+        WithinErrorMarginPercent(result.Longitude, expectedLongitude, ErrorMarginPercent);
+        WithinErrorMarginPercent(result.Latitude, expectedLatitude, ErrorMarginPercent);
     }
 
     [Theory]
@@ -41,10 +36,10 @@ public class Proj4SpatialProjectionTests
 
         var result = sut.Wgs84ToOsgb36(westLongitude, southLatitude, eastLongitude, northLatitude);
 
-        WithinErrorMarginPercent(result.westLongitude, expectedWestLongitude, ErrorMarginPercent);
-        WithinErrorMarginPercent(result.southLatitude, expectedSouthLatitude, ErrorMarginPercent);
-        WithinErrorMarginPercent(result.eastLongitude, expectedEastLongitude, ErrorMarginPercent);
-        WithinErrorMarginPercent(result.northLatitude, expectedNorthLatitude, ErrorMarginPercent);
+        WithinErrorMarginPercent(result.WestLongitude, expectedWestLongitude, ErrorMarginPercent);
+        WithinErrorMarginPercent(result.SouthLatitude, expectedSouthLatitude, ErrorMarginPercent);
+        WithinErrorMarginPercent(result.EastLongitude, expectedEastLongitude, ErrorMarginPercent);
+        WithinErrorMarginPercent(result.NorthLatitude, expectedNorthLatitude, ErrorMarginPercent);
     }
 
     [Theory]
@@ -57,10 +52,10 @@ public class Proj4SpatialProjectionTests
 
         var result = sut.Osgb36ToWgs84(westLongitude, southLatitude, eastLongitude, northLatitude);
 
-        WithinErrorMarginPercent(result.westLongitude, expectedWestLongitude, ErrorMarginPercent);
-        WithinErrorMarginPercent(result.southLatitude, expectedSouthLatitude, ErrorMarginPercent);
-        WithinErrorMarginPercent(result.eastLongitude, expectedEastLongitude, ErrorMarginPercent);
-        WithinErrorMarginPercent(result.northLatitude, expectedNorthLatitude, ErrorMarginPercent);
+        WithinErrorMarginPercent(result.WestLongitude, expectedWestLongitude, ErrorMarginPercent);
+        WithinErrorMarginPercent(result.SouthLatitude, expectedSouthLatitude, ErrorMarginPercent);
+        WithinErrorMarginPercent(result.EastLongitude, expectedEastLongitude, ErrorMarginPercent);
+        WithinErrorMarginPercent(result.NorthLatitude, expectedNorthLatitude, ErrorMarginPercent);
     }
 
     private void WithinErrorMarginPercent(double actual, double expected, double percent)

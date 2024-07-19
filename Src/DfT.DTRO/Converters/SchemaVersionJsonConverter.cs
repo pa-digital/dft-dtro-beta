@@ -1,15 +1,9 @@
-﻿using DfT.DTRO.Models.SchemaTemplate;
-using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json;
 
 namespace DfT.DTRO.Converters;
 
-/// <summary>
-/// Converts <see cref="SchemaVersion"/> objects to and from JSON.
-/// </summary>
 public class SchemaVersionJsonConverter : JsonConverter<SchemaVersion>
 {
-    /// <inheritdoc/>
     public override SchemaVersion ReadJson(JsonReader reader, Type objectType, SchemaVersion existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         if (reader.TokenType != JsonToken.String)
@@ -29,7 +23,6 @@ public class SchemaVersionJsonConverter : JsonConverter<SchemaVersion>
         }
     }
 
-    /// <inheritdoc/>
     public override void WriteJson(JsonWriter writer, SchemaVersion value, JsonSerializer serializer)
     {
         writer.WriteValue(value.ToString());

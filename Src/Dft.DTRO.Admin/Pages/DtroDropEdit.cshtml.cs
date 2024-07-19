@@ -1,13 +1,12 @@
-using System.Net.Http;
 using Dft.DTRO.Admin.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 public class DtroDropEditModel : PageModel
 {
-    private readonly DtroService _dtroService;
+    private readonly IDtroService _dtroService;
 
-    public DtroDropEditModel(DtroService dtroService, IConfiguration configuration)
+    public DtroDropEditModel(IDtroService dtroService, IConfiguration configuration)
     {
         _dtroService = dtroService;
         ApiBaseUrl = configuration["ExternalApi:BaseUrl"];
@@ -21,7 +20,7 @@ public class DtroDropEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, string id)
     {
- 
+
         if (isEdit)
         {
             await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);

@@ -1,20 +1,13 @@
-﻿using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.RuleTemplate;
-using System.Collections.Generic;
+﻿using DfT.DTRO.Models.RuleTemplate;
 
 namespace DfT.DTRO.Services.Mapping;
 
-/// <inheritdoc cref="IRuleTemplateMappingService"/>
 public class RuleTemplateMappingService : IRuleTemplateMappingService
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="RuleTemplateMappingService"/> class.
-    /// </summary>
     public RuleTemplateMappingService()
     {
     }
 
-    /// <inheritdoc/>
     public RuleTemplateResponse MapToRuleTemplateResponse(RuleTemplate ruleTemplate)
     {
         var result = new RuleTemplateResponse()

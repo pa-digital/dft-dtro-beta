@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 public class SchemaDropEditModel : PageModel
 {
-    private readonly SchemaService _schemaService;
+    private readonly ISchemaService _schemaService;
 
-    public SchemaDropEditModel(SchemaService schemaService, IConfiguration configuration)
+    public SchemaDropEditModel(ISchemaService schemaService, IConfiguration configuration)
     {
         _schemaService = schemaService;
         ApiBaseUrl = configuration["ExternalApi:BaseUrl"];

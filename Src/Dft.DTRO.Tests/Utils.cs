@@ -6,7 +6,7 @@ using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
 using DfT.DTRO.Models.DtroHistory;
 using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Services;
+using DfT.DTRO.Models.SwaCode;
 using DfT.DTRO.Services.Conversion;
 using DfT.DTRO.Services.Mapping;
 using Microsoft.Extensions.Configuration;
@@ -116,8 +116,8 @@ namespace Dft.DTRO.Tests
                 .Select(item => JsonConvert.DeserializeObject<ExpandoObject>(item, new ExpandoObjectConverter()))
                 .Select(_ => new DtroHistorySourceResponse
                 {
-                    Created = new DateTime(2024,6,19,16,38,00), 
-                    LastUpdated = createdAt, 
+                    Created = new DateTime(2024, 6, 19, 16, 38, 00),
+                    LastUpdated = createdAt,
                 }).ToList();
 
             return sampleDtroHistories;
@@ -146,7 +146,7 @@ namespace Dft.DTRO.Tests
             return provisions;
         }
 
-        public static async Task<List<DTROHistory>> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
+        public static List<DTROHistory> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
         {
             List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
 
@@ -175,5 +175,22 @@ namespace Dft.DTRO.Tests
 
             return requests;
         }
+
+        public static List<SwaCodeResponse> SwaCodesResponse => new()
+        {
+            new SwaCodeResponse
+            {
+                TraId = 0,
+                IsAdmin = true,
+                Name = "Department for Transport",
+                Prefix = "DfT"
+            }, new SwaCodeResponse
+            {
+                TraId = 1585,
+                IsAdmin = false,
+                Name = "Essex Council",
+                Prefix = "GP"
+            }
+        };
     }
 }

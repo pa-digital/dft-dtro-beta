@@ -1,0 +1,12 @@
+﻿namespace DfT.DTRO.Models.SwaCode;
+
+public class SwaCodeResponse
+{
+    public int TraId { get; set; }
+
+    public string Name { get; set; }
+
+    public string Prefix { get; set; }
+
+    public bool IsAdmin { get; set; }
+}

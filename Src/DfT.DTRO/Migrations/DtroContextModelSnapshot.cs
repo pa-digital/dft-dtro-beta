@@ -232,6 +232,32 @@ namespace DfT.DTRO.Migrations
 
                     b.ToTable("SchemaTemplate");
                 });
+
+            modelBuilder.Entity("DfT.DTRO.Models.DataBase.SwaCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("text");
+
+                    b.Property<string>("Prefix")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<int>("TraId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SwaCodes");
+                });
 #pragma warning restore 612, 618
         }
     }

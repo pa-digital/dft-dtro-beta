@@ -33,15 +33,12 @@ public class RulesControllerGetRuleByIdTests
     [Fact]
     public async Task GetRuleById_ReturnsOk_WhenRuleExists()
     {
-        // Arrange
         var expected = new RuleTemplateResponse();
         expected.Template = "";
         expected.SchemaVersion = new SchemaVersion("1.0.0");
 
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(It.IsAny<Guid>())).ReturnsAsync(expected);
-        // Act
         var result = await _controller.GetById(new Guid());
-        // Assert
         Assert.IsType<OkObjectResult>(result);
         var okResult = result as OkObjectResult;
         Assert.Equal(expected, okResult?.Value);
@@ -49,35 +46,26 @@ public class RulesControllerGetRuleByIdTests
     [Fact]
     public async Task GetRuleById_ReturnsNotFound_WhenRuleDoesNotExist()
     {
-        // Arrange
         var ruleId = Guid.NewGuid();
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId)).ThrowsAsync(new NotFoundException());
-        // Act
         var result = await _controller.GetById(ruleId);
-        // Assert
         Assert.IsType<NotFoundObjectResult>(result);
     }
     [Fact]
     public async Task GetRuleById_ReturnsBadRequest_WhenInvalidOperationExceptionOccurs()
     {
-        // Arrange
         var ruleId = Guid.NewGuid();
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId)).ThrowsAsync(new InvalidOperationException("Invalid operation"));
-        // Act
         var result = await _controller.GetById(ruleId);
-        // Assert
         Assert.IsType<BadRequestObjectResult>(result);
     }
 
     [Fact]
     public async Task GetRuleById_ReturnsInternalServerError_WhenExceptionOccurs()
     {
-        // Arrange
         var ruleId = Guid.NewGuid();
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId)).ThrowsAsync(new Exception("Unexpected error"));
-        // Act
         var result = await _controller.GetById(ruleId);
-        // Assert
         Assert.IsType<ObjectResult>(result);
         var objectResult = result as ObjectResult;
         Assert.Equal(500, objectResult?.StatusCode);

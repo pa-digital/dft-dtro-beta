@@ -1,20 +1,9 @@
-﻿using System;
+﻿namespace DfT.DTRO.Models.Conditions.ValueRules;
 
-namespace DfT.DTRO.Models.Conditions.ValueRules;
-
-/// <summary>
-/// Represents a rule that checks precedence in sort order against a value.
-/// </summary>
 public interface ILessThanRule : IValueRule
 {
 }
 
-/// <summary>
-/// Represents a rule that checks precedence in sort order against a value of type <typeparamref name="T"/>.
-/// </summary>
-/// <typeparam name="T">The type of parameter used in this rule.</typeparam>
-/// <param name="value">The value to check precedence against.</param>
-/// <param name="inclusive">Whether the check should include <see cref="value"/></param>
 public readonly record struct LessThanRule<T>(
     T value,
     bool inclusive)
@@ -22,7 +11,6 @@ public readonly record struct LessThanRule<T>(
     where T : IComparable<T>
 {
 
-    /// <inheritdoc/>
     public bool Apply(T value)
     {
         var comparison = this.value.CompareTo(value);
@@ -40,7 +28,6 @@ public readonly record struct LessThanRule<T>(
         return false;
     }
 
-    /// <inheritdoc/>
     public bool Contradicts(IValueRule<T> other)
     {
         if (other is null)
@@ -68,16 +55,11 @@ public readonly record struct LessThanRule<T>(
         throw new NotImplementedException();
     }
 
-    /// <inheritdoc/>
     public IValueRule<T> Inverted()
     {
         return new MoreThanRule<T>(value, !inclusive);
     }
 
-    /// <summary>
-    /// Returns a string representation of this rule.
-    /// </summary>
-    /// <returns>A string representation of this rule.</returns>
     public override string ToString()
     {
         return $"<{(inclusive ? "=" : string.Empty)}{value}";

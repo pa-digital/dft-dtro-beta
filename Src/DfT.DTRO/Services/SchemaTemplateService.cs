@@ -1,18 +1,7 @@
-﻿using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SharedResponse;
-using DfT.DTRO.Services.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Threading.Tasks;
-using SchemaVersion = DfT.DTRO.Models.SchemaTemplate.SchemaVersion;
+﻿using DfT.DTRO.Services.Mapping;
 
 namespace DfT.DTRO.Services;
 
-/// <summary>
-/// An implementation of <see cref="ISchemaTemplateService"/>
-/// </summary>
 public class SchemaTemplateService : ISchemaTemplateService
 {
     private readonly ISchemaTemplateDal _schemaTemplateDal;
@@ -20,13 +9,6 @@ public class SchemaTemplateService : ISchemaTemplateService
     private readonly IDtroDal _dtroDal;
     private readonly ISchemaTemplateMappingService _schemaTemplateMappingService;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="schemaTemplateDal">An <see cref="ISchemaTemplateDal"/> instance.</param>
-    /// <param name="ruleTemplateDal">An <see cref="IRuleTemplateDal"/> instance.</param>
-    /// <param name="dtroDal">An <see cref="IDtroDal"/> instance.</param>
-    /// <param name="schemaTemplateMappingService">An <see cref="ISchemaTemplateMappingService"/> instance.</param>
     public SchemaTemplateService(ISchemaTemplateDal schemaTemplateDal, IRuleTemplateDal ruleTemplateDal, IDtroDal dtroDal, ISchemaTemplateMappingService schemaTemplateMappingService)
     {
         _schemaTemplateDal = schemaTemplateDal;
@@ -35,7 +17,6 @@ public class SchemaTemplateService : ISchemaTemplateService
         _ruleTemplateDal = ruleTemplateDal;
     }
 
-    /// <inheritdoc/>
     public async Task<GuidResponse> ActivateSchemaTemplateAsync(SchemaVersion schemaVersion)
     {
         var schemaTemplateExists = await _schemaTemplateDal.SchemaTemplateExistsAsync(schemaVersion);
@@ -53,7 +34,6 @@ public class SchemaTemplateService : ISchemaTemplateService
         return await _schemaTemplateDal.ActivateSchemaTemplateAsync(schemaVersion);
     }
 
-    /// <inheritdoc/>
     public async Task<GuidResponse> DeActivateSchemaTemplateAsync(SchemaVersion schemaVersion)
     {
         var schemaTemplateExists = await _schemaTemplateDal.SchemaTemplateExistsAsync(schemaVersion);
@@ -65,13 +45,11 @@ public class SchemaTemplateService : ISchemaTemplateService
         return await _schemaTemplateDal.DeActivateSchemaTemplateAsync(schemaVersion);
     }
 
-    /// <inheritdoc/>
     public async Task<bool> SchemaTemplateExistsAsync(SchemaVersion schemaVersion)
     {
         return await _schemaTemplateDal.SchemaTemplateExistsAsync(schemaVersion);
     }
 
-    /// <inheritdoc/>
     public async Task<SchemaTemplateResponse> GetSchemaTemplateByIdAsync(Guid id)
     {
         var schemaTemplateExists = await _schemaTemplateDal.SchemaTemplateExistsByIdAsync(id);
@@ -85,7 +63,6 @@ public class SchemaTemplateService : ISchemaTemplateService
         return res;
     }
 
-    /// <inheritdoc/>
     public async Task<SchemaTemplateResponse> GetSchemaTemplateAsync(SchemaVersion schemaVersion)
     {
         var schemaTemplateExists = await _schemaTemplateDal.SchemaTemplateExistsAsync(schemaVersion);
@@ -99,7 +76,6 @@ public class SchemaTemplateService : ISchemaTemplateService
         return res;
     }
 
-    /// <inheritdoc/>
     public async Task<List<SchemaTemplateResponse>> GetSchemaTemplatesAsync()
     {
         var templates = await _schemaTemplateDal.GetSchemaTemplatesAsync();
@@ -107,13 +83,11 @@ public class SchemaTemplateService : ISchemaTemplateService
         return templatesResponse;
     }
 
-    /// <inheritdoc/>
     public async Task<List<SchemaTemplateOverview>> GetSchemaTemplatesVersionsAsync()
     {
         return await _schemaTemplateDal.GetSchemaTemplatesVersionsAsync();
     }
 
-    /// <inheritdoc/>
     public async Task<GuidResponse> SaveSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId)
     {
         var schemaTemplateExists = await _schemaTemplateDal.SchemaTemplateExistsAsync(version);
@@ -125,7 +99,6 @@ public class SchemaTemplateService : ISchemaTemplateService
         return await _schemaTemplateDal.SaveSchemaTemplateAsJsonAsync(version, expandoObject, correlationId);
     }
 
-    /// <inheritdoc/>
     public async Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId)
     {
         var schemaTemplateExists = await _schemaTemplateDal.SchemaTemplateExistsAsync(version);

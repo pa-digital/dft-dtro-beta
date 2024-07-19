@@ -2,12 +2,8 @@ using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-/// <summary>
-/// Filter to add correlation ID to swagger docs.
-/// </summary>
 public class CorrelationIdHeaderParameterFilter : IOperationFilter
 {
-    /// <inheritdoc />
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         operation.Parameters.Add(new OpenApiParameter

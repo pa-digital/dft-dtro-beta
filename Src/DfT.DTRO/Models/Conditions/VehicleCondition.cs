@@ -3,17 +3,10 @@ using DfT.DTRO.Models.Conditions.Internal;
 
 namespace DfT.DTRO.Models.Conditions;
 
-/// <summary>
-/// Represents a condition regarding the vehicle.
-/// </summary>
 public class VehicleCondition : Condition
 {
-    /// <summary>
-    /// The characteristics that the vehicle must fulfill.
-    /// </summary>
     public VehicleCharacteristics VehicleCharacteristics { get; init; }
 
-    /// <inheritdoc/>
     public override object Clone()
     {
         return new VehicleCondition
@@ -23,7 +16,6 @@ public class VehicleCondition : Condition
         };
     }
 
-    /// <inheritdoc/>
     public override bool Contradicts(Condition other)
     {
         if (other is not VehicleCondition otherVehicleCondition)
@@ -37,7 +29,6 @@ public class VehicleCondition : Condition
             invertOther: otherVehicleCondition.Negate);
     }
 
-    /// <inheritdoc/>
     public override Condition Negated()
     {
         return new VehicleCondition

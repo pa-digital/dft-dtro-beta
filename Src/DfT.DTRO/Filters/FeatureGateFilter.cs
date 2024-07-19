@@ -2,28 +2,18 @@
 using Microsoft.FeatureManagement.Mvc;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Linq;
 
 namespace DfT.DTRO.Filters;
 
-/// <summary>
-/// The filter that removes Swagger documentation for endpoints disallowed by feature flags.
-/// </summary>
 public class FeatureGateFilter : IDocumentFilter
 {
     private readonly IFeatureManager _featureManager;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="featureManager">An <see cref="IFeatureManager"/> instance.</param>
     public FeatureGateFilter(IFeatureManager featureManager)
     {
         _featureManager = featureManager;
     }
 
-    /// <inheritdoc/>
     public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
     {
         foreach (var apiDescription in context.ApiDescriptions)

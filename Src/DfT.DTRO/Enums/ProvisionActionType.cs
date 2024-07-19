@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DfT.DTRO.Enums;
+﻿namespace DfT.DTRO.Enums;
 
 public enum ProvisionActionType
 {

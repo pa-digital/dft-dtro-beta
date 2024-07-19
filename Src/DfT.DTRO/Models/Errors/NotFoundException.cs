@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DfT.DTRO.Models.Errors;
+﻿namespace DfT.DTRO.Models.Errors;
 public class NotFoundException : Exception
 {
     public NotFoundException()

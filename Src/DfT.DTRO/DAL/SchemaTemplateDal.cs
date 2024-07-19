@@ -1,35 +1,15 @@
-﻿using DfT.DTRO.DAL;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SharedResponse;
+﻿using System.Diagnostics.CodeAnalysis;
+using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Dynamic;
-using System.Linq;
-using System.Threading.Tasks;
 using SchemaVersion = DfT.DTRO.Models.SchemaTemplate.SchemaVersion;
 
 namespace DfT.DTRO.Services;
 
-/// <summary>
-/// An implementation of <see cref="ISchemaTemplateDal"/>
-/// that uses an SQL database as its store.
-/// </summary>
-///
 [ExcludeFromCodeCoverage]
 public class SchemaTemplateDal : ISchemaTemplateDal
 {
     private readonly DtroContext _dtroContext;
 
-    /// <summary>
-    /// The default constructor.
-    /// </summary>
-    /// <param name="dtroContext">
-    /// An instance of <see cref="DtroContext"/>
-    /// representing the current database session.
-    /// </param>
     public SchemaTemplateDal(DtroContext dtroContext)
     {
         _dtroContext = dtroContext;
@@ -110,8 +90,6 @@ public class SchemaTemplateDal : ISchemaTemplateDal
         var schemaTemplate = new SchemaTemplate();
         var response = new GuidResponse();
 
-        // dynamic expandoObject = JsonConvert.DeserializeObject<ExpandoObject>(body, new ExpandoObjectConverter());
-        // dynamic expandoObject = body;
         schemaTemplate.Id = response.Id;
         schemaTemplate.Template = expandoObject;
         schemaTemplate.SchemaVersion = version;

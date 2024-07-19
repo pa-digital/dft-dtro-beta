@@ -44,6 +44,6 @@ public class JsonSchemaValidationTests
         Assert.Equal(expectedResult, actual);
     }
 
-    private string GetJsonSchemaForRequestAsString(DfT.DTRO.Models.DataBase.DTRO request) => 
+    private string GetJsonSchemaForRequestAsString(DfT.DTRO.Models.DataBase.DTRO request) =>
         File.ReadAllText($"{SchemaFolder}/{request.SchemaVersion}.json");
 }

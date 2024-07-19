@@ -1,24 +1,13 @@
-﻿using DfT.DTRO.Caching;
+﻿using System.Security.Cryptography.X509Certificates;
+using DfT.DTRO.Caching;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
-using System;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace DfT.DTRO.Extensions.DependencyInjection;
 
-/// <summary>
-/// Provides extension methods for registering DTRO cache.
-/// </summary>
 public static class Cache
 {
-    /// <summary>
-    /// Adds an <see cref="IRedisCache"/> based on the provided configuration.
-    /// </summary>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
-    /// <param name="configuration">The cache configuration.</param>
-    /// <returns>A reference to this instance after the operation has completed.</returns>
     public static IServiceCollection AddCache(this IServiceCollection services, IConfiguration configuration)
     {
         return configuration.GetValue("EnableRedisCache", false)
@@ -26,12 +15,6 @@ public static class Cache
             : services.AddSingleton<IRedisCache, NoopCache>();
     }
 
-    /// <summary>
-    /// Adds an <see cref="IRedisCache"/> with a Redis backend.
-    /// </summary>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
-    /// <param name="configuration">The configuration to get connection parameters from.</param>
-    /// <returns>A reference to this instance after the operation has completed.</returns>
     private static IServiceCollection AddRedisCache(this IServiceCollection services, IConfiguration configuration)
     {
         var redisConfig = configuration.GetSection("Redis");
@@ -45,16 +28,6 @@ public static class Cache
         return services.AddRedisCache(host, password, port, useSsl, certificateAuthorityCertPath);
     }
 
-    /// <summary>
-    /// Adds an <see cref="IRedisCache"/> with a Redis backend.
-    /// </summary>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
-    /// <param name="host">The Redis host address.</param>
-    /// <param name="password">The Redis password.</param>
-    /// <param name="port">The Redis host port.</param>
-    /// <param name="useSsl">Enables encryption of connection with SSL/TLS.</param>
-    /// <param name="certificateAuthorityCertPath">Path to CA that signed Redis server certificate.</param>
-    /// <returns>A reference to this instance after the operation has completed.</returns>
     private static IServiceCollection AddRedisCache(
         this IServiceCollection services,
         string host,
@@ -93,11 +66,11 @@ public static class Cache
             return false;
         }
 
-        X509Certificate2 ca = new (certificateAuthorityCertPath ??
+        X509Certificate2 ca = new(certificateAuthorityCertPath ??
                                    throw new ArgumentNullException(nameof(certificateAuthorityCertPath)));
-        X509Certificate2 certificateToValidate = new (certificate);
+        X509Certificate2 certificateToValidate = new(certificate);
 
-        X509Chain x509Chain = new ();
+        X509Chain x509Chain = new();
         x509Chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
         x509Chain.ChainPolicy.RevocationFlag = X509RevocationFlag.ExcludeRoot;
         x509Chain.ChainPolicy.VerificationFlags =

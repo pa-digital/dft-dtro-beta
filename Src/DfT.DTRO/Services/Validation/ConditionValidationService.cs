@@ -2,18 +2,13 @@
 using DfT.DTRO.Models.Conditions;
 using DfT.DTRO.Models.Conditions.Base;
 using DfT.DTRO.Models.Validation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ConditionConjunction = System.Collections.Generic.List<DfT.DTRO.Models.Conditions.Base.Condition>;
 using ConditionDnf = System.Collections.Generic.List<System.Collections.Generic.List<DfT.DTRO.Models.Conditions.Base.Condition>>;
 
 namespace DfT.DTRO.Services.Validation;
 
-/// <inheritdoc cref="IConditionValidationService"/>
 public class ConditionValidationService : IConditionValidationService
 {
-    /// <inheritdoc/>
     public List<SemanticValidationError> Validate(ConditionSet conditions)
     {
         var errors = new List<SemanticValidationError>();
@@ -28,13 +23,6 @@ public class ConditionValidationService : IConditionValidationService
         return errors;
     }
 
-    /// <summary>
-    /// Flattens the whole condition tree to
-    /// <see href="https://en.wikipedia.org/wiki/Disjunctive_normal_form">Disjunctive Normal Form</see>
-    /// like <c>(a and b [and ...]) or (a and !b [and ...]) [or ...]</c>
-    /// <br/><br/>
-    /// This makes it easier to find contradictions later.
-    /// </summary>
     private ConditionDnf ConvertToDnf(ConditionSet conditions)
     {
         conditions = ExpandXOr(conditions);
@@ -58,7 +46,6 @@ public class ConditionValidationService : IConditionValidationService
             ConditionSet.OperatorType.And => AndToDnf(conditions),
             ConditionSet.OperatorType.Or => OrToDnf(conditions),
 
-            // ConditionSet.OperatorType.XOr is invalid as it should be expanded earlier,
             _ => throw new InvalidOperationException()
         };
 
@@ -141,7 +128,6 @@ public class ConditionValidationService : IConditionValidationService
         left = ExpandXOr(left);
         right = ExpandXOr(right);
 
-        // (left || right) && !(left && right)
         return
             ConditionSet.And(
                 ConditionSet.Or(left, right),

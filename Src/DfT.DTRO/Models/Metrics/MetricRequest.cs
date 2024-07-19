@@ -1,30 +1,14 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace DfT.DTRO.Models.Metrics;
-
-/// <summary>
-/// Request for metric data.
-/// </summary>
+﻿namespace DfT.DTRO.Models.Metrics;
 
 [DataContract]
 public class MetricRequest
 {
-    /// <summary>
-    /// Gets or sets system TraId.
-    /// </summary>
     [DataMember(Name = "traId")]
     public int? TraId { get; set; }
 
-    /// <summary>
-    /// Gets or sets date from.
-    /// </summary>
     [DataMember(Name = "dateFrom")]
     public DateTime DateFrom { get; set; }
 
-    /// <summary>
-    /// Gets or sets Date to.
-    /// </summary>
     [DataMember(Name = "dateTo")]
     public DateTime DateTo { get; set; }
 }
