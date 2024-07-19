@@ -1,7 +1,7 @@
-variable "project" {
-  type        = string
-  description = "GCP project ID where alerts will be created,"
-}
+# variable "project" {
+#   type        = string
+#   description = "GCP project ID where alerts will be created,"
+# }
 
 variable "service_name" {
   type        = string
