@@ -1,5 +1,4 @@
 locals {
-  name_prefix            = "${var.application_name}-${var.environment}"
   cloud_run_service_name = "${local.name_prefix}-${var.dtro_service_image}"
   # At most `database_max_connections` in total can be opened
   max_instance_count   = floor(var.database_max_connections / var.db_connections_per_cloud_run_instance)
