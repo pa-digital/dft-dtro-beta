@@ -64,7 +64,7 @@ resource "google_cloud_run_v2_service" "dtro_service" {
         name = local.db_password_env_name
         value_source {
           secret_key_ref {
-            secret  = data.google_secret_manager_secret_version.postgres_password_value.secret_data
+            secret  = data.google_secret_manager_secret_version.postgres_password_value.secret
             version = "latest"
           }
         }
