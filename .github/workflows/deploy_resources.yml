@@ -32,6 +32,11 @@ on:
         type: boolean
         required: false
         default: false
+      run-build-push:
+        type: boolean
+        description: Run Build and Push job?
+        required: false
+        default: false
       run-deploy-CR-job:
         type: boolean
         description: Run deploy Cloud Run job?
@@ -60,6 +65,7 @@ permissions:
 
 jobs:
   build-push-dtro:
+    if: ${{ inputs.run-build-push }}
     name: Build and Push DTRO Application to Artifact Registry - ${{ inputs.environment }}
     runs-on: ubuntu-latest
     permissions:
@@ -151,8 +157,8 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -input=false -out terraform-plan-gcp-cr
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -input=false terraform-plan-gcp-cr
+#      - name: Terraform Apply
+#        run: terraform apply -auto-approve -input=false terraform-plan-gcp-cr
 
   build-apigee-proxies-and-products:
     if: ${{ inputs.run-apigee }}
