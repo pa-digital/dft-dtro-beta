@@ -93,7 +93,7 @@ resource "google_cloud_run_v2_service" "dtro_service" {
     containers {
       name  = "cloud-sql-proxy"
       image = "gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest"
-      args  = ["--private-ip", "${local.project_id}:${var.region}:${data.google_sql_database_instance.postgres_db.connection_name}"]
+      args  = ["--private-ip", data.google_sql_database_instance.postgres_db.connection_name]
     }
   }
 }
