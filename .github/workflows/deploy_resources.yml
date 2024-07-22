@@ -32,21 +32,6 @@ on:
         type: boolean
         required: false
         default: false
-      run-build-push:
-        type: boolean
-        description: Run Build and Push job?
-        required: false
-        default: false
-      run-deploy-CR-job:
-        type: boolean
-        description: Run deploy Cloud Run job?
-        required: false
-        default: false
-      run-apigee:
-        type: boolean
-        description: Run Apigee job?
-        required: false
-        default: false
 
 env:
   TF_VAR_tf_state_bucket: dft-d-tro-terraform-${{ inputs.environment }}
@@ -65,7 +50,6 @@ permissions:
 
 jobs:
   build-push-dtro:
-    if: ${{ inputs.run-build-push }}
     name: Build and Push DTRO Application to Artifact Registry - ${{ inputs.environment }}
     runs-on: ubuntu-latest
     permissions:
@@ -104,10 +88,9 @@ jobs:
           tags: ${{ env.ar_repo_url }}
 
   deploy-dtro:
-    if: ${{ inputs.run-deploy-CR-job }}
     name: Deploy DTRO Application to Cloud Run - ${{ inputs.environment }}
-#    needs:
-#      - build-push-dtro
+    needs:
+      - build-push-dtro
     runs-on: ubuntu-latest
     permissions:
       id-token: write
