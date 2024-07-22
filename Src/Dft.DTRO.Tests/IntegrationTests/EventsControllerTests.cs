@@ -1,11 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
-using DfT.DTRO;
-using DfT.DTRO.Models.DtroEvent;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
 namespace Dft.DTRO.Tests.IntegrationTests;
@@ -14,31 +6,27 @@ namespace Dft.DTRO.Tests.IntegrationTests;
 public class EventsControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {
-    private const string SampleDtroJsonPath = "./DtroJsonDataExamples/v3.1.1/proper-data.json";
+    private const string SampleDtroJsonPath = "../../../../../examples/D-TROs/3.1.1/proper-data.json";
 
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockStorageService;
-    private readonly Mock<IMetricsService> _metricsMock;
     private readonly int? _taForTest = 1585;
     public EventsControllerTests(WebApplicationFactory<Program> factory)
     {
         _mockStorageService = new Mock<IDtroService>(MockBehavior.Strict);
-        _metricsMock = new Mock<IMetricsService>();
-        _metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<int>())).ReturnsAsync(true);
+        Mock<IMetricsService> metricsMock = new();
+        metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<int>())).ReturnsAsync(true);
 
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
             services.AddSingleton(_mockStorageService.Object);
-            services.AddSingleton(_metricsMock.Object);
+            services.AddSingleton(metricsMock.Object);
         }));
     }
 
     [Fact]
     public async Task Post_Events_NoDtroIsMatchingTheCriteria_ReturnsEmptyResult()
     {
-
-
-
         _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroEventSearch>()))
             .Returns(Task.FromResult(Array.Empty<DfT.DTRO.Models.DataBase.DTRO>().ToList()));
         HttpClient client = _factory.CreateClient();
@@ -47,7 +35,7 @@ public class EventsControllerTests
         DtroEventSearch searchCriteria = new() { Since = DateTime.Today, Page = 1, PageSize = 10 };
         string payload = JsonConvert.SerializeObject(searchCriteria);
 
-        var json = new StringContent(payload, Encoding.UTF8, "application/json");
+        StringContent json = new(payload, Encoding.UTF8, "application/json");
 
         HttpResponseMessage response = await client.PostAsync("/v1/events", json);
 
@@ -56,7 +44,7 @@ public class EventsControllerTests
             await response.Content.ReadAsStringAsync()
         );
         Assert.NotNull(data);
-        Assert.Equal(1, data!.Page);
+        Assert.Equal(1, data.Page);
         Assert.Equal(0, data.PageSize);
         Assert.Equal(0, data.TotalCount);
         Assert.Empty(data.Events);
@@ -66,7 +54,7 @@ public class EventsControllerTests
     [Fact]
     public async Task Post_Search_DtroMatchingTheCriteriaExists_ReturnsMatchingDtros()
     {
-        DfT.DTRO.Models.DataBase.DTRO sampleDtro = await CreateDtroObject(SampleDtroJsonPath);
+        DfT.DTRO.Models.DataBase.DTRO sampleDtro = await Utils.CreateDtroObject(SampleDtroJsonPath);
 
         _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroEventSearch>()))
             .Returns(Task.FromResult(new[] { sampleDtro }.ToList()));
@@ -76,7 +64,7 @@ public class EventsControllerTests
         DtroEventSearch searchCriteria = new() { Since = DateTime.Today, Page = 1, PageSize = 10 };
         string payload = JsonConvert.SerializeObject(searchCriteria);
 
-        var json = new StringContent(payload, Encoding.UTF8, "application/json");
+        StringContent json = new(payload, Encoding.UTF8, "application/json");
         HttpResponseMessage response = await client.PostAsync("/v1/events", json);
 
         response.EnsureSuccessStatusCode();
@@ -84,7 +72,7 @@ public class EventsControllerTests
             await response.Content.ReadAsStringAsync()
         );
         Assert.NotNull(data);
-        Assert.Equal(1, data!.Page);
+        Assert.Equal(1, data.Page);
         Assert.Equal(1, data.PageSize);
         Assert.Equal(1, data.TotalCount);
         Assert.Single(data.Events);

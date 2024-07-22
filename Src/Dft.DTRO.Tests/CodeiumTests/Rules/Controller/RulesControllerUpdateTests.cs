@@ -1,98 +1,91 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text;
-using DfT.DTRO.Controllers;
-using DfT.DTRO.Models.SharedResponse;
-using DfT.DTRO.RequestCorrelation;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-
-namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller;
+﻿namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller;
 
 [ExcludeFromCodeCoverage]
 public class RulesControllerUpdateTests
 {
-    private readonly Mock<IRuleTemplateService> _mockRuleTemplateService;
-    private readonly Mock<IRequestCorrelationProvider> _mockCorrelationProvider;
-    private readonly Mock<ILogger<RulesController>> _mockLogger;
     private readonly RulesController _controller;
+    private readonly Mock<IRequestCorrelationProvider> _mockCorrelationProvider;
+    private readonly Mock<IRuleTemplateService> _mockRuleTemplateService;
 
     public RulesControllerUpdateTests()
     {
         _mockRuleTemplateService = new Mock<IRuleTemplateService>();
         _mockCorrelationProvider = new Mock<IRequestCorrelationProvider>();
-        _mockLogger = new Mock<ILogger<RulesController>>();
+        Mock<ILogger<RulesController>> mockLogger = new();
         _controller = new RulesController(
             _mockRuleTemplateService.Object,
             _mockCorrelationProvider.Object,
-            _mockLogger.Object);
+            mockLogger.Object);
     }
 
     [Fact]
     public async Task UpdateRule_WithNullFile_ReturnsBadRequest()
     {
-        string version = "1.0";
+        const string version = "1.0";
         IFormFile? file = null;
-        var result = await _controller.UpdateFromFile(version, file);
+        IActionResult? result = await _controller.UpdateFromFile(version, file);
         Assert.IsType<BadRequestObjectResult>(result);
     }
+
     [Fact]
     public async Task UpdateRule_WithEmptyFile_ReturnsBadRequest()
     {
-        string version = "1.0";
-        var file = new Mock<IFormFile>();
+        const string version = "1.0";
+        Mock<IFormFile> file = new();
         file.Setup(f => f.Length).Returns(0);
-        var result = await _controller.UpdateFromFile(version, file.Object);
+        IActionResult? result = await _controller.UpdateFromFile(version, file.Object);
         Assert.IsType<BadRequestObjectResult>(result);
     }
+
     [Fact]
     public async Task UpdateRule_WithValidFile_ReturnsCreatedAtAction()
     {
-        string version = "1.0";
-        var file = new Mock<IFormFile>();
-        var fileContent = "valid content";
-        var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(fileContent));
+        const string version = "1.0";
+        Mock<IFormFile> file = new();
+        const string fileContent = "valid content";
+        MemoryStream memoryStream = new(Encoding.UTF8.GetBytes(fileContent));
         file.Setup(f => f.Length).Returns(memoryStream.Length);
         file.Setup(f => f.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
-            .Callback<Stream, CancellationToken>((stream, token) => memoryStream.CopyTo(stream));
-        var response = new GuidResponse { Id = Guid.NewGuid() };
+            .Callback<Stream, CancellationToken>((stream, _) => memoryStream.CopyTo(stream));
+        GuidResponse response = new() { Id = Guid.NewGuid() };
         _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
             .ReturnsAsync(response);
         _mockCorrelationProvider.Setup(c => c.CorrelationId).Returns("correlation-id");
-        var result = await _controller.UpdateFromFile(version, file.Object);
+        IActionResult? result = await _controller.UpdateFromFile(version, file.Object);
         Assert.IsType<OkObjectResult>(result);
     }
+
     [Fact]
     public async Task UpdateRule_WithInvalidOperationException_ReturnsBadRequest()
     {
-        string version = "1.0";
-        var file = new Mock<IFormFile>();
-        var fileContent = "invalid content";
-        var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(fileContent));
+        const string version = "1.0";
+        Mock<IFormFile> file = new();
+        const string fileContent = "invalid content";
+        MemoryStream memoryStream = new(Encoding.UTF8.GetBytes(fileContent));
         file.Setup(f => f.Length).Returns(memoryStream.Length);
         file.Setup(f => f.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
-            .Callback<Stream, CancellationToken>((stream, token) => memoryStream.CopyTo(stream));
+            .Callback<Stream, CancellationToken>((stream, _) => memoryStream.CopyTo(stream));
         _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
             .ThrowsAsync(new InvalidOperationException("Invalid operation"));
-        var result = await _controller.UpdateFromFile(version, file.Object);
+        IActionResult? result = await _controller.UpdateFromFile(version, file.Object);
         Assert.IsType<BadRequestObjectResult>(result);
     }
+
     [Fact]
     public async Task UpdateRule_WithException_ReturnsInternalServerError()
     {
-        string version = "1.0";
-        var file = new Mock<IFormFile>();
-        var fileContent = "content causing exception";
-        var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(fileContent));
+        const string version = "1.0";
+        Mock<IFormFile> file = new();
+        const string fileContent = "content causing exception";
+        MemoryStream memoryStream = new(Encoding.UTF8.GetBytes(fileContent));
         file.Setup(f => f.Length).Returns(memoryStream.Length);
         file.Setup(f => f.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
-            .Callback<Stream, CancellationToken>((stream, token) => memoryStream.CopyTo(stream));
+            .Callback<Stream, CancellationToken>((stream, _) => memoryStream.CopyTo(stream));
         _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
             .ThrowsAsync(new Exception("General exception"));
-        var result = await _controller.UpdateFromFile(version, file.Object);
+        IActionResult? result = await _controller.UpdateFromFile(version, file.Object);
         Assert.IsType<ObjectResult>(result);
-        var objectResult = result as ObjectResult;
+        ObjectResult? objectResult = result as ObjectResult;
         Assert.Equal(500, objectResult?.StatusCode);
     }
 }

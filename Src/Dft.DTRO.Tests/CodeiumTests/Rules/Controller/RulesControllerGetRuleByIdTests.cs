@@ -1,22 +1,14 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.Controllers;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.RuleTemplate;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.RequestCorrelation;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using DfT.DTRO.Models.RuleTemplate;
 
 namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller;
 
 [ExcludeFromCodeCoverage]
 public class RulesControllerGetRuleByIdTests
 {
-    private Mock<IRuleTemplateService> _mockRuleTemplateService;
-    private Mock<IRequestCorrelationProvider> _mockCorrelationProvider;
-    private Mock<ILogger<RulesController>> _mockLogger;
-    private RulesController _controller;
+    private readonly RulesController _controller;
+    private readonly Mock<IRequestCorrelationProvider> _mockCorrelationProvider;
+    private readonly Mock<ILogger<RulesController>> _mockLogger;
+    private readonly Mock<IRuleTemplateService> _mockRuleTemplateService;
 
     public RulesControllerGetRuleByIdTests()
     {
@@ -33,41 +25,47 @@ public class RulesControllerGetRuleByIdTests
     [Fact]
     public async Task GetRuleById_ReturnsOk_WhenRuleExists()
     {
-        var expected = new RuleTemplateResponse();
-        expected.Template = "";
-        expected.SchemaVersion = new SchemaVersion("1.0.0");
+        RuleTemplateResponse expected = new()
+        {
+            Template = "",
+            SchemaVersion = new SchemaVersion("1.0.0")
+        };
 
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(It.IsAny<Guid>())).ReturnsAsync(expected);
-        var result = await _controller.GetById(new Guid());
+        IActionResult? result = await _controller.GetById(new Guid());
         Assert.IsType<OkObjectResult>(result);
-        var okResult = result as OkObjectResult;
+        OkObjectResult? okResult = result as OkObjectResult;
         Assert.Equal(expected, okResult?.Value);
     }
+
     [Fact]
     public async Task GetRuleById_ReturnsNotFound_WhenRuleDoesNotExist()
     {
-        var ruleId = Guid.NewGuid();
+        Guid ruleId = Guid.NewGuid();
         _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId)).ThrowsAsync(new NotFoundException());
-        var result = await _controller.GetById(ruleId);
+        IActionResult? result = await _controller.GetById(ruleId);
         Assert.IsType<NotFoundObjectResult>(result);
     }
+
     [Fact]
     public async Task GetRuleById_ReturnsBadRequest_WhenInvalidOperationExceptionOccurs()
     {
-        var ruleId = Guid.NewGuid();
-        _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId)).ThrowsAsync(new InvalidOperationException("Invalid operation"));
-        var result = await _controller.GetById(ruleId);
+        Guid ruleId = Guid.NewGuid();
+        _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId))
+            .ThrowsAsync(new InvalidOperationException("Invalid operation"));
+        IActionResult? result = await _controller.GetById(ruleId);
         Assert.IsType<BadRequestObjectResult>(result);
     }
 
     [Fact]
     public async Task GetRuleById_ReturnsInternalServerError_WhenExceptionOccurs()
     {
-        var ruleId = Guid.NewGuid();
-        _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId)).ThrowsAsync(new Exception("Unexpected error"));
-        var result = await _controller.GetById(ruleId);
+        Guid ruleId = Guid.NewGuid();
+        _mockRuleTemplateService.Setup(s => s.GetRuleTemplateByIdAsync(ruleId))
+            .ThrowsAsync(new Exception("Unexpected error"));
+        IActionResult? result = await _controller.GetById(ruleId);
         Assert.IsType<ObjectResult>(result);
-        var objectResult = result as ObjectResult;
+        ObjectResult? objectResult = result as ObjectResult;
         Assert.Equal(500, objectResult?.StatusCode);
     }
 }

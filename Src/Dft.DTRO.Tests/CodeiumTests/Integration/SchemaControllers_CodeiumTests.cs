@@ -1,19 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Dynamic;
-using System.Net;
-using DfT.DTRO.Controllers;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SharedResponse;
-using DfT.DTRO.RequestCorrelation;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace DfT.DTRO.Tests.CodeiumTests.Integration;
@@ -21,38 +6,32 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration;
 [ExcludeFromCodeCoverage]
 public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactory<Program>>
 {
+    private const string SchemaVersion = "3.2.0";
 
-    private readonly Mock<ISchemaTemplateService> _mockSchemaTemplateService;
-
-    private readonly Mock<IRequestCorrelationProvider> _mockCorrelationProvider;
-
-    private readonly Mock<ILogger<SchemasController>> _mockLogger;
-
-    private readonly WebApplicationFactory<Program> _factory;
+    private const string BadSchemaVersion = "0.0.0";
 
     private readonly SchemasController _controller;
 
-    private readonly string json = File.ReadAllText("./SchemaJsonExamples/v3.2.0/example-3.2.0.json");
+    private readonly WebApplicationFactory<Program> _factory;
 
-    private readonly string schemaVersion = "3.2.0";
+    private readonly Mock<IRequestCorrelationProvider> _mockCorrelationProvider;
 
-    private readonly string badschemaVersion = "0.0.0";
+    private readonly Mock<ISchemaTemplateService> _mockSchemaTemplateService;
 
-    private readonly ExpandoObject? schemaTemplate;
-
+    private readonly ExpandoObject? _schemaTemplate;
 
     public SchemaController_Codeium_Tests(WebApplicationFactory<Program> factory)
     {
         _mockSchemaTemplateService = new Mock<ISchemaTemplateService>();
         _mockCorrelationProvider = new Mock<IRequestCorrelationProvider>();
-        _mockLogger = new Mock<ILogger<SchemasController>>();
+        Mock<ILogger<SchemasController>> mockLogger = new();
         _controller = new SchemasController(_mockSchemaTemplateService.Object,
-            _mockCorrelationProvider.Object, _mockLogger.Object);
+            _mockCorrelationProvider.Object, mockLogger.Object);
 
-        schemaTemplate = new ExpandoObject();
+        _schemaTemplate = new ExpandoObject();
         try
         {
-            schemaTemplate = JsonConvert.DeserializeObject<ExpandoObject>(json, new ExpandoObjectConverter());
+            _schemaTemplate = JsonConvert.DeserializeObject<ExpandoObject>(JsonExample, new ExpandoObjectConverter());
         }
         catch (JsonSerializationException ex)
         {
@@ -63,41 +42,38 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         {
             services.AddSingleton(_mockSchemaTemplateService.Object);
             services.AddSingleton(_mockCorrelationProvider.Object);
-            services.AddSingleton(_mockLogger.Object);
-
+            services.AddSingleton(mockLogger.Object);
         }));
     }
+
+    private static string JsonExample =>
+        File.ReadAllText("../../../../../examples/Schemas/3.2.0.json");
 
     [Fact]
     public async Task GetSchemas_ReturnsOk_WhenTemplatesExist()
     {
-        var templates = new List<SchemaTemplateResponse>
-        {
-            new SchemaTemplateResponse(),
-            new SchemaTemplateResponse()
-        };
+        List<SchemaTemplateResponse> templates = new() { new SchemaTemplateResponse(), new SchemaTemplateResponse() };
 
         _mockSchemaTemplateService.Setup(service => service.GetSchemaTemplatesAsync())
             .ReturnsAsync(templates);
 
-        var result = await _controller.Get() as OkObjectResult;
+        OkObjectResult? result = await _controller.Get() as OkObjectResult;
 
         Assert.IsType<OkObjectResult>(result);
-        Assert.Equal(templates, result?.Value);
+        Assert.Equal(templates, result.Value);
     }
 
     [Fact]
     public async Task GetSchemas_ReturnsEmptyList_WhenNoTemplatesExist()
     {
-        var templates = new List<SchemaTemplateResponse>();
+        List<SchemaTemplateResponse> templates = new();
         _mockSchemaTemplateService.Setup(service => service.GetSchemaTemplatesAsync())
             .ReturnsAsync(templates);
 
-        var result = await _controller.Get() as OkObjectResult;
+        OkObjectResult? result = await _controller.Get() as OkObjectResult;
 
         Assert.IsType<OkObjectResult>(result);
-        Assert.Equal(templates, result?.Value);
-
+        Assert.Equal(templates, result.Value);
     }
 
     [Fact]
@@ -106,40 +82,39 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         _mockSchemaTemplateService.Setup(service => service.GetSchemaTemplatesAsync())
             .Throws(new Exception());
 
-        var result = await _controller.Get() as ObjectResult;
+        ObjectResult? result = await _controller.Get() as ObjectResult;
 
         Assert.IsType<ObjectResult>(result);
-        Assert.Equal("500", result?.StatusCode.ToString());
+        Assert.Equal("500", result.StatusCode.ToString());
     }
 
     [Fact]
     public async Task GetSchemaVersion_ReturnsOkResult()
     {
-        var template = new SchemaTemplateResponse
+        SchemaTemplateResponse template = new()
         {
-            SchemaVersion = new SchemaVersion(schemaVersion),
+            SchemaVersion = new SchemaVersion(SchemaVersion),
             Template = new ExpandoObject(),
             IsActive = true
-
         };
-        _mockSchemaTemplateService.Setup(x => x.GetSchemaTemplateAsync(schemaVersion))
+        _mockSchemaTemplateService.Setup(x => x.GetSchemaTemplateAsync(SchemaVersion))
             .Returns(Task.FromResult(template));
 
-        var result = await _controller.GetByVersion(schemaVersion) as OkObjectResult;
-        var response = result?.StatusCode.ToString();
+        OkObjectResult? result = await _controller.GetByVersion(SchemaVersion) as OkObjectResult;
+        string? response = result?.StatusCode.ToString();
 
         Assert.IsType<OkObjectResult>(result);
         Assert.Equal("200", response);
-        _mockSchemaTemplateService.Verify(s => s.GetSchemaTemplateAsync(schemaVersion), Times.Once);
+        _mockSchemaTemplateService.Verify(s => s.GetSchemaTemplateAsync(SchemaVersion), Times.Once);
     }
 
     [Fact]
     public async Task GetSchema_ReturnsNotFoundResult()
     {
-        _mockSchemaTemplateService.Setup(x => x.GetSchemaTemplateAsync(badschemaVersion))
+        _mockSchemaTemplateService.Setup(x => x.GetSchemaTemplateAsync(BadSchemaVersion))
             .Throws(new NotFoundException());
 
-        var result = await _controller.GetByVersion(badschemaVersion) as NotFoundObjectResult;
+        NotFoundObjectResult? result = await _controller.GetByVersion(BadSchemaVersion) as NotFoundObjectResult;
 
         Assert.IsType<NotFoundObjectResult>(result);
     }
@@ -150,7 +125,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         _mockSchemaTemplateService.Setup(x => x.GetSchemaTemplateAsync(It.IsAny<SchemaVersion>()))
             .Throws(new InvalidOperationException("Invalid operation"));
 
-        var result = await _controller.GetByVersion(badschemaVersion) as BadRequestObjectResult;
+        BadRequestObjectResult? result = await _controller.GetByVersion(BadSchemaVersion) as BadRequestObjectResult;
 
         Assert.IsType<BadRequestObjectResult>(result);
     }
@@ -161,28 +136,24 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         _mockSchemaTemplateService.Setup(x => x.GetSchemaTemplateAsync(It.IsAny<SchemaVersion>()))
             .Throws(new Exception("Something went wrong"));
 
-        var result = await _controller.GetByVersion(badschemaVersion) as ObjectResult;
+        ObjectResult? result = await _controller.GetByVersion(BadSchemaVersion) as ObjectResult;
 
         Assert.IsType<ObjectResult>(result);
-        Assert.Equal(500, result?.StatusCode);
+        Assert.Equal(500, result.StatusCode);
     }
 
     [Fact]
     public async Task GetSchemaById_ValidId_ReturnsOk()
     {
         Guid schemaId = Guid.NewGuid();
-        var expectedSchema = new SchemaTemplate
-        {
-            Id = schemaId
-        };
         _mockSchemaTemplateService.Setup(s => s.GetSchemaTemplateByIdAsync(schemaId))
             .Returns(Task.FromResult(new SchemaTemplateResponse()));
 
-        var result = await _controller.GetById(schemaId) as OkObjectResult;
+        OkObjectResult? result = await _controller.GetById(schemaId) as OkObjectResult;
 
         Assert.IsType<OkObjectResult>(result);
-        Assert.IsType<SchemaTemplateResponse>(result?.Value);
-        Assert.Equal("200", result?.StatusCode.ToString());
+        Assert.IsType<SchemaTemplateResponse>(result.Value);
+        Assert.Equal("200", result.StatusCode.ToString());
     }
 
     [Fact]
@@ -192,158 +163,159 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         _mockSchemaTemplateService.Setup(s => s.GetSchemaTemplateByIdAsync(It.IsAny<Guid>()))
             .ThrowsAsync(new NotFoundException());
 
-        var result = await _controller.GetById(schemaId) as ObjectResult;
+        ObjectResult? result = await _controller.GetById(schemaId) as ObjectResult;
 
         Assert.IsType<NotFoundObjectResult>(result);
-        Assert.Equal("404", result?.StatusCode.ToString());
+        Assert.Equal("404", result.StatusCode.ToString());
     }
 
     [Fact]
     public async Task GetSchemaById_InvalidOperationException_ReturnsBadRequest()
     {
-        var schemaId = Guid.NewGuid();
+        Guid schemaId = Guid.NewGuid();
         _mockSchemaTemplateService.Setup(s => s.GetSchemaTemplateByIdAsync(It.IsAny<Guid>()))
             .ThrowsAsync(new InvalidOperationException());
 
-        var result = await _controller.GetById(schemaId) as BadRequestObjectResult;
+        BadRequestObjectResult? result = await _controller.GetById(schemaId) as BadRequestObjectResult;
 
         Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal("400", result?.StatusCode.ToString());
-
+        Assert.Equal("400", result.StatusCode.ToString());
     }
 
     [Fact]
     public async Task GetSchemaById_UnexpectedException_ReturnsInternalServerError()
     {
-        var schemaId = Guid.NewGuid();
+        Guid schemaId = Guid.NewGuid();
         _mockSchemaTemplateService.Setup(s => s.GetSchemaTemplateByIdAsync(schemaId))
             .ThrowsAsync(new Exception());
 
-        var result = await _controller.GetById(schemaId) as ObjectResult;
+        ObjectResult? result = await _controller.GetById(schemaId) as ObjectResult;
 
         Assert.IsType<ObjectResult>(result);
-        Assert.Equal(500, result?.StatusCode);
-
+        Assert.Equal(500, result.StatusCode);
     }
 
     [Fact]
     public async Task CreateSchema_ReturnsCreated()
     {
         Guid guidId = Guid.NewGuid();
-        _mockSchemaTemplateService.Setup(mock => mock.SaveSchemaTemplateAsJsonAsync("3.2.0", schemaTemplate,
+        _mockSchemaTemplateService.Setup(mock => mock.SaveSchemaTemplateAsJsonAsync("3.2.0", _schemaTemplate,
                 _mockCorrelationProvider.Object.CorrelationId))
-            .ReturnsAsync(new GuidResponse
-            {
-                Id = guidId
-            });
+            .ReturnsAsync(new GuidResponse { Id = guidId });
 
-        var result = await _controller.CreateFromBodyByVersion(schemaVersion, schemaTemplate) as CreatedAtActionResult;
+        CreatedAtActionResult? result =
+            await _controller.CreateFromBodyByVersion(SchemaVersion, _schemaTemplate) as CreatedAtActionResult;
 
         Assert.IsType<CreatedAtActionResult>(result);
-        Assert.Equal("CreateFromFileByVersion", result?.ActionName);
-        Assert.Equal(guidId, result?.RouteValues?["id"]);
-        Assert.IsType<GuidResponse>(result?.Value);
+        Assert.Equal("CreateFromFileByVersion", result.ActionName);
+        Assert.Equal(guidId, result.RouteValues?["id"]);
+        Assert.IsType<GuidResponse>(result.Value);
     }
 
     [Fact]
     public async Task CreateSchema_ThrowsInvalidOperationException_ReturnsBadRequest()
     {
-        var body = new ExpandoObject();
-        _mockSchemaTemplateService.Setup(mock => mock.SaveSchemaTemplateAsJsonAsync(badschemaVersion, body, _mockCorrelationProvider.Object.CorrelationId))
+        ExpandoObject body = new ExpandoObject();
+        _mockSchemaTemplateService.Setup(mock =>
+                mock.SaveSchemaTemplateAsJsonAsync(BadSchemaVersion, body,
+                    _mockCorrelationProvider.Object.CorrelationId))
             .Throws(new InvalidOperationException("Invalid schema"));
 
-        var result = await _controller.CreateFromBodyByVersion(badschemaVersion, body) as BadRequestObjectResult;
+        BadRequestObjectResult? result =
+            await _controller.CreateFromBodyByVersion(BadSchemaVersion, body) as BadRequestObjectResult;
 
         Assert.IsType<BadRequestObjectResult>(result);
-        Assert.IsType<ApiErrorResponse>(result?.Value);
-        var apiErrorResponse = result?.Value as ApiErrorResponse;
+        Assert.IsType<ApiErrorResponse>(result.Value);
+        ApiErrorResponse? apiErrorResponse = result.Value as ApiErrorResponse;
         Assert.Equal("Bad Request", apiErrorResponse?.Message);
     }
 
     [Fact]
     public async Task CreateSchema_ThrowsException_ReturnsInternalServerError()
     {
-        var body = new ExpandoObject();
-        _mockSchemaTemplateService.Setup(mock => mock.SaveSchemaTemplateAsJsonAsync(badschemaVersion,
+        ExpandoObject body = new ExpandoObject();
+        _mockSchemaTemplateService.Setup(mock => mock.SaveSchemaTemplateAsJsonAsync(BadSchemaVersion,
                 body, _mockCorrelationProvider.Object.CorrelationId))
             .Throws(new Exception("Unexpected error"));
 
-        var result = await _controller.CreateFromBodyByVersion(badschemaVersion, body) as ObjectResult;
+        ObjectResult? result = await _controller.CreateFromBodyByVersion(BadSchemaVersion, body) as ObjectResult;
 
         Assert.IsType<ObjectResult>(result);
-
     }
+
     [Fact]
     public async Task UpdateSchema_ReturnsOk_ValidSchemaVersionAndBody()
     {
-        var body = new ExpandoObject();
-        var guidResponse = new GuidResponse();
+        ExpandoObject body = new ExpandoObject();
+        GuidResponse guidResponse = new GuidResponse();
 
         _mockSchemaTemplateService.Setup(s => s.UpdateSchemaTemplateAsJsonAsync
-                (schemaVersion, body, It.IsAny<string>()))
+                (SchemaVersion, body, It.IsAny<string>()))
             .ReturnsAsync(guidResponse);
 
-        var result = await _controller.UpdateFromBodyByVersion(schemaVersion, body) as ObjectResult;
+        ObjectResult? result = await _controller.UpdateFromBodyByVersion(SchemaVersion, body) as ObjectResult;
 
         Assert.IsType<OkObjectResult>(result);
-        Assert.Equal(guidResponse, result?.Value);
+        Assert.Equal(guidResponse, result.Value);
         _mockSchemaTemplateService.Verify(s => s.UpdateSchemaTemplateAsJsonAsync
-            (schemaVersion, body, It.IsAny<string>()), Times.Once);
+            (SchemaVersion, body, It.IsAny<string>()), Times.Once);
     }
 
     [Fact]
     public async Task UpdateSchema_ReturnsNotFound_SchemaVersionDoesNotExist()
     {
-        var body = new ExpandoObject();
+        ExpandoObject body = new ExpandoObject();
         _mockSchemaTemplateService.Setup(s => s.UpdateSchemaTemplateAsJsonAsync
-                (badschemaVersion, body, It.IsAny<string>()))
+                (BadSchemaVersion, body, It.IsAny<string>()))
             .ThrowsAsync(new NotFoundException());
 
-        var result = await _controller.UpdateFromBodyByVersion(badschemaVersion, body) as ObjectResult;
+        ObjectResult? result = await _controller.UpdateFromBodyByVersion(BadSchemaVersion, body) as ObjectResult;
 
         Assert.IsType<NotFoundObjectResult>(result);
         _mockSchemaTemplateService.Verify(s => s.UpdateSchemaTemplateAsJsonAsync
-            (badschemaVersion, body, It.IsAny<string>()), Times.Once);
+            (BadSchemaVersion, body, It.IsAny<string>()), Times.Once);
     }
 
     [Fact]
     public async Task UpdateSchema_ReturnsBadRequest_InvalidSchemaVersionOrBody()
     {
-        var body = new ExpandoObject();
-        _mockSchemaTemplateService.Setup(s => s.UpdateSchemaTemplateAsJsonAsync(badschemaVersion, body, It.IsAny<string>()))
+        ExpandoObject body = new ExpandoObject();
+        _mockSchemaTemplateService
+            .Setup(s => s.UpdateSchemaTemplateAsJsonAsync(BadSchemaVersion, body, It.IsAny<string>()))
             .ThrowsAsync(new InvalidOperationException("Invalid schema version or body"));
 
-        var result = await _controller.UpdateFromBodyByVersion(badschemaVersion, body) as BadRequestObjectResult;
+        BadRequestObjectResult? result =
+            await _controller.UpdateFromBodyByVersion(BadSchemaVersion, body) as BadRequestObjectResult;
 
         Assert.NotNull(result);
-        Assert.IsType<ApiErrorResponse>(result?.Value);
-        _mockSchemaTemplateService.Verify(s => s.UpdateSchemaTemplateAsJsonAsync(badschemaVersion, body, It.IsAny<string>()), Times.Once);
+        Assert.IsType<ApiErrorResponse>(result.Value);
+        _mockSchemaTemplateService.Verify(
+            s => s.UpdateSchemaTemplateAsJsonAsync(BadSchemaVersion, body, It.IsAny<string>()), Times.Once);
     }
 
     [Fact]
     public async Task UpdateSchema_ReturnsInternalServerError_UnexpectedException()
     {
-        var version = "1.0.0";
-        var body = new ExpandoObject();
+        string version = "1.0.0";
+        ExpandoObject body = new ExpandoObject();
         _mockSchemaTemplateService.Setup(s => s.UpdateSchemaTemplateAsJsonAsync
             (version, body, It.IsAny<string>())).ThrowsAsync(new Exception());
 
-        var result = await _controller.UpdateFromBodyByVersion(version, body) as ObjectResult;
+        ObjectResult? result = await _controller.UpdateFromBodyByVersion(version, body) as ObjectResult;
 
         Assert.NotNull(result);
-        Assert.Equal(500, result?.StatusCode);
-
+        Assert.Equal(500, result.StatusCode);
     }
 
     [Fact]
     public async Task ActivateSchema_SchemaTemplateServiceActivates_ReturnsOk()
     {
-        var version = "1.0.0";
+        string version = "1.0.0";
 
         _mockSchemaTemplateService.Setup(s => s.ActivateSchemaTemplateAsync(version))
             .ReturnsAsync(new GuidResponse());
 
-        var result = await _controller.ActivateByVersion(version);
+        IActionResult? result = await _controller.ActivateByVersion(version);
 
         Assert.IsType<OkObjectResult>(result);
     }
@@ -351,10 +323,10 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     [Fact]
     public async Task ActivateSchema_ThrowsNotFoundException_ReturnsNotFound()
     {
-        _mockSchemaTemplateService.Setup(s => s.ActivateSchemaTemplateAsync(badschemaVersion))
+        _mockSchemaTemplateService.Setup(s => s.ActivateSchemaTemplateAsync(BadSchemaVersion))
             .ThrowsAsync(new NotFoundException());
 
-        var result = await _controller.ActivateByVersion(badschemaVersion) as ObjectResult;
+        ObjectResult? result = await _controller.ActivateByVersion(BadSchemaVersion) as ObjectResult;
 
         Assert.IsType<NotFoundObjectResult>(result);
     }
@@ -362,11 +334,12 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     [Fact]
     public async Task ActivateSchema_ThrowsInvalidOperationException_ReturnsBadRequest()
     {
-        _mockSchemaTemplateService.Setup(s => s.ActivateSchemaTemplateAsync(badschemaVersion))
+        _mockSchemaTemplateService.Setup(s => s.ActivateSchemaTemplateAsync(BadSchemaVersion))
             .ThrowsAsync(new InvalidOperationException("Some error"));
 
 
-        var result = await _controller.ActivateByVersion(badschemaVersion) as BadRequestObjectResult;
+        BadRequestObjectResult? result =
+            await _controller.ActivateByVersion(BadSchemaVersion) as BadRequestObjectResult;
 
         Assert.IsType<BadRequestObjectResult>(result);
     }
@@ -374,12 +347,12 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     [Fact]
     public async Task DeActivateSchema_WhenSchemaTemplateServiceSucceeds_ReturnsOk()
     {
-        var version = "1.0.0";
+        string version = "1.0.0";
 
         _mockSchemaTemplateService.Setup(s => s.DeActivateSchemaTemplateAsync(version))
             .ReturnsAsync(new GuidResponse());
 
-        var result = await _controller.DeactivateByVersion(version);
+        IActionResult? result = await _controller.DeactivateByVersion(version);
 
         Assert.IsType<OkObjectResult>(result);
     }
@@ -387,10 +360,10 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     [Fact]
     public async Task DeActivateSchema_ThrowsNotFoundException_ReturnsNotFound()
     {
-        _mockSchemaTemplateService.Setup(s => s.DeActivateSchemaTemplateAsync(badschemaVersion))
+        _mockSchemaTemplateService.Setup(s => s.DeActivateSchemaTemplateAsync(BadSchemaVersion))
             .ThrowsAsync(new NotFoundException());
 
-        var result = await _controller.DeactivateByVersion(badschemaVersion) as ObjectResult;
+        ObjectResult? result = await _controller.DeactivateByVersion(BadSchemaVersion) as ObjectResult;
 
         Assert.IsType<NotFoundObjectResult>(result);
     }
@@ -398,32 +371,31 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     [Fact]
     public async Task DeActivateSchema_ThrowsInvalidOperationException_ReturnsBadRequest()
     {
-        var version = "1.0.0";
+        string version = "1.0.0";
 
         _mockSchemaTemplateService.Setup(s => s.DeActivateSchemaTemplateAsync(version))
             .ThrowsAsync(new InvalidOperationException("Invalid version"));
 
-        var result = await _controller.DeactivateByVersion(version) as BadRequestObjectResult;
+        BadRequestObjectResult? result = await _controller.DeactivateByVersion(version) as BadRequestObjectResult;
 
         Assert.IsType<BadRequestObjectResult>(result);
-        var errorResponse = Assert.IsType<ApiErrorResponse>(result?.Value);
+        ApiErrorResponse errorResponse = Assert.IsType<ApiErrorResponse>(result.Value);
         Assert.Equal("Bad Request", errorResponse.Message);
     }
 
     [Fact]
     public async Task DeActivateSchema_WhenSchemaTemplateServiceThrowsUnexpectedException_ReturnsInternalServerError()
     {
-        var version = "1.0.0";
+        string version = "1.0.0";
 
         _mockSchemaTemplateService.Setup(s => s.DeActivateSchemaTemplateAsync(version))
             .ThrowsAsync(new Exception("Unexpected error"));
 
-        var result = await _controller.DeactivateByVersion(version) as ObjectResult;
+        ObjectResult? result = await _controller.DeactivateByVersion(version) as ObjectResult;
 
         Assert.IsType<ObjectResult>(result);
-        var errorResponse = Assert.IsType<ApiErrorResponse>(result?.Value);
-        Assert.Equal((int)HttpStatusCode.InternalServerError, result?.StatusCode);
+        ApiErrorResponse errorResponse = Assert.IsType<ApiErrorResponse>(result.Value);
+        Assert.Equal((int)HttpStatusCode.InternalServerError, result.StatusCode);
         Assert.Equal("Internal Server Error", errorResponse.Message);
     }
-
 }

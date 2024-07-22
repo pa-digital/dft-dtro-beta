@@ -14,9 +14,9 @@ public class JsonLogicValidationService : IJsonLogicValidationService
         _ruleTemplateDal = ruleTemplateDal;
     }
 
-    public async Task<IList<SemanticValidationError>> ValidateCreationRequest(DtroSubmit request)
+    public async Task<IList<SemanticValidationError>> ValidateCreationRequest(DtroSubmit request, string schemaVersion)
     {
-        if (request.SchemaVersion < "3.1.2")
+        if (request.SchemaVersion < schemaVersion)
         {
             return new List<SemanticValidationError>();
         }

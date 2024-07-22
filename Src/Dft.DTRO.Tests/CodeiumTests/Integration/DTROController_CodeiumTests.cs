@@ -1,18 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Dynamic;
-using DfT.DTRO.Controllers;
-using DfT.DTRO.Models.DtroDtos;
-using DfT.DTRO.Models.Errors;
-using DfT.DTRO.Models.SchemaTemplate;
-using DfT.DTRO.Models.SharedResponse;
-using DfT.DTRO.RequestCorrelation;
-using DfT.DTRO.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace DfT.DTRO.Tests.CodeiumTests.Integration;
@@ -22,33 +8,32 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
 {
     private readonly Mock<IDtroService> _mockDtroService;
     private readonly Mock<IRequestCorrelationProvider> _correlationProviderMock;
-    private readonly Mock<ILogger<DTROsController>> _loggerMock;
     private readonly DTROsController _controller;
-    private readonly Mock<IMetricsService> _metricsMock;
     private readonly WebApplicationFactory<Program> _factory;
 
-    private const string ValidDtroJsonPath = "./DtroJsonDataExamples/v3.2.0/valid-new-x.json";
+    private const string ValidDtroJsonPath = "../../../../../examples/D-TROs/3.2.0/valid-new-x.json";
     private readonly DtroSubmit _dtroSubmit;
     private readonly int? _taForTest = 1585;
 
     public DTROsController_Codeium_Tests(WebApplicationFactory<Program> factory)
     {
+        _factory = factory;
         _mockDtroService = new Mock<IDtroService>();
         _correlationProviderMock = new Mock<IRequestCorrelationProvider>();
-        _loggerMock = new Mock<ILogger<DTROsController>>();
-        _metricsMock = new Mock<IMetricsService>();
+        Mock<ILogger<DTROsController>> loggerMock = new();
+        Mock<IMetricsService> metricsMock = new();
 
-        _metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), _taForTest)).ReturnsAsync(true);
+        metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), _taForTest)).ReturnsAsync(true);
 
 
-        _controller = new DTROsController(_mockDtroService.Object, _metricsMock.Object,
-            _correlationProviderMock.Object, _loggerMock.Object);
+        _controller = new DTROsController(_mockDtroService.Object, metricsMock.Object,
+            _correlationProviderMock.Object, loggerMock.Object);
 
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
             services.AddSingleton(_mockDtroService.Object);
             services.AddSingleton(_correlationProviderMock.Object);
-            services.AddSingleton(_loggerMock.Object);
+            services.AddSingleton(loggerMock.Object);
         }));
 
         string json = File.ReadAllText(ValidDtroJsonPath);

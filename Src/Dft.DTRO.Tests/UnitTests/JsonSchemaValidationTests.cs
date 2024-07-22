@@ -1,14 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.Services.Validation;
-
-namespace Dft.DTRO.Tests;
+﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
 public class JsonSchemaValidationTests
 {
-    private const string Schema311Files = "./DtroJsonDataExamples/v3.1.1";
-    private const string Schema320Files = "./DtroJsonDataExamples/v3.2.0";
-    private const string SchemaFolder = "Schemas";
+    private const string Schema311Files = "../../../../../examples/D-TROs/3.1.1";
+    private const string Schema320Files = "../../../../../examples/D-TROs/3.2.0";
+    private const string SchemaFolder = "../../../../../examples/Schemas/";
+
     [Theory]
     [InlineData("3.1.1", "ha-missing", false)]
     [InlineData("3.1.1", "proper-data", true)]
@@ -20,10 +18,11 @@ public class JsonSchemaValidationTests
     {
         JsonSchemaValidationService sut = new();
 
-        var jsonSchema = GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
-        var inputJson = File.ReadAllText(Path.Join(Schema311Files, $"{sourceJson}.json"));
+        string jsonSchema =
+            GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
+        string inputJson = File.ReadAllText(Path.Join(Schema311Files, $"{sourceJson}.json"));
 
-        var result = !sut.ValidateRequestAgainstJsonSchema(jsonSchema, inputJson).Any();
+        bool result = !sut.ValidateRequestAgainstJsonSchema(jsonSchema, inputJson).Any();
 
         Assert.Equal(expectedResult, result);
     }
@@ -37,13 +36,16 @@ public class JsonSchemaValidationTests
     public void ProcessCorrectResults(string schemaVersion, string sourceJson, bool expectedResult)
     {
         JsonSchemaValidationService sut = new();
-        var jsonSchema = GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
-        var inputJson = File.ReadAllText(Path.Join(Schema320Files, $"{sourceJson}.json"));
+        string jsonSchema =
+            GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
+        string inputJson = File.ReadAllText(Path.Join(Schema320Files, $"{sourceJson}.json"));
 
-        var actual = sut.ValidateRequestAgainstJsonSchema(jsonSchema, inputJson).Any();
+        bool actual = sut.ValidateRequestAgainstJsonSchema(jsonSchema, inputJson).Any();
         Assert.Equal(expectedResult, actual);
     }
 
-    private string GetJsonSchemaForRequestAsString(DfT.DTRO.Models.DataBase.DTRO request) =>
-        File.ReadAllText($"{SchemaFolder}/{request.SchemaVersion}.json");
+    private string GetJsonSchemaForRequestAsString(DfT.DTRO.Models.DataBase.DTRO request)
+    {
+        return File.ReadAllText($"{SchemaFolder}/{request.SchemaVersion}.json");
+    }
 }
