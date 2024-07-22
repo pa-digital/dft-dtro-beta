@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage name="AM-Add-Organisation-Header">
+  <Add>
+    <Headers>
+      <Header name="x-organisation-id">{developer.email}</Header>
+    </Headers>
+  </Add>
+  <AssignTo>request</AssignTo>
+</AssignMessage>
