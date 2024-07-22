@@ -3,6 +3,11 @@ name: Deploy Feature Branch
 on:
   workflow_dispatch:
     inputs:
+      run-build-push:
+        type: boolean
+        description: Run Build and Push job?
+        required: false
+        default: false
       run-deploy-CR-job:
         type: boolean
         description: Run deploy Cloud Run job?
@@ -30,5 +35,6 @@ jobs:
       dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
       dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
 #      do-validation-checks: true
+      run-build-push: ${{ inputs.run-build-push }}
       run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
       run-apigee: ${{ inputs.run-apigee }}
