@@ -2,6 +2,7 @@ locals {
   cloud_run_service_name = "${var.application_name}-${var.environment}-${var.dtro_service_image}"
   # At most `database_max_connections` in total can be opened
   max_instance_count   = floor(var.database_max_connections / var.db_connections_per_cloud_run_instance)
+  db_password_env_name = "POSTGRES_PASSWORD"
 
   common_service_envs = merge(
     {
@@ -16,7 +17,6 @@ locals {
       POSTGRES_MAX_POOL_SIZE = var.db_connections_per_cloud_run_instance
   })
 
-  db_password_env_name = "POSTGRES_PASSWORD"
   project_id             = data.google_project.project.project_id
   artifact_registry_name = "${data.google_project.project.name}-repository"
 }
@@ -25,13 +25,13 @@ locals {
 resource "google_cloud_run_v2_service" "publish_service" {
   name     = local.cloud_run_service_name
   location = var.region
-  #   ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
+  ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY"
 
   template {
     service_account = var.execution_service_account
 
     scaling {
-      min_instance_count = 0
+      min_instance_count = 1
       max_instance_count = local.max_instance_count
     }
 
