@@ -11,6 +11,7 @@ data "google_sql_database_instance" "postgres_db" {
 data "google_vpc_access_connector" "serverless_connector" {
   name = "${local.name_prefix}-connector"
 }
+
 data "google_secret_manager_secret_version" "postgres_password_value" {
   secret = "${local.name_prefix}-postgres-password"
   version = "latest"
