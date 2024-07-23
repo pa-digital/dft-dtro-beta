@@ -30,7 +30,7 @@ ENV ASPNETCORE_URLS=http://*:8080 \
 
 # Copy scripts
 COPY Scripts/D-TRO_Database.sql ./
-COPY postgreSQL.sh ./
+COPY Scripts/postgreSQL.sh ./
 RUN chmod +x postgreSQL.sh
 
 # Set the entry point
