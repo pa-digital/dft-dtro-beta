@@ -88,6 +88,7 @@ jobs:
         uses: docker/build-push-action@v6.1.0
         with:
           context: dft-dtro-beta/Src/DfT.DTRO
+          platforms: linux/amd64
           push: true
           provenance: false
           tags: ${{ env.ar_repo_url }}
