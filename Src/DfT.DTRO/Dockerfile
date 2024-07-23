@@ -1,7 +1,8 @@
 # Base image to build application
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
 WORKDIR /app
-ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 
 # Copy the project file and restore dependencies,
 COPY *.csproj ./
@@ -10,12 +11,13 @@ RUN dotnet restore -r linux-musl-x64
 # Copy the rest of the files and build
 COPY . .
 RUN dotnet publish -o out -c Release -r linux-musl-x64 \
-    --self-contained true /p:PublishReadyToRun=true /p:PublishSingleFile=true
+    --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true
 
 # Create the migration bundle
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as migration-bundle
 WORKDIR /app
-ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 
 # Copy the project file and create the migration bundle
 COPY *.csproj ./
