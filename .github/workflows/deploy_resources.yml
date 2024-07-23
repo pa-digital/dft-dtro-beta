@@ -32,6 +32,11 @@ on:
         type: boolean
         required: false
         default: false
+      run-apigee:
+        type: boolean
+        description: Run Apigee job?
+        required: false
+        default: false
 
 env:
   TF_VAR_tf_state_bucket: dft-d-tro-terraform-${{ inputs.environment }}
