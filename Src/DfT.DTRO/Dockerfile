@@ -5,18 +5,21 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 # Copy the project file and restore dependencies,
 COPY *.csproj ./
-RUN dotnet restore -r alpine-x64
+RUN dotnet restore -r linux-musl-x64
 
 # Copy the rest of the files and build
 COPY . .
-RUN dotnet publish -o out -c Release -r alpine-x64 \
+RUN dotnet publish -o out -c Release -r linux-musl-x64 \
     --self-contained true /p:PublishReadyToRun=true /p:PublishSingleFile=true
 
 # Create the migration bundle
 FROM build as migration-bundle
 WORKDIR /app
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
-RUN dotnet restore -r alpine-x64 && dotnet ef migrations bundle --self-contained -r linux-musl-x64
+
+# Copy the project file and create the migration bundle
+COPY *.csproj ./
+RUN dotnet restore -r linux-musl-x64 && dotnet ef migrations bundle --self-contained -r linux-musl-x64
 
 # Base image to run application
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
@@ -25,6 +28,7 @@ WORKDIR /app
 # Copy the published application from the build stage
 COPY --from=build /app/out .
 COPY --from=migration-bundle /app/efbundle .
+RUN chmod +x efbundle
 
 # Expose the application port and set environment variables
 EXPOSE 8080
