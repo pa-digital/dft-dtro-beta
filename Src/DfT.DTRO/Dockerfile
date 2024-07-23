@@ -13,13 +13,14 @@ RUN dotnet publish -o out -c Release -r linux-musl-x64 \
     --self-contained true /p:PublishReadyToRun=true /p:PublishSingleFile=true
 
 # Create the migration bundle
-FROM build as migration-bundle
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as migration-bundle
 WORKDIR /app
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 # Copy the project file and create the migration bundle
 COPY *.csproj ./
-RUN dotnet restore -r linux-musl-x64 && dotnet ef migrations bundle --self-contained -r linux-musl-x64
+RUN dotnet restore -r linux-musl-x64
+RUN dotnet ef migrations bundle --self-contained -r linux-musl-x64
 
 # Base image to run application
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
