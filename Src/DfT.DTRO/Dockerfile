@@ -20,6 +20,9 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 # Copy the project file and create the migration bundle
 COPY *.csproj ./
 RUN dotnet restore -r linux-musl-x64 && dotnet tool restore
+COPY . ./
+RUN ls
+
 RUN dotnet ef migrations bundle --self-contained -r linux-musl-x64
 
 # Base image to run application
