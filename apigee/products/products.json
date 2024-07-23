@@ -1,0 +1,92 @@
+[
+  {
+    "name": "ENV-traffic-regulator-authority",
+    "displayName": "ENV Traffic Regulator Authority",
+    "approvalType": "manual",
+    "attributes": [
+      {
+        "name": "access",
+        "value": "public"
+      }
+    ],
+    "environments": [
+      "ENV-environment"
+    ],
+    "scopes": [
+      "tra"
+    ],
+    "createdAt": "1719227113878",
+    "lastModifiedAt": "1719227144037",
+    "operationGroup": {
+      "operationConfigs": [
+        {
+          "apiSource": "ENV-server",
+          "operations": [
+            {
+              "resource": "/**"
+            }
+          ],
+          "quota": {}
+        },
+        {
+          "apiSource": "oauth-generator",
+          "operations": [
+            {
+              "resource": "/oauth-generator",
+              "methods": [
+                "POST"
+              ]
+            }
+          ],
+          "quota": {}
+        }
+      ],
+      "operationConfigType": "proxy"
+    }
+  },
+  {
+    "name": "ENV-service-provider",
+    "displayName": "ENV Service Provider",
+    "approvalType": "manual",
+    "attributes": [
+      {
+        "name": "access",
+        "value": "public"
+      }
+    ],
+    "environments": [
+      "ENV-environment"
+    ],
+    "scopes": [
+      "sp"
+    ],
+    "createdAt": "1719227113878",
+    "lastModifiedAt": "1719227144037",
+    "operationGroup": {
+      "operationConfigs": [
+        {
+          "apiSource": "ENV-server",
+          "operations": [
+            {
+              "resource": "/**"
+            }
+          ],
+          "quota": {}
+        },
+        {
+          "apiSource": "oauth-generator",
+          "operations": [
+            {
+              "resource": "/oauth-generator",
+              "methods": [
+                "POST"
+              ]
+            }
+          ],
+          "quota": {}
+        }
+      ],
+      "operationConfigType": "proxy"
+    }
+  }
+]

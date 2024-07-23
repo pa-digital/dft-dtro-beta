@@ -1,14 +1,15 @@
 locals {
-  cloud_run_service_name = "${var.application_name}-${var.environment}-${var.dtro_service_image}"
+  cloud_run_service_name = "${local.name_prefix}-${var.dtro_service_image}"
   # At most `database_max_connections` in total can be opened
   max_instance_count   = floor(var.database_max_connections / var.db_connections_per_cloud_run_instance)
+  db_password_env_name = "POSTGRES_PASSWORD"
 
   common_service_envs = merge(
     {
       DEPLOYED               = timestamp()
       PROJECTID              = data.google_project.project.project_id
       EnableRedisCache       = var.feature_enable_redis_cache
-      POSTGRES_DB            = "${var.application_name}-${var.environment}-database"
+      POSTGRES_DB            = "${local.name_prefix}-database"
       POSTGRES_USER          = var.application_name
       POSTGRES_HOST          = var.postgres_host
       POSTGRES_PORT          = var.postgres_port
@@ -16,22 +17,20 @@ locals {
       POSTGRES_MAX_POOL_SIZE = var.db_connections_per_cloud_run_instance
   })
 
-  db_password_env_name = "POSTGRES_PASSWORD"
   project_id             = data.google_project.project.project_id
   artifact_registry_name = "${data.google_project.project.name}-repository"
 }
 
-## TODO: Move this File to dft-dtro-beta repo
-resource "google_cloud_run_v2_service" "publish_service" {
+resource "google_cloud_run_v2_service" "dtro_service" {
   name     = local.cloud_run_service_name
   location = var.region
-  #   ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
+  ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY"
 
   template {
     service_account = var.execution_service_account
 
     scaling {
-      min_instance_count = 0
+      min_instance_count = 1
       max_instance_count = local.max_instance_count
     }
 
@@ -49,6 +48,8 @@ resource "google_cloud_run_v2_service" "publish_service" {
 
     containers {
       image = "${var.region}-docker.pkg.dev/${local.project_id}/${local.artifact_registry_name}/${var.dtro_service_image}:${var.tag}"
+#       # TODO: Below is the last stable image
+#       image = "europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-repository/dft-dtro-beta@sha256:f34febca186167410eb8ee2a8362975521c8994c675ba22a5590cb563d442e0f"
       ports {
         container_port = 8080
       }
@@ -65,7 +66,7 @@ resource "google_cloud_run_v2_service" "publish_service" {
         name = local.db_password_env_name
         value_source {
           secret_key_ref {
-            secret  = data.google_secret_manager_secret_version.postgres_password_value.secret_data
+            secret  = data.google_secret_manager_secret_version.postgres_password_value.secret
             version = "latest"
           }
         }
@@ -92,7 +93,7 @@ resource "google_cloud_run_v2_service" "publish_service" {
     containers {
       name  = "cloud-sql-proxy"
       image = "gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest"
-      args  = ["--private-ip", "${local.project_id}:${var.region}:${data.google_sql_database_instance.postgres_db.connection_name}"]
+      args  = ["--private-ip", data.google_sql_database_instance.postgres_db.connection_name]
     }
   }
 }
