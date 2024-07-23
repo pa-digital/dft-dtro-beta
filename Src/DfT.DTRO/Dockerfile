@@ -19,7 +19,7 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 # Copy the project file and create the migration bundle
 COPY *.csproj ./
-RUN dotnet tool install --global dotnet-ef
+RUN dotnet tool install --global dotnet-ef --version 6.0.6
 RUN dotnet restore
 
 COPY . ./
