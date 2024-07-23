@@ -11,7 +11,7 @@ RUN dotnet restore -r linux-musl-x64
 # Copy the rest of the files and build
 COPY . .
 RUN dotnet publish -o out -c Release -r linux-musl-x64 \
-    --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true
+    --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true
 
 # Create the migration bundle
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as migration-bundle
