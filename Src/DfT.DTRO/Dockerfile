@@ -48,7 +48,7 @@ ENV ASPNETCORE_URLS=http://*:8080 \
     FeatureManagement__DtroRead=True
 
 # Copy scripts
-COPY Scripts/entrypoint.sh ./
-RUN chmod +x entrypopint.sh
+COPY Scripts/postgreSQL.sh ./
+RUN chmod +x postgreSQL.sh
 
-ENTRYPOINT ["/bin/sh","entrypoint.sh"]
+ENTRYPOINT ["/bin/sh","postgreSQL.sh"]
