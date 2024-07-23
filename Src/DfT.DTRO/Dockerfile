@@ -24,7 +24,7 @@ RUN dotnet restore
 RUN export PATH="$PATH:/root/.dotnet/tools"
 
 COPY . ./
-RUN dotnet ef migrations bundle --self-contained -r linux-musl-x64
+RUN dotnet-ef migrations bundle --self-contained -r linux-musl-x64
 
 # Base image to run application
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
