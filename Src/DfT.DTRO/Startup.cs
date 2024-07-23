@@ -1,21 +1,10 @@
-using DfT.DTRO.DAL;
-using DfT.DTRO.Extensions.Configuration;
-using DfT.DTRO.Extensions.DependencyInjection;
-using DfT.DTRO.Filters;
-using DfT.DTRO.Services.Conversion;
-using DfT.DTRO.Services.Mapping;
-using DfT.DTRO.Services.Validation;
-using DfT.DTRO.Utilities;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Internal;
-using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+
 namespace DfT.DTRO;
 
+[ExcludeFromCodeCoverage]
 public class Startup
 {
     private readonly IWebHostEnvironment _hostingEnv;
@@ -45,30 +34,7 @@ public class Startup
             })
             .AddXmlSerializerFormatters();
 
-        services
-            .AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("0.0.1", new OpenApiInfo
-                {
-                    Version = "0.0.1",
-                    Title = "DTRO - OpenAPI 3.0",
-                    Description = "DTRO - OpenAPI 3.0",
-                    TermsOfService = new Uri("https://cloud.google.com/terms")
-                });
-                c.CustomSchemaIds(type => type.FullName);
-
-                c.OperationFilter<GeneratePathParamsValidationFilter>();
-
-                c.OperationFilter<CorrelationIdHeaderParameterFilter>();
-
-                c.EnableAnnotations();
-
-                c.DocumentFilter<FeatureGateFilter>();
-
-                c.SchemaFilter<BoundingBoxSchemaFilter>();
-            })
-            .AddSwaggerGenNewtonsoftSupport();
-
+        services.AddSwagger(Configuration);
         services.AddHealthChecks();
 
         services.AddFeatureManagement();

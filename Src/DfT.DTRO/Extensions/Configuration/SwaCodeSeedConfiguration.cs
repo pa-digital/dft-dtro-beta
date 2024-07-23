@@ -1,5 +1,6 @@
 ﻿namespace DfT.DTRO.Extensions.Configuration;
 
+[ExcludeFromCodeCoverage]
 public class SwaCodeSeedConfiguration : IEntityTypeConfiguration<SwaCode>
 {
     public void Configure(EntityTypeBuilder<SwaCode> builder)

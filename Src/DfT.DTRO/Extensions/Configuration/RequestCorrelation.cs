@@ -1,5 +1,6 @@
 ﻿namespace DfT.DTRO.Extensions.Configuration;
 
+[ExcludeFromCodeCoverage]
 public static class RequestCorrelationConfigurationExtensions
 {
     public static IServiceCollection AddRequestCorrelation(this IServiceCollection services, string sectionName = "RequestCorrelation")
