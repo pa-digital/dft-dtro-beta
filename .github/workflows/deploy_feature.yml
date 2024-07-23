@@ -13,7 +13,7 @@ jobs:
       execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
     with:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_DEV }}
-      gcp-project: ${{ vars.GCP_PROJECT_ID_DEV }}
+      gcp-project: ${{ vars.GCP_PROJECT_DEV }}
       gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
       environment: dev
       dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
