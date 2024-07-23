@@ -1,3 +1,3 @@
 ﻿
-psql -h 127.0.0.1 -U dtro -d dtro-dev-database -f D-TRO_Database.sql
+psql "host=127.0.0.1 sslmode=disable dbname=dtro-dev-database user=dtro" -f D-TRO_Database.sql
 exec ./DfT.DTRO
