@@ -14,7 +14,7 @@ RUN dotnet publish -o out -c Release -r linux-musl-x64 \
     --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true
 
 # Create the migration bundle
-FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as migration-bundle
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS migration-bundle
 WORKDIR /app
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
