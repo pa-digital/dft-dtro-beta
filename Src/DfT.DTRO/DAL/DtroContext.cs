@@ -39,6 +39,8 @@ public partial class DtroContext : DbContext
             });
 
         modelBuilder.ApplyConfiguration(new SwaCodeSeedConfiguration());
+        var dtroConfiguration = new DtroScriptGenerator(this);
+        dtroConfiguration.RunScript("SELECT * FROM \"Dtros\"");
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
