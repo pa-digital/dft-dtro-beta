@@ -52,6 +52,6 @@ ENV ASPNETCORE_URLS=http://*:8080 \
 
 # Create postgres client
 RUN apk --no-cache -U upgrade \
-&& apk add --no-cache postgresql15-client
+    && apk add --no-cache postgresql15-client
 
-CMD ["/bin/sh", "-c", "./efbundle && postgreSQL.sh && ./DfT.DTRO"]
+CMD ["/bin/sh", "-c", "./efbundle && ./postgreSQL.sh && ./DfT.DTRO"]
