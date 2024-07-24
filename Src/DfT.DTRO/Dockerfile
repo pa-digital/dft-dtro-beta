@@ -37,6 +37,7 @@ WORKDIR /app
 # Copy the published application from the build stage
 COPY --from=build /app/out .
 COPY --from=migration-bundle /app/efbundle .
+COPY postgreSQL.sh .
 RUN chmod +x efbundle
 RUN chmod +x DfT.DTRO
 RUN chmod +x postgreSQL.sh
