@@ -38,6 +38,7 @@ WORKDIR /app
 COPY --from=build /app/out .
 COPY --from=migration-bundle /app/efbundle .
 RUN chmod +x efbundle
+RUN chmod +x DfT.DTRO
 
 # Expose the application port and set environment variables
 EXPOSE 8080
@@ -47,8 +48,5 @@ ENV ASPNETCORE_URLS=http://*:8080 \
     FeatureManagement__SchemaWrite=True \
     FeatureManagement__DtroRead=True
 
-# Copy scripts
-COPY Scripts/postgreSQL.sh ./
-RUN chmod +x postgreSQL.sh
 
-ENTRYPOINT ["/bin/sh","postgreSQL.sh"]
+CMD ["/bin/sh", "-c", "./efbundle && ./DfT.DTRO"]
