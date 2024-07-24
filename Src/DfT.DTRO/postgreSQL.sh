@@ -1,2 +1,0 @@
-﻿
-psql SELECT * FROM "Dtros"
