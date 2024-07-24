@@ -36,3 +36,5 @@
 /.github/temp_storge_of_tf_files/.gitignore
 /terraform/.terraform.lock.hcl
 /Src/DfT.DTRO/Logs
+*.user
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/Dft.DTRO.Admin.RazorAssemblyInfo.cs
