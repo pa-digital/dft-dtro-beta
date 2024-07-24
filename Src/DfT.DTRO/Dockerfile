@@ -14,7 +14,7 @@ RUN dotnet publish -o out -c Release -r linux-musl-x64 \
     --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true
 
 # Create the migration bundle
-FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as migration-bundle
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS migration-bundle
 WORKDIR /app
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
@@ -49,4 +49,9 @@ ENV ASPNETCORE_URLS=http://*:8080 \
     FeatureManagement__DtroRead=True
 
 
-CMD ["/bin/sh", "-c", "./efbundle && ./DfT.DTRO"]
+# Create postgres client
+RUN apk --no-cache -U upgrade \
+&& apk add --no-cache postgresql15-client \
+
+
+CMD ["/bin/sh", "-c", "./efbundle && psql SELECT * \"FROM\" Dtros && ./DfT.DTRO"]
