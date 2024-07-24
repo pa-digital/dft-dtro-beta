@@ -39,6 +39,7 @@ COPY --from=build /app/out .
 COPY --from=migration-bundle /app/efbundle .
 RUN chmod +x efbundle
 RUN chmod +x DfT.DTRO
+RUN chmod +x postgreSQL.sh
 
 # Expose the application port and set environment variables
 EXPOSE 8080
@@ -51,6 +52,6 @@ ENV ASPNETCORE_URLS=http://*:8080 \
 
 # Create postgres client
 RUN apk --no-cache -U upgrade \
-&& apk add --no-cache postgresql15-client \
+&& apk add --no-cache postgresql15-client
 
 CMD ["/bin/sh", "-c", "./efbundle && postgreSQL.sh && ./DfT.DTRO"]
