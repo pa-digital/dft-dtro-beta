@@ -10,14 +10,20 @@ namespace DfT.DTRO.Services;
 
 public class DtroService : IDtroService
 {
+    private readonly ISwaCodeDal _swaCodeDal;
     private readonly IDtroDal _dtroDal;
     private readonly IDtroHistoryDal _dtroHistoryDal;
     private readonly ISchemaTemplateDal _schemaTemplateDal;
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
 
-    public DtroService(IDtroDal dtroDal, IDtroHistoryDal dtroHistoryDal, ISchemaTemplateDal schemaTemplateDal, IDtroMappingService dtroMappingService, IDtroGroupValidatorService dtroGroupValidatorService)
+    public DtroService(IDtroDal dtroDal, IDtroHistoryDal dtroHistoryDal, 
+        ISchemaTemplateDal schemaTemplateDal, 
+        IDtroMappingService dtroMappingService, 
+        IDtroGroupValidatorService dtroGroupValidatorService,
+        ISwaCodeDal swaCodeDal)
     {
+        _swaCodeDal = swaCodeDal;
         _dtroDal = dtroDal;
         _dtroHistoryDal = dtroHistoryDal;
         _schemaTemplateDal = schemaTemplateDal;
@@ -190,24 +196,10 @@ public class DtroService : IDtroService
 
     public async Task<bool> AssignOwnershipAsync(Guid id, int? apiTraId, int assignToTraId, string correlationId)
     {
-        var dic = ServiceDataRule.Data;
+        var swaList  = await _swaCodeDal.GetAllCodes();
 
-        bool found = false;
-        if (dic.TryGetValue("swa_codes", out JsonNode jsonNode))
-        {
-
-            var validTraIds = jsonNode.AsArray();
-            foreach (var item in validTraIds)
-            {
-                if (item.GetValue<int>() == assignToTraId)
-                {
-                    found = true;
-                    break;
-                }
-            }
-        }
-
-        if (!found)
+        var found = swaList.FirstOrDefault(x => x.TraId == assignToTraId);
+        if (found == null)
         {
             throw new NotFoundException($"Invalid -assign To TRA Id-: {assignToTraId} , the TRA does not exist");
         }

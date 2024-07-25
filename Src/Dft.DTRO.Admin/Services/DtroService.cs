@@ -36,9 +36,14 @@ public class DtroService : IDtroService
         return history;
     }
 
-    public async Task<PaginatedResponse<DtroSearchResult>> SearchDtros()
+    public async Task<PaginatedResponse<DtroSearchResult>> SearchDtros(int? traId)
     {
-        var search = new DtroSearch() { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { new() } };
+        if (traId == 0)
+        {
+            traId = null;
+        }
+        var searchQuery = new SearchQuery{CurrentTraOwner = traId};
+        var search = new DtroSearch() { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { searchQuery } };
 
         var jsonContent = JsonSerializer.Serialize(search);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
