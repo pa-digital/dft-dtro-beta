@@ -4,23 +4,39 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 public class DtroEditModel : PageModel
 {
+    private readonly ITraService _traService;
     private readonly IDtroService _dtroService;
-
-    public DtroEditModel(IDtroService dtroService, IConfiguration configuration)
-    {
-        _dtroService = dtroService;
-        ApiBaseUrl = configuration["ExternalApi:BaseUrl"];
-    }
+    [BindProperty(SupportsGet = true)]
+    public TraSearch TraSearch { get; set; } = new TraSearch();
 
     [BindProperty(SupportsGet = true)]
     public string Id { get; set; }
 
-    [BindProperty]
-    public string ApiBaseUrl { get; set; }
-
-    public async Task<IActionResult> OnPostAsync(Guid id, int assignToTraId)
+    public DtroEditModel(IDtroService dtroService, ITraService traService)
     {
-        await _dtroService.ReassignDtroAsync(id, assignToTraId);
+        _dtroService = dtroService;
+        _traService = traService;
+    }
+
+    public async Task OnGetAsync()
+    {
+        TraSearch.UpdateButtonText = "Assign";
+        TraSearch.SwaCodes = await _traService.GetSwaCodes();
+    }
+
+
+    public async Task<IActionResult> OnPostAsync(Guid id)
+    {
+        if (TempData.TryGetValue("TraSelect", out object traSelect))
+        {
+            TraSearch.TraSelect = (int)traSelect;
+        }
+
+        if (TraSearch.TraSelect != null)
+        {
+            await _dtroService.ReassignDtroAsync(id, (int)TraSearch.TraSelect);
+        }
+
         return RedirectToPage("Search");
     }
 }

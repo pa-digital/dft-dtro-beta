@@ -9,11 +9,8 @@
     <p>Dashboard</p>
 </div>
 
-
-<form method="post" asp-page-handler="Update" style="display: flex;">
-    <div id="first">
-
-
+<form id="searchSection" method="post" asp-page-handler="Update" style="display: flex;">
+    <div>
         <div class="options-container" style="accent-color">
             <label>
                 <input type="radio" name="PeriodOption" value="days" checked="@((Model.PeriodOption == "days"))" /> Days
@@ -33,73 +30,11 @@
             </select>
         </div>
 
-        <div style="margin-top: 10px; width: 420px;">
-
-            <div style="display: flex; align-items: center;">
-                <label style="margin-right: 10px;">TRA</label>
-                <input type="text" id="traSearch" placeholder="Search..." style="margin-right: 10px;" />
-                <input type="hidden"  style="max-width: 30px; " id="selectedValue" name="TraSelect" />
-
-                <button id="updateButton" class="btn btn-primary" type="submit">Update</button>
-            </div>
-
-            <div id="traSelectContainer" style="margin-top: 10px;">
-                <div id="traSelect" class="select-items" style="width: 100%; ">
-                    @{
-                        foreach (var item in Model.swaCodes)
-                        {
-
-                            if (item.TraId == Model.TraSelect)
-                            {
-
-
-                                if (@item.TraId == 0)// for 'all'
-                                {
-                                    <div style="width: 100%;" class="item selected" data-value="@item.TraId">
-                                        @item.Name
-                                    </div>
-                                    <script>
-                                        document.getElementById('traSearch').value = '';
-                                        document.getElementById('selectedValue').value = '@item.TraId';
-                                    </script>
-                                }
-                                else
-                                {
-                                    <div style="width: 100%;" class="item selected" data-value="@item.TraId">
-                                        @item.Name <span style="opacity: 0.5;">[@item.TraId]</span>
-                                    </div>
-                                    <script>
-                                        document.getElementById('traSearch').value = '@item.Name';
-                                        document.getElementById('selectedValue').value = '@item.TraId';
-                                    </script>
-                                }
-
-                            }
-                            else
-                            {
-                                if (@item.TraId == 0) // for 'all'
-                                {
-                                    <div style="width: 100%;" class="item" data-value="@item.TraId">
-                                        @item.Name
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div style="width: 100%;" class="item" data-value="@item.TraId">
-                                        @item.Name <span style="opacity: 0.5;">[@item.TraId]</span>
-                                    </div>
-                                }
-                            }
-
-                        }
-                    }
-                </div>
-            </div>
-        </div>
+        @await Html.PartialAsync("_TraSearchPartial", Model.TraSearch)
     </div>
 
 
-    <div id="second" style="display: flex;">
+    <div id="pieChart" style="display: flex;">
         <div id="metrics" style="grey; padding: 10px; flex: 1; position: relative;">
             <div style="display: flex; justify-content: center; align-items: center; height: 30vh;">
                 <div style="position: relative; width: 70vh;">
@@ -140,13 +75,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             const periodOptions = document.querySelectorAll('input[name="PeriodOption"]');
             const numberSelect = document.getElementById('numberSelect');
-            const traSearch = document.getElementById('traSearch');
-            const traSelectContainer = document.getElementById('traSelectContainer');
-            const traSelect = document.getElementById('traSelect');
-            const selectedValueInput = document.getElementById('selectedValue');
-            const updateButton = document.getElementById('updateButton');
-            let selectedItemId = null; // Track the currently selected item ID
-   
             // Event listener for period options (days, weeks, months)
             periodOptions.forEach(option => {
                 option.addEventListener('change', function () {
@@ -176,90 +104,6 @@
                     }
                 });
             });
-
-            // Event listener for search input on traSelect
-            traSearch.addEventListener('input', function () {
-
-                const searchValue = traSearch.value.trim().toLowerCase();
-                const items = traSelectContainer.getElementsByClassName('item');
-
-                // Check if search value contains a number
-                const searchContainsNumber = /\d/.test(searchValue);
-
-                // Loop through each item and toggle display based on search value
-                Array.from(items).forEach(item => {
-                    const itemId = item.getAttribute('data-value');
-                    const itemName = item.textContent.trim().toLowerCase();
-
-                    if (searchValue === '') {
-                        item.style.display = 'block';
-                    }
-                    else {
-                        // Show item if matches search text or if search contains a number and item ID contains that number
-                        if (itemName.includes(searchValue) || (searchContainsNumber && itemId.includes(searchValue))) {
-                            item.style.display = 'block';
-                        } else {
-                            item.style.display = 'none';
-                        }
-                    }
-                });
-
-                updateButton.disabled = searchContainsNumber;
-
-                // Clear selection highlight and reset selected item ID when search changes
-                clearSelection();
-                selectedItemId = null;
-            });
-
-            // Event listener for selecting an item in traSelect
-            traSelectContainer.addEventListener('click', function (event) {
-                const selectedItem = event.target.closest('.item');
-                if (selectedItem) {
-                    const selectedItemId = selectedItem.getAttribute('data-value');
-
-                    // Extract the text before '['
-                    const selectedItemText = selectedItem.textContent.trim();
-                    const index = selectedItemText.indexOf('['); // Find the index of '['
-                    const selectedItemName = index !== -1 ? selectedItemText.slice(0, index).trim() : selectedItemText;
-
-                    // Remove selection from previously selected item
-                    clearSelection();
-
-                    // Add selection to the clicked item
-                    selectedItem.classList.add('selected-InList');
-
-                    // Update the hidden input value
-                    selectedValueInput.value = selectedItemId;
-
-                    // Update the search text box with the selected item's name
-                    traSearch.value = selectedItemName;
-
-                    updateButton.disabled = false;
-                }
-            });
-
-
-            // // Set the search text box with the first item's name if LookupResponses has values
-            // if (@Model.swaCodes.Count > 0) {
-            //     traSearch.value = "@Html.Raw(Model.swaCodes[0].Name)"; // Ensure proper encoding and escaping
-            // }
-
-            // Event listener to clear search text box on first focus
-            traSearch.addEventListener('focus', function () {
-                clearSelection();
-                // Update the hidden input value
-                selectedValueInput.value = 0;
-                traSearch.value = ''; // Clear the search text box
-         
-            });
-
-            // Function to clear selection highlight
-            function clearSelection() {
-                const selectedItems = traSelectContainer.querySelectorAll('.item.selected-InList');
-                selectedItems.forEach(item => {
-                    item.classList.remove('selected-InList');
-                });
-            }
         });
     </script>
 
