@@ -3,7 +3,14 @@
 
 
 <h2>DTROs <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="false">+</a></h2>
-<table class="table">
+
+<form id="searchSection" method="post" asp-page-handler="Update" style="display: flex;margin-top:20px;">
+    <div>
+        @await Html.PartialAsync("_TraSearchPartial", Model.TraSearch)
+    </div>
+</form>
+
+<table style="margin-top:30px"  class="table">
     <thead>
         <tr>
             
@@ -20,16 +27,16 @@
             <th></th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var result in Model.Dtros.Results)
         {
             <tr>
-               
                 <td>@result.TroName</td>
                 <td>@result.PublicationTime</td>
-                <td>@Model.FormatOrderReportingPoint(result.RegulationType)</td>
-                <td>@Model.FormatOrderReportingPoint(result.VehicleType)</td>
-                <td>@Model.FormatOrderReportingPoint(result.OrderReportingPoint)</td>
+                <td>@Model.FormatListToSingle(result.RegulationType)</td>
+                <td>@Model.FormatListToSingle(result.VehicleType)</td>
+                <td>@Model.FormatListToSingle(result.OrderReportingPoint)</td>
                 <td>
                     @for (int i = 0; i < result.RegulationStart.Count(); i++)
                     {

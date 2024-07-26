@@ -1,21 +1,5 @@
 [
   {
-    "id": 1,
-    "message": "The 'CurrentTraOwnerInSwaCodes' value must be one of the recognised SWA codes.",
-    "name": "CurrentTraOwnerInSwaCodes",
-    "path": "source.currentTraOwner",
-    "rule": {
-      "in": [
-        {
-          "var": "source.currentTraOwner"
-        },
-        {
-          "service_data": "swa_codes"
-        }
-      ]
-    }
-  },
-  {
     "id": 2,
     "message": "weekInMonth instances must be unique.",
     "name": "ExceptionPeriodApplicableInstanceOfDayWithinMonthInstancesUnique",
@@ -1190,22 +1174,7 @@
       ]
     }
   },
-  {
-    "id": 23,
-    "message": "The 'TRA' value must be one of the recognised SWA codes.",
-    "name": "TraCreatorInSwaCodes",
-    "path": "source.traCreator",
-    "rule": {
-      "in": [
-        {
-          "var": "source.traCreator"
-        },
-        {
-          "service_data": "swa_codes"
-        }
-      ]
-    }
-  },
+  
   {
     "id": 24,
     "message": "Period end date must not be later than overall period end date.",

@@ -553,8 +553,7 @@ public class SqlStorageServiceTests : IDisposable
     {
         DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
 
-        List<DfT.DTRO.Models.DataBase.DTRO>? result =
-            await sut.FindDtrosAsync(new DtroEventSearch { Page = 1, PageSize = 10, VehicleType = "taxi" });
+        var result = await sut.FindDtrosAsync(new DtroEventSearch { Page = 1, PageSize = 10, VehicleType = "taxi" });
 
         Assert.Single(result);
         Assert.Contains(_dtroWithVehicleTypes, result);

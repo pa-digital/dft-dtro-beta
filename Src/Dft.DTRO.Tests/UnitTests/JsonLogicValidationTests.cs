@@ -748,45 +748,6 @@ public class JsonLogicValidationTests
     }
 
     [Fact]
-    public async Task DisallowsTraCreatorNotInSwaRules()
-    {
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-            ""source"": {
-                ""traCreator"": 9,  ""currentTraOwner"": 9
-            }
-        }");
-
-        await UseRulesByName("TraCreatorInSwaCodes");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
-
-        Assert.NotEmpty(result);
-    }
-
-
-    [Fact]
-    public async Task DisallowsCurrentTraOwnerNotInSwaRules()
-    {
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-            ""source"": {
-                ""traCreator"": 9,  ""currentTraOwner"": 9
-            }
-        }");
-
-        await UseRulesByName("CurrentTraOwnerInSwaCodes");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
-
-        Assert.NotEmpty(result);
-    }
-
-    [Fact]
     public async Task DisallowPublicationTimeMoreThanOneMonthOld()
     {
         DateTime time = DateTime.UtcNow.AddMonths(-2);
@@ -2708,8 +2669,8 @@ public class JsonLogicValidationTests
     private async Task UseRulesByName(params string[] names)
     {
         FileJsonLogicRuleSource source = new();
-        IEnumerable<JsonLogicValidationRule> rules = await source.GetRules("rules-3.2.0");
-        List<JsonLogicValidationRule> subset = rules.Where(it => names.Contains(it.Name)).ToList();
+        var rules = await source.GetRules("rules-3.2.0");
+        var subset = rules.Where(it => names.Contains(it.Name)).ToList();
 
         _ruleDal.Setup(it => it.GetRuleTemplateDeserializeAsync(It.IsAny<SchemaVersion>())).ReturnsAsync(subset);
     }

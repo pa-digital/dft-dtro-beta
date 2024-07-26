@@ -14,7 +14,7 @@ public class FileJsonLogicRuleSource : IJsonLogicRuleSource
         }
 
         FileStream fs = File.OpenRead(path);
-
-        return await JsonSerializer.DeserializeAsync<JsonLogicValidationRule[]>(fs);
+        var ret = await JsonSerializer.DeserializeAsync<JsonLogicValidationRule[]>(fs);
+        return ret;
     }
 }

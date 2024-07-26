@@ -14,7 +14,7 @@ RUN dotnet publish -o out -c Release -r linux-musl-x64 \
     --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true
 
 # Create the migration bundle
-FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as migration-bundle
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS migration-bundle
 WORKDIR /app
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 \
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
@@ -38,6 +38,7 @@ WORKDIR /app
 COPY --from=build /app/out .
 COPY --from=migration-bundle /app/efbundle .
 RUN chmod +x efbundle
+RUN chmod +x DfT.DTRO
 
 # Expose the application port and set environment variables
 EXPOSE 8080
@@ -47,8 +48,4 @@ ENV ASPNETCORE_URLS=http://*:8080 \
     FeatureManagement__SchemaWrite=True \
     FeatureManagement__DtroRead=True
 
-# Copy scripts
-COPY Scripts/postgreSQL.sh ./
-RUN chmod +x postgreSQL.sh
-
-ENTRYPOINT ["/bin/sh","postgreSQL.sh"]
+CMD ["/bin/sh", "-c", "./efbundle && ./DfT.DTRO"]

@@ -1,32 +1,54 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Dft.DTRO.Admin.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
 public class SearchModel : PageModel
 {
     public PaginatedResponse<DtroSearchResult> Dtros { get; set; }
     private readonly IDtroService _dtroService;
+    private readonly ITraService _traService;
 
-    public SearchModel(IDtroService dtroService)
+    [BindProperty(SupportsGet = true)]
+    public TraSearch TraSearch { get; set; } = new TraSearch();
+
+    public SearchModel(IDtroService dtroService, ITraService traService)
     {
         _dtroService = dtroService;
+        _traService = traService;
     }
 
     public async Task OnGetAsync()
     {
-        Dtros = await _dtroService.SearchDtros();
+        Dtros = await _dtroService.SearchDtros(TraSearch.TraSelect);
+
+        TraSearch.UpdateButtonText = "Search";
+        TraSearch.SwaCodes = await _traService.GetSwaCodes();
+        TraSearch.SwaCodes.Insert(0, new SwaCodeResponse { TraId = 0, Name = "[all]" });
     }
 
-    public string FormatOrderReportingPoint(IEnumerable<string> orderReportingPoints)
+    public IActionResult OnPostUpdate()
     {
-        var formattedPoints = new List<string>();
-        foreach (var point in orderReportingPoints)
+        return RedirectToPage(new {TraSearch.TraSelect});
+    }
+
+    public IActionResult OnGetRefresh()
+    {
+        if (TempData.TryGetValue("TraSelect", out object traSelect))
+            TraSearch.TraSelect = (int)traSelect;
+
+        return RedirectToPage(new {TraSearch.TraSelect });
+    }
+
+    public string FormatListToSingle(IEnumerable<string> items)
+    {
+        var formattedItems = new List<string>();
+        foreach (var item in items)
         {
-            string formattedPoint = Regex.Replace(point, "(?<!^)([A-Z])", " $1");
-            formattedPoint = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(formattedPoint.ToLower());
-            formattedPoints.Add(formattedPoint);
+            string formattedItem = Regex.Replace(item, "(?<!^)([A-Z])", " $1");
+            formattedItem = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(formattedItem.ToLower());
+            formattedItems.Add(formattedItem);
         }
-        return string.Join(", ", formattedPoints);
+        return string.Join(", ", formattedItems);
     }
 }

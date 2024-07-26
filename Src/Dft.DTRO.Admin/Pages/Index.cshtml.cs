@@ -29,9 +29,7 @@ namespace Dft.DTRO.Admin.Pages
         public int NumberSelect { get; set; } = 1;
 
         [BindProperty(SupportsGet = true)]
-        public int? TraSelect { get; set; }
-
-        public List<SwaCodeResponse> swaCodes { get; set; } = new List<SwaCodeResponse>();
+        public TraSearch TraSearch { get; set; } = new TraSearch();
 
         public async Task OnGetAsync()
         {
@@ -39,13 +37,12 @@ namespace Dft.DTRO.Admin.Pages
             HealthDatabase = await _metricsService.HealthDatabase();
             TraIdMatch = await _metricsService.TraIdMatch();
 
-            MetricRequest metricRequest = CreateRequest(GetPeriodEnum(PeriodOption), NumberSelect, TraSelect);
-
+            var metricRequest = CreateRequest(GetPeriodEnum(PeriodOption), NumberSelect, TraSearch.TraSelect);
             var metrics = await _metricsService.MetricsForTra(metricRequest);
             Metrics = metrics ?? new MetricSummary();
-
-            swaCodes = await _traService.GetSwaCodes();
-            swaCodes.Insert(0, new SwaCodeResponse { TraId = 0, Name = "[all]" });
+            TraSearch.UpdateButtonText = "Update";
+            TraSearch.SwaCodes = await _traService.GetSwaCodes();
+            TraSearch.SwaCodes.Insert(0, new SwaCodeResponse { TraId = 0, Name = "[all]" });
         }
 
         private Period GetPeriodEnum(string periodOption)
@@ -89,7 +86,7 @@ namespace Dft.DTRO.Admin.Pages
 
         public IActionResult OnPostUpdate()
         {
-            return RedirectToPage(new { PeriodOption, NumberSelect, TraSelect });
+            return RedirectToPage(new { PeriodOption, NumberSelect, TraSearch.TraSelect });
         }
 
         public IActionResult OnGetRefresh()
@@ -101,9 +98,9 @@ namespace Dft.DTRO.Admin.Pages
                 NumberSelect = (int)numberSelect;
 
             if (TempData.TryGetValue("TraSelect", out object traSelect))
-                TraSelect = (int)traSelect;
+                TraSearch.TraSelect = (int)traSelect;
 
-            return RedirectToPage(new { PeriodOption, NumberSelect, TraSelect });
+            return RedirectToPage(new { PeriodOption, NumberSelect, TraSearch.TraSelect });
         }
 
         private enum Period
