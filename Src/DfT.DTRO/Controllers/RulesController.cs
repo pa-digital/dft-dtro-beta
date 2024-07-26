@@ -1,5 +1,8 @@
 namespace DfT.DTRO.Controllers;
 
+/// <summary>
+/// Controller for capturing Rule Templates
+/// </summary>
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
@@ -10,6 +13,12 @@ public class RulesController : ControllerBase
     private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<RulesController> _logger;
 
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="ruleTemplateService">An <see cref="IRuleTemplateService"/> instance.</param>
+    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
+    /// <param name="logger">An <see cref="ILogger{RulesController}"/> instance.</param>
     public RulesController(
         IRuleTemplateService ruleTemplateService,
         IRequestCorrelationProvider correlationProvider,
@@ -20,10 +29,18 @@ public class RulesController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Get rule template versions.
+    /// </summary>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>List of rule template versions.</returns>
     [HttpGet]
     [Route("/v1/rules/versions")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetVersions()
+    public async Task<IActionResult> GetVersions()
     {
         try
         {
@@ -38,10 +55,18 @@ public class RulesController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Get rule templates.
+    /// </summary>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>List of rule templates.</returns>
     [HttpGet]
     [Route("/v1/rules")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> Get()
+    public async Task<IActionResult> Get()
     {
         try
         {
@@ -56,10 +81,19 @@ public class RulesController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Get rule template by its rule version
+    /// </summary>
+    /// <param name="version">Rule version by which rule template to retrieve.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>Rule template.</returns>
     [HttpGet]
     [Route("/v1/rules/{version}")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetByVersion(string version)
+    public async Task<IActionResult> GetByVersion(string version)
     {
         try
         {
@@ -84,10 +118,19 @@ public class RulesController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Get rule template by its ID
+    /// </summary>
+    /// <param name="id">ID of the rule template to retrieve.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>Rule template.</returns>
     [HttpGet]
     [Route("/v1/rules/{id:guid}")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetById(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         try
         {
@@ -112,6 +155,16 @@ public class RulesController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Create rule template
+    /// </summary>
+    /// <param name="version">Schema version the rule template is created for.</param>
+    /// <param name="file">JSON file containing a full rule template.</param>
+    /// <response code="201">Created.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the rule template.</returns>
     [HttpPost]
     [Route("/v1/rules/createFromFile/{version}")]
     [Consumes("multipart/form-data")]
@@ -147,6 +200,16 @@ public class RulesController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Update an existing rule template
+    /// </summary>
+    /// <param name="version">Schema version the rule template is updated for.</param>
+    /// <param name="file">JSON file containing a full rule template.</param>
+    /// <response code="201">Created.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the rule template.</returns>
     [HttpPut]
     [Route("/v1/rules/updateFromFile/{version}")]
     [ValidateModelState]

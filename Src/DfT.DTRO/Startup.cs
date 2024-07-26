@@ -7,18 +7,20 @@ namespace DfT.DTRO;
 [ExcludeFromCodeCoverage]
 public class Startup
 {
-    private readonly IWebHostEnvironment _hostingEnv;
+    private IWebHostEnvironment Environment { get; }
 
     private IConfiguration Configuration { get; }
 
     public Startup(IWebHostEnvironment env, IConfiguration configuration)
     {
-        _hostingEnv = env;
+        Environment = env;
         Configuration = configuration;
     }
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddControllers();
+        services.AddEndpointsApiExplorer();
         services
             .AddMvc(options =>
             {
@@ -34,7 +36,7 @@ public class Startup
             })
             .AddXmlSerializerFormatters();
 
-        services.AddSwagger(Configuration);
+        services.AddSwagger(Configuration, Environment);
         services.AddHealthChecks();
 
         services.AddFeatureManagement();
@@ -60,13 +62,12 @@ public class Startup
         services.AddScoped<IMetricDal, MetricDal>();
         services.AddScoped<ISwaCodeDal, SwaCodeDal>();
         services.AddScoped<ITraService, TraService>();
+        services.TryAddSingleton<ISystemClock, SystemClock>();
 
         services.AddStorage(Configuration);
         services.AddJsonLogic();
         services.AddRequestCorrelation();
         services.AddCache(Configuration);
-        services.TryAddSingleton<ISystemClock, SystemClock>();
-        services.AddMvc();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -78,12 +79,15 @@ public class Startup
 
         app.UseAuthorization();
 
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
+        if (env.IsDevelopment())
         {
-            c.SwaggerEndpoint("/swagger/0.0.1/swagger.json", "DTRO - OpenAPI 3.0");
-            c.RoutePrefix = string.Empty;
-        });
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/0.0.1/swagger.json", "DTRO - OpenAPI 3.0");
+                c.RoutePrefix = string.Empty;
+            });
+        }
 
         app.UseEndpoints(endpoints =>
         {
