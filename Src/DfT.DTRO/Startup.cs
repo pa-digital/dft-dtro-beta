@@ -129,6 +129,7 @@ public class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+            DbInitialize.RunSqlStatement(app);
         }
         else
         {

@@ -39,8 +39,6 @@ public partial class DtroContext : DbContext
             });
 
         modelBuilder.ApplyConfiguration(new SwaCodeSeedConfiguration());
-
-        DbInitialize.RunSqlStatement(this);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
