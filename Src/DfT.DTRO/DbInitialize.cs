@@ -2,6 +2,8 @@
 
 namespace DfT.DTRO;
 
+//TODO: The class and method below will be removed once
+//TODO: access to query the deployed database is granted
 public static class DbInitialize
 {
     public static void RunSqlStatement(IApplicationBuilder app)
