@@ -1,22 +1,6 @@
 [
   {
     "id": 1,
-    "message": "The 'CurrentTraOwnerInSwaCodes' value must be one of the recognised SWA codes.",
-    "name": "CurrentTraOwnerInSwaCodes",
-    "path": "source.currentTraOwner",
-    "rule": {
-      "in": [
-        {
-          "var": "source.currentTraOwner"
-        },
-        {
-          "service_data": "swa_codes"
-        }
-      ]
-    }
-  },
-  {
-    "id": 2,
     "message": "weekInMonth instances must be unique.",
     "name": "ExceptionPeriodApplicableInstanceOfDayWithinMonthInstancesUnique",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod.recurringDayWeekMonthPeriod.applicableInstanceOfDayWithinMonth",
@@ -86,7 +70,7 @@
     }
   },
   {
-    "id": 3,
+    "id": 2,
     "message": "weekInMonth instances must be unique.",
     "name": "ExceptionPeriodApplicableWeekInstancesUnique",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod.recurringDayWeekMonthPeriod.applicableWeek",
@@ -156,7 +140,7 @@
     }
   },
   {
-    "id": 4,
+    "id": 3,
     "message": "Period end date must not be later than overall period end date.",
     "name": "ExceptionPeriodEndNotMoreThanOverallPeriodEnd",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod",
@@ -223,7 +207,7 @@
     }
   },
   {
-    "id": 5,
+    "id": 4,
     "message": "Period start time must be earlier than end time.",
     "name": "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod.recurringTimePeriodOfDay",
@@ -285,7 +269,7 @@
     }
   },
   {
-    "id": 6,
+    "id": 5,
     "message": "Period start date must be earlier than end date.",
     "name": "ExceptionPeriodStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod",
@@ -345,7 +329,7 @@
     }
   },
   {
-    "id": 7,
+    "id": 6,
     "message": "Period start date must not be earlier than overall period start date.",
     "name": "ExceptionPeriodStartNotLessThanOverallPeriodStart",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod",
@@ -407,7 +391,7 @@
     }
   },
   {
-    "id": 8,
+    "id": 7,
     "message": "weekInMonth instances must be unique.",
     "name": "ExceptionPeriodWeekInMonthInstancesUnique",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod.recurringDayWeekMonthPeriod.weekInMonth",
@@ -477,7 +461,7 @@
     }
   },
   {
-    "id": 9,
+    "id": 8,
     "message": "The 'lastUpdateDate' must be in the past",
     "name": "ExternalReferenceLastUpdateDate",
     "path": "source.provision.regulatedPlaces.externalReference.lastUpdateDate",
@@ -512,7 +496,7 @@
     }
   },
   {
-    "id": 10,
+    "id": 9,
     "message": "Field is required and 'grossVehicleWeight' must be greater than 0 and less than or equal to 50.",
     "name": "GrossWeightCharacteristicValidForRegulationTypes",
     "path": "source.provision.regulations.conditions.vehicleCharacteristics.grossWeightCharacteristic",
@@ -574,7 +558,7 @@
     }
   },
   {
-    "id": 11,
+    "id": 10,
     "message": "Field is required and 'heaviestAxleWeight' must be greater than 0 and less than or equal to 50.",
     "name": "HeaviestAxleWeightCharacteristicValidForRegulationTypes",
     "path": "source.provision.regulations.conditions.vehicleCharacteristics.heaviestAxleWeightCharacteristic",
@@ -636,7 +620,7 @@
     }
   },
   {
-    "id": 12,
+    "id": 11,
     "message": "'comparisonOperator' must be 'lessThan' or 'lessThanOrEqualTo' and 'vehicleHeight' must be between 0 and 6.",
     "name": "HeightCharacteristicValidForRegulationTypeDimensionMaximumHeightStructural",
     "path": "source.provision.regulations.conditions.vehicleCharacteristics.heightCharacteristic",
@@ -706,7 +690,7 @@
     }
   },
   {
-    "id": 13,
+    "id": 12,
     "message": "'comparisonOperator' must be 'lessThan' or 'lessThanOrEqualTo' and 'vehicleHeight' must be between 0 and 6.",
     "name": "HeightCharacteristicValidForRegulationTypeDimensionMaximumHeightWithTRO",
     "path": "source.provision.regulations.conditions.vehicleCharacteristics.heightCharacteristic",
@@ -776,7 +760,7 @@
     }
   },
   {
-    "id": 14,
+    "id": 13,
     "message": "'comparisonOperator' must be 'lessThan' or 'lessThanOrEqualTo' and 'vehicleLength' must be between 0 and 40.",
     "name": "LengthCharacteristicValidForRegulationTypeDimensionMaximumLength",
     "path": "source.provision.regulations.conditions.vehicleCharacteristics.lengthCharacteristic",
@@ -846,7 +830,7 @@
     }
   },
   {
-    "id": 15,
+    "id": 14,
     "message": "'minTime' must be lower than 'maxTime'",
     "name": "MinTimeLessThanMaxTime",
     "path": "source.provision.regulations.overallPeriod.validityCondition.rateTable.rateLineCollection",
@@ -897,7 +881,7 @@
     }
   },
   {
-    "id": 16,
+    "id": 15,
     "message": "'minValueCollection' must be lower than 'maxValueCollection'",
     "name": "MinValueCollectionLessThanMax",
     "path": "source.provision.regulations.overallPeriod.validityCondition.rateTable.rateLineCollection",
@@ -948,7 +932,7 @@
     }
   },
   {
-    "id": 17,
+    "id": 16,
     "message": "'minValue' must be lower than 'maxValue'",
     "name": "MinValueLessThanMax",
     "path": "source.provision.regulations.overallPeriod.validityCondition.rateTable.rateLineCollection.rateLine",
@@ -1006,7 +990,7 @@
     }
   },
   {
-    "id": 18,
+    "id": 17,
     "message": "OverallPeriod start date must be earlier than the end date.",
     "name": "OverallPeriodStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod",
@@ -1045,7 +1029,7 @@
     }
   },
   {
-    "id": 19,
+    "id": 18,
     "message": "'provisionIndex' must match provision's index in the array.",
     "name": "ProvisionIndexSequential",
     "path": "source.provision.provisionIndex",
@@ -1070,7 +1054,7 @@
     }
   },
   {
-    "id": 20,
+    "id": 19,
     "message": "The 'publicationTime' must be less than one month in the past, and not in the future",
     "name": "PublicationTimeAge",
     "path": "header.publicationTime",
@@ -1106,7 +1090,7 @@
     }
   },
   {
-    "id": 21,
+    "id": 20,
     "message": "'sequence' must match object's index in the array.",
     "name": "RateLineCollectionSequential",
     "path": "source.provision.regulations.overallPeriod.validityCondition.rateTable.rateLineCollection",
@@ -1145,7 +1129,7 @@
     }
   },
   {
-    "id": 22,
+    "id": 21,
     "message": "'sequence' must match object's index in the array.",
     "name": "RateLineSequential",
     "path": "source.provision.regulations.overallPeriod.validityCondition.rateTable.rateLineCollection.rateLine",
@@ -1191,23 +1175,7 @@
     }
   },
   {
-    "id": 23,
-    "message": "The 'TRA' value must be one of the recognised SWA codes.",
-    "name": "TraCreatorInSwaCodes",
-    "path": "source.traCreator",
-    "rule": {
-      "in": [
-        {
-          "var": "source.traCreator"
-        },
-        {
-          "service_data": "swa_codes"
-        }
-      ]
-    }
-  },
-  {
-    "id": 24,
+    "id": 22,
     "message": "Period end date must not be later than overall period end date.",
     "name": "ValidPeriodEndNotMoreThanOverallPeriodEnd",
     "path": "source.provision.regulations.overallPeriod.validPeriod",
@@ -1274,7 +1242,7 @@
     }
   },
   {
-    "id": 25,
+    "id": 23,
     "message": "Period start time must be earlier than end time.",
     "name": "ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.validPeriod.recurringTimePeriodOfDay",
@@ -1336,7 +1304,7 @@
     }
   },
   {
-    "id": 26,
+    "id": 24,
     "message": "Period start date must be earlier than end date.",
     "name": "ValidPeriodStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.validPeriod",
@@ -1396,7 +1364,7 @@
     }
   },
   {
-    "id": 27,
+    "id": 25,
     "message": "Period start date must not be earlier than overall period start date.",
     "name": "ValidPeriodStartNotLessThanOverallPeriodStart",
     "path": "source.provision.regulations.overallPeriod.validPeriod",
@@ -1458,7 +1426,7 @@
     }
   },
   {
-    "id": 28,
+    "id": 26,
     "message": "'startValidUsagePeriod' must be lower than 'endValidUsagePeriod'",
     "name": "ValidUsagePeriodStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.validityCondition.rateTable.rateLineCollection",
@@ -1504,7 +1472,7 @@
     }
   },
   {
-    "id": 29,
+    "id": 27,
     "message": "weekInMonth instances must be unique.",
     "name": "ValidityPeriodApplicableInstanceOfDayWithinMonthInstancesUnique",
     "path": "source.provision.regulations.overallPeriod.validityPeriod.recurringDayWeekMonthPeriod.applicableInstanceOfDayWithinMonth",
@@ -1574,7 +1542,7 @@
     }
   },
   {
-    "id": 30,
+    "id": 28,
     "message": "weekInMonth instances must be unique.",
     "name": "ValidityPeriodApplicableWeekInstancesUnique",
     "path": "source.provision.regulations.overallPeriod.validityPeriod.recurringDayWeekMonthPeriod.applicableWeek",
@@ -1644,7 +1612,7 @@
     }
   },
   {
-    "id": 31,
+    "id": 29,
     "message": "weekInMonth instances must be unique.",
     "name": "ValidityPeriodWeekInMonthInstancesUnique",
     "path": "source.provision.regulations.overallPeriod.validityPeriod.recurringDayWeekMonthPeriod.weekInMonth",
@@ -1714,7 +1682,7 @@
     }
   },
   {
-    "id": 32,
+    "id": 30,
     "message": "'comparisonOperator' must be 'lessThan' or 'lessThanOrEqualTo' and 'vehicleHeight' must be between 0 and 6.",
     "name": "WidthCharacteristicValidForRegulationTypeDimensionMaximumWidth",
     "path": "source.provision.regulations.conditions.vehicleCharacteristics.widthCharacteristic",
@@ -1784,7 +1752,7 @@
     }
   },
   {
-    "id": 33,
+    "id": 31,
     "message": "The 'yearOfFirstRegistration' must less than or equal to current year value.",
     "name": "YearOfFirstRegistrationLessOrEqualToCurrentYearValueInConditions",
     "path": "source.provision.regulations.conditions.vehicleCharacteristics.yearOfFirstRegistration",
@@ -1843,7 +1811,7 @@
     }
   },
   {
-    "id": 34,
+    "id": 32,
     "message": "The 'yearOfFirstRegistration' must be less than or equal to the current year value.",
     "name": "YearOfFirstRegistrationLessOrEqualToCurrentYearValueInOverallPeriod",
     "path": "source.provision.regulations.overallPeriod.validityCondition.conditionSet.conditions.vehicleCharacteristics.yearOfFirstRegistration",
