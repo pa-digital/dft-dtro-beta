@@ -20,7 +20,7 @@ env:
   TF_VAR_region: ${{ vars.DEFAULT_GCP_REGION }}
   TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID_DEV }} #TODO: Change to test after verification
   TF_VAR_execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
-  TF_VAR_artifact_registry_image_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ vars.GCP_PROJECT_DEV }}-int-repository/${{ vars.DTRO_IMAGE_NAME }} #TODO: Change to test after verification
+  TF_VAR_artifact_registry_image_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID_DEV }}/${{ vars.GCP_PROJECT_DEV }}-int-repository/${{ vars.DTRO_IMAGE_NAME }} #TODO: Change to test after verification
   TF_VAR_dtro_service_image: ${{ vars.DTRO_IMAGE_NAME }}
   TF_VAR_tag: ${{ vars.DTRO_IMAGE_TAG }}
 
