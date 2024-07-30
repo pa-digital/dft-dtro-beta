@@ -131,7 +131,8 @@ public class Startup
             app.UseDeveloperExceptionPage();
             //TODO: The line below will be removed once access
             //TODO: to query the deployed database is granted
-            DbInitialize.RunSqlStatement(app);
+            DbInitialize dbInitialize = new(loggerFactory.CreateLogger<DbInitialize>());
+            dbInitialize.RunSqlStatement(app);
         }
         else
         {
