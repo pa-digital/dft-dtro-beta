@@ -20,7 +20,7 @@ env:
   TF_VAR_region: ${{ vars.DEFAULT_GCP_REGION }}
   TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID_DEV }} #TODO: Change to test after verification
   TF_VAR_execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
-  TF_VAR_artifact_registry_image_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID_DEV }}/${{ vars.GCP_PROJECT_DEV }}-int-repository/${{ vars.DTRO_IMAGE_NAME }} #TODO: Change to test after verification
+  TF_VAR_artifact_registry_image_path: ${{ vars.DEFAULT_GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID_DEV }}/${{ vars.GCP_PROJECT_DEV }}-int-repository/${{ vars.DTRO_IMAGE_NAME }} #TODO: Change to test after verification
   TF_VAR_dtro_service_image: ${{ vars.DTRO_IMAGE_NAME }}
   TF_VAR_tag: ${{ vars.DTRO_IMAGE_TAG }}
 
@@ -55,8 +55,8 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.workload_identity_provider }}
-          service_account: ${{ secrets.wip_service_account }}
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }} #TODO: Change to test after verification
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }} #TODO: Change to test after verification
 
       - name: Authenticate Docker with the Artifact Registry repository
         run: gcloud auth configure-docker europe-west1-docker.pkg.dev
@@ -127,8 +127,6 @@ jobs:
       run:
         shell: bash
         working-directory: apigee
-    env:
-      name_prefix: dtro-${{ inputs.environment }}-apigee
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -140,9 +138,9 @@ jobs:
         run: ./environments/load_environment_variables.sh
         env:
           github_ref: ${{ github.ref }}
-          environment: ${{ inputs.environment }}
-          service_account: ${{ secrets.wip_service_account }}
-          apigee_organisation: ${{ inputs.gcp-project-id }}
+          environment: ${{ env.TF_VAR_environment }}
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
+          apigee_organisation: ${{ env.TF_VAR_project_id }}
 
       - name: Authenticate to Google Cloud
         id: google-auth
@@ -194,7 +192,7 @@ jobs:
   #        run: zip -r proxy.zip apiproxy
   #
   #      - name: Upload and Deploy API Proxy Bundle
-  #        run: apigeecli apis create bundle --name "${env}-server" --proxy-zip proxy.zip --env "${{ env.name_prefix }}-environment" --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
+  #        run: apigeecli apis create bundle --name "${env}-server" --proxy-zip proxy.zip --env "dtro-${{ env.TF_VAR_integration_prefix }}-apigee-environment" --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
   #
   #      - name: Create Products
   #        run: |
