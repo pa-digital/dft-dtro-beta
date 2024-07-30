@@ -16,14 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Dockerfile" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Dockerfile" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
