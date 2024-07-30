@@ -20,7 +20,7 @@ env:
   TF_VAR_region: ${{ vars.DEFAULT_GCP_REGION }}
   TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID_DEV }} #TODO: Change to test after verification
   TF_VAR_execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
-  ar_repo_url: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ vars.GCP_PROJECT_DEV }}-int-repository/${{ inputs.dtro-image-name }}:${{ inputs.dtro-image-tag }} #TODO: Change to test after verification
+  TF_VAR_artifact_registry_image_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ vars.GCP_PROJECT_DEV }}-int-repository/${{ vars.DTRO_IMAGE_NAME }} #TODO: Change to test after verification
   TF_VAR_dtro_service_image: ${{ vars.DTRO_IMAGE_NAME }}
   TF_VAR_tag: ${{ vars.DTRO_IMAGE_TAG }}
 
@@ -68,13 +68,13 @@ jobs:
           platforms: linux/amd64
           push: true
           provenance: false
-          tags: ${{ env.ar_repo_url }}
+          tags: ${{ env.TF_VAR_artifact_registry_image_path }}:${{ env.TF_VAR_tag }}
 
   deploy-resources:
     name: Deploy GCP Resources to Integration
     if: ${{ inputs.run-terraform }}
-    #    needs:
-    #      - build-push-dtro
+    needs:
+      - build-push-dtro
     runs-on: ubuntu-latest
     permissions:
       id-token: write
