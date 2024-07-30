@@ -129,6 +129,9 @@ public class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+            //TODO: The line below will be removed once access
+            //TODO: to query the deployed database is granted
+            DbInitialize.RunSqlStatement(app);
         }
         else
         {
