@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using Dft.DTRO.Admin.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Primitives;
 
 public class TraListModel : PageModel
 {
@@ -64,9 +65,15 @@ public class TraListModel : PageModel
                     await _traService.ActivateTraAsync(traId);
                 }
             }
+            TraSearch.Search = TraSearch.PreviousSearch;
+            TraSearch.TraSelect = TraSearch.PreviousTraSelect;
         }
-  
-        return RedirectToPage(new { TraSearch.Search,TraSearch.TraSelect });
+        else
+        {
+            TraSearch.PreviousSearch = TraSearch.Search;
+            TraSearch.PreviousTraSelect = TraSearch.TraSelect;
+        }
+        return RedirectToPage(new { TraSearch.Search, TraSearch.TraSelect, TraSearch.PreviousTraSelect, TraSearch.PreviousSearch });
     }
 
     public IActionResult OnGetRefresh()
@@ -77,14 +84,29 @@ public class TraListModel : PageModel
 
     private void GetParams()
     {
-        if (TempData.TryGetValue("TraSelect", out object traSelect))
+        if (Request.Form.TryGetValue("TraSearch.TraSelect", out StringValues traSelectObj) )
         {
-            TraSearch.TraSelect = (int)traSelect;
+            TraSearch.TraSelect = Convert.ToInt32(traSelectObj[0]);
         }
-        if (TempData.TryGetValue("Search", out object search))
+        if (Request.Form.TryGetValue("TraSearch.Search", out StringValues searchObj))
         {
-            TraSearch.Search = (string)search;
+            TraSearch.Search = searchObj[0];
         }
+
+        if (Request.Form.TryGetValue("TraSearch.PreviousTraSelect", out StringValues previousTraSelectObj) )
+        {
+            if (int.TryParse(previousTraSelectObj[0], out int previousTraSelect))
+            {
+                TraSearch.PreviousTraSelect = previousTraSelect;
+            }
+            
+        }
+        if (Request.Form.TryGetValue("TraSearch.PreviousSearch", out StringValues previousSearchObj))
+        {
+
+            TraSearch.PreviousSearch = previousSearchObj[0];
+        }
+
     }
 
     public string FormatListToSingle(IEnumerable<string> items)

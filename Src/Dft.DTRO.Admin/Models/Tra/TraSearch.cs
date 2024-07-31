@@ -10,5 +10,9 @@ public class TraSearch
     public string UpdateButtonText { get; set; }
 
     public List<SwaCodeResponse> SwaCodes { get; set; } = new List<SwaCodeResponse>();
+
+    public int? PreviousTraSelect { get; set; }
+
+    public string PreviousSearch { get; set; } = string.Empty;
 }
 

@@ -5,6 +5,9 @@
         <label style="margin-right: 10px;">TRA</label>
         <input type="text" id="traSearch" name="TraSearch.Search"  placeholder="Search..." style="width: 100%; margin-right: 10px;" value="@Model.Search" />
         <input type="hidden" style="max-width: 30px;" id="selectedValue" name="TraSearch.TraSelect" />
+        <input type="hidden" style="max-width: 30px;" name="TraSearch.PreviousTraSelect" value="@Model.PreviousTraSelect" />
+        <input type="hidden" style="max-width: 30px;" name="TraSearch.PreviousSearch" value="@Model.PreviousSearch" />
+
         <input type="hidden" id="alwaysButtonEnabled" value="@Model.AlwaysButtonEnabled.ToString().ToLower()" />
         <button id="updateButton" class="btn btn-primary" type="submit">@Model.UpdateButtonText</button>
     </div>

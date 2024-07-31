@@ -3,6 +3,8 @@
 
 <h2>TRAs <a class="btn btn-primary" asp-page="TraEdit" asp-route-IsEdit="false">+</a></h2>
 
+
+
 <form id="searchSection" method="post" asp-page-handler="Update" style=" margin-top: 30px;margin-right: 20px;margin-bottom: 20px;">
     <div>
         @await Html.PartialAsync("_TraSearchPartial", Model.TraSearch)
