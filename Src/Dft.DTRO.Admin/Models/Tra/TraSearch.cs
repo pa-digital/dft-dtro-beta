@@ -7,7 +7,7 @@ public class TraSearch
 
     public  bool AlwaysButtonEnabled { get; set; }
 
-    public string UpdateButtonText { get; set; }
+    public string UpdateButtonText { get; set; } = string.Empty;
 
     public List<SwaCodeResponse> SwaCodes { get; set; } = new List<SwaCodeResponse>();
 
