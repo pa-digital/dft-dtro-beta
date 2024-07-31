@@ -45,6 +45,7 @@ public class TraListModel : PageModel
 
     public async Task<IActionResult> OnPostUpdate()
     {
+        OnGetAsync().Wait();
         GetParams();
         var action = Request.Form["action"];
 
@@ -53,23 +54,23 @@ public class TraListModel : PageModel
             if (traId != 0)
             {
                 TraSearch.SwaCodes = await _traService.GetSwaCodes();
-                var tra = TraSearch.SwaCodes.Find(s => s.TraId == traId);
-                if (tra == null) return NotFound();
+        var tra = TraSearch.SwaCodes.Find(s => s.TraId == traId);
+        if (tra == null) return NotFound();
 
-                if (tra.IsActive)
-                {
-                    await _traService.DeactivateTraAsync(traId);
-                }
-                else
-                {
-                    await _traService.ActivateTraAsync(traId);
-                }
-            }
-            TraSearch.Search = TraSearch.PreviousSearch;
-            TraSearch.TraSelect = TraSearch.PreviousTraSelect;
+        if (tra.IsActive)
+        {
+            await _traService.DeactivateTraAsync(traId);
         }
         else
         {
+            await _traService.ActivateTraAsync(traId);
+        }
+            }
+            TraSearch.Search = TraSearch.PreviousSearch;
+            TraSearch.TraSelect = TraSearch.PreviousTraSelect;
+    }
+        else
+    {
             TraSearch.PreviousSearch = TraSearch.Search;
             TraSearch.PreviousTraSelect = TraSearch.TraSelect;
         }
@@ -107,6 +108,8 @@ public class TraListModel : PageModel
             TraSearch.PreviousSearch = previousSearchObj[0];
         }
 
+        if (TempData.TryGetValue("Search", out object search))
+            TraSearch.Search = (string)search;
     }
 
     public string FormatListToSingle(IEnumerable<string> items)
