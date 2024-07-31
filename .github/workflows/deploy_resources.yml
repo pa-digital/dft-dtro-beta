@@ -146,8 +146,8 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -input=false -out terraform-plan-gcp-cr
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -input=false terraform-plan-gcp-cr
+#      - name: Terraform Apply
+#        run: terraform apply -auto-approve -input=false terraform-plan-gcp-cr
 
   build-apigee-proxies-and-products:
     if: ${{ inputs.run-apigee }}
