@@ -34,6 +34,6 @@ jobs:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_TEST }}
       gcp-project: ${{ vars.GCP_PROJECT_ID_TEST }}
       gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
-      environment: dev
+      environment: test
       dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
       dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
