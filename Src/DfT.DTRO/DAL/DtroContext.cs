@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.Extensions.Configuration;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions.Internal;
 using NpgsqlTypes;
@@ -37,8 +36,6 @@ public partial class DtroContext : DbContext
                 return new PostgresBinaryExpression(
                     PostgresExpressionType.Overlaps, args[0], args[1], args[0].Type, args[0].TypeMapping);
             });
-
-        modelBuilder.ApplyConfiguration(new SwaCodeSeedConfiguration());
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
