@@ -20,7 +20,7 @@ public class RecordManagementServiceTests
         IRecordManagementService sut = new RecordManagementService(mockSwaCodeDal.Object);
 
 
-        mockSwaCodeDal.Setup(it => it.GetAllCodes().Result).Returns(() => Utils.SwaCodesResponse);
+        mockSwaCodeDal.Setup(it => it.GetAllCodesAsync().Result).Returns(() => Utils.SwaCodesResponse);
 
         string input = File.ReadAllText(Path.Join(SourceJsonBasePath, $"{file}.json"));
 
