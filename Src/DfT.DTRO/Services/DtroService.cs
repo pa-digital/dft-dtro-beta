@@ -193,10 +193,9 @@ public class DtroService : IDtroService
     }
 
 
-
     public async Task<bool> AssignOwnershipAsync(Guid id, int? apiTraId, int assignToTraId, string correlationId)
     {
-        var swaList  = await _swaCodeDal.GetAllCodes();
+        var swaList  = await _swaCodeDal.GetAllCodesAsync();
 
         var found = swaList.FirstOrDefault(x => x.TraId == assignToTraId);
         if (found == null)

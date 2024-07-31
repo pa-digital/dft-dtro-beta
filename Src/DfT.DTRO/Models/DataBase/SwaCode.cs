@@ -27,4 +27,8 @@ public class SwaCode
 
     [DataMember(Name = "IsAdmin")]
     public bool IsAdmin { get; set; }
+
+
+    [DataMember(Name = "isActive")]
+    public bool IsActive { get; set; } = false;
 }
