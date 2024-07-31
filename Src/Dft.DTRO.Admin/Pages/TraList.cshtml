@@ -1,0 +1,62 @@
+﻿@page
+@model TraListModel
+
+<h2>TRAs <a class="btn btn-primary" asp-page="TraEdit" asp-route-IsEdit="false">+</a></h2>
+
+<form id="searchSection" method="post" asp-page-handler="Update" style=" margin-top: 30px;margin-right: 20px;margin-bottom: 20px;">
+    <div>
+        @await Html.PartialAsync("_TraSearchPartial", Model.TraSearch)
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>TRA Id</th>
+                <th>Prefix</th>
+                <th>Name</th>
+                <th>Active</th>
+                <th>Admin</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var swa in Model.FilteredSwaCodes)
+            {
+                <tr>
+                    <td>@swa.TraId</td>
+                    <td>@swa.Prefix</td>
+                    <td>@swa.Name</td>
+                    <td>
+                        @if (swa.IsActive)
+                        {
+                            <img src="~/images/tick.png" alt="Active" style="max-height:20px; vertical-align: middle;" />
+                        }
+                        else
+                        {
+                            <img src="~/images/cross.png" alt="Inactive" style="max-height:20px; vertical-align: middle;" />
+                        }
+                    </td>
+                    <td>
+                        @if (swa.IsAdmin)
+                        {
+                            <img src="~/images/tick.png" alt="Active" style="max-height:20px; vertical-align: middle;" />
+                        }
+                        else
+                        {
+                            <img src="~/images/cross.png" alt="Inactive" style="max-height:20px; vertical-align: middle;" />
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-info" asp-page="TraEdit" asp-route-IsEdit="true" asp-route-version="@swa.TraId">Edit</a>
+                        <form method="post" asp-page-handler="ToggleActive" asp-route-traId="@swa.TraId" class="d-inline">
+                            <button style="min-width: 100px;" class="btn btn-@(swa.IsActive ? "warning" : "success")" type="submit">
+                                @(swa.IsActive ? "Disable" : "Enable")
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
