@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Dft.DTRO.Admin.Services;
@@ -41,27 +42,30 @@ public class TraListModel : PageModel
         }
     }
 
-    public async Task<IActionResult> OnPostToggleActiveAsync(int traId)
+    public async Task<IActionResult> OnPostUpdate()
     {
-        OnGetAsync().Wait();
         GetParams();
-        var tra = TraSearch.SwaCodes.Find(s => s.TraId == traId);
-        if (tra == null) return NotFound();
+        var action = Request.Form["action"];
 
-        if (tra.IsActive)
+        if (int.TryParse(action,out int traId))
         {
-            await _traService.DeactivateTraAsync(traId);
-        }
-        else
-        {
-            await _traService.ActivateTraAsync(traId);
-        }
+            if (traId != 0)
+            {
+                TraSearch.SwaCodes = await _traService.GetSwaCodes();
+                var tra = TraSearch.SwaCodes.Find(s => s.TraId == traId);
+                if (tra == null) return NotFound();
 
-        return RedirectToPage(new { TraSearch.Search, TraSearch.TraSelect });
-    }
-
-    public IActionResult OnPostUpdate()
-    {
+                if (tra.IsActive)
+                {
+                    await _traService.DeactivateTraAsync(traId);
+                }
+                else
+                {
+                    await _traService.ActivateTraAsync(traId);
+                }
+            }
+        }
+  
         return RedirectToPage(new { TraSearch.Search,TraSearch.TraSelect });
     }
 
@@ -74,10 +78,13 @@ public class TraListModel : PageModel
     private void GetParams()
     {
         if (TempData.TryGetValue("TraSelect", out object traSelect))
+        {
             TraSearch.TraSelect = (int)traSelect;
-
+        }
         if (TempData.TryGetValue("Search", out object search))
+        {
             TraSearch.Search = (string)search;
+        }
     }
 
     public string FormatListToSingle(IEnumerable<string> items)

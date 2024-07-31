@@ -47,12 +47,14 @@
                         }
                     </td>
                     <td>
-                        <a class="btn btn-info" asp-page="TraEdit" asp-route-IsEdit="true" asp-route-version="@swa.TraId">Edit</a>
-                        <form method="post" asp-page-handler="ToggleActive" asp-route-traId="@swa.TraId" class="d-inline">
-                            <button style="min-width: 100px;" class="btn btn-@(swa.IsActive ? "warning" : "success")" type="submit">
-                                @(swa.IsActive ? "Disable" : "Enable")
-                            </button>
-                        </form>
+                        <a class="btn btn-info" asp-page="TraEdit" asp-route-IsEdit="true" asp-route-traId="@swa.TraId">Edit</a>
+                        <button type="submit" 
+                            name="action" 
+                            value= "@swa.TraId"
+                            class="btn btn-@(swa.IsActive ? "warning" : "success")" 
+                            style="min-width: 100px;">
+                            @(swa.IsActive ? "Disable" : "Enable")
+                        </button>
                     </td>
                 </tr>
             }
