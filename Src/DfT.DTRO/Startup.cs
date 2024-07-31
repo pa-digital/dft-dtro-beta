@@ -126,6 +126,7 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
+        DbInitialize.SeedSwaCodes(app);
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
