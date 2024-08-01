@@ -153,7 +153,7 @@ jobs:
     if: ${{ inputs.run-apigee }}
     name: Build GCP Apigee proxies and products in ${{ inputs.environment }}
     #    needs:
-    #      - deploy-apigee-proxies-and-portal
+    #      - deploy-dtro
     runs-on: ubuntu-latest
     permissions:
       id-token: write

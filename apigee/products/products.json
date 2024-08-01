@@ -1,7 +1,7 @@
 [
   {
-    "name": "ENV-traffic-regulator-authority",
-    "displayName": "ENV Traffic Regulator Authority",
+    "name": "ENV-central-service-provider",
+    "displayName": "ENV Central ServiceProvider",
     "approvalType": "manual",
     "attributes": [
       {
@@ -13,7 +13,7 @@
       "ENV-environment"
     ],
     "scopes": [
-      "tra"
+      "cso"
     ],
     "createdAt": "1719227113878",
     "lastModifiedAt": "1719227144037",
@@ -59,6 +59,51 @@
     ],
     "scopes": [
       "sp"
+    ],
+    "createdAt": "1719227113878",
+    "lastModifiedAt": "1719227144037",
+    "operationGroup": {
+      "operationConfigs": [
+        {
+          "apiSource": "ENV-server",
+          "operations": [
+            {
+              "resource": "/**"
+            }
+          ],
+          "quota": {}
+        },
+        {
+          "apiSource": "oauth-generator",
+          "operations": [
+            {
+              "resource": "/oauth-generator",
+              "methods": [
+                "POST"
+              ]
+            }
+          ],
+          "quota": {}
+        }
+      ],
+      "operationConfigType": "proxy"
+    }
+  },
+  {
+    "name": "ENV-service-consumer",
+    "displayName": "ENV Service Consumer",
+    "approvalType": "manual",
+    "attributes": [
+      {
+        "name": "access",
+        "value": "public"
+      }
+    ],
+    "environments": [
+      "ENV-environment"
+    ],
+    "scopes": [
+      "sc"
     ],
     "createdAt": "1719227113878",
     "lastModifiedAt": "1719227144037",
