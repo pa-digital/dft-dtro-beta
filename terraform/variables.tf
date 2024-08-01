@@ -33,13 +33,25 @@ variable "execution_service_account" {
   description = "Service account for executing GCP applications."
 }
 
-variable "artifact_registry_image_path" {
+variable "artifact_registry_dtro_image_path" {
   type        = string
   description = "Path of the image in Artifact Registry"
   default     = "europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-repository/dft-dtro-beta"
 }
 
+variable "artifact_registry_service_ui_image_path" {
+  type        = string
+  description = "Path of the image in Artifact Registry"
+  default     = "europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-ui-repository/dft-dtro-beta"
+}
+
 variable "dtro_service_image" {
+  type        = string
+  description = "The name of an image being pushed for publish service."
+  default     = "dft-dtro-beta"
+}
+
+variable "service_ui_image" {
   type        = string
   description = "The name of an image being pushed for publish service."
   default     = "dft-dtro-beta"

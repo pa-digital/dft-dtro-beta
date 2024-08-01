@@ -20,8 +20,10 @@ env:
   TF_VAR_region: ${{ vars.DEFAULT_GCP_REGION }}
   TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID_DEV }} #TODO: Change to test after verification
   TF_VAR_execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
-  TF_VAR_artifact_registry_image_path: ${{ vars.DEFAULT_GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID_DEV }}/${{ vars.GCP_PROJECT_DEV }}-int-repository/${{ vars.DTRO_IMAGE_NAME }} #TODO: Change to test after verification
+  TF_VAR_artifact_registry_dtro_image_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ inputs.gcp-project }}-repository/${{ inputs.dtro-image-name }}
+  TF_VAR_artifact_registry_service_ui_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ inputs.gcp-project }}-ui-repository/${{ inputs.dtro-image-name }}
   TF_VAR_dtro_service_image: ${{ vars.DTRO_IMAGE_NAME }}
+  TF_VAR_service_ui_image: ${{ vars.DTRO_IMAGE_NAME }}
   TF_VAR_tag: ${{ vars.DTRO_IMAGE_TAG }}
 
 permissions:
@@ -61,14 +63,23 @@ jobs:
       - name: Authenticate Docker with the Artifact Registry repository
         run: gcloud auth configure-docker europe-west1-docker.pkg.dev
 
-      - name: Build and push Docker image to Artifact Registry
+      - name: Build and push DTRO Docker image to Artifact Registry
         uses: docker/build-push-action@v6.1.0
         with:
           context: dft-dtro-beta/Src/DfT.DTRO
           platforms: linux/amd64
           push: true
           provenance: false
-          tags: ${{ env.TF_VAR_artifact_registry_image_path }}:${{ env.TF_VAR_tag }}
+          tags: ${{ env.TF_VAR_artifact_registry_dtro_image_path }}:${{ env.TF_VAR_tag }}
+
+      - name: Build and push Service Portal Docker image to Artifact Registry
+        uses: docker/build-push-action@v6.1.0
+        with:
+          context: dft-dtro-beta/Src/DfT.DTRO.Admin
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: ${{ env.TF_VAR_artifact_registry_service_ui_path }}:${{ env.TF_VAR_tag }}
 
   deploy-resources:
     name: Deploy GCP Resources to Integration
