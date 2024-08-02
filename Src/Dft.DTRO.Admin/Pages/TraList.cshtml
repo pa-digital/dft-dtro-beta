@@ -3,6 +3,7 @@
 
 <h2>TRAs <a class="btn btn-primary" asp-page="TraEdit" asp-route-IsEdit="false">+</a></h2>
 
+<input  style="color: palegoldenrod" name="TraSearch.PreviousSearch" value="@Model.TraSearch.PreviousSearch" />
 
 
 <form id="searchSection" method="post" asp-page-handler="Update" style=" margin-top: 30px;margin-right: 20px;margin-bottom: 20px;">
@@ -49,7 +50,9 @@
                         }
                     </td>
                     <td>
-                        <a class="btn btn-info" asp-page="TraEdit" asp-route-IsEdit="true" asp-route-traId="@swa.TraId">Edit</a>
+                        <a class="btn btn-info" asp-page="TraEdit" asp-route-IsEdit="true" asp-route-search="@Model.TraSearch.PreviousSearch" asp-route-traId="@swa.TraId">Edit</a>
+                       
+                        
                         <button type="submit" 
                             name="action" 
                             value= "@swa.TraId"

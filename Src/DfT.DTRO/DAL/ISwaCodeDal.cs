@@ -7,6 +7,7 @@ public interface ISwaCodeDal
     Task<GuidResponse> DeActivateTraAsync(int traId);
     Task<List<SwaCodeResponse>> GetAllCodesAsync();
     Task<List<SwaCodeResponse>> SearchSwaCodesAsync(string partialName);
+    Task<SwaCodeResponse> GetSwaCodeAsync(int traId);
     Task<SwaCode> GetTraAsync(int traId);
     Task<GuidResponse> SaveTraAsync(SwaCodeRequest swaCodeRequest);
     Task<bool> TraExistsAsync(int traId);
