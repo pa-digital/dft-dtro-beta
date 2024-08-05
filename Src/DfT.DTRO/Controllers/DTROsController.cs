@@ -275,7 +275,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            DtroResponse dtroResponse = await _dtroService.GetDtroByIdAsync(id);
+            var dtroResponse = await _dtroService.GetDtroByIdAsync(id);
             _logger.LogInformation($"'{nameof(GetById)}' method called using '{id}' unique identifier");
             return Ok(dtroResponse);
         }

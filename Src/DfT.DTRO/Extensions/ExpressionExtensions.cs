@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace DfT.DTRO.Extensions;
+﻿namespace DfT.DTRO.Extensions;
 
 public static class ExpressionExtensions
 {
@@ -20,19 +18,19 @@ public static class ExpressionExtensions
         return Expression.Lambda<Func<T, bool>>(Expression.OrElse(current.Body, body2WithParam1), parameter1);
     }
 
-    public static Expression<Func<T, bool>> AllOf<T>(IEnumerable<Expression<Func<T, bool>>> expressions)
+    public static Expression<Func<T, bool>> AllOf<T>(this IEnumerable<Expression<Func<T, bool>>> expressions)
     {
-        var expr = expressions.First();
+        var expression = expressions.First();
 
         foreach (var next in expressions.Skip(1))
         {
-            expr = expr.AndAlso(next);
+            expression = expression.AndAlso(next);
         }
 
-        return expr;
+        return expression;
     }
 
-    public static Expression<Func<T, bool>> AnyOf<T>(IEnumerable<Expression<Func<T, bool>>> expressions)
+    public static Expression<Func<T, bool>> AnyOf<T>(this IEnumerable<Expression<Func<T, bool>>> expressions)
     {
         var expr = expressions.First();
 

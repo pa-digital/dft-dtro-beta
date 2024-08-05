@@ -60,7 +60,6 @@ public class MetricsController : ControllerBase
     [SwaggerResponse(statusCode: 200, description: "Successfully received the Tra Id")]
     [SwaggerResponse(statusCode: 404, description: "TRA ID not found in header.")]
     [SwaggerResponse(statusCode: 500, description: "Api server error.")]
-
     public ActionResult<int?> HealthTraId([FromHeader(Name = "TA")][Required] int? ta)
     {
         try
