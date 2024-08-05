@@ -1,19 +1,20 @@
-﻿using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.SwaCode;
-using Microsoft.EntityFrameworkCore;
+﻿namespace DfT.DTRO.DAL;
 
-namespace DfT.DTRO.DAL;
-
+/// <summary>
+/// Implementation of the <see cref="ISwaCodeDal"/> service.
+/// </summary>
 [ExcludeFromCodeCoverage]
 public class SwaCodeDal : ISwaCodeDal
 {
     private readonly DtroContext _dtroContext;
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="dtroContext"><see cref="DtroContext"/> database context.</param>
     public SwaCodeDal(DtroContext dtroContext) => _dtroContext = dtroContext;
 
+    ///<inheritdoc cref="ISwaCodeDal"/>
     public async Task<List<SwaCodeResponse>> GetAllCodesAsync() =>
         await _dtroContext.SwaCodes
             .OrderBy(swaCode => swaCode.Name)
@@ -27,6 +28,7 @@ public class SwaCodeDal : ISwaCodeDal
             })
             .ToListAsync();
 
+    ///<inheritdoc cref="ISwaCodeDal"/>
     public async Task<List<SwaCodeResponse>> SearchSwaCodesAsync(string partialName) =>
      await _dtroContext.SwaCodes
          .Where(swaCode => EF.Functions.Like(swaCode.Name.ToLower(), $"%{partialName.ToLower()}%"))
@@ -41,7 +43,7 @@ public class SwaCodeDal : ISwaCodeDal
          })
          .ToListAsync();
 
-
+    ///<inheritdoc cref="ISwaCodeDal"/>
     public async Task<GuidResponse> ActivateTraAsync(int traId)
     {
         if (!await TraExistsAsync(traId))
@@ -55,6 +57,7 @@ public class SwaCodeDal : ISwaCodeDal
         return new GuidResponse() { Id = existing.Id };
     }
 
+    ///<inheritdoc cref="ISwaCodeDal"/>
     public async Task<GuidResponse> DeActivateTraAsync(int traId)
     {
         if (!await TraExistsAsync(traId))
@@ -68,17 +71,21 @@ public class SwaCodeDal : ISwaCodeDal
         return new GuidResponse() { Id = existing.Id };
     }
 
+    ///<inheritdoc cref="ISwaCodeDal"/>
     public async Task<bool> TraExistsAsync(int traId)
     {
         var exists = await _dtroContext.SwaCodes.AnyAsync(it => it.TraId == traId);
         return exists;
     }
+
+    ///<inheritdoc cref="ISwaCodeDal"/>
     public async Task<SwaCode> GetTraAsync(int traId)
     {
         var ret = await _dtroContext.SwaCodes.FirstOrDefaultAsync(b => b.TraId == traId);
         return ret;
     }
 
+    ///<inheritdoc cref="ISwaCodeDal"/>
     public async Task<GuidResponse> SaveTraAsync(SwaCodeRequest swaCodeRequest)
     {
         var swaCode = new SwaCode();
@@ -102,6 +109,7 @@ public class SwaCodeDal : ISwaCodeDal
         return response;
     }
 
+    ///<inheritdoc cref="ISwaCodeDal"/>
     public async Task<GuidResponse> UpdateTraAsync(SwaCodeRequest swaCodeRequest)
     {
         if (!await TraExistsAsync(swaCodeRequest.TraId))

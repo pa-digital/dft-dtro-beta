@@ -1,14 +1,14 @@
 ﻿namespace DfT.DTRO.DAL;
 
 /// <summary>
-/// Service interface providing methods that storage for Rule Templates.
+/// Service interface providing methods that storage Rule Templates.
 /// </summary>
 public interface IRuleTemplateDal
 {
     /// <summary>
     /// Get rule templates by <paramref name="schemaVersion"/>
     /// </summary>
-    /// <param name="schemaVersion">Schema version to get by.</param>
+    /// <param name="schemaVersion">Schema version to get rule template by.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous get operation.</returns>
     Task<IEnumerable<JsonLogicValidationRule>> GetRuleTemplateDeserializeAsync(SchemaVersion schemaVersion);
 
@@ -33,7 +33,7 @@ public interface IRuleTemplateDal
     Task<List<RuleTemplate>> GetRuleTemplatesAsync();
 
     /// <summary>
-    /// Get rule template versions
+    /// Get rule template versions.
     /// </summary>
     /// <returns>A <see cref="Task"/> representing the asynchronous get operation.</returns>
     Task<List<RuleTemplateOverview>> GetRuleTemplatesVersionsAsync();
@@ -61,7 +61,7 @@ public interface IRuleTemplateDal
     /// <summary>
     /// Save a rule template by its <paramref name="version"/>
     /// </summary>
-    /// <param name="version">Rule version.</param>
+    /// <param name="version">Rule version to get rule template by.</param>
     /// <param name="rule">JSON object representing a rule template.</param>
     /// <param name="correlationId">Correlation ID passed when submitting the rule template.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
@@ -70,7 +70,7 @@ public interface IRuleTemplateDal
     /// <summary>
     /// Update an existing rule template by its <paramref name="version"/>
     /// </summary>
-    /// <param name="version">Rule version.</param>
+    /// <param name="version">Rule version to get rule template by.</param>
     /// <param name="rule">JSON object representing a rule template.</param>
     /// <param name="correlationId">Correlation ID passed when submitting the rule template.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>

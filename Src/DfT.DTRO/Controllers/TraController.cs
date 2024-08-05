@@ -52,7 +52,7 @@ public class TraController : ControllerBase
     /// <summary>
     /// Find the existing SWA Codes that matches the requested criteria.
     /// </summary>
-    /// <param name="partialName">Partial name of the Street Work Manager</param>
+    /// <param name="partialName">Partial name of the Street Work Act</param>
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="400">Bad Request.</response>
@@ -113,7 +113,7 @@ public class TraController : ControllerBase
     }
 
     /// <summary>
-    /// Update an existing Street Work Manager
+    /// Update an existing Street Work Act.
     /// </summary>
     /// <param name="body">Object containing a full SWA details.</param>
     /// <response code="200">OK.</response>
@@ -155,9 +155,9 @@ public class TraController : ControllerBase
     }
 
     /// <summary>
-    /// Activate the Street Work Manager.
+    /// Activate the Street Work Act.
     /// </summary>
-    /// <param name="traId">ID of the SWA by which Street Work Manager will be activated.</param>
+    /// <param name="traId">ID of the SWA by which Street Work Act will be activated.</param>
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="400">Bad Request.</response>
@@ -197,9 +197,9 @@ public class TraController : ControllerBase
     }
 
     /// <summary>
-    /// Deactivate the Street Work Manager.
+    /// Deactivate the Street Work Act.
     /// </summary>
-    /// <param name="traId">ID of the SWA by which Street Work Manager will be deactivated.</param>
+    /// <param name="traId">ID of the SWA by which Street Work Act will be deactivated.</param>
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="400">Bad Request.</response>

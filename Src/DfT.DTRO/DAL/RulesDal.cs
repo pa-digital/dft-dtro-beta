@@ -12,10 +12,7 @@ public class RuleTemplateDal : IRuleTemplateDal
     /// Default constructor.
     /// </summary>
     /// <param name="dtroContext"><see cref="DtroContext"/> database context.</param>
-    public RuleTemplateDal(DtroContext dtroContext)
-    {
-        _dtroContext = dtroContext;
-    }
+    public RuleTemplateDal(DtroContext dtroContext) => _dtroContext = dtroContext;
 
     ///<inheritdoc cref="IRuleTemplateDal"/>
     public async Task<bool> RuleTemplateExistsAsync(SchemaVersion schemaVersion)
