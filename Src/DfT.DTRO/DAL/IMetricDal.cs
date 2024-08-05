@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.DAL;
+﻿using DfT.DTRO.Enums;
+
+namespace DfT.DTRO.DAL;
 
 /// <summary>
 /// Service interface providing methods that support metrics capture.

@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.DAL;
+﻿using DfT.DTRO.Enums;
+
+namespace DfT.DTRO.DAL;
 
 /// <summary>
 /// Implementation of <see cref="IMetricDal"/> service.

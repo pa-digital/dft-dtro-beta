@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using DfT.DTRO.Controllers;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Moq;
-using Xunit;
+﻿using DfT.DTRO.Models.SwaCode;
 
-namespace Dft.DTRO.Tests.CodeiumTests.Tra.Controler;
+namespace Dft.DTRO.Tests.CodeiumTests.Tra.Controller;
+
 public class TraControllerTests
 {
     private readonly Mock<ITraService> _traServiceMock;
