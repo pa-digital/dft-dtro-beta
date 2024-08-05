@@ -1,45 +1,43 @@
 ﻿namespace DfT.DTRO.Models;
 
-[ExcludeFromCodeCoverage]
-public class ApiSettings
+public class OpenApiInfoSettings
 {
     private readonly IConfiguration _configuration;
 
-    public ApiSettings(IConfiguration configuration) =>
+    public OpenApiInfoSettings(IConfiguration configuration) =>
         _configuration = configuration;
 
     public string Version =>
         Environment.GetEnvironmentVariable(nameof(Version)) ??
-        Get<string>(_configuration, nameof(Version));
+        _configuration.GetProperty<string>(nameof(OpenApiInfoSettings), nameof(Version));
 
     public string Title =>
         Environment.GetEnvironmentVariable(nameof(Title)) ??
-        Get<string>(_configuration, nameof(Title));
+        _configuration.GetProperty<string>(nameof(OpenApiInfoSettings), nameof(Title));
 
     public string Description =>
         Environment.GetEnvironmentVariable(nameof(Description)) ??
-        Get<string>(_configuration, nameof(Description));
+        _configuration.GetProperty<string>(nameof(OpenApiInfoSettings), nameof(Description));
 
     public string TermsOfService =>
         Environment.GetEnvironmentVariable(nameof(TermsOfService)) ??
-        Get<string>(_configuration, nameof(TermsOfService));
+        _configuration.GetProperty<string>(nameof(OpenApiInfoSettings), nameof(TermsOfService));
 
     public string ContactName =>
         Environment.GetEnvironmentVariable(nameof(ContactName)) ??
-        Get<string>(_configuration, nameof(ContactName));
+        _configuration.GetProperty<string>(nameof(OpenApiInfoSettings), nameof(ContactName));
 
     public string ContactUrl =>
         Environment.GetEnvironmentVariable(nameof(ContactUrl)) ??
-        Get<string>(_configuration, nameof(ContactUrl));
+        _configuration.GetProperty<string>(nameof(OpenApiInfoSettings), nameof(ContactUrl));
 
     public string LicenseName =>
         Environment.GetEnvironmentVariable(nameof(LicenseName)) ??
-        Get<string>(_configuration, nameof(LicenseName));
+        _configuration.GetProperty<string>(nameof(OpenApiInfoSettings), nameof(LicenseName));
 
     public string LicenseUrl =>
         Environment.GetEnvironmentVariable(nameof(LicenseUrl)) ??
-        Get<string>(_configuration, nameof(LicenseUrl));
+        _configuration.GetProperty<string>(nameof(OpenApiInfoSettings), nameof(LicenseUrl));
 
-    private static T Get<T>(IConfiguration configuration, string property) =>
-        configuration.GetSection(nameof(ApiSettings)).GetValue<T>(property);
+
 }
