@@ -29,7 +29,7 @@ public class DtroDal : IDtroDal
     ///<inheritdoc cref="IDtroService"/>
     public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime)
     {
-        Models.DataBase.DTRO existing = await _dtroContext.Dtros.FindAsync(id);
+        var existing = await _dtroContext.Dtros.FindAsync(id);
 
         if (existing is null || existing.Deleted)
         {

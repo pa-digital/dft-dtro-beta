@@ -1,45 +1,50 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.DAL;
-using DfT.DTRO.JsonLogic;
-using DfT.DTRO.Models.RuleTemplate;
-using Microsoft.EntityFrameworkCore;
-using SchemaVersion = DfT.DTRO.Models.SchemaTemplate.SchemaVersion;
+﻿namespace DfT.DTRO.DAL;
 
-namespace DfT.DTRO.Services;
-
+/// <summary>
+/// Implementation of the <see cref="IRuleTemplateDal"/> service.
+/// </summary>
 [ExcludeFromCodeCoverage]
 public class RuleTemplateDal : IRuleTemplateDal
 {
     private readonly DtroContext _dtroContext;
 
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="dtroContext"><see cref="DtroContext"/> database context.</param>
     public RuleTemplateDal(DtroContext dtroContext)
     {
         _dtroContext = dtroContext;
     }
 
+    ///<inheritdoc cref="IRuleTemplateDal"/>
     public async Task<bool> RuleTemplateExistsAsync(SchemaVersion schemaVersion)
     {
         var exists = await _dtroContext.RuleTemplate.AnyAsync(it => it.SchemaVersion == schemaVersion);
         return exists;
     }
 
+    ///<inheritdoc cref="IRuleTemplateDal"/>
     public async Task<bool> RuleTemplateExistsByIdAsync(Guid id)
     {
         var exists = await _dtroContext.RuleTemplate.AnyAsync(it => it.Id == id);
         return exists;
     }
 
+    ///<inheritdoc cref="IRuleTemplateDal"/>
     public async Task<RuleTemplate> GetRuleTemplateByIdAsync(Guid id)
     {
         return await _dtroContext.RuleTemplate.FindAsync(id);
     }
 
+    ///<inheritdoc cref="IRuleTemplateDal"/>
     public async Task<RuleTemplate> GetRuleTemplateAsync(SchemaVersion schemaVersion)
     {
         var ret = await _dtroContext.RuleTemplate.FirstOrDefaultAsync(b => b.SchemaVersion == schemaVersion);
         return ret;
     }
 
+    ///<inheritdoc cref="IRuleTemplateDal"/>
     public async Task<IEnumerable<JsonLogicValidationRule>> GetRuleTemplateDeserializeAsync(SchemaVersion schemaVersion)
     {
         var dalRule = await _dtroContext.RuleTemplate.FirstOrDefaultAsync(b => b.SchemaVersion == schemaVersion);
@@ -49,20 +54,20 @@ public class RuleTemplateDal : IRuleTemplateDal
 
             return rules.ToList();
         }
-        catch (Exception ex)
+        catch
         {
-
-            throw ex;
+            return null;
         }
-
     }
 
+    ///<inheritdoc cref="IRuleTemplateDal"/>
     public async Task<List<RuleTemplate>> GetRuleTemplatesAsync()
     {
         var templates = await _dtroContext.RuleTemplate.ToListAsync();
         return templates;
     }
 
+    ///<inheritdoc cref="IRuleTemplateDal"/>
     public async Task<List<RuleTemplateOverview>> GetRuleTemplatesVersionsAsync()
     {
         var versions = await _dtroContext.RuleTemplate
@@ -75,6 +80,7 @@ public class RuleTemplateDal : IRuleTemplateDal
         return versions;
     }
 
+    ///<inheritdoc cref="IRuleTemplateDal"/>
     public async Task<GuidResponse> SaveRuleTemplateAsJsonAsync(string version, string rule, string correlationId)
     {
         var ruleTemplate = new RuleTemplate();
@@ -99,6 +105,7 @@ public class RuleTemplateDal : IRuleTemplateDal
         return response;
     }
 
+    ///<inheritdoc cref="IRuleTemplateDal"/>
     public async Task<GuidResponse> UpdateRuleTemplateAsJsonAsync(string version, string rule, string correlationId)
     {
         if (!await RuleTemplateExistsAsync(version))

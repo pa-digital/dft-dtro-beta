@@ -1,22 +1,26 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.Models.Metrics;
-using Microsoft.EntityFrameworkCore;
+﻿namespace DfT.DTRO.DAL;
 
-namespace DfT.DTRO.DAL;
-
+/// <summary>
+/// Implementation of <see cref="IMetricDal"/> service.
+/// </summary>
 [ExcludeFromCodeCoverage]
 public class MetricDal : IMetricDal
 {
     private readonly DtroContext _dtroContext;
 
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="dtroContext"><see cref="DtroContext"/> database context.</param>
     public MetricDal(DtroContext dtroContext)
     {
         _dtroContext = dtroContext;
     }
 
+    ///<inheritdoc cref="IMetricDal"/>
     public async Task<bool> IncrementMetric(MetricType type, int traId)
     {
-        DateOnly today = new DateOnly(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
+        var today = new DateOnly(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
         var metric = await _dtroContext.Metrics.FirstOrDefaultAsync(x => x.ForDate == today && x.TraId == traId);
         if (metric == null)
         {
@@ -49,11 +53,14 @@ public class MetricDal : IMetricDal
             case MetricType.Event:
                 metric.EventCount++;
                 break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
         await _dtroContext.SaveChangesAsync();
         return true;
     }
 
+    ///<inheritdoc cref="IMetricDal"/>
     public async Task<MetricSummary> GetMetricsForTra(int? traId, DateOnly fromDate, DateOnly toDate)
     {
         if (traId == null)
@@ -93,6 +100,7 @@ public class MetricDal : IMetricDal
 
     }
 
+    ///<inheritdoc cref="IMetricDal"/>
     public async Task<bool> HasValidConnectionAsync()
     {
         try
