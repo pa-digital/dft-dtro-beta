@@ -3,7 +3,7 @@
 namespace DfT.DTRO.Extensions.Configuration;
 
 [ExcludeFromCodeCoverage]
-public static class SerilogConfigurationExtensions
+public static class SerilogConfiguration
 {
     public static IHostBuilder ConfigureSerilog(this IHostBuilder hostBuilder) =>
         hostBuilder.UseSerilog((context, configuration) =>

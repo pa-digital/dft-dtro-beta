@@ -5,61 +5,75 @@ namespace DfT.DTRO.Extensions.Configuration;
 [ExcludeFromCodeCoverage]
 public static class SwaggerConfiguration
 {
+    private static InfoSettings _infoSettings;
+
     public static void AddSwagger(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
-        var openApiSecuritySchemeSettings = new OpenApiSecuritySchemeSettings(configuration);
-        var openApiSecurityRequirementSettings = new OpenApiSecurityReqiurementSettings(configuration);
-        var openApiInfoSettings = new OpenApiInfoSettings(configuration);
+        var securitySchemeSettings = new SecuritySchemeSettings(configuration);
+        var securityRequirementSettings = new SecurityReqiurementSettings(configuration);
+        _infoSettings = new InfoSettings(configuration);
         services.AddSwaggerGen(options =>
         {
             var openApiSecurityScheme = new OpenApiSecurityScheme
             {
-                In = openApiSecuritySchemeSettings.In.GetEnumFromDisplayName<ParameterLocation>(),
-                Description = openApiSecuritySchemeSettings.Description,
-                Name = openApiSecuritySchemeSettings.Name,
-                Scheme = openApiSecuritySchemeSettings.Scheme,
-                Type = openApiSecuritySchemeSettings.Type.GetEnumFromDisplayName<SecuritySchemeType>()
+                In = securitySchemeSettings
+                    .In
+                    .GetEnumFromDisplayName<ParameterLocation>(),
+                Description = securitySchemeSettings.Description,
+                Name = securitySchemeSettings.Name,
+                Scheme = securitySchemeSettings.Scheme,
+                Type = securitySchemeSettings
+                    .Type
+                    .GetEnumFromDisplayName<SecuritySchemeType>()
             };
-            options.AddSecurityDefinition("Bearer", openApiSecurityScheme);
+            options.AddSecurityDefinition(securitySchemeSettings.Scheme, openApiSecurityScheme);
 
             var openApiSecurityRequirement = new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
                     {
-                        In = openApiSecurityRequirementSettings.In.GetEnumFromDisplayName<ParameterLocation>(),
-                        Name = openApiSecurityRequirementSettings.Name,
+                        In = securityRequirementSettings
+                            .In
+                            .GetEnumFromDisplayName<ParameterLocation>(),
+                        Name = securityRequirementSettings.Name,
                         Reference = new OpenApiReference
                         {
-                            Id = openApiSecurityRequirementSettings.ReferenceId,
-                            Type = openApiSecurityRequirementSettings.ReferenceType.GetEnumFromDisplayName<ReferenceType>(),
+                            Id = securityRequirementSettings.Id,
+                            Type = securityRequirementSettings
+                                .Type
+                                .GetEnumFromDisplayName<ReferenceType>()
                         },
-                        Scheme = openApiSecurityRequirementSettings.Scheme
+                        Scheme = securityRequirementSettings.Scheme
                     },
-                    new List<string>()
+                    new string[]
+                    {
+
+                    }
                 }
             };
             options.AddSecurityRequirement(openApiSecurityRequirement);
 
             var openApiInfo = new OpenApiInfo
             {
-                Version = openApiInfoSettings.Version,
-                Title = openApiInfoSettings.Title,
-                Description = openApiInfoSettings.Description,
-                TermsOfService = new Uri(openApiInfoSettings.TermsOfService),
+                Version = _infoSettings.Version,
+                Title = _infoSettings.Title,
+                Description = _infoSettings.Description,
+                TermsOfService = new Uri(_infoSettings.TermsOfService),
                 Contact = new OpenApiContact
                 {
-                    Name = openApiInfoSettings.ContactName,
-                    Url = new Uri(openApiInfoSettings.ContactUrl),
+                    Name = _infoSettings.ContactName,
+                    Email = _infoSettings.ContactEmail,
+                    Url = new Uri(_infoSettings.ContactUrl)
                 },
                 License = new OpenApiLicense
                 {
-                    Name = openApiInfoSettings.LicenseName,
-                    Url = new Uri(openApiInfoSettings.LicenseUrl)
+                    Name = _infoSettings.LicenseName,
+                    Url = new Uri(_infoSettings.LicenseUrl)
                 }
             };
+            options.SwaggerDoc(_infoSettings.Version, openApiInfo);
 
-            options.SwaggerDoc(openApiInfoSettings.Version, openApiInfo);
             options.CustomSchemaIds(type => type.FullName);
             options.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{environment.ApplicationName}.xml");
             options.OperationFilter<GeneratePathParamsValidationFilter>();
@@ -68,5 +82,16 @@ public static class SwaggerConfiguration
             options.DocumentFilter<FeatureGateFilter>();
             options.SchemaFilter<BoundingBoxSchemaFilter>();
         }).AddSwaggerGenNewtonsoftSupport();
+    }
+
+
+    public static void UseCustomSwagger(this IApplicationBuilder app)
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint($"/swagger/{_infoSettings.Version}/swagger.json", $"{_infoSettings.Title}");
+            options.RoutePrefix = string.Empty;
+        });
     }
 }

@@ -81,12 +81,7 @@ public class Startup
 
         if (env.IsDevelopment())
         {
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/0.0.1/swagger.json", "DTRO - OpenAPI 3.0");
-                c.RoutePrefix = string.Empty;
-            });
+            app.UseCustomSwagger();
         }
 
         app.UseEndpoints(endpoints =>
