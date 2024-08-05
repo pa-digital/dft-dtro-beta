@@ -1,6 +1,6 @@
 ﻿namespace DfT.DTRO.Models.SwaCode;
 
-public class SwaCodeResponse
+public class SwaCodeRequest
 {
     public int TraId { get; set; }
 

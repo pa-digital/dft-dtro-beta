@@ -10,6 +10,12 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "integration_prefix" {
+  type        = string
+  description = "Prefix to denote if deployment is for integration instance. Left blank if for test instance"
+  default     = ""
+}
+
 variable "region" {
   type        = string
   description = "GCP region to which resources will be deployed."
@@ -36,7 +42,7 @@ variable "execution_service_account" {
 variable "artifact_registry_image_path" {
   type        = string
   description = "Path of the image in Artifact Registry"
-  default     = "europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-repository/dft-dtro-beta"
+  default     = "europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-int-repository/dft-dtro-beta"
 }
 
 variable "dtro_service_image" {

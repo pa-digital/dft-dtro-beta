@@ -1,16 +1,48 @@
-﻿namespace DfT.DTRO.Extensions.Configuration;
+﻿using DfT.DTRO.DAL;
 
-[ExcludeFromCodeCoverage]
-public class SwaCodeSeedConfiguration : IEntityTypeConfiguration<SwaCode>
+namespace DfT.DTRO;
+
+public static class DbInitialize
 {
-    public void Configure(EntityTypeBuilder<SwaCode> builder)
+    public static void SeedSwaCodes(IApplicationBuilder app)
     {
-        builder.HasData(SwaCodes);
+        using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
+        {
+            DtroContext context = serviceScope
+                .ServiceProvider
+                .GetService<DtroContext>();
+
+            if (!context.SwaCodes.Any())
+            {
+                context.SwaCodes.AddRange(_swaCodes);
+                context.SaveChanges();
+            }
+        }
     }
 
+    //TODO: The method below will be removed once
+    //TODO: access to query the deployed database is granted
+    public static void RunSqlStatement(IApplicationBuilder app)
+    {
+        using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
+        {
+            DtroContext dtroContext = serviceScope
+                .ServiceProvider
+                .GetService<DtroContext>();
+            Console.WriteLine(DateTime.UtcNow);
+            int swaCodesCount = dtroContext.SwaCodes.Count();
+            Console.WriteLine(swaCodesCount);
+            List<string> swaCodesNames = dtroContext
+                .SwaCodes
+                .Select(swaCode => swaCode.Name)
+                .ToList();
+            swaCodesNames.ForEach(Console.WriteLine);
+            Console.WriteLine(DateTime.UtcNow);
+        }
+    }
 
     #region swaCodes
-    private readonly IEnumerable<SwaCode> SwaCodes = new List<SwaCode>
+    private static readonly IEnumerable<SwaCode> _swaCodes = new List<SwaCode>
     {
             new() { Id = Guid.NewGuid(), Name = "Department of Transport", TraId = 0, Prefix = "DfT", IsAdmin = true },
             new() { Id = Guid.NewGuid(), Name = "(AQ) LIMITED", TraId = 7334, Prefix = "SK", IsAdmin = false },
@@ -1285,6 +1317,5 @@ public class SwaCodeSeedConfiguration : IEntityTypeConfiguration<SwaCode>
             new() { Id = Guid.NewGuid(), Name = "ZOOM INTERNET LIMITED", TraId = 7574, Prefix = "R5", IsAdmin = false },
             new() { Id = Guid.NewGuid(), Name = "ZZOOMM PLC", TraId = 7379, Prefix = "B9" }
         };
-
     #endregion
 }

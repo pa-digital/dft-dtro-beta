@@ -1,7 +1,10 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Dynamic;
+using System;
+using System.Globalization;
 using DfT.DTRO.DAL;
 using DfT.DTRO.Models.SwaCode;
+using System.Collections.Generic;
+
 
 namespace DfT.DTRO.Services;
 
@@ -14,9 +17,8 @@ public class TraService : ITraService
         _swaCodeDal = swaCodeDal;
     }
 
-    public async Task<List<SwaCodeResponse>> GetUiFormattedSwaCodeAsync()
+    private void FormatTraNameForUi(ref List<SwaCodeResponse> swaCodeResponses)
     {
-        var swaCodeResponses = await _swaCodeDal.GetAllCodes();
         var sb = new StringBuilder();
         foreach (var swaCode in swaCodeResponses)
         {
@@ -47,8 +49,63 @@ public class TraService : ITraService
                 swaCode.Name = sb.ToString();
             }
         }
+    }
 
+    public async Task<List<SwaCodeResponse>> SearchSwaCodes(string partialName)
+    {
+        var swaCodeResponses = await _swaCodeDal.SearchSwaCodesAsync(partialName);
+        FormatTraNameForUi(ref swaCodeResponses);
         return swaCodeResponses;
     }
 
+    public async Task<List<SwaCodeResponse>> GetSwaCodeAsync()
+    {
+        var swaCodeResponses = await _swaCodeDal.GetAllCodesAsync();
+        FormatTraNameForUi(ref swaCodeResponses);
+        return swaCodeResponses;
+    }
+
+    public async Task<GuidResponse> ActivateTraAsync(int traId)
+    {
+        var traExists = await _swaCodeDal.TraExistsAsync(traId);
+        if (!traExists)
+        {
+            throw new NotFoundException("TRA not found");
+        }
+
+        return await _swaCodeDal.ActivateTraAsync(traId);
+    }
+
+    public async Task<GuidResponse> DeActivateTraAsync(int traId)
+    {
+        var traExists = await _swaCodeDal.TraExistsAsync(traId);
+        if (!traExists)
+        {
+            throw new NotFoundException("TRA not found");
+        }
+
+        return await _swaCodeDal.DeActivateTraAsync(traId);
+    }
+
+    public async Task<GuidResponse> SaveTraAsync(SwaCodeRequest swaCodeRequest)
+    {
+        var traExists = await _swaCodeDal.TraExistsAsync(swaCodeRequest.TraId);
+        if (traExists)
+        {
+            throw new InvalidOperationException("TRA already Exists");
+        }
+
+        return await _swaCodeDal.SaveTraAsync(swaCodeRequest);
+    }
+
+    public async Task<GuidResponse> UpdateTraAsync(SwaCodeRequest swaCodeRequest)
+    {
+        var traExists = await _swaCodeDal.TraExistsAsync(swaCodeRequest.TraId);
+        if (!traExists)
+        {
+            throw new NotFoundException();
+        }
+
+        return await _swaCodeDal.UpdateTraAsync(swaCodeRequest);
+    }
 }
