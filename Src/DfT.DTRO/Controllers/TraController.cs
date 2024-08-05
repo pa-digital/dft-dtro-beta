@@ -49,6 +49,15 @@ public class TraController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Find the existing SWA Codes that matches the requested criteria.
+    /// </summary>
+    /// <param name="partialName">Partial name of the Street Work Manager</param>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>A List of SWA Codes</returns>
     [HttpGet("/v1/SearchSwaCodes/{partialName}")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, description: "Tra swa codes retrieved successfully.")]
@@ -68,11 +77,21 @@ public class TraController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Create a new Street Work Manager entity.
+    /// </summary>
+    /// <param name="body">Object containing a full SWA details.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the submitted SWA.</returns>
     [HttpPost]
     [Route("/v1/swaCodes/createFromBody")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
+    [SwaggerResponse(statusCode: 400, description: "Bad Request.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
     public async Task<IActionResult> CreateFromBody(SwaCodeRequest body)
     {
         try
@@ -93,11 +112,23 @@ public class TraController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Update an existing Street Work Manager
+    /// </summary>
+    /// <param name="body">Object containing a full SWA details.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the submitted SWA.</returns>
     [HttpPut]
     [Route("/v1/swaCodes/updateFromBody")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
+    [SwaggerResponse(statusCode: 404, description: "Not Found.")]
+    [SwaggerResponse(statusCode: 400, description: "Bad Request.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
     public async Task<IActionResult> UpdateFromBody([FromBody] SwaCodeRequest body)
     {
         try
@@ -123,11 +154,23 @@ public class TraController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Activate the Street Work Manager.
+    /// </summary>
+    /// <param name="traId">ID of the SWA by which Street Work Manager will be activated.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the activated SWA.</returns>
     [HttpPatch]
-    [Route("/v1/swaCodes/activate/{traId}")]
+    [Route("/v1/swaCodes/activate/{traId:int}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
+    [SwaggerResponse(statusCode: 404, description: "Not Found.")]
+    [SwaggerResponse(statusCode: 400, description: "Bad Request.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
     public async Task<IActionResult> ActivateByTraId(int traId)
     {
         try
@@ -153,11 +196,23 @@ public class TraController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Deactivate the Street Work Manager.
+    /// </summary>
+    /// <param name="traId">ID of the SWA by which Street Work Manager will be deactivated.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the deactivated SWA.</returns>
     [HttpPatch]
-    [Route("/v1/swaCodes/deactivate/{traId}")]
+    [Route("/v1/swaCodes/deactivate/{traId:int}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
+    [SwaggerResponse(statusCode: 404, description: "Not Found.")]
+    [SwaggerResponse(statusCode: 400, description: "Bad Request.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
     public async Task<IActionResult> DeactivateByTraId(int traId)
     {
         try
