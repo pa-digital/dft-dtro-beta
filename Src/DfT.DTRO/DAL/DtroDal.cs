@@ -1,17 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
-using DfT.DTRO.Caching;
-using DfT.DTRO.DAL;
-using DfT.DTRO.Models.DtroEvent;
-using DfT.DTRO.Models.Filtering;
-using DfT.DTRO.Models.Pagination;
-using DfT.DTRO.Services.Conversion;
-using DfT.DTRO.Services.Mapping;
-using Microsoft.EntityFrameworkCore;
-using static DfT.DTRO.Extensions.ExpressionExtensions;
+﻿namespace DfT.DTRO.DAL;
 
-namespace DfT.DTRO.Services;
-
+/// <summary>
+/// Implementation of the <see cref="IDtroDal" /> service.
+/// </summary>
 [ExcludeFromCodeCoverage]
 public class DtroDal : IDtroDal
 {
@@ -20,6 +11,13 @@ public class DtroDal : IDtroDal
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IRedisCache _dtroCache;
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="dtroContext"><see cref="DtroContext"/> database context.</param>
+    /// <param name="projectionService"><see cref="ISpatialProjectionService"/> service.</param>
+    /// <param name="dtroMappingService"><see cref="IDtroMappingService"/> service.</param>
+    /// <param name="dtroCache"><see cref="IRedisCache"/> service.</param>
     public DtroDal(DtroContext dtroContext, ISpatialProjectionService projectionService, IDtroMappingService dtroMappingService, IRedisCache dtroCache)
     {
         _dtroContext = dtroContext;
@@ -28,9 +26,10 @@ public class DtroDal : IDtroDal
         _dtroCache = dtroCache;
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime)
     {
-        Models.DataBase.DTRO existing = await _dtroContext.Dtros.FindAsync(id);
+        var existing = await _dtroContext.Dtros.FindAsync(id);
 
         if (existing is null || existing.Deleted)
         {
@@ -47,16 +46,19 @@ public class DtroDal : IDtroDal
         return true;
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task<bool> DtroExistsAsync(Guid id)
     {
         return await _dtroContext.Dtros.AnyAsync(it => it.Id == id && !it.Deleted);
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task<int> DtroCountForSchemaAsync(SchemaVersion schemaVersion)
     {
         return await _dtroContext.Dtros.CountAsync(it => it.SchemaVersion == schemaVersion);
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task<Models.DataBase.DTRO> GetDtroByIdAsync(Guid id)
     {
         var cachedDtro = await _dtroCache.GetDtro(id);
@@ -76,6 +78,7 @@ public class DtroDal : IDtroDal
         return dtro;
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId)
     {
         var dtro = new Models.DataBase.DTRO();
@@ -100,6 +103,7 @@ public class DtroDal : IDtroDal
         return response;
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task<bool> TryUpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId)
     {
         try
@@ -113,9 +117,10 @@ public class DtroDal : IDtroDal
         }
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task UpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId)
     {
-        if (await _dtroContext.Dtros.FindAsync(id) is not Models.DataBase.DTRO existing || existing.Deleted)
+        if (await _dtroContext.Dtros.FindAsync(id) is not { } existing || existing.Deleted)
         {
             throw new InvalidOperationException($"There is no DTRO with Id {id}");
         }
@@ -133,9 +138,10 @@ public class DtroDal : IDtroDal
         await _dtroContext.SaveChangesAsync();
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId)
     {
-        if (await _dtroContext.Dtros.FindAsync(id) is not Models.DataBase.DTRO existing || existing.Deleted)
+        if (await _dtroContext.Dtros.FindAsync(id) is not { } existing || existing.Deleted)
         {
             throw new InvalidOperationException($"There is no DTRO with Id {id}");
         }
@@ -153,6 +159,7 @@ public class DtroDal : IDtroDal
         await _dtroContext.SaveChangesAsync();
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
     {
         IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
@@ -163,7 +170,7 @@ public class DtroDal : IDtroDal
         {
             var expressionsToConjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
 
-            if (query.DeletionTime is DateTime deletionTime)
+            if (query.DeletionTime is { } deletionTime)
             {
                 deletionTime = DateTime.SpecifyKind(deletionTime, DateTimeKind.Utc);
                 expressionsToConjunct.Add(it => it.DeletionTime >= deletionTime);
@@ -173,23 +180,23 @@ public class DtroDal : IDtroDal
                 expressionsToConjunct.Add(it => !it.Deleted);
             }
 
-            if (query.TraCreator is int traCreator)
+            if (query.TraCreator is { } traCreator)
             {
                 expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == traCreator);
             }
 
-            if (query.CurrentTraOwner is int currentTraOwner)
+            if (query.CurrentTraOwner is { } currentTraOwner)
             {
                 expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == currentTraOwner);
             }
 
-            if (query.PublicationTime is DateTime publicationTime)
+            if (query.PublicationTime is { } publicationTime)
             {
                 publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc);
                 expressionsToConjunct.Add(it => it.Created >= publicationTime);
             }
 
-            if (query.ModificationTime is DateTime modificationTime)
+            if (query.ModificationTime is { } modificationTime)
             {
                 modificationTime = DateTime.SpecifyKind(modificationTime, DateTimeKind.Utc);
                 expressionsToConjunct.Add(it => it.LastUpdated >= modificationTime);
@@ -217,12 +224,12 @@ public class DtroDal : IDtroDal
 
             if (query.Location is not null)
             {
-                var bbox =
+                var boundingBox =
                     query.Location.Crs != "osgb36Epsg27700"
                         ? _projectionService.Wgs84ToOsgb36(query.Location.Bbox)
                         : query.Location.Bbox;
 
-                expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(bbox, it.Location));
+                expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(boundingBox, it.Location));
             }
 
             if (query.RegulationStart is not null)
@@ -264,12 +271,12 @@ public class DtroDal : IDtroDal
                 continue;
             }
 
-            expressionsToDisjunct.Add(AllOf(expressionsToConjunct));
+            expressionsToDisjunct.Add(expressionsToConjunct.AllOf());
         }
 
         IQueryable<Models.DataBase.DTRO> dataQuery = expressionsToDisjunct.Any()
             ? result
-                .Where(AnyOf(expressionsToDisjunct))
+                .Where(expressionsToDisjunct.AnyOf())
             : result;
 
         IQueryable<Models.DataBase.DTRO> paginatedQuery = dataQuery
@@ -280,37 +287,38 @@ public class DtroDal : IDtroDal
         return new PaginatedResult<Models.DataBase.DTRO>(await paginatedQuery.ToListAsync(), await dataQuery.CountAsync());
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search)
     {
         IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
 
         var expressionsToConjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
 
-        if (search.DeletionTime is DateTime deletionTime)
+        if (search.DeletionTime is { } deletionTime)
         {
             deletionTime = DateTime.SpecifyKind(deletionTime, DateTimeKind.Utc);
 
             expressionsToConjunct.Add(it => it.DeletionTime >= deletionTime);
         }
 
-        if (search.TraCreator is int traCreator)
+        if (search.TraCreator is { } traCreator)
         {
             expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == traCreator);
         }
 
-        if (search.CurrentTraOwner is int currentTraOwner)
+        if (search.CurrentTraOwner is { } currentTraOwner)
         {
             expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == currentTraOwner);
         }
 
-        if (search.Since is DateTime publicationTime)
+        if (search.Since is { } publicationTime)
         {
             publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc);
 
             expressionsToConjunct.Add(it => it.Created >= publicationTime);
         }
 
-        if (search.ModificationTime is DateTime modificationTime)
+        if (search.ModificationTime is { } modificationTime)
         {
             modificationTime = DateTime.SpecifyKind(modificationTime, DateTimeKind.Utc);
 
@@ -339,12 +347,12 @@ public class DtroDal : IDtroDal
 
         if (search.Location is not null)
         {
-            var bbox =
+            var boundingBox =
                 search.Location.Crs != "osgb36Epsg27700"
                     ? _projectionService.Wgs84ToOsgb36(search.Location.Bbox)
                     : search.Location.Bbox;
 
-            expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(bbox, it.Location));
+            expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(boundingBox, it.Location));
         }
 
         if (search.RegulationStart is not null)
@@ -353,11 +361,11 @@ public class DtroDal : IDtroDal
 
             Expression<Func<Models.DataBase.DTRO, bool>> expr = search.RegulationStart.Operator switch
             {
-                ComparisonOperator.Equal => (it) => it.RegulationStart == value,
-                ComparisonOperator.LessThan => (it) => it.RegulationStart < value,
-                ComparisonOperator.LessThanOrEqual => (it) => it.RegulationStart <= value,
-                ComparisonOperator.GreaterThan => (it) => it.RegulationStart > value,
-                ComparisonOperator.GreaterThanOrEqual => (it) => it.RegulationStart >= value,
+                ComparisonOperator.Equal => it => it.RegulationStart == value,
+                ComparisonOperator.LessThan => it => it.RegulationStart < value,
+                ComparisonOperator.LessThanOrEqual => it => it.RegulationStart <= value,
+                ComparisonOperator.GreaterThan => it => it.RegulationStart > value,
+                ComparisonOperator.GreaterThanOrEqual => it => it.RegulationStart >= value,
                 _ => throw new InvalidOperationException("Unsupported comparison operator.")
             };
 
@@ -387,15 +395,16 @@ public class DtroDal : IDtroDal
         }
 
         var sqlQuery = result
-            .Where(AllOf(expressionsToConjunct))
+            .Where(expressionsToConjunct.AllOf())
             .OrderBy(it => it.Id);
 
         return await sqlQuery.ToListAsync();
     }
 
+    ///<inheritdoc cref="IDtroService"/>
     public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
     {
-        Models.DataBase.DTRO dtro = await _dtroContext.Dtros.FindAsync(id);
+        var dtro = await _dtroContext.Dtros.FindAsync(id);
 
         if (dtro is null)
         {

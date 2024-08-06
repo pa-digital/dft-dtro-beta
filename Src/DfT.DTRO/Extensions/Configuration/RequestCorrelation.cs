@@ -1,7 +1,10 @@
 ﻿namespace DfT.DTRO.Extensions.Configuration;
 
-public static class RequestCorrelationConfigurationExtensions
+///<inheritdoc cref="RequestCorrelationConfiguration"/>
+[ExcludeFromCodeCoverage]
+public static class RequestCorrelationConfiguration
 {
+    ///<inheritdoc cref="RequestCorrelationConfiguration"/>
     public static IServiceCollection AddRequestCorrelation(this IServiceCollection services, string sectionName = "RequestCorrelation")
     {
         return services
@@ -19,6 +22,7 @@ public static class RequestCorrelationConfigurationExtensions
             });
     }
 
+    ///<inheritdoc cref="RequestCorrelationConfiguration"/>
     public static IApplicationBuilder UseRequestCorrelation(this IApplicationBuilder app)
         => app.UseMiddleware<RequestCorrelationMiddleware>()
               .UseMiddleware<RequestCorrelationEnricherMiddleware>();

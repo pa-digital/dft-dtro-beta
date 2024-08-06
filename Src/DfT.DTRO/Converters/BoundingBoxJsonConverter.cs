@@ -2,8 +2,12 @@ using Newtonsoft.Json;
 
 namespace DfT.DTRO.Converters;
 
+/// <summary>
+/// Converts tuple of 4 coordinates into <see cref="BoundingBox"/> object
+/// </summary>
 public class BoundingBoxJsonConverter : JsonConverter<BoundingBox>
 {
+    /// <inheritdoc />
     public override void WriteJson(JsonWriter writer, BoundingBox value, JsonSerializer serializer)
     {
         writer.WriteStartArray();
@@ -14,6 +18,7 @@ public class BoundingBoxJsonConverter : JsonConverter<BoundingBox>
         writer.WriteEndArray();
     }
 
+    /// <inheritdoc />
     public override BoundingBox ReadJson(
         JsonReader reader,
         Type objectType,
