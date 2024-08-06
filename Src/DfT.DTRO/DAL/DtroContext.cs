@@ -19,6 +19,8 @@ public partial class DtroContext : DbContext
 
     public virtual DbSet<SwaCode> SwaCodes { get; set; }
 
+    public virtual DbSet<SystemConfig> SystemConfig { get; set; }
+
     public DtroContext(DbContextOptions<DtroContext> options)
         : base(options)
     {
