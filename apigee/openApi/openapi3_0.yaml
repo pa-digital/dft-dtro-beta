@@ -1313,6 +1313,41 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
+  /v1/systemName:
+    get:
+      tags:
+        - SystemConfig
+      parameters:
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: >-
+              UUID formatted string to track the request through the enquiries
+              stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
+      responses:
+        '200':
+          description: System name retrieved successfully.
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/xml:
+              schema:
+                type: string
+        '500':
+          description: Internal server error.
   /v1/swaCodes:
     get:
       tags:
@@ -1555,6 +1590,50 @@ paths:
           description: Not Found.
         '500':
           description: Internal server error.
+  /v1/swaCodes/{traId}:
+    get:
+      tags:
+        - Tra
+      parameters:
+        - name: traId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: >-
+              UUID formatted string to track the request through the enquiries
+              stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
+      responses:
+        '200':
+          description: Ok
+          content:
+            text/plain:
+              schema:
+                $ref: >-
+                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+            text/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+            application/xml:
+              schema:
+                $ref: >-
+                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+            text/xml:
+              schema:
+                $ref: >-
+                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
   /v1/swaCodes/activate/{traId}:
     patch:
       tags:
