@@ -111,7 +111,7 @@ resource "google_cloud_run_v2_service" "service_portal_service" {
     }
 
     vpc_access {
-      connector = data.google_vpc_access_connector.serverless_connector.id
+      connector = data.google_vpc_access_connector.ui_vpc_connector.id
       egress    = "PRIVATE_RANGES_ONLY"
     }
 

@@ -16,3 +16,7 @@ data "google_secret_manager_secret_version" "postgres_password_value" {
   secret = "${local.name_prefix}-postgres-password"
   version = "latest"
 }
+
+data "google_vpc_access_connector" "ui_vpc_connector" {
+  name = "cloud-run-connector"
+}
