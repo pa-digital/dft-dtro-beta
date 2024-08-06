@@ -5,7 +5,13 @@ namespace DfT.DTRO;
 
 public static class DbInitialize
 {
-    public static void SeedSwaCodes(IApplicationBuilder app)
+    public static void SeedAppData(IApplicationBuilder app)
+    {
+        SeedSwaCodes(app);
+        SeedConfig(app);
+    }
+
+    private static void SeedSwaCodes(IApplicationBuilder app)
     {
         using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
         {
@@ -15,12 +21,26 @@ public static class DbInitialize
 
             if (!context.SwaCodes.Any())
             {
-                context.SwaCodes.AddRange(SeedData.Tras);
+                context.SwaCodes.AddRange(SeedData.TrafficAuthorities);
                 context.SaveChanges();
             }
         }
     }
+    private static void SeedConfig(IApplicationBuilder app)
+    {
+        using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
+        {
+            DtroContext context = serviceScope
+                .ServiceProvider
+                .GetService<DtroContext>();
 
+            if (!context.SystemConfig.Any())
+            {
+                context.SystemConfig.Add(SeedData.SystemConfig);
+                context.SaveChanges();
+            }
+        }
+    }
     //TODO: The method below will be removed once
     //TODO: access to query the deployed database is granted
     public static void RunSqlStatement(IApplicationBuilder app)
