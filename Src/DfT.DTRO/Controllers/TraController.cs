@@ -154,6 +154,28 @@ public class TraController : ControllerBase
         }
     }
 
+
+
+    [HttpGet("/v1/swaCodes/{traId}")]
+    [ValidateModelState]
+    [FeatureGate(FeatureNames.SchemaWrite)]
+    [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
+    public async Task<ActionResult<SwaCodeResponse>> GetSwaCode(int traId)
+    {
+        try
+        {
+            SwaCodeResponse swaCodeResponses = await _traService.GetSwaCodeAsync(traId) ?? new SwaCodeResponse();
+            _logger.LogInformation($"'{nameof(GetSwaCodes)}' method called");
+            return Ok(swaCodeResponses);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+        }
+    }
+
+
     /// <summary>
     /// Activate the Street Work Act.
     /// </summary>

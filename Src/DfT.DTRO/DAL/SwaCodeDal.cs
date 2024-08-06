@@ -28,6 +28,23 @@ public class SwaCodeDal : ISwaCodeDal
             })
             .ToListAsync();
 
+    public async Task<SwaCodeResponse> GetSwaCodeAsync(int traId)
+    {
+        var swaCode = await _dtroContext.SwaCodes
+            .Where(swaCode => swaCode.TraId == traId)
+            .Select(swaCode => new SwaCodeResponse
+            {
+                TraId = swaCode.TraId,
+                Name = swaCode.Name,
+                Prefix = swaCode.Prefix,
+                IsAdmin = swaCode.IsAdmin,
+                IsActive = swaCode.IsActive
+            })
+            .FirstOrDefaultAsync();
+
+        return swaCode ?? new SwaCodeResponse(); // Return a default instance if no record is found
+    }
+
     ///<inheritdoc cref="ISwaCodeDal"/>
     public async Task<List<SwaCodeResponse>> SearchSwaCodesAsync(string partialName) =>
      await _dtroContext.SwaCodes

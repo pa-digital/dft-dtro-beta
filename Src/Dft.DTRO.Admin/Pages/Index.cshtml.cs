@@ -42,7 +42,7 @@ namespace Dft.DTRO.Admin.Pages
             Metrics = metrics ?? new MetricSummary();
             TraSearch.UpdateButtonText = "Update";
             TraSearch.SwaCodes = await _traService.GetSwaCodes();
-            TraSearch.SwaCodes.Insert(0, new SwaCodeResponse { TraId = 0, Name = "[all]" });
+            TraSearch.SwaCodes.Insert(0, new SwaCode { TraId = 0, Name = "[all]" });
         }
 
         private Period GetPeriodEnum(string periodOption)

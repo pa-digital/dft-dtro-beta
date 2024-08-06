@@ -37,6 +37,7 @@ public interface ISwaCodeDal
     /// </summary>
     /// <param name="traId">Traffic authority regulation ID.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous get operation.</returns>
+    Task<SwaCodeResponse> GetSwaCodeAsync(int traId);
     Task<SwaCode> GetTraAsync(int traId);
 
     /// <summary>

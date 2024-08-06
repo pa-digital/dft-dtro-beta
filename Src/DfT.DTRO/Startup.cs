@@ -62,6 +62,8 @@ public class Startup
         services.AddScoped<IMetricDal, MetricDal>();
         services.AddScoped<ISwaCodeDal, SwaCodeDal>();
         services.AddScoped<ITraService, TraService>();
+        services.AddScoped<ISystemConfigDal, SystemConfigDal>();
+        services.AddScoped<ISystemConfigService, SystemConfigService>();
         services.TryAddSingleton<ISystemClock, SystemClock>();
 
         services.AddStorage(Configuration);
@@ -91,7 +93,7 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
-        DbInitialize.SeedSwaCodes(app);
+        DbInitialize.SeedAppData(app);
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

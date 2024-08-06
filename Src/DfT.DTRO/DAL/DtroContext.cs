@@ -39,6 +39,8 @@ public class DtroContext : DbContext
     /// Default constructor.
     /// </summary>
     /// <param name="options">Base context options.</param>
+    public virtual DbSet<SystemConfig> SystemConfig { get; set; }
+
     public DtroContext(DbContextOptions<DtroContext> options)
         : base(options)
     {

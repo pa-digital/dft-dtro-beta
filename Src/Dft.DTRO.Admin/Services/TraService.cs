@@ -12,7 +12,7 @@ public class TraService : ITraService
         _client = clientFactory.CreateClient("ExternalApi");
     }
 
-    public async Task<List<SwaCodeResponse>> GetSwaCodes()
+    public async Task<List<SwaCode>> GetSwaCodes()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "/v1/swaCodes");
         Helper.AddHeaders(ref request);
@@ -22,15 +22,33 @@ public class TraService : ITraService
         response.EnsureSuccessStatusCode();
 
         var jsonResponse = await response.Content.ReadAsStringAsync();
-        var swaCodeList = JsonSerializer.Deserialize<List<SwaCodeResponse>>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        var swaCodeList = JsonSerializer.Deserialize<List<SwaCode>>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         if (swaCodeList == null)
         {
-            swaCodeList = new List<SwaCodeResponse>();
+            swaCodeList = new List<SwaCode>();
         }
         return swaCodeList;
     }
 
-    public async Task<List<SwaCodeResponse>> SearchSwaCodes(string partialName)
+    public async Task<SwaCode> GetSwaCode(int id)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/swaCodes/{id}");
+        Helper.AddHeaders(ref request);
+
+        var response = await _client.SendAsync(request);
+
+        response.EnsureSuccessStatusCode();
+
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var swaCode = JsonSerializer.Deserialize<SwaCode>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        if (swaCode == null)
+        {
+            swaCode = new SwaCode();
+        }
+        return swaCode;
+    }
+
+    public async Task<List<SwaCode>> SearchSwaCodes(string partialName)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/SearchSwaCodes/{partialName}");
         Helper.AddHeaders(ref request);
@@ -40,10 +58,10 @@ public class TraService : ITraService
         response.EnsureSuccessStatusCode();
 
         var jsonResponse = await response.Content.ReadAsStringAsync();
-        var swaCodeList = JsonSerializer.Deserialize<List<SwaCodeResponse>>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        var swaCodeList = JsonSerializer.Deserialize<List<SwaCode>>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         if (swaCodeList == null)
         {
-            swaCodeList = new List<SwaCodeResponse>();
+            swaCodeList = new List<SwaCode>();
         }
         return swaCodeList;
     }
@@ -60,14 +78,14 @@ public class TraService : ITraService
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task UpdateSchemaAsync(SwaCodeRequest swaCodeRequest)
+    public async Task UpdateTraAsync(SwaCode swaCodeRequest)
     {
 
         var response = await _client.PutAsJsonAsync($"/v1/swaCodes/updateFromBody/", swaCodeRequest);
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task CreateSchemaAsync(SwaCodeRequest swaCodeRequest)
+    public async Task CreateTraAsync(SwaCode swaCodeRequest)
     {
 
         var response = await _client.PostAsJsonAsync($"/v1/swaCodes/createFromBody/", swaCodeRequest);

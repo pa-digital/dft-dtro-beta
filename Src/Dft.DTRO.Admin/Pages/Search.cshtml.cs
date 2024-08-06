@@ -24,7 +24,7 @@ public class SearchModel : PageModel
 
         TraSearch.UpdateButtonText = "Search";
         TraSearch.SwaCodes = await _traService.GetSwaCodes();
-        TraSearch.SwaCodes.Insert(0, new SwaCodeResponse { TraId = 0, Name = "[all]" , IsActive = true});
+        TraSearch.SwaCodes.Insert(0, new SwaCode { TraId = 0, Name = "[all]" , IsActive = true});
     }
 
     public IActionResult OnPostUpdate()
