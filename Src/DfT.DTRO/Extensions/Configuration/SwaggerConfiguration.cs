@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.Extensions.Configuration;
+﻿using Microsoft.OpenApi.Extensions;
+
+namespace DfT.DTRO.Extensions.Configuration;
 
 [ExcludeFromCodeCoverage]
 public static class SwaggerConfiguration
@@ -7,34 +9,38 @@ public static class SwaggerConfiguration
 
     public static void AddSwagger(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
-        //var securitySchemeSettings = new SecuritySchemeSettings(configuration);
-        //var securityRequirementSettings = new SecurityReqiurementSettings(configuration);
+        var securitySchemeSettings = new SecuritySchemeSettings(configuration);
+        var securityRequirementSettings = new SecurityRequirementSettings(configuration);
         _infoSettings = new InfoSettings(configuration);
         services.AddSwaggerGen(options =>
         {
             var openApiSecurityScheme = new OpenApiSecurityScheme
             {
-                In = ParameterLocation.Header,
-                Description = "",
-                Name = "Authorization",
-                Scheme = "Bearer",
-                Type = SecuritySchemeType.ApiKey
+                In = securitySchemeSettings.In.GetEnumFromDisplayName<ParameterLocation>(),
+                Description = securitySchemeSettings.Description,
+                Name = securitySchemeSettings.Name,
+                Scheme = securitySchemeSettings.Scheme,
+                Type = securitySchemeSettings.Type.GetEnumFromDisplayName<SecuritySchemeType>()
             };
-            options.AddSecurityDefinition("Bearer", openApiSecurityScheme);
+            options.AddSecurityDefinition(securitySchemeSettings.Scheme, openApiSecurityScheme);
 
             var openApiSecurityRequirement = new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
                     {
-                        In = ParameterLocation.Header,
-                        Name = "Bearer",
+                        In = securityRequirementSettings
+                            .In
+                            .GetEnumFromDisplayName<ParameterLocation>(),
+                        Name = securityRequirementSettings.Name,
                         Reference = new OpenApiReference
                         {
-                            Id = "Bearer",
-                            Type = ReferenceType.SecurityScheme
+                            Id = securityRequirementSettings.Id,
+                            Type = securityRequirementSettings
+                                .Type
+                                .GetEnumFromDisplayName<ReferenceType>()
                         },
-                        Scheme = "oauth2"
+                        Scheme = securityRequirementSettings.Scheme
                     },
                     new string[]
                     {
