@@ -11,6 +11,8 @@ info:
     name: DfT
     url: https://license-url.com
   version: 0.0.1
+servers:
+  - url: "http://localhost"
 paths:
   /v1/dtros/createFromFile:
     post:
