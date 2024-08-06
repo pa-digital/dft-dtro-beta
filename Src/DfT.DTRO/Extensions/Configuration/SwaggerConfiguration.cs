@@ -1,6 +1,4 @@
-﻿using Microsoft.OpenApi.Extensions;
-
-namespace DfT.DTRO.Extensions.Configuration;
+﻿namespace DfT.DTRO.Extensions.Configuration;
 
 [ExcludeFromCodeCoverage]
 public static class SwaggerConfiguration
@@ -9,42 +7,34 @@ public static class SwaggerConfiguration
 
     public static void AddSwagger(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
-        var securitySchemeSettings = new SecuritySchemeSettings(configuration);
-        var securityRequirementSettings = new SecurityReqiurementSettings(configuration);
+        //var securitySchemeSettings = new SecuritySchemeSettings(configuration);
+        //var securityRequirementSettings = new SecurityReqiurementSettings(configuration);
         _infoSettings = new InfoSettings(configuration);
         services.AddSwaggerGen(options =>
         {
             var openApiSecurityScheme = new OpenApiSecurityScheme
             {
-                In = securitySchemeSettings
-                    .In
-                    .GetEnumFromDisplayName<ParameterLocation>(),
-                Description = securitySchemeSettings.Description,
-                Name = securitySchemeSettings.Name,
-                Scheme = securitySchemeSettings.Scheme,
-                Type = securitySchemeSettings
-                    .Type
-                    .GetEnumFromDisplayName<SecuritySchemeType>()
+                In = ParameterLocation.Header,
+                Description = "",
+                Name = "Authorization",
+                Scheme = "Bearer",
+                Type = SecuritySchemeType.ApiKey
             };
-            options.AddSecurityDefinition(securitySchemeSettings.Scheme, openApiSecurityScheme);
+            options.AddSecurityDefinition("Bearer", openApiSecurityScheme);
 
             var openApiSecurityRequirement = new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
                     {
-                        In = securityRequirementSettings
-                            .In
-                            .GetEnumFromDisplayName<ParameterLocation>(),
-                        Name = securityRequirementSettings.Name,
+                        In = ParameterLocation.Header,
+                        Name = "Bearer",
                         Reference = new OpenApiReference
                         {
-                            Id = securityRequirementSettings.Id,
-                            Type = securityRequirementSettings
-                                .Type
-                                .GetEnumFromDisplayName<ReferenceType>()
+                            Id = "Bearer",
+                            Type = ReferenceType.SecurityScheme
                         },
-                        Scheme = securityRequirementSettings.Scheme
+                        Scheme = "oauth2"
                     },
                     new string[]
                     {
@@ -90,7 +80,7 @@ public static class SwaggerConfiguration
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
-            options.SwaggerEndpoint($"/swagger/{_infoSettings.Version}/swagger.json", $"{_infoSettings.Title}");
+            options.SwaggerEndpoint($"/swagger/{_infoSettings.Version}/swagger.json", _infoSettings.Title);
             options.RoutePrefix = string.Empty;
         });
     }
