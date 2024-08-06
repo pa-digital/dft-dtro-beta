@@ -263,7 +263,7 @@ namespace DfT.DTRO.Migrations
 
                     b.ToTable("SwaCodes");
 
-                    b.HasData(SeedData.Tras);
+                    b.HasData(SeedData.TrafficAuthorities);
                 });
 #pragma warning restore 612, 618
         }

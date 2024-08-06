@@ -2,8 +2,14 @@
 
 public static class SeedData
 {
-    
-    public static List<SwaCode> Tras = new List<SwaCode>(){
+    public static SystemConfig SystemConfig = new SystemConfig()
+    {
+        Id = new Guid("a7ab6da8-4d24-4f7f-a58b-fb7443ae8abe"),
+        SystemName = "TRA Test System"
+        
+    };
+
+    public static List<SwaCode> TrafficAuthorities = new List<SwaCode>(){
                         new SwaCode
                         {
                             Id = new Guid("67d2adeb-31ac-4962-8025-c14ef2aa7236"),

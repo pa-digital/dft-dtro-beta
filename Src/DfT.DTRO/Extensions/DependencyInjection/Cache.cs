@@ -1,8 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using DfT.DTRO.Caching;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 
 namespace DfT.DTRO.Extensions.DependencyInjection;
 

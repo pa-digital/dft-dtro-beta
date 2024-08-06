@@ -1,5 +1,10 @@
+using DfT.DTRO.Enums;
+
 namespace DfT.DTRO.Controllers;
 
+/// <summary>
+/// Controller for searching D-TROs
+/// </summary>
 [Tags("Search")]
 [ApiController]
 [Consumes("application/json")]
@@ -10,6 +15,12 @@ public class SearchController : ControllerBase
     private readonly IMetricsService _metricsService;
     private readonly ILogger<SearchController> _logger;
 
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="searchService">An <see cref="ISearchService"/> instance.</param>
+    /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
+    /// <param name="logger">An <see cref="ILogger{SearchController}"/> intance.</param>
     public SearchController(
         ISearchService searchService,
         IMetricsService metricsService,
@@ -20,6 +31,16 @@ public class SearchController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Finds existing D-TROs that match the required criteria.
+    /// </summary>
+    /// <param name="ta">TRA identification a D-TRO is search for.</param>
+    /// <param name="body">A D-TRO object search criteria.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>D-TRO matching searching request.</returns>
     [HttpPost]
     [Route("/v1/search")]
     [ValidateModelState]

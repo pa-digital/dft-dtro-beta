@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace DfT.DTRO.Models.DataBase;
@@ -10,7 +9,7 @@ namespace DfT.DTRO.Models.DataBase;
 public class RuleTemplate
 {
     /// <summary>
-    /// Id of the Rule.
+    /// ID of the Rule.
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
@@ -21,7 +20,7 @@ public class RuleTemplate
     /// <summary>
     /// The schema identifier of the rule data payload being submitted.
     /// </summary>
-    /// <example>3.1.1.</example>
+    /// <example>3.2.1.</example>
     [Required(ErrorMessage = "SchemaVersion field must be included")]
     [DataMember(Name = "SchemaVersion")]
     [JsonConverter(typeof(SchemaVersionJsonConverter))]

@@ -1,35 +1,26 @@
-using DfT.DTRO.DAL;
-using DfT.DTRO.Extensions.Configuration;
-using DfT.DTRO.Extensions.DependencyInjection;
-using DfT.DTRO.Filters;
-using DfT.DTRO.Services.Conversion;
-using DfT.DTRO.Services.Mapping;
-using DfT.DTRO.Services.Validation;
-using DfT.DTRO.Utilities;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Internal;
-using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+
 namespace DfT.DTRO;
 
+[ExcludeFromCodeCoverage]
 public class Startup
 {
-    private readonly IWebHostEnvironment _hostingEnv;
+    private IWebHostEnvironment Environment { get; }
 
     private IConfiguration Configuration { get; }
 
     public Startup(IWebHostEnvironment env, IConfiguration configuration)
     {
-        _hostingEnv = env;
+        Environment = env;
         Configuration = configuration;
     }
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddControllers();
+        services.AddEndpointsApiExplorer();
         services
             .AddMvc(options =>
             {
@@ -45,30 +36,7 @@ public class Startup
             })
             .AddXmlSerializerFormatters();
 
-        services
-            .AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("0.0.1", new OpenApiInfo
-                {
-                    Version = "0.0.1",
-                    Title = "DTRO - OpenAPI 3.0",
-                    Description = "DTRO - OpenAPI 3.0",
-                    TermsOfService = new Uri("https://cloud.google.com/terms")
-                });
-                c.CustomSchemaIds(type => type.FullName);
-
-                c.OperationFilter<GeneratePathParamsValidationFilter>();
-
-                c.OperationFilter<CorrelationIdHeaderParameterFilter>();
-
-                c.EnableAnnotations();
-
-                c.DocumentFilter<FeatureGateFilter>();
-
-                c.SchemaFilter<BoundingBoxSchemaFilter>();
-            })
-            .AddSwaggerGenNewtonsoftSupport();
-
+        services.AddSwagger(Configuration, Environment);
         services.AddHealthChecks();
 
         services.AddFeatureManagement();
@@ -94,13 +62,14 @@ public class Startup
         services.AddScoped<IMetricDal, MetricDal>();
         services.AddScoped<ISwaCodeDal, SwaCodeDal>();
         services.AddScoped<ITraService, TraService>();
+        services.AddScoped<ISystemConfigDal, SystemConfigDal>();
+        services.AddScoped<ISystemConfigService, SystemConfigService>();
+        services.TryAddSingleton<ISystemClock, SystemClock>();
 
         services.AddStorage(Configuration);
         services.AddJsonLogic();
         services.AddRequestCorrelation();
         services.AddCache(Configuration);
-        services.TryAddSingleton<ISystemClock, SystemClock>();
-        services.AddMvc();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -112,12 +81,10 @@ public class Startup
 
         app.UseAuthorization();
 
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
+        if (env.IsDevelopment())
         {
-            c.SwaggerEndpoint("/swagger/0.0.1/swagger.json", "DTRO - OpenAPI 3.0");
-            c.RoutePrefix = string.Empty;
-        });
+            app.UseCustomSwagger();
+        }
 
         app.UseEndpoints(endpoints =>
         {
@@ -126,7 +93,7 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
-        DbInitialize.SeedSwaCodes(app);
+        DbInitialize.SeedAppData(app);
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
