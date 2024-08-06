@@ -2,11 +2,13 @@
 
 namespace DfT.DTRO.Extensions.Configuration;
 
+///<inheritdoc cref="SwaggerConfiguration"/>
 [ExcludeFromCodeCoverage]
 public static class SwaggerConfiguration
 {
     private static InfoSettings _infoSettings;
 
+    ///<inheritdoc cref="SwaggerConfiguration"/>
     public static void AddSwagger(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
         var securitySchemeSettings = new SecuritySchemeSettings(configuration);
@@ -80,7 +82,7 @@ public static class SwaggerConfiguration
         }).AddSwaggerGenNewtonsoftSupport();
     }
 
-
+    ///<inheritdoc cref="SwaggerConfiguration"/>
     public static void UseCustomSwagger(this IApplicationBuilder app)
     {
         app.UseSwagger();

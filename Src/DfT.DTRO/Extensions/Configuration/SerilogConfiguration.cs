@@ -2,9 +2,11 @@
 
 namespace DfT.DTRO.Extensions.Configuration;
 
+///<inheritdoc cref="SerilogConfiguration"/>
 [ExcludeFromCodeCoverage]
 public static class SerilogConfiguration
 {
+    ///<inheritdoc cref="SerilogConfiguration"/>
     public static IHostBuilder ConfigureSerilog(this IHostBuilder hostBuilder) =>
         hostBuilder.UseSerilog((context, configuration) =>
         {
