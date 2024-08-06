@@ -1,12 +1,4 @@
-﻿using DfT.DTRO.Enums;
-using DfT.DTRO.Extensions;
-using DfT.DTRO.Models.DtroEvent;
-using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Models.Search;
-using DfT.DTRO.Services.Conversion;
-using Microsoft.Extensions.Configuration;
-
-namespace DfT.DTRO.Services.Mapping;
+﻿namespace DfT.DTRO.Services.Mapping;
 
 public class DtroMappingService : IDtroMappingService
 {

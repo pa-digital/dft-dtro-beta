@@ -34,6 +34,7 @@ global using DfT.DTRO.Models.DtroJson;
 global using DfT.DTRO.Models.Errors;
 global using DfT.DTRO.Models.Filtering;
 global using DfT.DTRO.Models.Metrics;
+global using DfT.DTRO.Models.Owner;
 global using DfT.DTRO.Models.Pagination;
 global using DfT.DTRO.Models.RuleTemplate;
 global using DfT.DTRO.Models.SchemaTemplate;

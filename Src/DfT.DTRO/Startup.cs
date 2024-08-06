@@ -31,7 +31,6 @@ public class Startup
             {
                 opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 opts.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-
                 opts.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             })
             .AddXmlSerializerFormatters();
