@@ -45,8 +45,8 @@
     }
   },
   {
-    "name": "ENV-service-provider",
-    "displayName": "ENV Service Provider",
+    "name": "ENV-service-consumer",
+    "displayName": "ENV Service Consumer",
     "approvalType": "manual",
     "attributes": [
       {
@@ -58,7 +58,7 @@
       "ENV-environment"
     ],
     "scopes": [
-      "sp"
+      "sc"
     ],
     "createdAt": "1719227113878",
     "lastModifiedAt": "1719227144037",
