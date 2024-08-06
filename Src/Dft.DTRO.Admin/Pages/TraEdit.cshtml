@@ -1,0 +1,99 @@
+﻿@page "{traId:int?}"
+@model TraEditModel
+@{
+    bool isEdit = Model.IsEdit;
+    string search = Request.Query["search"];
+}
+
+<h2>@(isEdit ? "Edit TRA" : "Add TRA")</h2>
+
+<form method="post" class="form-horizontal">
+    <div style="max-width:800px">
+
+        <div class="form-group row">
+            <label for="traId" class="col-sm-2 col-form-label">TRA ID</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="traId" name="SwaCode.TraId" value="@Model.SwaCode.TraId" readonly="@isEdit" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" name="SwaCode.Name" value="@Model.SwaCode.Name" required />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="prefix" class="col-sm-2 col-form-label">Prefix</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="prefix" name="SwaCode.Prefix" value="@Model.SwaCode.Prefix" maxlength="2" required />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="isAdmin" class="col-sm-2 col-form-label">Is Admin</label>
+            <div class="col-sm-10">
+                <input type="hidden" name="SwaCode.IsAdmin" value="false" />
+                <input type="checkbox" id="isAdmin" value="true" @(Model.SwaCode.IsAdmin ? "checked" : "") />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="isActive" class="col-sm-2 col-form-label">Is Active</label>
+            <div class="col-sm-10">
+                <input type="hidden" name="SwaCode.IsActive" value="false" />
+                <input type="checkbox" id="isActive" value="true" @(Model.SwaCode.IsActive ? "checked" : "") />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10 offset-sm-2 text-right">
+                <button id="saveButton" class="btn btn-primary" type="submit" disabled>@(isEdit ? "Update" : "Create")</button>
+                <button id="cancelButton" class="btn btn-secondary" type="submit" name="action" value="Cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        const saveButton = document.getElementById("saveButton");
+        const requiredFields = document.querySelectorAll("input[required]");
+
+        requiredFields.forEach(field => {
+            field.addEventListener("input", () => {
+                saveButton.disabled = !Array.from(requiredFields).every(f => f.value.trim() !== "");
+            });
+        });
+
+        saveButton.disabled = !Array.from(requiredFields).every(f => f.value.trim() !== "");
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the checkbox and hidden input elements
+            var checkbox = document.getElementById('isAdmin');
+            var hiddenInput = document.querySelector('input[name="SwaCode.IsAdmin"]');
+            var isActiveCheckbox = document.getElementById('isActive');
+            var isActiveHiddenInput = document.querySelector('input[name="SwaCode.IsActive"]');
+
+            // Update the hidden input based on the checkbox state
+            function updateHiddenInput() {
+                hiddenInput.value = checkbox.checked ? 'true' : 'false';
+            }
+
+            // Add event listener for the checkbox change event
+            checkbox.addEventListener('change', updateHiddenInput);
+
+            // Initialize the hidden input value based on the initial checkbox state
+            updateHiddenInput();
+
+            // Update the hidden input based on the checkbox state
+            function updateIsActiveHiddenInput() {
+                isActiveHiddenInput.value = isActiveCheckbox.checked ? 'true' : 'false';
+            }
+
+            // Add event listener for the checkbox change event
+            isActiveCheckbox.addEventListener('change', updateIsActiveHiddenInput);
+
+            // Initialize the hidden input value based on the initial checkbox state
+            updateIsActiveHiddenInput();
+        });
+
+    </script>
+}

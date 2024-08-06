@@ -9,7 +9,7 @@ public class TraSearch
 
     public string UpdateButtonText { get; set; } = string.Empty;
 
-    public List<SwaCodeResponse> SwaCodes { get; set; } = new List<SwaCodeResponse>();
+    public List<SwaCode> SwaCodes { get; set; } = new List<SwaCode>();
 
     public int? PreviousTraSelect { get; set; }
 
