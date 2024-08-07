@@ -126,8 +126,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -168,8 +167,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -320,8 +318,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: >-
-                    #/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistorySourceResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistorySourceResponse'
         '400':
           description: Bad Request.
         '404':
@@ -358,8 +355,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: >-
-                    #/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistoryProvisionResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistoryProvisionResponse'
         '400':
           description: Bad Request.
         '404':
@@ -463,24 +459,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult'
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult'
             text/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult'
             application/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult'
             text/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult'
         '400':
           description: The request was malformed.
         '404':
@@ -887,8 +878,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '201':
           description: Created.
         '400':
@@ -1094,8 +1084,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1151,8 +1140,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1193,8 +1181,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1228,8 +1215,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1263,8 +1249,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1305,10 +1290,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse`1[[DfT.DTRO.Models.Search.DtroSearchResult,
-                  DfT.DTRO, Version=1.0.0.0, Culture=neutral,
-                  PublicKeyToken=null]]
+                $ref: '#/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse`1[[DfT.DTRO.Models.Search.DtroSearchResult, DfT.DTRO, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'
         '400':
           description: Bad Request.
         '404':
@@ -1501,24 +1483,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '500':
@@ -1568,24 +1545,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1618,24 +1590,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
   /v1/swaCodes/activate/{traId}:
     patch:
       tags:
@@ -1664,24 +1631,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1716,24 +1678,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/json:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/xml:
               schema:
-                $ref: >-
-                  #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1868,15 +1825,9 @@ components:
         location:
           $ref: '#/components/schemas/DfT.DTRO.Models.DtroJson.Location'
         regulationStart:
-          $ref: >-
-            #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime,
-            System.Private.CoreLib, Version=6.0.0.0, Culture=neutral,
-            PublicKeyToken=7cec85d7bea7798e]]
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'
         regulationEnd:
-          $ref: >-
-            #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime,
-            System.Private.CoreLib, Version=6.0.0.0, Culture=neutral,
-            PublicKeyToken=7cec85d7bea7798e]]
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'
       additionalProperties: false
     DfT.DTRO.Models.DtroEvent.DtroEventSearchResult:
       type: object
@@ -2063,15 +2014,9 @@ components:
           type: string
           nullable: true
         regulationStart:
-          $ref: >-
-            #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime,
-            System.Private.CoreLib, Version=6.0.0.0, Culture=neutral,
-            PublicKeyToken=7cec85d7bea7798e]]
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'
         regulationEnd:
-          $ref: >-
-            #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime,
-            System.Private.CoreLib, Version=6.0.0.0, Culture=neutral,
-            PublicKeyToken=7cec85d7bea7798e]]
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'
       additionalProperties: false
     DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]:
       required:
