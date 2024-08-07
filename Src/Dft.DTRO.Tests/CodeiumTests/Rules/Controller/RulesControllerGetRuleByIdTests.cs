@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Models.RuleTemplate;
-
-namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller;
+﻿namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller;
 
 [ExcludeFromCodeCoverage]
 public class RulesControllerGetRuleByIdTests

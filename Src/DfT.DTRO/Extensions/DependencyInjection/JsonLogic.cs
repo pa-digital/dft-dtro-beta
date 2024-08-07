@@ -1,12 +1,6 @@
-﻿using System.Reflection;
-using DfT.DTRO.JsonLogic;
-using DfT.DTRO.Services.Validation;
-using Json.Logic;
-using Microsoft.Extensions.DependencyInjection;
+﻿namespace DfT.DTRO.Extensions.DependencyInjection;
 
-namespace DfT.DTRO.Extensions.DependencyInjection;
-
-public static class JsonLogicDIExtensions
+public static class JsonLogic
 {
     private static MethodInfo _addRuleMethod = typeof(RuleRegistry).GetMethods()
             .Single(it => it.Name == "AddRule");
