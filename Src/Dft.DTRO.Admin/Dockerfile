@@ -21,4 +21,6 @@ RUN chmod +x Dft.DTRO.Admin
 
 EXPOSE 8080
 
+ENV BASE_URL="https://localhost:5001"
+
 ENTRYPOINT ["./Dft.DTRO.Admin"]
