@@ -10,7 +10,7 @@
       }
     ],
     "environments": [
-      "ENV-environment"
+      "dtro-ENV-apigee-environment"
     ],
     "scopes": [
       "cso"
@@ -20,7 +20,7 @@
     "operationGroup": {
       "operationConfigs": [
         {
-          "apiSource": "ENV-server",
+          "apiSource": "dtro-ENV-server",
           "operations": [
             {
               "resource": "/**"
@@ -55,7 +55,7 @@
       }
     ],
     "environments": [
-      "ENV-environment"
+      "dtro-ENV-apigee-environment"
     ],
     "scopes": [
       "dsp"
@@ -65,7 +65,7 @@
     "operationGroup": {
       "operationConfigs": [
         {
-          "apiSource": "ENV-server",
+          "apiSource": "dtro-ENV-server",
           "operations": [
             {
               "resource": "/**"
@@ -100,7 +100,7 @@
       }
     ],
     "environments": [
-      "ENV-environment"
+      "dtro-ENV-apigee-environment"
     ],
     "scopes": [
       "dc"
@@ -110,7 +110,7 @@
     "operationGroup": {
       "operationConfigs": [
         {
-          "apiSource": "ENV-server",
+          "apiSource": "dtro-ENV-server",
           "operations": [
             {
               "resource": "/**"
