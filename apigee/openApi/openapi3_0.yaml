@@ -1290,7 +1290,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse`1[[DfT.DTRO.Models.Search.DtroSearchResult, DfT.DTRO, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'
+                $ref: '#/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1825,9 +1825,9 @@ components:
         location:
           $ref: '#/components/schemas/DfT.DTRO.Models.DtroJson.Location'
         regulationStart:
-          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
         regulationEnd:
-          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
       additionalProperties: false
     DfT.DTRO.Models.DtroEvent.DtroEventSearchResult:
       type: object
@@ -2014,11 +2014,11 @@ components:
           type: string
           nullable: true
         regulationStart:
-          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
         regulationEnd:
-          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
       additionalProperties: false
-    DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]:
+    DfT.DTRO.Models.Filtering.ValueCondition:
       required:
         - operator
         - value
@@ -2066,7 +2066,7 @@ components:
           type: integer
           format: int32
       additionalProperties: false
-    DfT.DTRO.Models.Pagination.PaginatedResponse`1[[DfT.DTRO.Models.Search.DtroSearchResult, DfT.DTRO, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]:
+    DfT.DTRO.Models.Pagination.PaginatedResponse:
       type: object
       properties:
         results:
