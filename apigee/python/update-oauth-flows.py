@@ -4,6 +4,7 @@ import yaml
 import sys
 import xml.etree.ElementTree as ET
 
+print("Starting Update OAuth Flows function")
 # Load the YAML file specified as the first command-line argument
 with open(sys.argv[1], "r") as file:
     apds = yaml.safe_load(file)
@@ -37,3 +38,5 @@ for path, methods in paths.items():
                     step.text = filename
 
 tree.write(proxy_xml_path, encoding='utf-8', xml_declaration=True)
+
+print("Finished Update OAuth Flows function")

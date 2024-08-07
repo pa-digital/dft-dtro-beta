@@ -234,7 +234,7 @@ jobs:
           python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
           python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
           cp -a oauth/* apiproxy/policies
-          rm apiproxy/policies/OAuth-v20-1.xml
+#          rm apiproxy/policies/OAuth-v20-1.xml
 
       - name: Create API bundle
         run: zip -r proxy.zip apiproxy
