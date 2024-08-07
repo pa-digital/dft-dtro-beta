@@ -224,11 +224,11 @@ jobs:
           cp policies/AM-Add-Organisation-Header.xml apiproxy/policies/AM-Add-Organisation-Header.xml
           gawk -i inplace '/<PostFlow name="PostFlow">/ { print; getline; print "   <Request>\n      <Step>\n        <Name>AM-Add-Organisation-Header</Name>\n      </Step>\n   </Request>"; next } 1' apiproxy/proxies/default.xml
           gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Add-Organisation-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
-#
-      - name: Create OAuth Policies
+
+      - name: Setup Python
         uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+
+      - name: Create OAuth Policies
         run: |
           pip install -r python/requirements.txt
           python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
