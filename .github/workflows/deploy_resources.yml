@@ -229,7 +229,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - run: |
+        run: |
           pip install -r python/requirements.txt
           python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
           python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
