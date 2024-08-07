@@ -244,8 +244,8 @@ jobs:
 
       - name: Create Products
         run: |
-          sed -i "s/ENV/${env}/g" apigee/products/products.json
-          apigeecli products import -f apigee/products/products.json --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --upsert
+          sed -i "s/ENV/${env}/g" products/products.json
+          apigeecli products import -f products/products.json --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --upsert
 
       - name: Publish Products to Developer Portal
-        run: apigee/portals/publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}
+        run: portals/publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}

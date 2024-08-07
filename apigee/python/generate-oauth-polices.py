@@ -6,8 +6,6 @@ import sys
 from itertools import combinations
 from pathlib import Path
 
-print("Starting Generate OAuth Flows function")
-
 scopes = sys.argv[2].split(",")
 
 # Generate all combinations of scopes
@@ -64,4 +62,4 @@ for scopes in all_scope_combinations:
 # Save the updated XML file
 server_tree.write(server_xml_path, encoding='utf-8', xml_declaration=True)
 
-print("Finished Generate OAuth Flows function")
+print("Generate OAuth Flows function complete")
