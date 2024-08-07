@@ -238,6 +238,9 @@ namespace DfT.DTRO.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("boolean");
 
@@ -257,6 +260,22 @@ namespace DfT.DTRO.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SwaCodes");
+                });
+
+            modelBuilder.Entity("DfT.DTRO.Models.DataBase.SystemConfig", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("SystemName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SystemConfig");
                 });
 #pragma warning restore 612, 618
         }

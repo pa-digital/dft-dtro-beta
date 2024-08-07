@@ -21,7 +21,7 @@ public class RecordManagementService : IRecordManagementService
             validationErrors.Add(new SemanticValidationError { Message = "TRA cannot be null" });
         }
 
-        List<SwaCodeResponse> swaCodes = _swaCodeDal.GetAllCodes().Result;
+        List<SwaCodeResponse> swaCodes = _swaCodeDal.GetAllCodesAsync().Result;
 
         int creator = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<int>("traCreator");
         bool isCreatorWithinSwaCodes = swaCodes.Select(response => response.TraId == creator).Any();

@@ -186,7 +186,7 @@ public class DTROsControllerTests
     [Fact]
     public async Task Get_SourceHistory_ReturnsListOfHistoricSources()
     {
-        List<DtroHistorySourceResponse> sourceResponses = Utils.CreateResponseDtroHistoryObject(ValidDtroHistories);
+        var sourceResponses = Utils.CreateResponseDtroHistoryObject(ValidDtroHistories);
 
 
         _mockDtroService.Setup(it => it.GetDtroSourceHistoryAsync(It.IsAny<Guid>()))

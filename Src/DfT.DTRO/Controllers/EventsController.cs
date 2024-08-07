@@ -1,5 +1,10 @@
-﻿namespace DfT.DTRO.Controllers;
+﻿using DfT.DTRO.Enums;
 
+namespace DfT.DTRO.Controllers;
+
+/// <summary>
+/// Controller for querying the database for data store events (e.g. create, update, delete)
+/// </summary>
 [Tags("Events")]
 [ApiController]
 public class EventsController : ControllerBase
@@ -8,6 +13,12 @@ public class EventsController : ControllerBase
     private readonly IMetricsService _metricsService;
     private readonly ILogger<EventsController> _logger;
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="eventSearchService">An <see cref="IEventSearchService"/> instance.</param>
+    /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
+    /// <param name="logger">An <see cref="ILogger{EventsController}"/> instance.</param>
     public EventsController(
         IEventSearchService eventSearchService,
         IMetricsService metricsService,
@@ -18,6 +29,16 @@ public class EventsController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Retrieve all data store events
+    /// </summary>
+    /// <param name="ta">TRA identification retrieve is for.</param>
+    /// <param name="search">A search query object</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>Search result.</returns>
     [HttpPost("/v1/events")]
     [FeatureGate(FeatureNames.DtroRead)]
     [ValidateModelState]

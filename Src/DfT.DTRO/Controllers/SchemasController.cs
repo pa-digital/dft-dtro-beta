@@ -2,6 +2,9 @@ using Newtonsoft.Json;
 
 namespace DfT.DTRO.Controllers;
 
+/// <summary>
+/// Controller for capturing Schema Template
+/// </summary>
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
@@ -12,6 +15,12 @@ public class SchemasController : ControllerBase
     private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<SchemasController> _logger;
 
+    /// <summary>
+    /// Default Constructor.
+    /// </summary>
+    /// <param name="schemaTemplateService">An <see cref="ISchemaTemplateService"/> instance.</param>
+    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
+    /// <param name="logger">An <see cref="ILogger{SchemaController}"/> instance.</param>
     public SchemasController(
         ISchemaTemplateService schemaTemplateService,
         IRequestCorrelationProvider correlationProvider,
@@ -22,10 +31,18 @@ public class SchemasController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Get schema template versions.
+    /// </summary>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>List of schema template versions.</returns>
     [HttpGet]
     [Route("/v1/schemas/versions")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetVersions()
+    public async Task<IActionResult> GetVersions()
     {
         try
         {
@@ -40,10 +57,18 @@ public class SchemasController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Get schema templates.
+    /// </summary>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>List of schema templates.</returns>
     [HttpGet]
     [Route("/v1/schemas")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> Get()
+    public async Task<IActionResult> Get()
     {
         try
         {
@@ -58,10 +83,19 @@ public class SchemasController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Get schema template by its schema version
+    /// </summary>
+    /// <param name="version">Schema version by which schema template to retrieve.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>Schema template.</returns>
     [HttpGet]
     [Route("/v1/schemas/{version}")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetByVersion(string version)
+    public async Task<IActionResult> GetByVersion(string version)
     {
         try
         {
@@ -87,10 +121,19 @@ public class SchemasController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Get schema template by its ID
+    /// </summary>
+    /// <param name="id">ID of the schema template to retrieve.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>Schema template.</returns>
     [HttpGet]
     [Route("/v1/schemas/{id:guid}")]
     [FeatureGate(FeatureNames.SchemasRead)]
-    public virtual async Task<IActionResult> GetById(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         try
         {
@@ -115,6 +158,16 @@ public class SchemasController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Create schema template
+    /// </summary>
+    /// <param name="version">Schema version the schema template is created for.</param>
+    /// <param name="file">JSON file containing a full schema template.</param>
+    /// <response code="201">Created.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the schema template.</returns>
     [HttpPost]
     [Route("/v1/schemas/createFromFile/{version}")]
     [Consumes("multipart/form-data")]
@@ -150,6 +203,16 @@ public class SchemasController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Create schema template
+    /// </summary>
+    /// <param name="version">Schema version the schema template is created for.</param>
+    /// <param name="body">Object containing a full schema template.</param>
+    /// <response code="201">Created.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the schema template.</returns>
     [HttpPost]
     [Route("/v1/schemas/createFromBody/{version}")]
     [ValidateModelState]
@@ -176,6 +239,16 @@ public class SchemasController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Update an existing schema template.
+    /// </summary>
+    /// <param name="version">Schema version to be used for updating schema template.</param>
+    /// <param name="file">JSON file containing a full schema template.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the updated schema template.</returns>
     [HttpPut]
     [Route("/v1/schemas/updateFromFile/{version}")]
     [Consumes("multipart/form-data")]
@@ -219,6 +292,16 @@ public class SchemasController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Update an existing schema template.
+    /// </summary>
+    /// <param name="version">Schema version to be used for updating schema template.</param>
+    /// <param name="body">Object containing a full schema template.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the updated schema template.</returns>
     [HttpPut]
     [Route("/v1/schemas/updateFromBody/{version}")]
     [ValidateModelState]
@@ -249,6 +332,15 @@ public class SchemasController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Activate schema template 
+    /// </summary>
+    /// <param name="version">Schema version by which schema template will activate.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the activated schema template.</returns>
     [HttpPatch]
     [Route("/v1/schemas/activate/{version}")]
     [ValidateModelState]
@@ -279,6 +371,15 @@ public class SchemasController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Deactivate schema template 
+    /// </summary>
+    /// <param name="version">Schema version by which schema template will deactivate.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the deactivated schema template.</returns>
     [HttpPatch]
     [Route("/v1/schemas/deactivate/{version}")]
     [ValidateModelState]

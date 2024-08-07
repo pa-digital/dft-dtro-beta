@@ -15,6 +15,7 @@ builder.Services.AddScoped<IRuleService, RuleService>();
 builder.Services.AddScoped<IDtroService, DtroService>();
 builder.Services.AddScoped<IMetricsService, MetricsService>();
 builder.Services.AddScoped<ITraService, TraService>();
+builder.Services.AddScoped<ISystemConfigService, SystemConfigService>();
 
 var app = builder.Build();
 
