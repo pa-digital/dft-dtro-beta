@@ -1,7 +1,7 @@
 [
   {
     "name": "ENV-central-service-provider",
-    "displayName": "ENV Central ServiceProvider",
+    "displayName": "ENV Central Service Provider",
     "approvalType": "manual",
     "attributes": [
       {
@@ -45,8 +45,8 @@
     }
   },
   {
-    "name": "ENV-service-consumer",
-    "displayName": "ENV Service Consumer",
+    "name": "ENV-digital-service-provider",
+    "displayName": "ENV Digital Service Provider",
     "approvalType": "manual",
     "attributes": [
       {
@@ -58,7 +58,7 @@
       "ENV-environment"
     ],
     "scopes": [
-      "sc"
+      "dsp"
     ],
     "createdAt": "1719227113878",
     "lastModifiedAt": "1719227144037",
@@ -90,8 +90,8 @@
     }
   },
   {
-    "name": "ENV-service-consumer",
-    "displayName": "ENV Service Consumer",
+    "name": "ENV-data-consumer",
+    "displayName": "ENV Data Consumer",
     "approvalType": "manual",
     "attributes": [
       {
@@ -103,7 +103,7 @@
       "ENV-environment"
     ],
     "scopes": [
-      "sc"
+      "dc"
     ],
     "createdAt": "1719227113878",
     "lastModifiedAt": "1719227144037",

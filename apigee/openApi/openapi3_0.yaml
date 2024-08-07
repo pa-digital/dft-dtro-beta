@@ -2182,10 +2182,18 @@ components:
           type: boolean
       additionalProperties: false
   securitySchemes:
-    Bearer:
-      type: apiKey
-      description: "JWT Authorization header using Bearer scheme.\r\nEnter the word 'Bearer' [space] then your token in the text input below.\r\nExample: 'Bearer 123abc'"
-      name: Authorization
-      in: header
+    oAuth:
+      type: oauth2
+      description: This API uses OAuth 2 with the clientCredentials grant flow.
+      flows:
+        clientCredentials:
+          tokenUrl: https://dtro-dft.gov.uk/v1/oauth-generator
+          scopes:
+            cso: Central Service Provider
+            dsp: Digital Service Provider
+            dc: Data Consumer
 security:
-  - Bearer: []
+  - oAuth:
+    - cso
+    - dsp
+    - dc
