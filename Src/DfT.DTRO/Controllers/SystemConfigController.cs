@@ -12,7 +12,7 @@ public class SystemConfigController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet("/v1/systemName")]
+    [HttpGet("/systemName")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, description: "System name retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]

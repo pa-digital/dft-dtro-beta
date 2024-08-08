@@ -39,7 +39,7 @@ public class EventsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Search result.</returns>
-    [HttpPost("/v1/events")]
+    [HttpPost("/events")]
     [FeatureGate(FeatureNames.DtroRead)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "Successfully received the event list")]
