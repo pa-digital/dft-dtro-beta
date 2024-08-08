@@ -99,7 +99,7 @@ public class Startup
             app.UseDeveloperExceptionPage();
             //TODO: The line below will be removed once access
             //TODO: to query the deployed database is granted
-            DbInitialize.RunSqlStatement(app);
+            DbInitialize.RunSqlStatement(app, loggerFactory);
         }
         else
         {
