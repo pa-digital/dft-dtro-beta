@@ -14,7 +14,7 @@ info:
 servers:
   - url: "http://localhost"
 paths:
-  /v1/dtros/createFromFile:
+  /dtros/createFromFile:
     post:
       tags:
         - DTROs
@@ -69,7 +69,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/dtros/updateFromFile/{id}:
+  /dtros/updateFromFile/{id}:
     put:
       tags:
         - DTROs
@@ -133,7 +133,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/dtros/createFromBody:
+  /dtros/createFromBody:
     post:
       tags:
         - DTROs
@@ -174,7 +174,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/dtros/updateFromBody/{id}:
+  /dtros/updateFromBody/{id}:
     put:
       tags:
         - DTROs
@@ -222,7 +222,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/dtros/{id}:
+  /dtros/{id}:
     get:
       tags:
         - DTROs
@@ -288,7 +288,7 @@ paths:
           description: Could not find a DTRO with the specified id.
         '500':
           description: Internal Server Error.
-  /v1/dtros/sourceHistory/{dtroId}:
+  /dtros/sourceHistory/{dtroId}:
     get:
       tags:
         - DTROs
@@ -325,7 +325,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/dtros/provisionHistory/{dtroId}:
+  /dtros/provisionHistory/{dtroId}:
     get:
       tags:
         - DTROs
@@ -362,7 +362,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/dtros/Ownership/{id}/{assignToTraId}:
+  /dtros/Ownership/{id}/{assignToTraId}:
     post:
       tags:
         - DTROs
@@ -407,7 +407,7 @@ paths:
           description: Could not find a DTRO with the specified id.
         '500':
           description: Internal Server Error.
-  /v1/events:
+  /events:
     post:
       tags:
         - Events
@@ -478,7 +478,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/healthApi:
+  /healthApi:
     get:
       tags:
         - Metrics
@@ -514,7 +514,7 @@ paths:
                 type: boolean
         '500':
           description: Api server error.
-  /v1/healthTraId:
+  /healthTraId:
     get:
       tags:
         - Metrics
@@ -564,7 +564,7 @@ paths:
           description: TRA ID not found in header.
         '500':
           description: Api server error.
-  /v1/healthDatabase:
+  /healthDatabase:
     get:
       tags:
         - Metrics
@@ -602,7 +602,7 @@ paths:
           description: Database is not available.
         '500':
           description: Api server error.
-  /v1/metricsForTra:
+  /metricsForTra:
     post:
       tags:
         - Metrics
@@ -666,7 +666,7 @@ paths:
           description: Not found.
         '500':
           description: Internal server error.
-  /v1/rules/versions:
+  /rules/versions:
     get:
       tags:
         - Rules
@@ -690,7 +690,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/rules:
+  /rules:
     get:
       tags:
         - Rules
@@ -714,7 +714,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/rules/{version}:
+  /rules/{version}:
     get:
       tags:
         - Rules
@@ -744,7 +744,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/rules/{id}:
+  /rules/{id}:
     get:
       tags:
         - Rules
@@ -775,7 +775,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/rules/createFromFile/{version}:
+  /rules/createFromFile/{version}:
     post:
       tags:
         - Rules
@@ -829,7 +829,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/rules/updateFromFile/{version}:
+  /rules/updateFromFile/{version}:
     put:
       tags:
         - Rules
@@ -887,7 +887,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/schemas/versions:
+  /schemas/versions:
     get:
       tags:
         - Schemas
@@ -911,7 +911,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/schemas:
+  /schemas:
     get:
       tags:
         - Schemas
@@ -935,7 +935,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/schemas/{version}:
+  /schemas/{version}:
     get:
       tags:
         - Schemas
@@ -965,7 +965,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/schemas/{id}:
+  /schemas/{id}:
     get:
       tags:
         - Schemas
@@ -996,7 +996,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/schemas/createFromFile/{version}:
+  /schemas/createFromFile/{version}:
     post:
       tags:
         - Schemas
@@ -1050,7 +1050,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/schemas/createFromBody/{version}:
+  /schemas/createFromBody/{version}:
     post:
       tags:
         - Schemas
@@ -1091,7 +1091,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/schemas/updateFromFile/{version}:
+  /schemas/updateFromFile/{version}:
     put:
       tags:
         - Schemas
@@ -1147,7 +1147,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/schemas/updateFromBody/{version}:
+  /schemas/updateFromBody/{version}:
     put:
       tags:
         - Schemas
@@ -1188,7 +1188,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/schemas/activate/{version}:
+  /schemas/activate/{version}:
     patch:
       tags:
         - Schemas
@@ -1222,7 +1222,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/schemas/deactivate/{version}:
+  /schemas/deactivate/{version}:
     patch:
       tags:
         - Schemas
@@ -1256,7 +1256,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/search:
+  /search:
     post:
       tags:
         - Search
@@ -1297,7 +1297,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /v1/systemName:
+  /systemName:
     get:
       tags:
         - SystemConfig
@@ -1332,7 +1332,7 @@ paths:
                 type: string
         '500':
           description: Internal server error.
-  /v1/swaCodes:
+  /swaCodes:
     get:
       tags:
         - Tra
@@ -1380,7 +1380,7 @@ paths:
           description: Not found.
         '500':
           description: Internal server error.
-  /v1/SearchSwaCodes/{partialName}:
+  /SearchSwaCodes/{partialName}:
     get:
       tags:
         - Tra
@@ -1436,7 +1436,7 @@ paths:
           description: Not found.
         '500':
           description: Internal server error.
-  /v1/swaCodes/createFromBody:
+  /swaCodes/createFromBody:
     post:
       tags:
         - Tra
@@ -1500,7 +1500,7 @@ paths:
           description: Bad Request.
         '500':
           description: Internal server error.
-  /v1/swaCodes/updateFromBody:
+  /swaCodes/updateFromBody:
     put:
       tags:
         - Tra
@@ -1564,7 +1564,7 @@ paths:
           description: Not Found.
         '500':
           description: Internal server error.
-  /v1/swaCodes/{traId}:
+  /swaCodes/{traId}:
     get:
       tags:
         - Tra
@@ -1603,7 +1603,7 @@ paths:
             text/xml:
               schema:
                 $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
-  /v1/swaCodes/activate/{traId}:
+  /swaCodes/activate/{traId}:
     patch:
       tags:
         - Tra
@@ -1650,7 +1650,7 @@ paths:
           description: Not Found.
         '500':
           description: Internal server error.
-  /v1/swaCodes/deactivate/{traId}:
+  /swaCodes/deactivate/{traId}:
     patch:
       tags:
         - Tra
@@ -2187,7 +2187,7 @@ components:
       description: This API uses OAuth 2 with the clientCredentials grant flow.
       flows:
         clientCredentials:
-          tokenUrl: https://dtro-dft.gov.uk/v1/oauth-generator
+          tokenUrl: https://dtro-dft.gov.uk/oauth-generator
           scopes:
             cso: Central Service Provider
             dsp: Digital Service Provider
