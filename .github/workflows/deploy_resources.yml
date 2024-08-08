@@ -211,36 +211,36 @@ jobs:
       - name: Make scripts directory executable
         run: chmod +x portals/*
 
-#      - name: Deploy Proxy
-#        run: apigeecli apis create oas --name "dtro-${env}-server" --oas-base-folderpath openApi --oas-name openapi3_0.yaml --target-url $target_url --basepath /v1 --add-cors=true --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
-#
-#      - name: Get Proxy Bundle
-#        run: |
-#          apigeecli apis export --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
-#          unzip "dtro-${env}-server.zip"
-#
-#      - name: Add Header Policy
-#        run: |
-#          cp policies/AM-Add-Organisation-Header.xml apiproxy/policies/AM-Add-Organisation-Header.xml
-#          gawk -i inplace '/<PostFlow name="PostFlow">/ { print; getline; print "   <Request>\n      <Step>\n        <Name>AM-Add-Organisation-Header</Name>\n      </Step>\n   </Request>"; next } 1' apiproxy/proxies/default.xml
-#          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Add-Organisation-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
-#
-#      - name: Setup Python
-#        uses: actions/setup-python@v5
-#
-#      - name: Create OAuth Policies
-#        run: |
-#          pip install -r python/requirements.txt
-#          python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
-#          python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
-#          cp -a oauth/* apiproxy/policies
-##          rm apiproxy/policies/OAuth-v20-1.xml
-#
-#      - name: Create API bundle
-#        run: zip -r proxy.zip apiproxy
-#
-#      - name: Upload and Deploy API Proxy Bundle
-#        run: apigeecli apis create bundle --name "dtro-${env}-server" --proxy-zip proxy.zip --env "${{ env.name_prefix }}-environment" --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
+      - name: Deploy Proxy
+        run: apigeecli apis create oas --name "dtro-${env}-server" --oas-base-folderpath openApi --oas-name openapi3_0.yaml --target-url $target_url --basepath /v1 --add-cors=true --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
+
+      - name: Get Proxy Bundle
+        run: |
+          apigeecli apis export --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
+          unzip "dtro-${env}-server.zip"
+
+      - name: Add Header Policy
+        run: |
+          cp policies/AM-Set-App-Id-Header.xml apiproxy/policies/AM-Set-App-Id-Header.xml
+          gawk -i inplace '/<PostFlow name="PostFlow">/ { print; getline; print "   <Request>\n      <Step>\n        <Name>AM-Set-App-Id-Header</Name>\n      </Step>\n   </Request>"; next } 1' apiproxy/proxies/default.xml
+          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+
+      - name: Create OAuth Policies
+        run: |
+          pip install -r python/requirements.txt
+          python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
+          python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
+          cp -a oauth/* apiproxy/policies
+          rm apiproxy/policies/OAuth-v20-1.xml
+
+      - name: Create API bundle
+        run: zip -r proxy.zip apiproxy
+
+      - name: Upload and Deploy API Proxy Bundle
+        run: apigeecli apis create bundle --name "dtro-${env}-server" --proxy-zip proxy.zip --env "${{ env.name_prefix }}-environment" --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
 
       - name: Create Products
         run: |
