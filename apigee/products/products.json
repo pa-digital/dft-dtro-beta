@@ -2,7 +2,7 @@
   {
     "name": "ENV-central-service-provider",
     "displayName": "ENV Central Service Provider",
-    "approvalType": "auto",
+    "approvalType": "manual",
     "attributes": [
       {
         "name": "access",
