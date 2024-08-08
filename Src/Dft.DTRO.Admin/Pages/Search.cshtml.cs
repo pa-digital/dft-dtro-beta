@@ -1,8 +1,3 @@
-using System.Globalization;
-using System.Text.RegularExpressions;
-using Dft.DTRO.Admin.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 public class SearchModel : PageModel
 {
     public PaginatedResponse<DtroSearchResult> Dtros { get; set; }
@@ -24,12 +19,12 @@ public class SearchModel : PageModel
 
         TraSearch.UpdateButtonText = "Search";
         TraSearch.SwaCodes = await _traService.GetSwaCodes();
-        TraSearch.SwaCodes.Insert(0, new SwaCode { TraId = 0, Name = "[all]" , IsActive = true});
+        TraSearch.SwaCodes.Insert(0, new SwaCode { TraId = 0, Name = "[all]", IsActive = true });
     }
 
     public IActionResult OnPostUpdate()
     {
-        return RedirectToPage(new {TraSearch.TraSelect});
+        return RedirectToPage(new { TraSearch.TraSelect });
     }
 
     public IActionResult OnGetRefresh()
@@ -37,7 +32,7 @@ public class SearchModel : PageModel
         if (TempData.TryGetValue("TraSelect", out object traSelect))
             TraSearch.TraSelect = (int)traSelect;
 
-        return RedirectToPage(new {TraSearch.TraSelect });
+        return RedirectToPage(new { TraSearch.TraSelect });
     }
 
     public string FormatListToSingle(IEnumerable<string> items)

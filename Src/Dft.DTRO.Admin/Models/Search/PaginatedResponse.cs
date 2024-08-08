@@ -1,3 +1,5 @@
+namespace Dft.DTRO.Admin.Models.Search;
+
 public class PaginatedResponse<T>
 {
     public IReadOnlyCollection<T> Results { get; set; }

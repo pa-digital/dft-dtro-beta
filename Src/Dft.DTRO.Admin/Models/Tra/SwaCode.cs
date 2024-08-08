@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Dft.DTRO.Admin.Models.Tra;
 
 public class SwaCode
 {
