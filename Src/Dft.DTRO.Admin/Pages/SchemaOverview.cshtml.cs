@@ -1,7 +1,3 @@
-using Dft.DTRO.Admin.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 public class SchemaOverviewModel : PageModel
 {
     private readonly ISchemaService _schemaService;

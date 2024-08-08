@@ -1,11 +1,12 @@
-﻿
+﻿namespace Dft.DTRO.Admin.Models.Tra;
+
 public class TraSearch
 {
     public int? TraSelect { get; set; }
 
     public string Search { get; set; } = string.Empty;
 
-    public  bool AlwaysButtonEnabled { get; set; }
+    public bool AlwaysButtonEnabled { get; set; }
 
     public string UpdateButtonText { get; set; } = string.Empty;
 
