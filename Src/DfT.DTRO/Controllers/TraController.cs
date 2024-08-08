@@ -58,7 +58,7 @@ public class TraController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>A List of SWA Codes</returns>
-    [HttpGet("/v1/SearchSwaCodes/{partialName}")]
+    [HttpGet("/v1/swaCodes/search/{partialName}")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, description: "Tra swa codes retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]

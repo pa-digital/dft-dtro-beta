@@ -50,7 +50,7 @@ public class TraService : ITraService
 
     public async Task<List<SwaCode>> SearchSwaCodes(string partialName)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/SearchSwaCodes/{partialName}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/swaCodes/search/{partialName}");
         Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);
