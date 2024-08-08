@@ -51,6 +51,7 @@ public class TraEditModel : PageModel
         else
         {
             await _traService.CreateTraAsync(SwaCode);
+            Search = SwaCode.Name;
         }
 
         return RedirectToPage("TraList", new { search = Search });
