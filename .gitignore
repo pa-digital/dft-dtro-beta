@@ -36,3 +36,4 @@
 /.github/temp_storge_of_tf_files/.gitignore
 /terraform/.terraform.lock.hcl
 /Src/DfT.DTRO/Logs
+/DfT.DTRO.slnLaunch.user

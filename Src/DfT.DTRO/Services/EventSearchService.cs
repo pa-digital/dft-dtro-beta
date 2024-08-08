@@ -1,7 +1,4 @@
-﻿using DfT.DTRO.Models.DtroEvent;
-using DfT.DTRO.Services.Mapping;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services;
 
 public class EventSearchService : IEventSearchService
 {
