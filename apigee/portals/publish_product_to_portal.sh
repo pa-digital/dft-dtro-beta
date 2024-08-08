@@ -13,8 +13,8 @@ PORTAL_URL="$(echo "${PORTAL_NAME//[- ]/}" | tr '[:upper:]' '[:lower:]')"
 TOKEN=$1
 
 # List of product names
-PRODUCT_NAMES=("cso" "digital-service-provider" "data-consumer")
-
+PRODUCT_NAMES=("central-service-provider" "digital-service-provider" "data-consumer")
+echo "PORTAL_URL = ${PORTAL_URL}"
 # Loop through each product name
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
 
