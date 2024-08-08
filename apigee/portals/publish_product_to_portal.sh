@@ -21,10 +21,10 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
   PRODUCT_NAME="${env}-${PRODUCT}"
 
 #  # Convert product name to title case with spaces
-#  TITLE=$(to_title_case "${PRODUCT_NAME}")
+  TITLE=$(to_title_case "${PRODUCT}")
 
   # Construct the description
-  DESCRIPTION="This is the ${TITLE_ENV} D-TRO application for ${PRODUCT}."
+  DESCRIPTION="This is the ${TITLE_ENV} D-TRO application for ${PRODUCT}s."
 
   # Make the API call
   RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
