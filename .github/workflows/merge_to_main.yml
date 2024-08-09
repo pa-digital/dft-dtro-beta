@@ -20,10 +20,10 @@ jobs:
       environment: dev
       dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
       dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
-      # TODO: In here to support apigee deployment. To be removed once Apigee deployment completed.
       run-build-push: true
       run-deploy-CR-job: true
-      run-apigee: false
+#      run-apigee: false #TODO: Default value when no major endpoint or OAuth changes have been made
+      run-apigee: true
 
   deploy-test:
     name: Deploy to Test
@@ -41,3 +41,7 @@ jobs:
       environment: test
       dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
       dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
+      run-build-push: true
+      run-deploy-CR-job: true
+#      run-apigee: false #TODO: Default value when no major endpoint or OAuth changes have been made
+      run-apigee: true
