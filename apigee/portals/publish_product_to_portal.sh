@@ -28,7 +28,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
   DESCRIPTION="This is the ${TITLE_ENV} D-TRO application for ${PRODUCT}s."
 
   # Make the API call
-  RESPONSE=$(curl -s -o /dev/null  -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
@@ -43,18 +43,17 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
     }')
 
  # Error checking and handling
- echo "${TITLE} = ${RESPONSE}"
-#  if [ "$RESPONSE" -eq 200 ]; then
-#    echo "${TITLE} successfully created in the Developer Portal."
-#  elif [ "$RESPONSE" -eq 409 ]; then
-#    echo "${TITLE} already exists in the Developer Portal."
-#  else
-#    echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
-#    exit 1
-#  fi
+  if [ "$RESPONSE" -eq 200 ]; then
+    echo "${TITLE} successfully created in the Developer Portal."
+  elif [ "$RESPONSE" -eq 409 ]; then
+    echo "${TITLE} already exists in the Developer Portal."
+  else
+    echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
+    exit 1
+  fi
 done
 
-RESPONSE=$(curl -s -o /dev/null -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+TEST_RESPONSE=$(curl -i -o /dev/null -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
@@ -68,5 +67,5 @@ RESPONSE=$(curl -s -o /dev/null -X POST "https://apigee.googleapis.com/v1/organi
       "apiProductName": "test1"
     }')
 
- echo "Test1 response = ${RESPONSE}"
+ echo "Test1 response = ${TEST_RESPONSE}"
 

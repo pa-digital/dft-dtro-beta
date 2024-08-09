@@ -483,11 +483,6 @@ paths:
       tags:
         - Metrics
       summary: Check API health.
-      operationId: check-api-health
-      security:
-        - oAuth:
-            - cso
-            - dsp
       parameters:
         - name: X-Correlation-ID
           in: header
