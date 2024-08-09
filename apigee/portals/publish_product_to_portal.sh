@@ -19,10 +19,10 @@ echo "PORTAL_URL = ${PORTAL_URL}"
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
 
   PRODUCT_NAME="${env}-${PRODUCT}"
-
-#  # Convert product name to title case with spaces
+  echo "PRODUCT_NAME = ${PRODUCT_NAME}"
+  # Convert product name to title case with spaces
   TITLE=$(to_title_case "${PRODUCT}")
-
+  echo "TITLE = ${TITLE}"
   # Construct the description
   DESCRIPTION="This is the ${TITLE_ENV} D-TRO application for ${PRODUCT}s."
 
