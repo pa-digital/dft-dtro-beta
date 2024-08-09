@@ -1,5 +1,8 @@
 ﻿namespace DfT.DTRO.Controllers;
 
+/// <summary>
+/// Controller for capturing metric
+/// </summary>
 [Tags("Metrics")]
 [ApiController]
 public class MetricsController : ControllerBase
@@ -7,6 +10,11 @@ public class MetricsController : ControllerBase
     private readonly IMetricsService _metricsService;
     private readonly ILogger<MetricsController> _logger;
 
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
+    /// <param name="logger">An <see cref="ILogger{MetricsController}"/> instance.</param>
     public MetricsController(
         IMetricsService metricsService,
         ILogger<MetricsController> logger)
@@ -15,7 +23,12 @@ public class MetricsController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet("/v1/healthApi")]
+    /// <summary>
+    /// Check API health.
+    /// </summary>
+    /// <response code="200">OK.</response>
+    /// <response code="500">Internal Server Error.</response>
+    [HttpGet("/healthApi")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "The API is up and running.")]
@@ -34,13 +47,19 @@ public class MetricsController : ControllerBase
         }
     }
 
-    [HttpGet("/v1/healthTraId")]
+    /// <summary>
+    /// Check TRA ID health.
+    /// </summary>
+    /// <param name="ta">TRA identification to check the health.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    [HttpGet("/healthTraId")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "Successfully received the Tra Id")]
     [SwaggerResponse(statusCode: 404, description: "TRA ID not found in header.")]
     [SwaggerResponse(statusCode: 500, description: "Api server error.")]
-
     public ActionResult<int?> HealthTraId([FromHeader(Name = "TA")][Required] int? ta)
     {
         try
@@ -65,7 +84,13 @@ public class MetricsController : ControllerBase
         }
     }
 
-    [HttpGet("/v1/healthDatabase")]
+    /// <summary>
+    /// Check database health.
+    /// </summary>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    [HttpGet("/healthDatabase")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, description: "Database is available.")]
     [SwaggerResponse(statusCode: 404, description: "Database is not available.")]
@@ -91,7 +116,15 @@ public class MetricsController : ControllerBase
         }
     }
 
-    [HttpPost("/v1/metricsForTra")]
+    /// <summary>
+    /// Get metrics for TRA
+    /// </summary>
+    /// <param name="metricRequest">Object containing a metric request.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>Metric summary</returns>
+    [HttpPost("/metricsForTra")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, description: "Metrics retrieved successfully.")]
     [SwaggerResponse(statusCode: 400, description: "Dates Incorrect.")]

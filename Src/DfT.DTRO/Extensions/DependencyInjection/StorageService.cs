@@ -1,10 +1,6 @@
-﻿using System.Reflection;
-using DfT.DTRO.DAL;
-using Npgsql;
+﻿namespace DfT.DTRO.Extensions.DependencyInjection;
 
-namespace DfT.DTRO.Extensions.DependencyInjection;
-
-public static class StorageServiceDIExtensions
+public static class StorageService
 {
     public static void AddStorage(this IServiceCollection services, IConfiguration configuration)
     {

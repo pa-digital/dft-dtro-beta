@@ -1,5 +1,5 @@
-﻿
-namespace Dft.DTRO.Tests.CodeiumTests.Tra.Service;
+﻿namespace Dft.DTRO.Tests.CodeiumTests.Tra.Service;
+
 public class TraServiceTests
 {
     private readonly Mock<ISwaCodeDal> _mockSwaCodeDal;

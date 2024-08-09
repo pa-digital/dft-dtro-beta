@@ -1,3 +1,4 @@
+namespace Dft.DTRO.Admin.Models.Search;
 
 public record struct BoundingBox(double westLongitude, double southLatitude, double eastLongitude, double northLatitude)
 {

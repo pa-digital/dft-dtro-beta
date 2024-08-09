@@ -1,20 +1,20 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.DAL;
-using Microsoft.EntityFrameworkCore;
-using SchemaVersion = DfT.DTRO.Models.SchemaTemplate.SchemaVersion;
+﻿namespace DfT.DTRO.DAL;
 
-namespace DfT.DTRO.Services;
-
+/// <summary>
+/// Implementation of the <see cref="ISchemaTemplateDal"/> service.
+/// </summary>
 [ExcludeFromCodeCoverage]
 public class SchemaTemplateDal : ISchemaTemplateDal
 {
     private readonly DtroContext _dtroContext;
 
-    public SchemaTemplateDal(DtroContext dtroContext)
-    {
-        _dtroContext = dtroContext;
-    }
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="dtroContext"><see cref="DtroContext"/> database context.</param>
+    public SchemaTemplateDal(DtroContext dtroContext) => _dtroContext = dtroContext;
 
+    ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<GuidResponse> ActivateSchemaTemplateAsync(SchemaVersion schemaVersion)
     {
         if (!await SchemaTemplateExistsAsync(schemaVersion))
@@ -28,6 +28,7 @@ public class SchemaTemplateDal : ISchemaTemplateDal
         return new GuidResponse() { Id = existing.Id };
     }
 
+    ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<GuidResponse> DeActivateSchemaTemplateAsync(SchemaVersion schemaVersion)
     {
         if (!await SchemaTemplateExistsAsync(schemaVersion))
@@ -41,35 +42,41 @@ public class SchemaTemplateDal : ISchemaTemplateDal
         return new GuidResponse() { Id = existing.Id };
     }
 
+    ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<bool> SchemaTemplateExistsAsync(SchemaVersion schemaVersion)
     {
         var exists = await _dtroContext.SchemaTemplate.AnyAsync(it => it.SchemaVersion == schemaVersion);
         return exists;
     }
 
+    ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<bool> SchemaTemplateExistsByIdAsync(Guid id)
     {
         var exists = await _dtroContext.SchemaTemplate.AnyAsync(it => it.Id == id);
         return exists;
     }
 
+    ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<SchemaTemplate> GetSchemaTemplateByIdAsync(Guid id)
     {
         return await _dtroContext.SchemaTemplate.FindAsync(id);
     }
 
+    ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<SchemaTemplate> GetSchemaTemplateAsync(SchemaVersion schemaVersion)
     {
         var ret = await _dtroContext.SchemaTemplate.FirstOrDefaultAsync(b => b.SchemaVersion == schemaVersion);
         return ret;
     }
 
+    ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<List<SchemaTemplate>> GetSchemaTemplatesAsync()
     {
         var templates = await _dtroContext.SchemaTemplate.ToListAsync();
         return templates;
     }
 
+    ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<List<SchemaTemplateOverview>> GetSchemaTemplatesVersionsAsync()
     {
         var versions = await (from schema in _dtroContext.SchemaTemplate
@@ -85,6 +92,7 @@ public class SchemaTemplateDal : ISchemaTemplateDal
         return versions;
     }
 
+    ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<GuidResponse> SaveSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId)
     {
         var schemaTemplate = new SchemaTemplate();
@@ -109,6 +117,7 @@ public class SchemaTemplateDal : ISchemaTemplateDal
         return response;
     }
 
+    ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId)
     {
         if (!await SchemaTemplateExistsAsync(version))

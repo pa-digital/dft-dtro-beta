@@ -1,13 +1,14 @@
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-
 namespace DfT.DTRO.Attributes;
 
+/// <summary>
+/// Model state validation attribute.
+/// </summary>
 public class ValidateModelStateAttribute : ActionFilterAttribute
 {
+    /// <summary>
+    /// Called before action method is invoked.
+    /// </summary>
+    /// <param name="context">The context being executed under.</param>
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         var descriptor = context.ActionDescriptor as ControllerActionDescriptor;

@@ -31,9 +31,9 @@ public class JsonLogicValidationService : IJsonLogicValidationService
         foreach (var rule in rules)
         {
             var result = rule.Rule.Apply(node);
-            if (result.AsValue().TryGetValue(out bool value) && !value)
+            if (result != null && result.AsValue().TryGetValue(out bool value) && !value)
             {
-                errors.Add(new SemanticValidationError()
+                errors.Add(new SemanticValidationError
                 {
                     Message = rule.Message,
                     Path = rule.Path

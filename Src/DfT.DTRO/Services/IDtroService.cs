@@ -1,8 +1,3 @@
-using DfT.DTRO.Models.DtroEvent;
-using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Models.Filtering;
-using DfT.DTRO.Models.Pagination;
-
 namespace DfT.DTRO.Services;
 
 public interface IDtroService

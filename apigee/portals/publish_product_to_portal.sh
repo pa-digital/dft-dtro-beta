@@ -7,24 +7,25 @@ to_title_case() {
   echo "$1" | sed -e 's/\b./\u&/g' -e 's/-/ /g'
 }
 TITLE_ENV=$(to_title_case "${env}")
-PORTAL_NAME="${TITLE_ENV} Developer NPP Portal"
+PORTAL_NAME="${TITLE_ENV} Developer D-TRO Portal"
 PORTAL_URL="$(echo "${PORTAL_NAME//[- ]/}" | tr '[:upper:]' '[:lower:]')"
 
 TOKEN=$1
 
 # List of product names
-PRODUCT_NAMES=("service-provider" "enforcement-provider" "parking-operator")
+PRODUCT_NAMES=("central-service-provider" "digital-service-provider" "data-consumer")
 
 # Loop through each product name
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
 
+  # Name of product created via product.json
   PRODUCT_NAME="${env}-${PRODUCT}"
 
-  # Construct the description
-  DESCRIPTION="This is the ${PRODUCT_NAME} product."
-
   # Convert product name to title case with spaces
-  TITLE=$(to_title_case "${PRODUCT_NAME}")
+  TITLE=$(to_title_case "${PRODUCT}")
+
+  # Construct the description
+  DESCRIPTION="This is the ${TITLE_ENV} D-TRO application for ${PRODUCT}s."
 
   # Make the API call
   RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
@@ -43,11 +44,28 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
 
  # Error checking and handling
   if [ "$RESPONSE" -eq 200 ]; then
-    echo "${PRODUCT_NAME} successfully created in the Developer Portal."
+    echo "${TITLE} successfully created in the Developer Portal."
   elif [ "$RESPONSE" -eq 409 ]; then
-    echo "${PRODUCT_NAME} already exists in the Developer Portal."
+    echo "${TITLE} already exists in the Developer Portal."
   else
-    echo "Failed to publish ${PRODUCT_NAME} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
+    echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
     exit 1
   fi
 done
+
+TEST_RESPONSE=$(curl -i -o /dev/null -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+    -H "Authorization: Bearer ${TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "title": "test1",
+      "description": "test1",
+      "anonAllowed": true,
+      "imageUrl": "",
+      "requireCallbackUrl": false,
+      "categoryIds": [],
+      "published": true,
+      "apiProductName": "test1"
+    }')
+
+ echo "Test1 response = ${TEST_RESPONSE}"
+

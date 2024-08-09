@@ -1,4 +1,4 @@
-using System.Runtime.Serialization;
+namespace Dft.DTRO.Admin.Models.Metrics;
 
 public class MetricSummary
 {

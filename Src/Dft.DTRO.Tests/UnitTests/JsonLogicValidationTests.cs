@@ -9,7 +9,7 @@ public class JsonLogicValidationTests
 
     public JsonLogicValidationTests()
     {
-        JsonLogicDIExtensions.AddAllRules(typeof(IJsonLogicRuleSource).Assembly);
+        JsonLogic.AddAllRules(typeof(IJsonLogicRuleSource).Assembly);
     }
 
     [Fact]

@@ -168,7 +168,7 @@ namespace Dft.DTRO.Tests
         {
             new SwaCodeResponse
             {
-                TraId = 0,
+                TraId = -1,
                 IsAdmin = true,
                 Name = "Department for Transport",
                 Prefix = "DfT"

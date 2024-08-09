@@ -1,7 +1,11 @@
+using DfT.DTRO.Enums;
 using Newtonsoft.Json;
 
 namespace DfT.DTRO.Controllers;
 
+/// <summary>
+/// Controller for capturing D-TROs
+/// </summary>
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
@@ -13,6 +17,13 @@ public class DTROsController : ControllerBase
     private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<DTROsController> _logger;
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
+    /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
+    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
+    /// <param name="logger">An <see cref="ILogger{DTROsController}"/> instance.</param>
     public DTROsController(
         IDtroService dtroService,
         IMetricsService metricsService,
@@ -25,8 +36,18 @@ public class DTROsController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Create a new D-TRO
+    /// </summary>
+    /// <param name="ta">TRA identification a D-TRO is being submitted for.</param>
+    /// <param name="file">JSON file containing a full D-TRO details.</param>
+    /// <response code="201">Created.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the submitted D-TRO</returns>
     [HttpPost]
-    [Route("/v1/dtros/createFromFile")]
+    [Route("/dtros/createFromFile")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     public async Task<IActionResult> CreateFromFile([FromHeader(Name = "TA")][Required] int? ta, IFormFile file)
@@ -75,8 +96,19 @@ public class DTROsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Update an existing D-TRO
+    /// </summary>
+    /// <param name="ta">TRA identification a D-TRO is being updated for.</param>
+    /// <param name="id">ID of the D-TRO to update.</param>
+    /// <param name="file">JSON file containing a full D-TRO details</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the submitted D-TRO</returns>
     [HttpPut]
-    [Route("/v1/dtros/updateFromFile/{id:guid}")]
+    [Route("/dtros/updateFromFile/{id:guid}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
@@ -128,8 +160,18 @@ public class DTROsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Create a new D-TRO
+    /// </summary>
+    /// <param name="ta">TRA identification a D-TRO is being submitted for.</param>
+    /// <param name="dtroSubmit">Object containing a full D-TRO details.</param>
+    /// <response code="201">Created.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the submitted D-TRO</returns>
     [HttpPost]
-    [Route("/v1/dtros/createFromBody")]
+    [Route("/dtros/createFromBody")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
@@ -168,8 +210,19 @@ public class DTROsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Update an existing D-TRO
+    /// </summary>
+    /// <param name="ta">TRA identification a D-TRO is being updated for.</param>
+    /// <param name="id">ID of the D-TRO to update.</param>
+    /// <param name="dtroSubmit">Object containing a full D-TRO details.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>ID of the submitted D-TRO</returns>
     [HttpPut]
-    [Route("/v1/dtros/updateFromBody/{id:guid}")]
+    [Route("/dtros/updateFromBody/{id:guid}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Okay")]
@@ -208,14 +261,22 @@ public class DTROsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Gets a D-TRO by its ID
+    /// </summary>
+    /// <param name="id">ID of the D-TRO to retrieve.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>D-TRO object.</returns>
     [HttpGet]
-    [Route("/v1/dtros/{id:guid}")]
+    [Route("/dtros/{id:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     public async Task<IActionResult> GetById(Guid id)
     {
         try
         {
-            DtroResponse dtroResponse = await _dtroService.GetDtroByIdAsync(id);
+            var dtroResponse = await _dtroService.GetDtroByIdAsync(id);
             _logger.LogInformation($"'{nameof(GetById)}' method called using '{id}' unique identifier");
             return Ok(dtroResponse);
         }
@@ -231,7 +292,16 @@ public class DTROsController : ControllerBase
         }
     }
 
-    [HttpDelete("/v1/dtros/{id:guid}")]
+    /// <summary>
+    /// Marks a D-TRO as deleted.
+    /// </summary>
+    /// <param name="ta">TRA identification a D-TRO is being mark as deleted for.</param>
+    /// <param name="id">ID of the D-TRO to mark as deleted.</param>
+    /// <response code="204">No content.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    [HttpDelete("/dtros/{id:guid}")]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
@@ -257,8 +327,17 @@ public class DTROsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Retrieve the Source History for existing D-TROs
+    /// </summary>
+    /// <param name="dtroId">ID of the D-TRO to retrieve source history for.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>List of D-TROs source history.</returns>
     [HttpGet]
-    [Route("/v1/dtros/sourceHistory/{dtroId:guid}")]
+    [Route("/dtros/sourceHistory/{dtroId:guid}")]
     public async Task<ActionResult<List<DtroHistorySourceResponse>>> GetSourceHistory(Guid dtroId)
     {
         try
@@ -279,8 +358,17 @@ public class DTROsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Retrieve the Provision History for existing D-TROs
+    /// </summary>
+    /// <param name="dtroId">ID of the D-TRO to retrieve provision history for.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>List of D-TROs provision history.</returns>
     [HttpGet]
-    [Route("/v1/dtros/provisionHistory/{dtroId:guid}")]
+    [Route("/dtros/provisionHistory/{dtroId:guid}")]
     public async Task<ActionResult<List<DtroHistoryProvisionResponse>>> GetProvisionHistory(Guid dtroId)
     {
         try
@@ -301,6 +389,16 @@ public class DTROsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Assign D-TRO ownership
+    /// </summary>
+    /// <param name="ta">TRA identification of the D-TRO owner.</param>
+    /// <param name="id">ID of the D-TRO to assign.</param>
+    /// <param name="assignToTraId">TRA identification of the new D-TRO owner</param>
+    /// <response code="201">Created.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
     [HttpPost("v1/dtros/Ownership/{id:guid}/{assignToTraId:int}")]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]

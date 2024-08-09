@@ -3,7 +3,7 @@
 <div class="rounded-box">
     <div style="display: flex; align-items: center;">
         <label style="margin-right: 10px;">TRA</label>
-        <input type="text" id="traSearch" name="TraSearch.Search"  placeholder="Search..." style="width: 100%; margin-right: 10px;" value="@Model.Search" />
+        <input type="text" id="traSearch" name="TraSearch.Search" value="@Model.Search" placeholder="Search..." style="width: 100%; margin-right: 10px;" value="@Model.Search" />
         <input type="hidden" style="max-width: 30px;" id="selectedValue" name="TraSearch.TraSelect" />
         <input type="hidden" style="max-width: 30px;" name="TraSearch.PreviousTraSelect" value="@Model.PreviousTraSelect" />
         <input type="hidden" style="max-width: 30px;" name="TraSearch.PreviousSearch" value="@Model.PreviousSearch" />
@@ -25,7 +25,7 @@
                                 @item.Name
                             </div>
                             <script>
-                                document.getElementById('traSearch').value = '';
+                                // document.getElementById('traSearch').value = '';
                                 document.getElementById('selectedValue').value = '@item.TraId';
                             </script>
                         }

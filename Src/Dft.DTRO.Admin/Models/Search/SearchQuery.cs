@@ -1,5 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
+namespace Dft.DTRO.Admin.Models.Search;
 
 public class SearchQuery
 {

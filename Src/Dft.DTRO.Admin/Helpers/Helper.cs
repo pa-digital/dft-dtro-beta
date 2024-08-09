@@ -1,4 +1,5 @@
-﻿
+﻿namespace Dft.DTRO.Admin.Helpers;
+
 public static class Helper
 {
     public static void AddHeaders(ref HttpRequestMessage httpRequestMessage)

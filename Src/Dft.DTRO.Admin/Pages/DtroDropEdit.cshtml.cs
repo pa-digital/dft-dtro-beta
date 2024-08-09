@@ -1,7 +1,3 @@
-using Dft.DTRO.Admin.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 public class DtroDropEditModel : PageModel
 {
     private readonly IDtroService _dtroService;

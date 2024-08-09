@@ -12,6 +12,9 @@ case "${environment}" in
   "test")
     source environments/test.sh
     ;;
+  "int")
+    source environments/int.sh
+    ;;
   "prod")
     source environments/prod.sh
     ;;

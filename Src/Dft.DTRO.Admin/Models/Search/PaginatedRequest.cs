@@ -1,5 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
+namespace Dft.DTRO.Admin.Models.Search;
 
 public class PaginatedRequest
 {

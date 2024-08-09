@@ -61,3 +61,5 @@ for scopes in all_scope_combinations:
 
 # Save the updated XML file
 server_tree.write(server_xml_path, encoding='utf-8', xml_declaration=True)
+
+print("Generate OAuth Flows function complete")

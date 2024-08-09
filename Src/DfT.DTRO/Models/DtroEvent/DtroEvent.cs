@@ -1,25 +1,44 @@
-﻿using DfT.DTRO.Models.Search;
+﻿namespace DfT.DTRO.Models.DtroEvent;
 
-namespace DfT.DTRO.Models.DtroEvent;
-
+/// <summary>
+/// Record representing a change event in the D-TRO service.
+/// </summary>
 [DataContract]
 public class DtroEvent
 {
+    /// <summary>
+    /// Date and time the D-TRO was published.
+    /// </summary>
     [DataMember(Name = "publicationTime")]
     public DateTime PublicationTime { get; set; }
 
+    /// <summary>
+    /// Traffic Authority Regulation that created the D-TRO.
+    /// </summary>
     [DataMember(Name = "traCreator")]
     public int TrafficAuthorityCreatorId { get; set; }
 
+    /// <summary>
+    /// Traffic Authority Regulation that owns the D-TRO.
+    /// </summary>
     [DataMember(Name = "currentTraOwner")]
     public int TrafficAuthorityOwnerId { get; set; }
 
+    /// <summary>
+    /// Traffic Regulation Order name.
+    /// </summary>
     [DataMember(Name = "troName")]
     public string TroName { get; set; }
 
+    /// <summary>
+    /// Regulation type of the traffic regulation order.
+    /// </summary>
     [DataMember(Name = "regulationType")]
     public List<string> RegulationType { get; set; }
 
+    /// <summary>
+    /// Vehicle type.
+    /// </summary>
     [DataMember(Name = "vehicleType")]
     public List<string> VehicleType { get; set; }
 
@@ -47,7 +66,7 @@ public class DtroEvent
         {
             EventType = DtroEventType.Delete,
             EventTime = dtro.DeletionTime.Value,
-            PublicationTime = dtro.Created.Value,
+            PublicationTime = dtro.LastUpdated.Value,
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
@@ -56,7 +75,7 @@ public class DtroEvent
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/v1/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 
@@ -66,7 +85,7 @@ public class DtroEvent
         {
             EventType = DtroEventType.Create,
             EventTime = dtro.Created.Value,
-            PublicationTime = dtro.Created.Value,
+            PublicationTime = dtro.LastUpdated.Value,
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
@@ -75,7 +94,7 @@ public class DtroEvent
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/v1/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 
@@ -85,7 +104,7 @@ public class DtroEvent
         {
             EventType = DtroEventType.Update,
             EventTime = dtro.LastUpdated.Value,
-            PublicationTime = dtro.Created.Value,
+            PublicationTime = dtro.LastUpdated.Value,
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
@@ -94,7 +113,7 @@ public class DtroEvent
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/v1/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 }

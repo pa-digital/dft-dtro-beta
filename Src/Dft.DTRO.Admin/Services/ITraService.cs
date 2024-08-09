@@ -4,9 +4,10 @@ namespace Dft.DTRO.Admin.Services;
 public interface ITraService
 {
     Task ActivateTraAsync(int traId);
-    Task CreateSchemaAsync(SwaCodeRequest swaCodeRequest);
+    Task CreateTraAsync(SwaCode swaCodeRequest);
     Task DeactivateTraAsync(int traId);
-    Task<List<SwaCodeResponse>> GetSwaCodes();
-    Task<List<SwaCodeResponse>> SearchSwaCodes(string partialName);
-    Task UpdateSchemaAsync(SwaCodeRequest swaCodeRequest);
+    Task<List<SwaCode>> GetSwaCodes();
+    Task<SwaCode> GetSwaCode(int id);
+    Task<List<SwaCode>> SearchSwaCodes(string partialName);
+    Task UpdateTraAsync(SwaCode swaCodeRequest);
 }

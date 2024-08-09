@@ -17,52 +17,68 @@ public class TraService : ITraService
         _swaCodeDal = swaCodeDal;
     }
 
-    private void FormatTraNameForUi(ref List<SwaCodeResponse> swaCodeResponses)
+    private List<SwaCodeResponse> FormatTraNameForUi(List<SwaCodeResponse> swaCodeResponses)
     {
-        var sb = new StringBuilder();
+        var ret = new List<SwaCodeResponse>();
         foreach (var swaCode in swaCodeResponses)
         {
-            string[] words = swaCode.Name.Split(' ');
-
-            bool isFirstWordInBrackets = false;
-            if (words.Length > 0 && words[0].StartsWith("(") && words[0].EndsWith(")"))
-            {
-                isFirstWordInBrackets = true;
-            }
-
-            if (words.Length > 0)
-            {
-                if (!isFirstWordInBrackets && words[0].Length >= 4)
-                {
-                    words[0] = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words[0].ToLower());
-                }
-
-                sb.Clear();
-                sb.Append(words[0]);
-
-                for (int i = 1; i < words.Length; i++)
-                {
-                    sb.Append(' ');
-                    sb.Append(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words[i].ToLower()));
-                }
-
-                swaCode.Name = sb.ToString();
-            }
+          ret.Add(FormatTraNameForUi(swaCode));
         }
+
+        return ret;
+    }
+
+    private SwaCodeResponse FormatTraNameForUi(SwaCodeResponse swaCode)
+    {
+        var sb = new StringBuilder();
+
+        string[] words = swaCode.Name.Split(' ');
+
+        bool isFirstWordInBrackets = false;
+        if (words.Length > 0 && words[0].StartsWith("(") && words[0].EndsWith(")"))
+        {
+            isFirstWordInBrackets = true;
+        }
+
+        if (words.Length > 0)
+        {
+            if (!isFirstWordInBrackets && words[0].Length >= 4)
+            {
+                words[0] = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words[0].ToLower());
+            }
+
+            sb.Clear();
+            sb.Append(words[0]);
+
+            for (int i = 1; i < words.Length; i++)
+            {
+                sb.Append(' ');
+                sb.Append(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words[i].ToLower()));
+            }
+            swaCode.Name = sb.ToString();
+        }
+        return swaCode;
     }
 
     public async Task<List<SwaCodeResponse>> SearchSwaCodes(string partialName)
     {
         var swaCodeResponses = await _swaCodeDal.SearchSwaCodesAsync(partialName);
-        FormatTraNameForUi(ref swaCodeResponses);
+        swaCodeResponses = FormatTraNameForUi(swaCodeResponses);
         return swaCodeResponses;
     }
 
     public async Task<List<SwaCodeResponse>> GetSwaCodeAsync()
     {
         var swaCodeResponses = await _swaCodeDal.GetAllCodesAsync();
-        FormatTraNameForUi(ref swaCodeResponses);
+        swaCodeResponses = FormatTraNameForUi(swaCodeResponses);
         return swaCodeResponses;
+    }
+
+    public async Task<SwaCodeResponse> GetSwaCodeAsync(int traId)
+    {
+        var swaCodeResponse = await _swaCodeDal.GetSwaCodeAsync(traId);
+        swaCodeResponse = FormatTraNameForUi(swaCodeResponse);
+        return swaCodeResponse;
     }
 
     public async Task<GuidResponse> ActivateTraAsync(int traId)

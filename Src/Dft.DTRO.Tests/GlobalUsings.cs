@@ -1,12 +1,20 @@
+// Global using directives
+
+global using System;
+global using System.Collections.Generic;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Dynamic;
+global using System.IO;
+global using System.Linq;
 global using System.Net;
 global using System.Text;
+global using System.Threading.Tasks;
 global using DfT.DTRO;
 global using DfT.DTRO.Caching;
 global using DfT.DTRO.Controllers;
 global using DfT.DTRO.Converters;
 global using DfT.DTRO.DAL;
+global using DfT.DTRO.Enums;
 global using DfT.DTRO.Extensions;
 global using DfT.DTRO.Extensions.DependencyInjection;
 global using DfT.DTRO.JsonLogic;
@@ -30,6 +38,7 @@ global using DfT.DTRO.Services;
 global using DfT.DTRO.Services.Conversion;
 global using DfT.DTRO.Services.Mapping;
 global using DfT.DTRO.Services.Validation;
+global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Testing;

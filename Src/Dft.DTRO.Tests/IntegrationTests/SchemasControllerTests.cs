@@ -47,7 +47,7 @@ public class SchemasControllerTests
             .ReturnsAsync(schemaTemplateOverviews);
 
         HttpClient client = _factory.CreateClient();
-        HttpResponseMessage response = await client.GetAsync("/v1/schemas/versions");
+        HttpResponseMessage response = await client.GetAsync("/schemas/versions");
 
         response.EnsureSuccessStatusCode();
         dynamic? data = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
@@ -66,7 +66,7 @@ public class SchemasControllerTests
             .Returns(Task.FromResult(new List<SchemaTemplateOverview>()));
 
         HttpClient client = _factory.CreateClient();
-        HttpResponseMessage response = await client.GetAsync("/v1/schemas/versions");
+        HttpResponseMessage response = await client.GetAsync("/schemas/versions");
 
         response.EnsureSuccessStatusCode();
         dynamic? data = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
@@ -103,7 +103,7 @@ public class SchemasControllerTests
             .Returns(Task.FromResult(schemaTemplates));
 
         HttpClient client = _factory.CreateClient();
-        HttpResponseMessage response = await client.GetAsync("/v1/schemas");
+        HttpResponseMessage response = await client.GetAsync("/schemas");
 
         response.EnsureSuccessStatusCode();
         dynamic? data = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
@@ -120,7 +120,7 @@ public class SchemasControllerTests
             .ReturnsAsync(new List<SchemaTemplateResponse>());
 
         HttpClient client = _factory.CreateClient();
-        HttpResponseMessage response = await client.GetAsync("/v1/schemas");
+        HttpResponseMessage response = await client.GetAsync("/schemas");
 
         response.EnsureSuccessStatusCode();
         dynamic? data = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync());
@@ -137,7 +137,7 @@ public class SchemasControllerTests
             .Returns(Task.FromResult<SchemaTemplateResponse?>(null));
 
         HttpClient client = _factory.CreateClient();
-        HttpResponseMessage response = await client.GetAsync($"/v1/schemas/{schemaVersion}");
+        HttpResponseMessage response = await client.GetAsync($"/schemas/{schemaVersion}");
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
@@ -155,7 +155,7 @@ public class SchemasControllerTests
 
         HttpClient client = _factory.CreateClient();
 
-        HttpResponseMessage response = await client.PatchAsync($"/v1/schemas/activate/{schemaVersion}", null);
+        HttpResponseMessage response = await client.PatchAsync($"/schemas/activate/{schemaVersion}", null);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -172,7 +172,7 @@ public class SchemasControllerTests
 
         HttpClient client = _factory.CreateClient();
 
-        HttpResponseMessage response = await client.PatchAsync($"/v1/schemas/deactivate/{schemaVersion}", null);
+        HttpResponseMessage response = await client.PatchAsync($"/schemas/deactivate/{schemaVersion}", null);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }

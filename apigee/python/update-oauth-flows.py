@@ -37,3 +37,5 @@ for path, methods in paths.items():
                     step.text = filename
 
 tree.write(proxy_xml_path, encoding='utf-8', xml_declaration=True)
+
+print("Update OAuth Flows function complete")

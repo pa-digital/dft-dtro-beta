@@ -1,29 +1,52 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions.Internal;
-using NpgsqlTypes;
+﻿namespace DfT.DTRO.DAL;
 
-namespace DfT.DTRO.DAL;
-
-public partial class DtroContext : DbContext
+/// <summary>
+/// Represents a session with the D-TRO database.
+/// </summary>
+public class DtroContext : DbContext
 {
+    /// <summary>
+    /// D-TRO table for create, read, update and delete operations.
+    /// </summary>
     public virtual DbSet<Models.DataBase.DTRO> Dtros { get; set; }
 
+    /// <summary>
+    /// D-TRO history table for read operations.
+    /// </summary>
     public virtual DbSet<DTROHistory> DtroHistories { get; set; }
 
+    /// <summary>
+    /// Schema Template table for create, read and update operations.
+    /// </summary>
     public virtual DbSet<SchemaTemplate> SchemaTemplate { get; set; }
 
+    /// <summary>
+    /// Rule Template table for create, read and update operations.
+    /// </summary>
     public virtual DbSet<RuleTemplate> RuleTemplate { get; set; }
 
+    /// <summary>
+    /// Metric table for read operations.
+    /// </summary>
     public virtual DbSet<Metric> Metrics { get; set; }
 
+    /// <summary>
+    /// SWA Codes table for create, read and update operations.
+    /// </summary>
     public virtual DbSet<SwaCode> SwaCodes { get; set; }
+
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    /// <param name="options">Base context options.</param>
+    public virtual DbSet<SystemConfig> SystemConfig { get; set; }
 
     public DtroContext(DbContextOptions<DtroContext> options)
         : base(options)
     {
     }
 
+    ///<inheritdoc />
     [SuppressMessage(
         "Usage",
         "EF1001:Internal EF Core API usage.",
@@ -38,6 +61,7 @@ public partial class DtroContext : DbContext
             });
     }
 
+    ///<inheritdoc />
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder
