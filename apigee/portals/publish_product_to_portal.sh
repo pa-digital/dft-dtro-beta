@@ -17,12 +17,9 @@ PRODUCT_NAMES=("central-service-provider" "digital-service-provider" "data-consu
 
 # Loop through each product name
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
-
-  PRODUCT_NAME="${env}-${PRODUCT}"
-  echo "PRODUCT_NAME = ${PRODUCT_NAME}"
   # Convert product name to title case with spaces
   TITLE=$(to_title_case "${PRODUCT}")
-  echo "TITLE = ${TITLE}"
+
   # Construct the description
   DESCRIPTION="This is the ${TITLE_ENV} D-TRO application for ${PRODUCT}s."
 
@@ -31,23 +28,40 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
-      "title": "'"${PRODUCT}"'",
+      "title": "'"${TITLE}"'",
       "description": "'"${DESCRIPTION}"'",
       "anonAllowed": true,
       "imageUrl": "",
       "requireCallbackUrl": false,
       "categoryIds": [],
       "published": true,
-      "apiProductName": "'"${PRODUCT_NAME}"'"
+      "apiProductName": "'"${TITLE}"'"
     }')
 
  # Error checking and handling
   if [ "$RESPONSE" -eq 200 ]; then
-    echo "${PRODUCT_NAME} successfully created in the Developer Portal."
+    echo "${TITLE} successfully created in the Developer Portal."
   elif [ "$RESPONSE" -eq 409 ]; then
-    echo "${PRODUCT_NAME} already exists in the Developer Portal."
+    echo "${TITLE} already exists in the Developer Portal."
   else
-    echo "Failed to publish ${PRODUCT_NAME} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
+    echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
     exit 1
   fi
 done
+
+RESPONSE=$(curl -s -o /dev/null -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+    -H "Authorization: Bearer ${TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "title": "test1",
+      "description": "test1",
+      "anonAllowed": true,
+      "imageUrl": "",
+      "requireCallbackUrl": false,
+      "categoryIds": [],
+      "published": true,
+      "apiProductName": "test1"
+    }')
+
+ echo "${RESPONSE}"
+
