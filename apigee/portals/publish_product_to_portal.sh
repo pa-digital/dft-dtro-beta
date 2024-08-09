@@ -17,6 +17,10 @@ PRODUCT_NAMES=("central-service-provider" "digital-service-provider" "data-consu
 
 # Loop through each product name
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
+
+  # Name of product created via product.json
+  PRODUCT_NAME="${env}-${PRODUCT}"
+
   # Convert product name to title case with spaces
   TITLE=$(to_title_case "${PRODUCT}")
 
@@ -35,7 +39,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
       "requireCallbackUrl": false,
       "categoryIds": [],
       "published": true,
-      "apiProductName": "'"${PRODUCT}"'"
+      "apiProductName": "'"${PRODUCT_NAME}"'"
     }')
 
  # Error checking and handling
