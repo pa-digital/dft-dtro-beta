@@ -483,6 +483,7 @@ paths:
       tags:
         - Metrics
       summary: Check API health.
+      operationId: check-api-health
       security:
         - oAuth:
             - cso
