@@ -35,7 +35,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
       "requireCallbackUrl": false,
       "categoryIds": [],
       "published": true,
-      "apiProductName": "'"${TITLE}"'"
+      "apiProductName": "'"${PRODUCT}"'"
     }')
 
  # Error checking and handling
