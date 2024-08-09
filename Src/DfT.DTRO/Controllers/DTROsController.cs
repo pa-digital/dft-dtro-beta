@@ -399,7 +399,7 @@ public class DTROsController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpPost("v1/dtros/Ownership/{id:guid}/{assignToTraId:int}")]
+    [HttpPost("dtros/Ownership/{id:guid}/{assignToTraId:int}")]
     [FeatureGate(FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
