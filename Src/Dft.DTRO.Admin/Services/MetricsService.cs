@@ -12,7 +12,7 @@ public class MetricsService : IMetricsService
     {
         try
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/v1/healthApi");
+            var request = new HttpRequestMessage(HttpMethod.Get, "/healthApi");
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -30,7 +30,7 @@ public class MetricsService : IMetricsService
     {
         try
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/v1/healthDatabase");
+            var request = new HttpRequestMessage(HttpMethod.Get, "/healthDatabase");
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -48,7 +48,7 @@ public class MetricsService : IMetricsService
     {
         try
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/v1/healthTraId");
+            var request = new HttpRequestMessage(HttpMethod.Get, "/healthTraId");
             Helper.AddHeaders(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
@@ -71,7 +71,7 @@ public class MetricsService : IMetricsService
     {
         var jsonContent = JsonSerializer.Serialize(metricRequest);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-        var request = new HttpRequestMessage(HttpMethod.Post, "/v1/metricsForTra")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/metricsForTra")
         {
             Content = param
         };

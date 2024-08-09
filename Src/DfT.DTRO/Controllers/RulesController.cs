@@ -38,7 +38,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of rule template versions.</returns>
     [HttpGet]
-    [Route("/v1/rules/versions")]
+    [Route("/rules/versions")]
     [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetVersions()
     {
@@ -64,7 +64,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of rule templates.</returns>
     [HttpGet]
-    [Route("/v1/rules")]
+    [Route("/rules")]
     [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> Get()
     {
@@ -91,7 +91,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Rule template.</returns>
     [HttpGet]
-    [Route("/v1/rules/{version}")]
+    [Route("/rules/{version}")]
     [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetByVersion(string version)
     {
@@ -128,7 +128,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Rule template.</returns>
     [HttpGet]
-    [Route("/v1/rules/{id:guid}")]
+    [Route("/rules/{id:guid}")]
     [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -166,7 +166,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the rule template.</returns>
     [HttpPost]
-    [Route("/v1/rules/createFromFile/{version}")]
+    [Route("/rules/createFromFile/{version}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     public async Task<IActionResult> CreateFromFile(string version, IFormFile file)
@@ -211,7 +211,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the rule template.</returns>
     [HttpPut]
-    [Route("/v1/rules/updateFromFile/{version}")]
+    [Route("/rules/updateFromFile/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]

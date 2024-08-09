@@ -28,7 +28,7 @@ public class MetricsController : ControllerBase
     /// </summary>
     /// <response code="200">OK.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpGet("/v1/healthApi")]
+    [HttpGet("/healthApi")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "The API is up and running.")]
@@ -54,7 +54,7 @@ public class MetricsController : ControllerBase
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpGet("/v1/healthTraId")]
+    [HttpGet("/healthTraId")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "Successfully received the Tra Id")]
@@ -90,7 +90,7 @@ public class MetricsController : ControllerBase
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpGet("/v1/healthDatabase")]
+    [HttpGet("/healthDatabase")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, description: "Database is available.")]
     [SwaggerResponse(statusCode: 404, description: "Database is not available.")]
@@ -124,7 +124,7 @@ public class MetricsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Metric summary</returns>
-    [HttpPost("/v1/metricsForTra")]
+    [HttpPost("/metricsForTra")]
     [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, description: "Metrics retrieved successfully.")]
     [SwaggerResponse(statusCode: 400, description: "Dates Incorrect.")]

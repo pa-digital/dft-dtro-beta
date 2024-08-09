@@ -1,7 +1,7 @@
 [
   {
-    "name": "ENV-traffic-regulator-authority",
-    "displayName": "ENV Traffic Regulator Authority",
+    "name": "ENV-central-service-provider",
+    "displayName": "Central Service Provider",
     "approvalType": "manual",
     "attributes": [
       {
@@ -10,17 +10,17 @@
       }
     ],
     "environments": [
-      "ENV-environment"
+      "dtro-ENV-apigee-environment"
     ],
     "scopes": [
-      "tra"
+      "cso"
     ],
     "createdAt": "1719227113878",
     "lastModifiedAt": "1719227144037",
     "operationGroup": {
       "operationConfigs": [
         {
-          "apiSource": "ENV-server",
+          "apiSource": "dtro-ENV-server",
           "operations": [
             {
               "resource": "/**"
@@ -45,8 +45,8 @@
     }
   },
   {
-    "name": "ENV-service-provider",
-    "displayName": "ENV Service Provider",
+    "name": "ENV-digital-service-provider",
+    "displayName": "Digital Service Provider",
     "approvalType": "manual",
     "attributes": [
       {
@@ -55,17 +55,62 @@
       }
     ],
     "environments": [
-      "ENV-environment"
+      "dtro-ENV-apigee-environment"
     ],
     "scopes": [
-      "sp"
+      "dsp"
     ],
     "createdAt": "1719227113878",
     "lastModifiedAt": "1719227144037",
     "operationGroup": {
       "operationConfigs": [
         {
-          "apiSource": "ENV-server",
+          "apiSource": "dtro-ENV-server",
+          "operations": [
+            {
+              "resource": "/**"
+            }
+          ],
+          "quota": {}
+        },
+        {
+          "apiSource": "oauth-generator",
+          "operations": [
+            {
+              "resource": "/oauth-generator",
+              "methods": [
+                "POST"
+              ]
+            }
+          ],
+          "quota": {}
+        }
+      ],
+      "operationConfigType": "proxy"
+    }
+  },
+  {
+    "name": "ENV-data-consumer",
+    "displayName": "Data Consumer",
+    "approvalType": "manual",
+    "attributes": [
+      {
+        "name": "access",
+        "value": "public"
+      }
+    ],
+    "environments": [
+      "dtro-ENV-apigee-environment"
+    ],
+    "scopes": [
+      "dc"
+    ],
+    "createdAt": "1719227113878",
+    "lastModifiedAt": "1719227144037",
+    "operationGroup": {
+      "operationConfigs": [
+        {
+          "apiSource": "dtro-ENV-server",
           "operations": [
             {
               "resource": "/**"

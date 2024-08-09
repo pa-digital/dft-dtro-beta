@@ -10,7 +10,7 @@ public class TraService : ITraService
 
     public async Task<List<SwaCode>> GetSwaCodes()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, "/v1/swaCodes");
+        var request = new HttpRequestMessage(HttpMethod.Get, "/swaCodes");
         Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);
@@ -28,7 +28,7 @@ public class TraService : ITraService
 
     public async Task<SwaCode> GetSwaCode(int id)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/swaCodes/{id}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/swaCodes/{id}");
         Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);
@@ -46,7 +46,7 @@ public class TraService : ITraService
 
     public async Task<List<SwaCode>> SearchSwaCodes(string partialName)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/swaCodes/search/{partialName}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/swaCodes/search/{partialName}");
         Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);
@@ -64,27 +64,27 @@ public class TraService : ITraService
 
     public async Task ActivateTraAsync(int traId)
     {
-        var response = await _client.PatchAsync($"/v1/swaCodes/activate/{traId}", null);
+        var response = await _client.PatchAsync($"/swaCodes/activate/{traId}", null);
         response.EnsureSuccessStatusCode();
     }
 
     public async Task DeactivateTraAsync(int traId)
     {
-        var response = await _client.PatchAsync($"/v1/swaCodes/deactivate/{traId}", null);
+        var response = await _client.PatchAsync($"/swaCodes/deactivate/{traId}", null);
         response.EnsureSuccessStatusCode();
     }
 
     public async Task UpdateTraAsync(SwaCode swaCodeRequest)
     {
 
-        var response = await _client.PutAsJsonAsync($"/v1/swaCodes/updateFromBody/", swaCodeRequest);
+        var response = await _client.PutAsJsonAsync($"/swaCodes/updateFromBody/", swaCodeRequest);
         response.EnsureSuccessStatusCode();
     }
 
     public async Task CreateTraAsync(SwaCode swaCodeRequest)
     {
 
-        var response = await _client.PostAsJsonAsync($"/v1/swaCodes/createFromBody/", swaCodeRequest);
+        var response = await _client.PostAsJsonAsync($"/swaCodes/createFromBody/", swaCodeRequest);
         response.EnsureSuccessStatusCode();
     }
 }

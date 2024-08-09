@@ -10,7 +10,7 @@ public class SystemConfigService : ISystemConfigService
 
     public async Task<string> GetSystemName()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/systemName");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/systemName");
         Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);

@@ -11,7 +11,7 @@ public class DtroService : IDtroService
 
     public async Task<List<DtroHistoryProvisionResponse>> DtroProvisionHistory(Guid id)
     {
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/v1/dtros/provisionHistory/{id}");
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/dtros/provisionHistory/{id}");
         var response = await _client.SendAsync(httpRequestMessage);
 
         response.EnsureSuccessStatusCode();
@@ -23,7 +23,7 @@ public class DtroService : IDtroService
 
     public async Task<List<DtroHistorySourceResponse>> DtroSourceHistory(Guid id)
     {
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/v1/dtros/sourceHistory/{id}");
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/dtros/sourceHistory/{id}");
         var response = await _client.SendAsync(httpRequestMessage);
 
         response.EnsureSuccessStatusCode();
@@ -43,7 +43,7 @@ public class DtroService : IDtroService
 
         var jsonContent = JsonSerializer.Serialize(search);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-        var request = new HttpRequestMessage(HttpMethod.Post, "/v1/search")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/search")
         {
             Content = param
         };
@@ -64,7 +64,7 @@ public class DtroService : IDtroService
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "/v1/dtros/createFromFile")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/dtros/createFromFile")
         {
             Content = content
         };
@@ -83,7 +83,7 @@ public class DtroService : IDtroService
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
 
-        var request = new HttpRequestMessage(HttpMethod.Put, $"/v1/dtros/updateFromFile/{id}")
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/dtros/updateFromFile/{id}")
         {
             Content = content
         };
@@ -97,7 +97,7 @@ public class DtroService : IDtroService
     public async Task<IActionResult> ReassignDtroAsync(Guid id, int toTraId)
     {
 
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"/v1/dtros/Ownership/{id}/{toTraId}");
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"/dtros/Ownership/{id}/{toTraId}");
         Helper.AddHeaders(ref httpRequestMessage);
 
         var response = await _client.SendAsync(httpRequestMessage);

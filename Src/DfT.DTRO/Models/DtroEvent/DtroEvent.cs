@@ -75,7 +75,7 @@ public class DtroEvent
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/v1/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 
@@ -94,7 +94,7 @@ public class DtroEvent
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/v1/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 
@@ -113,7 +113,7 @@ public class DtroEvent
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/v1/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 }

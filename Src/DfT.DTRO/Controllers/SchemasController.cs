@@ -40,7 +40,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of schema template versions.</returns>
     [HttpGet]
-    [Route("/v1/schemas/versions")]
+    [Route("/schemas/versions")]
     [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetVersions()
     {
@@ -66,7 +66,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of schema templates.</returns>
     [HttpGet]
-    [Route("/v1/schemas")]
+    [Route("/schemas")]
     [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> Get()
     {
@@ -93,7 +93,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Schema template.</returns>
     [HttpGet]
-    [Route("/v1/schemas/{version}")]
+    [Route("/schemas/{version}")]
     [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetByVersion(string version)
     {
@@ -131,7 +131,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Schema template.</returns>
     [HttpGet]
-    [Route("/v1/schemas/{id:guid}")]
+    [Route("/schemas/{id:guid}")]
     [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -169,7 +169,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the schema template.</returns>
     [HttpPost]
-    [Route("/v1/schemas/createFromFile/{version}")]
+    [Route("/schemas/createFromFile/{version}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     public async Task<IActionResult> CreateFromFileByVersion(string version, IFormFile file)
@@ -214,7 +214,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the schema template.</returns>
     [HttpPost]
-    [Route("/v1/schemas/createFromBody/{version}")]
+    [Route("/schemas/createFromBody/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
@@ -250,7 +250,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the updated schema template.</returns>
     [HttpPut]
-    [Route("/v1/schemas/updateFromFile/{version}")]
+    [Route("/schemas/updateFromFile/{version}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
@@ -303,7 +303,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the updated schema template.</returns>
     [HttpPut]
-    [Route("/v1/schemas/updateFromBody/{version}")]
+    [Route("/schemas/updateFromBody/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
@@ -342,7 +342,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the activated schema template.</returns>
     [HttpPatch]
-    [Route("/v1/schemas/activate/{version}")]
+    [Route("/schemas/activate/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
@@ -381,7 +381,7 @@ public class SchemasController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the deactivated schema template.</returns>
     [HttpPatch]
-    [Route("/v1/schemas/deactivate/{version}")]
+    [Route("/schemas/deactivate/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]

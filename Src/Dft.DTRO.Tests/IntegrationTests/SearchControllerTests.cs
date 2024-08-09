@@ -37,7 +37,7 @@ public class SearchControllerTests
         string payload = JsonConvert.SerializeObject(search);
 
         HttpResponseMessage response =
-            await client.PostAsync("/v1/search", new StringContent(payload, Encoding.UTF8, "application/json"));
+            await client.PostAsync("/search", new StringContent(payload, Encoding.UTF8, "application/json"));
 
         response.EnsureSuccessStatusCode();
         PaginatedResponse<DtroSearchResult>? data = JsonConvert.DeserializeObject<PaginatedResponse<DtroSearchResult>>(
@@ -66,7 +66,7 @@ public class SearchControllerTests
         string payload = JsonConvert.SerializeObject(search);
 
         HttpResponseMessage response =
-            await client.PostAsync("/v1/search", new StringContent(payload, Encoding.UTF8, "application/json"));
+            await client.PostAsync("/search", new StringContent(payload, Encoding.UTF8, "application/json"));
 
         response.EnsureSuccessStatusCode();
         PaginatedResponse<DtroSearchResult>? data = JsonConvert.DeserializeObject<PaginatedResponse<DtroSearchResult>>(
