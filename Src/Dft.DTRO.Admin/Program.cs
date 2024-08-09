@@ -1,10 +1,13 @@
-using Dft.DTRO.Admin.Services;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 
-var apiBaseUrl = builder.Configuration.GetValue<string>("ExternalApi:BaseUrl");
+var apiBaseUrl =
+    Environment.GetEnvironmentVariable("BASE_URL") ??
+    builder
+    .Configuration
+    .GetValue<string>("ExternalApi:BaseUrl");
+
 builder.Services.AddHttpClient("ExternalApi", client =>
 {
     client.BaseAddress = new Uri(apiBaseUrl);

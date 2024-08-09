@@ -1,12 +1,4 @@
-﻿using DfT.DTRO.Enums;
-using DfT.DTRO.Extensions;
-using DfT.DTRO.Models.DtroEvent;
-using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Models.Search;
-using DfT.DTRO.Services.Conversion;
-using Microsoft.Extensions.Configuration;
-
-namespace DfT.DTRO.Services.Mapping;
+﻿namespace DfT.DTRO.Services.Mapping;
 
 public class DtroMappingService : IDtroMappingService
 {
@@ -21,7 +13,7 @@ public class DtroMappingService : IDtroMappingService
 
     public IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros)
     {
-        var results = new List<DtroEvent>();
+        var events = new List<DtroEvent>();
 
         var baseUrl = _configuration.GetSection("SearchServiceUrl").Value;
 
@@ -39,22 +31,25 @@ public class DtroMappingService : IDtroMappingService
             var regulationStartTimes = periods.Select(it => it.GetValueOrDefault<DateTime?>("start")).Where(it => it is not null).Select(it => it.Value).ToList();
             var regulationEndTimes = periods.Select(it => it.GetValueOrDefault<DateTime?>("end")).Where(it => it is not null).Select(it => it.Value).ToList();
 
-            results.Add(DtroEvent.FromCreation(dtro, baseUrl, regulationStartTimes, regulationEndTimes));
+            DtroEvent fromCreation = DtroEvent.FromCreation(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
+            events.Add(fromCreation);
 
             if (dtro.Created != dtro.LastUpdated)
             {
-                results.Add(DtroEvent.FromUpdate(dtro, baseUrl, regulationStartTimes, regulationEndTimes));
+                DtroEvent fromUpdate = DtroEvent.FromUpdate(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
+                events.Add(fromUpdate);
             }
 
             if (dtro.Deleted)
             {
-                results.Add(DtroEvent.FromDeletion(dtro, baseUrl, regulationStartTimes, regulationEndTimes));
+                DtroEvent fromDeletion = DtroEvent.FromDeletion(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
+                events.Add(fromDeletion);
             }
         }
 
-        results.Sort((x, y) => y.EventTime.CompareTo(x.EventTime));
+        events.Sort((x, y) => y.EventTime.CompareTo(x.EventTime));
 
-        return results;
+        return events;
     }
 
     public DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro)

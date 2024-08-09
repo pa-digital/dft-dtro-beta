@@ -1,4 +1,4 @@
-﻿using System.Dynamic;
+﻿namespace Dft.DTRO.Admin.Models.DtroHistory;
 
 public class DtroHistoryProvisionResponse
 {

@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Dft.DTRO.Admin.Services;
+﻿namespace Dft.DTRO.Admin.Services;
 public class TraService : ITraService
 {
     private readonly HttpClient _client;
@@ -50,7 +46,7 @@ public class TraService : ITraService
 
     public async Task<List<SwaCode>> SearchSwaCodes(string partialName)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/SearchSwaCodes/{partialName}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/swaCodes/search/{partialName}");
         Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);

@@ -1,8 +1,3 @@
-using Dft.DTRO.Admin.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Threading.Tasks;
-
 public class TraEditModel : PageModel
 {
     private readonly ITraService _traService;
@@ -51,6 +46,7 @@ public class TraEditModel : PageModel
         else
         {
             await _traService.CreateTraAsync(SwaCode);
+            Search = SwaCode.Name;
         }
 
         return RedirectToPage("TraList", new { search = Search });

@@ -1,11 +1,3 @@
-using System.Diagnostics;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using Dft.DTRO.Admin.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Primitives;
-
 public class TraListModel : PageModel
 {
     private readonly ITraService _traService;

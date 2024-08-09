@@ -1,7 +1,3 @@
-using Dft.DTRO.Admin.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 public class RuleDropEditModel : PageModel
 {
     private readonly IRuleService _ruleService;

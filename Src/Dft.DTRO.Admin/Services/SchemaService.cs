@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace Dft.DTRO.Admin.Services;
+﻿namespace Dft.DTRO.Admin.Services;
 public class SchemaService : ISchemaService
 {
     private readonly HttpClient _client;
