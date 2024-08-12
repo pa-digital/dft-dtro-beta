@@ -156,7 +156,7 @@ public class TraController : ControllerBase
 
 
 
-    [HttpGet("/v1/swaCodes/{traId}")]
+    [HttpGet("/swaCodes/{traId}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]

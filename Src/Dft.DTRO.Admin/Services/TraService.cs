@@ -16,7 +16,7 @@ public class TraService : ITraService
 
     public async Task<List<SwaCode>> GetSwaCodes()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, "/v1/swaCodes");
+        var request = new HttpRequestMessage(HttpMethod.Get, "/swaCodes");
         Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);
@@ -34,7 +34,7 @@ public class TraService : ITraService
 
     public async Task<SwaCode> GetSwaCode(int id)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/swaCodes/{id}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/swaCodes/{id}");
         Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);
@@ -52,7 +52,7 @@ public class TraService : ITraService
 
     public async Task<List<SwaCode>> SearchSwaCodes(string partialName)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/swaCodes/search/{partialName}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/swaCodes/search/{partialName}");
         Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);

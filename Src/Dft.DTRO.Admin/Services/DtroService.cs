@@ -1,8 +1,4 @@
-﻿using System.Text;
-using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Dft.DTRO.Admin.Services;
+﻿namespace Dft.DTRO.Admin.Services;
 public class DtroService : IDtroService
 {
     private readonly HttpClient _client;
@@ -45,12 +41,12 @@ public class DtroService : IDtroService
         {
             traId = null;
         }
-        var searchQuery = new SearchQuery{CurrentTraOwner = traId};
+        var searchQuery = new SearchQuery { CurrentTraOwner = traId };
         var search = new DtroSearch() { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { searchQuery } };
 
         var jsonContent = JsonSerializer.Serialize(search);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-        var request = new HttpRequestMessage(HttpMethod.Post, "/v1/search")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/search")
         {
             Content = param
         };
@@ -71,7 +67,7 @@ public class DtroService : IDtroService
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "/v1/dtros/createFromFile")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/dtros/createFromFile")
         {
             Content = content
         };
@@ -90,7 +86,7 @@ public class DtroService : IDtroService
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
 
-        var request = new HttpRequestMessage(HttpMethod.Put, $"/v1/dtros/updateFromFile/{id}")
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/dtros/updateFromFile/{id}")
         {
             Content = content
         };
@@ -104,7 +100,7 @@ public class DtroService : IDtroService
     public async Task<IActionResult> ReassignDtroAsync(Guid id, int toTraId)
     {
 
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"/v1/dtros/Ownership/{id}/{toTraId}");
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"/dtros/Ownership/{id}/{toTraId}");
         Helper.AddHeaders(ref httpRequestMessage);
 
         var response = await _client.SendAsync(httpRequestMessage);

@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Dft.DTRO.Admin.Services;
+﻿namespace Dft.DTRO.Admin.Services;
 public class SystemConfigService : ISystemConfigService
 {
     private readonly HttpClient _client;
@@ -14,7 +10,7 @@ public class SystemConfigService : ISystemConfigService
 
     public async Task<string> GetSystemName()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/systemName");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/systemName");
         Helper.AddHeaders(ref request);
 
         var response = await _client.SendAsync(request);

@@ -1,4 +1,4 @@
-﻿
+﻿namespace Dft.DTRO.Admin.Models.DtroHistory;
 public class DtroHistorySourceResponse
 {
     public string ActionType { get; set; }

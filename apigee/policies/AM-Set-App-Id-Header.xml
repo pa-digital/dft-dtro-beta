@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AssignMessage name="AM-Add-Organisation-Header">
-  <Add>
+<AssignMessage name="AM-Set-App-Id-Header">
+  <Set>
     <Headers>
-      <Header name="x-organisation-id">{developer.email}</Header>
+      <Header name="x-app-id">{developer.app.id}</Header>
     </Headers>
-  </Add>
+  </Set>
   <AssignTo>request</AssignTo>
 </AssignMessage>

@@ -1,9 +1,8 @@
-﻿using DfT.DTRO.DAL;
-using DfT.DTRO.Migrations;
+﻿using DfT.DTRO.Migrations;
 
 namespace DfT.DTRO;
 
-public static class DbInitialize
+public class DbInitialize
 {
     public static void SeedAppData(IApplicationBuilder app)
     {
@@ -42,16 +41,19 @@ public static class DbInitialize
         }
     }
     //TODO: The method below will be removed once
-    //TODO: access to query the deployed database is granted
-    public static void RunSqlStatement(IApplicationBuilder app)
+    //TODO: access to query the deployed database is granted.
+    public static void RunSqlStatement(IApplicationBuilder app, ILoggerFactory loggerFactory)
     {
         using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
         {
+            ILogger<DbInitialize> logger = loggerFactory.CreateLogger<DbInitialize>();
             DtroContext dtroContext = serviceScope
                 .ServiceProvider
                 .GetService<DtroContext>();
             Console.WriteLine(DateTime.UtcNow);
             int swaCodesCount = dtroContext.SwaCodes.Count();
+
+            logger.LogInformation($"SWA Codes count: {swaCodesCount}");
             Console.WriteLine(swaCodesCount);
             List<string> swaCodesNames = dtroContext
                 .SwaCodes
@@ -59,7 +61,7 @@ public static class DbInitialize
                 .ToList();
             swaCodesNames.ForEach(Console.WriteLine);
             Console.WriteLine(DateTime.UtcNow);
+            logger.LogInformation($"SWA Codes: {string.Join(",", swaCodesNames)}");
         }
     }
- 
 }

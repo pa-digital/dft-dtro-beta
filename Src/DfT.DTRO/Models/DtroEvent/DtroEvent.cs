@@ -75,7 +75,7 @@ public class DtroEvent
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/v1/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 
@@ -84,8 +84,8 @@ public class DtroEvent
         return new DtroEvent
         {
             EventType = DtroEventType.Create,
-            EventTime = dtro.LastUpdated.Value,
-            PublicationTime = dtro.Created.Value,
+            EventTime = dtro.Created.Value,
+            PublicationTime = dtro.LastUpdated.Value,
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
@@ -94,7 +94,7 @@ public class DtroEvent
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/v1/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 
@@ -104,7 +104,7 @@ public class DtroEvent
         {
             EventType = DtroEventType.Update,
             EventTime = dtro.LastUpdated.Value,
-            PublicationTime = dtro.Created.Value,
+            PublicationTime = dtro.LastUpdated.Value,
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
@@ -113,7 +113,7 @@ public class DtroEvent
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/v1/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 }

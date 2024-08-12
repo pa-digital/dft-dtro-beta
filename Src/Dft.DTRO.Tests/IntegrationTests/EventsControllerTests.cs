@@ -44,7 +44,7 @@ public class EventsControllerTests
 
         StringContent json = new(payload, Encoding.UTF8, "application/json");
 
-        HttpResponseMessage response = await client.PostAsync("/v1/events", json);
+        HttpResponseMessage response = await client.PostAsync("/events", json);
 
         response.EnsureSuccessStatusCode();
         DtroEventSearchResult? data = JsonConvert.DeserializeObject<DtroEventSearchResult>(
@@ -72,7 +72,7 @@ public class EventsControllerTests
         string payload = JsonConvert.SerializeObject(searchCriteria);
 
         StringContent json = new(payload, Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await client.PostAsync("/v1/events", json);
+        HttpResponseMessage response = await client.PostAsync("/events", json);
 
         response.EnsureSuccessStatusCode();
         DtroEventSearchResult? data = JsonConvert.DeserializeObject<DtroEventSearchResult>(
