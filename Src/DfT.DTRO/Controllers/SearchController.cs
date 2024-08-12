@@ -1,4 +1,3 @@
-using DfT.DTRO.Enums;
 using DfT.DTRO.Migrations;
 
 namespace DfT.DTRO.Controllers;
@@ -45,7 +44,6 @@ public class SearchController : ControllerBase
     [HttpPost]
     [Route("/search")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.Consumer)]
     [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]
     public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromBody] DtroSearch body)
     {
