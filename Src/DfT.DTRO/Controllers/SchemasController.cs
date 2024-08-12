@@ -41,7 +41,7 @@ public class SchemasController : ControllerBase
     /// <returns>List of schema template versions.</returns>
     [HttpGet]
     [Route("/schemas/versions")]
-    [FeatureGate(FeatureNames.SchemasRead)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetVersions()
     {
         try
@@ -67,7 +67,7 @@ public class SchemasController : ControllerBase
     /// <returns>List of schema templates.</returns>
     [HttpGet]
     [Route("/schemas")]
-    [FeatureGate(FeatureNames.SchemasRead)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> Get()
     {
         try
@@ -94,7 +94,7 @@ public class SchemasController : ControllerBase
     /// <returns>Schema template.</returns>
     [HttpGet]
     [Route("/schemas/{version}")]
-    [FeatureGate(FeatureNames.SchemasRead)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetByVersion(string version)
     {
         try
@@ -132,7 +132,7 @@ public class SchemasController : ControllerBase
     /// <returns>Schema template.</returns>
     [HttpGet]
     [Route("/schemas/{id:guid}")]
-    [FeatureGate(FeatureNames.SchemasRead)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -172,6 +172,7 @@ public class SchemasController : ControllerBase
     [Route("/schemas/createFromFile/{version}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
+    [FeatureGate(FeatureNames.Admin)]
     public async Task<IActionResult> CreateFromFileByVersion(string version, IFormFile file)
     {
         if (file == null || file.Length == 0)
@@ -216,7 +217,7 @@ public class SchemasController : ControllerBase
     [HttpPost]
     [Route("/schemas/createFromBody/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
+    [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
 
     public async Task<IActionResult> CreateFromBodyByVersion(string version, [FromBody] ExpandoObject body)
@@ -254,7 +255,7 @@ public class SchemasController : ControllerBase
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
+    [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     public async Task<IActionResult> UpdateFromFileByVersion(string version, IFormFile file)
     {
@@ -305,7 +306,7 @@ public class SchemasController : ControllerBase
     [HttpPut]
     [Route("/schemas/updateFromBody/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
+    [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     public async Task<IActionResult> UpdateFromBodyByVersion(string version, [FromBody] ExpandoObject body)
     {
@@ -344,7 +345,7 @@ public class SchemasController : ControllerBase
     [HttpPatch]
     [Route("/schemas/activate/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
+    [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     public async Task<IActionResult> ActivateByVersion(string version)
     {
@@ -383,7 +384,7 @@ public class SchemasController : ControllerBase
     [HttpPatch]
     [Route("/schemas/deactivate/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
+    [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     public async Task<IActionResult> DeactivateByVersion(string version)
     {

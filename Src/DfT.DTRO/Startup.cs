@@ -77,7 +77,8 @@ public class Startup
         app.UseRouting();
 
         app.UseRequestCorrelation();
-        app.UseMiddleware<SecurityHeadersMiddleware>();
+
+       // 
 
         app.UseAuthorization();
 
@@ -85,6 +86,10 @@ public class Startup
         {
             app.UseCustomSwagger();
         }
+
+        // Add the middleware before UseEndpoints
+        app.UseFeatureGateMiddleware();
+        app.UseMiddleware<SecurityHeadersMiddleware>();
 
         app.UseEndpoints(endpoints =>
         {
@@ -104,8 +109,8 @@ public class Startup
         else
         {
             app.UseExceptionHandler("/Error");
-
             app.UseHsts();
         }
     }
+
 }
