@@ -15,10 +15,10 @@ locals {
       POSTGRES_PORT          = var.postgres_port
       POSTGRES_SSL           = var.postgres_use_ssl
       POSTGRES_MAX_POOL_SIZE = var.db_connections_per_cloud_run_instance
-      FEATURE_FLAG_ReadOnly  = true
-      FEATURE_FLAG_Consumer  = true
-      FEATURE_FLAG_Admin     = true
-      FEATURE_FLAG_Publish   = true
+      FeatureManagement__ReadOnly  = "true"
+      FeatureManagement__Consumer  = "true"
+      FeatureManagement__Admin     = "true"
+      FeatureManagement__Publish   = "true"
   })
 
   project_id             = data.google_project.project.project_id
