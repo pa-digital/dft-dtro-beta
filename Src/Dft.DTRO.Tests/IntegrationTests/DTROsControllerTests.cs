@@ -96,7 +96,7 @@ public class DTROsControllerTests
 
         var payload = await Utils.CreateDtroJsonPayload(dtroPath, version);
 
-        HttpResponseMessage response = await client.PostAsync("/v1/dtros/createFromBody", payload);
+        HttpResponseMessage response = await client.PostAsync("/dtros/createFromBody", payload);
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         GuidResponse? data = JsonConvert.DeserializeObject<GuidResponse>(await response.Content.ReadAsStringAsync());
@@ -117,7 +117,7 @@ public class DTROsControllerTests
             .Throws((new NotFoundException()));
 
         StringContent payload = await Utils.CreateDtroJsonPayload(ValidDtroJsonPath, "0.0.0");
-        HttpResponseMessage response = await client.PostAsync("/v1/dtros", payload);
+        HttpResponseMessage response = await client.PostAsync("/dtros", payload);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -132,7 +132,7 @@ public class DTROsControllerTests
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         StringContent payload = await Utils.CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
-        HttpResponseMessage response = await client.PostAsync("/v1/dtros/createFromBody", payload);
+        HttpResponseMessage response = await client.PostAsync("/dtros/createFromBody", payload);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         ApiErrorResponse? data = JsonConvert.DeserializeObject<ApiErrorResponse>(await response.Content.ReadAsStringAsync());
@@ -152,7 +152,7 @@ public class DTROsControllerTests
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         StringContent payload = await Utils.CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
-        HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody/{dtroId}", payload);
+        HttpResponseMessage response = await client.PutAsync($"/dtros/updateFromBody/{dtroId}", payload);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         string stringAsync = await response.Content.ReadAsStringAsync();
@@ -176,7 +176,7 @@ public class DTROsControllerTests
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         StringContent payload = await Utils.CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
-        HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody/{notExistingDtroId}", payload);
+        HttpResponseMessage response = await client.PutAsync($"/dtros/updateFromBody/{notExistingDtroId}", payload);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -193,7 +193,7 @@ public class DTROsControllerTests
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         StringContent payload = await Utils.CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
-        HttpResponseMessage response = await client.PutAsync($"/v1/dtros/updateFromBody/{dtroId}", payload);
+        HttpResponseMessage response = await client.PutAsync($"/dtros/updateFromBody/{dtroId}", payload);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -210,7 +210,7 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        HttpResponseMessage response = await client.GetAsync($"/v1/dtros/{sampleDtro.Id}");
+        HttpResponseMessage response = await client.GetAsync($"/dtros/{sampleDtro.Id}");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -226,7 +226,7 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        HttpResponseMessage response = await client.GetAsync($"/v1/dtros/{dtroId}");
+        HttpResponseMessage response = await client.GetAsync($"/dtros/{dtroId}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -244,7 +244,7 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        HttpResponseMessage response = await client.GetAsync($"/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+        HttpResponseMessage response = await client.GetAsync($"/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -259,7 +259,7 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+        HttpResponseMessage response = await client.GetAsync("/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -272,7 +272,7 @@ public class DTROsControllerTests
 
         HttpClient client = _factory.CreateClient();
 
-        HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+        HttpResponseMessage response = await client.GetAsync("/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
     }
@@ -289,7 +289,7 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        HttpResponseMessage response = await client.GetAsync("/v1/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+        HttpResponseMessage response = await client.GetAsync("/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -304,7 +304,7 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        HttpResponseMessage response = await client.GetAsync("/v1/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+        HttpResponseMessage response = await client.GetAsync("/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -318,7 +318,7 @@ public class DTROsControllerTests
         HttpClient client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
-        HttpResponseMessage response = await client.GetAsync("/v1/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
+        HttpResponseMessage response = await client.GetAsync("/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
     }

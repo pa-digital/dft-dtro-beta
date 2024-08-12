@@ -86,7 +86,7 @@ public class TraController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted SWA.</returns>
     [HttpPost]
-    [Route("/v1/swaCodes/createFromBody")]
+    [Route("/swaCodes/createFromBody")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
@@ -122,7 +122,7 @@ public class TraController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted SWA.</returns>
     [HttpPut]
-    [Route("/v1/swaCodes/updateFromBody")]
+    [Route("/swaCodes/updateFromBody")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
@@ -186,7 +186,7 @@ public class TraController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the activated SWA.</returns>
     [HttpPatch]
-    [Route("/v1/swaCodes/activate/{traId:int}")]
+    [Route("/swaCodes/activate/{traId:int}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
@@ -228,7 +228,7 @@ public class TraController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the deactivated SWA.</returns>
     [HttpPatch]
-    [Route("/v1/swaCodes/deactivate/{traId:int}")]
+    [Route("/swaCodes/deactivate/{traId:int}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]

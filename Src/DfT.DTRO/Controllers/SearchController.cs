@@ -43,7 +43,7 @@ public class SearchController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>D-TRO matching searching request.</returns>
     [HttpPost]
-    [Route("/v1/search")]
+    [Route("/search")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Consumer)]
     [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]

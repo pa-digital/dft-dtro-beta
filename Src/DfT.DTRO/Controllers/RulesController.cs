@@ -38,7 +38,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of rule template versions.</returns>
     [HttpGet]
-    [Route("/v1/rules/versions")]
+    [Route("/rules/versions")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetVersions()
     {
@@ -64,7 +64,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of rule templates.</returns>
     [HttpGet]
-    [Route("/v1/rules")]
+    [Route("/rules")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> Get()
     {
@@ -91,7 +91,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Rule template.</returns>
     [HttpGet]
-    [Route("/v1/rules/{version}")]
+    [Route("/rules/{version}")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetByVersion(string version)
     {
@@ -128,7 +128,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Rule template.</returns>
     [HttpGet]
-    [Route("/v1/rules/{id:guid}")]
+    [Route("/rules/{id:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -166,7 +166,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the rule template.</returns>
     [HttpPost]
-    [Route("/v1/rules/createFromFile/{version}")]
+    [Route("/rules/createFromFile/{version}")]
     [FeatureGate(FeatureNames.Admin)]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
@@ -212,7 +212,7 @@ public class RulesController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the rule template.</returns>
     [HttpPut]
-    [Route("/v1/rules/updateFromFile/{version}")]
+    [Route("/rules/updateFromFile/{version}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]

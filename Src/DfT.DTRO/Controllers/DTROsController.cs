@@ -47,7 +47,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
     [HttpPost]
-    [Route("/v1/dtros/createFromFile")]
+    [Route("/dtros/createFromFile")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [FeatureGate(FeatureNames.Publish)]
@@ -109,7 +109,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
     [HttpPut]
-    [Route("/v1/dtros/updateFromFile/{id:guid}")]
+    [Route("/dtros/updateFromFile/{id:guid}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
@@ -172,7 +172,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
     [HttpPost]
-    [Route("/v1/dtros/createFromBody")]
+    [Route("/dtros/createFromBody")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
@@ -223,7 +223,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
     [HttpPut]
-    [Route("/v1/dtros/updateFromBody/{id:guid}")]
+    [Route("/dtros/updateFromBody/{id:guid}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Okay")]
@@ -271,7 +271,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>D-TRO object.</returns>
     [HttpGet]
-    [Route("/v1/dtros/{id:guid}")]
+    [Route("/dtros/{id:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -338,7 +338,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of D-TROs source history.</returns>
     [HttpGet]
-    [Route("/v1/dtros/sourceHistory/{dtroId:guid}")]
+    [Route("/dtros/sourceHistory/{dtroId:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<ActionResult<List<DtroHistorySourceResponse>>> GetSourceHistory(Guid dtroId)
     {
@@ -370,7 +370,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of D-TROs provision history.</returns>
     [HttpGet]
-    [Route("/v1/dtros/provisionHistory/{dtroId:guid}")]
+    [Route("/dtros/provisionHistory/{dtroId:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<ActionResult<List<DtroHistoryProvisionResponse>>> GetProvisionHistory(Guid dtroId)
     {
