@@ -16,7 +16,7 @@ public class MetricsService : IMetricsService
     {
         try
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/v1/healthApi");
+            var request = new HttpRequestMessage(HttpMethod.Get, "/healthApi");
             Helper.AddHeaders(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
@@ -35,7 +35,7 @@ public class MetricsService : IMetricsService
     {
         try
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/v1/healthDatabase");
+            var request = new HttpRequestMessage(HttpMethod.Get, "/healthDatabase");
             Helper.AddHeaders(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();

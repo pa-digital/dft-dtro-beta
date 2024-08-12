@@ -15,8 +15,8 @@ public class RuleService : IRuleService
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
         
-        //var response = await _client.PutAsync($"/v1/rules/updateFromFile/{version}", content);
-        var request = new HttpRequestMessage(HttpMethod.Put, $"/v1/rules/updateFromFile/{version}")
+        //var response = await _client.PutAsync($"/rules/updateFromFile/{version}", content);
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/rules/updateFromFile/{version}")
         {
             Content = content
         };
@@ -31,8 +31,8 @@ public class RuleService : IRuleService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        //var response = await _client.PostAsync($"/v1/rules/createFromFile/{version}", content);
-        var request = new HttpRequestMessage(HttpMethod.Post, $"/v1/rules/createFromFile/{version}")
+        //var response = await _client.PostAsync($"/rules/createFromFile/{version}", content);
+        var request = new HttpRequestMessage(HttpMethod.Post, $"/rules/createFromFile/{version}")
         {
             Content = content
         };
