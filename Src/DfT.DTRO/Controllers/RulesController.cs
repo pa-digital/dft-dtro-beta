@@ -39,7 +39,7 @@ public class RulesController : ControllerBase
     /// <returns>List of rule template versions.</returns>
     [HttpGet]
     [Route("/v1/rules/versions")]
-    [FeatureGate(FeatureNames.SchemasRead)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetVersions()
     {
         try
@@ -65,7 +65,7 @@ public class RulesController : ControllerBase
     /// <returns>List of rule templates.</returns>
     [HttpGet]
     [Route("/v1/rules")]
-    [FeatureGate(FeatureNames.SchemasRead)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> Get()
     {
         try
@@ -92,7 +92,7 @@ public class RulesController : ControllerBase
     /// <returns>Rule template.</returns>
     [HttpGet]
     [Route("/v1/rules/{version}")]
-    [FeatureGate(FeatureNames.SchemasRead)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetByVersion(string version)
     {
         try
@@ -129,7 +129,7 @@ public class RulesController : ControllerBase
     /// <returns>Rule template.</returns>
     [HttpGet]
     [Route("/v1/rules/{id:guid}")]
-    [FeatureGate(FeatureNames.SchemasRead)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -167,6 +167,7 @@ public class RulesController : ControllerBase
     /// <returns>ID of the rule template.</returns>
     [HttpPost]
     [Route("/v1/rules/createFromFile/{version}")]
+    [FeatureGate(FeatureNames.Admin)]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     public async Task<IActionResult> CreateFromFile(string version, IFormFile file)
@@ -213,7 +214,7 @@ public class RulesController : ControllerBase
     [HttpPut]
     [Route("/v1/rules/updateFromFile/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
+    [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]

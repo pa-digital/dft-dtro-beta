@@ -1,6 +1,24 @@
+using Microsoft.AspNetCore.Builder;
 using Newtonsoft.Json;
-
 namespace Dft.DTRO.Tests.IntegrationTests;
+
+[ExcludeFromCodeCoverage]
+// Custom Middleware for testing
+public class TestFeatureGateMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public TestFeatureGateMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        await _next(context);
+    }
+}
+
 
 [ExcludeFromCodeCoverage]
 public class DTROsControllerTests
@@ -20,6 +38,7 @@ public class DTROsControllerTests
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockDtroService;
     private readonly DtroMappingService _dtroMappingService;
+    private readonly Mock<ISwaCodeDal> _mockSwaCodeDal;
     private readonly int? _taForTest = 1585;
 
     public DTROsControllerTests(WebApplicationFactory<Program> factory)
@@ -29,13 +48,38 @@ public class DTROsControllerTests
 
         _dtroMappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
         _mockDtroService = new Mock<IDtroService>(MockBehavior.Strict);
+        _mockSwaCodeDal = new Mock<ISwaCodeDal>(MockBehavior.Strict);
 
+        _mockSwaCodeDal.Setup(m => m.GetTraAsync(It.IsAny<int>()))
+            .ReturnsAsync(new SwaCode() { Id = new Guid(), IsActive = true, IsAdmin = true, Name = "test" });
         _factory = factory
-            .WithWebHostBuilder(builder => builder
-                .ConfigureTestServices(services =>
-                {
-                    services.AddSingleton(_mockDtroService.Object);
-                }));
+           .WithWebHostBuilder(builder => builder
+               .ConfigureTestServices(services =>
+               {
+                   services.AddSingleton(_mockDtroService.Object);
+                   services.AddSingleton(_mockSwaCodeDal.Object);
+               }));
+
+        //  _factory = factory
+        //.WithWebHostBuilder(builder => builder
+        //    .ConfigureTestServices(services =>
+        //    {
+        //        services.AddControllers(); 
+        //        services.AddSingleton(_mockDtroService.Object);
+        //        services.AddSingleton(_mockSwaCodeDal.Object);
+        //    })
+        //    .Configure(app =>
+        //    {
+        //        app.UseRouting();
+
+        //        app.UseEndpoints(endpoints =>
+        //        {
+        //            endpoints.MapControllers();
+        //        });
+        //        app.UseMiddleware<FeatureGateMiddleware>();
+        //    }));
+
+
     }
 
     [Theory]
@@ -66,6 +110,8 @@ public class DTROsControllerTests
     public async Task Post_SchemaDoesNotExist_ReturnsNotFoundError()
     {
         HttpClient client = _factory.CreateClient();
+
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest))
             .Throws((new NotFoundException()));
@@ -178,6 +224,8 @@ public class DTROsControllerTests
 
         HttpClient client = _factory.CreateClient();
 
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+
         HttpResponseMessage response = await client.GetAsync($"/v1/dtros/{dtroId}");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -194,6 +242,8 @@ public class DTROsControllerTests
 
         HttpClient client = _factory.CreateClient();
 
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+
         HttpResponseMessage response = await client.GetAsync($"/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -206,6 +256,8 @@ public class DTROsControllerTests
             .Throws(new NotFoundException());
 
         HttpClient client = _factory.CreateClient();
+
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync("/v1/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
@@ -235,6 +287,8 @@ public class DTROsControllerTests
 
         HttpClient client = _factory.CreateClient();
 
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+
         HttpResponseMessage response = await client.GetAsync("/v1/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -248,6 +302,8 @@ public class DTROsControllerTests
 
         HttpClient client = _factory.CreateClient();
 
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+
         HttpResponseMessage response = await client.GetAsync("/v1/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -260,6 +316,7 @@ public class DTROsControllerTests
             .Throws(new Exception());
 
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync("/v1/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
 

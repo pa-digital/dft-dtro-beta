@@ -10,13 +10,19 @@ public class SchemasControllerTests
     private readonly WebApplicationFactory<Program> _factory;
 
     private readonly Mock<ISchemaTemplateService> _mockSchemaTemplateService;
-
+    private readonly Mock<ISwaCodeDal> _mockSwaCodeDal;
+    private readonly int? _taForTest = 1585;
     public SchemasControllerTests(WebApplicationFactory<Program> factory)
     {
         _mockSchemaTemplateService = new Mock<ISchemaTemplateService>(MockBehavior.Strict);
+        _mockSwaCodeDal = new Mock<ISwaCodeDal>(MockBehavior.Strict);
+
+        _mockSwaCodeDal.Setup(m => m.GetTraAsync(It.IsAny<int>()))
+           .ReturnsAsync(new SwaCode() { Id = new Guid(), IsActive = true, IsAdmin = true, Name = "test" });
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
             services.AddSingleton(_mockSchemaTemplateService.Object);
+            services.AddSingleton(_mockSwaCodeDal.Object);
         }));
     }
 
@@ -45,8 +51,11 @@ public class SchemasControllerTests
 
         _mockSchemaTemplateService.Setup(mock => mock.GetSchemaTemplatesVersionsAsync())
             .ReturnsAsync(schemaTemplateOverviews);
+        _mockSwaCodeDal.Setup(m => m.GetTraAsync(It.IsAny<int>()))
+           .ReturnsAsync(new SwaCode() { Id = new Guid(), IsActive = true, IsAdmin = true, Name = "test" });
 
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
         HttpResponseMessage response = await client.GetAsync("/v1/schemas/versions");
 
         response.EnsureSuccessStatusCode();
@@ -64,8 +73,11 @@ public class SchemasControllerTests
 
         _mockSchemaTemplateService.Setup(mock => mock.GetSchemaTemplatesVersionsAsync())
             .Returns(Task.FromResult(new List<SchemaTemplateOverview>()));
+        _mockSwaCodeDal.Setup(m => m.GetTraAsync(It.IsAny<int>()))
+           .ReturnsAsync(new SwaCode() { Id = new Guid(), IsActive = true, IsAdmin = true, Name = "test" });
 
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
         HttpResponseMessage response = await client.GetAsync("/v1/schemas/versions");
 
         response.EnsureSuccessStatusCode();
@@ -101,8 +113,11 @@ public class SchemasControllerTests
 
         _mockSchemaTemplateService.Setup(mock => mock.GetSchemaTemplatesAsync())
             .Returns(Task.FromResult(schemaTemplates));
+        _mockSwaCodeDal.Setup(m => m.GetTraAsync(It.IsAny<int>()))
+           .ReturnsAsync(new SwaCode() { Id = new Guid(), IsActive = true, IsAdmin = true, Name = "test" });
 
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
         HttpResponseMessage response = await client.GetAsync("/v1/schemas");
 
         response.EnsureSuccessStatusCode();
@@ -118,8 +133,11 @@ public class SchemasControllerTests
     {
         _mockSchemaTemplateService.Setup(mock => mock.GetSchemaTemplatesAsync())
             .ReturnsAsync(new List<SchemaTemplateResponse>());
+        _mockSwaCodeDal.Setup(m => m.GetTraAsync(It.IsAny<int>()))
+           .ReturnsAsync(new SwaCode() { Id = new Guid(), IsActive = true, IsAdmin = true, Name = "test" });
 
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
         HttpResponseMessage response = await client.GetAsync("/v1/schemas");
 
         response.EnsureSuccessStatusCode();
@@ -135,8 +153,11 @@ public class SchemasControllerTests
 
         _mockSchemaTemplateService.Setup(mock => mock.GetSchemaTemplateAsync(It.IsAny<SchemaVersion>()))
             .Returns(Task.FromResult<SchemaTemplateResponse?>(null));
+        _mockSwaCodeDal.Setup(m => m.GetTraAsync(It.IsAny<int>()))
+           .ReturnsAsync(new SwaCode() { Id = new Guid(), IsActive = true, IsAdmin = true, Name = "test" });
 
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
         HttpResponseMessage response = await client.GetAsync($"/v1/schemas/{schemaVersion}");
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
@@ -154,6 +175,7 @@ public class SchemasControllerTests
             .Returns(Task.FromResult(new GuidResponse()));
 
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         HttpResponseMessage response = await client.PatchAsync($"/v1/schemas/activate/{schemaVersion}", null);
 
@@ -171,6 +193,7 @@ public class SchemasControllerTests
             .Returns(Task.FromResult(new GuidResponse()));
 
         HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
 
         HttpResponseMessage response = await client.PatchAsync($"/v1/schemas/deactivate/{schemaVersion}", null);
 

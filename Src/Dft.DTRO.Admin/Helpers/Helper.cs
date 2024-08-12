@@ -3,12 +3,12 @@ public static class Helper
 {
     public static void AddHeaders(ref HttpRequestMessage httpRequestMessage)
     {
-        int ta = TraId();
+        int ta = DftAdminTraId();
         httpRequestMessage.Headers.Add("ta", ta.ToString());
     }
 
-    public static int TraId()
+    public static int DftAdminTraId()
     {
-        return 1585;
+        return -1; //1585;
     }
 }

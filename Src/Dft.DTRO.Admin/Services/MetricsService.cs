@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 
 namespace Dft.DTRO.Admin.Services;
@@ -16,6 +17,7 @@ public class MetricsService : IMetricsService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/v1/healthApi");
+            Helper.AddHeaders(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -34,6 +36,7 @@ public class MetricsService : IMetricsService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/v1/healthDatabase");
+            Helper.AddHeaders(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -58,7 +61,7 @@ public class MetricsService : IMetricsService
             var content = await response.Content.ReadAsStringAsync();
             var result = int.Parse(content);
 
-            if (result == Helper.TraId())
+            if (result == Helper.DftAdminTraId())
             {
                 return true;
             }

@@ -2,11 +2,11 @@
 
 public static class FeatureNames
 {
-    public const string DtroRead = "DtroRead";
+    public const string ReadOnly = "ReadOnly";
 
-    public const string DtroWrite = "DtroWrite";
+    public const string Publish = "Publish";
 
-    public const string SchemasRead = "SchemasRead";
+    public const string Consumer = "Consumer";
 
-    public const string SchemaWrite = "SchemaWrite";
+    public const string Admin = "Admin";
 }

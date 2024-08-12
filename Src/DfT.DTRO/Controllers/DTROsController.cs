@@ -50,6 +50,7 @@ public class DTROsController : ControllerBase
     [Route("/v1/dtros/createFromFile")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
+    [FeatureGate(FeatureNames.Publish)]
     public async Task<IActionResult> CreateFromFile([FromHeader(Name = "TA")][Required] int? ta, IFormFile file)
     {
         if (file == null || file.Length == 0)
@@ -112,7 +113,7 @@ public class DTROsController : ControllerBase
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.DtroWrite)]
+    [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     public async Task<IActionResult> UpdateFromFile([FromHeader(Name = "TA")][Required] int? ta, Guid id, IFormFile file)
     {
@@ -173,7 +174,7 @@ public class DTROsController : ControllerBase
     [HttpPost]
     [Route("/v1/dtros/createFromBody")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.DtroWrite)]
+    [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
     public async Task<IActionResult> CreateFromBody([FromHeader(Name = "TA")][Required] int? ta, [FromBody] DtroSubmit dtroSubmit)
     {
@@ -224,7 +225,7 @@ public class DTROsController : ControllerBase
     [HttpPut]
     [Route("/v1/dtros/updateFromBody/{id:guid}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.DtroWrite)]
+    [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Okay")]
     public async Task<IActionResult> UpdateFromBody([FromHeader(Name = "TA")][Required] int? ta, [FromRoute] Guid id, [FromBody] DtroSubmit dtroSubmit)
     {
@@ -271,7 +272,7 @@ public class DTROsController : ControllerBase
     /// <returns>D-TRO object.</returns>
     [HttpGet]
     [Route("/v1/dtros/{id:guid}")]
-    [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -302,7 +303,7 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     [HttpDelete("/v1/dtros/{id:guid}")]
-    [FeatureGate(FeatureNames.DtroWrite)]
+    [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
     public async Task<IActionResult> Delete([FromHeader(Name = "TA")][Required] int? ta, Guid id)
@@ -338,6 +339,7 @@ public class DTROsController : ControllerBase
     /// <returns>List of D-TROs source history.</returns>
     [HttpGet]
     [Route("/v1/dtros/sourceHistory/{dtroId:guid}")]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<ActionResult<List<DtroHistorySourceResponse>>> GetSourceHistory(Guid dtroId)
     {
         try
@@ -369,6 +371,7 @@ public class DTROsController : ControllerBase
     /// <returns>List of D-TROs provision history.</returns>
     [HttpGet]
     [Route("/v1/dtros/provisionHistory/{dtroId:guid}")]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<ActionResult<List<DtroHistoryProvisionResponse>>> GetProvisionHistory(Guid dtroId)
     {
         try
@@ -400,7 +403,7 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     [HttpPost("v1/dtros/Ownership/{id:guid}/{assignToTraId:int}")]
-    [FeatureGate(FeatureNames.DtroWrite)]
+    [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
     public async Task<IActionResult> AssignOwnership([FromHeader(Name = "TA")][Required] int? ta, Guid id, int assignToTraId)

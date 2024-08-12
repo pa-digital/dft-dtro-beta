@@ -29,7 +29,7 @@ public class MetricsController : ControllerBase
     /// <response code="200">OK.</response>
     /// <response code="500">Internal Server Error.</response>
     [HttpGet("/v1/healthApi")]
-    [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "The API is up and running.")]
     [SwaggerResponse(statusCode: 500, description: "Api server error.")]
@@ -55,7 +55,7 @@ public class MetricsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     [HttpGet("/v1/healthTraId")]
-    [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "Successfully received the Tra Id")]
     [SwaggerResponse(statusCode: 404, description: "TRA ID not found in header.")]
@@ -91,7 +91,7 @@ public class MetricsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     [HttpGet("/v1/healthDatabase")]
-    [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "Database is available.")]
     [SwaggerResponse(statusCode: 404, description: "Database is not available.")]
     [SwaggerResponse(statusCode: 500, description: "Api server error.")]
@@ -125,7 +125,7 @@ public class MetricsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Metric summary</returns>
     [HttpPost("/v1/metricsForTra")]
-    [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "Metrics retrieved successfully.")]
     [SwaggerResponse(statusCode: 400, description: "Dates Incorrect.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
