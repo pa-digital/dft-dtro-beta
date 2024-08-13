@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Enums;
-using DfT.DTRO.Migrations;
+﻿using DfT.DTRO.Migrations;
 
 namespace DfT.DTRO.Controllers;
 
@@ -33,7 +32,6 @@ public class EventsController : ControllerBase
     /// <summary>
     /// Retrieve all data store events
     /// </summary>
-    /// <param name="ta">TRA identification retrieve is for.</param>
     /// <param name="search">A search query object</param>
     /// <response code="200">OK.</response>
     /// <response code="400">Bad Request.</response>
@@ -41,7 +39,6 @@ public class EventsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Search result.</returns>
     [HttpPost("/events")]
-    [FeatureGate(FeatureNames.Consumer)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "Successfully received the event list")]
     [SwaggerResponse(statusCode: 400, description: "The request was malformed.")]
