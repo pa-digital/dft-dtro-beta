@@ -43,9 +43,9 @@ RUN chmod +x DfT.DTRO
 # Expose the application port and set environment variables
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080 \
-    FeatureManagement__ReadOnly=True \
-    FeatureManagement__Publish=True \
-    FeatureManagement__Consumer=True \
-    FeatureManagement__Admin=True
+    FeatureManagement__ReadOnly=true \
+    FeatureManagement__Publish=true \
+    FeatureManagement__Consumer=true \
+    FeatureManagement__Admin=true
 
 CMD ["/bin/sh", "-c", "./efbundle && ./DfT.DTRO"]
