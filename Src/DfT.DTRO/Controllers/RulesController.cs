@@ -39,7 +39,6 @@ public class RulesController : ControllerBase
     /// <returns>List of rule template versions.</returns>
     [HttpGet]
     [Route("/rules/versions")]
-    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetVersions()
     {
         try
@@ -65,7 +64,6 @@ public class RulesController : ControllerBase
     /// <returns>List of rule templates.</returns>
     [HttpGet]
     [Route("/rules")]
-    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> Get()
     {
         try
@@ -92,7 +90,6 @@ public class RulesController : ControllerBase
     /// <returns>Rule template.</returns>
     [HttpGet]
     [Route("/rules/{version}")]
-    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetByVersion(string version)
     {
         try
@@ -129,7 +126,6 @@ public class RulesController : ControllerBase
     /// <returns>Rule template.</returns>
     [HttpGet]
     [Route("/rules/{id:guid}")]
-    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -167,7 +163,6 @@ public class RulesController : ControllerBase
     /// <returns>ID of the rule template.</returns>
     [HttpPost]
     [Route("/rules/createFromFile/{version}")]
-    [FeatureGate(FeatureNames.Admin)]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     public async Task<IActionResult> CreateFromFile(string version, IFormFile file)
@@ -214,7 +209,6 @@ public class RulesController : ControllerBase
     [HttpPut]
     [Route("/rules/updateFromFile/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]

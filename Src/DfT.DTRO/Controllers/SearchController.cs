@@ -1,4 +1,3 @@
-using DfT.DTRO.Enums;
 using DfT.DTRO.Migrations;
 
 namespace DfT.DTRO.Controllers;
@@ -35,7 +34,6 @@ public class SearchController : ControllerBase
     /// <summary>
     /// Finds existing D-TROs that match the required criteria.
     /// </summary>
-    /// <param name="ta">TRA identification a D-TRO is search for.</param>
     /// <param name="body">A D-TRO object search criteria.</param>
     /// <response code="200">OK.</response>
     /// <response code="400">Bad Request.</response>
@@ -45,7 +43,6 @@ public class SearchController : ControllerBase
     [HttpPost]
     [Route("/search")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.Consumer)]
     [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]
     public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromBody] DtroSearch body)
     {

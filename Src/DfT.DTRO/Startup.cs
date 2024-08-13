@@ -39,8 +39,6 @@ public class Startup
         services.AddSwagger(Configuration, Environment);
         services.AddHealthChecks();
 
-        services.AddFeatureManagement();
-
         services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
         services.AddScoped<ISemanticValidationService, SemanticValidationService>();
         services.AddScoped<IConditionValidationService, ConditionValidationService>();
@@ -78,7 +76,7 @@ public class Startup
 
         app.UseRequestCorrelation();
 
-       // 
+        // 
 
         app.UseAuthorization();
 
