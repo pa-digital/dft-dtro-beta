@@ -39,7 +39,6 @@ public class RulesController : ControllerBase
     /// <returns>List of rule template versions.</returns>
     [HttpGet]
     [Route("/rules/versions")]
-    [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetVersions()
     {
         try
@@ -65,7 +64,6 @@ public class RulesController : ControllerBase
     /// <returns>List of rule templates.</returns>
     [HttpGet]
     [Route("/rules")]
-    [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> Get()
     {
         try
@@ -92,7 +90,6 @@ public class RulesController : ControllerBase
     /// <returns>Rule template.</returns>
     [HttpGet]
     [Route("/rules/{version}")]
-    [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetByVersion(string version)
     {
         try
@@ -129,7 +126,6 @@ public class RulesController : ControllerBase
     /// <returns>Rule template.</returns>
     [HttpGet]
     [Route("/rules/{id:guid}")]
-    [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -213,7 +209,6 @@ public class RulesController : ControllerBase
     [HttpPut]
     [Route("/rules/updateFromFile/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]

@@ -1,4 +1,4 @@
-using DfT.DTRO.Enums;
+using DfT.DTRO.Migrations;
 
 namespace DfT.DTRO.Controllers;
 
@@ -34,7 +34,6 @@ public class SearchController : ControllerBase
     /// <summary>
     /// Finds existing D-TROs that match the required criteria.
     /// </summary>
-    /// <param name="ta">TRA identification a D-TRO is search for.</param>
     /// <param name="body">A D-TRO object search criteria.</param>
     /// <response code="200">OK.</response>
     /// <response code="400">Bad Request.</response>
@@ -44,15 +43,14 @@ public class SearchController : ControllerBase
     [HttpPost]
     [Route("/search")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.DtroRead)]
     [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]
-    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromHeader(Name = "TA")][Required] int? ta, [FromBody] DtroSearch body)
+    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromBody] DtroSearch body)
     {
         try
         {
             PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
-            await _metricsService.IncrementMetric(MetricType.Search, ta);
-            _logger.LogInformation($"'{nameof(SearchDtros)}' method called using TRA Id: '{ta}' and body '{body}'");
+            await _metricsService.IncrementMetric(MetricType.Search, SeedData.DftTraId);
+            _logger.LogInformation($"'{nameof(SearchDtros)}' method called and body '{body}'");
             return Ok(response);
         }
         catch (InvalidOperationException err)
@@ -62,7 +60,7 @@ public class SearchController : ControllerBase
         }
         catch (Exception ex)
         {
-            await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SystemFailure, SeedData.DftTraId);
             _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }

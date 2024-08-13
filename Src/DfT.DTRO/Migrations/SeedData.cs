@@ -2,6 +2,7 @@
 
 public static class SeedData
 {
+    public static int DftTraId = -1;
     public static SystemConfig SystemConfig = new SystemConfig()
     {
         Id = new Guid("a7ab6da8-4d24-4f7f-a58b-fb7443ae8abe"),
@@ -15,7 +16,7 @@ public static class SeedData
                             Id = new Guid("67d2adeb-31ac-4962-8025-c14ef2aa7236"),
                             IsActive = true,
                             IsAdmin = true,
-                            Name = "Department of Transport X",
+                            Name = "Department of Transport",
                             Prefix = "DfT",
                             TraId = -1
                         },

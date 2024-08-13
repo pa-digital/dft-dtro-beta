@@ -31,7 +31,6 @@ public class TraController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>A list of TRA IDs</returns>
     [HttpGet("/swaCodes")]
-    [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, description: "Tra swa codes retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
     public async Task<ActionResult<List<SwaCodeResponse>>> GetSwaCodes()
@@ -58,8 +57,7 @@ public class TraController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>A List of SWA Codes</returns>
-    [HttpGet("/SearchSwaCodes/search/{partialName}")]
-    [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
+    [HttpGet("/swaCodes/search/{partialName}")]
     [SwaggerResponse(statusCode: 200, description: "Tra swa codes retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
     public async Task<ActionResult<List<SwaCodeResponse>>> SearchSwaCodes(string partialName)
@@ -88,7 +86,6 @@ public class TraController : ControllerBase
     [HttpPost]
     [Route("/swaCodes/createFromBody")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
     [SwaggerResponse(statusCode: 400, description: "Bad Request.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
@@ -124,7 +121,6 @@ public class TraController : ControllerBase
     [HttpPut]
     [Route("/swaCodes/updateFromBody")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     [SwaggerResponse(statusCode: 404, description: "Not Found.")]
     [SwaggerResponse(statusCode: 400, description: "Bad Request.")]
@@ -158,7 +154,6 @@ public class TraController : ControllerBase
 
     [HttpGet("/swaCodes/{traId}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     public async Task<ActionResult<SwaCodeResponse>> GetSwaCode(int traId)
     {
@@ -188,7 +183,6 @@ public class TraController : ControllerBase
     [HttpPatch]
     [Route("/swaCodes/activate/{traId:int}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     [SwaggerResponse(statusCode: 404, description: "Not Found.")]
     [SwaggerResponse(statusCode: 400, description: "Bad Request.")]
@@ -230,7 +224,6 @@ public class TraController : ControllerBase
     [HttpPatch]
     [Route("/swaCodes/deactivate/{traId:int}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     [SwaggerResponse(statusCode: 404, description: "Not Found.")]
     [SwaggerResponse(statusCode: 400, description: "Bad Request.")]

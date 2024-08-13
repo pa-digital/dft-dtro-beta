@@ -41,7 +41,6 @@ public class SchemasController : ControllerBase
     /// <returns>List of schema template versions.</returns>
     [HttpGet]
     [Route("/schemas/versions")]
-    [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetVersions()
     {
         try
@@ -67,7 +66,6 @@ public class SchemasController : ControllerBase
     /// <returns>List of schema templates.</returns>
     [HttpGet]
     [Route("/schemas")]
-    [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> Get()
     {
         try
@@ -94,7 +92,6 @@ public class SchemasController : ControllerBase
     /// <returns>Schema template.</returns>
     [HttpGet]
     [Route("/schemas/{version}")]
-    [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetByVersion(string version)
     {
         try
@@ -132,7 +129,6 @@ public class SchemasController : ControllerBase
     /// <returns>Schema template.</returns>
     [HttpGet]
     [Route("/schemas/{id:guid}")]
-    [FeatureGate(FeatureNames.SchemasRead)]
     public async Task<IActionResult> GetById(Guid id)
     {
         try
@@ -216,7 +212,6 @@ public class SchemasController : ControllerBase
     [HttpPost]
     [Route("/schemas/createFromBody/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
 
     public async Task<IActionResult> CreateFromBodyByVersion(string version, [FromBody] ExpandoObject body)
@@ -254,7 +249,6 @@ public class SchemasController : ControllerBase
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     public async Task<IActionResult> UpdateFromFileByVersion(string version, IFormFile file)
     {
@@ -305,7 +299,6 @@ public class SchemasController : ControllerBase
     [HttpPut]
     [Route("/schemas/updateFromBody/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     public async Task<IActionResult> UpdateFromBodyByVersion(string version, [FromBody] ExpandoObject body)
     {
@@ -344,7 +337,6 @@ public class SchemasController : ControllerBase
     [HttpPatch]
     [Route("/schemas/activate/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     public async Task<IActionResult> ActivateByVersion(string version)
     {
@@ -383,7 +375,6 @@ public class SchemasController : ControllerBase
     [HttpPatch]
     [Route("/schemas/deactivate/{version}")]
     [ValidateModelState]
-    [FeatureGate(FeatureNames.SchemaWrite)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     public async Task<IActionResult> DeactivateByVersion(string version)
     {

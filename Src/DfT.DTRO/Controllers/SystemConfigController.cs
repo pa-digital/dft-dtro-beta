@@ -13,7 +13,6 @@ public class SystemConfigController : ControllerBase
     }
 
     [HttpGet("/systemName")]
-    [FeatureGate(RequirementType.Any, FeatureNames.DtroRead, FeatureNames.DtroWrite)]
     [SwaggerResponse(statusCode: 200, description: "System name retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
     public async Task<ActionResult<string>> GetSystemName()

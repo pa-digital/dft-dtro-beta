@@ -1,4 +1,7 @@
-﻿namespace Dft.DTRO.Admin.Services;
+﻿using System;
+using System.Text.Json;
+
+namespace Dft.DTRO.Admin.Services;
 public class SchemaService : ISchemaService
 {
     private readonly HttpClient _client;
@@ -10,7 +13,9 @@ public class SchemaService : ISchemaService
 
     public async Task<List<SchemaTemplateOverview>> GetSchemaVersionsAsync()
     {
-        var response = await _client.GetAsync("/schemas/versions");
+        var request = new HttpRequestMessage(HttpMethod.Get, "/schemas/versions");
+        Helper.AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<List<SchemaTemplateOverview>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -18,13 +23,18 @@ public class SchemaService : ISchemaService
 
     public async Task ActivateSchemaAsync(string version)
     {
-        var response = await _client.PatchAsync($"/schemas/activate/{version}", null);
+        var request = new HttpRequestMessage(HttpMethod.Patch, $"/schemas/activate/{version}");
+        Helper.AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
 
     public async Task DeactivateSchemaAsync(string version)
     {
-        var response = await _client.PatchAsync($"/schemas/deactivate/{version}", null);
+        //var response = await _client.PatchAsync($"/schemas/deactivate/{version}", null);
+        var request = new HttpRequestMessage(HttpMethod.Patch, $"/schemas/deactivate/{version}");
+        Helper.AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
 
@@ -34,7 +44,13 @@ public class SchemaService : ISchemaService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        var response = await _client.PutAsync($"/schemas/updateFromFile/{version}", content);
+        // var response = await _client.PutAsync($"/schemas/updateFromFile/{version}", content);
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/schemas/updateFromFile/{version}")
+        {
+            Content = content
+        };
+        Helper.AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
 
@@ -44,7 +60,13 @@ public class SchemaService : ISchemaService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        var response = await _client.PostAsync($"/schemas/createFromFile/{version}", content);
+        // var response = await _client.PostAsync($"/schemas/createFromFile/{version}", content);
+        var request = new HttpRequestMessage(HttpMethod.Post, $"/schemas/createFromFile/{version}")
+        {
+            Content = content
+        };
+        Helper.AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
 }

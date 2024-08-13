@@ -1,4 +1,4 @@
-﻿using DfT.DTRO.Enums;
+﻿using DfT.DTRO.Migrations;
 
 namespace DfT.DTRO.Controllers;
 
@@ -32,7 +32,6 @@ public class EventsController : ControllerBase
     /// <summary>
     /// Retrieve all data store events
     /// </summary>
-    /// <param name="ta">TRA identification retrieve is for.</param>
     /// <param name="search">A search query object</param>
     /// <response code="200">OK.</response>
     /// <response code="400">Bad Request.</response>
@@ -40,17 +39,16 @@ public class EventsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Search result.</returns>
     [HttpPost("/events")]
-    [FeatureGate(FeatureNames.DtroRead)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "Successfully received the event list")]
     [SwaggerResponse(statusCode: 400, description: "The request was malformed.")]
-    public async Task<ActionResult<DtroEventSearchResult>> Events([FromHeader(Name = "TA")][Required] int? ta, [FromBody] DtroEventSearch search)
+    public async Task<ActionResult<DtroEventSearchResult>> Events([FromBody] DtroEventSearch search)
     {
         try
         {
             DtroEventSearchResult response = await _eventSearchService.SearchAsync(search);
-            await _metricsService.IncrementMetric(MetricType.Event, ta);
-            _logger.LogInformation($"'{nameof(Events)}' method called using TRA Id: '{ta}' and body '{search}'");
+            await _metricsService.IncrementMetric(MetricType.Event, SeedData.DftTraId);
+            _logger.LogInformation($"'{nameof(Events)}' method called '{search}'");
             return Ok(response);
         }
         catch (InvalidOperationException err)
@@ -60,7 +58,7 @@ public class EventsController : ControllerBase
         }
         catch (Exception ex)
         {
-            await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SystemFailure, SeedData.DftTraId);
             _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
