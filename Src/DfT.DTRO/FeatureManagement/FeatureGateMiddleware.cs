@@ -1,17 +1,14 @@
-﻿using DfT.DTRO.Controllers;
-using Google.Api;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.FeatureManagement;
-using System.Drawing.Text;
-using System.Reflection;
-using System.Threading.Tasks;
-
-public class FeatureGateMiddleware
+﻿public class FeatureGateMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<FeatureGateMiddleware> _logger;
+    private readonly HashSet<string> _excludedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "/health",
+        "/favicon.ico"// Add other paths you want to exclude
+        // You can add other paths here if necessary
+    };
+
     public FeatureGateMiddleware(RequestDelegate next, ILogger<FeatureGateMiddleware> logger)
     {
         _next = next;
@@ -78,15 +75,25 @@ public class FeatureGateMiddleware
                     }
                 }
             }
+            else
+            {
+                return true;
+            }
         }
         return false;
     }
 
-    public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider )
+    public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider)
     {
-       
         try
         {
+            // Skip middleware processing for excluded paths (e.g., health checks)
+            if (_excludedPaths.Contains(context.Request.Path.Value))
+            {
+                await _next(context);
+                return;
+            }
+
             var isConsumer = await ApiIsConsumer(context);
             if (!isConsumer)
             {
@@ -106,7 +113,7 @@ public class FeatureGateMiddleware
                             trafficAuthority = await swaCodeDal.GetTraAsync(traId.Value);
                             if (trafficAuthority == null)
                             {
-                                throw new Exception($"Middleware exception: Traffic authority  ({traId}) not found");
+                                throw new Exception($"Middleware exception: Traffic authority ({traId}) not found");
                             }
                         }
                     }
@@ -133,7 +140,6 @@ public class FeatureGateMiddleware
                         throw new Exception($"Middleware exception: Traffic authority ({trafficAuthority.TraId}) is not an admin user");
                     }
                 }
-
             }
 
             await _next(context);
@@ -146,11 +152,6 @@ public class FeatureGateMiddleware
         }
     }
 }
-
-
-
-
-// Extension method used to add the middleware to the HTTP request pipeline.
 public static class FeatureGateMiddlewareExtensions
 {
     public static IApplicationBuilder UseFeatureGateMiddleware(this IApplicationBuilder builder)
