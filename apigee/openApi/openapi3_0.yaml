@@ -19,6 +19,9 @@ paths:
       tags:
         - DTROs
       summary: Create a new D-TRO
+      security:
+        - oAuth:
+            - dsp
       parameters:
         - name: TA
           in: header
@@ -74,6 +77,9 @@ paths:
       tags:
         - DTROs
       summary: Update an existing D-TRO
+      security:
+        - oAuth:
+            - dsp
       parameters:
         - name: TA
           in: header
@@ -138,6 +144,9 @@ paths:
       tags:
         - DTROs
       summary: Create a new D-TRO
+      security:
+        - oAuth:
+            - dsp
       parameters:
         - name: TA
           in: header
@@ -179,6 +188,8 @@ paths:
       tags:
         - DTROs
       summary: Update an existing D-TRO
+      security:
+        - oAuth: -dsp
       parameters:
         - name: TA
           in: header
@@ -227,6 +238,10 @@ paths:
       tags:
         - DTROs
       summary: Gets a D-TRO by its ID
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: id
           in: path
@@ -255,6 +270,9 @@ paths:
       tags:
         - DTROs
       summary: Marks a D-TRO as deleted.
+      security:
+        - oAuth:
+            - dsp
       parameters:
         - name: TA
           in: header
@@ -293,6 +311,10 @@ paths:
       tags:
         - DTROs
       summary: Retrieve the Source History for existing D-TROs
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: dtroId
           in: path
@@ -330,6 +352,10 @@ paths:
       tags:
         - DTROs
       summary: Retrieve the Provision History for existing D-TROs
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: dtroId
           in: path
@@ -367,6 +393,9 @@ paths:
       tags:
         - DTROs
       summary: Assign D-TRO ownership
+      security:
+      - oAuth:
+        - cso
       parameters:
         - name: TA
           in: header
@@ -412,6 +441,10 @@ paths:
       tags:
         - Events
       summary: Retrieve all data store events
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: TA
           in: header
@@ -483,6 +516,9 @@ paths:
       tags:
         - Metrics
       summary: Check API health.
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -519,6 +555,9 @@ paths:
       tags:
         - Metrics
       summary: Check TRA ID health.
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: TA
           in: header
@@ -569,6 +608,9 @@ paths:
       tags:
         - Metrics
       summary: Check database health.
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -607,6 +649,9 @@ paths:
       tags:
         - Metrics
       summary: Get metrics for TRA
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -671,6 +716,10 @@ paths:
       tags:
         - Rules
       summary: Get rule template versions.
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -695,6 +744,10 @@ paths:
       tags:
         - Rules
       summary: Get rule templates.
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -719,6 +772,10 @@ paths:
       tags:
         - Rules
       summary: Get rule template by its rule version
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: version
           in: path
@@ -749,6 +806,10 @@ paths:
       tags:
         - Rules
       summary: Get rule template by its ID
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: id
           in: path
@@ -780,6 +841,9 @@ paths:
       tags:
         - Rules
       summary: Create rule template
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: version
           in: path
@@ -834,6 +898,9 @@ paths:
       tags:
         - Rules
       summary: Update an existing rule template
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: version
           in: path
@@ -892,6 +959,10 @@ paths:
       tags:
         - Schemas
       summary: Get schema template versions.
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -916,6 +987,10 @@ paths:
       tags:
         - Schemas
       summary: Get schema templates.
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -940,6 +1015,10 @@ paths:
       tags:
         - Schemas
       summary: Get schema template by its schema version
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: version
           in: path
@@ -970,6 +1049,10 @@ paths:
       tags:
         - Schemas
       summary: Get schema template by its ID
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: id
           in: path
@@ -1001,6 +1084,9 @@ paths:
       tags:
         - Schemas
       summary: Create schema template
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: version
           in: path
@@ -1055,6 +1141,9 @@ paths:
       tags:
         - Schemas
       summary: Create schema template
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: version
           in: path
@@ -1096,6 +1185,9 @@ paths:
       tags:
         - Schemas
       summary: Update an existing schema template.
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: version
           in: path
@@ -1152,6 +1244,9 @@ paths:
       tags:
         - Schemas
       summary: Update an existing schema template.
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: version
           in: path
@@ -1193,6 +1288,9 @@ paths:
       tags:
         - Schemas
       summary: Activate schema template
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: version
           in: path
@@ -1227,6 +1325,9 @@ paths:
       tags:
         - Schemas
       summary: Deactivate schema template
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: version
           in: path
@@ -1261,6 +1362,10 @@ paths:
       tags:
         - Search
       summary: Finds existing D-TROs that match the required criteria.
+      security:
+        - oAuth:
+            - dsp
+            - dc
       parameters:
         - name: TA
           in: header
@@ -1301,6 +1406,9 @@ paths:
     get:
       tags:
         - SystemConfig
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -1337,6 +1445,9 @@ paths:
       tags:
         - Tra
       summary: Retrieve TRA IDs
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -1385,6 +1496,9 @@ paths:
       tags:
         - Tra
       summary: Find the existing SWA Codes that matches the requested criteria.
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: partialName
           in: path
@@ -1441,6 +1555,9 @@ paths:
       tags:
         - Tra
       summary: Create a new Street Work Manager entity.
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -1505,6 +1622,9 @@ paths:
       tags:
         - Tra
       summary: Update an existing Street Work Act.
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: X-Correlation-ID
           in: header
@@ -1568,6 +1688,9 @@ paths:
     get:
       tags:
         - Tra
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: traId
           in: path
@@ -1608,6 +1731,9 @@ paths:
       tags:
         - Tra
       summary: Activate the Street Work Act.
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: traId
           in: path
@@ -1655,6 +1781,9 @@ paths:
       tags:
         - Tra
       summary: Deactivate the Street Work Act.
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: traId
           in: path
@@ -2194,6 +2323,6 @@ components:
             dc: Data Consumer
 security:
   - oAuth:
-    - cso
-    - dsp
-    - dc
+      - cso
+      - dsp
+      - dc
