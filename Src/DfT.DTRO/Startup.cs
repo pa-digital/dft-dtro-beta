@@ -88,7 +88,7 @@ public class Startup
         }
 
         // Add the middleware before UseEndpoints
-       //app.UseFeatureGateMiddleware();
+       app.UseFeatureGateMiddleware();
        
         app.UseMiddleware<SecurityHeadersMiddleware>();
 
