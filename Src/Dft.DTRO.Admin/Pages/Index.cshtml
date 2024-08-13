@@ -9,104 +9,22 @@
     <p>Dashboard</p>
 </div>
 
-<form id="searchSection" method="post" asp-page-handler="Update" style="display: flex;">
-    <div>
-        <div class="options-container" style="color: accent-color">
-            <label>
-                <input type="radio" name="PeriodOption" value="days" checked="@((Model.PeriodOption == "days"))" /> Days
-            </label>
-            <label>
-                <input type="radio" name="PeriodOption" value="weeks" checked="@((Model.PeriodOption == "weeks"))" /> Weeks
-            </label>
-            <label>
-                <input type="radio" name="PeriodOption" value="months" checked="@((Model.PeriodOption == "months"))" /> Months
-            </label>
-
-            <select id="numberSelect" name="NumberSelect" asp-for="NumberSelect">
-                @for (int i = 1; i <= 7; i++)
-                {
-                    <option value="@i" selected="@((Model.NumberSelect == i))">@i</option>
-                }
-            </select>
-        </div>
-
-        @await Html.PartialAsync("_TraSearchPartial", Model.TraSearch)
-    </div>
-
-
-    <div id="pieChart" style="display: flex;">
-        <div id="metrics" style="color: grey; padding: 10px; flex: 1; position: relative;">
-            <div style="display: flex; justify-content: center; align-items: center; height: 30vh;">
-                <div style="position: relative; width: 70vh;">
-                    <canvas id="metricSummaryChart"></canvas>
-
-                    <div id="stats" style="position: absolute; bottom: 0; right: 0;">
-                        <div style="padding: 10px; flex: 1;">
-                            <div class="checkbox-container" style="border: 1px solid lightgrey; padding: 10px;border-radius: 5px;">
-                                <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
-                                    <span>Api Health</span>
-                                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthApi ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
-                                </div>
-                                <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
-                                    <span>TRA Id Match</span>
-                                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.TraIdMatch ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
-                                </div>
-                                <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
-                                    <span>Database Health</span>
-                                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthDatabase ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div id="pieChart" style="display: flex;">
+    <div id="metrics" style="color: grey; padding: 10px; flex: 1; position: relative;">
+        <div style="display: flex; justify-content: center; align-items: center; height: 30vh;">
+            <div style="position: relative; width: 70vh;">
+                <canvas id="metricSummaryChart"></canvas>
             </div>
         </div>
     </div>
+</div>
 
-</form>
+
 
 
 @section Scripts {
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const periodOptions = document.querySelectorAll('input[name="PeriodOption"]');
-            const numberSelect = document.getElementById('numberSelect');
-            // Event listener for period options (days, weeks, months)
-            periodOptions.forEach(option => {
-                option.addEventListener('change', function () {
-                    let max = 7;
-                    switch (this.value) {
-                        case 'days':
-                            max = 7;
-                            break;
-                        case 'weeks':
-                            max = 4;
-                            break;
-                        case 'months':
-                            max = 6;
-                            break;
-                    };
-     
-                    // Update the number select options
-                    numberSelect.innerHTML = '';
-                    for (let i = 1; i <= max; i++) {
-                        const option = document.createElement('option');
-                        option.value = i;
-                        option.textContent = i;
-                        if (i == 1) {
-                            option.selected = true;
-                        }
-                        numberSelect.appendChild(option);
-                    }
-                });
-            });
-        });
-    </script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var canvas = document.getElementById('metricSummaryChart');
@@ -115,12 +33,9 @@
             var minimalValue = 0.01; // very small value to ensure visibility of zero-value slices
 
             var dataValues = [
-        @Model.Metrics.SystemFailureCount,
-        @Model.Metrics.SubmissionFailureCount,
-        @Model.Metrics.SubmissionCount,
-        @Model.Metrics.DeletionCount,
-        @Model.Metrics.SearchCount,
-        @Model.Metrics.EventCount
+                                    @Model.Metrics.SystemFailureCount,
+                                    @Model.Metrics.SubmissionFailureCount,
+                                    @Model.Metrics.SubmissionCount
                             ];
 
             var total = dataValues.reduce((acc, curr) => acc + curr, 0);
@@ -128,10 +43,7 @@
             var dataLabels = [
                 'SystemFailure (' + (@Model.Metrics.SystemFailureCount > 0 ? @Model.Metrics.SystemFailureCount : 0) + ')',
                 'SubmissionFailure (' + (@Model.Metrics.SubmissionFailureCount > 0 ? @Model.Metrics.SubmissionFailureCount : 0) + ')',
-                'Submission (' + (@Model.Metrics.SubmissionCount > 0 ? @Model.Metrics.SubmissionCount : 0) + ')',
-                'Deletion (' + (@Model.Metrics.DeletionCount > 0 ? @Model.Metrics.DeletionCount : 0) + ')',
-                'Search (' + (@Model.Metrics.SearchCount > 0 ? @Model.Metrics.SearchCount : 0) + ')',
-                'Event (' + (@Model.Metrics.EventCount > 0 ? @Model.Metrics.EventCount : 0) + ')'
+                'Submission (' + (@Model.Metrics.SubmissionCount > 0 ? @Model.Metrics.SubmissionCount : 0) + ')'
             ];
 
             // Check if all values are zero
@@ -147,18 +59,12 @@
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.5)', // pastel red
                         'rgba(255, 159, 64, 0.5)',  // pastel orange
-                        'rgb(144, 238, 144,0.5)',  // pastel green
-                        'rgba(54, 162, 235, 0.5)',  // pastel dark blue
-                        'rgba(153, 102, 255, 0.5)', // pastel blue
-                        'rgba(201, 203, 207, 0.5)'  // pastel light blue
+                        'rgb(144, 238, 144,0.5)'  // pastel green
                     ],
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
                         'rgba(255, 159, 64, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(201, 203, 207, 1)'
+                        'rgba(75, 192, 192, 1)'
                     ],
                     borderWidth: 1,
                     hoverOffset: 10
@@ -168,14 +74,18 @@
             var totalSubmissions = @Model.Metrics.SubmissionCount + @Model.Metrics.SubmissionFailureCount;
             var submissionPercentage = totalSubmissions > 0 ? (@Model.Metrics.SubmissionCount / totalSubmissions * 100).toFixed(2) : 0;
 
-                        var options = {
+            var options = {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'right',
-                        align: 'start'
+                        position: 'bottom',
+                        align: 'center',
+                        labels: {
+                            boxWidth: 11,  // Width of the color box next to each label
+                            padding: 20,   // Space between the legend items
+                        }
                     },
                     tooltip: {
                         callbacks: {
@@ -216,8 +126,25 @@
                     var text = textInMiddle,
                         textX = Math.round((width - ctx.measureText(text).width) / 2),
                         textY = height / 2;
-
+                    ctx.fillStyle = 'black';
                     ctx.fillText(text, textX, textY);
+
+                    ctx.fillStyle = 'grey';
+
+                    ctx.font = (fontSize * 0.7) + "em sans-serif"; 
+                    var label = "Successful";
+                    var labelX = Math.round((width - ctx.measureText(label).width) / 2);
+                    var labelY = textY + (height * 0.1); 
+
+                    ctx.fillText(label, labelX, labelY);
+
+                    ctx.font = (fontSize * 0.7) + "em sans-serif";
+                    var label = "Last 7 days";
+                    var labelX = Math.round((width - ctx.measureText(label).width) / 2);
+                    var labelY = textY - (height * 0.1);
+
+                    ctx.fillText(label, labelX, labelY);
+
                     ctx.save();
                 }
             };
