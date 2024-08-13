@@ -17,7 +17,7 @@ namespace Dft.DTRO.Admin.Pages
      
 
         [BindProperty(SupportsGet = true)]
-        public string PeriodOption { get; set; } = "days";
+        public string PeriodOption { get; set; } = "months";
 
         [BindProperty(SupportsGet = true)]
         public int NumberSelect { get; set; } = 1;

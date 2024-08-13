@@ -17,10 +17,29 @@
             </div>
         </div>
     </div>
+
+
+    <div id="stats" style="position: absolute; bottom: 60px; right: 0;">
+        <div style="padding: 10px; flex: 1;">
+            <div class="checkbox-container" style="border: 1px solid lightgrey; padding: 10px;border-radius: 5px;">
+                <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
+                    <span>Api Health</span>
+                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthApi ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                </div>
+                <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
+                    <span>TRA Id Match</span>
+                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.TraIdMatch ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: flex-end;">
+                    <span>Database Health</span>
+                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthDatabase ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
-
-
-
 
 @section Scripts {
 
@@ -33,17 +52,17 @@
             var minimalValue = 0.01; // very small value to ensure visibility of zero-value slices
 
             var dataValues = [
-                                    @Model.Metrics.SystemFailureCount,
-                                    @Model.Metrics.SubmissionFailureCount,
-                                    @Model.Metrics.SubmissionCount
+                                @Model.Metrics.SubmissionCount,
+                                @Model.Metrics.SubmissionFailureCount,
+                                @Model.Metrics.SystemFailureCount
                             ];
 
             var total = dataValues.reduce((acc, curr) => acc + curr, 0);
 
             var dataLabels = [
-                'SystemFailure (' + (@Model.Metrics.SystemFailureCount > 0 ? @Model.Metrics.SystemFailureCount : 0) + ')',
-                'SubmissionFailure (' + (@Model.Metrics.SubmissionFailureCount > 0 ? @Model.Metrics.SubmissionFailureCount : 0) + ')',
-                'Submission (' + (@Model.Metrics.SubmissionCount > 0 ? @Model.Metrics.SubmissionCount : 0) + ')'
+                'Submission Accepted (' + (@Model.Metrics.SubmissionCount > 0 ? @Model.Metrics.SubmissionCount : 0) + ')',
+                'Submissions Rejected (' + (@Model.Metrics.SubmissionFailureCount > 0 ? @Model.Metrics.SubmissionFailureCount : 0) + ')',
+                'API Failures (' + (@Model.Metrics.SystemFailureCount > 0 ? @Model.Metrics.SystemFailureCount : 0) + ')'
             ];
 
             // Check if all values are zero
@@ -57,14 +76,16 @@
                 datasets: [{
                     data: dataValues.map(value => value > 0 ? value : minimalValue),
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)', // pastel red
-                        'rgba(255, 159, 64, 0.5)',  // pastel orange
-                        'rgb(144, 238, 144,0.5)'  // pastel green
+                        
+                        'rgb(144, 238, 144,0.5)',  // pastel green
+                        'rgba(255, 159, 64, 0.5)', // pastel orange
+                        'rgba(255, 99, 132, 0.5)' // pastel red
+                       
                     ],
                     borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(255, 159, 64, 1)',
-                        'rgba(75, 192, 192, 1)'
+                        'rgba(75, 192, 192, 1)',// pastel green
+                        'rgba(255, 159, 64, 1)', // pastel orange
+                        'rgba(255, 99, 132, 1)'// pastel red   
                     ],
                     borderWidth: 1,
                     hoverOffset: 10

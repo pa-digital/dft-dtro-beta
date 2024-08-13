@@ -5,8 +5,7 @@
 }
 
 <div class="text-center" style="margin-top: 50px; margin-bottom: 50px">
-    <h1 class="display-4">Dft DTRO</h1>
-    <p>Dashboard</p>
+    <h1 class="display-4">Metrics</h1>
 </div>
 
 <form id="searchSection" method="post" asp-page-handler="Update" style="display: flex;">
@@ -35,17 +34,16 @@
 
 
     <div id="pieChart" style="display: flex;">
-        <div id="metrics" style="color: grey; padding: 10px; flex: 1; position: relative;">
-            <div style="display: flex; justify-content: center; align-items: center; height: 60vh;">
-                <div style="position: relative; width: 70vh;">
-                    <canvas id="metricSummaryChart"></canvas>                   
+        <div id="metrics" style="color: grey; padding-left: 10px; flex: 1; position: relative; height: 50vh;">
+            <div style="display: flex; justify-content: center; align-items: center;height: 100%;">
+                <div style="position: relative; width: 70vh; height: 100%;">
+                    <canvas id="metricSummaryChart" style="height: 100%;"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
 </form>
-
 
 @section Scripts {
 
@@ -55,35 +53,60 @@
         document.addEventListener('DOMContentLoaded', function () {
             const periodOptions = document.querySelectorAll('input[name="PeriodOption"]');
             const numberSelect = document.getElementById('numberSelect');
-            // Event listener for period options (days, weeks, months)
+            const updateButton = document.getElementById('updateButton');
+            const form = document.getElementById('searchSection');
+            const selectedNumberValue = '@Model.NumberSelect'; // Use Razor to get the selected value
+
+            // Function to update numberSelect options based on selected periodOption
+            function updateNumberSelectOptions() {
+                let max = 7;
+                const selectedPeriod = document.querySelector('input[name="PeriodOption"]:checked').value;
+
+                switch (selectedPeriod) {
+                    case 'days':
+                        max = 7;
+                        break;
+                    case 'weeks':
+                        max = 4;
+                        break;
+                    case 'months':
+                        max = 6;
+                        break;
+                }
+
+                numberSelect.innerHTML = '';
+                for (let i = 1; i <= max; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    if (i == selectedNumberValue) { // Preserve the selected value
+                        option.selected = true;
+                    }
+                    numberSelect.appendChild(option);
+                }
+            }
+
+            // Function to enable and trigger the update button
+            function triggerUpdateButton() {
+                updateButton.disabled = false; // Enable the button
+                updateButton.click();          // Trigger the button click
+            }
+
+            // Event listener for periodOptions (days, weeks, months)
             periodOptions.forEach(option => {
                 option.addEventListener('change', function () {
-                    let max = 7;
-                    switch (this.value) {
-                        case 'days':
-                            max = 7;
-                            break;
-                        case 'weeks':
-                            max = 4;
-                            break;
-                        case 'months':
-                            max = 6;
-                            break;
-                    };
-     
-                    // Update the number select options
-                    numberSelect.innerHTML = '';
-                    for (let i = 1; i <= max; i++) {
-                        const option = document.createElement('option');
-                        option.value = i;
-                        option.textContent = i;
-                        if (i == 1) {
-                            option.selected = true;
-                        }
-                        numberSelect.appendChild(option);
-                    }
+                    updateNumberSelectOptions();
+                    triggerUpdateButton();  // Automatically trigger button click
                 });
             });
+
+            // Event listener for numberSelect changes
+            numberSelect.addEventListener('change', function () {
+                triggerUpdateButton();  // Automatically trigger button click
+            });
+
+            // Initialize the options on page load
+            updateNumberSelectOptions();
         });
     </script>
 
@@ -93,23 +116,23 @@
             var ctx = canvas.getContext('2d');
 
             var dataValues = [
-                                @Model.Metrics.SystemFailureCount,
-                                @Model.Metrics.SubmissionFailureCount,
-                                @Model.Metrics.SubmissionCount,
-                                @Model.Metrics.DeletionCount,
-                                @Model.Metrics.SearchCount,
-                                @Model.Metrics.EventCount
-            ];
+        @Model.Metrics.SystemFailureCount,
+        @Model.Metrics.SubmissionFailureCount,
+        @Model.Metrics.SubmissionCount,
+        @Model.Metrics.DeletionCount,
+        @Model.Metrics.SearchCount,
+        @Model.Metrics.EventCount
+                    ];
 
             var total = dataValues.reduce((acc, curr) => acc + curr, 0);
 
             var dataLabels = [
-                'System Failure (' + (@Model.Metrics.SystemFailureCount > 0 ? @Model.Metrics.SystemFailureCount : 0) + ')',
-                'Submission Failure (' + (@Model.Metrics.SubmissionFailureCount > 0 ? @Model.Metrics.SubmissionFailureCount : 0) + ')',
-                'Submission (' + (@Model.Metrics.SubmissionCount > 0 ? @Model.Metrics.SubmissionCount : 0) + ')',
-                'Deletion (' + (@Model.Metrics.DeletionCount > 0 ? @Model.Metrics.DeletionCount : 0) + ')',
-                'Search (' + (@Model.Metrics.SearchCount > 0 ? @Model.Metrics.SearchCount : 0) + ')',
-                'Event (' + (@Model.Metrics.EventCount > 0 ? @Model.Metrics.EventCount : 0) + ')'
+                'API Failures (' + (@Model.Metrics.SystemFailureCount > 0 ? @Model.Metrics.SystemFailureCount : 0) + ')',
+                'Submissions Rejected (' + (@Model.Metrics.SubmissionFailureCount > 0 ? @Model.Metrics.SubmissionFailureCount : 0) + ')',
+                'Submissions Accepted (' + (@Model.Metrics.SubmissionCount > 0 ? @Model.Metrics.SubmissionCount : 0) + ')',
+                'Dtro Deletions (' + (@Model.Metrics.DeletionCount > 0 ? @Model.Metrics.DeletionCount : 0) + ')',
+                'Search Calls (' + (@Model.Metrics.SearchCount > 0 ? @Model.Metrics.SearchCount : 0) + ')',
+                'Search Event (' + (@Model.Metrics.EventCount > 0 ? @Model.Metrics.EventCount : 0) + ')'
             ];
 
             // Check if all values are zero
@@ -156,8 +179,7 @@
                 },
                 plugins: {
                     legend: {
-                        display: true,
-                        position: 'top'
+                        display: false
                     },
                     tooltip: {
                         callbacks: {
@@ -177,7 +199,6 @@
 
             metricSummaryChart.update();
         });
-
     </script>
 
 }
