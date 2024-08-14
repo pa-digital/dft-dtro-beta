@@ -1,4 +1,5 @@
-﻿using DfT.DTRO.Migrations;
+﻿using DfT.DTRO.Enums;
+using DfT.DTRO.Migrations;
 
 namespace DfT.DTRO.Controllers;
 
@@ -39,6 +40,7 @@ public class EventsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Search result.</returns>
     [HttpPost("/events")]
+    [FeatureGate(FeatureNames.Consumer)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "Successfully received the event list")]
     [SwaggerResponse(statusCode: 400, description: "The request was malformed.")]

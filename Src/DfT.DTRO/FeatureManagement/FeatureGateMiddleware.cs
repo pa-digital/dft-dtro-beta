@@ -35,13 +35,13 @@
                 foreach (var featureName in featureGateAttribute.Features)
                 {
                     if (await featureManager.IsEnabledAsync(featureName) && featureName == nameof(FeatureNames.Admin))
-                        {
-                            return true;
-                        }
+                    {
+                        return true;
                     }
                 }
             }
         }
+
         return false;
     }
 
@@ -64,16 +64,15 @@
                 foreach (var featureName in featureGateAttribute.Features)
                 {
                     if (await featureManager.IsEnabledAsync(featureName) && featureName == nameof(FeatureNames.Consumer))
-                        {
-                            return true;
-                        }
+                    {
+                        return true;
                     }
                 }
             }
-            else
-            {
-                return true;
-            }
+        }
+        else
+        {
+            return true;
         }
         return false;
     }
@@ -143,9 +142,8 @@
 
                 var isAdminCall = await ApiIsAdmin(context);
                 if (isAdminCall && !trafficAuthority.IsAdmin)
-                    {
-                        throw new Exception($"Middleware exception: Traffic authority ({trafficAuthority.TraId}) is not an admin user");
-                    }
+                {
+                    throw new Exception($"Middleware exception: Traffic authority ({trafficAuthority.TraId}) is not an admin user");
                 }
             }
 
