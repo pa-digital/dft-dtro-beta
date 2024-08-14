@@ -77,6 +77,7 @@ public static class SwaggerConfiguration
             options.OperationFilter<GeneratePathParamsValidationFilter>();
             options.OperationFilter<CorrelationIdHeaderParameterFilter>();
             options.EnableAnnotations();
+            options.DocumentFilter<FeatureGateFilter>();
             options.SchemaFilter<BoundingBoxSchemaFilter>();
         }).AddSwaggerGenNewtonsoftSupport();
     }
