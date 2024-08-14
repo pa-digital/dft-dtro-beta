@@ -12,7 +12,7 @@ public class DbInitialize
                 .ServiceProvider
                 .GetService<DtroContext>();
 
-            context.SwaCodes.RemoveRange(SeedData.TrafficAuthorities);
+            context.SwaCodes.RemoveRange();
             context.SaveChanges();
         }
     }
