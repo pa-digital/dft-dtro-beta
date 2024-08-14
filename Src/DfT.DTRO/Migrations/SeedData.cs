@@ -7,7 +7,7 @@ public static class SeedData
     {
         Id = new Guid("a7ab6da8-4d24-4f7f-a58b-fb7443ae8abe"),
         SystemName = "TRA Test System"
-        
+
     };
 
     public static List<SwaCode> TrafficAuthorities = new List<SwaCode>(){
