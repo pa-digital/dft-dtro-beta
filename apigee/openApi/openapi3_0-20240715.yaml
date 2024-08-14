@@ -36,8 +36,7 @@ paths:
           required: true
           schema:
             type: string
-            description: >-
-              UUID formatted string to track the request through the enquiries
+            description: UUID formatted string to track the request through the enquiries
               stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
@@ -102,8 +101,7 @@ paths:
           required: true
           schema:
             type: string
-            description: >-
-              UUID formatted string to track the request through the enquiries
+            description: UUID formatted string to track the request through the enquiries
               stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
@@ -134,7 +132,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -163,7 +161,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         description: Object containing a full D-TRO details.
@@ -177,7 +176,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -213,7 +212,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         description: Object containing a full D-TRO details.
@@ -257,7 +257,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -294,7 +295,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '204':
@@ -328,7 +330,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -338,7 +341,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistorySourceResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistorySourceResponse'
         '400':
           description: Bad Request.
         '404':
@@ -368,7 +371,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -378,7 +382,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistoryProvisionResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistoryProvisionResponse'
         '400':
           description: Bad Request.
         '404':
@@ -421,7 +425,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '201':
@@ -443,12 +448,20 @@ paths:
             - dsp
             - dc
       parameters:
+        - name: TA
+          in: header
+          description: TRA identification retrieve is for.
+          required: true
+          schema:
+            type: integer
+            format: int32
         - name: X-Correlation-ID
           in: header
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         description: A search query object
@@ -480,19 +493,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult'
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult'
             text/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult'
             application/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult'
             text/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult'
         '400':
           description: The request was malformed.
         '404':
@@ -508,15 +521,14 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: X-Correlation-ID
           in: header
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -548,8 +560,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: TA
           in: header
@@ -563,7 +573,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -602,15 +613,14 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: X-Correlation-ID
           in: header
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -650,7 +660,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         description: Object containing a metric request.
@@ -717,7 +728,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -744,7 +756,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -777,7 +790,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -811,7 +825,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -843,7 +858,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         content:
@@ -899,7 +915,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         content:
@@ -929,7 +946,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '201':
           description: Created.
         '400':
@@ -954,7 +971,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -981,7 +999,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -1014,7 +1033,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -1048,7 +1068,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -1080,7 +1101,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         content:
@@ -1136,7 +1158,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         description: Object containing a full schema template.
@@ -1151,7 +1174,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1179,7 +1202,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         content:
@@ -1209,7 +1233,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1237,7 +1261,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         description: Object containing a full schema template.
@@ -1252,7 +1277,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1280,7 +1305,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -1288,7 +1314,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1316,7 +1342,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -1324,7 +1351,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1342,12 +1369,20 @@ paths:
             - dsp
             - dc
       parameters:
+        - name: TA
+          in: header
+          description: TRA identification a D-TRO is search for.
+          required: true
+          schema:
+            type: integer
+            format: int32
         - name: X-Correlation-ID
           in: header
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         description: A D-TRO object search criteria.
@@ -1361,7 +1396,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse'
         '400':
           description: Bad Request.
         '404':
@@ -1382,7 +1417,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -1420,7 +1456,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -1455,7 +1492,7 @@ paths:
           description: Not found.
         '500':
           description: Internal server error.
-  /swaCodes/search/{partialName}:
+  /SearchSwaCodes/{partialName}:
     get:
       tags:
         - Tra
@@ -1476,7 +1513,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -1528,7 +1566,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
         description: Object containing a full SWA details.
@@ -1594,8 +1633,7 @@ paths:
           required: true
           schema:
             type: string
-            description: >-
-              UUID formatted string to track the request through the enquiries
+            description: UUID formatted string to track the request through the enquiries
               stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       requestBody:
@@ -1667,7 +1705,8 @@ paths:
           required: true
           schema:
             type: string
-            description: UUID formatted string to track the request through the enquiries stack.
+            description: UUID formatted string to track the request through the enquiries
+              stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
@@ -1678,7 +1717,7 @@ paths:
                 $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/json:
               schema:
                 $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
@@ -1710,8 +1749,7 @@ paths:
           required: true
           schema:
             type: string
-            description: >-
-              UUID formatted string to track the request through the enquiries
+            description: UUID formatted string to track the request through the enquiries
               stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
@@ -1761,8 +1799,7 @@ paths:
           required: true
           schema:
             type: string
-            description: >-
-              UUID formatted string to track the request through the enquiries
+            description: UUID formatted string to track the request through the enquiries
               stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
@@ -2107,9 +2144,9 @@ components:
           type: string
           nullable: true
         regulationStart:
-          $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
         regulationEnd:
-          $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
       additionalProperties: false
     DfT.DTRO.Models.Filtering.ValueCondition:
       required:
@@ -2275,7 +2312,7 @@ components:
           type: boolean
       additionalProperties: false
   securitySchemes:
-   oAuth:
+    oAuth:
       type: oauth2
       description: This API uses OAuth 2 with the clientCredentials grant flow.
       flows:
@@ -2286,7 +2323,7 @@ components:
             dsp: Digital Service Provider
             dc: Data Consumer
 security:
-   - oAuth:
+  - oAuth:
       - cso
       - dsp
       - dc
