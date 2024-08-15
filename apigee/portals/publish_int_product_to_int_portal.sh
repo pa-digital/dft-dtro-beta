@@ -6,7 +6,7 @@ ORG=$apigee_organisation
 to_title_case() {
   echo "$1" | sed -e 's/\b./\u&/g' -e 's/-/ /g'
 }
-TITLE_ENV=$(to_title_case "${env}")
+TITLE_ENV=$(to_title_case "${env_name_prefix}")
 PORTAL_NAME="${TITLE_ENV} Developer D-TRO Portal"
 PORTAL_URL="$(echo "${PORTAL_NAME//[- ]/}" | tr '[:upper:]' '[:lower:]')"
 
@@ -19,7 +19,7 @@ PRODUCT_NAMES=("digital-service-provider" "data-consumer")
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
 
   # Name of product created via product.json
-  PRODUCT_NAME="${env}-${PRODUCT}"
+  PRODUCT_NAME="${env_name_prefix}-${PRODUCT}"
 
   # Convert product name to title case with spaces
   TITLE=$(to_title_case "${PRODUCT}")
