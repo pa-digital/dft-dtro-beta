@@ -191,6 +191,7 @@ jobs:
         env:
           github_ref: ${{ github.ref }}
           environment: ${{ inputs.environment }}
+          env_name_prefix: ${{ inputs.environment }}
           service_account: ${{ secrets.wip_service_account }}
           apigee_organisation: ${{ inputs.gcp-project-id }}
 
