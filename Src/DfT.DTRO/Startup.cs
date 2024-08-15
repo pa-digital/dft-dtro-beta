@@ -94,6 +94,7 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
+        DbInitialize.GrantPermission(app);
         DbInitialize.EmptySwaCodesTable(app);
         DbInitialize.SeedAppData(app);
         if (env.IsDevelopment())
