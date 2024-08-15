@@ -1,7 +1,7 @@
 [
   {
     "name": "ENV-digital-service-provider",
-    "displayName": "Digital Service Provider",
+    "displayName": "ENV-Digital Service Provider",
     "approvalType": "manual",
     "attributes": [
       {
@@ -46,7 +46,7 @@
   },
   {
     "name": "ENV-data-consumer",
-    "displayName": "Data Consumer",
+    "displayName": "ENV-Data Consumer",
     "approvalType": "manual",
     "attributes": [
       {
