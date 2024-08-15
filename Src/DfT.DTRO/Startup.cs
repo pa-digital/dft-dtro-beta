@@ -88,8 +88,8 @@ public class Startup
         }
 
         // Add the middleware before UseEndpoints
-       app.UseFeatureGateMiddleware();
-       
+        app.UseFeatureGateMiddleware();
+
         app.UseMiddleware<SecurityHeadersMiddleware>();
 
         app.UseEndpoints(endpoints =>
@@ -99,13 +99,11 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
+        DbInitialize.EmptySwaCodesTable(app);
         DbInitialize.SeedAppData(app);
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-            //TODO: The line below will be removed once access
-            //TODO: to query the deployed database is granted
-            DbInitialize.RunSqlStatement(app, loggerFactory);
         }
         else
         {
