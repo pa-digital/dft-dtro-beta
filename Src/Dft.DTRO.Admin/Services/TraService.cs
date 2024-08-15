@@ -1,4 +1,10 @@
-﻿namespace Dft.DTRO.Admin.Services;
+﻿using System;
+using System.Diagnostics;
+using System.Reflection.Metadata;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Dft.DTRO.Admin.Services;
 public class TraService : ITraService
 {
     private readonly HttpClient _client;
@@ -64,27 +70,47 @@ public class TraService : ITraService
 
     public async Task ActivateTraAsync(int traId)
     {
-        var response = await _client.PatchAsync($"/swaCodes/activate/{traId}", null);
+        //var response = await _client.PatchAsync($"/swaCodes/activate/{traId}", null);
+        var request = new HttpRequestMessage(HttpMethod.Patch, $"/swaCodes/activate/{traId}");
+        Helper.AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
 
     public async Task DeactivateTraAsync(int traId)
     {
-        var response = await _client.PatchAsync($"/swaCodes/deactivate/{traId}", null);
+        //var response = await _client.PatchAsync($"/swaCodes/deactivate/{traId}", null);
+        var request = new HttpRequestMessage(HttpMethod.Patch, $"/swaCodes/deactivate/{traId}");
+        Helper.AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
 
     public async Task UpdateTraAsync(SwaCode swaCodeRequest)
     {
 
-        var response = await _client.PutAsJsonAsync($"/swaCodes/updateFromBody/", swaCodeRequest);
+        //var response = await _client.PutAsJsonAsync($"/swaCodes/updateFromBody/", swaCodeRequest);
+        var content = JsonContent.Create(swaCodeRequest);
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/swaCodes/updateFromBody/")
+        {
+            Content = content
+        };
+        Helper.AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
 
     public async Task CreateTraAsync(SwaCode swaCodeRequest)
     {
 
-        var response = await _client.PostAsJsonAsync($"/swaCodes/createFromBody/", swaCodeRequest);
+        //var response = await _client.PostAsJsonAsync($"/swaCodes/createFromBody/", swaCodeRequest);
+        var content = JsonContent.Create(swaCodeRequest);
+        var request = new HttpRequestMessage(HttpMethod.Post, $"/swaCodes/createFromBody/")
+        {
+            Content = content
+        };
+        Helper.AddHeaders(ref request);
+        var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
 }

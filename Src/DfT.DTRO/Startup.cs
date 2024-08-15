@@ -77,7 +77,8 @@ public class Startup
         app.UseRouting();
 
         app.UseRequestCorrelation();
-        app.UseMiddleware<SecurityHeadersMiddleware>();
+
+        // 
 
         app.UseAuthorization();
 
@@ -86,6 +87,11 @@ public class Startup
             app.UseCustomSwagger();
         }
 
+        // Add the middleware before UseEndpoints
+        app.UseFeatureGateMiddleware();
+
+        app.UseMiddleware<SecurityHeadersMiddleware>();
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
@@ -93,19 +99,17 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
+        DbInitialize.EmptySwaCodesTable(app);
         DbInitialize.SeedAppData(app);
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-            //TODO: The line below will be removed once access
-            //TODO: to query the deployed database is granted
-            DbInitialize.RunSqlStatement(app, loggerFactory);
         }
         else
         {
             app.UseExceptionHandler("/Error");
-
             app.UseHsts();
         }
     }
+
 }

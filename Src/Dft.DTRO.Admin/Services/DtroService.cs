@@ -12,6 +12,7 @@ public class DtroService : IDtroService
     public async Task<List<DtroHistoryProvisionResponse>> DtroProvisionHistory(Guid id)
     {
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/dtros/provisionHistory/{id}");
+        Helper.AddHeaders(ref httpRequestMessage);
         var response = await _client.SendAsync(httpRequestMessage);
 
         response.EnsureSuccessStatusCode();
@@ -24,6 +25,8 @@ public class DtroService : IDtroService
     public async Task<List<DtroHistorySourceResponse>> DtroSourceHistory(Guid id)
     {
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/dtros/sourceHistory/{id}");
+        Helper.AddHeaders(ref httpRequestMessage);
+
         var response = await _client.SendAsync(httpRequestMessage);
 
         response.EnsureSuccessStatusCode();

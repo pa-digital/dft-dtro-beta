@@ -10,10 +10,17 @@ public class EventsControllerTests
 
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockStorageService;
+    private readonly Mock<ISwaCodeDal> _mockSwaCodeDal;
     private readonly int? _taForTest = 1585;
     public EventsControllerTests(WebApplicationFactory<Program> factory)
     {
         _mockStorageService = new Mock<IDtroService>(MockBehavior.Strict);
+
+        _mockSwaCodeDal = new Mock<ISwaCodeDal>(MockBehavior.Strict);
+
+        _mockSwaCodeDal.Setup(m => m.GetTraAsync(It.IsAny<int>()))
+           .ReturnsAsync(new SwaCode() { Id = new Guid(), IsActive = true, IsAdmin = true, Name = "test" });
+
         Mock<IMetricsService> metricsMock = new();
         metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<int>())).ReturnsAsync(true);
 
