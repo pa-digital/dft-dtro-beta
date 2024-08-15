@@ -139,6 +139,7 @@ jobs:
         env:
           github_ref: ${{ github.ref }}
           environment: ${{ env.TF_VAR_environment }}
+          env_name_prefix: ${{ env.TF_VAR_integration_prefix }}
           service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
           apigee_organisation: ${{ env.TF_VAR_project_id }}
 
@@ -146,8 +147,8 @@ jobs:
         id: google-auth
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.workload_identity_provider }}
-          service_account: ${{ secrets.wip_service_account }}
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_TEST }}
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}
           token_format: access_token
 
       - name: Set up ApigeeCLI
@@ -160,18 +161,18 @@ jobs:
         run: chmod +x portals/*
 
       - name: Deploy Proxy
-        run: apigeecli apis create oas --name "dtro-${env}-server" --oas-base-folderpath openApi --oas-name openapi3_0.yaml --target-url $target_url --basepath /v1 --add-cors=true --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
+        run: apigeecli apis create oas --name "dtro-${env_name_prefix}-server" --oas-base-folderpath openApi --oas-name openapi3_0.yaml --target-url $target_url --basepath /v1 --add-cors=true --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
 
       - name: Get Proxy Bundle
         run: |
           apigeecli apis export --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
-          unzip "dtro-${env}-server.zip"
+          unzip "dtro-${env_name_prefix}-server.zip"
 
       - name: Add Header Policy
         run: |
           cp policies/AM-Set-App-Id-Header.xml apiproxy/policies/AM-Set-App-Id-Header.xml
           gawk -i inplace '/<PostFlow name="PostFlow">/ { print; getline; print "   <Request>\n      <Step>\n        <Name>AM-Set-App-Id-Header</Name>\n      </Step>\n   </Request>"; next } 1' apiproxy/proxies/default.xml
-          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
+          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>"; next } 1' apiproxy/dtro-${env_name_prefix}-server.xml
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -180,19 +181,19 @@ jobs:
         run: |
           pip install -r python/requirements.txt
           python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
-          python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
+          python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env_name_prefix}-server.xml
           cp -a oauth/* apiproxy/policies
 
       - name: Create API bundle
         run: zip -r proxy.zip apiproxy
 
       - name: Upload and Deploy API Proxy Bundle
-        run: apigeecli apis create bundle --name "dtro-${env}-server" --proxy-zip proxy.zip --env "${{ env.name_prefix }}-environment" --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
+        run: apigeecli apis create bundle --name "dtro-${env_name_prefix}-server" --proxy-zip proxy.zip --env "dtro-${{ env.TF_VAR_integration_prefix }}-apigee-environment" --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
 
       - name: Create Products
         run: |
-          sed -i "s/ENV/${env}/g" products/products.json
-          apigeecli products import -f products/products.json --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --upsert
+          sed -i "s/ENV/${env_name_prefix}/g" products/int_products.json
+          apigeecli products import -f products/int_products.json --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --upsert
 
       - name: Publish Products to Developer Portal
-        run: portals/publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}
+        run: portals/publish_int_product_to_int_portal.sh ${{ steps.google-auth.outputs.access_token }}
