@@ -3,24 +3,6 @@ using Newtonsoft.Json;
 namespace Dft.DTRO.Tests.IntegrationTests;
 
 [ExcludeFromCodeCoverage]
-// Custom Middleware for testing
-public class TestFeatureGateMiddleware
-{
-    private readonly RequestDelegate _next;
-
-    public TestFeatureGateMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
-    public async Task InvokeAsync(HttpContext context)
-    {
-        await _next(context);
-    }
-}
-
-
-[ExcludeFromCodeCoverage]
 public class DTROsControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {

@@ -29,7 +29,6 @@ public class MetricsController : ControllerBase
     /// <response code="200">OK.</response>
     /// <response code="500">Internal Server Error.</response>
     [HttpGet("/healthApi")]
-    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "The API is up and running.")]
     [SwaggerResponse(statusCode: 500, description: "Api server error.")]
@@ -54,7 +53,6 @@ public class MetricsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     [HttpGet("/healthDatabase")]
-    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "Database is available.")]
     [SwaggerResponse(statusCode: 404, description: "Database is not available.")]
     [SwaggerResponse(statusCode: 500, description: "Api server error.")]
