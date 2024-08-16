@@ -10,7 +10,7 @@ public class DbInitialize
         {
             using (DtroContext context = serviceScope.ServiceProvider.GetService<DtroContext>())
             {
-                context.Database.ExecuteSqlRaw("GRANT SELECT ON ALL TABLES IN SCHEMA public TO QATEST;");
+                context.Database.ExecuteSqlRaw("GRANT SELECT ON ALL TABLES IN SCHEMA public TO postgres;");
             }
         }
     }
