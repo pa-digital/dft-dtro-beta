@@ -39,8 +39,6 @@ public class Startup
         services.AddSwagger(Configuration, Environment);
         services.AddHealthChecks();
 
-        services.AddFeatureManagement();
-
         services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
         services.AddScoped<ISemanticValidationService, SemanticValidationService>();
         services.AddScoped<IConditionValidationService, ConditionValidationService>();
@@ -87,9 +85,6 @@ public class Startup
             app.UseCustomSwagger();
         }
 
-        // Add the middleware before UseEndpoints
-        app.UseFeatureGateMiddleware();
-
         app.UseMiddleware<SecurityHeadersMiddleware>();
 
         app.UseEndpoints(endpoints =>
@@ -99,6 +94,7 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
+        DbInitialize.GrantPermission(app);
         DbInitialize.EmptySwaCodesTable(app);
         DbInitialize.SeedAppData(app);
         if (env.IsDevelopment())
