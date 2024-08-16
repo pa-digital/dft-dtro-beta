@@ -21,6 +21,23 @@ locals {
  FeatureManagement__Publish   = true
   })
 
+  service_ui_envs = merge(
+    {
+      DEPLOYED               = timestamp()
+      PROJECTID              = data.google_project.project.project_id
+      EnableRedisCache       = var.feature_enable_redis_cache
+      POSTGRES_DB            = "${local.name_prefix}-database"
+      POSTGRES_USER          = var.application_name
+      POSTGRES_HOST          = var.postgres_host
+      POSTGRES_PORT          = var.postgres_port
+      POSTGRES_SSL           = var.postgres_use_ssl
+      POSTGRES_MAX_POOL_SIZE = var.db_connections_per_cloud_run_instance
+      FeatureManagement__ReadOnly  = true
+      FeatureManagement__Consumer  = true
+      FeatureManagement__Admin     = true
+      FeatureManagement__Publish   = true
+    })
+
   project_id             = data.google_project.project.project_id
 }
 
@@ -51,8 +68,7 @@ resource "google_cloud_run_v2_service" "dtro_service" {
 
     containers {
       image = "${var.artifact_registry_dtro_image_path}:${var.tag}"
-#       # TODO: Below is the last stable image
-#       image = "europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-repository/dft-dtro-beta@sha256:f34febca186167410eb8ee2a8362975521c8994c675ba22a5590cb563d442e0f"
+
       ports {
         container_port = 8080
       }
@@ -126,20 +142,10 @@ resource "google_cloud_run_v2_service" "service_portal_service" {
       }
 
       dynamic "env" {
-        for_each = local.dtro_service_envs
+        for_each = local.service_ui_envs
         content {
           name  = env.key
           value = env.value
-        }
-      }
-
-      env {
-        name = local.db_password_env_name
-        value_source {
-          secret_key_ref {
-            secret  = data.google_secret_manager_secret_version.postgres_password_value.secret
-            version = "latest"
-          }
         }
       }
 
