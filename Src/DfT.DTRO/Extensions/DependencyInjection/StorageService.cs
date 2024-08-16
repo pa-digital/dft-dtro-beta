@@ -1,12 +1,12 @@
 ﻿namespace DfT.DTRO.Extensions.DependencyInjection;
 
-public class StorageService
+public static class StorageService
 {
-    public static void AddStorage(IServiceCollection services, IConfiguration configuration, ILoggerFactory factory)
+    public static void AddStorage(this IServiceCollection services, IConfiguration configuration)
     {
         string connectionString = Build(services, configuration);
-        ILogger<StorageService> logger = factory.CreateLogger<StorageService>();
-        logger.LogInformation($"#*# {connectionString}");
+        //var logger = factory.CreateLogger<StorageService>();
+        //logger.LogInformation($"#*# {connectionString}");
         services.AddDbContext<DtroContext>(options =>
             options.UseNpgsql(connectionString, builder =>
             {
@@ -15,7 +15,7 @@ public class StorageService
             }));
     }
 
-    private static string Build(IServiceCollection services, IConfiguration configuration)
+    private static string Build(this IServiceCollection services, IConfiguration configuration)
     {
         string host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ??
                       configuration.GetValue("Postgres:Host", "localhost");
