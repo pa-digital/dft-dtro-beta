@@ -1,13 +1,12 @@
 ﻿namespace DfT.DTRO.Extensions.DependencyInjection;
 
-public static class StorageService
+public class StorageService
 {
-    public static void AddStorage(this IServiceCollection services, IConfiguration configuration, ILoggerFactory factory)
+    public static void AddStorage(IServiceCollection services, IConfiguration configuration, ILoggerFactory factory)
     {
         string connectionString = Build(services, configuration);
-        using (var logger = factory.CreateLogger<StorageService>() {
-                logger.LogInfo($"#*# {connectionString}");
-            })
+        ILogger<StorageService> logger = factory.CreateLogger<StorageService>();
+        logger.LogInformation($"#*# {connectionString}");
         services.AddDbContext<DtroContext>(options =>
             options.UseNpgsql(connectionString, builder =>
             {
@@ -39,10 +38,10 @@ public static class StorageService
         int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int envMaxPoolSize)
             ? envMaxPoolSize : configuration.GetValue<int?>("Postgres:MaxPoolSize", null);
 
-        return services.AddPostgresContext(host, port, user, password, database, useSsl, maxPoolSize);
+        return AddPostgresContext(services, host, port, user, password, database, useSsl, maxPoolSize);
     }
 
-    private static string AddPostgresContext(this IServiceCollection services, string host, int port,
+    private static string AddPostgresContext(IServiceCollection services, string host, int port,
         string user,
         string password, string database, bool useSsl, int? maxPoolSize)
     {
