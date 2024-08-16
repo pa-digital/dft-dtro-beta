@@ -1,19 +1,26 @@
-﻿namespace DfT.DTRO.Extensions.DependencyInjection;
+﻿using Serilog;
+using ILogger = Serilog.ILogger;
 
-public static class StorageService
+namespace DfT.DTRO.Extensions.DependencyInjection;
+
+public class StorageService
 {
-    public static void AddStorage(this IServiceCollection services, IConfiguration configuration)
+    private static ILogger Logger => Log.ForContext<StorageService>();
+
+    public static void AddStorage(IServiceCollection services, IConfiguration configuration)
     {
         string connectionString = Build(services, configuration);
         services.AddDbContext<DtroContext>(options =>
             options.UseNpgsql(connectionString, builder =>
             {
+                Logger.Information("Connection string:\t" + connectionString);
+                Console.WriteLine("Connection string:\t" + connectionString);
                 string assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
                 builder.MigrationsAssembly(assemblyName);
             }));
     }
 
-    private static string Build(this IServiceCollection services, IConfiguration configuration)
+    private static string Build(IServiceCollection services, IConfiguration configuration)
     {
         string host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ??
                       configuration.GetValue("Postgres:Host", "localhost");

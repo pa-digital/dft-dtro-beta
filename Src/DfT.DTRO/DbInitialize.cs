@@ -4,12 +4,6 @@ namespace DfT.DTRO;
 
 public class DbInitialize
 {
-    public static void DisplayConnectionString(IConfiguration configuration, ILoggerFactory loggerFactory)
-    {
-        var logger = loggerFactory.CreateLogger<DbInitialize>();
-        logger.LogInformation($"#*# {configuration.GetConnectionString("dft-dtro-test:europe-west1:dtro-int-postgres")}");
-    }
-
     public static void GrantPermission(IApplicationBuilder app)
     {
         using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())

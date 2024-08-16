@@ -64,7 +64,7 @@ public class Startup
         services.AddScoped<ISystemConfigService, SystemConfigService>();
         services.TryAddSingleton<ISystemClock, SystemClock>();
 
-        services.AddStorage(Configuration);
+        StorageService.AddStorage(services, Configuration);
         services.AddJsonLogic();
         services.AddRequestCorrelation();
         services.AddCache(Configuration);
@@ -94,7 +94,6 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
-        DbInitialize.DisplayConnectionString(Configuration, loggerFactory);
         DbInitialize.GrantPermission(app);
         DbInitialize.EmptySwaCodesTable(app);
         DbInitialize.SeedAppData(app);
