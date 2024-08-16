@@ -11,13 +11,10 @@ public class Startup
 
     private IConfiguration Configuration { get; }
 
-    private ILoggerFactory _loggerFactory { get; }
-
-    public Startup(IWebHostEnvironment env, IConfiguration configuration, ILoggerFactory loggerFactory)
+    public Startup(IWebHostEnvironment env, IConfiguration configuration)
     {
         Environment = env;
         Configuration = configuration;
-        _loggerFactory = loggerFactory;
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -97,6 +94,7 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
+        DbInitialize.DisplayConnectionString(Configuration, loggerFactory);
         DbInitialize.GrantPermission(app);
         DbInitialize.EmptySwaCodesTable(app);
         DbInitialize.SeedAppData(app);
