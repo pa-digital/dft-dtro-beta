@@ -11,10 +11,13 @@ public class Startup
 
     private IConfiguration Configuration { get; }
 
-    public Startup(IWebHostEnvironment env, IConfiguration configuration)
+    private ILoggerFactory _loggerFactory { get; }
+
+    public Startup(IWebHostEnvironment env, IConfiguration configuration, ILoggerFactory loggerFactory)
     {
         Environment = env;
         Configuration = configuration;
+        _loggerFactory = loggerFactory;
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -64,7 +67,7 @@ public class Startup
         services.AddScoped<ISystemConfigService, SystemConfigService>();
         services.TryAddSingleton<ISystemClock, SystemClock>();
 
-        services.AddStorage(Configuration);
+        services.AddStorage(Configuration, _loggerFactory);
         services.AddJsonLogic();
         services.AddRequestCorrelation();
         services.AddCache(Configuration);

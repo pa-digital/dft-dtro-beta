@@ -2,9 +2,12 @@
 
 public static class StorageService
 {
-    public static void AddStorage(this IServiceCollection services, IConfiguration configuration)
+    public static void AddStorage(this IServiceCollection services, IConfiguration configuration, ILoggerFactory factory)
     {
         string connectionString = Build(services, configuration);
+        using (var logger = factory.CreateLogger<StorageService>() {
+                logger.LogInfo($"#*# {connectionString}");
+            })
         services.AddDbContext<DtroContext>(options =>
             options.UseNpgsql(connectionString, builder =>
             {
