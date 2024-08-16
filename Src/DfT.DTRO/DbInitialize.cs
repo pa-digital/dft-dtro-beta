@@ -10,8 +10,8 @@ public class DbInitialize
         {
             using (DtroContext context = serviceScope.ServiceProvider.GetService<DtroContext>())
             {
-                const string rawSql = "GRANT SELECT ON ALL TABLES IN SCHEMA public TO QATEST;";
-                context.Database.ExecuteSqlRaw(rawSql);
+                const string user = "QATEST";
+                context.Database.ExecuteSqlRaw("GRANT SELECT ON ALL TABLES IN SCHEMA public TO {0};", user);
             }
         }
     }
