@@ -67,7 +67,7 @@ public class Startup
         services.AddScoped<ISystemConfigService, SystemConfigService>();
         services.TryAddSingleton<ISystemClock, SystemClock>();
 
-        StorageService.AddStorage(services, Configuration, _loggerFactory);
+        services.AddStorage(Configuration);
         services.AddJsonLogic();
         services.AddRequestCorrelation();
         services.AddCache(Configuration);
