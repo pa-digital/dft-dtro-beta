@@ -7,16 +7,10 @@ on:
         type: string
         description: Short name of the TRA
         required: true
-      run-build-push:
-        type: boolean
-        description: Run Build and Push job?
-        required: false
-        default: false
-      run-deploy-CR-job:
-        type: boolean
-        description: Run deploy Cloud Run job?
-        required: false
-        default: false
+      tra_id:
+        type: string
+        description: ID for the TRA
+        required: true
 
 env:
   environment: test #TODO: Update to for Prod
@@ -57,7 +51,9 @@ jobs:
         env:
           github_ref: ${{ github.ref }}
           environment: ${{ inputs.environment }}
+          env_name_prefix: ${{ env.env_name_prefix }}
           tra: ${{ inputs.tra }}
+          tra_id: ${{ inputs.tra_id }}
           service_account: ${{ secrets.wip_service_account }}
           apigee_organisation: ${{ inputs.gcp-project-id }}
 
@@ -76,7 +72,7 @@ jobs:
           echo "APIGEECLI_DEBUG=true" >> $GITHUB_ENV
 
       - name: Create TRA Portal
-        run: create_developer_portal.sh ${{ steps.google-auth.outputs.access_token }}
+        run: create_tra_portal.sh ${{ steps.google-auth.outputs.access_token }}
 
       - name: Publish Products to TRA Portal
         run: publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}
