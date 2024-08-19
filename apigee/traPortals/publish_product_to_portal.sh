@@ -6,8 +6,8 @@ ORG=$apigee_organisation
 to_title_case() {
   echo "$1" | sed -e 's/\b./\u&/g' -e 's/-/ /g'
 }
-TITLE_ENV=$(to_title_case "${env}")
-PORTAL_NAME="${TITLE_ENV} Developer D-TRO Portal"
+TITLE=$(to_title_case "${tra}")
+PORTAL_NAME="${TITLE} D-TRO Portal"
 PORTAL_URL="$(echo "${PORTAL_NAME//[- ]/}" | tr '[:upper:]' '[:lower:]')"
 
 TOKEN=$1
@@ -25,7 +25,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
   TITLE=$(to_title_case "${PRODUCT}")
 
   # Construct the description
-  DESCRIPTION="This is the ${TITLE_ENV} D-TRO application for ${PRODUCT}s."
+  DESCRIPTION="This is the ${TITLE} D-TRO application for ${PRODUCT}s."
 
   # Make the API call
   RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
