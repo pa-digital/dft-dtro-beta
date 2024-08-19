@@ -15,8 +15,6 @@ on:
 env:
   environment: test #TODO: Update to for Prod
   env_name_prefix: int #TODO: Remove for Prod, use 'environment' instead
-  gcp-project-id: ${{ vars.GCP_PROJECT_ID_TEST }} #TODO: Update to for Prod
-  gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
 
 permissions:
   contents: read
@@ -48,12 +46,12 @@ jobs:
         run: ./load_environment_variables.sh
         env:
           github_ref: ${{ github.ref }}
-          environment: ${{ inputs.environment }}
-          env_name_prefix: ${{ env.env_name_prefix }}
+          environment: ${{ env.environment }}
+          env_name_prefix: ${{ env.env_name_prefix }} #TODO: Update to '${{ inputs.environment }}' for Prod
           tra: ${{ inputs.tra }}
           tra_id: ${{ inputs.tra_id }}
-          service_account: ${{ secrets.wip_service_account }}
-          apigee_organisation: ${{ inputs.gcp-project-id }}
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }} #TODO: Update for Prod
+          apigee_organisation: ${{ vars.GCP_PROJECT_ID_TEST }} #TODO: Update for Prod
 
       - name: Authenticate to Google Cloud
         id: google-auth
