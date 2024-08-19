@@ -19,7 +19,7 @@ PRODUCT_NAMES=("digital-service-provider" "data-consumer")
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
 
   # Name of product created via product.json
-  PRODUCT_NAME="${env}-${PRODUCT}"
+  PRODUCT_NAME="${env_name_prefix}-${PRODUCT}"
 
   # Convert product name to title case with spaces
   TITLE=$(to_title_case "${PRODUCT}")
