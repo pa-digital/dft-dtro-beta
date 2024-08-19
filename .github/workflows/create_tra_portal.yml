@@ -45,7 +45,9 @@ jobs:
         run: chmod +x *.sh
 
       - name: Load Env Vars for Apigee script
-        run: load_environment_variables.sh
+        run: |
+          ls -l
+          load_environment_variables.sh
         env:
           github_ref: ${{ github.ref }}
           environment: ${{ inputs.environment }}
