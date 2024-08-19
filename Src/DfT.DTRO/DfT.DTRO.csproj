@@ -53,6 +53,5 @@
   </ItemGroup>
   <ItemGroup>
 	<Folder Include="Logs\" />
-	<Folder Include="Models\SwaCode\" />
   </ItemGroup>
 </Project>

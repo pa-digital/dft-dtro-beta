@@ -1,100 +1,163 @@
-﻿namespace Dft.DTRO.Tests.CodeiumTests.Metrics.Service;
-
-[ExcludeFromCodeCoverage]
-public class MetricsServiceTests
+﻿namespace Dft.DTRO.Tests.CodeiumTests.Metrics.Service
 {
-    private readonly MetricRequest _metricRequest =
-        new() { DateFrom = new DateTime(2024, 1, 2), DateTo = new DateTime(2024, 1, 12) };
-
-    [Fact]
-    public async Task IncrementMetric_SystemFailure_ReturnsTrue()
+    [ExcludeFromCodeCoverage]
+    public class MetricsServiceTests
     {
-        Mock<IMetricDal> mockMetricDal = new();
-        mockMetricDal.Setup(x => x.IncrementMetric(MetricType.SystemFailure, It.IsAny<int>())).ReturnsAsync(true);
-        MetricsService service = new(mockMetricDal.Object);
+        private readonly MetricRequest _metricRequest = new()
+        {
+            DateFrom = new DateTime(2024, 1, 2),
+            DateTo = new DateTime(2024, 1, 12)
+        };
 
-        bool result = await service.IncrementMetric(MetricType.SystemFailure, 123);
+        private readonly DtroUser _dtroUser = new();
 
-        Assert.True(result);
-    }
+        [Fact]
+        public async Task IncrementMetric_SystemFailure_ReturnsTrue()
+        {
+            // Arrange
+            var mockMetricDal = new Mock<IMetricDal>();
+            mockMetricDal.Setup(x => x.IncrementMetric(MetricType.SystemFailure, It.IsAny<Guid>()))
+                         .ReturnsAsync(true);
 
-    [Fact]
-    public async Task IncrementMetric_Submission_ReturnsTrue()
-    {
-        Mock<IMetricDal> mockMetricDal = new();
-        mockMetricDal.Setup(x => x.IncrementMetric(MetricType.Submission, It.IsAny<int>())).ReturnsAsync(true);
-        MetricsService service = new(mockMetricDal.Object);
+            var mockDtroUserDal = new Mock<DtroUserDal>();
+            mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
+                           .ReturnsAsync(_dtroUser);
 
-        bool result = await service.IncrementMetric(MetricType.Submission, 456);
+            var service = new MetricsService(mockMetricDal.Object, mockDtroUserDal.Object);
 
-        Assert.True(result);
-    }
+            // Act
+            bool result = await service.IncrementMetric(MetricType.SystemFailure, Guid.NewGuid());
 
-    [Fact]
-    public async Task IncrementMetric_Failure_ReturnsFalse()
-    {
-        Mock<IMetricDal> mockMetricDal = new();
-        mockMetricDal.Setup(x => x.IncrementMetric(MetricType.Deletion, It.IsAny<int>())).ReturnsAsync(false);
-        MetricsService service = new(mockMetricDal.Object);
+            // Assert
+            Assert.True(result);
+        }
 
-        bool result = await service.IncrementMetric(MetricType.Deletion, 789);
+        [Fact]
+        public async Task IncrementMetric_Submission_ReturnsTrue()
+        {
+            // Arrange
+            var mockMetricDal = new Mock<IMetricDal>();
+            mockMetricDal.Setup(x => x.IncrementMetric(MetricType.Submission, It.IsAny<Guid>()))
+                         .ReturnsAsync(true);
 
-        Assert.False(result);
-    }
+            var mockDtroUserDal = new Mock<DtroUserDal>();
+            mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
+                           .ReturnsAsync(_dtroUser);
 
-    [Fact]
-    public async Task GetMetricsForTra_ValidInputs_ReturnsMetricSummary()
-    {
-        _metricRequest.TraId = 123;
-        MetricSummary expectedMetricSummary = new();
+            var service = new MetricsService(mockMetricDal.Object, mockDtroUserDal.Object);
 
-        Mock<IMetricDal> mockMetricDal = new();
-        mockMetricDal.Setup(x => x.GetMetricsForTra(It.IsAny<int>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>()))
-            .ReturnsAsync(expectedMetricSummary);
-        MetricsService service = new(mockMetricDal.Object);
+            // Act
+            bool result = await service.IncrementMetric(MetricType.Submission, Guid.NewGuid());
 
-        MetricSummary? result = await service.GetMetrics(_metricRequest);
+            // Assert
+            Assert.True(result);
+        }
 
-        Assert.Equal(expectedMetricSummary, result);
-    }
+        [Fact]
+        public async Task IncrementMetric_Failure_ReturnsFalse()
+        {
+            // Arrange
+            var mockMetricDal = new Mock<IMetricDal>();
+            mockMetricDal.Setup(x => x.IncrementMetric(MetricType.Deletion, It.IsAny<Guid>()))
+                         .ReturnsAsync(false);
 
-    [Fact]
-    public async Task GetMetricsForTra_InvalidTraId_ReturnsNull()
-    {
-        _metricRequest.TraId = -1;
+            var mockDtroUserDal = new Mock<DtroUserDal>();
+            mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
+                           .ReturnsAsync(_dtroUser);
 
-        Mock<IMetricDal> mockMetricDal = new();
+            var service = new MetricsService(mockMetricDal.Object, mockDtroUserDal.Object);
 
-        mockMetricDal.Setup(x => x.GetMetricsForTra(It.IsAny<int>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>()))
-            .ReturnsAsync(() => null);
-        MetricsService service = new(mockMetricDal.Object);
+            // Act
+            bool result = await service.IncrementMetric(MetricType.Deletion, Guid.NewGuid());
 
-        MetricSummary? result = await service.GetMetrics(_metricRequest);
+            // Assert
+            Assert.False(result);
+        }
 
-        Assert.Null(result);
-    }
+        [Fact]
+        public async Task GetMetricsForTra_ValidInputs_ReturnsMetricSummary()
+        {
+            // Arrange
+            MetricSummary expectedMetricSummary = new();
 
-    [Fact]
-    public async Task CheckDataBase_ValidConnection_ReturnsTrue()
-    {
-        Mock<IMetricDal> mockMetricDal = new();
-        mockMetricDal.Setup(x => x.HasValidConnectionAsync()).ReturnsAsync(true);
-        MetricsService service = new(mockMetricDal.Object);
+            var mockMetricDal = new Mock<IMetricDal>();
+            mockMetricDal.Setup(x => x.GetMetricsForDtroUser(It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>()))
+                         .ReturnsAsync(expectedMetricSummary);
 
-        bool result = await service.CheckDataBase();
+            var mockDtroUserDal = new Mock<DtroUserDal>();
+            mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
+                           .ReturnsAsync(_dtroUser);
 
-        Assert.True(result);
-    }
+            var service = new MetricsService(mockMetricDal.Object, mockDtroUserDal.Object);
 
-    [Fact]
-    public async Task CheckDataBase_InvalidConnection_ReturnsFalse()
-    {
-        Mock<IMetricDal> mockMetricDal = new();
-        mockMetricDal.Setup(x => x.HasValidConnectionAsync()).ReturnsAsync(false);
-        MetricsService service = new(mockMetricDal.Object);
+            // Act
+            MetricSummary? result = await service.GetMetrics(_metricRequest);
 
-        bool result = await service.CheckDataBase();
+            // Assert
+            Assert.Equal(expectedMetricSummary, result);
+        }
 
-        Assert.False(result);
+        [Fact]
+        public async Task GetMetricsForTra_InvalidTraId_ReturnsNull()
+        {
+            // Arrange
+            var mockMetricDal = new Mock<IMetricDal>();
+            mockMetricDal.Setup(x => x.GetMetricsForDtroUser(It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>()))
+                         .ReturnsAsync(() => null);
+
+            var mockDtroUserDal = new Mock<DtroUserDal>();
+            mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
+                           .ReturnsAsync(_dtroUser);
+
+            var service = new MetricsService(mockMetricDal.Object, mockDtroUserDal.Object);
+
+            // Act
+            MetricSummary? result = await service.GetMetrics(_metricRequest);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task CheckDataBase_ValidConnection_ReturnsTrue()
+        {
+            // Arrange
+            var mockMetricDal = new Mock<IMetricDal>();
+            mockMetricDal.Setup(x => x.HasValidConnectionAsync())
+                         .ReturnsAsync(true);
+
+            var mockDtroUserDal = new Mock<DtroUserDal>();
+            mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
+                           .ReturnsAsync(_dtroUser);
+
+            var service = new MetricsService(mockMetricDal.Object, mockDtroUserDal.Object);
+
+            // Act
+            bool result = await service.CheckDataBase();
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task CheckDataBase_InvalidConnection_ReturnsFalse()
+        {
+            // Arrange
+            var mockMetricDal = new Mock<IMetricDal>();
+            mockMetricDal.Setup(x => x.HasValidConnectionAsync())
+                         .ReturnsAsync(false);
+
+            var mockDtroUserDal = new Mock<DtroUserDal>();
+            mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
+                           .ReturnsAsync(_dtroUser);
+
+            var service = new MetricsService(mockMetricDal.Object, mockDtroUserDal.Object);
+
+            // Act
+            bool result = await service.CheckDataBase();
+
+            // Assert
+            Assert.False(result);
+        }
     }
 }

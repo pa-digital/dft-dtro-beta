@@ -4,7 +4,7 @@
 /// Wrapper for Street Work Manager codes.
 /// </summary>
 [DataContract]
-public class SwaCode
+public class DtroUser
 {
     /// <summary>
     /// ID of the SWA document.
@@ -15,12 +15,17 @@ public class SwaCode
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 
+
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [Column(TypeName = "uuid")]
+    public Guid xAppId { get; set; }
+
     /// <summary>
     /// The ID of the traffic regulation authority
     /// </summary>
     [Required(ErrorMessage = "TRA id field must be included")]
     [DataMember(Name = "traId")]
-    public int TraId { get; set; }
+    public int? TraId { get; set; }
 
     /// <summary>
     /// The name of the traffic regulation authority
@@ -39,14 +44,8 @@ public class SwaCode
     public string Prefix { get; set; }
 
     /// <summary>
-    /// Flag representing administrative rights of the traffic regulation authority.
+    /// The user group
     /// </summary>
-    [DataMember(Name = "IsAdmin")]
-    public bool IsAdmin { get; set; }
-
-    /// <summary>
-    /// Flag representing if SWA is active.
-    /// </summary>
-    [DataMember(Name = "isActive")]
-    public bool IsActive { get; set; }
+    [DataMember(Name = "userGroup")]
+    public int UserGroup { get; set; }
 }

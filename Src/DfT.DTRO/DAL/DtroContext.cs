@@ -33,7 +33,7 @@ public class DtroContext : DbContext
     /// <summary>
     /// SWA Codes table for create, read and update operations.
     /// </summary>
-    public virtual DbSet<SwaCode> SwaCodes { get; set; }
+    public virtual DbSet<DtroUser> DtroUsers { get; set; }
 
     /// <summary>
     /// Default constructor.

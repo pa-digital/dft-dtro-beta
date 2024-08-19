@@ -1,4 +1,5 @@
 ﻿using DfT.DTRO.Enums;
+using DfT.DTRO.Models.DataBase;
 
 namespace DfT.DTRO.DAL;
 
@@ -20,17 +21,17 @@ public class MetricDal : IMetricDal
     }
 
     ///<inheritdoc cref="IMetricDal"/>
-    public async Task<bool> IncrementMetric(MetricType type, int traId)
+    public async Task<bool> IncrementMetric(MetricType type, Guid dtroUserId)
     {
         var today = new DateOnly(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
-        var metric = await _dtroContext.Metrics.FirstOrDefaultAsync(x => x.ForDate == today && x.TraId == traId);
+        var metric = await _dtroContext.Metrics.FirstOrDefaultAsync(x => x.ForDate == today && x.DtroUserId == dtroUserId);
         if (metric == null)
         {
             metric = new Metric
             {
                 Id = Guid.NewGuid(),
                 ForDate = today,
-                TraId = traId
+                DtroUserId = dtroUserId
             };
             await _dtroContext.Metrics.AddAsync(metric);
         }
@@ -63,9 +64,9 @@ public class MetricDal : IMetricDal
     }
 
     ///<inheritdoc cref="IMetricDal"/>
-    public async Task<MetricSummary> GetMetricsForTra(int? traId, DateOnly fromDate, DateOnly toDate)
+    public async Task<MetricSummary> GetMetricsForDtroUser(Guid? dtroUserId, DateOnly fromDate, DateOnly toDate)
     {
-        if (traId == null)
+        if (dtroUserId == null)
         {
             var aggregatedMetrics = await _dtroContext.Metrics
                           .Where(metric => metric.ForDate >= fromDate && metric.ForDate <= toDate)
@@ -85,7 +86,7 @@ public class MetricDal : IMetricDal
         else
         {
             var aggregatedMetrics = await _dtroContext.Metrics
-              .Where(metric => metric.TraId == traId && metric.ForDate >= fromDate && metric.ForDate <= toDate)
+              .Where(metric => metric.DtroUserId == dtroUserId && metric.ForDate >= fromDate && metric.ForDate <= toDate)
               .GroupBy(metric => 1)
               .Select(group => new MetricSummary
               {

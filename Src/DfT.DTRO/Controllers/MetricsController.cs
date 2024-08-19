@@ -48,43 +48,6 @@ public class MetricsController : ControllerBase
     }
 
     /// <summary>
-    /// Check TRA ID health.
-    /// </summary>
-    /// <param name="ta">TRA identification to check the health.</param>
-    /// <response code="200">OK.</response>
-    /// <response code="404">Not found.</response>
-    /// <response code="500">Internal Server Error.</response>
-    [HttpGet("/healthTraId")]
-    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
-    [ValidateModelState]
-    [SwaggerResponse(statusCode: 200, description: "Successfully received the Tra Id")]
-    [SwaggerResponse(statusCode: 404, description: "TRA ID not found in header.")]
-    [SwaggerResponse(statusCode: 500, description: "Api server error.")]
-    public ActionResult<int?> HealthTraId([FromHeader(Name = "TA")][Required] int? ta)
-    {
-        try
-        {
-            if (ta == null)
-            {
-                _logger.LogError($"TRA Id '{null}' is null");
-                return NotFound(new ApiErrorResponse("Not found", "ta not found in header"));
-            }
-            _logger.LogInformation($"'{nameof(HealthTraId)}' method called using TRA Id: '{ta}'");
-            return Ok(ta);
-        }
-        catch (NotFoundException nFex)
-        {
-            _logger.LogError(nFex.Message);
-            return NotFound(new ApiErrorResponse("Not found", "ta not found in header"));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
-        }
-    }
-
-    /// <summary>
     /// Check database health.
     /// </summary>
     /// <response code="200">OK.</response>
@@ -117,25 +80,25 @@ public class MetricsController : ControllerBase
     }
 
     /// <summary>
-    /// Get metrics for TRA
+    /// Get metrics for Dtro User
     /// </summary>
     /// <param name="metricRequest">Object containing a metric request.</param>
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Metric summary</returns>
-    [HttpPost("/metricsForTra")]
+    [HttpPost("/metricsForDtroUser")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "Metrics retrieved successfully.")]
     [SwaggerResponse(statusCode: 400, description: "Dates Incorrect.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
 
-    public async Task<ActionResult<MetricSummary>> GetMetricsForTra([FromBody] MetricRequest metricRequest)
+    public async Task<ActionResult<MetricSummary>> GetMetricsForDtroUser([FromBody] MetricRequest metricRequest)
     {
         try
         {
             MetricSummary metrics = await _metricsService.GetMetrics(metricRequest) ?? new MetricSummary();
-            _logger.LogInformation($"'{nameof(GetMetricsForTra)}' method called using TRA Id '{metricRequest.TraId}'");
+            _logger.LogInformation($"'{nameof(GetMetricsForDtroUser)}' method called using DtroUserId '{metricRequest.DtroUserId}'");
             return Ok(metrics);
         }
         catch (ArgumentException err)

@@ -2,13 +2,13 @@
 
 public class TraServiceTests
 {
-    private readonly Mock<ISwaCodeDal> _mockSwaCodeDal;
-    private readonly TraService _traService;
+    private readonly Mock<IDtroUserDal> _mockSwaCodeDal;
+    private readonly DtroUserService _traService;
 
     public TraServiceTests()
     {
-        _mockSwaCodeDal = new Mock<ISwaCodeDal>();
-        _traService = new TraService(_mockSwaCodeDal.Object);
+        _mockSwaCodeDal = new Mock<IDtroUserDal>();
+        _traService = new DtroUserService(_mockSwaCodeDal.Object);
     }
 
     [Fact]
@@ -16,18 +16,18 @@ public class TraServiceTests
     {
         // Arrange
         var partialName = "test";
-        var swaCodeResponses = new List<SwaCodeResponse>
+        var swaCodeResponses = new List<DtroUserResponse>
         {
-            new SwaCodeResponse { Name = "test name" },
-            new SwaCodeResponse { Name = "(test) another name" },
-            new SwaCodeResponse { Name = "SHORT NAME" }
+            new DtroUserResponse { Name = "test name" },
+            new DtroUserResponse { Name = "(test) another name" },
+            new DtroUserResponse { Name = "SHORT NAME" }
         };
 
-        _mockSwaCodeDal.Setup(dal => dal.SearchSwaCodesAsync(partialName))
+        _mockSwaCodeDal.Setup(dal => dal.SearchDtroUsersAsync(partialName))
             .ReturnsAsync(swaCodeResponses);
 
         // Act
-        var result = await _traService.SearchSwaCodes(partialName);
+        var result = await _traService.SearchDtroUsers(partialName);
 
         // Assert
         Assert.Equal("Test Name", result[0].Name);
@@ -39,17 +39,17 @@ public class TraServiceTests
     public async Task GetSwaCodeAsync_ShouldFormatNamesCorrectly()
     {
         // Arrange
-        var swaCodeResponses = new List<SwaCodeResponse>
+        var swaCodeResponses = new List<DtroUserResponse>
         {
-            new SwaCodeResponse { Name = "example name" },
-            new SwaCodeResponse { Name = "another EXAMPLE" }
+            new DtroUserResponse { Name = "example name" },
+            new DtroUserResponse { Name = "another EXAMPLE" }
         };
 
-        _mockSwaCodeDal.Setup(dal => dal.GetAllCodesAsync())
+        _mockSwaCodeDal.Setup(dal => dal.GetAllDtroUsersAsync())
             .ReturnsAsync(swaCodeResponses);
 
         // Act
-        var result = await _traService.GetSwaCodeAsync();
+        var result = await _traService.GetAllDtroUsersAsync();
 
         // Assert
         Assert.Equal("Example Name", result[0].Name);
@@ -57,93 +57,31 @@ public class TraServiceTests
     }
 
     [Fact]
-    public async Task ActivateTraAsync_ShouldThrowNotFoundException_WhenTraDoesNotExist()
-    {
-        // Arrange
-        var traId = 1;
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync(traId))
-            .ReturnsAsync(false);
-
-        // Act & Assert
-        await Assert.ThrowsAsync<NotFoundException>(() => _traService.ActivateTraAsync(traId));
-    }
-
-    [Fact]
-    public async Task ActivateTraAsync_ShouldReturnGuidResponse_WhenTraExists()
-    {
-        // Arrange
-        var traId = 1;
-        var response = new GuidResponse { Id = Guid.NewGuid() };
-
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync(traId))
-            .ReturnsAsync(true);
-        _mockSwaCodeDal.Setup(dal => dal.ActivateTraAsync(traId))
-            .ReturnsAsync(response);
-
-        // Act
-        var result = await _traService.ActivateTraAsync(traId);
-
-        // Assert
-        Assert.Equal(response.Id, result.Id);
-    }
-
-    [Fact]
-    public async Task DeActivateTraAsync_ShouldThrowNotFoundException_WhenTraDoesNotExist()
-    {
-        // Arrange
-        var traId = 1;
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync(traId))
-            .ReturnsAsync(false);
-
-        // Act & Assert
-        await Assert.ThrowsAsync<NotFoundException>(() => _traService.DeActivateTraAsync(traId));
-    }
-
-    [Fact]
-    public async Task DeActivateTraAsync_ShouldReturnGuidResponse_WhenTraExists()
-    {
-        // Arrange
-        var traId = 1;
-        var response = new GuidResponse { Id = Guid.NewGuid() };
-
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync(traId))
-            .ReturnsAsync(true);
-        _mockSwaCodeDal.Setup(dal => dal.DeActivateTraAsync(traId))
-            .ReturnsAsync(response);
-
-        // Act
-        var result = await _traService.DeActivateTraAsync(traId);
-
-        // Assert
-        Assert.Equal(response.Id, result.Id);
-    }
-
-    [Fact]
     public async Task SaveTraAsync_ShouldThrowInvalidOperationException_WhenTraExists()
     {
         // Arrange
-        var swaCodeRequest = new SwaCodeRequest { TraId = 1 };
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync(swaCodeRequest.TraId))
+        var swaCodeRequest = new DtroUserRequest { TraId = 1 };
+        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync((int) swaCodeRequest.TraId))
             .ReturnsAsync(true);
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => _traService.SaveTraAsync(swaCodeRequest));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => _traService.SaveDtroUserAsync(swaCodeRequest));
     }
 
     [Fact]
     public async Task SaveTraAsync_ShouldReturnGuidResponse_WhenTraDoesNotExist()
     {
         // Arrange
-        var swaCodeRequest = new SwaCodeRequest { TraId = 1 };
+        var swaCodeRequest = new DtroUserRequest { TraId = 1 };
         var response = new GuidResponse { Id = Guid.NewGuid() };
 
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync(swaCodeRequest.TraId))
+        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync((int) swaCodeRequest.TraId))
             .ReturnsAsync(false);
-        _mockSwaCodeDal.Setup(dal => dal.SaveTraAsync(swaCodeRequest))
+        _mockSwaCodeDal.Setup(dal => dal.SaveDtroUserAsync(swaCodeRequest))
             .ReturnsAsync(response);
 
         // Act
-        var result = await _traService.SaveTraAsync(swaCodeRequest);
+        var result = await _traService.SaveDtroUserAsync(swaCodeRequest);
 
         // Assert
         Assert.Equal(response.Id, result.Id);
@@ -153,28 +91,28 @@ public class TraServiceTests
     public async Task UpdateTraAsync_ShouldThrowNotFoundException_WhenTraDoesNotExist()
     {
         // Arrange
-        var swaCodeRequest = new SwaCodeRequest { TraId = 1 };
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync(swaCodeRequest.TraId))
+        var swaCodeRequest = new DtroUserRequest { TraId = 1 };
+        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync((int) swaCodeRequest.TraId))
             .ReturnsAsync(false);
 
         // Act & Assert
-        await Assert.ThrowsAsync<NotFoundException>(() => _traService.UpdateTraAsync(swaCodeRequest));
+        await Assert.ThrowsAsync<NotFoundException>(() => _traService.UpdateDtroUserAsync(swaCodeRequest));
     }
 
     [Fact]
     public async Task UpdateTraAsync_ShouldReturnGuidResponse_WhenTraExists()
     {
         // Arrange
-        var swaCodeRequest = new SwaCodeRequest { TraId = 1 };
+        var swaCodeRequest = new DtroUserRequest { TraId = 1 };
         var response = new GuidResponse { Id = Guid.NewGuid() };
 
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync(swaCodeRequest.TraId))
+        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync((int) swaCodeRequest.TraId))
             .ReturnsAsync(true);
-        _mockSwaCodeDal.Setup(dal => dal.UpdateTraAsync(swaCodeRequest))
+        _mockSwaCodeDal.Setup(dal => dal.UpdateDtroUserAsync(swaCodeRequest))
             .ReturnsAsync(response);
 
         // Act
-        var result = await _traService.UpdateTraAsync(swaCodeRequest);
+        var result = await _traService.UpdateDtroUserAsync(swaCodeRequest);
 
         // Assert
         Assert.Equal(response.Id, result.Id);

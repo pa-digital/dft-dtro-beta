@@ -16,11 +16,11 @@ public class RecordManagementServiceTests
     [InlineData("3.2.0", "invalid-duplicate-provision-reference", false)]
     public void ProducesCorrectResults(string schemaVersion, string file, bool isValid)
     {
-        Mock<ISwaCodeDal> mockSwaCodeDal = new();
+        Mock<IDtroUserDal> mockSwaCodeDal = new();
         IRecordManagementService sut = new RecordManagementService(mockSwaCodeDal.Object);
 
 
-        mockSwaCodeDal.Setup(it => it.GetAllCodesAsync().Result).Returns(() => Utils.SwaCodesResponse);
+        mockSwaCodeDal.Setup(it => it.GetAllDtroUsersAsync().Result).Returns(() => Utils.SwaCodesResponse);
 
         string input = File.ReadAllText(Path.Join(SourceJsonBasePath, $"{file}.json"));
 

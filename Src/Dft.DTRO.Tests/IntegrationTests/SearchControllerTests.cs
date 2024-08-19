@@ -15,7 +15,7 @@ public class SearchControllerTests
     {
         _mockStorageService = new Mock<IDtroService>(MockBehavior.Strict);
         Mock<IMetricsService> metricsMock = new();
-        metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<int>())).ReturnsAsync(true);
+        metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<Guid>())).ReturnsAsync(true);
 
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {

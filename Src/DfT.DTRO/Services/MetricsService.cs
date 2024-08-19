@@ -5,27 +5,19 @@ namespace DfT.DTRO.Services;
 public class MetricsService : IMetricsService
 {
     private readonly IMetricDal _metricDal;
+    private readonly IDtroUserDal _dtroUserDal;
 
-    public MetricsService(IMetricDal metricDal)
+    public MetricsService(IMetricDal metricDal, IDtroUserDal dtroUserDal)
     {
         _metricDal = metricDal;
+        _dtroUserDal = dtroUserDal;
     }
 
-    public async Task<bool> IncrementMetric(MetricType type, int? traId)
+    public async Task<bool> IncrementMetric(MetricType type, Guid xAppId)
     {
-        try
-        {
-            if (traId == null)
-            {
-                return false;
-            }
-            return await _metricDal.IncrementMetric(type, (int)traId);
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-
+            var dtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+            var result = await _metricDal.IncrementMetric(type, dtroUser.Id);
+            return result;
     }
 
     public async Task<MetricSummary> GetMetrics(MetricRequest metricRequest)
@@ -35,7 +27,8 @@ public class MetricsService : IMetricsService
             throw new ArgumentException("Start date must be before end date.");
         }
 
-        return await _metricDal.GetMetricsForTra(metricRequest.TraId,
+
+        return await _metricDal.GetMetricsForDtroUser(metricRequest.DtroUserId,
             new DateOnly(metricRequest.DateFrom.Year, metricRequest.DateFrom.Month, metricRequest.DateFrom.Day),
             new DateOnly(metricRequest.DateTo.Year, metricRequest.DateTo.Month, metricRequest.DateTo.Day));
     }

@@ -3,8 +3,8 @@
 [DataContract]
 public class MetricRequest
 {
-    [DataMember(Name = "traId")]
-    public int? TraId { get; set; }
+    [DataMember(Name = "dtroUserId")]
+    public Guid DtroUserId { get; set; }
 
     [DataMember(Name = "dateFrom")]
     public DateTime DateFrom { get; set; }
