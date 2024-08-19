@@ -120,19 +120,19 @@ resource "google_cloud_run_v2_service" "dtro_service" {
 resource "google_cloud_run_v2_service" "service_portal_service" {
   name     = "${local.cloud_run_service_name}-service-UI"
   location = var.region
-  ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY"
+  ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
 
   template {
     service_account = var.execution_service_account
 
     scaling {
       min_instance_count = 1
-      max_instance_count = 1
+      max_instance_count = 2
     }
 
     vpc_access {
       connector = data.google_vpc_access_connector.ui_vpc_connector.id
-      egress    = "PRIVATE_RANGES_ONLY"
+      egress    = "ALL_TRAFFIC"
     }
 
     containers {
