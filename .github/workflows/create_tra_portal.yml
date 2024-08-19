@@ -45,9 +45,7 @@ jobs:
         run: chmod +x *.sh
 
       - name: Load Env Vars for Apigee script
-        run: |
-          ls -l
-          load_environment_variables.sh
+        run: ./load_environment_variables.sh
         env:
           github_ref: ${{ github.ref }}
           environment: ${{ inputs.environment }}
@@ -72,7 +70,7 @@ jobs:
           echo "APIGEECLI_DEBUG=true" >> $GITHUB_ENV
 
       - name: Create TRA Portal
-        run: create_tra_portal.sh ${{ steps.google-auth.outputs.access_token }}
+        run: ./create_tra_portal.sh ${{ steps.google-auth.outputs.access_token }}
 
       - name: Publish Products to TRA Portal
-        run: publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}
+        run: ./publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}
