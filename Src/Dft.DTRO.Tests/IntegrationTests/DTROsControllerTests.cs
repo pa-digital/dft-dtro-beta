@@ -1,24 +1,5 @@
-using Microsoft.AspNetCore.Builder;
 using Newtonsoft.Json;
 namespace Dft.DTRO.Tests.IntegrationTests;
-
-[ExcludeFromCodeCoverage]
-// Custom Middleware for testing
-public class TestFeatureGateMiddleware
-{
-    private readonly RequestDelegate _next;
-
-    public TestFeatureGateMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
-    public async Task InvokeAsync(HttpContext context)
-    {
-        await _next(context);
-    }
-}
-
 
 [ExcludeFromCodeCoverage]
 public class DTROsControllerTests
@@ -59,27 +40,6 @@ public class DTROsControllerTests
                    services.AddSingleton(_mockDtroService.Object);
                    services.AddSingleton(_mockSwaCodeDal.Object);
                }));
-
-        //  _factory = factory
-        //.WithWebHostBuilder(builder => builder
-        //    .ConfigureTestServices(services =>
-        //    {
-        //        services.AddControllers(); 
-        //        services.AddSingleton(_mockDtroService.Object);
-        //        services.AddSingleton(_mockSwaCodeDal.Object);
-        //    })
-        //    .Configure(app =>
-        //    {
-        //        app.UseRouting();
-
-        //        app.UseEndpoints(endpoints =>
-        //        {
-        //            endpoints.MapControllers();
-        //        });
-        //        app.UseMiddleware<FeatureGateMiddleware>();
-        //    }));
-
-
     }
 
     [Theory]
