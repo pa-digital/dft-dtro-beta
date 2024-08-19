@@ -1,4 +1,9 @@
-﻿using System.Globalization;
+﻿using System.Dynamic;
+using System;
+using System.Globalization;
+using DfT.DTRO.DAL;
+using DfT.DTRO.Models.SwaCode;
+using System.Collections.Generic;
 
 
 namespace DfT.DTRO.Services;
@@ -19,14 +24,16 @@ public class DtroUserService : IDtroUserService
         var ret = new List<DtroUserResponse>();
         foreach (var response in responses)
         {
-            ret.Add(FormatNameForUi(response));
+          ret.Add(FormatNameForUi(response));
         }
+
         return ret;
     }
 
     private DtroUserResponse FormatNameForUi(DtroUserResponse response)
     {
         var sb = new StringBuilder();
+
         string[] words = response.Name.Split(' ');
 
         bool isFirstWordInBrackets = false;

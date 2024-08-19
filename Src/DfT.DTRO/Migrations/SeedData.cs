@@ -1,5 +1,12 @@
 ﻿namespace DfT.DTRO.Migrations;
 
+public enum UserGroup 
+{ 
+    Tra = 1,
+    Consumer = 2,
+    Admin = 3
+}
+
 public static class SeedData
 {
     public static int DftTraId = -1;

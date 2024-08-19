@@ -156,13 +156,13 @@ public class DtroUserDal : IDtroUserDal
 
         if (dtroUserRequest.UserGroup != UserGroup.Admin)
         {
-            if (dtroUserRequest.TraId != null)
-            {
+        if (dtroUserRequest.TraId != null)
+        {
                 if (await TraExistsAsync((int)dtroUserRequest.TraId))
-                {
-                    throw new InvalidOperationException($"There is an existing TRA with Id {dtroUserRequest.TraId}");
-                }
+            {
+                throw new InvalidOperationException($"There is an existing TRA with Id {dtroUserRequest.TraId}");
             }
+        }
         }
         await _dtroContext.DtroUsers.AddAsync(dtroUser);
 
