@@ -4,17 +4,6 @@ namespace DfT.DTRO;
 
 public class DbInitialize
 {
-    public static void GrantPermission(IApplicationBuilder app)
-    {
-        using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
-        {
-            using (DtroContext context = serviceScope.ServiceProvider.GetService<DtroContext>())
-            {
-                context.Database.ExecuteSqlRaw("GRANT SELECT ON ALL TABLES IN SCHEMA public TO postgres;");
-            }
-        }
-    }
-
     public static void EmptySwaCodesTable(IApplicationBuilder app)
     {
         using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())

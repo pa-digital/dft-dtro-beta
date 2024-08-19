@@ -1,20 +1,13 @@
-﻿using Serilog;
-using ILogger = Serilog.ILogger;
+﻿namespace DfT.DTRO.Extensions.DependencyInjection;
 
-namespace DfT.DTRO.Extensions.DependencyInjection;
-
-public class StorageService
+public static class StorageService
 {
-    private static ILogger Logger => Log.ForContext<StorageService>();
-
-    public static void AddStorage(IServiceCollection services, IConfiguration configuration)
+    public static void AddStorage(this IServiceCollection services, IConfiguration configuration)
     {
         string connectionString = Build(services, configuration);
         services.AddDbContext<DtroContext>(options =>
             options.UseNpgsql(connectionString, builder =>
             {
-                Logger.Information("Connection string:\t" + connectionString);
-                Console.WriteLine("Connection string:\t" + connectionString);
                 string assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
                 builder.MigrationsAssembly(assemblyName);
             }));
