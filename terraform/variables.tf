@@ -42,7 +42,7 @@ variable "artifact_registry_dtro_image_path" {
 variable "artifact_registry_service_ui_image_path" {
   type        = string
   description = "Path of the image in Artifact Registry"
-  default     = "europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-ui-repository/dft-dtro-beta"
+  default     = "europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-ui-repository/dft-dtro-ui"
 }
 
 variable "dtro_service_image" {
