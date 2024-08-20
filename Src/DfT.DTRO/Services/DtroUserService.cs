@@ -1,9 +1,4 @@
-﻿using System.Dynamic;
-using System;
-using System.Globalization;
-using DfT.DTRO.DAL;
-using DfT.DTRO.Models.SwaCode;
-using System.Collections.Generic;
+﻿using System.Globalization;
 
 
 namespace DfT.DTRO.Services;
@@ -22,7 +17,7 @@ public class DtroUserService : IDtroUserService
         var ret = new List<DtroUserResponse>();
         foreach (var response in responses)
         {
-          ret.Add(FormatNameForUi(response));
+            ret.Add(FormatNameForUi(response));
         }
 
         return ret;
@@ -88,6 +83,16 @@ public class DtroUserService : IDtroUserService
 
     public async Task<GuidResponse> UpdateDtroUserAsync(DtroUserRequest dtroUserRequest)
     {
-        return await _dtroUserDal.UpdateDtroUserAsync(dtroUserRequest);
+        GuidResponse response;
+        try
+        {
+            response = await _dtroUserDal.UpdateDtroUserAsync(dtroUserRequest);
+        }
+        catch (NotFoundException nFex)
+        {
+            throw nFex;
+        }
+
+        return response;
     }
 }

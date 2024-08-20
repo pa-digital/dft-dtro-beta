@@ -19,7 +19,7 @@
             mockMetricDal.Setup(x => x.IncrementMetric(MetricType.SystemFailure, It.IsAny<Guid>()))
                          .ReturnsAsync(true);
 
-            var mockDtroUserDal = new Mock<DtroUserDal>();
+            var mockDtroUserDal = new Mock<IDtroUserDal>();
             mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
                            .ReturnsAsync(_dtroUser);
 
@@ -40,7 +40,7 @@
             mockMetricDal.Setup(x => x.IncrementMetric(MetricType.Submission, It.IsAny<Guid>()))
                          .ReturnsAsync(true);
 
-            var mockDtroUserDal = new Mock<DtroUserDal>();
+            var mockDtroUserDal = new Mock<IDtroUserDal>();
             mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
                            .ReturnsAsync(_dtroUser);
 
@@ -61,7 +61,7 @@
             mockMetricDal.Setup(x => x.IncrementMetric(MetricType.Deletion, It.IsAny<Guid>()))
                          .ReturnsAsync(false);
 
-            var mockDtroUserDal = new Mock<DtroUserDal>();
+            var mockDtroUserDal = new Mock<IDtroUserDal>();
             mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
                            .ReturnsAsync(_dtroUser);
 
@@ -84,7 +84,7 @@
             mockMetricDal.Setup(x => x.GetMetricsForDtroUser(It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>()))
                          .ReturnsAsync(expectedMetricSummary);
 
-            var mockDtroUserDal = new Mock<DtroUserDal>();
+            var mockDtroUserDal = new Mock<IDtroUserDal>();
             mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
                            .ReturnsAsync(_dtroUser);
 
@@ -105,7 +105,7 @@
             mockMetricDal.Setup(x => x.GetMetricsForDtroUser(It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>()))
                          .ReturnsAsync(() => null);
 
-            var mockDtroUserDal = new Mock<DtroUserDal>();
+            var mockDtroUserDal = new Mock<IDtroUserDal>();
             mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
                            .ReturnsAsync(_dtroUser);
 
@@ -126,7 +126,7 @@
             mockMetricDal.Setup(x => x.HasValidConnectionAsync())
                          .ReturnsAsync(true);
 
-            var mockDtroUserDal = new Mock<DtroUserDal>();
+            var mockDtroUserDal = new Mock<IDtroUserDal>();
             mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
                            .ReturnsAsync(_dtroUser);
 
@@ -145,13 +145,14 @@
             // Arrange
             var mockMetricDal = new Mock<IMetricDal>();
             mockMetricDal.Setup(x => x.HasValidConnectionAsync())
-                         .ReturnsAsync(false);
+                .ReturnsAsync(false);
 
-            var mockDtroUserDal = new Mock<DtroUserDal>();
+            var mockDtroUserDal = new Mock<IDtroUserDal>();
             mockDtroUserDal.Setup(x => x.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
-                           .ReturnsAsync(_dtroUser);
+                .ReturnsAsync(_dtroUser);
 
             var service = new MetricsService(mockMetricDal.Object, mockDtroUserDal.Object);
+
 
             // Act
             bool result = await service.CheckDataBase();
