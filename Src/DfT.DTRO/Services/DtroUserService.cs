@@ -83,16 +83,6 @@ public class DtroUserService : IDtroUserService
 
     public async Task<GuidResponse> UpdateDtroUserAsync(DtroUserRequest dtroUserRequest)
     {
-        GuidResponse response;
-        try
-        {
-            response = await _dtroUserDal.UpdateDtroUserAsync(dtroUserRequest);
-        }
-        catch (NotFoundException nFex)
-        {
-            throw nFex;
-        }
-
-        return response;
+        return await _dtroUserDal.UpdateDtroUserAsync(dtroUserRequest);
     }
 }
