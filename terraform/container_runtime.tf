@@ -1,5 +1,6 @@
 locals {
-  cloud_run_service_name = "${local.name_prefix}-${var.dtro_service_image}"
+  dtro_cloud_run_service_name = "${local.name_prefix}-${var.dtro_service_image}"
+  Service_ui_cloud_run_service_name = "${local.name_prefix}-${var.service_ui_image}"
   # At most `database_max_connections` in total can be opened
   max_instance_count   = floor(var.database_max_connections / var.db_connections_per_cloud_run_instance)
   db_password_env_name = "POSTGRES_PASSWORD"
@@ -42,7 +43,7 @@ locals {
 }
 
 resource "google_cloud_run_v2_service" "dtro_service" {
-  name     = local.cloud_run_service_name
+  name     = local.dtro_cloud_run_service_name
   location = var.region
   ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY"
 
@@ -67,7 +68,7 @@ resource "google_cloud_run_v2_service" "dtro_service" {
     }
 
     containers {
-      image = "${var.artifact_registry_dtro_image_path}:${var.tag}"
+      image = "${var.artifact_registry_dtro_image_path}:${var.dtro_tag}"
 
       ports {
         container_port = 8080
@@ -118,7 +119,7 @@ resource "google_cloud_run_v2_service" "dtro_service" {
 }
 
 resource "google_cloud_run_v2_service" "service_portal_service" {
-  name     = "${local.cloud_run_service_name}-service-UI"
+  name     = local.Service_ui_cloud_run_service_name
   location = var.region
   ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
 
@@ -136,7 +137,7 @@ resource "google_cloud_run_v2_service" "service_portal_service" {
     }
 
     containers {
-      image = "${var.artifact_registry_service_ui_image_path}:${var.tag}"
+      image = "${var.artifact_registry_service_ui_image_path}:${var.service_ui_tag}"
       ports {
         container_port = 8080
       }

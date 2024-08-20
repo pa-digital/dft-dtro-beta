@@ -54,10 +54,16 @@ variable "dtro_service_image" {
 variable "service_ui_image" {
   type        = string
   description = "The name of an image being pushed for publish service."
-  default     = "dft-dtro-beta"
+  default     = "dft-dtro-ui"
 }
 
-variable "tag" {
+variable "dtro_tag" {
+  type        = string
+  description = "The tag of the image to run."
+  default     = "latest"
+}
+
+variable "service_ui_tag" {
   type        = string
   description = "The tag of the image to run."
   default     = "latest"
