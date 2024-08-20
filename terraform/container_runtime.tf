@@ -141,9 +141,9 @@ resource "google_cloud_run_v2_service" "service_portal_service" {
       }
 
       startup_probe {
-        timeout_seconds   = 3
-        period_seconds    = 15
-        failure_threshold = 10
+        timeout_seconds   = 6
+        period_seconds    = 30
+        failure_threshold = 20
         http_get {
           path = "/health"
           port = 8080
