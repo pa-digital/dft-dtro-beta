@@ -26,7 +26,7 @@ locals {
     {
       DEPLOYED               = timestamp()
       PROJECTID              = data.google_project.project.project_id
-      BASE_URL               = var.ui_url
+      BASE_URL               = var.api_url
     })
 
   project_id             = data.google_project.project.project_id

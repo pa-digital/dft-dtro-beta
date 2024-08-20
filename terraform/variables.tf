@@ -124,8 +124,8 @@ variable "feature_enable_redis_cache" {
   default     = false
 }
 
-variable "ui_url" {
+variable "api_url" {
   type        = string
-  description = "UI URL"
-  default     = "https://dtro-dev-dft-dtro-beta-ui-yglgjlddaq-ew.a.run.app"
+  description = "API URL"
+  default     = "https://dtro-dev-dft-dtro-beta-yglgjlddaq-ew.a.run.app"
 }
