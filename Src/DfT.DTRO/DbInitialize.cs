@@ -31,11 +31,11 @@ public class DbInitialize
                 .ServiceProvider
                 .GetService<DtroContext>();
 
-            if (!context.SwaCodes.Any())
-            {
-                context.SwaCodes.AddRange(SeedData.TrafficAuthorities);
-                context.SaveChanges();
-            }
+            //if (!context.SwaCodes.Any())
+            //{
+            //    context.SwaCodes.AddRange(SeedData.TrafficAuthorities);
+            //    context.SaveChanges();
+            //}
         }
     }
     private static void SeedConfig(IApplicationBuilder app)
