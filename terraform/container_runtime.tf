@@ -26,17 +26,7 @@ locals {
     {
       DEPLOYED               = timestamp()
       PROJECTID              = data.google_project.project.project_id
-      EnableRedisCache       = var.feature_enable_redis_cache
-      POSTGRES_DB            = "${local.name_prefix}-database"
-      POSTGRES_USER          = var.application_name
-      POSTGRES_HOST          = var.postgres_host
-      POSTGRES_PORT          = var.postgres_port
-      POSTGRES_SSL           = var.postgres_use_ssl
-      POSTGRES_MAX_POOL_SIZE = var.db_connections_per_cloud_run_instance
-      FeatureManagement__ReadOnly  = true
-      FeatureManagement__Consumer  = true
-      FeatureManagement__Admin     = true
-      FeatureManagement__Publish   = true
+      BASE_URL               = var.ui_url
     })
 
   project_id             = data.google_project.project.project_id

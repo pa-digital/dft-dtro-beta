@@ -116,7 +116,7 @@ jobs:
       - name: Build and push Service Portal Docker image to Artifact Registry
         uses: docker/build-push-action@v6.1.0
         with:
-          context: dft-dtro-beta/Src/DfT.DTRO.Admin
+          context: dft-dtro-beta/Src/Dft.DTRO.Admin
           platforms: linux/amd64
           push: true
           provenance: false

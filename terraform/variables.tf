@@ -123,3 +123,9 @@ variable "feature_enable_redis_cache" {
   description = "Feature flag, when enabled MemoryStore (Redis) cache instance is configured and used by the app"
   default     = false
 }
+
+variable "ui_url" {
+  type        = string
+  description = "UI URL"
+  default     = "https://dtro-dev-dft-dtro-beta-ui-yglgjlddaq-ew.a.run.app"
+}
