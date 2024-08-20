@@ -36,10 +36,10 @@ public static class StorageService
         int? maxPoolSize = int.TryParse(Environment.GetEnvironmentVariable("POSTGRES_MAX_POOL_SIZE"), out int envMaxPoolSize)
             ? envMaxPoolSize : configuration.GetValue<int?>("Postgres:MaxPoolSize", null);
 
-        return services.AddPostgresContext(host, port, user, password, database, useSsl, maxPoolSize);
+        return AddPostgresContext(services, host, port, user, password, database, useSsl, maxPoolSize);
     }
 
-    private static string AddPostgresContext(this IServiceCollection services, string host, int port,
+    private static string AddPostgresContext(IServiceCollection services, string host, int port,
         string user,
         string password, string database, bool useSsl, int? maxPoolSize)
     {

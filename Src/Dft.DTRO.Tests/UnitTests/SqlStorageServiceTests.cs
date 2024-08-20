@@ -34,7 +34,7 @@ public class SqlStorageServiceTests : IDisposable
             .ConfigureAppConfiguration(opt =>
                 opt.AddJsonFile("./Configurations/appsettings.SqlStorageServiceTests.json", true))
             .ConfigureServices(
-                (host, services) => services.AddStorage(host.Configuration))
+                (host, services) => StorageService.AddStorage(services, host.Configuration))
             .Build();
 
         _context = host.Services.GetService<DtroContext>();
