@@ -145,14 +145,14 @@ resource "google_cloud_run_v2_service" "service_portal_service" {
         period_seconds    = 15
         failure_threshold = 10
         http_get {
-          path = "/health"
+          path = "/"
           port = 8080
         }
       }
 
       liveness_probe {
         http_get {
-          path = "/health"
+          path = "/"
           port = 8080
         }
       }
