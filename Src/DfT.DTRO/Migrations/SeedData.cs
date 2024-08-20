@@ -25,7 +25,7 @@ public static class SeedData
                             UserGroup = (int) UserGroup.Admin,
                             Name = "Department of Transport",
                             Prefix = "DfT",
-                            TraId = -1
+                            TraId = null
                         },
                         new DtroUser
                         {
