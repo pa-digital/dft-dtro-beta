@@ -1,7 +1,7 @@
 [
   {
-    "name": "ENV-digital-service-provider",
-    "displayName": "ENV-Digital Service Provider",
+    "name": "ENV-digital-solution-provider",
+    "displayName": "ENV-Digital Solution Provider",
     "approvalType": "manual",
     "attributes": [
       {
