@@ -9,8 +9,8 @@ TOKEN=$1
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
-      "name": "'"${tra^} D-TRO Portal"'",
-      "description": "'"This is the ${tra^} Portal for D-TRO"'"
+      "name": "'"${tra^}(${swa_code}) D-TRO Portal"'",
+      "description": "'"This is the ${tra^}(${swa_code}) Portal for D-TRO"'"
     }')
 
   # Error checking and handling

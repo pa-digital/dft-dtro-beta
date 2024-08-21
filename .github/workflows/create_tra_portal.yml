@@ -7,7 +7,7 @@ on:
         type: string
         description: Short name of the TRA
         required: true
-      tra_id:
+      swa_code:
         type: string
         description: ID for the TRA
         required: true
@@ -49,7 +49,7 @@ jobs:
           environment: ${{ env.environment }}
           env_name_prefix: ${{ env.env_name_prefix }} #TODO: Update to '${{ inputs.environment }}' for Prod
           tra: ${{ inputs.tra }}
-          tra_id: ${{ inputs.tra_id }}
+          swa_code: ${{ inputs.swa_code }}
           service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }} #TODO: Update for Prod
           apigee_organisation: ${{ vars.GCP_PROJECT_ID_TEST }} #TODO: Update for Prod
 
