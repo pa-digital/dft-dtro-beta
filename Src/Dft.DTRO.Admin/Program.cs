@@ -1,3 +1,5 @@
+using Google.Cloud.Logging.Console;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
@@ -19,6 +21,12 @@ builder.Services.AddScoped<IDtroService, DtroService>();
 builder.Services.AddScoped<IMetricsService, MetricsService>();
 builder.Services.AddScoped<ITraService, TraService>();
 builder.Services.AddScoped<ISystemConfigService, SystemConfigService>();
+
+builder.Logging.AddGoogleCloudConsole(options =>
+{
+    options.TraceGoogleCloudProjectId = "AA0B58E7-FAF4-4DE3-86CB-EA3A8E6A5F4D";
+    options.IncludeScopes = true;
+});
 
 var app = builder.Build();
 
