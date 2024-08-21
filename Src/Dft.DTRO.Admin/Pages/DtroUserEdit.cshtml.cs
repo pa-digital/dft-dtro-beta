@@ -36,11 +36,12 @@ public class DtroUserEditModel : PageModel
         var action = Request.Form["action"];
         if (action == "Cancel")
         {
-            return RedirectToPage("TraList", new { search = Search });
+            return RedirectToPage("DtroUserList", new { search = Search });
         }
 
         if (IsEdit)
         {
+            DtroUser.Id = DtroUserId.Value;
             await _traService.UpdateDtroUserAsync(DtroUser);
         }
         else
@@ -49,11 +50,6 @@ public class DtroUserEditModel : PageModel
             Search = DtroUser.Name;
         }
 
-        return RedirectToPage("TraList", new { search = Search });
-    }
-
-    public IActionResult OnPostCancel()
-    {
         return RedirectToPage("DtroUserList", new { search = Search });
     }
 }

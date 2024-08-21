@@ -29,7 +29,7 @@
             {
                 <tr>
                     <td>@dtroUser.Id</td>
-                    <td>@dtroUser.xAppId</td>
+                    <td>@(dtroUser.xAppId == Guid.Empty ? "(Not Set)" : dtroUser.xAppId.ToString())</td>
                     <td>@dtroUser.TraId</td>
                     <td>@dtroUser.Prefix</td>
                     <td>@dtroUser.Name</td>

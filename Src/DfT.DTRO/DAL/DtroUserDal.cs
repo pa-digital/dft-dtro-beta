@@ -143,6 +143,7 @@ public class DtroUserDal : IDtroUserDal
         }
 
         var existing = await GetDtroUserAsync(dtroUserRequest.Id);
+        existing.TraId = dtroUserRequest.TraId;
         existing.Name = dtroUserRequest.Name;
         existing.Prefix = dtroUserRequest.Prefix;
         existing.UserGroup = (int)dtroUserRequest.UserGroup;
