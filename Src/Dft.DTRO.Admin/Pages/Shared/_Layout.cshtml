@@ -2,8 +2,8 @@
 @using Dft.DTRO.Admin.Services
 @inject ISystemConfigService SystemConfigService
 @{
-    var systemNameTask = await SystemConfigService.GetSystemName();
-    var systemName = systemNameTask;
+    var systemConfig = await SystemConfigService.GetSystemConfig();
+    var systemName = systemConfig.SystemName;
 }
 
 <!DOCTYPE html>
@@ -65,6 +65,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Metrics">Metrics</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/SystemConfigEdit">Configuration</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>

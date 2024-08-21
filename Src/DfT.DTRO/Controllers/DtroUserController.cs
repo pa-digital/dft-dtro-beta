@@ -136,7 +136,7 @@ public class DtroUserController : ControllerBase
         try
         {
             GuidResponse response = await _dtroUserService.UpdateDtroUserAsync(body);
-            _logger.LogInformation($"'{nameof(UpdateFromBody)}' method called using tra ID '{body.TraId}'");
+            _logger.LogInformation($"'{nameof(UpdateFromBody)}' method called using ID '{body.Id}'");
             return Ok(response);
         }
         catch (NotFoundException nFex)

@@ -14,8 +14,8 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>x-App-Id</th>
+                <th>Group</th>
                 <th>TRA Id</th>
                 <th>Prefix</th>
                 <th>Name</th>
@@ -28,8 +28,8 @@
             @foreach (var dtroUser in Model.FilteredDtroUsers)
             {
                 <tr>
-                    <td>@dtroUser.Id</td>
                     <td>@(dtroUser.xAppId == Guid.Empty ? "(Not Set)" : dtroUser.xAppId.ToString())</td>
+                    <td>@dtroUser.UserGroup.ToString()</td>
                     <td>@dtroUser.TraId</td>
                     <td>@dtroUser.Prefix</td>
                     <td>@dtroUser.Name</td>

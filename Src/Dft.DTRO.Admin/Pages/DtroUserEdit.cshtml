@@ -38,7 +38,7 @@
         <div class="form-group row" style="margin-top:10px">
             <label for="traId" class="col-sm-2 col-form-label">TA Id</label>
             <div class="col-sm-10">
-                <input type="number" style="max-width:140px" class="form-control" id="traId" name="DtroUser.TraId" value="@Model.DtroUser.TraId"/>
+                <input type="number" style="max-width:140px" class="form-control" id="traId" name="DtroUser.TraId" value="@Model.DtroUser.TraId" />
             </div>
         </div>
 
@@ -76,6 +76,7 @@
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
             const saveButton = document.getElementById("saveButton");
             const cancelButton = document.getElementById("cancelButton");
             const requiredFields = document.querySelectorAll("input[required]");
@@ -128,10 +129,15 @@
             handleUserGroupChange();
             updateSaveButtonState(); // Ensure button state is set on load
 
+            // Add event listeners to required fields
             requiredFields.forEach(field => {
                 field.addEventListener("input", updateSaveButtonState);
             });
 
+            // Add event listener to TraId input
+            traIdInput.addEventListener("input", updateSaveButtonState);
+
+            // Add event listeners to UserGroup radio buttons
             userGroupInputs.forEach(group => {
                 group.addEventListener("change", function () {
                     handleUserGroupChange();

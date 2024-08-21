@@ -38,20 +38,6 @@ public class DtroUserService : IDtroUserService
 
         var jsonResponse = await response.Content.ReadAsStringAsync();
 
-       
-
-        // Deserialize the JSON response into a List<DtroUserResponse>
-        //var dtroUserResponseList = JsonSerializer.Deserialize<List<DtroUserResponse>>(jsonResponse, GetJsonOptions());
-        //var dtroUserList = dtroUserResponseList.Select(dtroUserResponse => new DtroUser
-        //{
-        //    Id = dtroUserResponse.Id,
-        //    xAppId = dtroUserResponse.xAppId,
-        //    TraId = dtroUserResponse.TraId,
-        //    Name = dtroUserResponse.Name,
-        //    Prefix = dtroUserResponse.Prefix,
-        //    UserGroup = dtroUserResponse.UserGroup
-        //}).ToList();
-
         var dtroUserList = JsonSerializer.Deserialize<List<DtroUser>>(jsonResponse, GetJsonOptions());
 
         if (dtroUserList == null)
