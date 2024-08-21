@@ -4,8 +4,8 @@ public static class Helper
 {
     public static void AddHeaders(ref HttpRequestMessage httpRequestMessage)
     {
-        int ta = DftAdminTraId();
-        httpRequestMessage.Headers.Add("ta", ta.ToString());
+        var xAppId = new Guid("f553d1ec-a7ca-43d2-b714-60dacbb4d004");
+        httpRequestMessage.Headers.Add("x-app-id", xAppId.ToString());
     }
 
     public static int DftAdminTraId()

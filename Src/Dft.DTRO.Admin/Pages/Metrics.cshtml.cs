@@ -4,17 +4,16 @@ namespace Dft.DTRO.Admin.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IMetricsService _metricsService;
-        private readonly ITraService _traService;
+        private readonly IDtroUserService _dtroUserService;
 
-        public MetricsModel(ILogger<IndexModel> logger, IMetricsService metricsService, ITraService traService)
+        public MetricsModel(ILogger<IndexModel> logger, IMetricsService metricsService, IDtroUserService dtroUserService)
         {
             _logger = logger;
             _metricsService = metricsService;
-            _traService = traService;
+            _dtroUserService = dtroUserService;
         }
 
         public MetricSummary Metrics { get; set; } = new MetricSummary();
-     
 
         [BindProperty(SupportsGet = true)]
         public string PeriodOption { get; set; } = "months";
@@ -23,16 +22,16 @@ namespace Dft.DTRO.Admin.Pages
         public int NumberSelect { get; set; } = 1;
 
         [BindProperty(SupportsGet = true)]
-        public TraSearch TraSearch { get; set; } = new TraSearch();
+        public DtroUserSearch DtroUserSearch  { get; set; } = new DtroUserSearch();
 
         public async Task OnGetAsync()
         {
-            var metricRequest = CreateRequest(GetPeriodEnum(PeriodOption), NumberSelect, TraSearch.TraSelect);
-            var metrics = await _metricsService.MetricsForTra(metricRequest);
+            var metricRequest = CreateRequest(GetPeriodEnum(PeriodOption), NumberSelect, DtroUserSearch.DtroUserIdSelect);
+            var metrics = await _metricsService.MetricsForDtroUser(metricRequest);
             Metrics = metrics ?? new MetricSummary();
-            TraSearch.UpdateButtonText = "Update";
-            TraSearch.SwaCodes = await _traService.GetSwaCodes();
-            TraSearch.SwaCodes.Insert(0, new SwaCode { TraId = 0, Name = "[all]" });
+            DtroUserSearch.UpdateButtonText = "Update";
+            DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
+            DtroUserSearch.DtroUsers.Insert(0, new DtroUser {Id = Guid.Empty, Name = "[all]" });
         }
 
         private Period GetPeriodEnum(string periodOption)
@@ -44,11 +43,11 @@ namespace Dft.DTRO.Admin.Pages
             return Period.Days;
         }
 
-        private MetricRequest CreateRequest(Period period, int number, int? traId = null)
+        private MetricRequest CreateRequest(Period period, int number, Guid? dtroUserId = null)
         {
             var metricRequest = new MetricRequest
             {
-                TraId = traId == 0 ? null : traId
+                DtroUserId = dtroUserId == null ? null : dtroUserId
             };
 
             int deductDays = number;
@@ -76,7 +75,7 @@ namespace Dft.DTRO.Admin.Pages
 
         public IActionResult OnPostUpdate()
         {
-            return RedirectToPage(new { PeriodOption, NumberSelect, TraSearch.TraSelect });
+            return RedirectToPage(new { PeriodOption, NumberSelect, DtroUserSearch.DtroUserIdSelect });
         }
 
         public IActionResult OnGetRefresh()
@@ -87,10 +86,10 @@ namespace Dft.DTRO.Admin.Pages
             if (TempData.TryGetValue("NumberSelect", out object numberSelect))
                 NumberSelect = (int)numberSelect;
 
-            if (TempData.TryGetValue("TraSelect", out object traSelect))
-                TraSearch.TraSelect = (int)traSelect;
+            if (TempData.TryGetValue("DtroUserSelect", out object dtroUserSelect))
+                DtroUserSearch.DtroUserIdSelect = (Guid)dtroUserSelect;
 
-            return RedirectToPage(new { PeriodOption, NumberSelect, TraSearch.TraSelect });
+            return RedirectToPage(new { PeriodOption, NumberSelect, DtroUserSearch.DtroUserIdSelect });
         }
 
         private enum Period

@@ -1,0 +1,84 @@
+﻿@page "{dtroUserId:Guid?}"
+@model DtroUserEditModel
+@{
+    bool isEdit = Model.IsEdit;
+    string search = Request.Query["search"];
+}
+
+<h2>@(isEdit ? "Edit User" : "Add User")</h2>
+
+<form method="post" class="form-horizontal">
+    <div style="max-width:600px">
+
+        <div class="form-group row" style="margin-top:10px">
+            <label for="Id" class="col-sm-2 col-form-label">Id</label>
+            <div class="col-sm-10">
+                <input type="text" disabled class="form-control" id="id" name="DtroUser.Id" value="@Model.DtroUser.Id" />
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:10px">
+            <label for="traId" class="col-sm-2 col-form-label">TA Id</label>
+            <div class="col-sm-10">
+                <input type="number" style="max-width:140px" class="form-control" id="traId" name="DtroUser.TraId" value="@Model.DtroUser.TraId" readonly="@isEdit" required />
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:10px">
+            <label for="xAppId" class="col-sm-2 col-form-label">x-App-Id</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" name="DtroUser.Name" value="@Model.DtroUser.xAppId" required />
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:10px">
+            <label for="name" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="name" name="DtroUser.Name" value="@Model.DtroUser.Name" required />
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:10px">
+            <label for="prefix" class="col-sm-2 col-form-label">Prefix</label>
+            <div class="col-sm-10">
+                <input type="text" style="max-width:140px" class="form-control" id="prefix" name="DtroUser.Prefix" value="@Model.DtroUser.Prefix" maxlength="2" required />
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:20px">
+            <div class="col-sm-10 offset-sm-2 text-right" >
+                <button id="saveButton" class="btn btn-primary" type="submit" disabled>@(isEdit ? "Update" : "Create")</button>
+                <button id="cancelButton" class="btn btn-secondary" type="button">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const saveButton = document.getElementById("saveButton");
+            const cancelButton = document.getElementById("cancelButton");
+            const requiredFields = document.querySelectorAll("input[required]");
+
+            const form = cancelButton.closest('form'); // Find the closest form
+
+            function updateSaveButtonState() {
+                const allRequiredFieldsFilled = Array.from(requiredFields).every(f => f.value.trim() !== "");
+                saveButton.disabled = !(allRequiredFieldsFilled && traIdValid);
+            }
+
+            requiredFields.forEach(field => {
+                field.addEventListener("input", updateSaveButtonState);
+            });
+
+            updateSaveButtonState();
+
+            cancelButton.addEventListener('click', function () {
+                const cancelInput = document.createElement('input');
+                cancelInput.type = 'hidden';
+                cancelInput.name = 'action';
+                cancelInput.value = 'Cancel';
+                form.appendChild(cancelInput);
+                form.submit(); // Submit the form
+            });
+        });
+    </script>
+}

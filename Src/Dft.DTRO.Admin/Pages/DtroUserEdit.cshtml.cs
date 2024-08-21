@@ -1,20 +1,20 @@
-public class TraEditModel : PageModel
+public class DtroUserEditModel : PageModel
 {
-    private readonly ITraService _traService;
+    private readonly IDtroUserService _traService;
 
-    public TraEditModel(ITraService traService)
+    public DtroUserEditModel(IDtroUserService traService)
     {
         _traService = traService;
     }
 
     [BindProperty(SupportsGet = true)]
-    public int? TraId { get; set; }
+    public Guid? DtroUserId { get; set; }
 
     [BindProperty(SupportsGet = true)]
     public bool IsEdit { get; set; }
 
     [BindProperty]
-    public SwaCode SwaCode { get; set; }
+    public DtroUser DtroUser { get; set; }
 
     [BindProperty(SupportsGet = true)]
     public string Search { get; set; }
@@ -23,11 +23,11 @@ public class TraEditModel : PageModel
     {
         if (IsEdit)
         {
-            SwaCode = await _traService.GetSwaCode((int)TraId);
+            DtroUser = await _traService.GetDtroUserAsync(DtroUserId.Value);
         }
         else
         {
-            SwaCode = new SwaCode();
+            DtroUser = new DtroUser();
         }
     }
 
@@ -41,12 +41,12 @@ public class TraEditModel : PageModel
 
         if (IsEdit)
         {
-            await _traService.UpdateTraAsync(SwaCode);
+            await _traService.UpdateDtroUserAsync(DtroUser);
         }
         else
         {
-            await _traService.CreateTraAsync(SwaCode);
-            Search = SwaCode.Name;
+            await _traService.CreateDtroUserAsync(DtroUser);
+            Search = DtroUser.Name;
         }
 
         return RedirectToPage("TraList", new { search = Search });
@@ -54,6 +54,6 @@ public class TraEditModel : PageModel
 
     public IActionResult OnPostCancel()
     {
-        return RedirectToPage("TraList", new { search = Search });
+        return RedirectToPage("DtroUserList", new { search = Search });
     }
 }

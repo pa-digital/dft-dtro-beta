@@ -21,6 +21,7 @@ public class DtroUserDal : IDtroUserDal
             .OrderBy(dtroUser => dtroUser.Name)
             .Select(dtroUser => new DtroUserResponse
             {
+                Id = dtroUser.Id,
                 TraId = dtroUser.TraId,
                 Name = dtroUser.Name,
                 Prefix = dtroUser.Prefix,

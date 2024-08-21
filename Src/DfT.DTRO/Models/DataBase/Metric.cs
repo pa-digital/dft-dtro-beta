@@ -15,6 +15,9 @@ public class Metric
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 
+    /// <summary>
+    /// Dtro User Id of the metric
+    /// </summary>
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     [Column(TypeName = "uuid")]
     public Guid DtroUserId { get; set; }

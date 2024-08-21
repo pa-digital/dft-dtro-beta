@@ -97,10 +97,10 @@ public class DtroService : IDtroService
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task<IActionResult> ReassignDtroAsync(Guid id, int toTraId)
+    public async Task<IActionResult> ReassignDtroAsync(Guid id, Guid toDtroUserId)
     {
 
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"/dtros/Ownership/{id}/{toTraId}");
+        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"/dtros/Ownership/{id}/{toDtroUserId}");
         Helper.AddHeaders(ref httpRequestMessage);
 
         var response = await _client.SendAsync(httpRequestMessage);

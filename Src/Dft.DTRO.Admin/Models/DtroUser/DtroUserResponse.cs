@@ -1,8 +1,4 @@
-﻿using DfT.DTRO.Migrations;
-
-namespace DfT.DTRO.Models.SwaCode;
-
-public class DtroUserResponse
+﻿public class DtroUserResponse
 {
     public Guid Id { get; set; }
 

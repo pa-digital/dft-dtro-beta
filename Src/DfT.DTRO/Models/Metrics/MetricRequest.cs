@@ -4,7 +4,7 @@
 public class MetricRequest
 {
     [DataMember(Name = "dtroUserId")]
-    public Guid DtroUserId { get; set; }
+    public Guid? DtroUserId { get; set; }
 
     [DataMember(Name = "dateFrom")]
     public DateTime DateFrom { get; set; }
