@@ -7,7 +7,8 @@
         {
             DateFrom = new DateTime(2024, 1, 2),
             DateTo = new DateTime(2024, 1, 12),
-            DtroUserId = Guid.NewGuid()
+            DtroUserId = Guid.NewGuid(),
+            UserGroup = UserGroup.All
         };
 
         private readonly DtroUser _dtroUser = new();
@@ -17,7 +18,7 @@
         {
             // Arrange
             var mockMetricDal = new Mock<IMetricDal>();
-            mockMetricDal.Setup(x => x.IncrementMetric(MetricType.SystemFailure, It.IsAny<Guid>()))
+            mockMetricDal.Setup(x => x.IncrementMetric(MetricType.SystemFailure, It.IsAny<Guid>(), It.IsAny<UserGroup>()))
                          .ReturnsAsync(true);
 
             var mockDtroUserDal = new Mock<IDtroUserDal>();
@@ -38,7 +39,7 @@
         {
             // Arrange
             var mockMetricDal = new Mock<IMetricDal>();
-            mockMetricDal.Setup(x => x.IncrementMetric(MetricType.Submission, It.IsAny<Guid>()))
+            mockMetricDal.Setup(x => x.IncrementMetric(MetricType.Submission, It.IsAny<Guid>(), It.IsAny<UserGroup>()))
                          .ReturnsAsync(true);
 
             var mockDtroUserDal = new Mock<IDtroUserDal>();
@@ -59,7 +60,7 @@
         {
             // Arrange
             var mockMetricDal = new Mock<IMetricDal>();
-            mockMetricDal.Setup(x => x.IncrementMetric(MetricType.Deletion, It.IsAny<Guid>()))
+            mockMetricDal.Setup(x => x.IncrementMetric(MetricType.Deletion, It.IsAny<Guid>(), It.IsAny<UserGroup>()))
                          .ReturnsAsync(false);
 
             var mockDtroUserDal = new Mock<IDtroUserDal>();

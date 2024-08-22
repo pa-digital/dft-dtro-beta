@@ -1,14 +1,17 @@
-﻿namespace Dft.DTRO.Tests.CodeiumTests.Tra.Service;
+﻿using Moq;
+
+namespace Dft.DTRO.Tests.CodeiumTests.Tra.Service;
 
 public class TraServiceTests
 {
     private readonly Mock<IDtroUserDal> _mockDtroUserDal;
     private readonly IDtroUserService _traService;
-
+    private readonly Mock<IMetricDal> _mockMetricsDal;
     public TraServiceTests()
     {
         _mockDtroUserDal = new Mock<IDtroUserDal>();
-        _traService = new DtroUserService(_mockDtroUserDal.Object);
+        _mockMetricsDal = new Mock<IMetricDal>();
+        _traService = new DtroUserService(_mockDtroUserDal.Object, _mockMetricsDal.Object);
     }
 
     [Fact]
@@ -119,6 +122,10 @@ public class TraServiceTests
 
         _mockDtroUserDal.Setup(dal => dal.TraExistsAsync((int)swaCodeRequest.TraId))
             .ReturnsAsync(true);
+
+        _mockDtroUserDal.Setup(dal => dal.GetDtroUserByIdAsync(It.IsAny<Guid>()))
+           .ReturnsAsync(new DtroUserResponse() {Id = Guid.NewGuid(), UserGroup = UserGroup.All});
+
         _mockDtroUserDal.Setup(dal => dal.UpdateDtroUserAsync(swaCodeRequest))
             .ReturnsAsync(response);
 
