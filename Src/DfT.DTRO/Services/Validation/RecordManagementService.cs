@@ -12,11 +12,11 @@ public class RecordManagementService : IRecordManagementService
         _dtroUserDal = swaCodeDal;
     }
 
-    public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit, int? ta)
+    public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit, int? submittedByTa)
     {
         List<SemanticValidationError> validationErrors = new();
 
-        if (ta == null)
+        if (submittedByTa == null)
         {
             validationErrors.Add(new SemanticValidationError { Message = "TRA cannot be null" });
         }
@@ -40,6 +40,14 @@ public class RecordManagementService : IRecordManagementService
             validationErrors.Add(new SemanticValidationError
             {
                 Message = $"TRA owner '{owner}' is not within accepted SWA codes."
+            });
+        }
+
+        if (creator != submittedByTa  || owner != submittedByTa)
+        {
+            validationErrors.Add(new SemanticValidationError
+            {
+                Message = $"TA '{submittedByTa}' cannot add/update a DTRO for another TA. (creator TA is '{creator}', owner TA is '{owner}' )"
             });
         }
 

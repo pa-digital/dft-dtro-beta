@@ -37,7 +37,6 @@ public class DtroUser
     /// <summary>
     /// The prefix of the traffic regulation authority
     /// </summary>
-    [Required(ErrorMessage = "TRA prefix field must be included")]
     [DataMember(Name = "prefix")]
     [StringLength(20)]
     public string Prefix { get; set; }

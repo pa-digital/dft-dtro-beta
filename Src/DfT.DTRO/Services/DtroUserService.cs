@@ -6,10 +6,12 @@ namespace DfT.DTRO.Services;
 public class DtroUserService : IDtroUserService
 {
     private readonly IDtroUserDal _dtroUserDal;
+    private readonly IMetricDal _metricsDal;
 
-    public DtroUserService(IDtroUserDal dtroUserDal)
+    public DtroUserService(IDtroUserDal dtroUserDal, IMetricDal metricsDal)
     {
         _dtroUserDal = dtroUserDal;
+        _metricsDal = metricsDal;
     }
 
     private List<DtroUserResponse> FormatUserNameForUi(List<DtroUserResponse> responses)
@@ -19,14 +21,12 @@ public class DtroUserService : IDtroUserService
         {
             ret.Add(FormatNameForUi(response));
         }
-
         return ret;
     }
 
     private DtroUserResponse FormatNameForUi(DtroUserResponse response)
     {
         var sb = new StringBuilder();
-
         string[] words = response.Name.Split(' ');
 
         bool isFirstWordInBrackets = false;
@@ -78,11 +78,19 @@ public class DtroUserService : IDtroUserService
 
     public async Task<GuidResponse> SaveDtroUserAsync(DtroUserRequest dtroUserRequest)
     {
-        return await _dtroUserDal.SaveDtroUserAsync(dtroUserRequest);
+        
+        var guid = await _dtroUserDal.SaveDtroUserAsync(dtroUserRequest);
+        return guid;
     }
 
     public async Task<GuidResponse> UpdateDtroUserAsync(DtroUserRequest dtroUserRequest)
     {
-        return await _dtroUserDal.UpdateDtroUserAsync(dtroUserRequest);
+        var exisitng = await _dtroUserDal.GetDtroUserByIdAsync(dtroUserRequest.Id);
+        var guid = await _dtroUserDal.UpdateDtroUserAsync(dtroUserRequest);
+        if (exisitng.UserGroup != dtroUserRequest.UserGroup)
+        {
+           await _metricsDal.UpdateUserGroupForMetricsAsync(dtroUserRequest.Id, dtroUserRequest.UserGroup);
+        }
+        return guid;
     }
 }

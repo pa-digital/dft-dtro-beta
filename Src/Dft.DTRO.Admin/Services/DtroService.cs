@@ -12,7 +12,7 @@ public class DtroService : IDtroService
     public async Task<List<DtroHistoryProvisionResponse>> DtroProvisionHistory(Guid id)
     {
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/dtros/provisionHistory/{id}");
-        Helper.AddHeaders(ref httpRequestMessage);
+        Helper.AddXAppIdHeader(ref httpRequestMessage);
         var response = await _client.SendAsync(httpRequestMessage);
 
         response.EnsureSuccessStatusCode();
@@ -25,7 +25,7 @@ public class DtroService : IDtroService
     public async Task<List<DtroHistorySourceResponse>> DtroSourceHistory(Guid id)
     {
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/dtros/sourceHistory/{id}");
-        Helper.AddHeaders(ref httpRequestMessage);
+        Helper.AddXAppIdHeader(ref httpRequestMessage);
 
         var response = await _client.SendAsync(httpRequestMessage);
 
@@ -51,7 +51,7 @@ public class DtroService : IDtroService
             Content = param
         };
 
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
 
         response.EnsureSuccessStatusCode();
@@ -72,7 +72,7 @@ public class DtroService : IDtroService
             Content = content
         };
 
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
@@ -91,7 +91,7 @@ public class DtroService : IDtroService
             Content = content
         };
 
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
@@ -101,7 +101,7 @@ public class DtroService : IDtroService
     {
 
         var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"/dtros/Ownership/{id}/{toDtroUserId}");
-        Helper.AddHeaders(ref httpRequestMessage);
+        Helper.AddXAppIdHeader(ref httpRequestMessage);
 
         var response = await _client.SendAsync(httpRequestMessage);
         if (response.IsSuccessStatusCode)

@@ -30,7 +30,7 @@ public class DtroUserService : IDtroUserService
     public async Task<List<DtroUser>> GetDtroUsersAsync()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "/dtroUsers");
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
 
@@ -50,7 +50,7 @@ public class DtroUserService : IDtroUserService
     public async Task<DtroUser> GetDtroUserAsync(Guid dtroUserId)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"/dtroUsers/{dtroUserId}");
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
 
@@ -68,7 +68,7 @@ public class DtroUserService : IDtroUserService
     public async Task<List<DtroUser>> SearchDtroUsersAsync(string partialName)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"/dtroUsers/search/{partialName}");
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
 
@@ -86,7 +86,7 @@ public class DtroUserService : IDtroUserService
     public async Task ActivateDtroUserAsync(Guid dtroUserId)
     {
         var request = new HttpRequestMessage(HttpMethod.Patch, $"/dtroUsers/activate/{dtroUserId}");
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -94,7 +94,7 @@ public class DtroUserService : IDtroUserService
     public async Task DeactivateDtroUserAsync(Guid dtroUserId)
     {
         var request = new HttpRequestMessage(HttpMethod.Patch, $"/dtroUsers/deactivate/{dtroUserId}");
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -107,7 +107,7 @@ public class DtroUserService : IDtroUserService
         {
             Content = content
         };
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -119,7 +119,7 @@ public class DtroUserService : IDtroUserService
         {
             Content = content
         };
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }

@@ -26,6 +26,13 @@ public interface IDtroUserDal
     Task<DtroUserResponse> GetDtroUserResponseAsync(Guid id);
 
     /// <summary>
+    /// Get DtroUser by <paramref name="userId"/>
+    /// </summary>
+    /// <param name="userId">User ID.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous get operation.</returns>
+    Task<DtroUserResponse> GetDtroUserByIdAsync(Guid userId);
+
+    /// <summary>
     /// Get DtroUser by <paramref name="traId"/>
     /// </summary>
     /// <param name="traId">Traffic authority regulation ID.</param>

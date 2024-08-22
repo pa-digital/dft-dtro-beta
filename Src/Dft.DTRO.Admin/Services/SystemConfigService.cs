@@ -18,7 +18,7 @@ public class SystemConfigService : ISystemConfigService
         {
             Content = content
         };
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         return true;
@@ -32,7 +32,7 @@ public class SystemConfigService : ISystemConfigService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/systemConfig");
-            Helper.AddHeaders(ref request);
+            Helper.AddXAppIdHeader(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();

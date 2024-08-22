@@ -17,7 +17,7 @@ public class MetricsService : IMetricsService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/healthApi");
-            Helper.AddHeaders(ref request);
+            Helper.AddXAppIdHeader(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -36,7 +36,7 @@ public class MetricsService : IMetricsService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/healthDatabase");
-            Helper.AddHeaders(ref request);
+            Helper.AddXAppIdHeader(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -60,7 +60,7 @@ public class MetricsService : IMetricsService
             Content = param
         };
 
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
 

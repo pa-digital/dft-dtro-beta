@@ -12,4 +12,7 @@ public class MetricRequest
 
     [DataMember(Name = "dateTo")]
     public DateTime DateTo { get; set; }
+
+    [DataMember(Name = "userGroup")]
+    public UserGroup UserGroup { get; set; }
 }

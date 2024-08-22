@@ -82,7 +82,7 @@
             MetricSummary expectedMetricSummary = new();
 
             var mockMetricDal = new Mock<IMetricDal>();
-            mockMetricDal.Setup(x => x.GetMetricsForDtroUser(It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>()))
+            mockMetricDal.Setup(x => x.GetMetricsForDtroUser(It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<UserGroup>()))
                          .ReturnsAsync(expectedMetricSummary);
 
             var mockDtroUserDal = new Mock<IDtroUserDal>();
@@ -103,7 +103,7 @@
         {
             // Arrange
             var mockMetricDal = new Mock<IMetricDal>();
-            mockMetricDal.Setup(x => x.GetMetricsForDtroUser(It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>()))
+            mockMetricDal.Setup(x => x.GetMetricsForDtroUser(It.IsAny<Guid>(), It.IsAny<DateOnly>(), It.IsAny<DateOnly>(), It.IsAny<UserGroup>()))
                          .ReturnsAsync(() => null);
 
             var mockDtroUserDal = new Mock<IDtroUserDal>();

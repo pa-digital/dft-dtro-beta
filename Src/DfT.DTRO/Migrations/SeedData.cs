@@ -1,12 +1,5 @@
 ﻿namespace DfT.DTRO.Migrations;
 
-public enum UserGroup 
-{ 
-    Tra = 1,
-    Consumer = 2,
-    Admin = 3
-}
-
 public static class SeedData
 {
     public static int DftTraId = -1;
@@ -25,7 +18,7 @@ public static class SeedData
                             xAppId = new Guid("f553d1ec-a7ca-43d2-b714-60dacbb4d004"),
                             UserGroup = (int) UserGroup.Admin,
                             Name = "Department of Transport",
-                            Prefix = "DfT",
+                            Prefix = "",
                             TraId = null
                         },
                         new DtroUser

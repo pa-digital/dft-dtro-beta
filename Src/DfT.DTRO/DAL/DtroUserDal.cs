@@ -16,8 +16,29 @@ public class DtroUserDal : IDtroUserDal
     public DtroUserDal(DtroContext dtroContext) => _dtroContext = dtroContext;
 
     ///<inheritdoc cref="IDtroUserDal"/>
-    public async Task<List<DtroUserResponse>> GetAllDtroUsersAsync() =>
-        await _dtroContext.DtroUsers
+    public async Task<DtroUserResponse> GetDtroUserByIdAsync(Guid userId)
+    {
+        var user = await _dtroContext.DtroUsers
+            .Where(dtroUser => dtroUser.Id == userId)
+            .Select(dtroUser => new DtroUserResponse
+            {
+                Id = dtroUser.Id,
+                TraId = dtroUser.TraId,
+                Name = dtroUser.Name,
+                Prefix = dtroUser.Prefix,
+                UserGroup = (UserGroup)dtroUser.UserGroup,
+                xAppId = dtroUser.xAppId
+            })
+            .FirstOrDefaultAsync();
+
+        return user;
+    }
+
+
+    ///<inheritdoc cref="IDtroUserDal"/>
+    public async Task<List<DtroUserResponse>> GetAllDtroUsersAsync()
+    {
+      var admins =  await _dtroContext.DtroUsers
             .OrderBy(dtroUser => dtroUser.Name)
             .Select(dtroUser => new DtroUserResponse
             {
@@ -25,11 +46,26 @@ public class DtroUserDal : IDtroUserDal
                 TraId = dtroUser.TraId,
                 Name = dtroUser.Name,
                 Prefix = dtroUser.Prefix,
-                UserGroup =(UserGroup) dtroUser.UserGroup,
+                UserGroup = (UserGroup)dtroUser.UserGroup,
                 xAppId = dtroUser.xAppId
-            })
+            }).Where( x => x.UserGroup == UserGroup.Admin)
             .ToListAsync();
 
+        var nonAdmins = await _dtroContext.DtroUsers
+            .OrderBy(dtroUser => dtroUser.Name)
+            .Select(dtroUser => new DtroUserResponse
+            {
+                Id = dtroUser.Id,
+                TraId = dtroUser.TraId,
+                Name = dtroUser.Name,
+                Prefix = dtroUser.Prefix,
+                UserGroup = (UserGroup)dtroUser.UserGroup,
+                xAppId = dtroUser.xAppId
+            }).Where(x => x.UserGroup != UserGroup.Admin)
+            .ToListAsync();
+        admins.AddRange(nonAdmins);
+        return admins;
+    }
     ///<inheritdoc cref="IDtroUserDal"/>
     public async Task<DtroUserResponse> GetDtroUserResponseAsync(Guid id)
     {
@@ -46,7 +82,12 @@ public class DtroUserDal : IDtroUserDal
             })
             .FirstOrDefaultAsync();
 
-        return dtroUser ?? new DtroUserResponse(); // Return a default instance if no record is found
+        if (dtroUser == null)
+        {
+            throw new NotFoundException($"There is no DtroUser with Id {id}");
+        }
+
+        return dtroUser;
     }
 
     ///<inheritdoc cref="IDtroUserDal"/>
@@ -109,15 +150,18 @@ public class DtroUserDal : IDtroUserDal
         dtroUser.Id = response.Id;
         dtroUser.TraId = dtroUserRequest.TraId;
         dtroUser.Name = dtroUserRequest.Name;
-        dtroUser.Prefix = dtroUserRequest.Prefix;
+        dtroUser.Prefix = dtroUserRequest.Prefix ?? "";
         dtroUser.UserGroup = (int)dtroUserRequest.UserGroup;
         dtroUser.xAppId = dtroUserRequest.xAppId;
 
-        if (dtroUserRequest.TraId != null)
+        if (dtroUserRequest.UserGroup != UserGroup.Admin)
         {
-            if (await TraExistsAsync((int) dtroUserRequest.TraId))
+            if (dtroUserRequest.TraId != null)
             {
-                throw new InvalidOperationException($"There is an existing TRA with Id {dtroUserRequest.TraId}");
+                if (await TraExistsAsync((int)dtroUserRequest.TraId))
+                {
+                    throw new InvalidOperationException($"There is an existing TRA with Id {dtroUserRequest.TraId}");
+                }
             }
         }
         await _dtroContext.DtroUsers.AddAsync(dtroUser);
@@ -138,20 +182,22 @@ public class DtroUserDal : IDtroUserDal
 
         var existing = await GetDtroUserAsync(dtroUserRequest.Id);
       
-        if (dtroUserRequest.TraId != null)
+        if (dtroUserRequest.UserGroup != UserGroup.Admin)
         {
-            if (existing.TraId != dtroUserRequest.TraId)
+            if (dtroUserRequest.TraId != null)
             {
-                if (await TraExistsAsync((int)dtroUserRequest.TraId))
+                if (existing.TraId != dtroUserRequest.TraId)
                 {
-                    throw new InvalidOperationException($"There is an existing DtroUser with TRA Id {dtroUserRequest.TraId}");
+                    if (await TraExistsAsync((int)dtroUserRequest.TraId))
+                    {
+                        throw new InvalidOperationException($"There is an existing DtroUser with TRA Id {dtroUserRequest.TraId}");
+                    }
                 }
             }
         }
-
         existing.TraId = dtroUserRequest.TraId;
         existing.Name = dtroUserRequest.Name;
-        existing.Prefix = dtroUserRequest.Prefix;
+        existing.Prefix = dtroUserRequest.Prefix ?? "";
         existing.UserGroup = (int)dtroUserRequest.UserGroup;
         existing.xAppId = dtroUserRequest.xAppId;
 

@@ -16,7 +16,7 @@ public class MetricsService : IMetricsService
     public async Task<bool> IncrementMetric(MetricType type, Guid xAppId)
     {
             var dtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
-            var result = await _metricDal.IncrementMetric(type, dtroUser.Id);
+            var result = await _metricDal.IncrementMetric(type, dtroUser.Id,(UserGroup) dtroUser.UserGroup);
             return result;
     }
 
@@ -27,10 +27,12 @@ public class MetricsService : IMetricsService
             throw new ArgumentException("Start date must be before end date.");
         }
 
-
+        var dateFrom = new DateOnly(metricRequest.DateFrom.Year, metricRequest.DateFrom.Month, metricRequest.DateFrom.Day);
+        var dateTo = new DateOnly(metricRequest.DateTo.Year, metricRequest.DateTo.Month, metricRequest.DateTo.Day);
         return await _metricDal.GetMetricsForDtroUser(metricRequest.DtroUserId,
-            new DateOnly(metricRequest.DateFrom.Year, metricRequest.DateFrom.Month, metricRequest.DateFrom.Day),
-            new DateOnly(metricRequest.DateTo.Year, metricRequest.DateTo.Month, metricRequest.DateTo.Day));
+            dateFrom,
+            dateTo,
+            metricRequest.UserGroup );
     }
 
     public async Task<bool> CheckDataBase()

@@ -142,7 +142,7 @@ public class DtroUserController : ControllerBase
         catch (NotFoundException nFex)
         {
             _logger.LogError(nFex.Message);
-            return NotFound(new ApiErrorResponse("TRA ID", "TRA ID not found"));
+            return NotFound(new ApiErrorResponse("Not Found", "User not found"));
         }
         catch (InvalidOperationException err)
         {
@@ -167,6 +167,8 @@ public class DtroUserController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
+    [SwaggerResponse(statusCode: 404, description: "Not Found.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
     public async Task<ActionResult<DtroUserResponse>> GetDtroUser(Guid dtroUserId)
     {
         try
@@ -174,6 +176,11 @@ public class DtroUserController : ControllerBase
             DtroUserResponse dtroUserResponses = await _dtroUserService.GetDtroUserAsync(dtroUserId) ?? new DtroUserResponse();
             _logger.LogInformation($"'{nameof(GetDtroUser)}' method called");
             return Ok(dtroUserResponses);
+        }
+        catch (NotFoundException nFex)
+        {
+            _logger.LogError(nFex.Message);
+            return NotFound(new ApiErrorResponse("Not Found", "User not found"));
         }
         catch (Exception ex)
         {

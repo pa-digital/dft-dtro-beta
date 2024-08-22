@@ -11,18 +11,18 @@
     <div style="max-width:600px">
 
         <div class="form-group row" style="margin-top:10px">
-            <label for="Id" class="col-sm-2 col-form-label">Id</label>
-            <div class="col-sm-10">
+            <label for="Id" class="col-sm-4 col-form-label">Id</label>
+            <div class="col-sm-8">
                 <input type="text" disabled class="form-control" id="id" name="DtroUser.Id" value="@Model.DtroUser.Id" />
             </div>
         </div>
 
         <div class="form-group row" style="margin-top:10px">
-            <label class="col-sm-2 col-form-label">User Group</label>
-            <div class="col-sm-10">
+            <label  class="col-sm-4 col-form-label">User Group</label>
+            <div style="margin-top:8px" class="col-sm-8">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="DtroUser.UserGroup" id="userGroupTra" value="Tra" @(isEdit && Model.DtroUser.UserGroup == UserGroup.Tra ? "checked" : "") @(isEdit ? "" : "checked")>
-                    <label class="form-check-label" for="userGroupTra">Tra</label>
+                    <label class="form-check-label" for="userGroupTra">Publisher</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="DtroUser.UserGroup" id="userGroupConsumer" value="Consumer" @(isEdit && Model.DtroUser.UserGroup == UserGroup.Consumer ? "checked" : "")>
@@ -36,42 +36,42 @@
         </div>
 
         <div class="form-group row" style="margin-top:10px">
-            <label for="traId" class="col-sm-2 col-form-label">TA Id</label>
-            <div class="col-sm-10">
+            <label for="traId" id="traIdLabel" class="col-sm-4 col-form-label">SWA Code</label>
+            <div class="col-sm-8">
                 <input type="number" style="max-width:140px" class="form-control" id="traId" name="DtroUser.TraId" value="@Model.DtroUser.TraId" />
             </div>
         </div>
 
+
         <div class="form-group row" style="margin-top:10px">
-            <label for="xAppId" class="col-sm-2 col-form-label">x-App-Id</label>
-            <div class="col-sm-10">
+            <label for="xAppId" class="col-sm-4 col-form-label">x-App-Id</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="xAppId" name="DtroUser.xAppId" value="@Model.DtroUser.xAppId" required />
             </div>
         </div>
 
         <div class="form-group row" style="margin-top:10px">
-            <label for="name" class="col-sm-2 col-form-label">Name</label>
-            <div class="col-sm-10">
+            <label for="name" class="col-sm-4 col-form-label">Name</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="name" name="DtroUser.Name" value="@Model.DtroUser.Name" required />
             </div>
         </div>
 
         <div class="form-group row" style="margin-top:10px">
-            <label for="prefix" class="col-sm-2 col-form-label">Prefix</label>
-            <div class="col-sm-10">
-                <input type="text" style="max-width:140px" class="form-control" id="prefix" name="DtroUser.Prefix" value="@Model.DtroUser.Prefix" maxlength="2" required />
+            <label for="prefix" class="col-sm-4 col-form-label">Prefix</label>
+            <div class="col-sm-8">
+                <input type="text" style="max-width:140px" class="form-control" id="prefix" name="DtroUser.Prefix" value="@Model.DtroUser.Prefix" maxlength="2"/>
             </div>
         </div>
 
         <div class="form-group row" style="margin-top:20px">
-            <div class="col-sm-10 offset-sm-2 text-right">
+            <div class="col-sm-8 offset-sm-4 text-right">
                 <button id="saveButton" class="btn btn-primary" type="submit" disabled>@(isEdit ? "Update" : "Create")</button>
                 <button id="cancelButton" class="btn btn-secondary" type="button">Cancel</button>
             </div>
         </div>
     </div>
 </form>
-
 
 @section Scripts {
     <script>
@@ -81,10 +81,13 @@
             const cancelButton = document.getElementById("cancelButton");
             const requiredFields = document.querySelectorAll("input[required]");
             const traIdInput = document.getElementById("traId");
+            const prefixInput = document.getElementById("prefix");
+            const traIdLabel = document.getElementById("traIdLabel");
             const userGroupInputs = document.querySelectorAll('input[name="DtroUser.UserGroup"]');
             const userGroupTra = document.getElementById("userGroupTra");
             const userGroupConsumer = document.getElementById("userGroupConsumer");
             const userGroupAdmin = document.getElementById("userGroupAdmin");
+            const isTestSystem = @Model.IsTestSystem.ToString().ToLower(); // Pass the IsTestSystem value from Razor to JS
 
             let originalValues = {
                 traId: traIdInput.value,
@@ -96,7 +99,13 @@
 
             function updateSaveButtonState() {
                 const allRequiredFieldsFilled = Array.from(requiredFields).every(f => f.value.trim() !== "");
-                const traIdValid = userGroupTra.checked ? traIdInput.value.trim() !== "" : true;
+                
+                const isAdminSelected = userGroupAdmin.checked;
+                const isConsumerSelected = userGroupConsumer.checked;
+                const isTraSelected = userGroupTra.checked;
+                const isTraText = traIdInput.value.trim() !== "";
+                const isPrefixText = prefixInput.value.trim() !== "";
+                const traIdValid = (isTraSelected && isTraText && isPrefixText) || (isConsumerSelected) || (isAdminSelected);
                 const dataChanged = hasDataChanged();
 
                 saveButton.disabled = !(allRequiredFieldsFilled && traIdValid && dataChanged);
@@ -104,6 +113,7 @@
 
             function hasDataChanged() {
                 return (
+                 
                     originalValues.traId !== traIdInput.value ||
                     originalValues.name !== document.getElementById("name").value ||
                     originalValues.xAppId !== document.getElementById("xAppId").value ||
@@ -113,21 +123,52 @@
             }
 
             function handleUserGroupChange() {
-                if (userGroupTra.checked) {
-                    traIdInput.disabled = false; // Enable TraId input if Tra is selected
-                    traIdInput.value = originalValues.traId; // Restore the original TraId if Tra is selected
-                    traIdInput.required = true; // Make TraId required if Tra is selected
+                const userGroup = document.querySelector('input[name="DtroUser.UserGroup"]:checked').value;
+                if (userGroup === 'Tra') {
+                    traIdInput.disabled = false;
+                    traIdInput.value = originalValues.traId;
+                    traIdInput.required = true;
+                    traIdLabel.textContent = 'TA Id';
+
+                } else if (userGroup === 'Admin') {
+                    if (isTestSystem) {
+                        traIdInput.disabled = false;
+                        traIdInput.value = originalValues.traId;
+                        traIdInput.required = false; // Make TraId not required for Admin
+                        traIdLabel.textContent = 'Dtro submission under TA';
+                    }
+                    else {
+                        traIdInput.disabled = true;
+                        traIdInput.value = '';
+                        traIdInput.required = false; // Make TraId not required for Admin
+                        traIdLabel.textContent = 'TA not allowed in Live';
+                    }
                 } else {
-                    traIdInput.value = ""; // Clear the TraId if a non-Tra group is selected
-                    traIdInput.disabled = true; // Disable TraId input if a non-Tra group is selected
-                    traIdInput.required = false; // Make TraId not required if Tra is not selected
+                   
+                    traIdInput.value = "";
+                    traIdInput.disabled = true;
+                    traIdInput.required = false;
+                    traIdLabel.textContent = 'TA Id';
                 }
-                updateSaveButtonState(); // Update save button state after change
+
+
+                if (userGroup === 'Tra') {
+                    prefixInput.disabled = false;
+                    prefixInput.value = originalValues.prefix;
+                    prefixInput.required = true;
+
+                } else{
+                    prefixInput.value = "";
+                    prefixInput.disabled = true;
+                    prefixInput.required = false;
+                }
+
+                updateSaveButtonState();
             }
 
             // Initial setup
             handleUserGroupChange();
-            updateSaveButtonState(); // Ensure button state is set on load
+            updateSaveButtonState();
 
             // Add event listeners to required fields
             requiredFields.forEach(field => {
@@ -136,6 +177,9 @@
 
             // Add event listener to TraId input
             traIdInput.addEventListener("input", updateSaveButtonState);
+
+            // Add event listener to prefix input
+            prefixInput.addEventListener("input", updateSaveButtonState);
 
             // Add event listeners to UserGroup radio buttons
             userGroupInputs.forEach(group => {
@@ -154,5 +198,6 @@
                 form.submit();
             });
         });
+
     </script>
 }

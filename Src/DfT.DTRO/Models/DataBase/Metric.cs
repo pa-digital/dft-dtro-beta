@@ -79,4 +79,10 @@ public class Metric
     [DataMember(Name = "lastUpdatedCorrelationId")]
     [SwaggerSchema(ReadOnly = true)]
     public string LastUpdatedCorrelationId { get; set; }
+
+    /// <summary>
+    /// The user group
+    /// </summary>
+    [DataMember(Name = "userGroup")]
+    public int UserGroup { get; set; }
 }
