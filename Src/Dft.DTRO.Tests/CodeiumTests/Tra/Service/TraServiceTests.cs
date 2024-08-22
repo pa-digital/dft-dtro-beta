@@ -2,13 +2,13 @@
 
 public class TraServiceTests
 {
-    private readonly Mock<IDtroUserDal> _mockSwaCodeDal;
+    private readonly Mock<IDtroUserDal> _mockDtroUserDal;
     private readonly IDtroUserService _traService;
 
     public TraServiceTests()
     {
-        _mockSwaCodeDal = new Mock<IDtroUserDal>();
-        _traService = new DtroUserService(_mockSwaCodeDal.Object);
+        _mockDtroUserDal = new Mock<IDtroUserDal>();
+        _traService = new DtroUserService(_mockDtroUserDal.Object);
     }
 
     [Fact]
@@ -18,12 +18,12 @@ public class TraServiceTests
         var partialName = "test";
         var swaCodeResponses = new List<DtroUserResponse>
         {
-            new DtroUserResponse { Name = "test name" },
-            new DtroUserResponse { Name = "(test) another name" },
-            new DtroUserResponse { Name = "SHORT NAME" }
+            new() { Name = "test name" },
+            new() { Name = "(test) another name" },
+            new() { Name = "SHORT NAME" }
         };
 
-        _mockSwaCodeDal.Setup(dal => dal.SearchDtroUsersAsync(partialName))
+        _mockDtroUserDal.Setup(dal => dal.SearchDtroUsersAsync(partialName))
             .ReturnsAsync(swaCodeResponses);
 
         // Act
@@ -45,7 +45,7 @@ public class TraServiceTests
             new DtroUserResponse { Name = "another EXAMPLE" }
         };
 
-        _mockSwaCodeDal.Setup(dal => dal.GetAllDtroUsersAsync())
+        _mockDtroUserDal.Setup(dal => dal.GetAllDtroUsersAsync())
             .ReturnsAsync(swaCodeResponses);
 
         // Act
@@ -61,8 +61,13 @@ public class TraServiceTests
     {
         // Arrange
         var swaCodeRequest = new DtroUserRequest { TraId = 1 };
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync((int)swaCodeRequest.TraId))
+
+        _mockDtroUserDal.Setup(dal => dal.TraExistsAsync((int)swaCodeRequest.TraId))
             .ReturnsAsync(true);
+
+        _mockDtroUserDal
+            .Setup(dal => dal.SaveDtroUserAsync(swaCodeRequest))
+            .ThrowsAsync(new InvalidOperationException());
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => _traService.SaveDtroUserAsync(swaCodeRequest));
@@ -75,9 +80,9 @@ public class TraServiceTests
         var swaCodeRequest = new DtroUserRequest { TraId = 1 };
         var response = new GuidResponse { Id = Guid.NewGuid() };
 
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync((int)swaCodeRequest.TraId))
+        _mockDtroUserDal.Setup(dal => dal.TraExistsAsync((int)swaCodeRequest.TraId))
             .ReturnsAsync(false);
-        _mockSwaCodeDal.Setup(dal => dal.SaveDtroUserAsync(swaCodeRequest))
+        _mockDtroUserDal.Setup(dal => dal.SaveDtroUserAsync(swaCodeRequest))
             .ReturnsAsync(response);
 
         // Act
@@ -92,8 +97,14 @@ public class TraServiceTests
     {
         // Arrange
         var swaCodeRequest = new DtroUserRequest { TraId = 1 };
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync((int)swaCodeRequest.TraId))
+
+        _mockDtroUserDal
+            .Setup(dal => dal.TraExistsAsync((int)swaCodeRequest.TraId))
             .ReturnsAsync(false);
+
+        _mockDtroUserDal
+            .Setup(dal => dal.UpdateDtroUserAsync(swaCodeRequest))
+            .ThrowsAsync(new NotFoundException());
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _traService.UpdateDtroUserAsync(swaCodeRequest));
@@ -106,9 +117,9 @@ public class TraServiceTests
         var swaCodeRequest = new DtroUserRequest { TraId = 1 };
         var response = new GuidResponse { Id = Guid.NewGuid() };
 
-        _mockSwaCodeDal.Setup(dal => dal.TraExistsAsync((int)swaCodeRequest.TraId))
+        _mockDtroUserDal.Setup(dal => dal.TraExistsAsync((int)swaCodeRequest.TraId))
             .ReturnsAsync(true);
-        _mockSwaCodeDal.Setup(dal => dal.UpdateDtroUserAsync(swaCodeRequest))
+        _mockDtroUserDal.Setup(dal => dal.UpdateDtroUserAsync(swaCodeRequest))
             .ReturnsAsync(response);
 
         // Act
