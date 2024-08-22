@@ -15,6 +15,8 @@ builder.Services.AddHttpClient("ExternalApi", client =>
     client.BaseAddress = new Uri(apiBaseUrl);
 });
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddScoped<ISchemaService, SchemaService>();
 builder.Services.AddScoped<IRuleService, RuleService>();
 builder.Services.AddScoped<IDtroService, DtroService>();
