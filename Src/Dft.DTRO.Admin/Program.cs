@@ -47,4 +47,6 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+app.UseHealthChecks("/health");
+
 app.Run();
