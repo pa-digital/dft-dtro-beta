@@ -6,7 +6,8 @@
         private readonly MetricRequest _metricRequest = new()
         {
             DateFrom = new DateTime(2024, 1, 2),
-            DateTo = new DateTime(2024, 1, 12)
+            DateTo = new DateTime(2024, 1, 12),
+            DtroUserId = Guid.NewGuid()
         };
 
         private readonly DtroUser _dtroUser = new();
