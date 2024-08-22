@@ -26,7 +26,7 @@ locals {
     {
       DEPLOYED               = timestamp()
       PROJECTID              = data.google_project.project.project_id
-      BASE_URL               = var.api_url
+      BASE_URL               = var.dtro_api_url[var.environment]
     })
 
   project_id             = data.google_project.project.project_id
@@ -59,7 +59,6 @@ resource "google_cloud_run_v2_service" "dtro_service" {
 
     containers {
       image = "${var.artifact_registry_dtro_image_path}:${var.dtro_tag}"
-
       ports {
         container_port = 8080
       }
@@ -119,11 +118,6 @@ resource "google_cloud_run_v2_service" "service_portal_service" {
     scaling {
       min_instance_count = 1
       max_instance_count = 2
-    }
-
-    vpc_access {
-      connector = data.google_vpc_access_connector.ui_vpc_connector.id
-      egress    = "ALL_TRAFFIC"
     }
 
     containers {

@@ -124,8 +124,12 @@ variable "feature_enable_redis_cache" {
   default     = false
 }
 
-variable "api_url" {
-  type        = string
-  description = "API URL"
-  default     = "https://dtro-dev-dft-dtro-beta-yglgjlddaq-ew.a.run.app"
+variable "dtro_api_url" {
+  type        = map(string)
+  description = "API url for DTRO"
+  default = {
+    dev  = "https://dtro-dev.dft.gov.uk"
+    test = "https://dtro-test.dft.gov.uk"
+    prod = "https://dtro.dft.gov.uk"
+  }
 }
