@@ -21,6 +21,7 @@ public class DtroUserDal : IDtroUserDal
             .OrderBy(dtroUser => dtroUser.Name)
             .Select(dtroUser => new DtroUserResponse
             {
+                Id = dtroUser.Id,
                 TraId = dtroUser.TraId,
                 Name = dtroUser.Name,
                 Prefix = dtroUser.Prefix,
@@ -128,13 +129,7 @@ public class DtroUserDal : IDtroUserDal
     ///<inheritdoc cref="IDtroUserDal"/>
     public async Task<GuidResponse> UpdateDtroUserAsync(DtroUserRequest dtroUserRequest)
     {
-        if (dtroUserRequest.TraId != null)
-        {
-            if (!await TraExistsAsync((int) dtroUserRequest.TraId))
-            {
-                throw new InvalidOperationException($"There is no DtroUser with TRA Id {dtroUserRequest.TraId}");
-            }
-        }
+      
 
         if (!await DtroUserExistsAsync(dtroUserRequest.Id))
         {
@@ -142,6 +137,19 @@ public class DtroUserDal : IDtroUserDal
         }
 
         var existing = await GetDtroUserAsync(dtroUserRequest.Id);
+      
+        if (dtroUserRequest.TraId != null)
+        {
+            if (existing.TraId != dtroUserRequest.TraId)
+            {
+                if (await TraExistsAsync((int)dtroUserRequest.TraId))
+                {
+                    throw new InvalidOperationException($"There is an existing DtroUser with TRA Id {dtroUserRequest.TraId}");
+                }
+            }
+        }
+
+        existing.TraId = dtroUserRequest.TraId;
         existing.Name = dtroUserRequest.Name;
         existing.Prefix = dtroUserRequest.Prefix;
         existing.UserGroup = (int)dtroUserRequest.UserGroup;

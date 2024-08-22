@@ -122,7 +122,7 @@ public class DtroUserController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
-    /// <returns>ID of the submitted SWA.</returns>
+    /// <returns>ID of the submitted DtroUser.</returns>
     [HttpPut]
     [Route("/dtroUsers/updateFromBody")]
     [ValidateModelState]
@@ -136,7 +136,7 @@ public class DtroUserController : ControllerBase
         try
         {
             GuidResponse response = await _dtroUserService.UpdateDtroUserAsync(body);
-            _logger.LogInformation($"'{nameof(UpdateFromBody)}' method called using tra ID '{body.TraId}'");
+            _logger.LogInformation($"'{nameof(UpdateFromBody)}' method called using ID '{body.Id}'");
             return Ok(response);
         }
         catch (NotFoundException nFex)
@@ -156,17 +156,22 @@ public class DtroUserController : ControllerBase
         }
     }
 
-
-
-    [HttpGet("/dtroUsers/{traId}")]
+    /// <summary>
+    /// Retrieve a Dtro User
+    /// </summary>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>A Dtro User</returns>
+    [HttpGet("/dtroUsers/{dtroUserId}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
-    public async Task<ActionResult<DtroUserResponse>> GetDtroUser(Guid guid)
+    public async Task<ActionResult<DtroUserResponse>> GetDtroUser(Guid dtroUserId)
     {
         try
         {
-            DtroUserResponse dtroUserResponses = await _dtroUserService.GetDtroUserAsync(guid) ?? new DtroUserResponse();
+            DtroUserResponse dtroUserResponses = await _dtroUserService.GetDtroUserAsync(dtroUserId) ?? new DtroUserResponse();
             _logger.LogInformation($"'{nameof(GetDtroUser)}' method called");
             return Ok(dtroUserResponses);
         }

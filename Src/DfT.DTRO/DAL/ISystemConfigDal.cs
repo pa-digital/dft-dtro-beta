@@ -1,7 +1,10 @@
 ﻿
+using DfT.DTRO.Models.SystemConfig;
+
 namespace DfT.DTRO.Services;
 
 public interface ISystemConfigDal
 {
-    Task<SystemConfig> GetSystemConfigAsync();
+    Task<SystemConfigResponse> GetSystemConfigAsync();
+    Task<bool> UpdateSystemConfigAsync(SystemConfigRequest systemConfigRequest);
 }

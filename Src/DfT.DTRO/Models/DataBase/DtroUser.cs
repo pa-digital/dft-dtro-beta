@@ -23,7 +23,6 @@ public class DtroUser
     /// <summary>
     /// The ID of the traffic regulation authority
     /// </summary>
-    [Required(ErrorMessage = "TRA id field must be included")]
     [DataMember(Name = "traId")]
     public int? TraId { get; set; }
 

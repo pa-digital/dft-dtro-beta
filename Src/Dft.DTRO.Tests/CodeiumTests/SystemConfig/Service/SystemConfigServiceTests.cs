@@ -3,6 +3,7 @@ using Moq;
 using System.Threading.Tasks;
 using DfT.DTRO.Services;
 using DfT.DTRO.Models;
+using DfT.DTRO.Models.SystemConfig;
 
 public class SystemConfigServiceTests
 {
@@ -14,20 +15,23 @@ public class SystemConfigServiceTests
         _mockSystemConfigDal = new Mock<ISystemConfigDal>();
         _service = new SystemConfigService(_mockSystemConfigDal.Object);
     }
-
     [Fact]
-    public async Task GetSystemNameAsync_ReturnsSystemName()
+    public async Task GetSystemConfigAsync_ReturnsSystemName()
     {
         // Arrange
         var expectedSystemName = "TestSystem";
-        var systemConfig = new SystemConfig { SystemName = expectedSystemName };
+        var systemConfig = new SystemConfig { SystemName = expectedSystemName, IsTest = true }; // Make sure SystemConfig matches what you are using
+        var systemConfigResponse = new SystemConfigResponse { SystemName = expectedSystemName, IsTest = systemConfig.IsTest };
+
         _mockSystemConfigDal.Setup(dal => dal.GetSystemConfigAsync())
-            .ReturnsAsync(systemConfig);
+            .ReturnsAsync(systemConfigResponse);
 
         // Act
-        var result = await _service.GetSystemNameAsync();
+        var result = await _service.GetSystemConfigAsync();
 
         // Assert
-        Assert.Equal(expectedSystemName, result);
+        Assert.Equal(expectedSystemName, result.SystemName);
+        Assert.Equal(systemConfig.IsTest, result.IsTest); // Check other properties if needed
     }
+
 }

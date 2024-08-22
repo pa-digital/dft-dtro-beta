@@ -21,6 +21,14 @@ body {
   margin-bottom: 60px;
 }
 
+
+.single-line-label {
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow if text is too long */
+    text-overflow: ellipsis; /* Add ellipsis if text is too long */
+}
+
+
 .drop-area {
     width: 270px;
     height: 270px;

@@ -2,6 +2,7 @@
 using DfT.DTRO.DAL;
 using DfT.DTRO.JsonLogic;
 using DfT.DTRO.Models.RuleTemplate;
+using DfT.DTRO.Models.SystemConfig;
 using Microsoft.EntityFrameworkCore;
 using SchemaVersion = DfT.DTRO.Models.SchemaTemplate.SchemaVersion;
 
@@ -17,14 +18,27 @@ public class SystemConfigDal : ISystemConfigDal
         _dtroContext = dtroContext;
     }
 
-    public async Task<SystemConfig> GetSystemConfigAsync()
+    public async Task<SystemConfigResponse> GetSystemConfigAsync()
     {
         var config = await _dtroContext.SystemConfig.FirstOrDefaultAsync();
         if (config == null)
         {
-            return new SystemConfig() { SystemName = "Not Set (record not found in database)" };
+            return new SystemConfigResponse() { SystemName = "Not Set (record not found in database)" };
         }
 
-        return config;
+        return new SystemConfigResponse() { SystemName = config.SystemName , IsTest = config.IsTest};
+    }
+
+    public async Task<bool> UpdateSystemConfigAsync(SystemConfigRequest systemConfigRequest)
+    {
+        var existing = await _dtroContext.SystemConfig.FirstOrDefaultAsync();
+        if (existing == null)
+        {
+            throw new NotFoundException();
+        }   
+        existing.IsTest = systemConfigRequest.IsTest;
+        existing.SystemName = systemConfigRequest.SystemName;
+        await _dtroContext.SaveChangesAsync();
+        return true;
     }
 }

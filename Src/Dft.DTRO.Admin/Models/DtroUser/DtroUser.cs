@@ -1,10 +1,16 @@
-﻿namespace Dft.DTRO.Admin.Models.Tra;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-public class SwaCode
+namespace Dft.DTRO.Admin.Models.DtroUser;
+
+public class DtroUser
 {
+    public Guid Id { get; set; }
+
+    public Guid xAppId { get; set; }
+
     [Required(ErrorMessage = "TraId is required.")]
     [Range(-9999, 9999, ErrorMessage = "TraId must be between -9999 and 9999.")]
-    public int TraId { get; set; }
+    public int? TraId { get; set; }
 
     [Required(ErrorMessage = "Name is required.")]
     public string Name { get; set; }
@@ -13,9 +19,5 @@ public class SwaCode
     [StringLength(2, MinimumLength = 2, ErrorMessage = "Prefix must be exactly 2 characters.")]
     public string Prefix { get; set; }
 
-    [Required(ErrorMessage = "IsAdmin is required.")]
-    public bool IsAdmin { get; set; }
-
-    [Required(ErrorMessage = "IsActive is required.")]
-    public bool IsActive { get; set; }
+    public UserGroup UserGroup { get; set; }
 }
