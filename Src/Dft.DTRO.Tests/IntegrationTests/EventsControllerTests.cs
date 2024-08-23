@@ -1,4 +1,3 @@
-using DfT.DTRO.Migrations;
 using Newtonsoft.Json;
 
 namespace Dft.DTRO.Tests.IntegrationTests;
@@ -11,32 +10,42 @@ public class EventsControllerTests
 
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockStorageService;
+    private readonly Mock<IDtroUserDal> _mockDtroUserDal;
+    private readonly int _return_taForTest = 1585;
     private readonly Guid _xAppIdGuidForTest = Guid.NewGuid();
 
     public EventsControllerTests(WebApplicationFactory<Program> factory)
     {
         _mockStorageService = new Mock<IDtroService>(MockBehavior.Strict);
+        _mockDtroUserDal = new Mock<IDtroUserDal>(MockBehavior.Strict);
+
+        _mockDtroUserDal.Setup(m => m.GetDtroUserByTraIdAsync(It.IsAny<int>()))
+            .ReturnsAsync(new DtroUser() { Id = new Guid(), TraId = _return_taForTest, UserGroup = (int)UserGroup.Tra, xAppId = _xAppIdGuidForTest, Name = "test" });
+
+        _mockDtroUserDal.Setup(m => m.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(new DtroUser() { Id = new Guid(), TraId = (int)_return_taForTest, UserGroup = (int)UserGroup.Tra, xAppId = _xAppIdGuidForTest, Name = "test" });
 
         Mock<IDtroUserDal> mockSwaCodeDal = new(MockBehavior.Strict);
 
         mockSwaCodeDal.Setup(m => m.GetDtroUserByTraIdAsync(It.IsAny<int>()))
            .ReturnsAsync(new DtroUser { Id = new Guid(), UserGroup = (int)UserGroup.Tra, xAppId = _xAppIdGuidForTest, Name = "test" });
 
-        Mock<IMetricsService> metricsMock = new();
-        metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<Guid>())).ReturnsAsync(true);
-
-        _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
-        {
-            services.AddSingleton(_mockStorageService.Object);
-            services.AddSingleton(metricsMock.Object);
-        }));
+        _factory = factory
+            .WithWebHostBuilder(builder => builder
+                .ConfigureTestServices(services =>
+                {
+                    services.AddSingleton(_mockStorageService.Object);
+                    services.AddSingleton(_mockDtroUserDal.Object);
+                }));
     }
 
-    [Fact(Skip = "Method too complicated")]
+    [Fact]
     public async Task Post_Events_NoDtroIsMatchingTheCriteria_ReturnsEmptyResult()
     {
-        _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroEventSearch>()))
+        _mockStorageService
+            .Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroEventSearch>()))
             .ReturnsAsync(new DfT.DTRO.Models.DataBase.DTRO[] { }.ToList());
+
         HttpClient client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
@@ -58,7 +67,7 @@ public class EventsControllerTests
         Assert.Empty(data.Events);
     }
 
-    [Fact(Skip = "Method too complicated")]
+    [Fact]
     public async Task Post_Search_DtroMatchingTheCriteriaExists_ReturnsMatchingDtros()
     {
         DfT.DTRO.Models.DataBase.DTRO sampleDtro = await Utils.CreateDtroObject(SampleDtroJsonPath);
