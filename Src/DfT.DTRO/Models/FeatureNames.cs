@@ -1,6 +1,6 @@
-﻿namespace DfT.DTRO.FeatureManagement;
+﻿namespace DfT.DTRO.Models;
 
-public static class FeatureNames
+public class FeatureNames
 {
     public const string ReadOnly = "ReadOnly";
 
@@ -9,4 +9,5 @@ public static class FeatureNames
     public const string Consumer = "Consumer";
 
     public const string Admin = "Admin";
+
 }

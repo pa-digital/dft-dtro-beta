@@ -14,14 +14,15 @@ on:
         default: false
 
 env:
-  TF_VAR_tf_state_bucket: dft-d-tro-terraform-dev #TODO: Change to test after verification
-  TF_VAR_environment: dev #TODO: Change to test after verification
+  TF_VAR_tf_state_bucket: dft-d-tro-terraform-test
+  TF_VAR_environment: test
   TF_VAR_integration_prefix: int
   TF_VAR_region: ${{ vars.DEFAULT_GCP_REGION }}
-  TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID_DEV }} #TODO: Change to test after verification
-  TF_VAR_execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
-  TF_VAR_artifact_registry_image_path: ${{ vars.DEFAULT_GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID_DEV }}/${{ vars.GCP_PROJECT_DEV }}-int-repository/${{ vars.DTRO_IMAGE_NAME }} #TODO: Change to test after verification
+  TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID_TEST }}
+  TF_VAR_execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_TEST }}
+  TF_VAR_artifact_registry_image_path: ${{ vars.DEFAULT_GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID_TEST }}/${{ vars.GCP_PROJECT_ID_TEST }}-int-repository/${{ vars.DTRO_IMAGE_NAME }}
   TF_VAR_dtro_service_image: ${{ vars.DTRO_IMAGE_NAME }}
+  TF_VAR_service_ui_image: ${{ vars.DTRO_IMAGE_NAME }}
   TF_VAR_tag: ${{ vars.DTRO_IMAGE_TAG }}
 
 permissions:
@@ -55,20 +56,29 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }} #TODO: Change to test after verification
-          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }} #TODO: Change to test after verification
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_TEST }}
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}
 
       - name: Authenticate Docker with the Artifact Registry repository
         run: gcloud auth configure-docker europe-west1-docker.pkg.dev
 
-      - name: Build and push Docker image to Artifact Registry
+      - name: Build and push DTRO Docker image to Artifact Registry
         uses: docker/build-push-action@v6.1.0
         with:
           context: dft-dtro-beta/Src/DfT.DTRO
           platforms: linux/amd64
           push: true
           provenance: false
-          tags: ${{ env.TF_VAR_artifact_registry_image_path }}:${{ env.TF_VAR_tag }}
+          tags: ${{ env.TF_VAR_artifact_registry_dtro_image_path }}:${{ env.TF_VAR_tag }}
+
+      - name: Build and push Service Portal Docker image to Artifact Registry
+        uses: docker/build-push-action@v6.1.0
+        with:
+          context: dft-dtro-beta/Src/Dft.DTRO.Admin
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: ${{ env.TF_VAR_artifact_registry_service_ui_path }}:${{ env.TF_VAR_tag }}
 
   deploy-resources:
     name: Deploy GCP Resources to Integration
@@ -93,8 +103,8 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }} #TODO: Change to test after verification
-          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }} #TODO: Change to test after verification
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_TEST }}
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -114,8 +124,8 @@ jobs:
   build-apigee-proxies-and-products:
     name: Build GCP Apigee proxies and products in Integration
     if: ${{ inputs.run-apigee }}
-    #    needs:
-    #      - deploy-resources
+    #        needs:
+    #          - deploy-resources
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -139,6 +149,7 @@ jobs:
         env:
           github_ref: ${{ github.ref }}
           environment: ${{ env.TF_VAR_environment }}
+          env_name_prefix: ${{ env.TF_VAR_integration_prefix }}
           service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
           apigee_organisation: ${{ env.TF_VAR_project_id }}
 
@@ -146,8 +157,8 @@ jobs:
         id: google-auth
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.workload_identity_provider }}
-          service_account: ${{ secrets.wip_service_account }}
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_TEST }}
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}
           token_format: access_token
 
       - name: Set up ApigeeCLI
@@ -159,40 +170,40 @@ jobs:
       - name: Make scripts directory executable
         run: chmod +x portals/*
 
-#      - name: Deploy Proxy
-#        run: apigeecli apis create oas --name "dtro-${env}-server" --oas-base-folderpath openApi --oas-name openapi3_0.yaml --target-url $target_url --basepath /v1 --add-cors=true --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
-#
-#      - name: Get Proxy Bundle
-#        run: |
-#          apigeecli apis export --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
-#          unzip "dtro-${env}-server.zip"
-#
-#      - name: Add Header Policy
-#        run: |
-#          cp policies/AM-Set-App-Id-Header.xml apiproxy/policies/AM-Set-App-Id-Header.xml
-#          gawk -i inplace '/<PostFlow name="PostFlow">/ { print; getline; print "   <Request>\n      <Step>\n        <Name>AM-Set-App-Id-Header</Name>\n      </Step>\n   </Request>"; next } 1' apiproxy/proxies/default.xml
-#          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
-#
-#      - name: Setup Python
-#        uses: actions/setup-python@v5
-#
-#      - name: Create OAuth Policies
-#        run: |
-#          pip install -r python/requirements.txt
-#          python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
-#          python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
-#          cp -a oauth/* apiproxy/policies
-#
-#      - name: Create API bundle
-#        run: zip -r proxy.zip apiproxy
-#
-#      - name: Upload and Deploy API Proxy Bundle
-#        run: apigeecli apis create bundle --name "dtro-${env}-server" --proxy-zip proxy.zip --env "${{ env.name_prefix }}-environment" --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
+      - name: Deploy Proxy
+        run: apigeecli apis create oas --name "dtro-${env_name_prefix}-server" --oas-base-folderpath openApi --oas-name openapi3_0.yaml --target-url $target_url --basepath /v1 --add-cors=true --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
+
+      - name: Get Proxy Bundle
+        run: |
+          apigeecli apis export --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
+          unzip "dtro-${env_name_prefix}-server.zip"
+
+      - name: Add Header Policy
+        run: |
+          cp policies/AM-Set-App-Id-Header.xml apiproxy/policies/AM-Set-App-Id-Header.xml
+          gawk -i inplace '/<PostFlow name="PostFlow">/ { print; getline; print "   <Request>\n      <Step>\n        <Name>AM-Set-App-Id-Header</Name>\n      </Step>\n   </Request>"; next } 1' apiproxy/proxies/default.xml
+          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>"; next } 1' apiproxy/dtro-${env_name_prefix}-server.xml
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+
+      - name: Create OAuth Policies
+        run: |
+          pip install -r python/requirements.txt
+          python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
+          python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env_name_prefix}-server.xml
+          cp -a oauth/* apiproxy/policies
+
+      - name: Create API bundle
+        run: zip -r proxy.zip apiproxy
+
+      - name: Upload and Deploy API Proxy Bundle
+        run: apigeecli apis create bundle --name "dtro-${env_name_prefix}-server" --proxy-zip proxy.zip --env "dtro-${{ env.TF_VAR_integration_prefix }}-apigee-environment" --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
 
       - name: Create Products
         run: |
-          sed -i "s/ENV/${env}/g" products/products.json
-          apigeecli products import -f products/products.json --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --upsert
+          sed -i "s/ENV/${env_name_prefix}/g" products/int_products.json
+          apigeecli products import -f products/int_products.json --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --upsert
 
       - name: Publish Products to Developer Portal
-        run: portals/publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}
+        run: portals/publish_int_product_to_int_portal.sh ${{ steps.google-auth.outputs.access_token }}

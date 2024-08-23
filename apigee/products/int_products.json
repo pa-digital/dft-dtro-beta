@@ -1,52 +1,7 @@
 [
   {
-    "name": "ENV-central-service-operator",
-    "displayName": "Central Service Operator",
-    "approvalType": "manual",
-    "attributes": [
-      {
-        "name": "access",
-        "value": "public"
-      }
-    ],
-    "environments": [
-      "dtro-ENV-apigee-environment"
-    ],
-    "scopes": [
-      "cso"
-    ],
-    "createdAt": "1719227113878",
-    "lastModifiedAt": "1719227144037",
-    "operationGroup": {
-      "operationConfigs": [
-        {
-          "apiSource": "dtro-ENV-server",
-          "operations": [
-            {
-              "resource": "/**"
-            }
-          ],
-          "quota": {}
-        },
-        {
-          "apiSource": "oauth-generator",
-          "operations": [
-            {
-              "resource": "/oauth-generator",
-              "methods": [
-                "POST"
-              ]
-            }
-          ],
-          "quota": {}
-        }
-      ],
-      "operationConfigType": "proxy"
-    }
-  },
-  {
     "name": "ENV-digital-solution-provider",
-    "displayName": "Digital Solution Provider",
+    "displayName": "ENV-Digital Solution Provider",
     "approvalType": "manual",
     "attributes": [
       {
@@ -91,7 +46,7 @@
   },
   {
     "name": "ENV-data-consumer",
-    "displayName": "Data Consumer",
+    "displayName": "ENV-Data Consumer",
     "approvalType": "manual",
     "attributes": [
       {

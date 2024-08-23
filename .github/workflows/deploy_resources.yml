@@ -28,6 +28,12 @@ on:
       dtro-image-tag:
         type: string
         required: true
+      service-ui-image-name:
+        type: string
+        required: true
+      service-ui-image-tag:
+        type: string
+        required: true
       do-validation-checks:
         type: boolean
         required: false
@@ -54,9 +60,12 @@ env:
   TF_VAR_region: ${{ inputs.gcp-region }}
   TF_VAR_project_id: ${{ inputs.gcp-project-id }}
   TF_VAR_execution_service_account: ${{ secrets.execution_service_account }}
-  TF_VAR_artifact_registry_image_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ inputs.gcp-project }}-repository/${{ inputs.dtro-image-name }}
+  TF_VAR_artifact_registry_dtro_image_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ inputs.gcp-project }}-repository/${{ inputs.dtro-image-name }}
+  TF_VAR_artifact_registry_service_ui_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ inputs.gcp-project }}-ui-repository/${{ inputs.service-ui-image-name }}
   TF_VAR_dtro_service_image: ${{ inputs.dtro-image-name }}
-  TF_VAR_tag: ${{ inputs.dtro-image-tag }}
+  TF_VAR_service_ui_image: ${{ inputs.service-ui-image-name }}
+  TF_VAR_dtro_tag: ${{ inputs.dtro-image-tag }}
+  TF_VAR_service_ui_tag: ${{ inputs.service-ui-image-tag }}
 
 permissions:
   contents: read
@@ -95,14 +104,23 @@ jobs:
       - name: Authenticate Docker with the Artifact Registry repository
         run: gcloud auth configure-docker europe-west1-docker.pkg.dev
 
-      - name: Build and push Docker image to Artifact Registry
+      - name: Build and push DTRO Docker image to Artifact Registry
         uses: docker/build-push-action@v6.1.0
         with:
           context: dft-dtro-beta/Src/DfT.DTRO
           platforms: linux/amd64
           push: true
           provenance: false
-          tags: ${{ env.TF_VAR_artifact_registry_image_path }}:${{ env.TF_VAR_tag }}
+          tags: ${{ env.TF_VAR_artifact_registry_dtro_image_path }}:${{ env.TF_VAR_dtro_tag }}
+
+      - name: Build and push Service Portal Docker image to Artifact Registry
+        uses: docker/build-push-action@v6.1.0
+        with:
+          context: dft-dtro-beta/Src/Dft.DTRO.Admin
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          tags: ${{ env.TF_VAR_artifact_registry_service_ui_path }}:${{ env.TF_VAR_service_ui_tag }}
 
   deploy-dtro:
     if: ${{ inputs.run-deploy-CR-job }}
@@ -191,6 +209,7 @@ jobs:
         env:
           github_ref: ${{ github.ref }}
           environment: ${{ inputs.environment }}
+          env_name_prefix: ${{ inputs.environment }}
           service_account: ${{ secrets.wip_service_account }}
           apigee_organisation: ${{ inputs.gcp-project-id }}
 

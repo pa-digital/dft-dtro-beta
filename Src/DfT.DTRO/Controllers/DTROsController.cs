@@ -316,7 +316,7 @@ public class DTROsController : ControllerBase
         }
         catch (NotFoundException nFex)
         {
-           
+
             _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Not found", "Dtro not found"));
         }

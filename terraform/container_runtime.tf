@@ -1,10 +1,11 @@
 locals {
-  cloud_run_service_name = "${local.name_prefix}-${var.dtro_service_image}"
+  dtro_cloud_run_service_name = "${local.name_prefix}-${var.dtro_service_image}"
+  Service_ui_cloud_run_service_name = "${local.name_prefix}-${var.service_ui_image}"
   # At most `database_max_connections` in total can be opened
   max_instance_count   = floor(var.database_max_connections / var.db_connections_per_cloud_run_instance)
   db_password_env_name = "POSTGRES_PASSWORD"
 
-  common_service_envs = merge(
+  dtro_service_envs = merge(
     {
       DEPLOYED               = timestamp()
       PROJECTID              = data.google_project.project.project_id
@@ -21,11 +22,18 @@ locals {
  FeatureManagement__Publish   = true
   })
 
+  service_ui_envs = merge(
+    {
+      DEPLOYED               = timestamp()
+      PROJECTID              = data.google_project.project.project_id
+      BASE_URL               = var.dtro_api_url[var.environment]
+    })
+
   project_id             = data.google_project.project.project_id
 }
 
 resource "google_cloud_run_v2_service" "dtro_service" {
-  name     = local.cloud_run_service_name
+  name     = local.dtro_cloud_run_service_name
   location = var.region
   ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY"
 
@@ -50,15 +58,13 @@ resource "google_cloud_run_v2_service" "dtro_service" {
     }
 
     containers {
-      image = "${var.artifact_registry_image_path}:${var.tag}"
-#       # TODO: Below is the last stable image
-#       image = "europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-repository/dft-dtro-beta@sha256:f34febca186167410eb8ee2a8362975521c8994c675ba22a5590cb563d442e0f"
+      image = "${var.artifact_registry_dtro_image_path}:${var.dtro_tag}"
       ports {
         container_port = 8080
       }
 
       dynamic "env" {
-        for_each = local.common_service_envs
+        for_each = local.dtro_service_envs
         content {
           name  = env.key
           value = env.value
@@ -97,6 +103,53 @@ resource "google_cloud_run_v2_service" "dtro_service" {
       name  = "cloud-sql-proxy"
       image = "gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest"
       args  = ["--private-ip", data.google_sql_database_instance.postgres_db.connection_name]
+    }
+  }
+}
+
+resource "google_cloud_run_v2_service" "service_portal_service" {
+  name     = local.Service_ui_cloud_run_service_name
+  location = var.region
+  ingress  = "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
+
+  template {
+    service_account = var.execution_service_account
+
+    scaling {
+      min_instance_count = 1
+      max_instance_count = 2
+    }
+
+    containers {
+      image = "${var.artifact_registry_service_ui_image_path}:${var.service_ui_tag}"
+      ports {
+        container_port = 8080
+      }
+
+      dynamic "env" {
+        for_each = local.service_ui_envs
+        content {
+          name  = env.key
+          value = env.value
+        }
+      }
+
+      startup_probe {
+        timeout_seconds   = 3
+        period_seconds    = 15
+        failure_threshold = 10
+        http_get {
+          path = "/health"
+          port = 8080
+        }
+      }
+
+      liveness_probe {
+        http_get {
+          path = "/health"
+          port = 8080
+        }
+      }
     }
   }
 }

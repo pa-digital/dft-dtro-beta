@@ -13,12 +13,20 @@ builder.Services.AddHttpClient("ExternalApi", client =>
     client.BaseAddress = new Uri(apiBaseUrl);
 });
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddScoped<ISchemaService, SchemaService>();
 builder.Services.AddScoped<IRuleService, RuleService>();
 builder.Services.AddScoped<IDtroService, DtroService>();
 builder.Services.AddScoped<IMetricsService, MetricsService>();
 builder.Services.AddScoped<IDtroUserService, DtroUserService>();
 builder.Services.AddScoped<ISystemConfigService, SystemConfigService>();
+
+builder.Logging.AddGoogleCloudConsole(options =>
+{
+    options.TraceGoogleCloudProjectId = "AA0B58E7-FAF4-4DE3-86CB-EA3A8E6A5F4D";
+    options.IncludeScopes = true;
+});
 
 var app = builder.Build();
 
@@ -38,5 +46,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.UseHealthChecks("/health");
 
 app.Run();

@@ -20,7 +20,6 @@ COPY --from=build /app/out .
 RUN chmod +x Dft.DTRO.Admin
 
 EXPOSE 8080
-
-ENV BASE_URL="https://localhost:5001"
+ENV ASPNETCORE_URLS=http://*:8080
 
 ENTRYPOINT ["./Dft.DTRO.Admin"]

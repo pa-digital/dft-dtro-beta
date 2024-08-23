@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.DAL;
-using DfT.DTRO.Models.Validation;
+﻿using DfT.DTRO.Models.Validation;
 
 namespace DfT.DTRO.Services.Validation;
 
@@ -43,7 +42,7 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        if (creator != submittedByTa  || owner != submittedByTa)
+        if (creator != submittedByTa || owner != submittedByTa)
         {
             validationErrors.Add(new SemanticValidationError
             {

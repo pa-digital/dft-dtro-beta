@@ -39,10 +39,16 @@ variable "execution_service_account" {
   description = "Service account for executing GCP applications."
 }
 
-variable "artifact_registry_image_path" {
+variable "artifact_registry_dtro_image_path" {
   type        = string
   description = "Path of the image in Artifact Registry"
-  default     = "europe-west1-docker.pkg.dev/dft-dtro-dev-01/dft-dtro-dev-int-repository/dft-dtro-beta"
+  default     = "europe-west1-docker.pkg.dev/dft-dtro-test/dft-dtro-test-int-repository/dft-dtro-beta"
+}
+
+variable "artifact_registry_service_ui_image_path" {
+  type        = string
+  description = "Path of the image in Artifact Registry"
+  default     = "europe-west1-docker.pkg.dev/dft-dtro-test/dft-dtro-test-ui-int-repository/dft-dtro-ui"
 }
 
 variable "dtro_service_image" {
@@ -51,7 +57,19 @@ variable "dtro_service_image" {
   default     = "dft-dtro-beta"
 }
 
-variable "tag" {
+variable "service_ui_image" {
+  type        = string
+  description = "The name of an image being pushed for publish service."
+  default     = "dft-dtro-ui"
+}
+
+variable "dtro_tag" {
+  type        = string
+  description = "The tag of the image to run."
+  default     = "latest"
+}
+
+variable "service_ui_tag" {
   type        = string
   description = "The tag of the image to run."
   default     = "latest"
@@ -110,4 +128,12 @@ variable "feature_enable_redis_cache" {
   type        = bool
   description = "Feature flag, when enabled MemoryStore (Redis) cache instance is configured and used by the app"
   default     = false
+}
+
+variable "dtro_api_url" {
+  type        = map(string)
+  description = "API url for DTRO"
+  default = {
+    test = "https://dtro-integration.dft.gov.uk"
+  }
 }

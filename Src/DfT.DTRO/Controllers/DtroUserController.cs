@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Models.DataBase;
-
-namespace DfT.DTRO.Controllers;
+﻿namespace DfT.DTRO.Controllers;
 
 /// <summary>
 /// Controller for capturing Dtro Users

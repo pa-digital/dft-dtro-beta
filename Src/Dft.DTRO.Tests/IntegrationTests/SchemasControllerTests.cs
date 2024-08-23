@@ -1,4 +1,3 @@
-using DfT.DTRO.Migrations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -14,6 +13,7 @@ public class SchemasControllerTests
     private readonly Mock<IDtroUserDal> _mockSwaCodeDal;
     private readonly int? _taForTest = 1585;
     private readonly Guid _xAppIdGuidForTest = Guid.NewGuid();
+
     public SchemasControllerTests(WebApplicationFactory<Program> factory)
     {
         _mockSchemaTemplateService = new Mock<ISchemaTemplateService>(MockBehavior.Strict);

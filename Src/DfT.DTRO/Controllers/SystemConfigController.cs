@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Models.SystemConfig;
-
-namespace DfT.DTRO.Controllers;
+﻿namespace DfT.DTRO.Controllers;
 
 [ApiController]
 public class SystemConfigController : ControllerBase

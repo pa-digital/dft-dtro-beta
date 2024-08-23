@@ -1,7 +1,4 @@
-﻿
-using DfT.DTRO.Migrations;
-
-public class UserGroupMiddleware
+﻿public class UserGroupMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<UserGroupMiddleware> _logger;
