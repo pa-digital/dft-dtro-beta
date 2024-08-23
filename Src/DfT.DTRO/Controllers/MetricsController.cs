@@ -1,4 +1,7 @@
-﻿namespace DfT.DTRO.Controllers;
+﻿using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.Mvc;
+
+namespace DfT.DTRO.Controllers;
 
 /// <summary>
 /// Controller for capturing metric

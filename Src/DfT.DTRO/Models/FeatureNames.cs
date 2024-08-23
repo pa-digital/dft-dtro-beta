@@ -1,0 +1,8 @@
+﻿namespace DfT.DTRO.Models;
+
+public class FeatureNames
+{
+    public const string ReadOnly = "ReadOnly";
+    public const string Publish = "Publish";
+    public const string Admin = "Admin";
+}

@@ -1,3 +1,4 @@
+using Microsoft.FeatureManagement;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -38,6 +39,8 @@ public class Startup
 
         services.AddSwagger(Configuration, Environment);
         services.AddHealthChecks();
+
+        services.AddFeatureManagement();
 
         services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
         services.AddScoped<ISemanticValidationService, SemanticValidationService>();
