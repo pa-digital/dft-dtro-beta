@@ -134,8 +134,10 @@
 
                 // Update the search text box with the selected item's name
                 traSearch.value = selectedItemName;
-
                 updateButton.disabled = false;
+                updateButton.click();
+                updateButton.disabled = true;
+               
             }
         });
 
@@ -155,7 +157,7 @@
             if (!alwaysButtonEnabled) {
                 updateButton.disabled = true;
             }
-           
+
             selectedItems.forEach(item => {
                 item.classList.remove('selected-InList');
             });
