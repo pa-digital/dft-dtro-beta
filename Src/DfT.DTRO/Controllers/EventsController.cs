@@ -1,7 +1,4 @@
-﻿using DfT.DTRO.Enums;
-using DfT.DTRO.Migrations;
-
-namespace DfT.DTRO.Controllers;
+﻿namespace DfT.DTRO.Controllers;
 
 /// <summary>
 /// Controller for querying the database for data store events (e.g. create, update, delete)

@@ -10,27 +10,43 @@ public class SearchControllerTests
 
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockStorageService;
-    private readonly int? _taForTest = 1585;
+    private readonly Mock<IDtroUserDal> _mockDtroUserDal;
+    private readonly int _return_taForTest = 1585;
+    private readonly Guid _xAppIdGuidForTest = Guid.NewGuid();
+
     public SearchControllerTests(WebApplicationFactory<Program> factory)
     {
         _mockStorageService = new Mock<IDtroService>(MockBehavior.Strict);
-        Mock<IMetricsService> metricsMock = new();
-        metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<Guid>())).ReturnsAsync(true);
+        _mockDtroUserDal = new Mock<IDtroUserDal>(MockBehavior.Strict);
 
-        _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
-        {
-            services.AddSingleton(_mockStorageService.Object);
-        }));
+        _mockDtroUserDal.Setup(m => m.GetDtroUserByTraIdAsync(It.IsAny<int>()))
+            .ReturnsAsync(new DtroUser() { Id = new Guid(), TraId = _return_taForTest, UserGroup = (int)UserGroup.Tra, xAppId = _xAppIdGuidForTest, Name = "test" });
+
+        _mockDtroUserDal.Setup(m => m.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(new DtroUser() { Id = new Guid(), TraId = (int)_return_taForTest, UserGroup = (int)UserGroup.Tra, xAppId = _xAppIdGuidForTest, Name = "test" });
+
+        Mock<IDtroUserDal> mockSwaCodeDal = new(MockBehavior.Strict);
+
+        mockSwaCodeDal.Setup(m => m.GetDtroUserByTraIdAsync(It.IsAny<int>()))
+            .ReturnsAsync(new DtroUser { Id = new Guid(), UserGroup = (int)UserGroup.Tra, xAppId = _xAppIdGuidForTest, Name = "test" });
+
+        _factory = factory
+            .WithWebHostBuilder(builder => builder
+                .ConfigureTestServices(services =>
+                {
+                    services.AddSingleton(_mockStorageService.Object);
+                    services.AddSingleton(_mockDtroUserDal.Object);
+                }));
     }
 
-    [Fact(Skip = "Method too complicated")]
+    [Fact]
     public async Task Post_Search_NoDtroIsMatchingTheCriteria_ReturnsEmptyResult()
     {
         _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroSearch>()))
             .Returns(Task.FromResult(
                 new PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>(Array.Empty<DfT.DTRO.Models.DataBase.DTRO>(), 0)));
         HttpClient client = _factory.CreateClient();
-        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+        client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         DtroSearch search =
             new() { Queries = new[] { new SearchQuery { TraCreator = 1585 } }, Page = 1, PageSize = 10 };
@@ -51,7 +67,7 @@ public class SearchControllerTests
         Assert.Empty(data.Results);
     }
 
-    [Fact(Skip = "Method too complicated")]
+    [Fact]
     public async Task Post_Search_DtroMatchingTheCriteriaExists_ReturnsMatchingDtros()
     {
         DfT.DTRO.Models.DataBase.DTRO sampleDtro = await Utils.CreateDtroObject(SampleDtroJsonPath);
@@ -59,7 +75,7 @@ public class SearchControllerTests
         _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroSearch>()))
             .Returns(Task.FromResult(new PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>(new[] { sampleDtro }.ToList(), 1)));
         HttpClient client = _factory.CreateClient();
-        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+        client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         DtroSearch search =
             new() { Queries = new[] { new SearchQuery { TraCreator = 1585 } }, Page = 1, PageSize = 10 };
