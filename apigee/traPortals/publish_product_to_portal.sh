@@ -25,7 +25,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
   TITLE=$(to_title_case "${PRODUCT}")
 
   # Construct the description
-  DESCRIPTION="This is the ${TITLE} D-TRO application for ${PRODUCT}s."
+  DESCRIPTION="This is the D-TRO application for ${PRODUCT}s."
 
   # Make the API call
   RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
