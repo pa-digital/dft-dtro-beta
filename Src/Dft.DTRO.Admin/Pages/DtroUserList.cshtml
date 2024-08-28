@@ -1,19 +1,21 @@
 ﻿@page
-@model TraListModel
+@model DtroUserListModel
 
-<h2>TRAs <a class="btn btn-primary" asp-page="TraEdit" asp-route-IsEdit="false">+</a></h2>
+<h2>Users <a class="btn btn-primary" asp-page="DtroUserEdit" asp-route-IsEdit="false">+</a></h2>
 
 @* <input  style="color: palegoldenrod" name="TraSearch.PreviousSearch" value="@Model.TraSearch.PreviousSearch" /> *@
 
 
 <form id="searchSection" method="post" asp-page-handler="Update" style=" margin-top: 30px;margin-right: 20px;margin-bottom: 20px;">
     <div>
-        @await Html.PartialAsync("_TraSearchPartial", Model.TraSearch)
+        @await Html.PartialAsync("_TraSearchPartial", Model.DtroUserSearch)
     </div>
 
     <table class="table">
         <thead>
             <tr>
+                <th>x-App-Id</th>
+                <th>Group</th>
                 <th>TRA Id</th>
                 <th>Prefix</th>
                 <th>Name</th>
@@ -23,14 +25,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var swa in Model.FilteredSwaCodes)
+            @foreach (var dtroUser in Model.FilteredDtroUsers)
             {
                 <tr>
-                    <td>@swa.TraId</td>
-                    <td>@swa.Prefix</td>
-                    <td>@swa.Name</td>
+                    <td>@(dtroUser.xAppId == Guid.Empty ? "(Not Set)" : dtroUser.xAppId.ToString())</td>
+                    <td>@dtroUser.UserGroup.ToString()</td>
+                    <td>@dtroUser.TraId</td>
+                    <td>@dtroUser.Prefix</td>
+                    <td>@dtroUser.Name</td>
                     <td>
-                        @if (swa.IsActive)
+                        @if (dtroUser.xAppId != Guid.Empty)
                         {
                             <img src="~/images/tick.png" alt="Active" style="max-height:20px; vertical-align: middle;" />
                         }
@@ -40,7 +44,7 @@
                         }
                     </td>
                     <td>
-                        @if (swa.IsAdmin)
+                        @if (dtroUser.UserGroup == UserGroup.Admin)
                         {
                             <img src="~/images/tick.png" alt="Active" style="max-height:20px; vertical-align: middle;" />
                         }
@@ -50,16 +54,16 @@
                         }
                     </td>
                     <td>
-                        <a class="btn btn-info" asp-page="TraEdit" asp-route-IsEdit="true" asp-route-search="@Model.TraSearch.PreviousSearch" asp-route-traId="@swa.TraId">Edit</a>
+                        <a class="btn btn-info" asp-page="DtroUserEdit" asp-route-IsEdit="true" asp-route-search="@Model.DtroUserSearch.PreviousSearch" asp-route-dtroUserId="@dtroUser.Id">Edit</a>
                        
                         
-                        <button type="submit" 
+                     @*    <button type="submit" 
                             name="action" 
-                            value= "@swa.TraId"
-                            class="btn btn-@(swa.IsActive ? "warning" : "success")" 
+                            value= "@dtroUser.TraId"
+                            class="btn btn-@(dtroUser.IsActive ? "warning" : "success")" 
                             style="min-width: 100px;">
-                                @(swa.IsActive ? "Disable" : "Enable")
-                            </button>
+                                @(dtroUser.IsActive ? "Disable" : "Enable")
+                            </button> *@
                         
                     </td>
                 </tr>

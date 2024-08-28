@@ -10,7 +10,7 @@ namespace DfT.DTRO.Services;
 
 public class DtroService : IDtroService
 {
-    private readonly ISwaCodeDal _swaCodeDal;
+    private readonly IDtroUserDal _dtroUserDal;
     private readonly IDtroDal _dtroDal;
     private readonly IDtroHistoryDal _dtroHistoryDal;
     private readonly ISchemaTemplateDal _schemaTemplateDal;
@@ -21,9 +21,9 @@ public class DtroService : IDtroService
         ISchemaTemplateDal schemaTemplateDal, 
         IDtroMappingService dtroMappingService, 
         IDtroGroupValidatorService dtroGroupValidatorService,
-        ISwaCodeDal swaCodeDal)
+        IDtroUserDal swaCodeDal)
     {
-        _swaCodeDal = swaCodeDal;
+        _dtroUserDal = swaCodeDal;
         _dtroDal = dtroDal;
         _dtroHistoryDal = dtroHistoryDal;
         _schemaTemplateDal = schemaTemplateDal;
@@ -31,15 +31,11 @@ public class DtroService : IDtroService
         _dtroGroupValidatorService = dtroGroupValidatorService;
     }
 
-    public async Task<bool> DeleteDtroAsync(int? ta, Guid id, DateTime? deletionTime = null)
+    public async Task<bool> DeleteDtroAsync( Guid dtroId, DateTime? deletionTime = null)
     {
         deletionTime ??= DateTime.UtcNow;
-        if (ta == null)
-        {
-            throw new Exception();
-        }
 
-        var result = await _dtroDal.SoftDeleteDtroAsync(id, deletionTime);
+        var result = await _dtroDal.SoftDeleteDtroAsync(dtroId, deletionTime);
         if (!result)
         {
             throw new NotFoundException();
@@ -70,9 +66,10 @@ public class DtroService : IDtroService
         return dtroResponse;
     }
 
-    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, int? headerTa)
+    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
     {
-        var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, headerTa);
+        var apiDtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, apiDtroUser.TraId);
 
         if (validationErrors is not null)
         {
@@ -82,9 +79,10 @@ public class DtroService : IDtroService
         return await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
     }
 
-    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, int? headerTa)
+    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
     {
-        var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, headerTa);
+        var apiDtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, apiDtroUser.TraId);
 
         if (validationErrors is not null)
         {
@@ -193,32 +191,34 @@ public class DtroService : IDtroService
     }
 
 
-    public async Task<bool> AssignOwnershipAsync(Guid id, int? apiTraId, int assignToTraId, string correlationId)
+    public async Task<bool> AssignOwnershipAsync(Guid dtroId, Guid xAppId, int assignToTraId, string correlationId)
     {
-        var swaList  = await _swaCodeDal.GetAllCodesAsync();
+        var dtroUserList  = await _dtroUserDal.GetAllDtroUsersAsync();
 
-        var found = swaList.FirstOrDefault(x => x.TraId == assignToTraId);
+        var found = dtroUserList.FirstOrDefault(x => x.TraId == assignToTraId);
         if (found == null)
         {
             throw new NotFoundException($"Invalid -assign To TRA Id-: {assignToTraId} , the TRA does not exist");
         }
 
-        var currentDtro = await _dtroDal.GetDtroByIdAsync(id);
+        var currentDtro = await _dtroDal.GetDtroByIdAsync(dtroId);
         if (currentDtro is null)
         {
-            throw new NotFoundException($"Invalid DTRO Id: {id}");
+            throw new NotFoundException($"Invalid DTRO Id: {dtroId}");
         }
 
-        if (apiTraId != null)
+        var apiDtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+
+       var apiTraId = apiDtroUser.TraId;
+
+        var ownership = _dtroMappingService.GetOwnership(currentDtro);
+
+        var isCreatorOrOwner = ownership.TrafficAuthorityCreatorId == apiTraId | ownership.TrafficAuthorityOwnerId == apiTraId;
+        if (!isCreatorOrOwner)
         {
-            var ownership = _dtroMappingService.GetOwnership(currentDtro);
-
-            var isCreatorOrOwner = ownership.TrafficAuthorityCreatorId == apiTraId | ownership.TrafficAuthorityOwnerId == apiTraId;
-            if (!isCreatorOrOwner)
-            {
-                throw new DtroValidationException($"Traffic authority {apiTraId} is not the creator or owner in the DTRO data submitted");
-            }
+            throw new DtroValidationException($"Traffic authority {apiTraId} is not the creator or owner in the DTRO data submitted");
         }
+       
 
         DTROHistory historyDtro = _dtroMappingService.MapToDtroHistory(currentDtro);
         var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
@@ -227,7 +227,7 @@ public class DtroService : IDtroService
             throw new Exception("Failed to write to history table");
         }
 
-        await _dtroDal.AssignDtroOwnership(id, assignToTraId, correlationId);
+        await _dtroDal.AssignDtroOwnership(dtroId, assignToTraId, correlationId);
 
         return true;
     }

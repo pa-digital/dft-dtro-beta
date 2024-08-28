@@ -13,7 +13,7 @@ PORTAL_URL="$(echo "${PORTAL_NAME//[- ]/}" | tr '[:upper:]' '[:lower:]')"
 TOKEN=$1
 
 # List of product names
-PRODUCT_NAMES=("central-service-provider" "digital-service-provider" "data-consumer")
+PRODUCT_NAMES=("central-service-operator" "digital-solution-provider" "data-consumer")
 
 # Loop through each product name
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
@@ -52,20 +52,3 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
     exit 1
   fi
 done
-
-TEST_RESPONSE=$(curl -i -o /dev/null -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
-    -H "Authorization: Bearer ${TOKEN}" \
-    -H "Content-Type: application/json" \
-    -d '{
-      "title": "test1",
-      "description": "test1",
-      "anonAllowed": true,
-      "imageUrl": "",
-      "requireCallbackUrl": false,
-      "categoryIds": [],
-      "published": true,
-      "apiProductName": "test1"
-    }')
-
- echo "Test1 response = ${TEST_RESPONSE}"
-

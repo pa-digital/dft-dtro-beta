@@ -1,4 +1,5 @@
 ﻿using DfT.DTRO.Enums;
+using DfT.DTRO.Models.DataBase;
 
 namespace DfT.DTRO.DAL;
 
@@ -20,17 +21,18 @@ public class MetricDal : IMetricDal
     }
 
     ///<inheritdoc cref="IMetricDal"/>
-    public async Task<bool> IncrementMetric(MetricType type, int traId)
+    public async Task<bool> IncrementMetric(MetricType type, Guid dtroUserId, UserGroup userGroup)
     {
         var today = new DateOnly(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day);
-        var metric = await _dtroContext.Metrics.FirstOrDefaultAsync(x => x.ForDate == today && x.TraId == traId);
+        var metric = await _dtroContext.Metrics.FirstOrDefaultAsync(x => x.ForDate == today && x.DtroUserId == dtroUserId);
         if (metric == null)
         {
             metric = new Metric
             {
                 Id = Guid.NewGuid(),
                 ForDate = today,
-                TraId = traId
+                DtroUserId = dtroUserId,
+                UserGroup = (int) userGroup
             };
             await _dtroContext.Metrics.AddAsync(metric);
         }
@@ -63,43 +65,56 @@ public class MetricDal : IMetricDal
     }
 
     ///<inheritdoc cref="IMetricDal"/>
-    public async Task<MetricSummary> GetMetricsForTra(int? traId, DateOnly fromDate, DateOnly toDate)
+    public async Task UpdateUserGroupForMetricsAsync(Guid dtroUserId, UserGroup newUserGroup)
     {
-        if (traId == null)
+        // Validate that the dtroUserId is not empty
+        if (dtroUserId == Guid.Empty)
         {
-            var aggregatedMetrics = await _dtroContext.Metrics
-                          .Where(metric => metric.ForDate >= fromDate && metric.ForDate <= toDate)
-                          .GroupBy(metric => 1)
-                          .Select(group => new MetricSummary
-                          {
-                              SystemFailureCount = group.Sum(metric => metric.SystemFailureCount),
-                              SubmissionFailureCount = group.Sum(metric => metric.SubmissionFailureCount),
-                              SubmissionCount = group.Sum(metric => metric.SubmissionCount),
-                              DeletionCount = group.Sum(metric => metric.DeletionCount),
-                              SearchCount = group.Sum(metric => metric.SearchCount),
-                              EventCount = group.Sum(metric => metric.EventCount),
-                          })
-                          .FirstOrDefaultAsync();
-            return aggregatedMetrics;
-        }
-        else
-        {
-            var aggregatedMetrics = await _dtroContext.Metrics
-              .Where(metric => metric.TraId == traId && metric.ForDate >= fromDate && metric.ForDate <= toDate)
-              .GroupBy(metric => 1)
-              .Select(group => new MetricSummary
-              {
-                  SystemFailureCount = group.Sum(metric => metric.SystemFailureCount),
-                  SubmissionFailureCount = group.Sum(metric => metric.SubmissionFailureCount),
-                  SubmissionCount = group.Sum(metric => metric.SubmissionCount),
-                  DeletionCount = group.Sum(metric => metric.DeletionCount),
-                  SearchCount = group.Sum(metric => metric.SearchCount),
-                  EventCount = group.Sum(metric => metric.EventCount),
-              })
-              .FirstOrDefaultAsync();
-            return aggregatedMetrics;
+            throw new ArgumentException("dtroUserId cannot be empty.", nameof(dtroUserId));
         }
 
+        // Get all metrics with the specified dtroUserId
+        var metricsToUpdate = await _dtroContext.Metrics
+            .Where(metric => metric.DtroUserId == dtroUserId)
+            .ToListAsync();
+
+        foreach (var metric in metricsToUpdate)
+        {
+            metric.UserGroup = (int)newUserGroup;
+        }
+
+        await _dtroContext.SaveChangesAsync();
+    }
+
+    ///<inheritdoc cref="IMetricDal"/>
+    public async Task<MetricSummary> GetMetricsForDtroUser(Guid? dtroUserId, DateOnly fromDate, DateOnly toDate, UserGroup userGroup)
+    {
+        var query = _dtroContext.Metrics.Where(metric => metric.ForDate >= fromDate && metric.ForDate <= toDate);
+
+        if (dtroUserId.HasValue && dtroUserId != Guid.Empty)
+        {
+            query = query.Where(metric => metric.DtroUserId == dtroUserId.Value);
+        }
+
+        if (userGroup != UserGroup.All)
+        {
+            query = query.Where(metric => metric.UserGroup == (int)userGroup);
+        }
+
+        var aggregatedMetrics = await query
+            .GroupBy(metric => 1) 
+            .Select(group => new MetricSummary
+            {
+                SystemFailureCount = group.Sum(metric => metric.SystemFailureCount),
+                SubmissionFailureCount = group.Sum(metric => metric.SubmissionFailureCount),
+                SubmissionCount = group.Sum(metric => metric.SubmissionCount),
+                DeletionCount = group.Sum(metric => metric.DeletionCount),
+                SearchCount = group.Sum(metric => metric.SearchCount),
+                EventCount = group.Sum(metric => metric.EventCount),
+            })
+            .FirstOrDefaultAsync();
+
+        return aggregatedMetrics;
     }
 
     ///<inheritdoc cref="IMetricDal"/>

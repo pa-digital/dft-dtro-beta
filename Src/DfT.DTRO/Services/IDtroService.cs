@@ -6,13 +6,13 @@ public interface IDtroService
 
     Task<bool> DtroExistsAsync(Guid id);
 
-    Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, int? headerTa);
+    Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId);
 
     Task<DtroResponse> GetDtroByIdAsync(Guid id);
 
-    Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, int? ta);
+    Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, Guid xAppId);
 
-    Task<bool> DeleteDtroAsync(int? ta, Guid id, DateTime? deletionTime = null);
+    Task<bool> DeleteDtroAsync(Guid dtroId, DateTime? deletionTime = null);
 
     Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search);
 
@@ -22,5 +22,5 @@ public interface IDtroService
 
     Task<List<DtroHistoryProvisionResponse>> GetDtroProvisionHistoryAsync(Guid dtroId);
 
-    Task<bool> AssignOwnershipAsync(Guid id, int? apiTraId, int assignToTraId, string correlationId);
+    Task<bool> AssignOwnershipAsync(Guid dtroId, Guid xAppId, int assignToTraId, string correlationId);
 }

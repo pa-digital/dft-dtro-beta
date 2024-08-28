@@ -38,7 +38,7 @@ public class DTROsController : ControllerBase
     /// <summary>
     /// Create a new D-TRO
     /// </summary>
-    /// <param name="ta">TRA identification a D-TRO is being submitted for.</param>
+    /// <param name="xAppId">xAppId identification a D-TRO is being submitted for.</param>
     /// <param name="file">JSON file containing a full D-TRO details.</param>
     /// <response code="201">Created.</response>
     /// <response code="400">Bad Request.</response>
@@ -50,7 +50,7 @@ public class DTROsController : ControllerBase
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [FeatureGate(FeatureNames.Publish)]
-    public async Task<IActionResult> CreateFromFile([FromHeader(Name = "TA")][Required] int? ta, IFormFile file)
+    public async Task<IActionResult> CreateFromFile([FromHeader(Name = "x-app-id")][Required] Guid xAppId, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -64,33 +64,33 @@ public class DTROsController : ControllerBase
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
-                GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, ta);
-                await _metricsService.IncrementMetric(MetricType.Submission, ta);
-                _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using TRA Id: '{ta}' and file '{file.Name}'");
+                GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, xAppId);
+                await _metricsService.IncrementMetric(MetricType.Submission, xAppId);
+                _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using xAppId: '{xAppId}' and file '{file.Name}'");
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }
         catch (DtroValidationException err)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
             return BadRequest(err);
         }
         catch (NotFoundException nFex)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("DTRO", nFex.Message));
         }
         catch (InvalidOperationException err)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
@@ -99,7 +99,7 @@ public class DTROsController : ControllerBase
     /// <summary>
     /// Update an existing D-TRO
     /// </summary>
-    /// <param name="ta">TRA identification a D-TRO is being updated for.</param>
+    /// <param name="xAppId">xappid identification a D-TRO is being updated for.</param>
     /// <param name="id">ID of the D-TRO to update.</param>
     /// <param name="file">JSON file containing a full D-TRO details</param>
     /// <response code="200">OK.</response>
@@ -114,7 +114,7 @@ public class DTROsController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
-    public async Task<IActionResult> UpdateFromFile([FromHeader(Name = "TA")][Required] int? ta, Guid id, IFormFile file)
+    public async Task<IActionResult> UpdateFromFile([FromHeader(Name = "x-app-id")][Required] Guid xAppId, Guid id, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -128,33 +128,33 @@ public class DTROsController : ControllerBase
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
-                GuidResponse response = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId, ta);
-                await _metricsService.IncrementMetric(MetricType.Submission, ta);
-                _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using TRA Id: '{ta}', unique identifier: '{id}' and file: '{file.Name}'");
+                GuidResponse response = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId, xAppId);
+                await _metricsService.IncrementMetric(MetricType.Submission, xAppId);
+                _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using x-app-id Id: '{xAppId}', unique identifier: '{id}' and file: '{file.Name}'");
                 return Ok(response);
             }
         }
         catch (DtroValidationException err)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
             return BadRequest(err);
         }
         catch (NotFoundException nFex)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("DTRO", nFex.Message));
         }
         catch (InvalidOperationException err)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
@@ -175,36 +175,36 @@ public class DTROsController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
-    public async Task<IActionResult> CreateFromBody([FromHeader(Name = "TA")][Required] int? ta, [FromBody] DtroSubmit dtroSubmit)
+    public async Task<IActionResult> CreateFromBody([FromHeader(Name = "x-app-id")][Required] Guid xAppId, [FromBody] DtroSubmit dtroSubmit)
     {
         try
         {
-            GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, ta);
-            await _metricsService.IncrementMetric(MetricType.Submission, ta);
-            _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using TRA Id: '{ta}' and body '{dtroSubmit}'");
+            GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, xAppId);
+            await _metricsService.IncrementMetric(MetricType.Submission, xAppId);
+            _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using xAppId: '{xAppId}' and body '{dtroSubmit}'");
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
         catch (DtroValidationException err)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
             return BadRequest(err);
         }
         catch (NotFoundException nFex)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("DTRO", nFex.Message));
         }
         catch (InvalidOperationException err)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
@@ -226,36 +226,36 @@ public class DTROsController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Okay")]
-    public async Task<IActionResult> UpdateFromBody([FromHeader(Name = "TA")][Required] int? ta, [FromRoute] Guid id, [FromBody] DtroSubmit dtroSubmit)
+    public async Task<IActionResult> UpdateFromBody([FromHeader(Name = "x-app-id")][Required] Guid xAppId, [FromRoute] Guid id, [FromBody] DtroSubmit dtroSubmit)
     {
         try
         {
-            GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId, ta);
-            await _metricsService.IncrementMetric(MetricType.Submission, ta);
-            _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using TRA Id: '{ta}', unique identifier: '{id}' and body: '{dtroSubmit}'");
+            GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId, xAppId);
+            await _metricsService.IncrementMetric(MetricType.Submission, xAppId);
+            _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using xAppId: '{xAppId}', unique identifier: '{id}' and body: '{dtroSubmit}'");
             return Ok(guidResponse);
         }
         catch (DtroValidationException err)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
             return BadRequest(err);
         }
         catch (NotFoundException nFex)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("DTRO", nFex.Message));
         }
         catch (InvalidOperationException err)
         {
-            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
@@ -305,23 +305,24 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> Delete([FromHeader(Name = "TA")][Required] int? ta, Guid id)
+    public async Task<IActionResult> Delete([FromHeader(Name = "x-app-id")][Required] Guid xAppId, Guid id)
     {
         try
         {
-            await _dtroService.DeleteDtroAsync(ta, id);
-            _logger.LogInformation($"'{nameof(Delete)}' method called using TRA Id: '{ta}' and unique identifier '{id}'");
+            await _dtroService.DeleteDtroAsync(id);
+            await _metricsService.IncrementMetric(MetricType.Deletion, xAppId);
+            _logger.LogInformation($"'{nameof(Delete)}' method called using xAppId: '{xAppId}' and unique identifier '{id}'");
             return NoContent();
         }
         catch (NotFoundException nFex)
         {
-            await _metricsService.IncrementMetric(MetricType.Deletion, ta);
+           
             _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Not found", "Dtro not found"));
         }
         catch (Exception ex)
         {
-            await _metricsService.IncrementMetric(MetricType.SystemFailure, ta);
+            await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
@@ -405,12 +406,12 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> AssignOwnership([FromHeader(Name = "TA")][Required] int? ta, Guid id, int assignToTraId)
+    public async Task<IActionResult> AssignOwnership([FromHeader(Name = "x-app-id")][Required] Guid xAppId, Guid id, int assignToTraId)
     {
         try
         {
-            await _dtroService.AssignOwnershipAsync(id, ta, assignToTraId, _correlationProvider.CorrelationId);
-            _logger.LogInformation($"'{nameof(AssignOwnership)}' method called using TRA Id '{ta}', unique identifier '{id}' and new assigned TRA Id '{assignToTraId}'");
+            await _dtroService.AssignOwnershipAsync(id, xAppId, assignToTraId, _correlationProvider.CorrelationId);
+            _logger.LogInformation($"'{nameof(AssignOwnership)}' method called using xAppId '{xAppId}', unique identifier '{id}' and new assigned TRA Id '{assignToTraId}'");
             return NoContent();
         }
         catch (NotFoundException nFex)

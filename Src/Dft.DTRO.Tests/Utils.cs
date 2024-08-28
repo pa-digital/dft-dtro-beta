@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DfT.DTRO.Migrations;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Dft.DTRO.Tests
@@ -164,18 +165,20 @@ namespace Dft.DTRO.Tests
             return requests;
         }
 
-        public static List<SwaCodeResponse> SwaCodesResponse => new()
+        public static List<DtroUserResponse> SwaCodesResponse => new()
         {
-            new SwaCodeResponse
+            new DtroUserResponse
             {
                 TraId = -1,
-                IsAdmin = true,
+                UserGroup = UserGroup.Admin, 
+                xAppId = Guid.NewGuid(),
                 Name = "Department for Transport",
                 Prefix = "DfT"
-            }, new SwaCodeResponse
+            }, new DtroUserResponse
             {
                 TraId = 1585,
-                IsAdmin = false,
+                UserGroup = UserGroup.Tra,
+                xAppId = Guid.NewGuid(),
                 Name = "Essex Council",
                 Prefix = "GP"
             }

@@ -4,15 +4,15 @@ namespace Dft.DTRO.Tests.CodeiumTests.Tra.Controller;
 
 public class TraControllerSearchSwaCodesTests
 {
-    private readonly Mock<ITraService> _traServiceMock;
-    private readonly Mock<ILogger<TraController>> _loggerMock;
-    private readonly TraController _controller;
+    private readonly Mock<IDtroUserService> _traServiceMock;
+    private readonly Mock<ILogger<DtroUserController>> _loggerMock;
+    private readonly DtroUserController _controller;
 
     public TraControllerSearchSwaCodesTests()
     {
-        _traServiceMock = new Mock<ITraService>();
-        _loggerMock = new Mock<ILogger<TraController>>();
-        _controller = new TraController(_traServiceMock.Object, _loggerMock.Object);
+        _traServiceMock = new Mock<IDtroUserService>();
+        _loggerMock = new Mock<ILogger<DtroUserController>>();
+        _controller = new DtroUserController(_traServiceMock.Object, _loggerMock.Object);
     }
 
     [Fact]
@@ -20,11 +20,11 @@ public class TraControllerSearchSwaCodesTests
     {
         // Arrange
         var partialName = "test";
-        var swaCodes = new List<SwaCodeResponse> { new SwaCodeResponse() };
-        _traServiceMock.Setup(service => service.SearchSwaCodes(partialName)).ReturnsAsync(swaCodes);
+        var swaCodes = new List<DtroUserResponse> { new DtroUserResponse() };
+        _traServiceMock.Setup(service => service.SearchDtroUsers(partialName)).ReturnsAsync(swaCodes);
 
         // Act
-        var result = await _controller.SearchSwaCodes(partialName);
+        var result = await _controller.SearchDtroUsers(partialName);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -37,10 +37,10 @@ public class TraControllerSearchSwaCodesTests
     {
         // Arrange
         var partialName = "test";
-        _traServiceMock.Setup(service => service.SearchSwaCodes(partialName)).ThrowsAsync(new Exception());
+        _traServiceMock.Setup(service => service.SearchDtroUsers(partialName)).ThrowsAsync(new Exception());
 
         // Act
-        var result = await _controller.SearchSwaCodes(partialName);
+        var result = await _controller.SearchDtroUsers(partialName);
 
         // Assert
         var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);

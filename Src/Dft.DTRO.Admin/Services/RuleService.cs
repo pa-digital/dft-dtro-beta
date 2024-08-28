@@ -20,7 +20,7 @@ public class RuleService : IRuleService
         {
             Content = content
         };
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -36,7 +36,7 @@ public class RuleService : IRuleService
         {
             Content = content
         };
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }

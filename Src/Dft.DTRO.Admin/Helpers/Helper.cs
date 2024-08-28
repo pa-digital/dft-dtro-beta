@@ -2,14 +2,14 @@
 
 public static class Helper
 {
-    public static void AddHeaders(ref HttpRequestMessage httpRequestMessage)
+    public static void AddXAppIdHeader(ref HttpRequestMessage httpRequestMessage)
     {
-        int ta = DftAdminTraId();
-        httpRequestMessage.Headers.Add("ta", ta.ToString());
+        Guid xAppId = MyXAppId();
+        httpRequestMessage.Headers.Add("x-app-id", xAppId.ToString());
     }
 
-    public static int DftAdminTraId()
+    public static Guid MyXAppId()
     {
-        return -1; //1585;
+        return new Guid("f553d1ec-a7ca-43d2-b714-60dacbb4d004"); 
     }
 }

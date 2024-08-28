@@ -16,11 +16,11 @@ public class Metric
     public Guid Id { get; set; }
 
     /// <summary>
-    /// The ID of the traffic regulation authority
+    /// Dtro User Id of the metric
     /// </summary>
-    [Required(ErrorMessage = "TraId field must be included")]
-    [DataMember(Name = "traId")]
-    public int TraId { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [Column(TypeName = "uuid")]
+    public Guid DtroUserId { get; set; }
 
     /// <summary>
     /// Timestamp representing the date of this metric.
@@ -79,4 +79,10 @@ public class Metric
     [DataMember(Name = "lastUpdatedCorrelationId")]
     [SwaggerSchema(ReadOnly = true)]
     public string LastUpdatedCorrelationId { get; set; }
+
+    /// <summary>
+    /// The user group
+    /// </summary>
+    [DataMember(Name = "userGroup")]
+    public int UserGroup { get; set; }
 }

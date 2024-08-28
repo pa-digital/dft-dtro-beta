@@ -13,7 +13,7 @@ global using Dft.DTRO.Admin.Models.DtroHistory;
 global using Dft.DTRO.Admin.Models.Metrics;
 global using Dft.DTRO.Admin.Models.Schema;
 global using Dft.DTRO.Admin.Models.Search;
-global using Dft.DTRO.Admin.Models.Tra;
+global using Dft.DTRO.Admin.Models.DtroUser;
 global using Dft.DTRO.Admin.ModelView;
 global using Dft.DTRO.Admin.Services;
 global using Microsoft.AspNetCore.Mvc;

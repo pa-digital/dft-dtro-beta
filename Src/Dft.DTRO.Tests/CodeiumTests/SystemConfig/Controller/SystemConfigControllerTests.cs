@@ -1,4 +1,6 @@
 ﻿
+using DfT.DTRO.Models.SystemConfig;
+
 public class SystemConfigControllerTests
 {
     private readonly Mock<ISystemConfigService> _mockSystemConfigService;
@@ -17,27 +19,28 @@ public class SystemConfigControllerTests
     {
         // Arrange
         var systemName = "TestSystem";
-        _mockSystemConfigService.Setup(service => service.GetSystemNameAsync())
-            .ReturnsAsync(systemName);
+        _mockSystemConfigService.Setup(service => service.GetSystemConfigAsync())
+            .ReturnsAsync(new DfT.DTRO.Models.SystemConfig.SystemConfigResponse { IsTest = true, SystemName = "TestSystem" });
 
         // Act
-        var result = await _controller.GetSystemName();
+        var result = await _controller.GetSystemConfig();
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         Assert.Equal(200, okResult.StatusCode);
-        Assert.Equal(systemName, okResult.Value);
+        Assert.True(((SystemConfigResponse)okResult.Value).IsTest);
+        Assert.Equal(systemName, ((SystemConfigResponse)okResult.Value).SystemName);
     }
 
     [Fact]
     public async Task GetSystemName_ReturnsInternalServerError_OnException()
     {
         // Arrange
-        _mockSystemConfigService.Setup(service => service.GetSystemNameAsync())
+        _mockSystemConfigService.Setup(service => service.GetSystemConfigAsync())
             .ThrowsAsync(new Exception("Service failure"));
 
         // Act
-        var result = await _controller.GetSystemName();
+        var result = await _controller.GetSystemConfig();
 
         // Assert
         var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);

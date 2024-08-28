@@ -4,7 +4,7 @@ namespace DfT.DTRO;
 
 public class DbInitialize
 {
-    public static void EmptySwaCodesTable(IApplicationBuilder app)
+    public static void EmptyDtroUsersTable(IApplicationBuilder app)
     {
         using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
         {
@@ -12,18 +12,18 @@ public class DbInitialize
                 .ServiceProvider
                 .GetService<DtroContext>();
 
-            context.SwaCodes.RemoveRange();
+            context.DtroUsers.RemoveRange();
             context.SaveChanges();
         }
     }
 
     public static void SeedAppData(IApplicationBuilder app)
     {
-        SeedSwaCodes(app);
+        SeedDtroUsers(app);
         SeedConfig(app);
     }
 
-    private static void SeedSwaCodes(IApplicationBuilder app)
+    private static void SeedDtroUsers(IApplicationBuilder app)
     {
         using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
         {
@@ -31,9 +31,9 @@ public class DbInitialize
                 .ServiceProvider
                 .GetService<DtroContext>();
 
-            if (!context.SwaCodes.Any())
+            if (!context.DtroUsers.Any())
             {
-                context.SwaCodes.AddRange(SeedData.TrafficAuthorities);
+                context.DtroUsers.AddRange(SeedData.TrafficAuthorities);
                 context.SaveChanges();
             }
         }

@@ -13,7 +13,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
 
     private const string ValidDtroJsonPath = "../../../../../examples/D-TROs/3.2.0/valid-new-x.json";
     private readonly DtroSubmit _dtroSubmit;
-    private readonly int? _taForTest = 1585;
+    private readonly Guid _xAppIdForTest = Guid.NewGuid();
 
     public DTROsController_Codeium_Tests(WebApplicationFactory<Program> factory)
     {
@@ -23,7 +23,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
         Mock<ILogger<DTROsController>> loggerMock = new();
         Mock<IMetricsService> metricsMock = new();
 
-        metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), _taForTest)).ReturnsAsync(true);
+        metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), _xAppIdForTest)).ReturnsAsync(true);
 
 
         _controller = new DTROsController(_mockDtroService.Object, metricsMock.Object,
@@ -52,9 +52,9 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     public async Task CreateDtro_Returns_OK()
     {
         var response = new GuidResponse { Id = Guid.NewGuid() };
-        _mockDtroService.Setup(x => x.SaveDtroAsJsonAsync(_dtroSubmit, It.IsAny<string>(), _taForTest)).ReturnsAsync(response);
+        _mockDtroService.Setup(x => x.SaveDtroAsJsonAsync(_dtroSubmit, It.IsAny<string>(), _xAppIdForTest)).ReturnsAsync(response);
 
-        var result = await _controller.CreateFromBody(_taForTest, _dtroSubmit);
+        var result = await _controller.CreateFromBody(_xAppIdForTest, _dtroSubmit);
 
         var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
         Assert.Equal(201, createdAtActionResult.StatusCode);
@@ -67,88 +67,88 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     public async Task CreateDtro_ValidationException_ReturnsBadRequest()
     {
         var dtroBadSubmit = new DtroSubmit();
-        _mockDtroService.Setup(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _taForTest))
+        _mockDtroService.Setup(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _xAppIdForTest))
             .ThrowsAsync(new DtroValidationException());
 
-        var response = await _controller.CreateFromBody(_taForTest, dtroBadSubmit);
+        var response = await _controller.CreateFromBody(_xAppIdForTest, dtroBadSubmit);
 
         Assert.IsType<BadRequestObjectResult>(response);
-        _mockDtroService.Verify(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _taForTest), Times.Once);
+        _mockDtroService.Verify(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _xAppIdForTest), Times.Once);
     }
 
     [Fact]
     public async Task CreateDtro_UnexpectedException_ReturnsInternalServerError()
     {
         var dtroBadSubmit = new DtroSubmit();
-        _mockDtroService.Setup(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _taForTest))
+        _mockDtroService.Setup(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _xAppIdForTest))
             .ThrowsAsync(new Exception("Unexpected error"));
 
-        var response = await _controller.CreateFromBody(_taForTest, dtroBadSubmit);
+        var response = await _controller.CreateFromBody(_xAppIdForTest, dtroBadSubmit);
 
         Assert.IsType<ObjectResult>(response);
         var objectResult = (ObjectResult)response;
         Assert.Equal(500, objectResult.StatusCode);
 
-        _mockDtroService.Verify(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _taForTest), Times.Once);
+        _mockDtroService.Verify(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _xAppIdForTest), Times.Once);
     }
 
     [Fact]
     public async Task UpdateDtro_ReturnsOk_ForExistingDtro()
     {
-        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest))
+        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest))
             .Returns(Task.FromResult(new GuidResponse()));
 
-        var result = await _controller.UpdateFromBody(_taForTest, Guid.NewGuid(), _dtroSubmit);
+        var result = await _controller.UpdateFromBody(_xAppIdForTest, Guid.NewGuid(), _dtroSubmit);
 
         Assert.IsType<OkObjectResult>(result);
-        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest), Times.Once);
+        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest), Times.Once);
     }
 
     [Fact]
     public async Task UpdateDtro_ReturnsBadRequest_ForInvalidDtro()
     {
-        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest))
+        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest))
             .ThrowsAsync(new DtroValidationException());
 
         var dtroBadSubmit = new DtroSubmit
         { SchemaVersion = new("3.1.2"), Data = new() };
 
-        var result = await _controller.UpdateFromBody(_taForTest, Guid.NewGuid(), dtroBadSubmit);
+        var result = await _controller.UpdateFromBody(_xAppIdForTest, Guid.NewGuid(), dtroBadSubmit);
 
         Assert.IsType<BadRequestObjectResult>(result);
-        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest), Times.Once);
+        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest), Times.Once);
     }
 
     [Fact]
     public async Task UpdateDtro_ReturnsNotFound_ForNonExistentDtro()
     {
-        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest))
+        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest))
             .ThrowsAsync(new NotFoundException());
 
         var dtroBadSubmit = new DtroSubmit
         { SchemaVersion = new("3.1.2"), Data = new() };
 
-        var result = await _controller.UpdateFromBody(_taForTest, Guid.NewGuid(), dtroBadSubmit);
+        var result = await _controller.UpdateFromBody(_xAppIdForTest, Guid.NewGuid(), dtroBadSubmit);
 
         Assert.IsType<NotFoundObjectResult>(result);
-        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest), Times.Once);
+        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest), Times.Once);
     }
 
     [Fact]
     public async Task UpdateDtro_ReturnsInternalServerError_ForUnexpectedException()
     {
-        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest))
+        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest))
             .ThrowsAsync(new Exception());
 
         var dtroBadSubmit = new DtroSubmit
         { SchemaVersion = new("3.1.2"), Data = new() };
 
-        var result = await _controller.UpdateFromBody(_taForTest, Guid.NewGuid(), dtroBadSubmit) as ObjectResult;
+        var result = await _controller.UpdateFromBody(_xAppIdForTest, Guid.NewGuid(), dtroBadSubmit) as ObjectResult;
 
         Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, result?.StatusCode);
 
-        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _taForTest), Times.Once);
+        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest), Times.Once);
     }
 
     [Fact]
@@ -191,9 +191,9 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     [Fact]
     public async Task DeleteDtro_ValidId_ReturnsNoContent()
     {
-        _mockDtroService.Setup(s => s.DeleteDtroAsync(It.IsAny<int?>(), It.IsAny<Guid>(), It.IsAny<DateTime>())).Returns(Task.FromResult(true));
+        _mockDtroService.Setup(s => s.DeleteDtroAsync(It.IsAny<Guid>(), It.IsAny<DateTime>())).Returns(Task.FromResult(true));
 
-        var response = await _controller.Delete(It.IsAny<int?>(), Guid.NewGuid()) as NoContentResult;
+        var response = await _controller.Delete(Guid.NewGuid(),Guid.NewGuid()) as NoContentResult;
 
         Assert.NotNull(response);
         Assert.IsType<NoContentResult>(response);

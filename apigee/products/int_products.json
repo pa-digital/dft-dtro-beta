@@ -1,0 +1,92 @@
+[
+  {
+    "name": "ENV-digital-solution-provider",
+    "displayName": "ENV-Digital Solution Provider",
+    "approvalType": "manual",
+    "attributes": [
+      {
+        "name": "access",
+        "value": "public"
+      }
+    ],
+    "environments": [
+      "dtro-ENV-apigee-environment"
+    ],
+    "scopes": [
+      "dsp"
+    ],
+    "createdAt": "1719227113878",
+    "lastModifiedAt": "1719227144037",
+    "operationGroup": {
+      "operationConfigs": [
+        {
+          "apiSource": "dtro-ENV-server",
+          "operations": [
+            {
+              "resource": "/**"
+            }
+          ],
+          "quota": {}
+        },
+        {
+          "apiSource": "oauth-generator",
+          "operations": [
+            {
+              "resource": "/oauth-generator",
+              "methods": [
+                "POST"
+              ]
+            }
+          ],
+          "quota": {}
+        }
+      ],
+      "operationConfigType": "proxy"
+    }
+  },
+  {
+    "name": "ENV-data-consumer",
+    "displayName": "ENV-Data Consumer",
+    "approvalType": "manual",
+    "attributes": [
+      {
+        "name": "access",
+        "value": "public"
+      }
+    ],
+    "environments": [
+      "dtro-ENV-apigee-environment"
+    ],
+    "scopes": [
+      "dc"
+    ],
+    "createdAt": "1719227113878",
+    "lastModifiedAt": "1719227144037",
+    "operationGroup": {
+      "operationConfigs": [
+        {
+          "apiSource": "dtro-ENV-server",
+          "operations": [
+            {
+              "resource": "/**"
+            }
+          ],
+          "quota": {}
+        },
+        {
+          "apiSource": "oauth-generator",
+          "operations": [
+            {
+              "resource": "/oauth-generator",
+              "methods": [
+                "POST"
+              ]
+            }
+          ],
+          "quota": {}
+        }
+      ],
+      "operationConfigType": "proxy"
+    }
+  }
+]

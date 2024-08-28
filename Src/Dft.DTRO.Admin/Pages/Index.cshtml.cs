@@ -12,22 +12,20 @@ namespace Dft.DTRO.Admin.Pages
 
         public MetricSummary Metrics { get; set; } = new MetricSummary();
         public bool HealthApi { get; set; } = true;
-        public bool TraIdMatch { get; set; } = false;
         public bool HealthDatabase { get; set; } = true;
 
         public async Task OnGetAsync()
         {
             HealthApi = await _metricsService.HealthApi();
             HealthDatabase = await _metricsService.HealthDatabase();
-            TraIdMatch = await _metricsService.TraIdMatch();
-
+           
             var metricRequest = new MetricRequest
             {
-                TraId = null,
+                DtroUserId = null,
                 DateFrom = DateTime.Now.AddDays(-7),
                 DateTo = DateTime.Now
             };
-            var metrics = await _metricsService.MetricsForTra(metricRequest);
+            var metrics = await _metricsService.MetricsForDtroUser(metricRequest);
             Metrics = metrics ?? new MetricSummary();
         }
     }

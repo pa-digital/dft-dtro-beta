@@ -14,7 +14,7 @@ public class SchemaService : ISchemaService
     public async Task<List<SchemaTemplateOverview>> GetSchemaVersionsAsync()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "/schemas/versions");
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -24,7 +24,7 @@ public class SchemaService : ISchemaService
     public async Task ActivateSchemaAsync(string version)
     {
         var request = new HttpRequestMessage(HttpMethod.Patch, $"/schemas/activate/{version}");
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -33,7 +33,7 @@ public class SchemaService : ISchemaService
     {
         //var response = await _client.PatchAsync($"/schemas/deactivate/{version}", null);
         var request = new HttpRequestMessage(HttpMethod.Patch, $"/schemas/deactivate/{version}");
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -49,7 +49,7 @@ public class SchemaService : ISchemaService
         {
             Content = content
         };
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -65,7 +65,7 @@ public class SchemaService : ISchemaService
         {
             Content = content
         };
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }

@@ -5,23 +5,23 @@ namespace DfT.DTRO.Services.Validation;
 
 public class RecordManagementService : IRecordManagementService
 {
-    private readonly ISwaCodeDal _swaCodeDal;
+    private readonly IDtroUserDal _dtroUserDal;
 
-    public RecordManagementService(ISwaCodeDal swaCodeDal)
+    public RecordManagementService(IDtroUserDal swaCodeDal)
     {
-        _swaCodeDal = swaCodeDal;
+        _dtroUserDal = swaCodeDal;
     }
 
-    public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit, int? ta)
+    public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit, int? submittedByTa)
     {
         List<SemanticValidationError> validationErrors = new();
 
-        if (ta == null)
+        if (submittedByTa == null)
         {
             validationErrors.Add(new SemanticValidationError { Message = "TRA cannot be null" });
         }
 
-        List<SwaCodeResponse> swaCodes = _swaCodeDal.GetAllCodesAsync().Result;
+        List<DtroUserResponse> swaCodes = _dtroUserDal.GetAllDtroUsersAsync().Result;
 
         int creator = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<int>("traCreator");
         bool isCreatorWithinSwaCodes = swaCodes.Select(response => response.TraId == creator).Any();
@@ -40,6 +40,14 @@ public class RecordManagementService : IRecordManagementService
             validationErrors.Add(new SemanticValidationError
             {
                 Message = $"TRA owner '{owner}' is not within accepted SWA codes."
+            });
+        }
+
+        if (creator != submittedByTa  || owner != submittedByTa)
+        {
+            validationErrors.Add(new SemanticValidationError
+            {
+                Message = $"TA '{submittedByTa}' cannot add/update a DTRO for another TA. (creator TA is '{creator}', owner TA is '{owner}' )"
             });
         }
 

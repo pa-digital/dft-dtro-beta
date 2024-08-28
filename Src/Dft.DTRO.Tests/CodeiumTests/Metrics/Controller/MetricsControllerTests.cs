@@ -31,34 +31,6 @@ public class MetricsControllerTests
         Assert.Equal(expected, okResult.Value);
     }
 
-
-    [Fact]
-    public void HealthTraId_ReturnsStatusCode200_WhenTraIdIsProvided()
-    {
-        const int traId = 123;
-
-        ActionResult<int?>? result = _controller.HealthTraId(traId);
-
-        ObjectResult? okResult = result.Result as ObjectResult;
-        Assert.NotNull(okResult);
-        Assert.Equal(200, okResult.StatusCode);
-        Assert.Equal(traId, okResult.Value);
-    }
-
-    [Fact]
-    public void HealthTraId_ReturnsStatusCode404_WhenTraIdIsNotProvided()
-    {
-        int? traId = null;
-
-        ActionResult<int?>? result = _controller.HealthTraId(traId);
-
-        NotFoundObjectResult? notFoundResult = result.Result as NotFoundObjectResult;
-        Assert.NotNull(notFoundResult);
-        Assert.Equal(404, notFoundResult.StatusCode);
-        ApiErrorResponse? apiErrorResponse = notFoundResult.Value as ApiErrorResponse;
-        Assert.Equal("Not found", apiErrorResponse?.Message);
-    }
-
     [Fact]
     public async Task HealthDatabase_ReturnsStatusCode200_WhenDatabaseIsAvailable()
     {
@@ -103,7 +75,6 @@ public class MetricsControllerTests
     [Fact]
     public async Task GetMetricsForTra_ReturnsStatusCode200_WithValidInput()
     {
-        _metricRequest.TraId = 123;
         MetricSummary metricSummary = new()
         {
             SystemFailureCount = 1,
@@ -116,7 +87,7 @@ public class MetricsControllerTests
 
         _mockMetricsService.Setup(service => service.GetMetrics(_metricRequest)).ReturnsAsync(metricSummary);
 
-        ActionResult<MetricSummary>? result = await _controller.GetMetricsForTra(_metricRequest);
+        ActionResult<MetricSummary>? result = await _controller.GetMetricsForDtroUser(_metricRequest);
 
         OkObjectResult? okResult = result.Result as OkObjectResult;
         Assert.NotNull(okResult);
@@ -127,12 +98,10 @@ public class MetricsControllerTests
     [Fact]
     public async Task GetMetricsForTra_ReturnsStatusCode500_OnException()
     {
-        _metricRequest.TraId = 123;
-
         _mockMetricsService.Setup(service => service.GetMetrics(_metricRequest))
             .ThrowsAsync(new Exception("Test exception"));
 
-        ActionResult<MetricSummary>? result = await _controller.GetMetricsForTra(_metricRequest);
+        ActionResult<MetricSummary>? result = await _controller.GetMetricsForDtroUser(_metricRequest);
 
         ObjectResult? objectResult = result.Result as ObjectResult;
         Assert.NotNull(objectResult);

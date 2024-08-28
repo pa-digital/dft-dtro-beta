@@ -1,19 +1,23 @@
 ﻿@page
 @model SearchModel
 
+<h2>
+    DTROs
+    @if (Model.AllowAddUpdate)
+    {
+        <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="false">+</a>
+    }
+</h2>
 
-<h2>DTROs <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="false">+</a></h2>
-
-<form id="searchSection" method="post" asp-page-handler="Update" style="display: flex;margin-top:20px;">
+<form id="searchSection" method="post" asp-page-handler="Update" style="display: flex; margin-top:20px;">
     <div>
-        @await Html.PartialAsync("_TraSearchPartial", Model.TraSearch)
+        @await Html.PartialAsync("_TraSearchPartial", Model.DtroUserSearch)
     </div>
 </form>
 
-<table style="margin-top:30px"  class="table">
+<table style="margin-top:30px" class="table">
     <thead>
         <tr>
-            
             <th>Tro Name</th>
             <th>Published</th>
             <th>Regulation</th>
@@ -47,17 +51,16 @@
                     }
                 </td>
                 <td>
-                    <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="true" asp-route-id="@result.Id">Upload</a>
+                    @if (Model.AllowAddUpdate)
+                    {
+                        <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="true" asp-route-id="@result.Id">Upload</a>
+                    }
                 </td>
-
                 <td>@result.TrafficAuthorityCreatorId</td>
                 <td>@result.TrafficAuthorityOwnerId</td>
-
                 <td>
                     <a class="btn btn-primary" asp-page="DtroEdit" asp-route-id="@result.Id">Reassign</a>
                 </td>
-
-
                 <td>
                     <a class="btn btn-secondary" asp-page="DtroHistory" asp-route-id="@result.Id">History</a>
                 </td>

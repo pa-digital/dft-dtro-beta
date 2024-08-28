@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.Services;
+﻿using DfT.DTRO.Models.SystemConfig;
+
+namespace DfT.DTRO.Services;
 
 public class SystemConfigService : ISystemConfigService
 {
@@ -9,9 +11,15 @@ public class SystemConfigService : ISystemConfigService
         _systemConfigDal = systemConfigDal;
     }
 
-    public async Task<string> GetSystemNameAsync()
+    public async Task<SystemConfigResponse> GetSystemConfigAsync()
     {
         var response = await _systemConfigDal.GetSystemConfigAsync();
-        return response.SystemName;
+        return response;
     }
+    public async Task<bool> UpdateSystemConfigAsync(SystemConfigRequest systemConfigRequest)
+    {
+        return await _systemConfigDal.UpdateSystemConfigAsync(systemConfigRequest);
+    }
+    
+
 }

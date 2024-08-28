@@ -1,36 +1,36 @@
 public class DtroEditModel : PageModel
 {
-    private readonly ITraService _traService;
+    private readonly IDtroUserService _dtroUserService;
     private readonly IDtroService _dtroService;
     [BindProperty(SupportsGet = true)]
-    public TraSearch TraSearch { get; set; } = new TraSearch();
+    public DtroUserSearch DtroUserSearch { get; set; } = new DtroUserSearch();
 
     [BindProperty(SupportsGet = true)]
     public string Id { get; set; }
 
-    public DtroEditModel(IDtroService dtroService, ITraService traService)
+    public DtroEditModel(IDtroService dtroService, IDtroUserService traService)
     {
         _dtroService = dtroService;
-        _traService = traService;
+        _dtroUserService = traService;
     }
 
     public async Task OnGetAsync()
     {
-        TraSearch.UpdateButtonText = "Assign";
-        TraSearch.SwaCodes = await _traService.GetSwaCodes();
+        DtroUserSearch.UpdateButtonText = "Assign";
+        DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
     }
 
 
     public async Task<IActionResult> OnPostAsync(Guid id)
     {
-        if (TempData.TryGetValue("TraSelect", out object traSelect))
+        if (TempData.TryGetValue("DtroUserSelect", out object dtroUserSelect))
         {
-            TraSearch.TraSelect = (int)traSelect;
+            DtroUserSearch.DtroUserIdSelect = (Guid)dtroUserSelect;
         }
 
-        if (TraSearch.TraSelect != null)
+        if (DtroUserSearch.DtroUserIdSelect != null)
         {
-            await _dtroService.ReassignDtroAsync(id, (int)TraSearch.TraSelect);
+            await _dtroService.ReassignDtroAsync(id, DtroUserSearch.DtroUserIdSelect.Value);
         }
 
         return RedirectToPage("Search");

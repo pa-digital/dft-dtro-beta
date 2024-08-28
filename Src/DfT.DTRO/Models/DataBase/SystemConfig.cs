@@ -16,4 +16,8 @@ public class SystemConfig
     [StringLength(100)]
     public string SystemName { get; set; }
 
+    [DataMember(Name = "isTest")]
+    [SwaggerSchema(ReadOnly = true)]
+    public bool IsTest { get; set; }
+
 }

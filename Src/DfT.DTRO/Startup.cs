@@ -60,8 +60,8 @@ public class Startup
         services.AddScoped<ISchemaTemplateDal, SchemaTemplateDal>();
         services.AddScoped<IRuleTemplateDal, RuleTemplateDal>();
         services.AddScoped<IMetricDal, MetricDal>();
-        services.AddScoped<ISwaCodeDal, SwaCodeDal>();
-        services.AddScoped<ITraService, TraService>();
+        services.AddScoped<IDtroUserDal, DtroUserDal>();
+        services.AddScoped<IDtroUserService, DtroUserService>();
         services.AddScoped<ISystemConfigDal, SystemConfigDal>();
         services.AddScoped<ISystemConfigService, SystemConfigService>();
         services.TryAddSingleton<ISystemClock, SystemClock>();
@@ -88,7 +88,7 @@ public class Startup
         }
 
         // Add the middleware before UseEndpoints
-        app.UseFeatureGateMiddleware();
+        app.UserGroupMiddleware();
 
         app.UseMiddleware<SecurityHeadersMiddleware>();
 
@@ -99,7 +99,7 @@ public class Startup
 
         app.UseHealthChecks("/health");
 
-        DbInitialize.EmptySwaCodesTable(app);
+        DbInitialize.EmptyDtroUsersTable(app);
         DbInitialize.SeedAppData(app);
         if (env.IsDevelopment())
         {

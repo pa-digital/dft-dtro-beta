@@ -130,6 +130,35 @@ namespace DfT.DTRO.Migrations
                     b.ToTable("DtroHistories");
                 });
 
+            modelBuilder.Entity("DfT.DTRO.Models.DataBase.DtroUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("text");
+
+                    b.Property<string>("Prefix")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<int?>("TraId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserGroup")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("xAppId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DtroUsers");
+                });
+
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Metric", b =>
                 {
                     b.Property<Guid>("Id")
@@ -140,6 +169,9 @@ namespace DfT.DTRO.Migrations
 
                     b.Property<int>("DeletionCount")
                         .HasColumnType("integer");
+
+                    b.Property<Guid>("DtroUserId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("EventCount")
                         .HasColumnType("integer");
@@ -162,7 +194,7 @@ namespace DfT.DTRO.Migrations
                     b.Property<int>("SystemFailureCount")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TraId")
+                    b.Property<int>("UserGroup")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -233,40 +265,14 @@ namespace DfT.DTRO.Migrations
                     b.ToTable("SchemaTemplate");
                 });
 
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.SwaCode", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(2147483647)
-                        .HasColumnType("text");
-
-                    b.Property<string>("Prefix")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<int>("TraId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SwaCodes");
-                });
-
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.SystemConfig", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("IsTest")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("SystemName")
                         .IsRequired()

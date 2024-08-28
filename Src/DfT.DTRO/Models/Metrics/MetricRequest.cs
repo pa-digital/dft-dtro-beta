@@ -1,14 +1,20 @@
-﻿namespace DfT.DTRO.Models.Metrics;
+﻿using DfT.DTRO.Migrations;
+
+namespace DfT.DTRO.Models.Metrics;
 
 [DataContract]
 public class MetricRequest
 {
-    [DataMember(Name = "traId")]
-    public int? TraId { get; set; }
+    [DataMember(Name = "dtroUserId")]
+    public Guid? DtroUserId { get; set; }
 
     [DataMember(Name = "dateFrom")]
     public DateTime DateFrom { get; set; }
 
     [DataMember(Name = "dateTo")]
     public DateTime DateTo { get; set; }
+
+
+    [DataMember(Name = "userGroup")]
+    public UserGroup UserGroup { get; set; } = UserGroup.All;
 }

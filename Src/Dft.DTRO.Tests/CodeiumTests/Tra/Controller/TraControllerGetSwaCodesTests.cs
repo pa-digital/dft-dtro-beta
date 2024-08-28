@@ -4,26 +4,26 @@ namespace Dft.DTRO.Tests.CodeiumTests.Tra.Controller;
 
 public class TraControllerGetSwaCodesTests
 {
-    private readonly Mock<ITraService> _traServiceMock;
-    private readonly Mock<ILogger<TraController>> _loggerMock;
-    private readonly TraController _controller;
+    private readonly Mock<IDtroUserService> _traServiceMock;
+    private readonly Mock<ILogger<DtroUserController>> _loggerMock;
+    private readonly DtroUserController _controller;
 
     public TraControllerGetSwaCodesTests()
     {
-        _traServiceMock = new Mock<ITraService>();
-        _loggerMock = new Mock<ILogger<TraController>>();
-        _controller = new TraController(_traServiceMock.Object, _loggerMock.Object);
+        _traServiceMock = new Mock<IDtroUserService>();
+        _loggerMock = new Mock<ILogger<DtroUserController>>();
+        _controller = new DtroUserController(_traServiceMock.Object, _loggerMock.Object);
     }
 
     [Fact]
     public async Task GetSwaCodes_ReturnsOk_WithListOfSwaCodeResponse()
     {
         // Arrange
-        var swaCodes = new List<SwaCodeResponse> { new SwaCodeResponse() };
-        _traServiceMock.Setup(service => service.GetSwaCodeAsync()).ReturnsAsync(swaCodes);
+        var swaCodes = new List<DtroUserResponse> { new DtroUserResponse() };
+        _traServiceMock.Setup(service => service.GetAllDtroUsersAsync()).ReturnsAsync(swaCodes);
 
         // Act
-        var result = await _controller.GetSwaCodes();
+        var result = await _controller.GetDtroUsers();
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -35,10 +35,10 @@ public class TraControllerGetSwaCodesTests
     public async Task GetSwaCodes_ReturnsInternalServerError_WhenExceptionIsThrown()
     {
         // Arrange
-        _traServiceMock.Setup(service => service.GetSwaCodeAsync()).ThrowsAsync(new Exception());
+        _traServiceMock.Setup(service => service.GetAllDtroUsersAsync()).ThrowsAsync(new Exception());
 
         // Act
-        var result = await _controller.GetSwaCodes();
+        var result = await _controller.GetDtroUsers();
 
         // Assert
         var statusCodeResult = Assert.IsType<ObjectResult>(result.Result);

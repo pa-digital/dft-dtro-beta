@@ -4,15 +4,15 @@ namespace Dft.DTRO.Tests.CodeiumTests.Tra.Controller;
 
 public class TraControllerCreateFromBodyTests
 {
-    private readonly Mock<ITraService> _traServiceMock;
-    private readonly Mock<ILogger<TraController>> _loggerMock;
-    private readonly TraController _controller;
+    private readonly Mock<IDtroUserService> _traServiceMock;
+    private readonly Mock<ILogger<DtroUserController>> _loggerMock;
+    private readonly DtroUserController _controller;
 
     public TraControllerCreateFromBodyTests()
     {
-        _traServiceMock = new Mock<ITraService>();
-        _loggerMock = new Mock<ILogger<TraController>>();
-        _controller = new TraController(_traServiceMock.Object, _loggerMock.Object);
+        _traServiceMock = new Mock<IDtroUserService>();
+        _loggerMock = new Mock<ILogger<DtroUserController>>();
+        _controller = new DtroUserController(_traServiceMock.Object, _loggerMock.Object);
     }
 
 
@@ -20,9 +20,9 @@ public class TraControllerCreateFromBodyTests
     public async Task CreateFromBody_ReturnsCreated_WithGuidResponse()
     {
         // Arrange
-        var request = new SwaCodeRequest { TraId = 1 };
+        var request = new DtroUserRequest { TraId = 1 };
         var response = new GuidResponse { Id = Guid.NewGuid() };
-        _traServiceMock.Setup(service => service.SaveTraAsync(request)).ReturnsAsync(response);
+        _traServiceMock.Setup(service => service.SaveDtroUserAsync(request)).ReturnsAsync(response);
 
         // Act
         var result = await _controller.CreateFromBody(request);
@@ -37,8 +37,8 @@ public class TraControllerCreateFromBodyTests
     public async Task CreateFromBody_ReturnsBadRequest_WhenInvalidOperationExceptionIsThrown()
     {
         // Arrange
-        var request = new SwaCodeRequest { TraId = 1 };
-        _traServiceMock.Setup(service => service.SaveTraAsync(request)).ThrowsAsync(new InvalidOperationException("Invalid operation"));
+        var request = new DtroUserRequest { TraId = 1 };
+        _traServiceMock.Setup(service => service.SaveDtroUserAsync(request)).ThrowsAsync(new InvalidOperationException("Invalid operation"));
 
         // Act
         var result = await _controller.CreateFromBody(request);
@@ -53,8 +53,8 @@ public class TraControllerCreateFromBodyTests
     public async Task CreateFromBody_ReturnsInternalServerError_WhenExceptionIsThrown()
     {
         // Arrange
-        var request = new SwaCodeRequest { TraId = 1 };
-        _traServiceMock.Setup(service => service.SaveTraAsync(request)).ThrowsAsync(new Exception());
+        var request = new DtroUserRequest { TraId = 1 };
+        _traServiceMock.Setup(service => service.SaveDtroUserAsync(request)).ThrowsAsync(new Exception());
 
         // Act
         var result = await _controller.CreateFromBody(request);

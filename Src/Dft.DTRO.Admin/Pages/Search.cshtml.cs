@@ -2,37 +2,59 @@ public class SearchModel : PageModel
 {
     public PaginatedResponse<DtroSearchResult> Dtros { get; set; }
     private readonly IDtroService _dtroService;
-    private readonly ITraService _traService;
+    private readonly IDtroUserService _dtroUserService;
+    private readonly ISystemConfigService _systemConfigService;
 
     [BindProperty(SupportsGet = true)]
-    public TraSearch TraSearch { get; set; } = new TraSearch();
+    public DtroUserSearch DtroUserSearch { get; set; } = new DtroUserSearch();
 
-    public SearchModel(IDtroService dtroService, ITraService traService)
+    [BindProperty(SupportsGet = true)]
+    public bool AllowAddUpdate { get; set; } = false;
+
+    public SearchModel(IDtroService dtroService, IDtroUserService dtroUserService, ISystemConfigService systemConfigService)
     {
         _dtroService = dtroService;
-        _traService = traService;
+        _dtroUserService = dtroUserService;
+        _systemConfigService = systemConfigService;
     }
 
     public async Task OnGetAsync()
     {
-        Dtros = await _dtroService.SearchDtros(TraSearch.TraSelect);
+        int? useTraId = null;
+        if(DtroUserSearch.DtroUserIdSelect != null && DtroUserSearch.DtroUserIdSelect != Guid.Empty)
+        {
+            var user = await _dtroUserService.GetDtroUserAsync(DtroUserSearch.DtroUserIdSelect.Value);
+            useTraId = user.TraId;
+        }
+        Dtros = await _dtroService.SearchDtros(useTraId);
 
-        TraSearch.UpdateButtonText = "Search";
-        TraSearch.SwaCodes = await _traService.GetSwaCodes();
-        TraSearch.SwaCodes.Insert(0, new SwaCode { TraId = 0, Name = "[all]", IsActive = true });
+        DtroUserSearch.UpdateButtonText = "Search";
+        DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
+        DtroUserSearch.DtroUsers.Insert(0, new DtroUser { TraId = 0, Name = "[all]"});
+
+       
+        var users = await _dtroUserService.GetDtroUsersAsync();
+        var myUser = users.FirstOrDefault(x => x.xAppId == Helper.MyXAppId());
+
+        var systemConfig = await _systemConfigService.GetSystemConfig();
+
+        if (myUser?.TraId != null && systemConfig.IsTest)
+        {
+            AllowAddUpdate = true;
+        }
     }
 
     public IActionResult OnPostUpdate()
     {
-        return RedirectToPage(new { TraSearch.TraSelect });
+        return RedirectToPage(new { DtroUserSearch.DtroUserIdSelect });
     }
 
     public IActionResult OnGetRefresh()
     {
-        if (TempData.TryGetValue("TraSelect", out object traSelect))
-            TraSearch.TraSelect = (int)traSelect;
+        if (TempData.TryGetValue("DtroUserSelect", out object dtroUserSelect))
+            DtroUserSearch.DtroUserIdSelect = (Guid)dtroUserSelect;
 
-        return RedirectToPage(new { TraSearch.TraSelect });
+        return RedirectToPage(new { DtroUserSearch.DtroUserIdSelect });
     }
 
     public string FormatListToSingle(IEnumerable<string> items)

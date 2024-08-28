@@ -17,7 +17,7 @@ public class MetricsService : IMetricsService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/healthApi");
-            Helper.AddHeaders(ref request);
+            Helper.AddXAppIdHeader(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -36,7 +36,7 @@ public class MetricsService : IMetricsService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/healthDatabase");
-            Helper.AddHeaders(ref request);
+            Helper.AddXAppIdHeader(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -50,39 +50,17 @@ public class MetricsService : IMetricsService
         }
     }
 
-    public async Task<bool> TraIdMatch()
-    {
-        try
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/healthTraId");
-            Helper.AddHeaders(ref request);
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            var result = int.Parse(content);
 
-            if (result == Helper.DftAdminTraId())
-            {
-                return true;
-            }
-            return false;
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-    }
-
-    public async Task<MetricSummary> MetricsForTra(MetricRequest metricRequest)
+    public async Task<MetricSummary> MetricsForDtroUser(MetricRequest metricRequest)
     {
         var jsonContent = JsonSerializer.Serialize(metricRequest);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-        var request = new HttpRequestMessage(HttpMethod.Post, "/metricsForTra")
+        var request = new HttpRequestMessage(HttpMethod.Post, "/metricsForDtroUser")
         {
             Content = param
         };
 
-        Helper.AddHeaders(ref request);
+        Helper.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
 
