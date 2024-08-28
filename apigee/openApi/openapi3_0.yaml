@@ -2272,7 +2272,7 @@ components:
         clientCredentials:
           tokenUrl: https://dtro-dft.gov.uk/oauth-generator
           scopes:
-            cso: Central Service Provider
+            cso: Central Service Operator
             dsp: Digital Service Provider
             dc: Data Consumer
 security:

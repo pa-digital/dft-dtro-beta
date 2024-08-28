@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if [ -z "${environment}" ]; then
+if [ -z "${env_name_prefix}" ]; then
   echo "Environment variable is not set."
   exit 1
 fi
 
-case "${environment}" in
+case "${env_name_prefix}" in
   "dev")
     source environments/dev.sh
     ;;
@@ -19,7 +19,7 @@ case "${environment}" in
     source environments/prod.sh
     ;;
   *)
-    echo "Environment not found: ${environment}."
+    echo "Environment not found: ${env_name_prefix}."
     exit 1
     ;;
 esac
