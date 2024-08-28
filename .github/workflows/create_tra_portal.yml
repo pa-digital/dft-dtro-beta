@@ -7,10 +7,6 @@ on:
         type: string
         description: Short name of the TRA
         required: true
-      swa_code:
-        type: string
-        description: ID for the TRA
-        required: true
 
 env:
   environment: test #TODO: Update to for Prod
