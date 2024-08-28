@@ -20,6 +20,8 @@ jobs:
       environment: dev
       dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
       dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
+      service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
+      service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
       run-build-push: true
       run-deploy-CR-job: true
 #      run-apigee: false #TODO: Default value when no major endpoint or OAuth changes have been made
@@ -41,6 +43,8 @@ jobs:
       environment: test
       dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
       dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
+      service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
+      service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
       run-build-push: true
       run-deploy-CR-job: true
 #      run-apigee: false #TODO: Default value when no major endpoint or OAuth changes have been made
