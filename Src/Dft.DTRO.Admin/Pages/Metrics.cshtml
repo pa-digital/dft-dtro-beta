@@ -10,6 +10,20 @@
 
 <form id="searchSection" method="post" asp-page-handler="Update" style="display: flex;">
     <div>
+        <!-- UserGroup Options -->
+        <div class="options-container">
+            <label>
+                <input type="radio" name="UserGroup" value="Tra" checked="@((Model.UserGroup == "Tra"))" /> Publisher
+            </label>
+            <label>
+                <input type="radio" name="UserGroup" value="Consumer" checked="@((Model.UserGroup == "Consumer"))" /> Consumer
+            </label>
+            <label>
+                <input type="radio" name="UserGroup" value="Admin" checked="@((Model.UserGroup == "Admin"))" /> Admin
+            </label>
+        </div>
+
+        <!-- Period Options -->
         <div class="options-container" style="color: grey">
             <label>
                 <input type="radio" name="PeriodOption" value="days" checked="@((Model.PeriodOption == "days"))" /> Days
@@ -32,12 +46,17 @@
         @await Html.PartialAsync("_TraSearchPartial", Model.DtroUserSearch)
     </div>
 
-
     <div id="pieChart" style="display: flex;">
-        <div id="metrics" style="color: grey; padding-left: 10px; flex: 1; position: relative; height: 50vh;">
-            <div style="display: flex; justify-content: center; align-items: center;height: 100%;">
-                <div style="position: relative; width: 70vh; height: 100%;">
-                    <canvas id="metricSummaryChart" style="height: 100%;"></canvas>
+        <div id="metrics" style="color: grey; padding-left: 10px; flex: 1; position: relative;">
+            <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                <div style="position: relative; width: 70vh; height: 50vh;">
+                    <canvas id="metricSummaryChart" style="width: 100%; height: 100%;"></canvas>
+                    <!-- Button Container -->
+                    <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                        <button type="submit" name="exportCsv" value="true" class="btn btn-primary">
+                            Export
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -46,14 +65,15 @@
 </form>
 
 @section Scripts {
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const periodOptions = document.querySelectorAll('input[name="PeriodOption"]');
-            const numberSelect = document.getElementById('numberSelect');
+
             const updateButton = document.getElementById('updateButton');
+            const userGroupOptions = document.querySelectorAll('input[name="UserGroup"]');
+            const numberSelect = document.getElementById('numberSelect');
             const form = document.getElementById('searchSection');
             const selectedNumberValue = '@Model.NumberSelect'; // Use Razor to get the selected value
 
@@ -75,6 +95,7 @@
                 }
 
                 numberSelect.innerHTML = '';
+
                 for (let i = 1; i <= max; i++) {
                     const option = document.createElement('option');
                     option.value = i;
@@ -92,7 +113,19 @@
                 updateButton.click();          // Trigger the button click
             }
 
-            // Event listener for periodOptions (days, weeks, months)
+            // Event listeners for UserGroup and PeriodOption changes to submit form
+            userGroupOptions.forEach(option => {
+                option.addEventListener('change', function () {
+
+                    const traSearch = document.getElementById('traSearch');
+                    if (traSearch) {
+                        traSearch.focus();
+                    }
+
+                    triggerUpdateButton();  // Automatically trigger button click
+                });
+            });
+
             periodOptions.forEach(option => {
                 option.addEventListener('change', function () {
                     updateNumberSelectOptions();
@@ -107,97 +140,114 @@
 
             // Initialize the options on page load
             updateNumberSelectOptions();
-        });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var canvas = document.getElementById('metricSummaryChart');
-            var ctx = canvas.getContext('2d');
+            // Update chart based on selected UserGroup
+            function updateChart() {
+                const userGroup = document.querySelector('input[name="UserGroup"]:checked').value;
+                let labels = [];
+                let data = [];
 
-            var dataValues = [
-        @Model.Metrics.SystemFailureCount,
-        @Model.Metrics.SubmissionFailureCount,
-        @Model.Metrics.SubmissionCount,
-        @Model.Metrics.DeletionCount,
-        @Model.Metrics.SearchCount,
-        @Model.Metrics.EventCount
-                    ];
+                // Update labels and data based on UserGroup
+                if (userGroup === 'Admin') {
+                    labels = ['Submission','Rejected','Deletion', 'Search', 'Event', 'Fault'];
+                    data = [
+                                @Model.Metrics.SubmissionCount,
+                                @Model.Metrics.SubmissionFailureCount,
+                                @Model.Metrics.DeletionCount,
+                                @Model.Metrics.SearchCount,
+                                @Model.Metrics.EventCount,
+                                @Model.Metrics.SystemFailureCount
+                            ];
+                } else if (userGroup === 'Tra') {
+                    labels = ['Submission', 'Rejected', 'Deletion', 'Fault'];
+                    data = [
+                                @Model.Metrics.SubmissionCount,
+                                @Model.Metrics.SubmissionFailureCount,
+                                @Model.Metrics.DeletionCount,
+                                @Model.Metrics.SystemFailureCount
+                           ];
+                } else if (userGroup === 'Consumer') {
+                    labels = ['Search', 'Event', 'Fault'];
+                    data = [
+                                @Model.Metrics.SearchCount,
+                                @Model.Metrics.EventCount,
+                                @Model.Metrics.SystemFailureCount
+                           ];
+                }
 
-            var total = dataValues.reduce((acc, curr) => acc + curr, 0);
+                // Destroy existing chart instance if exists
+                if (window.metricChart) {
+                    window.metricChart.destroy();
+                }
 
-            var dataLabels = [
-                'API Failures (' + (@Model.Metrics.SystemFailureCount > 0 ? @Model.Metrics.SystemFailureCount : 0) + ')',
-                'Submissions Rejected (' + (@Model.Metrics.SubmissionFailureCount > 0 ? @Model.Metrics.SubmissionFailureCount : 0) + ')',
-                'Submissions Accepted (' + (@Model.Metrics.SubmissionCount > 0 ? @Model.Metrics.SubmissionCount : 0) + ')',
-                'Dtro Deletions (' + (@Model.Metrics.DeletionCount > 0 ? @Model.Metrics.DeletionCount : 0) + ')',
-                'Search Calls (' + (@Model.Metrics.SearchCount > 0 ? @Model.Metrics.SearchCount : 0) + ')',
-                'Search Event (' + (@Model.Metrics.EventCount > 0 ? @Model.Metrics.EventCount : 0) + ')'
-            ];
+                // Define color variables
+                const pastelRed = 'rgba(255, 99, 132, 0.5)';
+                const pastelOrange = 'rgba(255, 159, 64, 0.5)';
+                const pastelGreen = 'rgb(144, 238, 144, 0.5)';
+                const pastelDarkBlue = 'rgba(54, 162, 235, 0.5)';
+                const pastelBlue = 'rgba(153, 102, 255, 0.5)';
+                const pastelLightBlue = 'rgba(201, 203, 207, 0.5)';
 
-            // Check if all values are zero
-            if (total === 0) {
-                dataValues = [0];
-                dataLabels = ['No data'];
-            }
+                const borderRed = 'rgba(255, 99, 132, 1)';
+                const borderOrange = 'rgba(255, 159, 64, 1)';
+                const borderGreen = 'rgba(75, 192, 192, 1)';
+                const borderDarkBlue = 'rgba(54, 162, 235, 1)';
+                const borderBlue = 'rgba(153, 102, 255, 1)';
+                const borderLightBlue = 'rgba(201, 203, 207, 1)';
 
-            var data = {
-                labels: dataLabels,
-                datasets: [{
-                    label: 'Metrics',
-                    data: dataValues,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)', // pastel red
-                        'rgba(255, 159, 64, 0.5)',  // pastel orange
-                        'rgb(144, 238, 144,0.5)',  // pastel green
-                        'rgba(54, 162, 235, 0.5)',  // pastel dark blue
-                        'rgba(153, 102, 255, 0.5)', // pastel blue
-                        'rgba(201, 203, 207, 0.5)'  // pastel light blue
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(255, 159, 64, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(201, 203, 207, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            };
-
-            var options = {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1  // Customize this depending on your data range
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
+                // Create a new chart
+                const ctx = document.getElementById('metricSummaryChart').getContext('2d');
+                window.metricChart = new Chart(ctx, {
+                    type: 'bar', // You can change to 'pie', 'line', etc.
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Metrics Summary',
+                            data: data,
+                            backgroundColor: [
+                                pastelGreen,
+                                pastelOrange,
+                                pastelDarkBlue,
+                                pastelBlue,
+                                pastelLightBlue,
+                                pastelRed
+                            ],
+                            borderColor: [
+                                borderGreen,
+                                borderOrange,
+                                borderDarkBlue,
+                                borderBlue,
+                                borderLightBlue,
+                                borderRed
+                            ],
+                            borderWidth: 1
+                        }]
                     },
-                    tooltip: {
-                        callbacks: {
-                            label: function (tooltipItem) {
-                                return tooltipItem.dataset.label + ': ' + tooltipItem.raw;
+                    options: {
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1, // Ensures that the ticks are whole numbers
+                                    callback: function (value) {
+                                        return Number.isInteger(value) ? value : ''; // Display only whole numbers
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            };
+                });
+            }
 
-            var metricSummaryChart = new Chart(ctx, {
-                type: 'bar',
-                data: data,
-                options: options
-            });
+            // Initialize the chart on page load
+            updateChart();
 
-            metricSummaryChart.update();
+           
         });
     </script>
 

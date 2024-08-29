@@ -1,12 +1,16 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text;
+
 namespace Dft.DTRO.Admin.Pages
 {
     public class MetricsModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly ILogger<MetricsModel> _logger;
         private readonly IMetricsService _metricsService;
         private readonly IDtroUserService _dtroUserService;
 
-        public MetricsModel(ILogger<IndexModel> logger, IMetricsService metricsService, IDtroUserService dtroUserService)
+        public MetricsModel(ILogger<MetricsModel> logger, IMetricsService metricsService, IDtroUserService dtroUserService)
         {
             _logger = logger;
             _metricsService = metricsService;
@@ -16,22 +20,38 @@ namespace Dft.DTRO.Admin.Pages
         public MetricSummary Metrics { get; set; } = new MetricSummary();
 
         [BindProperty(SupportsGet = true)]
+        public string UserGroup { get; set; } = "Admin";
+
+        [BindProperty(SupportsGet = true)]
         public string PeriodOption { get; set; } = "months";
 
         [BindProperty(SupportsGet = true)]
         public int NumberSelect { get; set; } = 1;
 
         [BindProperty(SupportsGet = true)]
-        public DtroUserSearch DtroUserSearch  { get; set; } = new DtroUserSearch();
+        public DtroUserSearch DtroUserSearch { get; set; } = new DtroUserSearch();
 
         public async Task OnGetAsync()
         {
-            var metricRequest = CreateRequest(GetPeriodEnum(PeriodOption), NumberSelect, DtroUserSearch.DtroUserIdSelect);
+            await LoadMetricsDataAsync();
+        }
+
+        private async Task LoadMetricsDataAsync()
+        {
+            var metricRequest = await CreateRequestAsync(GetPeriodEnum(PeriodOption), NumberSelect, DtroUserSearch.DtroUserIdSelect, UserGroup);
             var metrics = await _metricsService.MetricsForDtroUser(metricRequest);
             Metrics = metrics ?? new MetricSummary();
             DtroUserSearch.UpdateButtonText = "Update";
+            DtroUserSearch.AlwaysButtonHidden = true;
             DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
-            DtroUserSearch.DtroUsers.Insert(0, new DtroUser {Id = Guid.Empty, Name = "[all]" });
+           
+            UserGroup selectedUserGroup;
+            if (Enum.TryParse(UserGroup, out selectedUserGroup))
+            {
+                DtroUserSearch.DtroUsers.RemoveAll(x => x.UserGroup != selectedUserGroup);
+            }
+            DtroUserSearch.DtroUsers.Insert(0, new DtroUser { Id = Guid.Empty, Name = "[all]" });
+
         }
 
         private Period GetPeriodEnum(string periodOption)
@@ -43,11 +63,23 @@ namespace Dft.DTRO.Admin.Pages
             return Period.Days;
         }
 
-        private MetricRequest CreateRequest(Period period, int number, Guid? dtroUserId = null)
+        private async Task<MetricRequest> CreateRequestAsync(Period period, int number, Guid? dtroUserId = null, string userGroupString = "Tra")
         {
+            if (dtroUserId != null && dtroUserId != Guid.Empty)
+            {
+                var user = await _dtroUserService.GetDtroUserAsync((Guid)dtroUserId);
+                userGroupString = user?.UserGroup.ToString() ?? "Tra";
+            }
+
+            UserGroup = userGroupString;
+
+            UserGroup userGroup;
+            Enum.TryParse(userGroupString, true, out userGroup);
+
             var metricRequest = new MetricRequest
             {
-                DtroUserId = dtroUserId == null ? null : dtroUserId
+                DtroUserId = dtroUserId,
+                UserGroup = userGroup // Include UserGroup in the request
             };
 
             int deductDays = number;
@@ -73,23 +105,76 @@ namespace Dft.DTRO.Admin.Pages
             return metricRequest;
         }
 
-        public IActionResult OnPostUpdate()
+        public async Task<IActionResult> OnPostAsync(bool? exportCsv = null)
         {
-            return RedirectToPage(new { PeriodOption, NumberSelect, DtroUserSearch.DtroUserIdSelect });
+            if (exportCsv == true)
+            {
+                var metricRequest = await CreateRequestAsync(GetPeriodEnum(PeriodOption), NumberSelect, DtroUserSearch.DtroUserIdSelect, UserGroup);
+                var fullMetrics = await _metricsService.FullMetricsForDtroUser(metricRequest);
+
+                if (fullMetrics == null)
+                {
+                    return Page();
+                }
+
+                var csvContent = GenerateCsvContent(fullMetrics);
+                var fileName = "MetricsData.csv";
+                return File(Encoding.UTF8.GetBytes(csvContent), "text/csv", fileName);
+            }
+
+            await LoadMetricsDataAsync();
+            return RedirectToPage(new { PeriodOption, NumberSelect, DtroUserSearch.DtroUserIdSelect, UserGroup });
         }
 
-        public IActionResult OnGetRefresh()
+        private string GenerateCsvContent(List<FullMetricSummary> metricList)
         {
-            if (TempData.TryGetValue("PeriodOption", out object periodOption))
-                PeriodOption = periodOption as string;
+            var sb = new StringBuilder();
 
-            if (TempData.TryGetValue("NumberSelect", out object numberSelect))
-                NumberSelect = (int)numberSelect;
+            if (UserGroup == "Admin")
+            {
+                sb.AppendLine("User Name,For Date,Submission,Submission Failure,Deletion,Search ,Event,System Failure");
+            }
+            else if (UserGroup == "Tra")
+            {
+                sb.AppendLine("User Name,For Date,Submission,Submission Failure,Deletion,System Failure");
+            }
+            else if (UserGroup == "Consumer")
+            {
+                sb.AppendLine("User Name,For Date, Search ,Event,System Failure");
+            }
 
-            if (TempData.TryGetValue("DtroUserSelect", out object dtroUserSelect))
-                DtroUserSearch.DtroUserIdSelect = (Guid)dtroUserSelect;
-
-            return RedirectToPage(new { PeriodOption, NumberSelect, DtroUserSearch.DtroUserIdSelect });
+            foreach (var metric in metricList)
+            {
+                if (UserGroup == "Admin")
+                {
+                    sb.Append($"{metric.UserName}");
+                    sb.Append($",{metric.ForDate}");
+                    sb.Append($",{metric.SubmissionCount}");
+                    sb.Append($",{metric.SubmissionFailureCount}");
+                    sb.Append($",{metric.DeletionCount}");
+                    sb.Append($",{metric.SearchCount}");
+                    sb.Append($",{metric.EventCount}");
+                    sb.AppendLine($",{metric.SystemFailureCount}");
+                }
+                else if (UserGroup == "Tra")
+                {
+                    sb.Append($"{metric.UserName}");
+                    sb.Append($",{metric.ForDate}");
+                    sb.Append($",{metric.SubmissionCount}");
+                    sb.Append($",{metric.SubmissionFailureCount}");
+                    sb.Append($",{metric.DeletionCount}");
+                    sb.AppendLine($",{metric.SystemFailureCount}");
+                }
+                else if (UserGroup == "Consumer")
+                {
+                    sb.Append($"{metric.UserName}");
+                    sb.Append($",{metric.ForDate}");
+                    sb.Append($",{metric.SearchCount}");
+                    sb.Append($",{metric.EventCount}");
+                    sb.AppendLine($",{metric.SystemFailureCount}");
+                }
+            }
+            return sb.ToString();
         }
 
         private enum Period
