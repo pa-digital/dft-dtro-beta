@@ -30,7 +30,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.MapHealthChecks("/health");
+app.UseHealthChecks("/health");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
