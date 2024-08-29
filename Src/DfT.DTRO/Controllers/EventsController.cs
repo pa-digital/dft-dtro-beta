@@ -1,7 +1,4 @@
-﻿using DfT.DTRO.Enums;
-using DfT.DTRO.Migrations;
-
-namespace DfT.DTRO.Controllers;
+﻿namespace DfT.DTRO.Controllers;
 
 /// <summary>
 /// Controller for querying the database for data store events (e.g. create, update, delete)
@@ -44,6 +41,7 @@ public class EventsController : ControllerBase
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "Successfully received the event list")]
     [SwaggerResponse(statusCode: 400, description: "The request was malformed.")]
+    [SwaggerResponse(statusCode: 404, description: "Event(s) not found.")]
     public async Task<ActionResult<DtroEventSearchResult>> Events([FromHeader(Name = "x-app-id")][Required] Guid xAppId, [FromBody] DtroEventSearch search)
     {
         try
@@ -52,6 +50,11 @@ public class EventsController : ControllerBase
             await _metricsService.IncrementMetric(MetricType.Event, xAppId);
             _logger.LogInformation($"'{nameof(Events)}' method called '{search}'");
             return Ok(response);
+        }
+        catch (NotFoundException nFex)
+        {
+            _logger.LogError(nFex.Message);
+            return NotFound(new ApiErrorResponse("No Found", nFex.Message));
         }
         catch (InvalidOperationException err)
         {

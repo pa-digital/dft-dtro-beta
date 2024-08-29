@@ -1,9 +1,4 @@
-﻿using Xunit;
-using Moq;
-using System.Threading.Tasks;
-using DfT.DTRO.Services;
-using DfT.DTRO.Models;
-using DfT.DTRO.Models.SystemConfig;
+﻿namespace Dft.DTRO.Tests.CodeiumTests.SystemConfig.Service;
 
 public class SystemConfigServiceTests
 {
@@ -20,7 +15,7 @@ public class SystemConfigServiceTests
     {
         // Arrange
         var expectedSystemName = "TestSystem";
-        var systemConfig = new SystemConfig { SystemName = expectedSystemName, IsTest = true }; // Make sure SystemConfig matches what you are using
+        var systemConfig = new DfT.DTRO.Models.DataBase.SystemConfig { SystemName = expectedSystemName, IsTest = true }; // Make sure SystemConfig matches what you are using
         var systemConfigResponse = new SystemConfigResponse { SystemName = expectedSystemName, IsTest = systemConfig.IsTest };
 
         _mockSystemConfigDal.Setup(dal => dal.GetSystemConfigAsync())
