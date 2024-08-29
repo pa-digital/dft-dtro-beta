@@ -1,5 +1,4 @@
-﻿
-using DfT.DTRO.Models.SystemConfig;
+﻿namespace Dft.DTRO.Tests.CodeiumTests.SystemConfig.Controller;
 
 public class SystemConfigControllerTests
 {

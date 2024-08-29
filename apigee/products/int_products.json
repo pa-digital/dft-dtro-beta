@@ -1,7 +1,7 @@
 [
   {
-    "name": "ENV-digital-solution-provider",
-    "displayName": "ENV-Digital Solution Provider",
+    "name": "ENV-publisher",
+    "displayName": "Publisher",
     "approvalType": "manual",
     "attributes": [
       {
@@ -45,8 +45,8 @@
     }
   },
   {
-    "name": "ENV-data-consumer",
-    "displayName": "ENV-Data Consumer",
+    "name": "ENV-consumer",
+    "displayName": "Consumer",
     "approvalType": "manual",
     "attributes": [
       {

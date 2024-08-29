@@ -1,9 +1,4 @@
-﻿using DfT.DTRO.Models.Filtering;
-using DfT.DTRO.Models.Pagination;
-using DfT.DTRO.Models.Search;
-using DfT.DTRO.Services.Mapping;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services;
 
 public class SearchService : ISearchService
 {
