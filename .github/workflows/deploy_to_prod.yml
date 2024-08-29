@@ -28,7 +28,7 @@ jobs:
           minimum-approvals: 1
           issue-title: "Deploying Application version ${{steps.releasev.outputs.RELEASE}} to Prod"
           issue-body: "Approving this issue will deploy Application release version '${{steps.releasev.outputs.RELEASE}}' to the Production environment."
-          exclude-workflow-initiator-as-approver: true
+          exclude-workflow-initiator-as-approver: false
 
   deploy-production:
     name: Application - Deploy to Production
