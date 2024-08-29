@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.DAL;
-using DfT.DTRO.Models.Validation;
+﻿using DfT.DTRO.Models.Validation;
 
 namespace DfT.DTRO.Services.Validation;
 
@@ -43,7 +42,7 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        if (creator != submittedByTa  || owner != submittedByTa)
+        if (creator != submittedByTa || owner != submittedByTa)
         {
             validationErrors.Add(new SemanticValidationError
             {
@@ -56,24 +55,21 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = "One or more traffic authorities affected identification is incorrect."
+                Message = "One or more TRA affected identification is incorrect."
             });
         }
 
-        validationErrors.AddRange(traAffected.Cast<long>()
-            .Select(item => new
+        List<int?> traIds = swaCodes.Where(it => it.TraId != null).Select(it => it.TraId).ToList();
+        List<long> traAffectedIds = traAffected.Select(it => it).Cast<long>().ToList();
+        bool isTraAffectedWithinSwaCodes = traAffectedIds.TrueForAll(it => traIds.Contains((int)it));
+
+        if (!isTraAffectedWithinSwaCodes)
+        {
+            validationErrors.Add(new SemanticValidationError
             {
-                item,
-                isTraAffectedWithinSwaCodes = swaCodes
-                    .Select(response => response.TraId == item)
-                    .Any()
-            })
-            .Where(it => !it.isTraAffectedWithinSwaCodes)
-            .Select(it =>
-                new SemanticValidationError
-                {
-                    Message = $"TRA affected '{it.item}' is not within the accepted SWA codes"
-                }));
+                Message = "One or more TRA affected is not within accepted SWA codes."
+            });
+        }
 
         var sourceReference = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("reference");
         if (string.IsNullOrWhiteSpace(sourceReference))

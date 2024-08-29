@@ -20,6 +20,8 @@ builder.Services.AddScoped<IMetricsService, MetricsService>();
 builder.Services.AddScoped<IDtroUserService, DtroUserService>();
 builder.Services.AddScoped<ISystemConfigService, SystemConfigService>();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -28,7 +30,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
+app.MapHealthChecks("/health");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
