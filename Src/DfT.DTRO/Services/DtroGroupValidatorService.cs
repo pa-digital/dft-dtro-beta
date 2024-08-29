@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Services.Validation;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services;
 public class DtroGroupValidatorService : IDtroGroupValidatorService
 {
     private readonly IJsonSchemaValidationService _jsonSchemaValidationService;

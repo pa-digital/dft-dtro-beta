@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Enums;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace DfT.DTRO.Extensions;
 public static class ObjectExtensions
@@ -52,4 +51,5 @@ public static class ObjectExtensions
 
         return true;
     }
+
 }
