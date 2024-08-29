@@ -13,7 +13,7 @@ PORTAL_URL="$(echo "${PORTAL_NAME//[- ]/}" | tr '[:upper:]' '[:lower:]')"
 TOKEN=$1
 
 # List of product names
-PRODUCT_NAMES=("digital-solution-provider" "data-consumer")
+PRODUCT_NAMES=("publisher" "consumer")
 
 # Loop through each product name
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
@@ -25,7 +25,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
   TITLE=$(to_title_case "${PRODUCT}")
 
   # Construct the description
-  DESCRIPTION="This is the ${TITLE_ENV} D-TRO application for ${PRODUCT}s."
+  DESCRIPTION="This is the D-TRO application for ${PRODUCT}s."
 
   # Make the API call
   RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
