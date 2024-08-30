@@ -120,7 +120,7 @@ jobs:
           platforms: linux/amd64
           push: true
           provenance: false
-          tags: ${{ env.TF_VAR_artifact_registry_service_ui_path }}:${{ env.TF_VAR_service_ui_tag }}
+          tags: ${{ env.TF_VAR_artifact_registry_service_ui_image_path }}:${{ env.TF_VAR_service_ui_tag }}
 
   deploy-dtro:
     if: ${{ inputs.run-deploy-CR-job }}
