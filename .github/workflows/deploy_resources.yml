@@ -61,7 +61,7 @@ env:
   TF_VAR_project_id: ${{ inputs.gcp-project-id }}
   TF_VAR_execution_service_account: ${{ secrets.execution_service_account }}
   TF_VAR_artifact_registry_dtro_image_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ inputs.gcp-project }}-repository/${{ inputs.dtro-image-name }}
-  TF_VAR_artifact_registry_service_ui_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ inputs.gcp-project }}-ui-repository/${{ inputs.service-ui-image-name }}
+  TF_VAR_artifact_registry_service_ui_image_path: ${{ inputs.gcp-region }}-docker.pkg.dev/${{ inputs.gcp-project-id }}/${{ inputs.gcp-project }}-ui-repository/${{ inputs.service-ui-image-name }}
   TF_VAR_dtro_service_image: ${{ inputs.dtro-image-name }}
   TF_VAR_service_ui_image: ${{ inputs.service-ui-image-name }}
   TF_VAR_dtro_tag: ${{ inputs.dtro-image-tag }}
