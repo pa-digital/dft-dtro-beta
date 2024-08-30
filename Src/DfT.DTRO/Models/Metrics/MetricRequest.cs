@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Migrations;
-
-namespace DfT.DTRO.Models.Metrics;
+﻿namespace DfT.DTRO.Models.Metrics;
 
 [DataContract]
 public class MetricRequest

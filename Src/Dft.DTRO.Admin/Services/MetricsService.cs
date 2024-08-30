@@ -74,4 +74,28 @@ public class MetricsService : IMetricsService
         }
         return metricSummary;
     }
+
+    public async Task<List<FullMetricSummary>> FullMetricsForDtroUser(MetricRequest metricRequest)
+    {
+        var jsonContent = JsonSerializer.Serialize(metricRequest);
+        var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+        var request = new HttpRequestMessage(HttpMethod.Post, "/fullMetricsForDtroUser")
+        {
+            Content = param
+        };
+
+        Helper.AddXAppIdHeader(ref request);
+
+        var response = await _client.SendAsync(request);
+
+        response.EnsureSuccessStatusCode();
+
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var metricSummary = JsonSerializer.Deserialize<List<FullMetricSummary>>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        if (metricSummary == null)
+        {
+            return new List<FullMetricSummary>();
+        }
+        return metricSummary;
+    }
 }

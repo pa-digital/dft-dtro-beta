@@ -118,6 +118,59 @@ public class MetricDal : IMetricDal
     }
 
     ///<inheritdoc cref="IMetricDal"/>
+    public async Task<List<FullMetricSummary>> GetFullMetricsForDtroUser(Guid? dtroUserId, DateOnly fromDate, DateOnly toDate, UserGroup userGroup)
+    {
+
+        // Create the query with initial filter
+        var query = from metric in _dtroContext.Metrics
+                    join user in _dtroContext.DtroUsers
+                    on metric.DtroUserId equals user.Id
+                    where metric.ForDate >= fromDate && metric.ForDate <= toDate
+                    select new
+                    {
+                        metric.ForDate,
+                        metric.SystemFailureCount,
+                        metric.SubmissionFailureCount,
+                        metric.SubmissionCount,
+                        metric.DeletionCount,
+                        metric.SearchCount,
+                        metric.EventCount,
+                        user.Name,
+                        metric.DtroUserId,
+                        metric.UserGroup
+                    };
+
+        // Apply optional filters
+        if (dtroUserId.HasValue && dtroUserId != Guid.Empty)
+        {
+            query = query.Where(x => x.DtroUserId == dtroUserId.Value);
+        }
+
+        if (userGroup != UserGroup.All)
+        {
+            query = query.Where(x => x.UserGroup == (int)userGroup);
+        }
+
+        // Execute the query and project results into FullMetricSummary
+        var fullMetrics = await query
+            .Select(x => new FullMetricSummary
+            {
+                ForDate = x.ForDate.ToShortDateString(),
+                SystemFailureCount = x.SystemFailureCount,
+                SubmissionFailureCount = x.SubmissionFailureCount,
+                SubmissionCount = x.SubmissionCount,
+                DeletionCount = x.DeletionCount,
+                SearchCount = x.SearchCount,
+                EventCount = x.EventCount,
+                UserName = x.Name
+            })
+            .ToListAsync();
+
+        return fullMetrics;
+    }
+
+
+    ///<inheritdoc cref="IMetricDal"/>
     public async Task<bool> HasValidConnectionAsync()
     {
         try

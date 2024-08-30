@@ -8,6 +8,8 @@ public class DtroUserSearch
 
     public bool AlwaysButtonEnabled { get; set; }
 
+    public bool AlwaysButtonHidden { get; set; } = false;
+
     public string UpdateButtonText { get; set; } = string.Empty;
 
     public List<DtroUser> DtroUsers { get; set; } = new List<DtroUser>();

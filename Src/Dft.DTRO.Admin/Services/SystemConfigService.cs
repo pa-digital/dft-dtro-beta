@@ -28,7 +28,7 @@ public class SystemConfigService : ISystemConfigService
     public async Task<SystemConfig> GetSystemConfig()
     {
 
-        var unknown  = new SystemConfig() { SystemName = "Unknown" , IsTest = true};
+        var unknown  = new SystemConfig() { SystemName = "Unknown" , IsTest = false};
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/systemConfig");
@@ -49,7 +49,8 @@ public class SystemConfigService : ISystemConfigService
         }
         catch (Exception)
         {
-            unknown.SystemName = "No System Config)";
+            unknown.SystemName = "Not Found";
+            unknown.CurrentUserName = "";
             return unknown;
         }   
     }

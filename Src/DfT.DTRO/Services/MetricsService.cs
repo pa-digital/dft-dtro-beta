@@ -35,6 +35,21 @@ public class MetricsService : IMetricsService
             metricRequest.UserGroup );
     }
 
+    public async Task<List<FullMetricSummary>> GetFullMetrics(MetricRequest metricRequest)
+    {
+        if (metricRequest.DateFrom > metricRequest.DateTo)
+        {
+            throw new ArgumentException("Start date must be before end date.");
+        }
+
+        var dateFrom = new DateOnly(metricRequest.DateFrom.Year, metricRequest.DateFrom.Month, metricRequest.DateFrom.Day);
+        var dateTo = new DateOnly(metricRequest.DateTo.Year, metricRequest.DateTo.Month, metricRequest.DateTo.Day);
+        return await _metricDal.GetFullMetricsForDtroUser(metricRequest.DtroUserId,
+            dateFrom,
+            dateTo,
+            metricRequest.UserGroup);
+    }
+
     public async Task<bool> CheckDataBase()
     {
         return await _metricDal.HasValidConnectionAsync();

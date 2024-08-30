@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Models.SwaCode;
-
-namespace Dft.DTRO.Tests.CodeiumTests.Tra.Controller;
+﻿namespace Dft.DTRO.Tests.CodeiumTests.Tra.Controller;
 
 public class TraControllerCreateFromBodyTests
 {

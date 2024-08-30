@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Migrations;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Dft.DTRO.Tests
@@ -170,7 +169,7 @@ namespace Dft.DTRO.Tests
             new DtroUserResponse
             {
                 TraId = -1,
-                UserGroup = UserGroup.Admin, 
+                UserGroup = UserGroup.Admin,
                 xAppId = Guid.NewGuid(),
                 Name = "Department for Transport",
                 Prefix = "DfT"
@@ -181,6 +180,14 @@ namespace Dft.DTRO.Tests
                 xAppId = Guid.NewGuid(),
                 Name = "Essex Council",
                 Prefix = "GP"
+            },
+            new DtroUserResponse
+            {
+                TraId = 7563,
+                UserGroup = UserGroup.Tra,
+                xAppId = Guid.NewGuid(),
+                Name = "Cornwall Council",
+                Prefix = "DP"
             }
         };
     }

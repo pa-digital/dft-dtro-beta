@@ -9,7 +9,12 @@
         <input type="hidden" style="max-width: 30px;" name="DtroUserSearch.PreviousSearch" value="@Model.PreviousSearch" />
 
         <input type="hidden" id="alwaysButtonEnabled" value="@Model.AlwaysButtonEnabled.ToString().ToLower()" />
-        <button id="updateButton" class="btn btn-primary" type="submit">@Model.UpdateButtonText</button>
+     @*    <button id="updateButton" class="btn btn-primary" type="submit">@Model.UpdateButtonText</button>
+ *@
+        <button id="updateButton" class="btn btn-primary" type="submit"
+                style="@(Model.AlwaysButtonHidden ? "display:none;" :"")">
+            @Model.UpdateButtonText
+        </button>
     </div>
 
     <div id="traSelectContainer" style="margin-top: 10px;">
@@ -19,7 +24,7 @@
                 {
                     if (item.Id == Model.DtroUserIdSelect)
                     {
-                        if (item.TraId == null)
+                        if (item.TraId == null || item.TraId == 0)
                         {
                             <div style="width: 100%;" class="item selected" data-value="@item.Id">
                                 @item.Name
@@ -41,7 +46,7 @@
                     }
                     else
                     {
-                        if (item.TraId == null)
+                        if (item.TraId == null || item.TraId == 0)
                         {
                             <div style="width: 100%;" class="item" data-value="@item.Id">
                                 @item.Name
@@ -71,7 +76,7 @@
         let selectedItemId = null; // Track the currently selected item ID
 
         updateButton.disabled = true;
-
+       
         // Event listener for search input on traSelect
         traSearch.addEventListener('input', function () {
 
@@ -110,6 +115,7 @@
             // Clear selection highlight and reset selected item ID when search changes
             clearSelection();
             selectedItemId = null;
+
         });
 
         // Event listener for selecting an item in traSelect
