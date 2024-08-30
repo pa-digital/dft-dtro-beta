@@ -26,7 +26,7 @@ on:
 
 jobs:
   deploy-feature-dev:
-    if: ${{ ! inputs.run-apigee }}
+    if: ${{ ! inputs.deploy-to-test }}
     name: Deploy Feature Branch to Dev
     uses: ./.github/workflows/deploy_resources.yml
     secrets:
@@ -48,7 +48,7 @@ jobs:
       run-apigee: ${{ inputs.run-apigee }}
 
   deploy-feature-test:
-   if: ${{ inputs.run-apigee }}
+   if: ${{ inputs.deploy-to-test }}
    name: Deploy to Test
    uses: ./.github/workflows/deploy_resources.yml
    secrets:
@@ -64,6 +64,7 @@ jobs:
      dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
      service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
      service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
+     # do-validation-checks: true
      run-build-push: ${{ inputs.run-build-push }}
      run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
      run-apigee: ${{ inputs.run-apigee }}
