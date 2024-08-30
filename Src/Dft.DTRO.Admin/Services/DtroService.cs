@@ -2,18 +2,18 @@
 public class DtroService : IDtroService
 {
     private readonly HttpClient _client;
-
-    public DtroService(IHttpClientFactory clientFactory)
+    private readonly IXappIdService _xappIdService;
+    public DtroService(IHttpClientFactory clientFactory, IXappIdService xappIdService)
     {
         _client = clientFactory.CreateClient("ExternalApi");
+        _xappIdService = xappIdService;
     }
-
 
     public async Task<List<DtroHistoryProvisionResponse>> DtroProvisionHistory(Guid id)
     {
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/dtros/provisionHistory/{id}");
-        Helper.AddXAppIdHeader(ref httpRequestMessage);
-        var response = await _client.SendAsync(httpRequestMessage);
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/dtros/provisionHistory/{id}");
+        _xappIdService.AddXAppIdHeader(ref request);
+        var response = await _client.SendAsync(request);
 
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -21,13 +21,12 @@ public class DtroService : IDtroService
         return history;
     }
 
-
     public async Task<List<DtroHistorySourceResponse>> DtroSourceHistory(Guid id)
     {
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"/dtros/sourceHistory/{id}");
-        Helper.AddXAppIdHeader(ref httpRequestMessage);
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/dtros/sourceHistory/{id}");
+        _xappIdService.AddXAppIdHeader(ref request);
 
-        var response = await _client.SendAsync(httpRequestMessage);
+        var response = await _client.SendAsync(request);
 
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -51,7 +50,7 @@ public class DtroService : IDtroService
             Content = param
         };
 
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
 
         response.EnsureSuccessStatusCode();
@@ -72,7 +71,7 @@ public class DtroService : IDtroService
             Content = content
         };
 
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
@@ -91,7 +90,7 @@ public class DtroService : IDtroService
             Content = content
         };
 
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
@@ -100,10 +99,10 @@ public class DtroService : IDtroService
     public async Task<IActionResult> ReassignDtroAsync(Guid id, Guid toDtroUserId)
     {
 
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"/dtros/Ownership/{id}/{toDtroUserId}");
-        Helper.AddXAppIdHeader(ref httpRequestMessage);
+        var request = new HttpRequestMessage(HttpMethod.Post, $"/dtros/Ownership/{id}/{toDtroUserId}");
+        _xappIdService.AddXAppIdHeader(ref request);
 
-        var response = await _client.SendAsync(httpRequestMessage);
+        var response = await _client.SendAsync(request);
         if (response.IsSuccessStatusCode)
         {
             return new JsonResult(new { message = "Successfully reassigned the DTRO." });

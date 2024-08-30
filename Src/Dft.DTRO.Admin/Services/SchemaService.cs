@@ -1,20 +1,18 @@
-﻿using System;
-using System.Text.Json;
-
-namespace Dft.DTRO.Admin.Services;
+﻿namespace Dft.DTRO.Admin.Services;
 public class SchemaService : ISchemaService
 {
     private readonly HttpClient _client;
-
-    public SchemaService(IHttpClientFactory clientFactory)
+    private readonly IXappIdService _xappIdService;
+    public SchemaService(IHttpClientFactory clientFactory, IXappIdService xappIdService)
     {
         _client = clientFactory.CreateClient("ExternalApi");
+        _xappIdService = xappIdService;
     }
 
     public async Task<List<SchemaTemplateOverview>> GetSchemaVersionsAsync()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "/schemas/versions");
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -24,7 +22,7 @@ public class SchemaService : ISchemaService
     public async Task ActivateSchemaAsync(string version)
     {
         var request = new HttpRequestMessage(HttpMethod.Patch, $"/schemas/activate/{version}");
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -33,7 +31,7 @@ public class SchemaService : ISchemaService
     {
         //var response = await _client.PatchAsync($"/schemas/deactivate/{version}", null);
         var request = new HttpRequestMessage(HttpMethod.Patch, $"/schemas/deactivate/{version}");
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -49,7 +47,7 @@ public class SchemaService : ISchemaService
         {
             Content = content
         };
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -65,7 +63,7 @@ public class SchemaService : ISchemaService
         {
             Content = content
         };
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc;
-
+﻿using System.Text.Json.Serialization;
 namespace Dft.DTRO.Admin.Services;
 public class DtroUserService : IDtroUserService
 {
     private readonly HttpClient _client;
-
+    private readonly IXappIdService _xappIdService;
     private JsonSerializerOptions GetJsonOptions()
     {
         var options = new JsonSerializerOptions
@@ -22,15 +16,16 @@ public class DtroUserService : IDtroUserService
         };
         return options;
     }
-    public DtroUserService(IHttpClientFactory clientFactory)
+    public DtroUserService(IHttpClientFactory clientFactory, IXappIdService xappIdService)
     {
         _client = clientFactory.CreateClient("ExternalApi");
+        _xappIdService = xappIdService;
     }
 
     public async Task<List<DtroUser>> GetDtroUsersAsync()
     {
         var request = new HttpRequestMessage(HttpMethod.Get, "/dtroUsers");
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
 
@@ -50,7 +45,7 @@ public class DtroUserService : IDtroUserService
     public async Task<DtroUser> GetDtroUserAsync(Guid dtroUserId)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"/dtroUsers/{dtroUserId}");
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
 
@@ -68,7 +63,7 @@ public class DtroUserService : IDtroUserService
     public async Task<List<DtroUser>> SearchDtroUsersAsync(string partialName)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, $"/dtroUsers/search/{partialName}");
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
 
@@ -86,7 +81,7 @@ public class DtroUserService : IDtroUserService
     public async Task ActivateDtroUserAsync(Guid dtroUserId)
     {
         var request = new HttpRequestMessage(HttpMethod.Patch, $"/dtroUsers/activate/{dtroUserId}");
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -94,7 +89,7 @@ public class DtroUserService : IDtroUserService
     public async Task DeactivateDtroUserAsync(Guid dtroUserId)
     {
         var request = new HttpRequestMessage(HttpMethod.Patch, $"/dtroUsers/deactivate/{dtroUserId}");
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -107,7 +102,7 @@ public class DtroUserService : IDtroUserService
         {
             Content = content
         };
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -119,7 +114,7 @@ public class DtroUserService : IDtroUserService
         {
             Content = content
         };
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }

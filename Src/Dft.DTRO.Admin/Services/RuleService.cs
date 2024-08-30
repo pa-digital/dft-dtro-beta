@@ -2,10 +2,11 @@
 public class RuleService : IRuleService
 {
     private readonly HttpClient _client;
-
-    public RuleService(IHttpClientFactory clientFactory)
+    private readonly IXappIdService _xappIdService;
+    public RuleService(IHttpClientFactory clientFactory, IXappIdService xappIdService)
     {
         _client = clientFactory.CreateClient("ExternalApi");
+        _xappIdService = xappIdService;
     }
 
     public async Task UpdateRuleAsync(string version, IFormFile file)
@@ -20,7 +21,7 @@ public class RuleService : IRuleService
         {
             Content = content
         };
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }
@@ -36,7 +37,7 @@ public class RuleService : IRuleService
         {
             Content = content
         };
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
     }

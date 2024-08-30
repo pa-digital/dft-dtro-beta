@@ -1,6 +1,5 @@
 ﻿
 namespace Dft.DTRO.Admin.Services;
-
 public interface IMetricsService
 {
     Task<bool> HealthDatabase();

@@ -7,5 +7,4 @@ public interface IDtroService
     Task<List<DtroHistorySourceResponse>> DtroSourceHistory(Guid id);
     Task<IActionResult> ReassignDtroAsync(Guid id, Guid toDtroUserId);
     Task<PaginatedResponse<DtroSearchResult>> SearchDtros(int? traId);
-   
 }

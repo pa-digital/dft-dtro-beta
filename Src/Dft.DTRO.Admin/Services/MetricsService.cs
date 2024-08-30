@@ -1,15 +1,12 @@
-﻿using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-
-namespace Dft.DTRO.Admin.Services;
+﻿namespace Dft.DTRO.Admin.Services;
 public class MetricsService : IMetricsService
 {
     private readonly HttpClient _client;
-
-    public MetricsService(IHttpClientFactory clientFactory)
+    private readonly IXappIdService _xappIdService;
+    public MetricsService(IHttpClientFactory clientFactory, IXappIdService xappIdService)
     {
         _client = clientFactory.CreateClient("ExternalApi");
+        _xappIdService = xappIdService;
     }
 
     public async Task<bool> HealthApi()
@@ -17,7 +14,7 @@ public class MetricsService : IMetricsService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/healthApi");
-            Helper.AddXAppIdHeader(ref request);
+            _xappIdService.AddXAppIdHeader(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -36,7 +33,7 @@ public class MetricsService : IMetricsService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/healthDatabase");
-            Helper.AddXAppIdHeader(ref request);
+            _xappIdService.AddXAppIdHeader(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -50,7 +47,6 @@ public class MetricsService : IMetricsService
         }
     }
 
-
     public async Task<MetricSummary> MetricsForDtroUser(MetricRequest metricRequest)
     {
         var jsonContent = JsonSerializer.Serialize(metricRequest);
@@ -60,7 +56,7 @@ public class MetricsService : IMetricsService
             Content = param
         };
 
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
 
@@ -84,7 +80,7 @@ public class MetricsService : IMetricsService
             Content = param
         };
 
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
 

@@ -1,3 +1,4 @@
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
@@ -19,7 +20,7 @@ builder.Services.AddScoped<IDtroService, DtroService>();
 builder.Services.AddScoped<IMetricsService, MetricsService>();
 builder.Services.AddScoped<IDtroUserService, DtroUserService>();
 builder.Services.AddScoped<ISystemConfigService, SystemConfigService>();
-
+builder.Services.AddSingleton<IXappIdService>(provider => new XappIdService(builder.Configuration));
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();

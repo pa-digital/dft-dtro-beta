@@ -1,6 +1,5 @@
 ﻿
 namespace Dft.DTRO.Admin.Services;
-
 public interface IDtroUserService
 {
     Task ActivateDtroUserAsync(Guid dtroUserId);
