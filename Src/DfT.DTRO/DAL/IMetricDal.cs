@@ -18,6 +18,16 @@ public interface IMetricDal
     Task<MetricSummary> GetMetricsForDtroUser(Guid? dtroUserId, DateOnly fromDate, DateOnly toDate, UserGroup userGroup);
 
     /// <summary>
+    /// Gets full metrics for dtro User  having <paramref name="dtroUserId"/>.
+    /// </summary>
+    /// <param name="dtroUserId"> dtro User Id.</param>
+    /// <param name="fromDate">Time stamp representing start date and time of metric being captured.</param>
+    /// <param name="toDate">Time stamp representing end date and time of metric being captured.</param>
+    /// <param name="userGroup">User Group.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous get operation.</returns>
+    Task<List<FullMetricSummary>> GetFullMetricsForDtroUser(Guid? dtroUserId, DateOnly fromDate, DateOnly toDate, UserGroup userGroup);
+
+    /// <summary>
     /// Increment metric for dtro User having <paramref name="dtroUserId"/>.
     /// </summary>
     /// <param name="type">Type of the metric being incremented.</param>

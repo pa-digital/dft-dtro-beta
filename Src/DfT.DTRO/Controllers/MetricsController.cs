@@ -113,4 +113,39 @@ public class MetricsController : ControllerBase
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
+
+    /// <summary>
+    /// Get full metrics for Dtro User
+    /// </summary>
+    /// <param name="metricRequest">Object containing a metric request.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>Metric summary</returns>
+    [HttpPost("/fullMetricsForDtroUser")]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
+    [SwaggerResponse(statusCode: 200, description: "Metrics retrieved successfully.")]
+    [SwaggerResponse(statusCode: 400, description: "Dates Incorrect.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
+
+    public async Task<ActionResult<List<FullMetricSummary>>> GetFullMetricsForDtroUser([FromBody] MetricRequest metricRequest)
+    {
+        try
+        {
+            List<FullMetricSummary> metrics = await _metricsService.GetFullMetrics(metricRequest) ?? new List<FullMetricSummary>();
+            _logger.LogInformation($"'{nameof(GetMetricsForDtroUser)}' method called using DtroUserId '{metricRequest.DtroUserId}'");
+            return Ok(metrics);
+        }
+        catch (ArgumentException err)
+        {
+            _logger.LogError(err.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            _logger.LogError(ex, "An error occurred while retrieving metrics for TRA.");
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+        }
+    }
 }
