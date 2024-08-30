@@ -5,7 +5,7 @@ on:
     inputs:
       tra:
         type: string
-        description: Short name of the TRA
+        description: Short name of the TRA(s) (separate each TRA with a ',' and no spaces)
         required: true
 
 env:
