@@ -16,10 +16,6 @@ locals {
       POSTGRES_PORT          = var.postgres_port
       POSTGRES_SSL           = var.postgres_use_ssl
       POSTGRES_MAX_POOL_SIZE = var.db_connections_per_cloud_run_instance
- FeatureManagement__ReadOnly  = true
- FeatureManagement__Consumer  = true
- FeatureManagement__Admin     = true
- FeatureManagement__Publish   = true
   })
 
   service_ui_envs = merge(
