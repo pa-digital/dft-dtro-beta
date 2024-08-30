@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using DfT.DTRO.Models.SystemConfig;
+﻿using DfT.DTRO.Models.SystemConfig;
 
 namespace Dft.DTRO.Admin.Services;
 public class SystemConfigService : ISystemConfigService
 {
     private readonly HttpClient _client;
-
-    public SystemConfigService(IHttpClientFactory clientFactory)
+    private readonly IXappIdService _xappIdService;
+    public SystemConfigService(IHttpClientFactory clientFactory, IXappIdService xappIdService)
     {
         _client = clientFactory.CreateClient("ExternalApi");
+        _xappIdService = xappIdService;
     }
 
     public async Task<bool> UpdateSystemConfig(SystemConfig systemConfig)
@@ -18,7 +18,7 @@ public class SystemConfigService : ISystemConfigService
         {
             Content = content
         };
-        Helper.AddXAppIdHeader(ref request);
+        _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         return true;
@@ -32,7 +32,7 @@ public class SystemConfigService : ISystemConfigService
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/systemConfig");
-            Helper.AddXAppIdHeader(ref request);
+            _xappIdService.AddXAppIdHeader(ref request);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();

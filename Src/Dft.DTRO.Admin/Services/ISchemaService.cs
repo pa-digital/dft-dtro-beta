@@ -1,6 +1,5 @@
 ﻿
 namespace Dft.DTRO.Admin.Services;
-
 public interface ISchemaService
 {
     Task ActivateSchemaAsync(string version);
