@@ -88,3 +88,38 @@ for title in "${!apidocs[@]}"; do
     exit 1
   fi
 done
+
+# Get the titles and IDs of the Products/Catalog items uploaded earlier to the portal and persist them to a map
+RESPONSE_GET_CATELOG_ITEM=$(curl -s -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+  -H "Authorization: Bearer ${TOKEN}")
+
+declare -A apidocs
+while IFS="=" read -r title id; do
+  apidocs["$title"]="$id"
+done < <((echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[] | "\(.title)=\(.id)"'))
+
+# Read the YAML file and convert it to a base64 string with no wrap around
+base64_string=$(base64 -w 0 "$YAML_FILE")
+
+# For each Product/Catalog item, upload the Open API Spec
+for title in "${!apidocs[@]}"; do
+  RESPONSE_UPDATE_DOC=$(curl -s -o /dev/null -w "%{http_code}" -X PATCH "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${apidocs[$title]}/documentation" \
+    -H "Authorization: Bearer ${TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "oasDocumentation": {
+          "spec": {
+            "displayName": "'"${title} Open API Spec"'",
+            "contents": "'"${base64_string}"'"
+          }
+        }
+    }')
+
+  # Error checking and handling
+  if [ "$RESPONSE_UPDATE_DOC" -eq 200 ]; then
+    echo "${title} Open API Spec successfully uploaded."
+  else
+    echo "Failed to upload ${title} Open API Spec. HTTP response code: $RESPONSE_UPDATE_DOC"
+    exit 1
+  fi
+done
