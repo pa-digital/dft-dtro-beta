@@ -12,7 +12,7 @@ info:
     url: https://license-url.com
   version: 0.0.1
 servers:
-  - url: "http://localhost"
+  - url: 'http://localhost'
 paths:
   /dtros/createFromFile:
     post:
@@ -187,7 +187,7 @@ paths:
       summary: Update an existing D-TRO
       operationId: update-dtro-form-body
       security:
-        - oAuth: 
+        - oAuth:
             - dsp
       parameters:
         - name: x-app-id
@@ -1363,7 +1363,7 @@ paths:
             - dsp
             - dc
       parameters:
-      - name: x-app-id
+        - name: x-app-id
           in: header
           description: xAppId identification a D-TRO is being search for.
           required: true
@@ -2345,7 +2345,7 @@ components:
           type: boolean
       additionalProperties: false
   securitySchemes:
-   oAuth:
+    oAuth:
       type: oauth2
       description: This API uses OAuth 2 with the clientCredentials grant flow.
       flows:
@@ -2356,7 +2356,7 @@ components:
             dsp: Digital Service Provider
             dc: Data Consumer
 security:
-   - oAuth:
+  - oAuth:
       - cso
       - dsp
       - dc
