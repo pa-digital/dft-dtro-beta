@@ -14,7 +14,7 @@ PORTAL_URL="$(echo "${PORTAL_NAME//[- ]/}" | tr '[:upper:]' '[:lower:]')"
 TOKEN=$1
 
 # List of product names
-PRODUCT_NAMES=("publisher" "consumer")
+PRODUCT_NAMES=("Publisher" "Consumer")
 
 # Loop through each product name
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
@@ -58,29 +58,28 @@ done
 # Get the IDs of Products/Catalog items uploaded to the portal
 RESPONSE_GET_CATELOG_ITEM=$(curl -s -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
   -H "Authorization: Bearer ${TOKEN}")
-echo "${RESPONSE_GET_CATELOG_ITEM}"
-apidocs=()
-while IFS= read -r id; do
-  apidocs+=("$id")
-done < <((echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[].id'))
-echo "IDs"
-for id in "${apidocs[@]}"; do
-    echo "$id"
+declare -A apidocs
+while IFS="=" read -r title id; do
+  apidocs["$title"]="$id"
+done < <((echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[] | "\(.title)=\(.id)"'))
+for title in "${!apidocs[@]}"; do
+  echo "Title: $title, ID: ${apidocs[$title]}"
 done
 # Read the YAML file and convert it to a byte array
-byte_array=$(xxd -p "$YAML_FILE" | tr -d '\n' | sed 's/\(..\)/\\x\1/g')
-echo "byte_array"
-echo "${byte_array}"
+base64_string=$(base64 "$YAML_FILE")
+echo "base64_string"
+echo "${base64_string}"
+
 # For each Product/Catalog item, upload the Open API Spec
-for id in "${apidocs[@]}"; do
-  RESPONSE_UPDATE_DOC=$(curl -s -o /dev/null -w "%{http_code}" -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${id}/documentation" \
+for title in "${!apidocs[@]}"; do
+  RESPONSE_UPDATE_DOC=$(curl -s -o /dev/null -w "%{http_code}" -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${apidocs[$title]}/documentation" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
       "oasDocumentation": {
           "spec": {
-            "displayName": "D-TRO Open API Spec",
-            "contents": "'"${byte_array}"'"
+            "displayName": "'"${title} Open API Spec"'",
+            "contents": "'"${base64_string}"'"
           }
         }
     }')
