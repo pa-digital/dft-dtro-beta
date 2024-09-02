@@ -2,7 +2,7 @@
 
 # Script Variables
 ORG=$apigee_organisation
-YAML_FILE="../openApi/openapi3_0.ymal"
+YAML_FILE="../openApi/openapi3_0.yaml"
 
 to_title_case() {
   echo "$1" | sed -e 's/\b./\u&/g' -e 's/-/ /g'
@@ -60,7 +60,7 @@ RESPONSE_GET_CATELOG_ITEM=$(curl -s -X GET "https://apigee.googleapis.com/v1/org
   -H "Authorization: Bearer ${TOKEN}")
 echo "${RESPONSE_GET_CATELOG_ITEM}"
 apidocs=($(echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[].id'))
-
+echo "apidocs: ${apidocs}"
 # Read the YAML file and convert it to a byte array
 byte_array=$(xxd -p "$YAML_FILE" | tr -d '\n' | sed 's/\(..\)/\\x\1/g')
 
