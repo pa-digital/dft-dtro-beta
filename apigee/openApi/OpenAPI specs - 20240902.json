@@ -1,0 +1,3306 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "D-TRO",
+    "description": "Digital Traffic Regulation Order",
+    "termsOfService": "https://cloud.google.com/terms",
+    "contact": {
+      "name": "Jon Doe",
+      "url": "https://contact-url.com",
+      "email": "jon@doe.com"
+    },
+    "license": {
+      "name": "DfT",
+      "url": "https://license-url.com"
+    },
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/dtros/createFromFile": {
+      "post": {
+        "tags": [
+          "DTROs"
+        ],
+        "summary": "Create a new D-TRO",
+        "parameters": [
+          {
+            "name": "x-app-id",
+            "in": "header",
+            "description": "xAppId identification a D-TRO is being submitted for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/dtros/updateFromFile/{id}": {
+      "put": {
+        "tags": [
+          "DTROs"
+        ],
+        "summary": "Update an existing D-TRO",
+        "parameters": [
+          {
+            "name": "x-app-id",
+            "in": "header",
+            "description": "xappid identification a D-TRO is being updated for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the D-TRO to update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/dtros/createFromBody": {
+      "post": {
+        "tags": [
+          "DTROs"
+        ],
+        "summary": "Create a new D-TRO",
+        "parameters": [
+          {
+            "name": "x-app-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Object containing a full D-TRO details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.DtroDtos.DtroSubmit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/dtros/updateFromBody/{id}": {
+      "put": {
+        "tags": [
+          "DTROs"
+        ],
+        "summary": "Update an existing D-TRO",
+        "parameters": [
+          {
+            "name": "x-app-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the D-TRO to update.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Object containing a full D-TRO details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.DtroDtos.DtroSubmit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Okay",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.DtroDtos.DtroResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/dtros/{id}": {
+      "get": {
+        "tags": [
+          "DTROs"
+        ],
+        "summary": "Gets a D-TRO by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the D-TRO to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DTROs"
+        ],
+        "summary": "Marks a D-TRO as deleted.",
+        "parameters": [
+          {
+            "name": "x-app-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the D-TRO to mark as deleted.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted the DTRO."
+          },
+          "404": {
+            "description": "Could not find a DTRO with the specified id."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/dtros/sourceHistory/{dtroId}": {
+      "get": {
+        "tags": [
+          "DTROs"
+        ],
+        "summary": "Retrieve the Source History for existing D-TROs",
+        "parameters": [
+          {
+            "name": "dtroId",
+            "in": "path",
+            "description": "ID of the D-TRO to retrieve source history for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistorySourceResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/dtros/provisionHistory/{dtroId}": {
+      "get": {
+        "tags": [
+          "DTROs"
+        ],
+        "summary": "Retrieve the Provision History for existing D-TROs",
+        "parameters": [
+          {
+            "name": "dtroId",
+            "in": "path",
+            "description": "ID of the D-TRO to retrieve provision history for.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistoryProvisionResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/dtros/Ownership/{id}/{assignToTraId}": {
+      "post": {
+        "tags": [
+          "DTROs"
+        ],
+        "summary": "Assign D-TRO ownership",
+        "parameters": [
+          {
+            "name": "x-app-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the D-TRO to assign.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "assignToTraId",
+            "in": "path",
+            "description": "TRA identification of the new D-TRO owner",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully assigned the DTRO."
+          },
+          "404": {
+            "description": "Could not find a DTRO with the specified id."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/dtroUsers": {
+      "get": {
+        "tags": [
+          "DtroUser"
+        ],
+        "summary": "Retrieve All Dtro Users",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dtro Users retrieved successfully.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
+                  }
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          },
+          "404": {
+            "description": "Not found."
+          }
+        }
+      }
+    },
+    "/dtroUsers/search/{partialName}": {
+      "get": {
+        "tags": [
+          "DtroUser"
+        ],
+        "summary": "Find the existing Dtro Users that matches the requested criteria.",
+        "parameters": [
+          {
+            "name": "partialName",
+            "in": "path",
+            "description": "Partial name of the Dtro User",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dtro User retrieved successfully.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
+                  }
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "400": {
+            "description": "Bad Request."
+          }
+        }
+      }
+    },
+    "/dtroUsers/createFromBody": {
+      "post": {
+        "tags": [
+          "DtroUser"
+        ],
+        "summary": "Create a new Dtro user entity.",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Object containing the dtro Users details.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "text/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "application/*+xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "500": {
+            "description": "Internal server error."
+          },
+          "200": {
+            "description": "OK."
+          }
+        }
+      }
+    },
+    "/dtroUsers/updateFromBody": {
+      "put": {
+        "tags": [
+          "DtroUser"
+        ],
+        "summary": "Update an existing Dtro User.",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Object containing the Dtro User details.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "text/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            },
+            "application/*+xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/dtroUsers/{dtroUserId}": {
+      "get": {
+        "tags": [
+          "DtroUser"
+        ],
+        "summary": "Retrieve a Dtro User",
+        "parameters": [
+          {
+            "name": "dtroUserId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/events": {
+      "post": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Retrieve all data store events",
+        "parameters": [
+          {
+            "name": "x-app-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A search query object",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
+              }
+            },
+            "text/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
+              }
+            },
+            "application/*+xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully received the event list",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was malformed."
+          },
+          "404": {
+            "description": "Event(s) not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/healthApi": {
+      "get": {
+        "tags": [
+          "Metrics"
+        ],
+        "summary": "Check API health.",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The API is up and running.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Api server error."
+          }
+        }
+      }
+    },
+    "/healthDatabase": {
+      "get": {
+        "tags": [
+          "Metrics"
+        ],
+        "summary": "Check database health.",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Database is available.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Database is not available."
+          },
+          "500": {
+            "description": "Api server error."
+          }
+        }
+      }
+    },
+    "/metricsForDtroUser": {
+      "post": {
+        "tags": [
+          "Metrics"
+        ],
+        "summary": "Get metrics for Dtro User",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Object containing a metric request.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "text/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "application/*+xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Metrics retrieved successfully.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dates Incorrect."
+          },
+          "500": {
+            "description": "Internal server error."
+          },
+          "404": {
+            "description": "Not found."
+          }
+        }
+      }
+    },
+    "/fullMetricsForDtroUser": {
+      "post": {
+        "tags": [
+          "Metrics"
+        ],
+        "summary": "Get full metrics for Dtro User",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Object containing a metric request.",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "text/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            },
+            "application/*+xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Metrics retrieved successfully.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary"
+                  }
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dates Incorrect."
+          },
+          "500": {
+            "description": "Internal server error."
+          },
+          "404": {
+            "description": "Not found."
+          }
+        }
+      }
+    },
+    "/rules/versions": {
+      "get": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Get rule template versions.",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/rules": {
+      "get": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Get rule templates.",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/rules/{version}": {
+      "get": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Get rule template by its rule version",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Rule version by which rule template to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/rules/{id}": {
+      "get": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Get rule template by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the rule template to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/rules/createFromFile/{version}": {
+      "post": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Create rule template",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Schema version the rule template is created for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/rules/updateFromFile/{version}": {
+      "put": {
+        "tags": [
+          "Rules"
+        ],
+        "summary": "Update an existing rule template",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Schema version the rule template is updated for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/schemas/versions": {
+      "get": {
+        "tags": [
+          "Schemas"
+        ],
+        "summary": "Get schema template versions.",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/schemas": {
+      "get": {
+        "tags": [
+          "Schemas"
+        ],
+        "summary": "Get schema templates.",
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/schemas/{version}": {
+      "get": {
+        "tags": [
+          "Schemas"
+        ],
+        "summary": "Get schema template by its schema version",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Schema version by which schema template to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/schemas/{id}": {
+      "get": {
+        "tags": [
+          "Schemas"
+        ],
+        "summary": "Get schema template by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the schema template to retrieve.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/schemas/createFromFile/{version}": {
+      "post": {
+        "tags": [
+          "Schemas"
+        ],
+        "summary": "Create schema template",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Schema version the schema template is created for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Created."
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/schemas/createFromBody/{version}": {
+      "post": {
+        "tags": [
+          "Schemas"
+        ],
+        "summary": "Create schema template",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Schema version the schema template is created for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Object containing a full schema template.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": { }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/schemas/updateFromFile/{version}": {
+      "put": {
+        "tags": [
+          "Schemas"
+        ],
+        "summary": "Update an existing schema template.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Schema version to be used for updating schema template.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/schemas/updateFromBody/{version}": {
+      "put": {
+        "tags": [
+          "Schemas"
+        ],
+        "summary": "Update an existing schema template.",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Schema version to be used for updating schema template.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Object containing a full schema template.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": { }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/schemas/activate/{version}": {
+      "patch": {
+        "tags": [
+          "Schemas"
+        ],
+        "summary": "Activate schema template",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Schema version by which schema template will activate.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/schemas/deactivate/{version}": {
+      "patch": {
+        "tags": [
+          "Schemas"
+        ],
+        "summary": "Deactivate schema template",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "description": "Schema version by which schema template will deactivate.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/search": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Finds existing D-TROs that match the required criteria.",
+        "parameters": [
+          {
+            "name": "x-app-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "A D-TRO object search criteria.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.Filtering.DtroSearch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse`1[[DfT.DTRO.Models.Search.DtroSearchResult, DfT.DTRO, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/systemConfig": {
+      "get": {
+        "tags": [
+          "SystemConfig"
+        ],
+        "parameters": [
+          {
+            "name": "x-app-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "System name retrieved successfully.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/systemConfig/updateFromBody": {
+      "put": {
+        "tags": [
+          "SystemConfig"
+        ],
+        "parameters": [
+          {
+            "name": "X-Correlation-ID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "UUID formatted string to track the request through the enquiries stack.",
+              "default": "41ae0471-d7de-4737-907f-cab2f0089796"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
+              }
+            },
+            "text/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
+              }
+            },
+            "application/*+xml": {
+              "schema": {
+                "$ref": "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DfT.DTRO.Models.DtroDtos.DtroResponse": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.SchemaTemplate.SchemaVersion"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": { },
+            "description": "D-TRO data model response.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "D-TRO data response."
+      },
+      "DfT.DTRO.Models.DtroDtos.DtroSubmit": {
+        "required": [
+          "data",
+          "schemaVersion"
+        ],
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.SchemaTemplate.SchemaVersion"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": { },
+            "description": "D-TRO data model request."
+          }
+        },
+        "additionalProperties": false,
+        "description": "D-TRO data request."
+      },
+      "DfT.DTRO.Models.DtroEvent.DtroEvent": {
+        "type": "object",
+        "properties": {
+          "publicationTime": {
+            "type": "string",
+            "description": "Date and time the D-TRO was published.",
+            "format": "date-time"
+          },
+          "traCreator": {
+            "type": "integer",
+            "description": "Traffic Authority Regulation that created the D-TRO.",
+            "format": "int32"
+          },
+          "currentTraOwner": {
+            "type": "integer",
+            "description": "Traffic Authority Regulation that owns the D-TRO.",
+            "format": "int32"
+          },
+          "troName": {
+            "type": "string",
+            "description": "Traffic Regulation Order name.",
+            "nullable": true
+          },
+          "regulationType": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Regulation type of the traffic regulation order.",
+            "nullable": true
+          },
+          "vehicleType": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Vehicle type.",
+            "nullable": true
+          },
+          "orderReportingPoint": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "regulationStart": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "nullable": true
+          },
+          "regulationEnd": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "nullable": true
+          },
+          "eventType": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventType"
+          },
+          "eventTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.Search.Links"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Record representing a change event in the D-TRO service."
+      },
+      "DfT.DTRO.Models.DtroEvent.DtroEventSearch": {
+        "required": [
+          "page",
+          "pageSize",
+          "since"
+        ],
+        "type": "object",
+        "properties": {
+          "page": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "maximum": 50,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "since": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "traCreator": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "currentTraOwner": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "troName": {
+            "type": "string",
+            "nullable": true
+          },
+          "regulationType": {
+            "type": "string",
+            "nullable": true
+          },
+          "vehicleType": {
+            "type": "string",
+            "nullable": true
+          },
+          "orderReportingPoint": {
+            "type": "string",
+            "nullable": true
+          },
+          "location": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.DtroJson.Location"
+          },
+          "regulationStart": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+          },
+          "regulationEnd": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.DtroEvent.DtroEventSearchResult": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEvent"
+            },
+            "nullable": true
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.DtroEvent.DtroEventType": {
+        "enum": [
+          "create",
+          "update",
+          "delete"
+        ],
+        "type": "string"
+      },
+      "DfT.DTRO.Models.DtroHistory.DtroHistoryProvisionResponse": {
+        "type": "object",
+        "properties": {
+          "actionType": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": { },
+            "nullable": true
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reference": {
+            "type": "string",
+            "nullable": true
+          },
+          "schemaVersion": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.DtroHistory.DtroHistorySourceResponse": {
+        "type": "object",
+        "properties": {
+          "actionType": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reference": {
+            "type": "string",
+            "nullable": true
+          },
+          "schemaVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "section": {
+            "type": "string",
+            "nullable": true
+          },
+          "trafficAuthorityCreatorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "trafficAuthorityOwnerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "troName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.DtroJson.BoundingBox": {
+        "maxItems": 4,
+        "minItems": 4,
+        "type": "array",
+        "items": {
+          "type": "number",
+          "format": "double"
+        },
+        "additionalProperties": false,
+        "example": [
+          -103976.3,
+          -16703.87,
+          652897.98,
+          1199851.44
+        ]
+      },
+      "DfT.DTRO.Models.DtroJson.Location": {
+        "required": [
+          "bbox",
+          "crs"
+        ],
+        "type": "object",
+        "properties": {
+          "crs": {
+            "minLength": 1,
+            "pattern": "^(?:osgb36Epsg27700|wgs84Epsg4326)$",
+            "type": "string"
+          },
+          "bbox": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.DtroJson.BoundingBox"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.Filtering.ComparisonOperator": {
+        "enum": [
+          "=",
+          ">",
+          ">=",
+          "<",
+          "<="
+        ],
+        "type": "string"
+      },
+      "DfT.DTRO.Models.Filtering.DtroSearch": {
+        "required": [
+          "page",
+          "pageSize"
+        ],
+        "type": "object",
+        "properties": {
+          "queries": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DfT.DTRO.Models.Filtering.SearchQuery"
+            },
+            "nullable": true
+          },
+          "page": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "maximum": 50,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.Filtering.SearchQuery": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.DtroJson.Location"
+          },
+          "publicationTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "modificationTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletionTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "traCreator": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "currentTraOwner": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "troName": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "regulationType": {
+            "maxLength": 60,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "vehicleType": {
+            "maxLength": 40,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "orderReportingPoint": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "regulationStart": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+          },
+          "regulationEnd": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.Filtering.ValueCondition`1[[System.DateTime, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]": {
+        "required": [
+          "operator",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "operator": {
+            "$ref": "#/components/schemas/DfT.DTRO.Models.Filtering.ComparisonOperator"
+          },
+          "value": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.Metrics.FullMetricSummary": {
+        "type": "object",
+        "properties": {
+          "forDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "systemFailureCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "submissionFailureCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "submissionCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deletionCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "searchCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "eventCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.Metrics.MetricRequest": {
+        "type": "object",
+        "properties": {
+          "dtroUserId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "dateFrom": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dateTo": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userGroup": {
+            "$ref": "#/components/schemas/UserGroup"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.Metrics.MetricSummary": {
+        "type": "object",
+        "properties": {
+          "systemFailureCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "submissionFailureCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "submissionCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deletionCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "searchCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "eventCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.Pagination.PaginatedResponse`1[[DfT.DTRO.Models.Search.DtroSearchResult, DfT.DTRO, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DfT.DTRO.Models.Search.DtroSearchResult"
+            },
+            "nullable": true
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.SchemaTemplate.SchemaVersion": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.Search.DtroSearchResult": {
+        "type": "object",
+        "properties": {
+          "troName": {
+            "type": "string",
+            "nullable": true
+          },
+          "publicationTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "trafficAuthorityCreatorId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "trafficAuthorityOwnerId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "regulationType": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "vehicleType": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "orderReportingPoint": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "regulationStart": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "nullable": true
+          },
+          "regulationEnd": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.Search.Links": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.SharedResponse.GuidResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.SwaCode.DtroUserRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "traId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "prefix": {
+            "type": "string",
+            "nullable": true
+          },
+          "userGroup": {
+            "$ref": "#/components/schemas/UserGroup"
+          },
+          "xAppId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.SwaCode.DtroUserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "xAppId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "traId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "prefix": {
+            "type": "string",
+            "nullable": true
+          },
+          "userGroup": {
+            "$ref": "#/components/schemas/UserGroup"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.SystemConfig.SystemConfigRequest": {
+        "type": "object",
+        "properties": {
+          "systemName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isTest": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DfT.DTRO.Models.SystemConfig.SystemConfigResponse": {
+        "type": "object",
+        "properties": {
+          "systemName": {
+            "type": "string",
+            "nullable": true
+          },
+          "currentUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isTest": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserGroup": {
+        "enum": [
+          "all",
+          "tra",
+          "consumer",
+          "admin"
+        ],
+        "type": "string"
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "JWT Authorization header using Bearer scheme.\r\nEnter the word 'Bearer' [space] then your token in the text input below.\r\nExample: 'Bearer 123abc'",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
+}

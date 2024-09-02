@@ -24,13 +24,13 @@ paths:
         - oAuth:
             - dsp
       parameters:
-        - name: x-app-id
+        - name: TA
           in: header
-          description: xAppId identification a D-TRO is being submitted for.
+          description: TRA identification a D-TRO is being submitted for.
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int32
         - name: X-Correlation-ID
           in: header
           required: true
@@ -81,13 +81,13 @@ paths:
         - oAuth:
             - dsp
       parameters:
-        - name: x-app-id
+        - name: TA
           in: header
-          description: xAppId identification a D-TRO is being updated for.
+          description: TRA identification a D-TRO is being updated for.
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int32
         - name: id
           in: path
           description: ID of the D-TRO to update.
@@ -147,13 +147,13 @@ paths:
         - oAuth:
             - dsp
       parameters:
-        - name: x-app-id
+        - name: TA
           in: header
-          description: xAppId identification a D-TRO is being submitted for.
+          description: TRA identification a D-TRO is being submitted for.
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int32
         - name: X-Correlation-ID
           in: header
           required: true
@@ -166,7 +166,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroDtos.DtroSubmit
+              $ref: '#/components/schemas/DfT.DTRO.Models.DtroDtos.DtroSubmit'
       responses:
         '201':
           description: Created
@@ -190,13 +190,13 @@ paths:
         - oAuth: 
             - dsp
       parameters:
-        - name: x-app-id
+        - name: TA
           in: header
-          description: xAppId identification a D-TRO is being updated for.
+          description: TRA identification a D-TRO is being updated for.
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int32
         - name: id
           in: path
           description: ID of the D-TRO to update.
@@ -216,14 +216,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroDtos.DtroSubmit
+              $ref: '#/components/schemas/DfT.DTRO.Models.DtroDtos.DtroSubmit'
       responses:
         '200':
           description: Okay
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.DtroDtos.DtroResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.DtroDtos.DtroResponse'
         '400':
           description: Bad Request.
         '404':
@@ -271,13 +271,13 @@ paths:
         - oAuth:
             - dsp
       parameters:
-        - name: x-app-id
+        - name: TA
           in: header
-          description: xAppId identification a D-TRO is being mark as deleted for.
+          description: TRA identification a D-TRO is being mark as deleted for.
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int32
         - name: id
           in: path
           description: ID of the D-TRO to mark as deleted.
@@ -391,13 +391,13 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - name: x-app-id
+        - name: TA
           in: header
-          description: xAppId identification of the D-TRO owner.
+          description: TRA identification of the D-TRO owner.
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int32
         - name: id
           in: path
           description: ID of the D-TRO to assign.
@@ -439,13 +439,6 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: x-app-id
-          in: header
-          description: xAppId identification of the event D-TRO.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
@@ -458,25 +451,25 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch'
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch'
           text/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch'
           application/*+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch'
           application/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch'
           text/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch'
           application/*+xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch'
       responses:
         '200':
           description: Successfully received the event list
@@ -542,6 +535,60 @@ paths:
                 type: boolean
         '500':
           description: Api server error.
+  /healthTraId:
+    get:
+      tags:
+        - Metrics
+      summary: Check TRA ID health.
+      operationId: check-tra-health
+      security:
+        - oAuth:
+            - cso
+            - dsp
+            - dc
+      parameters:
+        - name: TA
+          in: header
+          description: TRA identification to check the health.
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
+      responses:
+        '200':
+          description: Successfully received the Tra Id
+          content:
+            text/plain:
+              schema:
+                type: integer
+                format: int32
+            application/json:
+              schema:
+                type: integer
+                format: int32
+            text/json:
+              schema:
+                type: integer
+                format: int32
+            application/xml:
+              schema:
+                type: integer
+                format: int32
+            text/xml:
+              schema:
+                type: integer
+                format: int32
+        '404':
+          description: TRA ID not found in header.
+        '500':
+          description: Api server error.
   /healthDatabase:
     get:
       tags:
@@ -588,8 +635,8 @@ paths:
     post:
       tags:
         - Metrics
-      summary: Get metrics for Dtro Users
-      operationId: get-d-tro-user-metrics
+      summary: Get metrics for TRA
+      operationId: get-tra-metrics
       security:
         - oAuth:
             - cso
@@ -606,116 +653,44 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest'
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest'
           text/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest'
           application/*+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest'
           application/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest'
           text/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest'
           application/*+xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest'
       responses:
         '200':
           description: Metrics retrieved successfully.
           content:
             text/plain:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
+                $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary'
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
+                $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary'
             text/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
+                $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary'
             application/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
+                $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary'
             text/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
-        '400':
-          description: Dates Incorrect.
-        '404':
-          description: Not found.
-        '500':
-          description: Internal server error.
-  /fullMetricsForDtroUser:
-    post:
-      tags:
-        - Metrics
-      summary: Get full metrics for Dtro User
-      parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
-      requestBody:
-        description: Object containing a metric request.
-        content:
-          application/json-patch+json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          application/json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          text/json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          application/*+json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          application/xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          text/xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          application/*+xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-      responses:
-        '200':
-          description: Metrics retrieved successfully.
-          content:
-            text/plain:
-              schema:
-                type: array
-                items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary
-            text/json:
-              schema:
-                type: array
-                items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary
-            text/xml:
-              schema:
-                type: array
-                items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary
+                $ref: '#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary'
         '400':
           description: Dates Incorrect.
         '404':
@@ -1363,13 +1338,6 @@ paths:
             - dsp
             - dc
       parameters:
-      - name: x-app-id
-          in: header
-          description: xAppId identification a D-TRO is being search for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
@@ -1382,7 +1350,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Filtering.DtroSearch
+              $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.DtroSearch'
       responses:
         '200':
           description: Ok
@@ -1396,21 +1364,15 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /systemConfig:
+  /systemName:
     get:
       tags:
         - SystemConfig
-      operationId: get-system-configudation
+      operationId: get-system-configuration
       security:
         - oAuth:
             - cso
       parameters:
-        - name: x-app-id
-          in: header
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
@@ -1424,89 +1386,27 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse
+                type: string
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse
+                type: string
             text/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse
+                type: string
             application/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse
+                type: string
             text/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse
+                type: string
         '500':
           description: Internal server error.
-  /systemConfig/updateFromBody:
-    put:
-      tags:
-        - SystemConfig
-      operationId: update-system-configudation
-      security:
-        - oAuth:
-            - cso
-      parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
-      requestBody:
-        content:
-          application/json-patch+json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
-          application/json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
-          text/json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
-          application/*+json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
-          application/xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
-          text/xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
-          application/*+xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
-      responses:
-        '200':
-          description: Ok
-          content:
-            text/plain:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-            application/json:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-            text/json:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-            application/xml:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-            text/xml:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-        '400':
-          description: Bad Request.
-        '500':
-          description: Internal server error.
-  /dtroUsers:
+  /swaCodes:
     get:
       tags:
-        - DtroUser
-      summary: Retrieve All D-TRO Users
-      operationId: get-all-d-tro-users
+        - Tra
+      summary: Retrieve TRA IDs
+      operationId: get-swa-codes
       security:
         - oAuth:
             - cso
@@ -1526,44 +1426,44 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeResponse'
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeResponse'
             text/json:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeResponse'
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeResponse'
             text/xml:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeResponse'
         '404':
           description: Not found.
         '500':
           description: Internal server error.
-  /dtroUsers/search/{partialName}:
+  /swaCodes/search/{partialName}:
     get:
       tags:
-        - DtroUser
-      summary: Find the existing D-TRO Users that matches the requested criteria.
-      operationId: search-d-tro-users
+        - Tra
+      summary: Find the existing SWA Codes that matches the requested criteria.
+      operationId: search-swa-codes
       security:
         - oAuth:
             - cso
       parameters:
         - name: partialName
           in: path
-          description: Partial name of the D-TRO User
+          description: Partial name of the Street Work Act
           required: true
           schema:
             type: string
@@ -1576,111 +1476,45 @@ paths:
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
-          description: D-TRO User retrieved successfully.
+          description: Tra swa codes retrieved successfully.
           content:
             text/plain:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeResponse'
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeResponse'
             text/json:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeResponse'
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeResponse'
             text/xml:
               schema:
                 type: array
                 items:
-                  $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeResponse'
         '400':
           description: Bad Request.
         '404':
           description: Not found.
         '500':
           description: Internal server error.
-  /dtroUsers/createFromBody:
+  /swaCodes/createFromBody:
     post:
       tags:
-        - DtroUser
-      summary: Create a new D-TRO user entity.
-      operationId: create-d-tro-user
-      security:
-        - oAuth:
-            - cso
-      parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
-      requestBody:
-        description: Object containing a D-TRO user details.
-        content:
-          application/json-patch+json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
-          application/json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
-          text/json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
-          application/*+json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
-          application/xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
-          text/xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
-          application/*+xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
-      responses:
-        '200':
-          description: OK.
-        '201':
-          description: Created
-          content:
-            text/plain:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-            application/json:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-            text/json:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-            application/xml:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-            text/xml:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-        '400':
-          description: Bad Request.
-        '500':
-          description: Internal server error.
-  /dtroUsers/updateFromBody:
-    put:
-      tags:
-        - DtroUser
-      summary: Update an existing Dtro User.
-      operationId: update-d-tro-user-from-body
+        - Tra
+      summary: Create a new Street Work Manager entity.
+      operationId: create-swa-from-body
       security:
         - oAuth:
             - cso
@@ -1697,65 +1531,131 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
           text/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
           application/*+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
           application/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
           text/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
           application/*+xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
+      responses:
+        '200':
+          description: OK.
+        '201':
+          description: Created
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+        '400':
+          description: Bad Request.
+        '500':
+          description: Internal server error.
+  /swaCodes/updateFromBody:
+    put:
+      tags:
+        - Tra
+      summary: Update an existing Street Work Act.
+      operationId: update-swa-from-body
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
+      requestBody:
+        description: Object containing a full SWA details.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
+          application/*+xml:
+            schema:
+              $ref: '#/components/schemas/DfT.DTRO.Models.SwaCode.SwaCodeRequest'
       responses:
         '200':
           description: Ok
           content:
             text/plain:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
         '400':
           description: Bad Request.
         '404':
           description: Not Found.
         '500':
           description: Internal server error.
-  /dtroUsers/{dtroUserId}:
+  /swaCodes/{traId}:
     get:
       tags:
-        - DtroUser
-      operationId: get-d-tro-user-by-id
+        - Tra
+      operationId: get-tra-by-id
       security:
         - oAuth:
             - cso
       parameters:
-        - name: dtroUserId
+        - name: traId
           in: path
           required: true
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int32
         - name: X-Correlation-ID
           in: header
           required: true
@@ -1769,19 +1669,117 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             application/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
             text/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+  /swaCodes/activate/{traId}:
+    patch:
+      tags:
+        - Tra
+      summary: Activate the Street Work Act.
+      operationId: activate-swa
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - name: traId
+          in: path
+          description: ID of the SWA by which Street Work Act will be activated.
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
+      responses:
+        '200':
+          description: Ok
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal server error.
+  /swaCodes/deactivate/{traId}:
+    patch:
+      tags:
+        - Tra
+      summary: Deactivate the Street Work Act.
+      operationId: deactivate-swa
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - name: traId
+          in: path
+          description: ID of the SWA by which Street Work Act will be deactivated.
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
+      responses:
+        '200':
+          description: Ok
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal server error.
 components:
   schemas:
     DfT.DTRO.Models.DtroDtos.DtroResponse:
@@ -1803,7 +1801,7 @@ components:
       type: object
       properties:
         schemaVersion:
-          $ref: #/components/schemas/DfT.DTRO.Models.SchemaTemplate.SchemaVersion
+          $ref: '#/components/schemas/DfT.DTRO.Models.SchemaTemplate.SchemaVersion'
         data:
           type: object
           additionalProperties: {}
@@ -1859,12 +1857,12 @@ components:
             format: date-time
           nullable: true
         eventType:
-          $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventType
+          $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventType'
         eventTime:
           type: string
           format: date-time
         _links:
-          $ref: #/components/schemas/DfT.DTRO.Models.Search.Links
+          $ref: '#/components/schemas/DfT.DTRO.Models.Search.Links'
       additionalProperties: false
       description: Record representing a change event in the D-TRO service.
     DfT.DTRO.Models.DtroEvent.DtroEventSearch:
@@ -1908,11 +1906,11 @@ components:
           type: string
           nullable: true
         location:
-          $ref: #/components/schemas/DfT.DTRO.Models.DtroJson.Location
+          $ref: '#/components/schemas/DfT.DTRO.Models.DtroJson.Location'
         regulationStart:
-          $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
         regulationEnd:
-          $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
       additionalProperties: false
     DfT.DTRO.Models.DtroEvent.DtroEventSearchResult:
       type: object
@@ -1920,7 +1918,7 @@ components:
         events:
           type: array
           items:
-            $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEvent
+            $ref: '#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEvent'
           nullable: true
         page:
           type: integer
@@ -2020,7 +2018,7 @@ components:
           pattern: ^(?:osgb36Epsg27700|wgs84Epsg4326)$
           type: string
         bbox:
-          $ref: #/components/schemas/DfT.DTRO.Models.DtroJson.BoundingBox
+          $ref: '#/components/schemas/DfT.DTRO.Models.DtroJson.BoundingBox'
       additionalProperties: false
     DfT.DTRO.Models.Filtering.ComparisonOperator:
       enum:
@@ -2040,7 +2038,7 @@ components:
           minItems: 1
           type: array
           items:
-            $ref: #/components/schemas/DfT.DTRO.Models.Filtering.SearchQuery
+            $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.SearchQuery'
           nullable: true
         page:
           maximum: 2147483647
@@ -2057,7 +2055,7 @@ components:
       type: object
       properties:
         location:
-          $ref: #/components/schemas/DfT.DTRO.Models.DtroJson.Location
+          $ref: '#/components/schemas/DfT.DTRO.Models.DtroJson.Location'
         publicationTime:
           type: string
           format: date-time
@@ -2110,45 +2108,17 @@ components:
       type: object
       properties:
         operator:
-          $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ComparisonOperator
+          $ref: '#/components/schemas/DfT.DTRO.Models.Filtering.ComparisonOperator'
         value:
           type: string
           format: date-time
       additionalProperties: false
-    DfT.DTRO.Models.Metrics.FullMetricSummary:
-      type: object
-      properties:
-        forDate:
-          type: string
-          nullable: true
-        userName:
-          type: string
-          nullable: true
-        systemFailureCount:
-          type: integer
-          format: int32
-        submissionFailureCount:
-          type: integer
-          format: int32
-        submissionCount:
-          type: integer
-          format: int32
-        deletionCount:
-          type: integer
-          format: int32
-        searchCount:
-          type: integer
-          format: int32
-        eventCount:
-          type: integer
-          format: int32
-      additionalProperties: false
     DfT.DTRO.Models.Metrics.MetricRequest:
       type: object
       properties:
-        dtroUserId:
-          type: string
-          format: uuid
+        traId:
+          type: integer
+          format: int32
           nullable: true
         dateFrom:
           type: string
@@ -2156,8 +2126,6 @@ components:
         dateTo:
           type: string
           format: date-time
-        userGroup:
-          $ref: #/components/schemas/UserGroup
       additionalProperties: false
     DfT.DTRO.Models.Metrics.MetricSummary:
       type: object
@@ -2187,7 +2155,7 @@ components:
         results:
           type: array
           items:
-            $ref: #/components/schemas/DfT.DTRO.Models.Search.DtroSearchResult
+            $ref: '#/components/schemas/DfT.DTRO.Models.Search.DtroSearchResult'
           nullable: true
         page:
           type: integer
@@ -2262,72 +2230,24 @@ components:
           type: string
           format: uuid
       additionalProperties: false
-    DfT.DTRO.Models.SwaCode.DtroUserRequest:
+    DfT.DTRO.Models.SwaCode.SwaCodeRequest:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
         traId:
           type: integer
           format: int32
-          nullable: true
         name:
           type: string
           nullable: true
         prefix:
           type: string
           nullable: true
-        userGroup:
-          $ref: #/components/schemas/UserGroup
-        xAppId:
-          type: string
-          format: uuid
-      additionalProperties: false
-    DfT.DTRO.Models.SwaCode.DtroUserResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        xAppId:
-          type: string
-          format: uuid
-        traId:
-          type: integer
-          format: int32
-          nullable: true
-        name:
-          type: string
-          nullable: true
-        prefix:
-          type: string
-          nullable: true
-        userGroup:
-          $ref: #/components/schemas/UserGroup
-      additionalProperties: false
-    DfT.DTRO.Models.SystemConfig.SystemConfigRequest:
-      type: object
-      properties:
-        systemName:
-          type: string
-          nullable: true
-        isTest:
+        isAdmin:
+          type: boolean
+        isActive:
           type: boolean
       additionalProperties: false
-    DfT.DTRO.Models.SystemConfig.SystemConfigResponse:
-      type: object
-      properties:
-        systemName:
-          type: string
-          nullable: true
-        currentUserName:
-          type: string
-          nullable: true
-        isTest:
-          type: boolean
-      additionalProperties: false
-    UserGroup:
+    DfT.DTRO.Models.SwaCode.SwaCodeResponse:
       type: object
       properties:
         traId:
