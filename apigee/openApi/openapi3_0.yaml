@@ -397,6 +397,13 @@ paths:
             - dsp
             - dc
       parameters:
+        - name: x-app-id
+          in: header
+          description: xAppId identification of the event D-TRO.
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
@@ -1314,6 +1321,13 @@ paths:
             - dsp
             - dc
       parameters:
+      - name: x-app-id
+          in: header
+          description: xAppId identification a D-TRO is being search for.
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
@@ -1349,6 +1363,12 @@ paths:
         - oAuth:
             - cso
       parameters:
+        - name: x-app-id
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
