@@ -43,7 +43,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
       "apiProductName": "'"${PRODUCT_NAME}"'"
     }')
 
-  Error checking and handling
+  # Error checking and handling
   if [ "$RESPONSE" -eq 200 ]; then
     echo "${TITLE} successfully created in the Developer Portal."
   elif [ "$RESPONSE" -eq 409 ]; then
@@ -65,7 +65,7 @@ while IFS="=" read -r title id; do
 done < <((echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[] | "\(.title)=\(.id)"'))
 
 # Read the YAML file and convert it to a byte array
-base64_string=$(base64 "$YAML_FILE")
+base64_string=$(base64 -w 0 "$YAML_FILE")
 
 # For each Product/Catalog item, upload the Open API Spec
 for title in "${!apidocs[@]}"; do
