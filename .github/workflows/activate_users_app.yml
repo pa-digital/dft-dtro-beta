@@ -44,9 +44,9 @@ jobs:
 
       - name: Load Env Vars for Apigee script
         run: | #TODO: Update for Prod
-          echo "workload_identity_service_account= ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}" >> $GITHUB_ENV 
+          echo "workload_identity_service_account=${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}" >> $GITHUB_ENV 
           echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_TEST }}" >> $GITHUB_ENV
-          echo "DEV_EMAIL= ${{ inputs.dev-email }}" >> $GITHUB_ENV 
+          echo "DEV_EMAIL=${{ inputs.dev-email }}" >> $GITHUB_ENV 
           echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
