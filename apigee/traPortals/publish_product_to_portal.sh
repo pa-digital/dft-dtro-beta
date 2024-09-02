@@ -58,7 +58,7 @@ done
 # Get the IDs of Products/Catalog items uploaded to the portal
 RESPONSE_GET_CATELOG_ITEM=$(curl -s -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
   -H "Authorization: Bearer ${TOKEN}")
-
+echo "${RESPONSE_GET_CATELOG_ITEM}"
 apidocs=($(echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[].id'))
 
 # Read the YAML file and convert it to a byte array
