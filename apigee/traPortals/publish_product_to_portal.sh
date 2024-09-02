@@ -26,10 +26,9 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
 
   # Name of product created via product.json
   PRODUCT_NAME="${env_name_prefix}-${PRODUCT}"
-  echo "PRODUCT_NAME: {$PRODUCT_NAME}"
+
   # Convert product name to title case with spaces
   TITLE=$(to_title_case "${PRODUCT}")
-  echo "TITLE: {$TITLE}"
 
   # Construct the description
   DESCRIPTION="This is the D-TRO application for ${TITLE}s."
