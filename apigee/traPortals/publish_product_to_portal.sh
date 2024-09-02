@@ -3,7 +3,12 @@
 # Script Variables
 ORG=$apigee_organisation
 YAML_FILE="apigee/openApi/openapi3_0.yml"
-
+echo "files in path"
+for file in *; do
+    if [ -f "$file" ]; then
+        echo "$file"
+    fi
+done
 to_title_case() {
   echo "$1" | sed -e 's/\b./\u&/g' -e 's/-/ /g'
 }
@@ -62,7 +67,7 @@ RESPONSE_GET_CATELOG_ITEM=$(curl -s -X GET "https://apigee.googleapis.com/v1/org
 apidocs=($(echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[].id'))
 
 # Read the YAML file and convert it to a byte array
-byte_array=$(xxd -p "$yaml_file" | tr -d '\n' | sed 's/\(..\)/\\x\1/g')
+byte_array=$(xxd -p "$YAML_FILE" | tr -d '\n' | sed 's/\(..\)/\\x\1/g')
 
 # For each Product/Catalog item, upload the Open API Spec
 for id in "${apidocs[@]}"; do
