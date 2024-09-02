@@ -29,20 +29,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
   DESCRIPTION="This is the D-TRO application for ${TITLE}s."
 
   # Make the API call
-#  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
-#    -H "Authorization: Bearer ${TOKEN}" \
-#    -H "Content-Type: application/json" \
-#    -d '{
-#      "title": "'"${TITLE}"'",
-#      "description": "'"${DESCRIPTION}"'",
-#      "anonAllowed": false,
-#      "imageUrl": "",
-#      "requireCallbackUrl": false,
-#      "categoryIds": [],
-#      "published": true,
-#      "apiProductName": "'"${PRODUCT_NAME}"'"
-#    }')
-  RESPONSE=$(curl -s  -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
@@ -55,17 +42,16 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
       "published": true,
       "apiProductName": "'"${PRODUCT_NAME}"'"
     }')
-  echo "RESPONSE: {$RESPONSE}"
 
- # Error checking and handling
-#  if [ "$RESPONSE" -eq 200 ]; then
-#    echo "${TITLE} successfully created in the Developer Portal."
-#  elif [ "$RESPONSE" -eq 409 ]; then
-#    echo "${TITLE} already exists in the Developer Portal."
-#  else
-#    echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
-#    exit 1
-#  fi
+  Error checking and handling
+  if [ "$RESPONSE" -eq 200 ]; then
+    echo "${TITLE} successfully created in the Developer Portal."
+  elif [ "$RESPONSE" -eq 409 ]; then
+    echo "${TITLE} already exists in the Developer Portal."
+  else
+    echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
+    exit 1
+  fi
 
 done
 
@@ -77,15 +63,13 @@ declare -A apidocs
 while IFS="=" read -r title id; do
   apidocs["$title"]="$id"
 done < <((echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[] | "\(.title)=\(.id)"'))
-for title in "${!apidocs[@]}"; do
-  echo "Title: $title, ID: ${apidocs[$title]}"
-done
+
 # Read the YAML file and convert it to a byte array
 base64_string=$(base64 "$YAML_FILE")
 
 # For each Product/Catalog item, upload the Open API Spec
 for title in "${!apidocs[@]}"; do
-  RESPONSE_UPDATE_DOC=$(curl -s -o /dev/null -w "%{http_code}" -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${apidocs[$title]}/documentation" \
+  RESPONSE_UPDATE_DOC=$(curl -s -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${apidocs[$title]}/documentation" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
