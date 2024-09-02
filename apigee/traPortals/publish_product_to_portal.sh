@@ -59,11 +59,18 @@ done
 RESPONSE_GET_CATELOG_ITEM=$(curl -s -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
   -H "Authorization: Bearer ${TOKEN}")
 echo "${RESPONSE_GET_CATELOG_ITEM}"
-apidocs=($(echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[].id'))
-echo "apidocs: ${apidocs}"
+apidocs=()
+while IFS= read -r id; do
+  apidocs+=("$id")
+done < <((echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[].id'))
+echo "IDs"
+for id in "${apidocs[@]}"; do
+    echo "$id"
+done
 # Read the YAML file and convert it to a byte array
 byte_array=$(xxd -p "$YAML_FILE" | tr -d '\n' | sed 's/\(..\)/\\x\1/g')
-
+echo "byte_array"
+echo "${byte_array}"
 # For each Product/Catalog item, upload the Open API Spec
 for id in "${apidocs[@]}"; do
   RESPONSE_UPDATE_DOC=$(curl -s -o /dev/null -w "%{http_code}" -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${id}/documentation" \
