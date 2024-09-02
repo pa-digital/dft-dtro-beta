@@ -11,14 +11,6 @@ on:
         type: string
         description: Email address of developer the application belongs to
         required: true
-      api-product:
-        type: string
-        description: Short name of the TRA(s) (separate each TRA with a ',' and no spaces)
-        required: true
-      environment:
-        type: string
-        description: Short name of the TRA(s) (separate each TRA with a ',' and no spaces)
-        required: true
 
 env:
   environment: prod
