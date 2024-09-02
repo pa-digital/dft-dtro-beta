@@ -2,6 +2,7 @@
 
 # Script Variables
 ORG=$apigee_organisation
+YAML_FILE="apigee/openApi/openapi3_0.yml"
 
 to_title_case() {
   echo "$1" | sed -e 's/\b./\u&/g' -e 's/-/ /g'
@@ -34,7 +35,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
     -d '{
       "title": "'"${TITLE}"'",
       "description": "'"${DESCRIPTION}"'",
-      "anonAllowed": true,
+      "anonAllowed": false,
       "imageUrl": "",
       "requireCallbackUrl": false,
       "categoryIds": [],
@@ -51,4 +52,30 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
     echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
     exit 1
   fi
+
+done
+
+# Get the IDs of Products/Catalog items uploaded to the portal
+RESPONSE_GET_CATELOG_ITEM=$(curl -s -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+  -H "Authorization: Bearer ${TOKEN}")
+
+apidocs=($(echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[].id'))
+
+# Read the YAML file and convert it to a byte array
+byte_array=$(xxd -p "$yaml_file" | tr -d '\n' | sed 's/\(..\)/\\x\1/g')
+
+# For each Product/Catalog item, upload the Open API Spec
+for id in "${apidocs[@]}"; do
+  RESPONSE_UPDATE_DOC=$(curl -s -o /dev/null -w "%{http_code}" -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${id}/documentation" \
+    -H "Authorization: Bearer ${TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "oasDocumentation": {
+          "spec": {
+            "displayName": "D-TRO Open API Spec",
+            "contents": "'"${byte_array}"'"
+          }
+        }
+    }')
+  echo "${RESPONSE_UPDATE_DOC}"
 done
