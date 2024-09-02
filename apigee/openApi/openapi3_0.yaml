@@ -1363,7 +1363,7 @@ paths:
             - dsp
             - dc
       parameters:
-      - name: x-app-id
+        - name: x-app-id
           in: header
           description: xAppId identification a D-TRO is being search for.
           required: true
