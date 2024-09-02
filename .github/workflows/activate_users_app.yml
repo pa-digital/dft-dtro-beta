@@ -5,19 +5,11 @@ on:
     inputs:
       app-name:
         type: string
-        description: Short name of the TRA(s) (separate each TRA with a ',' and no spaces)
+        description: Name of the application to activate
         required: true
-      app-key:
+      dev-email:
         type: string
-        description: Short name of the TRA(s) (separate each TRA with a ',' and no spaces)
-        required: true
-      api-product:
-        type: string
-        description: Short name of the TRA(s) (separate each TRA with a ',' and no spaces)
-        required: true
-      environment:
-        type: string
-        description: Short name of the TRA(s) (separate each TRA with a ',' and no spaces)
+        description: Email address of developer the application belongs to
         required: true
 
 env:
@@ -30,8 +22,8 @@ permissions:
   actions: read
 
 jobs:
-  create-tra-portal:
-    name: Create TRA Portal
+  activate-user-app:
+    name: Activate User's Application
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -42,24 +34,20 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: apigee/traPortals
+        working-directory: apigee/scripts
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name:  Make TRA Portal scripts executable
+      - name:  Make scripts executable
         run: chmod +x *.sh
 
       - name: Load Env Vars for Apigee script
-        run: ./load_environment_variables.sh
-        env:
-          github_ref: ${{ github.ref }}
-          environment: ${{ env.environment }}
-          env_name_prefix: ${{ env.env_name_prefix }} #TODO: Update to '${{ inputs.environment }}' for Prod
-          tra: ${{ inputs.tra }}
-          swa_code: ${{ inputs.swa_code }}
-          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }} #TODO: Update for Prod
-          apigee_organisation: ${{ vars.GCP_PROJECT_ID_TEST }} #TODO: Update for Prod
+        run: | #TODO: Update for Prod
+          echo "workload_identity_service_account= ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}" >> $GITHUB_ENV 
+          echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_TEST }}" >> $GITHUB_ENV
+          echo "DEV_EMAIL= ${{ inputs.dev-email }}" >> $GITHUB_ENV 
+          echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
         id: google-auth
@@ -75,8 +63,5 @@ jobs:
           echo "$HOME/.apigeecli/bin" >> $GITHUB_PATH
           echo "APIGEECLI_DEBUG=true" >> $GITHUB_ENV
 
-      - name: Create TRA Portal
-        run: ./create_tra_portal.sh ${{ steps.google-auth.outputs.access_token }}
-
-      - name: Publish Products to TRA Portal
-        run: ./publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}
+      - name: Activate User's Application
+        run: ./activate_user_app.sh ${{ steps.google-auth.outputs.access_token }}
