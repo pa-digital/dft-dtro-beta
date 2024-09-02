@@ -14,20 +14,19 @@ PORTAL_URL="$(echo "${PORTAL_NAME//[- ]/}" | tr '[:upper:]' '[:lower:]')"
 TOKEN=$1
 
 # List of product names
-PRODUCT_NAMES=("Publisher" "Consumer")
+PRODUCT_NAMES=("publisher" "consumer")
 
 # Loop through each product name
 for PRODUCT in "${PRODUCT_NAMES[@]}"; do
 
   # Name of product created via product.json
   PRODUCT_NAME="${env_name_prefix}-${PRODUCT}"
-  echo "PRODUCT_NAME: {$PRODUCT_NAME}"
+
   # Convert product name to title case with spaces
   TITLE=$(to_title_case "${PRODUCT}")
-  echo "TITLE: {$TITLE}"
 
   # Construct the description
-  DESCRIPTION="This is the D-TRO application for ${PRODUCT}s."
+  DESCRIPTION="This is the D-TRO application for ${TITLE}s."
 
   # Make the API call
 #  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
@@ -73,6 +72,7 @@ done
 # Get the IDs of Products/Catalog items uploaded to the portal
 RESPONSE_GET_CATELOG_ITEM=$(curl -s -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
   -H "Authorization: Bearer ${TOKEN}")
+
 declare -A apidocs
 while IFS="=" read -r title id; do
   apidocs["$title"]="$id"
@@ -82,8 +82,6 @@ for title in "${!apidocs[@]}"; do
 done
 # Read the YAML file and convert it to a byte array
 base64_string=$(base64 "$YAML_FILE")
-echo "base64_string"
-echo "${base64_string}"
 
 # For each Product/Catalog item, upload the Open API Spec
 for title in "${!apidocs[@]}"; do
@@ -98,5 +96,6 @@ for title in "${!apidocs[@]}"; do
           }
         }
     }')
+  echo "RESPONSE_UPDATE_DOC"
   echo "${RESPONSE_UPDATE_DOC}"
 done
