@@ -69,7 +69,7 @@ base64_string=$(base64 "$YAML_FILE")
 
 # For each Product/Catalog item, upload the Open API Spec
 for title in "${!apidocs[@]}"; do
-  RESPONSE_UPDATE_DOC=$(curl -s -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${apidocs[$title]}/documentation" \
+  RESPONSE_UPDATE_DOC=$(curl -s -X PATCH "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${apidocs[$title]}/documentation" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
