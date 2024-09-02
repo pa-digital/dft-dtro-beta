@@ -3,7 +3,12 @@
 # Script Variables
 ORG=$apigee_organisation
 YAML_FILE="../openApi/openapi3_0.yml"
-
+echo "files in path"
+for file in ../openApi/*; do
+    if [ -f "$file" ]; then
+        echo "$file"
+    fi
+done
 to_title_case() {
   echo "$1" | sed -e 's/\b./\u&/g' -e 's/-/ /g'
 }
