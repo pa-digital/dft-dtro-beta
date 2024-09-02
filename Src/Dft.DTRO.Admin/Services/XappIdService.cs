@@ -1,7 +1,7 @@
 ﻿namespace Dft.DTRO.Admin.Services;
 public class XappIdService : IXappIdService
 {
-    private readonly Guid _xAppId;
+    private Guid _xAppId;
 
     public XappIdService(IConfiguration configuration)
     {
@@ -34,5 +34,10 @@ public class XappIdService : IXappIdService
     public Guid MyXAppId()
     {
         return _xAppId;
+    }
+
+    public void ChangeXAppId(Guid guid)
+    {
+        _xAppId = guid;
     }
 }

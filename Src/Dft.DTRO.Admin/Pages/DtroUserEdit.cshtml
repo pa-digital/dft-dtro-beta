@@ -130,27 +130,14 @@
                     traIdInput.required = true;
                     traIdLabel.textContent = 'TA Id';
 
-                } else if (userGroup === 'Admin') {
-                    if (isTestSystem) {
-                        traIdInput.disabled = false;
-                        traIdInput.value = originalValues.traId;
-                        traIdInput.required = false; // Make TraId not required for Admin
-                        traIdLabel.textContent = 'Dtro submission under TA';
-                    }
-                    else {
-                        traIdInput.disabled = true;
-                        traIdInput.value = '';
-                        traIdInput.required = false; // Make TraId not required for Admin
-                        traIdLabel.textContent = 'TA not allowed in Live';
-                    }
-                } else {
-                   
+                } 
+                else 
+                {
                     traIdInput.value = "";
                     traIdInput.disabled = true;
                     traIdInput.required = false;
                     traIdLabel.textContent = 'TA Id';
                 }
-
 
                 if (userGroup === 'Tra') {
                     prefixInput.disabled = false;
