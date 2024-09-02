@@ -55,7 +55,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
 
 done
 
-# Get the IDs of Products/Catalog items uploaded to the portal
+# Get the titles and IDs of the Products/Catalog items uploaded earlier to the portal and persist them to a map
 RESPONSE_GET_CATELOG_ITEM=$(curl -s -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
   -H "Authorization: Bearer ${TOKEN}")
 
@@ -64,12 +64,12 @@ while IFS="=" read -r title id; do
   apidocs["$title"]="$id"
 done < <((echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[] | "\(.title)=\(.id)"'))
 
-# Read the YAML file and convert it to a byte array
+# Read the YAML file and convert it to a base64 string with no wrap around
 base64_string=$(base64 -w 0 "$YAML_FILE")
 
 # For each Product/Catalog item, upload the Open API Spec
 for title in "${!apidocs[@]}"; do
-  RESPONSE_UPDATE_DOC=$(curl -s -X PATCH "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${apidocs[$title]}/documentation" \
+  RESPONSE_UPDATE_DOC=$(curl -s -o /dev/null -w "%{http_code}" -X PATCH "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs/${apidocs[$title]}/documentation" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
@@ -82,4 +82,14 @@ for title in "${!apidocs[@]}"; do
     }')
   echo "RESPONSE_UPDATE_DOC"
   echo "${RESPONSE_UPDATE_DOC}"
+
+#  # Error checking and handling
+#  if [ "$RESPONSE" -eq 200 ]; then
+#    echo "${TITLE} successfully created in the Developer Portal."
+#  elif [ "$RESPONSE" -eq 409 ]; then
+#    echo "${TITLE} already exists in the Developer Portal."
+#  else
+#    echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
+#    exit 1
+#  fi
 done
