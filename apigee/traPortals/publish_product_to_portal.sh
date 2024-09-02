@@ -26,15 +26,29 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
 
   # Name of product created via product.json
   PRODUCT_NAME="${env_name_prefix}-${PRODUCT}"
-
+  echo "PRODUCT_NAME: {$PRODUCT_NAME}"
   # Convert product name to title case with spaces
   TITLE=$(to_title_case "${PRODUCT}")
+  echo "TITLE: {$TITLE}"
 
   # Construct the description
   DESCRIPTION="This is the D-TRO application for ${TITLE}s."
 
   # Make the API call
-  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+#  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+#    -H "Authorization: Bearer ${TOKEN}" \
+#    -H "Content-Type: application/json" \
+#    -d '{
+#      "title": "'"${TITLE}"'",
+#      "description": "'"${DESCRIPTION}"'",
+#      "anonAllowed": false,
+#      "imageUrl": "",
+#      "requireCallbackUrl": false,
+#      "categoryIds": [],
+#      "published": true,
+#      "apiProductName": "'"${PRODUCT_NAME}"'"
+#    }')
+  RESPONSE=$(curl -s  -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
@@ -47,6 +61,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
       "published": true,
       "apiProductName": "'"${PRODUCT_NAME}"'"
     }')
+  echo "RESPONSE: {$RESPONSE}"
 
   # Error checking and handling
   if [ "$RESPONSE" -eq 200 ]; then
