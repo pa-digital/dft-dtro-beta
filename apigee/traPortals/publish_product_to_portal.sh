@@ -52,7 +52,6 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
     echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
     exit 1
   fi
-
 done
 
 # Get the titles and IDs of the Products/Catalog items uploaded earlier to the portal and persist them to a map
@@ -80,16 +79,12 @@ for title in "${!apidocs[@]}"; do
           }
         }
     }')
-  echo "RESPONSE_UPDATE_DOC"
-  echo "${RESPONSE_UPDATE_DOC}"
 
-#  # Error checking and handling
-#  if [ "$RESPONSE" -eq 200 ]; then
-#    echo "${TITLE} successfully created in the Developer Portal."
-#  elif [ "$RESPONSE" -eq 409 ]; then
-#    echo "${TITLE} already exists in the Developer Portal."
-#  else
-#    echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
-#    exit 1
-#  fi
+  # Error checking and handling
+  if [ "$RESPONSE_UPDATE_DOC" -eq 200 ]; then
+    echo "${title} Open API Spec successfully uploaded."
+  else
+    echo "Failed to upload ${title} Open API Spec. HTTP response code: $RESPONSE_UPDATE_DOC"
+    exit 1
+  fi
 done
