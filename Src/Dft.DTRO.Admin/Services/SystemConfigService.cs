@@ -21,6 +21,8 @@ public class SystemConfigService : ISystemConfigService
         _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
         response.EnsureSuccessStatusCode();
+
+        _xappIdService.ChangeXAppId(systemConfig.xAppId);
         return true;
     }
     
@@ -45,6 +47,7 @@ public class SystemConfigService : ISystemConfigService
             {
                 return unknown;
             }
+            ret.xAppId = _xappIdService.MyXAppId();
             return ret;
         }
         catch (Exception)
