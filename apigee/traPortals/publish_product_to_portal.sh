@@ -34,20 +34,7 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
   DESCRIPTION="This is the D-TRO application for ${TITLE}s."
 
   # Make the API call
-#  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
-#    -H "Authorization: Bearer ${TOKEN}" \
-#    -H "Content-Type: application/json" \
-#    -d '{
-#      "title": "'"${TITLE}"'",
-#      "description": "'"${DESCRIPTION}"'",
-#      "anonAllowed": false,
-#      "imageUrl": "",
-#      "requireCallbackUrl": false,
-#      "categoryIds": [],
-#      "published": true,
-#      "apiProductName": "'"${PRODUCT_NAME}"'"
-#    }')
-  RESPONSE=$(curl -s  -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
@@ -60,7 +47,6 @@ for PRODUCT in "${PRODUCT_NAMES[@]}"; do
       "published": true,
       "apiProductName": "'"${PRODUCT_NAME}"'"
     }')
-  echo "RESPONSE: {$RESPONSE}"
 
   # Error checking and handling
   if [ "$RESPONSE" -eq 200 ]; then
