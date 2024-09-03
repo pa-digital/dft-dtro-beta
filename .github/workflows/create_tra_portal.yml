@@ -10,7 +10,7 @@ on:
 
 env:
   environment: test #TODO: Update to for Prod
-  env_name_prefix: test #TODO: Remove for Prod, use 'environment' instead
+  env_name_prefix: int #TODO: Remove for Prod, use 'environment' instead
 
 permissions:
   contents: read
