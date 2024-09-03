@@ -6,6 +6,9 @@ if [ -z "${env_name_prefix}" ]; then
 fi
 
 case "${env_name_prefix}" in
+  "test")
+    source test.sh
+    ;;
   "int")
     source int.sh
     ;;
