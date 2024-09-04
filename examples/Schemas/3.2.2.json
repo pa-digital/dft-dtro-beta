@@ -1019,7 +1019,8 @@
             "enum": [
                 "dangerousGoods",
                 "empty",
-                "explosiveMaterials"
+                "explosiveMaterials",
+				"other"
             ]
         },
         "Period": {
