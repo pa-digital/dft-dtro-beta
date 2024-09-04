@@ -1,8 +1,12 @@
-﻿namespace Dft.DTRO.Admin.Services;
+﻿using System.Net;
+using Dft.DTRO.Admin.Helpers;
+
+namespace Dft.DTRO.Admin.Services;
 public class DtroService : IDtroService
 {
     private readonly HttpClient _client;
     private readonly IXappIdService _xappIdService;
+
     public DtroService(IHttpClientFactory clientFactory, IXappIdService xappIdService)
     {
         _client = clientFactory.CreateClient("ExternalApi");
@@ -14,8 +18,6 @@ public class DtroService : IDtroService
         var request = new HttpRequestMessage(HttpMethod.Get, $"/dtros/provisionHistory/{id}");
         _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
-
-        response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         var history = JsonSerializer.Deserialize<List<DtroHistoryProvisionResponse>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         return history;
@@ -28,7 +30,6 @@ public class DtroService : IDtroService
 
         var response = await _client.SendAsync(request);
 
-        response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         var history = JsonSerializer.Deserialize<List<DtroHistorySourceResponse>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         return history;
@@ -52,8 +53,8 @@ public class DtroService : IDtroService
 
         _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
+        await HttpResponseHelper.SetError(response);
 
-        response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         var paginatedResponse = JsonSerializer.Deserialize<PaginatedResponse<DtroSearchResult>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         return paginatedResponse;
@@ -74,8 +75,8 @@ public class DtroService : IDtroService
         _xappIdService.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
 
+        await HttpResponseHelper.SetError(response);
     }
 
     public async Task UpdateDtroAsync(Guid id, IFormFile file)
@@ -93,7 +94,7 @@ public class DtroService : IDtroService
         _xappIdService.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
+        await HttpResponseHelper.SetError(response);
     }
 
     public async Task<IActionResult> ReassignDtroAsync(Guid id, Guid toDtroUserId)
@@ -103,6 +104,9 @@ public class DtroService : IDtroService
         _xappIdService.AddXAppIdHeader(ref request);
 
         var response = await _client.SendAsync(request);
+
+        await HttpResponseHelper.SetError(response);
+
         if (response.IsSuccessStatusCode)
         {
             return new JsonResult(new { message = "Successfully reassigned the DTRO." });

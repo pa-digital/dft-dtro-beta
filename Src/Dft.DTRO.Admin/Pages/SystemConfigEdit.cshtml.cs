@@ -1,3 +1,4 @@
+using Dft.DTRO.Admin.Helpers;
 using DfT.DTRO.Models.SystemConfig;
 
 public class SystemConfigEditModel : PageModel
@@ -19,12 +20,19 @@ public class SystemConfigEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var action = Request.Form["action"];
-        if (action == "Cancel")
+        try
         {
+            var action = Request.Form["action"];
+            if (action == "Cancel")
+            {
+                return RedirectToPage("Index");
+            }
+            await _systemConfigService.UpdateSystemConfig(SystemConfig);
             return RedirectToPage("Index");
         }
-        await _systemConfigService.UpdateSystemConfig(SystemConfig);
-        return RedirectToPage("Index");
+        catch (Exception ex)
+        {
+            return HttpResponseHelper.HandleError(ex);
+        }
     }
 }

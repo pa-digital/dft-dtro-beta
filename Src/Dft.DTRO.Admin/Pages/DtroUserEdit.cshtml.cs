@@ -1,3 +1,5 @@
+using Dft.DTRO.Admin.Helpers;
+
 public class DtroUserEditModel : PageModel
 {
     private readonly IDtroUserService _dtroUserService;
@@ -23,40 +25,55 @@ public class DtroUserEditModel : PageModel
     [BindProperty(SupportsGet = true)]
     public string Search { get; set; }
 
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
-        var systemConfig = await _systemConfigService.GetSystemConfig();
-        IsTestSystem = systemConfig.IsTest;
+        try
+        {
+            var systemConfig = await _systemConfigService.GetSystemConfig();
+            IsTestSystem = systemConfig.IsTest;
 
-        if (IsEdit)
-        {
-            DtroUser = await _dtroUserService.GetDtroUserAsync(DtroUserId.Value);
+            if (IsEdit)
+            {
+                DtroUser = await _dtroUserService.GetDtroUserAsync(DtroUserId.Value);
+            }
+            else
+            {
+                DtroUser = new DtroUser();
+            }
+            return Page();
         }
-        else
+        catch (Exception ex)
         {
-            DtroUser = new DtroUser();
+            return HttpResponseHelper.HandleError(ex);
         }
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var action = Request.Form["action"];
-        if (action == "Cancel")
+        try
         {
+            var action = Request.Form["action"];
+            if (action == "Cancel")
+            {
+                return RedirectToPage("DtroUserList", new { search = Search });
+            }
+
+            if (IsEdit)
+            {
+                DtroUser.Id = DtroUserId.Value;
+                await _dtroUserService.UpdateDtroUserAsync(DtroUser);
+            }
+            else
+            {
+                await _dtroUserService.CreateDtroUserAsync(DtroUser);
+                Search = DtroUser.Name;
+            }
+
             return RedirectToPage("DtroUserList", new { search = Search });
         }
-
-        if (IsEdit)
+        catch (Exception ex)
         {
-            DtroUser.Id = DtroUserId.Value;
-            await _dtroUserService.UpdateDtroUserAsync(DtroUser);
+            return HttpResponseHelper.HandleError(ex);
         }
-        else
-        {
-            await _dtroUserService.CreateDtroUserAsync(DtroUser);
-            Search = DtroUser.Name;
-        }
-
-        return RedirectToPage("DtroUserList", new { search = Search });
     }
 }

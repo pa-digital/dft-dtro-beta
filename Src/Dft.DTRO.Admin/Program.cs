@@ -1,4 +1,6 @@
 
+using Microsoft.AspNetCore.Mvc.Routing;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
@@ -20,8 +22,18 @@ builder.Services.AddScoped<IDtroService, DtroService>();
 builder.Services.AddScoped<IMetricsService, MetricsService>();
 builder.Services.AddScoped<IDtroUserService, DtroUserService>();
 builder.Services.AddScoped<ISystemConfigService, SystemConfigService>();
+
+//builder.Services.AddScoped<IErrorHandlerService, ErrorHandlerService>();
+
+
 builder.Services.AddSingleton<IXappIdService>(provider => new XappIdService(builder.Configuration));
 builder.Services.AddHealthChecks();
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
+
+//builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<ErrorHandlerService>();
 
 var app = builder.Build();
 

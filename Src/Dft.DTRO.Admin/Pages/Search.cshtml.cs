@@ -1,3 +1,5 @@
+using Dft.DTRO.Admin.Helpers;
+
 public class SearchModel : PageModel
 {
     public PaginatedResponse<DtroSearchResult> Dtros { get; set; }
@@ -23,30 +25,38 @@ public class SearchModel : PageModel
         _xappIdService = xappIdService;
     }
 
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
-        int? useTraId = null;
-        if(DtroUserSearch.DtroUserIdSelect != null && DtroUserSearch.DtroUserIdSelect != Guid.Empty)
+        try
         {
-            var user = await _dtroUserService.GetDtroUserAsync(DtroUserSearch.DtroUserIdSelect.Value);
-            useTraId = user.TraId;
+            int? useTraId = null;
+            if (DtroUserSearch.DtroUserIdSelect != null && DtroUserSearch.DtroUserIdSelect != Guid.Empty)
+            {
+                var user = await _dtroUserService.GetDtroUserAsync(DtroUserSearch.DtroUserIdSelect.Value);
+                useTraId = user.TraId;
+            }
+            Dtros = await _dtroService.SearchDtros(useTraId);
+            DtroUserSearch.AlwaysButtonHidden = true;
+            DtroUserSearch.UpdateButtonText = "Search";
+            DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
+            DtroUserSearch.DtroUsers.RemoveAll(x => x.UserGroup == UserGroup.Consumer);
+            DtroUserSearch.DtroUsers.Insert(0, new DtroUser { TraId = 0, Name = "[all]" });
+
+
+            var users = await _dtroUserService.GetDtroUsersAsync();
+            var myUser = users.FirstOrDefault(x => x.xAppId == _xappIdService.MyXAppId());
+
+            var systemConfig = await _systemConfigService.GetSystemConfig();
+
+            if (myUser?.TraId != null && systemConfig.IsTest)
+            {
+                AllowAddUpdate = true;
+            }
+            return Page();
         }
-        Dtros = await _dtroService.SearchDtros(useTraId);
-        DtroUserSearch.AlwaysButtonHidden = true;
-        DtroUserSearch.UpdateButtonText = "Search";
-        DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
-        DtroUserSearch.DtroUsers.RemoveAll(x => x.UserGroup == UserGroup.Consumer);
-        DtroUserSearch.DtroUsers.Insert(0, new DtroUser { TraId = 0, Name = "[all]"});
-
-       
-        var users = await _dtroUserService.GetDtroUsersAsync();
-        var myUser = users.FirstOrDefault(x => x.xAppId == _xappIdService.MyXAppId());
-
-        var systemConfig = await _systemConfigService.GetSystemConfig();
-
-        if (myUser?.TraId != null && systemConfig.IsTest)
+        catch (Exception ex)
         {
-            AllowAddUpdate = true;
+            return HttpResponseHelper.HandleError(ex);
         }
     }
 
@@ -57,10 +67,17 @@ public class SearchModel : PageModel
 
     public IActionResult OnGetRefresh()
     {
-        if (TempData.TryGetValue("DtroUserSelect", out object dtroUserSelect))
-            DtroUserSearch.DtroUserIdSelect = (Guid)dtroUserSelect;
+        try
+        {
+            if (TempData.TryGetValue("DtroUserSelect", out object dtroUserSelect))
+                DtroUserSearch.DtroUserIdSelect = (Guid)dtroUserSelect;
 
-        return RedirectToPage(new { DtroUserSearch.DtroUserIdSelect });
+            return RedirectToPage(new { DtroUserSearch.DtroUserIdSelect });
+        }
+        catch (Exception ex)
+        {
+            return HttpResponseHelper.HandleError(ex);
+        }
     }
 
     public string FormatListToSingle(IEnumerable<string> items)

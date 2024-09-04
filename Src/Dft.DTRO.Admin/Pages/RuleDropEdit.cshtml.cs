@@ -1,3 +1,5 @@
+using Dft.DTRO.Admin.Helpers;
+
 public class RuleDropEditModel : PageModel
 {
     private readonly IRuleService _ruleService;
@@ -15,14 +17,21 @@ public class RuleDropEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(IFormFile file, bool IsEdit, string Version)
     {
-        if (IsEdit)
+        try
         {
-            await _ruleService.UpdateRuleAsync(Version, file);
+            if (IsEdit)
+            {
+                await _ruleService.UpdateRuleAsync(Version, file);
+            }
+            else
+            {
+                await _ruleService.CreateRuleAsync(Version, file);
+            }
+            return RedirectToPage("SchemaOverview");
         }
-        else
+        catch (Exception ex)
         {
-            await _ruleService.CreateRuleAsync(Version, file);
+            return HttpResponseHelper.HandleError(ex);
         }
-        return RedirectToPage("SchemaOverview");
     }
 }

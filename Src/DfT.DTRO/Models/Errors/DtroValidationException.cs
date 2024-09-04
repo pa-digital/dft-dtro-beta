@@ -1,5 +1,4 @@
 using DfT.DTRO.Models.Validation;
-using Newtonsoft.Json.Schema;
 
 namespace DfT.DTRO.Models.Errors;
 
@@ -16,7 +15,7 @@ public class DtroValidationException : Exception
 
     public ApiErrorResponse RequestComparedToSchemaVersion { get; set; }
 
-    public List<ValidationError> RequestComparedToSchema { get; set; }
+    public List<DtroJsonValidationError> RequestComparedToSchema { get; set; }
 
     public List<SemanticValidationError> RequestComparedToRules { get; set; }
 }

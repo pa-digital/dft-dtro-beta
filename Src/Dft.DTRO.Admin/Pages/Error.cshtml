@@ -1,26 +1,92 @@
 ﻿@page
+@using Dft.DTRO.Admin.Models.Errors
 @model ErrorModel
 @{
     ViewData["Title"] = "Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<h1>Error</h1>
+<p>@Model.Message</p>
 
-@if (Model.ShowRequestId)
+@if (Model.Error is DtroValidationException dtroValidationException)
 {
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
+    <h2>Validation Errors</h2>
+    <ul>
+        <li>@dtroValidationException.Message</li>
+        @if (dtroValidationException.RequestComparedToSchemaVersion != null)
+        {
+            <li>Schema Version: @dtroValidationException.RequestComparedToSchemaVersion.Message</li>
+        }
+        @if (dtroValidationException.RequestComparedToSchema != null && dtroValidationException.RequestComparedToSchema.Any())
+        {
+            <li>
+                Request Compared To Schema:
+                <ul>
+                    @foreach (var error in dtroValidationException.RequestComparedToSchema)
+                    {
+                        <li>
+                            Message: @error.Message<br />
+                            Line Number: @error.LineNumber<br />
+                            Line Position: @error.LinePosition<br />
+                            Path: @error.Path<br />
+                            Value: @error.Value<br />
+                            Error Type: @error.ErrorType
+                            @if (error.ChildErrors != null && error.ChildErrors.Any())
+                            {
+                                <ul>
+                                    <li>Child Errors:</li>
+                                    <ul>
+                                        @foreach (var childError in error.ChildErrors)
+                                        {
+                                            <li>
+                                                Message: @childError.Message<br />
+                                                Line Number: @childError.LineNumber<br />
+                                                Line Position: @childError.LinePosition<br />
+                                                Path: @childError.Path<br />
+                                                Value: @childError.Value<br />
+                                                Error Type: @childError.ErrorType
+                                            </li>
+                                        }
+                                    </ul>
+                                </ul>
+                            }
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+        @if (dtroValidationException.RequestComparedToRules != null && dtroValidationException.RequestComparedToRules.Any())
+        {
+            <li>
+                Request Compared To Rules:
+                <ul>
+                    @foreach (var error in dtroValidationException.RequestComparedToRules)
+                    {
+                        <li>
+                            Message: @error.Message - Path: @error.Path - ErrorType: @error.ErrorType
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
 }
-
-<h3>Development Mode</h3>
-<p>
-    Swapping to the <strong>Development</strong> environment displays detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+else if (Model.Error is NotFoundException notFoundException)
+{
+    <h2>Not Found</h2>
+    <p>@notFoundException.Message</p>
+}
+else if (Model.Error is HttpRequestException httpRequestException)
+{
+    <h2>Network Error</h2>
+    <p>@httpRequestException.Message</p>
+}
+else if (Model.Error is Exception exception)
+{
+    <h2>General Error</h2>
+    <p>@exception.Message</p>
+}
+else if (Model.Error != null)
+{
+    <h2>Page cannot handled this Error Type - @Model.Error.GetType().Name</h2>
+}

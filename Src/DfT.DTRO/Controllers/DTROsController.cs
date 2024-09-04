@@ -59,8 +59,11 @@ public class DTROsController : ControllerBase
 
         try
         {
+            throw new NotFoundException("Booo");
+
             using (MemoryStream memoryStream = new())
             {
+
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);

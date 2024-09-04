@@ -1,3 +1,5 @@
+using Dft.DTRO.Admin.Helpers;
+
 public class DtroEditModel : PageModel
 {
     private readonly IDtroUserService _dtroUserService;
@@ -23,16 +25,24 @@ public class DtroEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(Guid id)
     {
-        if (TempData.TryGetValue("DtroUserSelect", out object dtroUserSelect))
+        try
         {
-            DtroUserSearch.DtroUserIdSelect = (Guid)dtroUserSelect;
-        }
+            if (TempData.TryGetValue("DtroUserSelect", out object dtroUserSelect))
+            {
+                DtroUserSearch.DtroUserIdSelect = (Guid)dtroUserSelect;
+            }
 
-        if (DtroUserSearch.DtroUserIdSelect != null)
+            if (DtroUserSearch.DtroUserIdSelect != null)
+            {
+              await _dtroService.ReassignDtroAsync(id, DtroUserSearch.DtroUserIdSelect.Value);
+            
+            }
+           
+            return RedirectToPage("Search");
+        }
+        catch (Exception ex)
         {
-            await _dtroService.ReassignDtroAsync(id, DtroUserSearch.DtroUserIdSelect.Value);
+            return HttpResponseHelper.HandleError(ex);
         }
-
-        return RedirectToPage("Search");
     }
 }

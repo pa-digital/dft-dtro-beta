@@ -1,3 +1,5 @@
+using Dft.DTRO.Admin.Helpers;
+
 namespace Dft.DTRO.Admin.Pages;
 
 public class DtroHistoryModel : PageModel
@@ -19,10 +21,20 @@ public class DtroHistoryModel : PageModel
         _dtroService = dtroService;
     }
 
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
-        SourceHistory = await _dtroService.DtroSourceHistory(Id);
-        ProvisionHistory = await _dtroService.DtroProvisionHistory(Id);
+       
+
+        try
+        {
+            SourceHistory = await _dtroService.DtroSourceHistory(Id);
+            ProvisionHistory = await _dtroService.DtroProvisionHistory(Id);
+            return Page();
+        }
+        catch (Exception ex)
+        {
+            return HttpResponseHelper.HandleError(ex);
+        }
     }
 
 }

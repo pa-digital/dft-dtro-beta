@@ -1,3 +1,5 @@
+using Dft.DTRO.Admin.Helpers;
+
 public class DtroDropEditModel : PageModel
 {
     private readonly IDtroService _dtroService;
@@ -16,16 +18,27 @@ public class DtroDropEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, string id)
     {
-
-        if (isEdit)
+        try
         {
-            await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);
-        }
-        else
-        {
-            await _dtroService.CreateDtroAsync(file);
-        }
+            if (isEdit)
+            {
+                await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);
+            }
+            else
+            {
+                await _dtroService.CreateDtroAsync(file);
+            }
 
-        return RedirectToPage("Search");
+            if (HttpResponseHelper.Error != null)
+            {
+                return HttpResponseHelper.HandleApiError();
+            }
+
+            return RedirectToPage("Search");
+        }
+        catch (Exception ex)
+        {
+            return HttpResponseHelper.HandleError(ex);
+        }
     }
 }

@@ -1,3 +1,4 @@
+using Dft.DTRO.Admin.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text;
@@ -16,7 +17,6 @@ namespace Dft.DTRO.Admin.Pages
             _metricsService = metricsService;
             _dtroUserService = dtroUserService;
         }
-
         public MetricSummary Metrics { get; set; } = new MetricSummary();
 
         [BindProperty(SupportsGet = true)]
@@ -107,23 +107,31 @@ namespace Dft.DTRO.Admin.Pages
 
         public async Task<IActionResult> OnPostAsync(bool? exportCsv = null)
         {
-            if (exportCsv == true)
+            try
             {
-                var metricRequest = await CreateRequestAsync(GetPeriodEnum(PeriodOption), NumberSelect, DtroUserSearch.DtroUserIdSelect, UserGroup);
-                var fullMetrics = await _metricsService.FullMetricsForDtroUser(metricRequest);
-
-                if (fullMetrics == null)
+                if (exportCsv == true)
                 {
-                    return Page();
+                    var metricRequest = await CreateRequestAsync(GetPeriodEnum(PeriodOption), NumberSelect, DtroUserSearch.DtroUserIdSelect, UserGroup);
+                    var fullMetrics = await _metricsService.FullMetricsForDtroUser(metricRequest);
+
+                    if (fullMetrics == null)
+                    {
+                        return Page();
+                    }
+
+                    var csvContent = GenerateCsvContent(fullMetrics);
+                    var fileName = "MetricsData.csv";
+                    return File(Encoding.UTF8.GetBytes(csvContent), "text/csv", fileName);
                 }
 
-                var csvContent = GenerateCsvContent(fullMetrics);
-                var fileName = "MetricsData.csv";
-                return File(Encoding.UTF8.GetBytes(csvContent), "text/csv", fileName);
+                await LoadMetricsDataAsync();
+                return RedirectToPage(new { PeriodOption, NumberSelect, DtroUserSearch.DtroUserIdSelect, UserGroup });
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseHelper.HandleError(ex);
             }
 
-            await LoadMetricsDataAsync();
-            return RedirectToPage(new { PeriodOption, NumberSelect, DtroUserSearch.DtroUserIdSelect, UserGroup });
         }
 
         private string GenerateCsvContent(List<FullMetricSummary> metricList)

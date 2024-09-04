@@ -1,3 +1,5 @@
+using Dft.DTRO.Admin.Helpers;
+
 namespace Dft.DTRO.Admin.Pages
 {
     public class IndexModel : PageModel
@@ -14,8 +16,9 @@ namespace Dft.DTRO.Admin.Pages
         public bool HealthApi { get; set; } = false;
         public bool HealthDatabase { get; set; } = false;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+
             try
             {
                 HealthApi = await _metricsService.HealthApi();
@@ -29,11 +32,13 @@ namespace Dft.DTRO.Admin.Pages
                 };
                 var metrics = await _metricsService.MetricsForDtroUser(metricRequest);
                 Metrics = metrics ?? new MetricSummary();
-            }
-            catch (Exception)
-            {
-            }
 
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                return HttpResponseHelper.HandleError(ex);
+            }
         }
     }
 }
