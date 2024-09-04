@@ -64,25 +64,6 @@
             ],
             "type": "string"
         },
-        "AgeOfDriver": {
-            "additionalProperties": false,
-            "description": "Object indicating characteristics about the age of a driver.",
-            "properties": {
-                "operator": {
-                    "$ref": "#/$defs/ComparisonOperatorType",
-                    "description": "The operator  to  be used in  the characteristic comparison operation."
-                },
-                "value": {
-                    "description": "Age of driver.",
-                    "type": "integer"
-                }
-            },
-            "required": [
-                "operator",
-                "value"
-            ],
-            "type": "object"
-        },
         "AllRegulationTypes": {
             "description": "A list of all regulation types",
             "oneOf": [
@@ -132,13 +113,13 @@
                 "applicableMonth": {
                     "items": {
                         "$ref": "#/$defs/MonthType",
-                        "description": "Applicable  month  of  the  year.  “All months of the year” is expressed by non- inclusion of this attribute."
+                        "description": "Applicable  month  of  the  year. “All months of the year” is expressed by non- inclusion of this attribute."
                     },
                     "type": "array",
                     "uniqueItems": true
                 },
                 "weekInMonth": {
-                    "description": "NOTE\tBy default, the WeekofMonth is calculated as follows.  The calendar week commences on a Monday (as per ISO 8601).  The first week of a month is the calendar week containing the first of the month. Several days of the first week of the month may occur in the previous calendar month.  The last week of the month contains the last day of the month in question.",
+                    "description": "NOTE\tBy default, the WeekofMonth is calculated as follows. The calendar week commences on a Monday (as per ISO 8601). The first week of a month is the calendar week containing the first of the month. Several days of the first week of the month may occur in the previous calendar month. The last week of the month contains the last day of the month in question.",
                     "items": {
                         "$ref": "#/$defs/CalendarWeekInMonthType"
                     },
@@ -267,7 +248,7 @@
             "type": "string"
         },
         "ComparisonOperatorType": {
-            "description": "The operator  to  be used in  the  vehicle characteristic comparison operation.",
+            "description": "The operator  to  be used in the vehicle characteristic comparison operation.",
             "enum": [
                 "equalTo",
                 "greaterThan",
@@ -468,7 +449,7 @@
                 "applicableMonth": {
                     "items": {
                         "$ref": "#/$defs/MonthType",
-                        "description": "Applicable  month  of  the  year.  “All months of the year” is expressed by non- inclusion of this attribute."
+                        "description": "Applicable  month  of  the  year. “All months of the year” is expressed by non-inclusion of this attribute."
                     },
                     "type": "array",
                     "uniqueItems": true
@@ -481,30 +462,23 @@
             "description": "WKT Directed Linear",
             "properties": {
                 "coordinates": {
-                    "items": {
-                        "items": {
-                            "items": {
-                                "type": "number"
-                            },
-                            "minItems": 2,
-                            "type": "array"
-                        },
-                        "minItems": 4,
-                        "type": "array"
-                    },
-                    "type": "array"
+                    "description": "coordinates pairs defined in WKT format",
+                    "type": "object"
                 },
-                "type": {
-                    "enum": [
-                        "DirectedLinear"
-                    ],
+                "crs": {
+                    "$ref": "#/$defs/CrsType",
+                    "description": "Coordinate referencing system"
+                },
+                "directedLineString": {
+                    "description": "WKT line string",
                     "type": "string"
                 }
             },
             "required": [
-                "type",
                 "coordinates",
-				"crsType"
+                "crsType",
+                "geometryType",
+                "directedLineString"
             ],
             "type": "object"
         },
@@ -594,12 +568,12 @@
             "description": "Emission characteristics of vehicles.",
             "properties": {
                 "emissionClassificationEuro": {
-                    "description": "The minimum Euro emission classification the vehicle(s) have to comply   with   according   to   the   1970\r\nDirective 70/220/EEC   and   its   several amendments. Note that vehicleType and\r\nfuelType need to be provided in order to\r\nmake this classification explicit.",
+                    "description": "The minimum Euro emission classification the vehicle(s) have to comply with according to the 1970\r\nDirective 70/220/EEC and its several amendments. Note that vehicleType and\r\nfuelType need to be provided in order to\r\nmake this classification explicit.",
                     "type": "string"
                 },
                 "emissionClassificationOther": {
                     "items": {
-                        "description": "Some  other  (probably  locally  defined)\r\nvalue(s) for emission classification.",
+                        "description": "Some other (probably locally defined)\r\nvalue(s) for emission classification.",
                         "type": "string"
                     },
                     "type": "array"
@@ -609,7 +583,7 @@
         },
         "ExtensionEnumeration": {
             "additionalProperties": false,
-            "description": "Object supporting the user-definition of a new list entry - to permit exceptional extension of the data model",
+            "description": "Object supporting the user-definition of a new list entry-to permit exceptional extension of the data model",
             "properties": {
                 "definition": {
                     "description": "user defined definition for the new list entry",
@@ -723,8 +697,8 @@
                     "description": "Indicates if the regulation is dynamic in nature",
                     "type": "boolean"
                 },
-                "overallPeriod": {
-                    "$ref": "#/$defs/OverallPeriod"
+                "timeValidity": {
+                    "$ref": "#/$defs/TimeValidity"
                 },
                 "regulationStatus": {
                     "$ref": "#/$defs/RegulationStatusType",
@@ -746,7 +720,7 @@
                 }
             },
             "required": [
-                "overallPeriod",
+                "timeValidity",
                 "isDynamic",
                 "regulationStatus",
                 "regulationType",
@@ -805,22 +779,22 @@
                         }
                     }
                 },
-				{
-					"if": {
-						"properties": {
-							"geometryType": {
-								"const": "directedLinear"
-							}
-						}
-					},
-					"then": {
-						"properties": {
-							"coordinates": {
-								"$ref": "#/$defs/DirectedLinear"
-							}
-						}
-					}
-				}
+                {
+                    "if": {
+                        "properties": {
+                            "geometryType": {
+                                "const": "directedLinear"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "coordinates": {
+                                "$ref": "#/$defs/DirectedLinear"
+                            }
+                        }
+                    }
+                }
             ],
             "description": "Geometry string defined as per WKT (RFC7946).\r\n\r\nFor moving traffic TROs, the geometry is expected to be defined as appropriate. Often this can by use of the linearGeometry, with coordinates derived from a well-known linear road network model (such as OS Highways). For kerbside restriction TROs, the geometry would normally be represented by a zone (polygon) or linearGeometry representing the shape of the related kerbline.",
             "properties": {
@@ -860,7 +834,7 @@
             "properties": {
                 "comparisonOperator": {
                     "$ref": "#/$defs/ComparisonOperatorType",
-                    "description": "The operator  to  be used in  the  vehicle characteristic comparison operation."
+                    "description": "The operator to be used in the vehicle characteristic comparison operation."
                 },
                 "grossVehicleWeight": {
                     "description": "The gross weight of the vehicle and its load, including any trailers.",
@@ -884,7 +858,7 @@
             "properties": {
                 "comparisonOperator": {
                     "$ref": "#/$defs/ComparisonOperatorType",
-                    "description": "The operator  to  be used in  the  vehicle characteristic comparison operation."
+                    "description": "The operator  to  be used in the vehicle characteristic comparison operation."
                 },
                 "heaviestAxleWeight": {
                     "description": "Indicates a characteristic relating to the heaviest axle of vehicle",
@@ -903,7 +877,7 @@
             "properties": {
                 "comparisonOperator": {
                     "$ref": "#/$defs/ComparisonOperatorType",
-                    "description": "The operator  to  be used in  the  vehicle characteristic comparison operation."
+                    "description": "The operator to be used in the vehicle characteristic comparison operation."
                 },
                 "vehicleHeight": {
                     "description": "height of the highest part, excluding \r\nantennae, of an individual vehicle from the \r\nreference plane defined by the bottom of the \r\nwheels touching the ground, in metres",
@@ -917,7 +891,7 @@
             "type": "object"
         },
         "InstanceOfDayInMonth": {
-            "description": "Specification  of  periods  defined  by  the  instance  of  a specific weekday within a month (e.g. 3rd Tuesday in May).",
+            "description": "Specification of periods defined  by  the  instance of a specific weekday within a month (e.g. 3rd Tuesday in May).",
             "enum": [
                 "firstInstance",
                 "secondInstance",
@@ -981,13 +955,6 @@
             ],
             "type": "object"
         },
-        "LicenseCharacteristicsType": {
-            "enum": [
-                "permanent",
-                "provisional"
-            ],
-            "type": "string"
-        },
         "LinearDirectionType": {
             "description": "Indicates the applicable direction for a linear direction",
             "enum": [
@@ -1009,12 +976,16 @@
                     "$ref": "#/$defs/CrsType",
                     "description": "Coordinate referencing system"
                 },
-				"direction": {
-					"$ref": "#/$defs/LinearDirectionType"
-				},
-				"lateralPosition": {
-					"$ref": "#/$defs/LinearLateralPositionType"
-				},
+                "direction": {
+                    "$ref": "#/$defs/LinearDirectionType"
+                },
+                "lateralPosition": {
+                    "$ref": "#/$defs/LinearLateralPositionType"
+                },
+                "linearString": {
+                    "description": "WKT linear string",
+                    "type": "string"
+                },
                 "representation": {
                     "$ref": "#/$defs/LinearType",
                     "description": "indicates the nature of the linear location for a linear representation of a regulated place."
@@ -1024,6 +995,9 @@
                 "coordinates",
                 "crsType",
                 "geometryType",
+                "direction",
+                "lateralPosition",
+                "lineString",
                 "representation"
             ],
             "type": "object"
@@ -1219,8 +1193,8 @@
                     },
                     "type": "array"
                 },
-                "overallPeriod": {
-                    "$ref": "#/$defs/OverallPeriod"
+                "timeValidity": {
+                    "$ref": "#/$defs/TimeValidity"
                 },
                 "regulationFullText": {
                     "description": "Full description of the other type of regulation",
@@ -1246,7 +1220,7 @@
                 }
             },
             "required": [
-                "overallPeriod",
+                "timeValidity",
                 "isDynamic",
                 "regulationFullText",
                 "regulationShortName",
@@ -1277,7 +1251,7 @@
             ],
             "type": "string"
         },
-        "OverallPeriod": {
+        "TimeValidity": {
             "additionalProperties": false,
             "description": "A continuous or discontinuous period of validity defined by overall bounding start and end times and the possible intersection of valid periods (potentially recurring) with the complement of exception periods (also potentially recurring). [EN 16157-7:2018]",
             "properties": {
@@ -1469,8 +1443,8 @@
                 "business",
                 "resident",
                 "other",
-				"residentWithNonResidentBlueBadge",
-				"residentExcludesNonResidentBlueBadge"
+                "residentWithNonResidentBlueBadge",
+                "residentExcludesNonResidentBlueBadge"
             ],
             "type": "string"
         },
@@ -1486,6 +1460,10 @@
                     "$ref": "#/$defs/CrsType",
                     "description": "Coordinate referencing system"
                 },
+                "point": {
+                    "description": "WKT point",
+                    "type": "string"
+                },
                 "representation": {
                     "$ref": "#/$defs/PointType",
                     "description": "indicates the nature of the point location for a point representation of a regulated place."
@@ -1495,6 +1473,7 @@
                 "coordinates",
                 "crsType",
                 "geometryType",
+                "point",
                 "representation"
             ],
             "type": "object"
@@ -1513,30 +1492,23 @@
             "description": "WKT Polygon",
             "properties": {
                 "coordinates": {
-                    "items": {
-                        "items": {
-                            "items": {
-                                "type": "number"
-                            },
-                            "minItems": 2,
-                            "type": "array"
-                        },
-                        "minItems": 4,
-                        "type": "array"
-                    },
-                    "type": "array"
+                    "description": "coordinates pairs defined in WKT format",
+                    "type": "object"
                 },
-                "type": {
-                    "enum": [
-                        "Polygon"
-                    ],
+                "crs": {
+                    "$ref": "#/$defs/CrsType",
+                    "description": "Coordinate referencing system"
+                },
+                "polygon": {
+                    "description": "WKT polygon string",
                     "type": "string"
                 }
             },
             "required": [
-                "type",
                 "coordinates",
-				"crsType"
+                "crsType",
+                "geometryType",
+                "polygon"
             ],
             "type": "object"
         },
@@ -2090,8 +2062,8 @@
                 "motorway",
                 "trunkRoad",
                 "aRoad",
-				"bRoad",
-				"cRoad",
+                "bRoad",
+                "cRoad",
                 "other"
             ],
             "type": "string"
@@ -2230,8 +2202,8 @@
                     "description": "Indicates if the regulation is dynamic in nature",
                     "type": "boolean"
                 },
-                "overallPeriod": {
-                    "$ref": "#/$defs/OverallPeriod"
+                "timeValidity": {
+                    "$ref": "#/$defs/TimeValidity"
                 },
                 "regulationStatus": {
                     "$ref": "#/$defs/RegulationStatusType",
@@ -2253,7 +2225,7 @@
                 }
             },
             "required": [
-                "overallPeriod",
+                "timeValidity",
                 "isDynamic",
                 "regulationStatus",
                 "timeZone",
@@ -2328,8 +2300,8 @@
                     "minimum": 5,
                     "type": "integer"
                 },
-                "overallPeriod": {
-                    "$ref": "#/$defs/OverallPeriod"
+                "timeValidity": {
+                    "$ref": "#/$defs/TimeValidity"
                 },
                 "regulationStatus": {
                     "$ref": "#/$defs/RegulationStatusType",
@@ -2351,7 +2323,7 @@
                 }
             },
             "required": [
-                "overallPeriod",
+                "timeValidity",
                 "isDynamic",
                 "mphValue",
                 "regulationStatus",
@@ -2871,10 +2843,10 @@
                     "type": "array"
                 },
                 "loadType": {
-					"items": {
-						"$ref": "#/$defs/PayloadType",
-						"description": "The type of load carried by the vehicle, especially in respect of hazardous loads."
-					}
+                    "items": {
+                        "$ref": "#/$defs/PayloadType",
+                        "description": "The type of load carried by the vehicle, especially in respect of hazardous loads."
+                    },
                     "type": "string"
                 },
                 "numberOfAxlesCharacteristic": {
@@ -2885,7 +2857,7 @@
                 },
                 "vehicleEquipment": {
                     "description": "The type of equipment in use or on board the vehicle.",
-					"$ref": "#/$defs/VehicleEquipmentType",
+                    "$ref": "#/$defs/VehicleEquipmentType",
                     "type": "string"
                 },
                 "vehicleType": {
@@ -2896,10 +2868,10 @@
                     "type": "array"
                 },
                 "vehicleUsage": {
-					"items": {
-						"$ref": "#/$defs/VehicleUsageType",
-						"description": "The type of usage of the vehicle (i.e. for what purpose is the vehicle being used)."
-					},
+                    "items": {
+                        "$ref": "#/$defs/VehicleUsageType",
+                        "description": "The type of usage of the vehicle (i.e. for what purpose is the vehicle being used)."
+                    },
                     "type": "string"
                 },
                 "widthCharacteristic": {
