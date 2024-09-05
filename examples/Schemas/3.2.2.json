@@ -2056,7 +2056,8 @@
                 "speedLimiterInUse",
                 "studdedTyresInUse",
                 "wheelchairSystem",
-                "withoutSnowTyresOrChainsOnBoard"
+                "withoutSnowTyresOrChainsOnBoard",
+				"other"
             ]
         },
         "VehicleType": {
@@ -2079,7 +2080,8 @@
                 "soloMotorcycle",
                 "taxi",
                 "trackedLayingVehicle",
-                "vehicleWithTrailer"
+                "vehicleWithTrailer",
+				"other"
             ]
         },
         "VehicleUsageType": {
@@ -2096,7 +2098,8 @@
                 "locallyRegisteredPrivateHireVehicle",
                 "military",
                 "privateHireVehicle",
-                "statutoryUndertakerPurpose"
+                "statutoryUndertakerPurpose",
+				"other"
             ]
         },
         "WeekInMonthType": {
@@ -2146,7 +2149,8 @@
                 "permitType",
                 "regulationType",
                 "vehicleEquipmentType",
-                "vehicleUsageType"
+                "vehicleUsageType",
+				"vehicleType"
             ]
         }
     },
