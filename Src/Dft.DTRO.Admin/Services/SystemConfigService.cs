@@ -39,12 +39,13 @@ public class SystemConfigService : ISystemConfigService
         _logger.LogInformation($"Client Base URL: {_client.BaseAddress} generated at {DateTime.UtcNow:G}");
         return true;
     }
-    
+
 
     public async Task<SystemConfig> GetSystemConfig()
     {
+        _logger.LogInformation($"Method {nameof(GetSystemConfig)} called at {DateTime.UtcNow:G}");
 
-        var unknown  = new SystemConfig() { SystemName = "Unknown" , IsTest = false};
+        var unknown = new SystemConfig() { SystemName = "Unknown", IsTest = false };
         try
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/systemConfig");
@@ -61,6 +62,7 @@ public class SystemConfigService : ISystemConfigService
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (jsonResponse == null)
             {
+                _logger.LogError($"Response content {jsonResponse} generated at {DateTime.UtcNow:G}");
                 return unknown;
             }
             var ret = JsonSerializer.Deserialize<SystemConfig>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -80,6 +82,6 @@ public class SystemConfigService : ISystemConfigService
             unknown.SystemName = "Not Found";
             unknown.CurrentUserName = "";
             return unknown;
-        }   
+        }
     }
 }
