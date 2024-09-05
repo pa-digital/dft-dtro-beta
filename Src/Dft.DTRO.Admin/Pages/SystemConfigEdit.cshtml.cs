@@ -30,7 +30,11 @@ public class SystemConfigEditModel : PageModel
             return RedirectToPage("Index");
         }
         var isUpdated = await _systemConfigService.UpdateSystemConfig(SystemConfig);
-        _logger.LogInformation($"Method 'UpdateSystemConfig' called at {DateTime.UtcNow:G} returned {isUpdated}");
+        _logger.LogInformation($"Method '{nameof(_systemConfigService.UpdateSystemConfig)}' called at {DateTime.UtcNow:G} returned {isUpdated}");
+        _logger.LogInformation($"x-App-Id\t'{SystemConfig.xAppId}' called at {DateTime.UtcNow:G}");
+        _logger.LogInformation($"Current User\t'{SystemConfig.CurrentUserName}' called at {DateTime.UtcNow:G}");
+        _logger.LogInformation($"Is in test?\t'{SystemConfig.IsTest}' called at {DateTime.UtcNow:G}");
+        _logger.LogInformation($"System name\t'{SystemConfig.SystemName}' called at {DateTime.UtcNow:G}");
         return RedirectToPage("Index");
     }
 }
