@@ -2,7 +2,7 @@
 
 # Script Variables
 ORG=$apigee_organisation
-YAML_FILE="../openApi/openapi3_0.yaml"
+YAML_FILE="openApi/openapi3_0.yaml"
 
 to_title_case() {
   echo "$1" | sed -e 's/\b./\u&/g' -e 's/-/ /g'
