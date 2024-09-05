@@ -24,13 +24,6 @@ paths:
         - oAuth:
             - dsp
       parameters:
-        - name: x-app-id
-          in: header
-          description: xAppId identification a D-TRO is being submitted for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
@@ -81,13 +74,6 @@ paths:
         - oAuth:
             - dsp
       parameters:
-        - name: x-app-id
-          in: header
-          description: xAppId identification a D-TRO is being updated for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: id
           in: path
           description: ID of the D-TRO to update.
@@ -147,13 +133,6 @@ paths:
         - oAuth:
             - dsp
       parameters:
-        - name: x-app-id
-          in: header
-          description: xAppId identification a D-TRO is being submitted for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
@@ -190,13 +169,6 @@ paths:
         - oAuth:
             - dsp
       parameters:
-        - name: x-app-id
-          in: header
-          description: xAppId identification a D-TRO is being updated for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: id
           in: path
           description: ID of the D-TRO to update.
@@ -271,13 +243,6 @@ paths:
         - oAuth:
             - dsp
       parameters:
-        - name: x-app-id
-          in: header
-          description: xAppId identification a D-TRO is being mark as deleted for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: id
           in: path
           description: ID of the D-TRO to mark as deleted.
@@ -391,13 +356,6 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - name: x-app-id
-          in: header
-          description: xAppId identification of the D-TRO owner.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: id
           in: path
           description: ID of the D-TRO to assign.
@@ -439,13 +397,6 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: x-app-id
-          in: header
-          description: xAppId identification of the event D-TRO.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
@@ -1363,13 +1314,6 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: x-app-id
-          in: header
-          description: xAppId identification a D-TRO is being search for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
@@ -1405,12 +1349,6 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - name: x-app-id
-          in: header
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
