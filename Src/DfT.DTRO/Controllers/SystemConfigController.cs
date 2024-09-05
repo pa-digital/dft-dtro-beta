@@ -36,7 +36,7 @@ public class SystemConfigController : ControllerBase
     [HttpPut]
     [Route("/systemConfig/updateFromBody")]
     [ValidateModelState]
-    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
+    [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
     [SwaggerResponse(statusCode: 400, description: "Bad Request.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
