@@ -46,6 +46,8 @@ public interface IDtroUserDal
     /// <returns>A <see cref="Task"/> representing the asynchronous get operation.</returns>
     Task<DtroUser> GetDtroUserOnAppIdAsync(Guid appId);
 
+
+    Task<bool> AnyAdminUserExistsAsync();
     /// <summary>
     /// Save DtroUser by <paramref name="dtroUserRequest"/>
     /// </summary>
