@@ -49,6 +49,7 @@ public class SystemConfigService : ISystemConfigService
 
             var response = await _client.SendAsync(request);
             _logger.LogInformation($"Response content: {response.Content} generated at {DateTime.UtcNow:G}");
+            _logger.LogInformation($"Response content: {response.RequestMessage} generated at {DateTime.UtcNow:G}");
 
             response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();
