@@ -1,7 +1,4 @@
-﻿
-using DfT.DTRO.Migrations;
-
-public class UserGroupMiddleware
+﻿public class UserGroupMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<UserGroupMiddleware> _logger;
@@ -62,11 +59,16 @@ public class UserGroupMiddleware
                 {
                     var dtroUserDal = scope.ServiceProvider.GetRequiredService<IDtroUserDal>();
 
-                    var dtroUser = await dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
-                    if (dtroUser == null)
+                    var anyAdminExists = await dtroUserDal.AnyAdminUserExistsAsync();
+                    if (anyAdminExists)
                     {
-                        throw new Exception($"Middleware , access denied: Dtro user for ({xAppId}) not found");
+                        var dtroUser = await dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+                        if (dtroUser == null)
+                        {
+                            throw new Exception($"Middleware , access denied: Dtro user for ({xAppId}) not found");
+                        }
                     }
+
                     return true;
                 }
             }

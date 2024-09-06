@@ -81,6 +81,14 @@ variable "cloud_run_min_instance_count" {
   default     = "1"
 }
 
+variable "cloud_run_service_ui_client_id" {
+  type        = string
+}
+
+variable "cloud_run_service_ui_client_secret" {
+  type        = string
+}
+
 variable "database_max_connections" {
   type        = number
   description = "Maximum number of connections allowed by the Postgres database"
@@ -128,8 +136,8 @@ variable "dtro_api_url" {
   type        = map(string)
   description = "API url for DTRO"
   default = {
-    dev  = "https://dtro-dev.dft.gov.uk"
-    test = "https://dtro-test.dft.gov.uk"
-    prod = "https://dtro.dft.gov.uk"
+    dev  = "https://dtro-dev.dft.gov.uk/v1"
+    test = "https://dtro-test.dft.gov.uk/v1"
+    prod = "https://dtro.dft.gov.uk/v1"
   }
 }
