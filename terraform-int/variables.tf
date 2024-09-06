@@ -87,6 +87,14 @@ variable "cloud_run_min_instance_count" {
   default     = "1"
 }
 
+variable "cloud_run_service_ui_client_id" {
+  type        = string
+}
+
+variable "cloud_run_service_ui_client_secret" {
+  type        = string
+}
+
 variable "database_max_connections" {
   type        = number
   description = "Maximum number of connections allowed by the Postgres database"
