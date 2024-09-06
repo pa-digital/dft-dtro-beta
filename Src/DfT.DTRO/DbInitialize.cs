@@ -4,18 +4,18 @@ namespace DfT.DTRO;
 
 public class DbInitialize
 {
-    public static void EmptyDtroUsersTable(IApplicationBuilder app)
-    {
-        using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
-        {
-            DtroContext context = serviceScope
-                .ServiceProvider
-                .GetService<DtroContext>();
+    //public static void EmptyDtroUsersTable(IApplicationBuilder app)
+    //{
+    //    using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
+    //    {
+    //        DtroContext context = serviceScope
+    //            .ServiceProvider
+    //            .GetService<DtroContext>();
 
-            context.DtroUsers.RemoveRange();
-            context.SaveChanges();
-        }
-    }
+    //        context.DtroUsers.RemoveRange();
+    //        context.SaveChanges();
+    //    }
+    //}
 
     public static void SeedAppData(IApplicationBuilder app)
     {
