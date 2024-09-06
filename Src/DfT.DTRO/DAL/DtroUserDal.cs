@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Migrations;
-namespace DfT.DTRO.DAL;
+﻿namespace DfT.DTRO.DAL;
 
 /// <summary>
 /// Implementation of the <see cref="IDtroUserDal"/> service.
@@ -38,18 +37,18 @@ public class DtroUserDal : IDtroUserDal
     ///<inheritdoc cref="IDtroUserDal"/>
     public async Task<List<DtroUserResponse>> GetAllDtroUsersAsync()
     {
-      var admins =  await _dtroContext.DtroUsers
-            .OrderBy(dtroUser => dtroUser.Name)
-            .Select(dtroUser => new DtroUserResponse
-            {
-                Id = dtroUser.Id,
-                TraId = dtroUser.TraId,
-                Name = dtroUser.Name,
-                Prefix = dtroUser.Prefix,
-                UserGroup = (UserGroup)dtroUser.UserGroup,
-                xAppId = dtroUser.xAppId
-            }).Where( x => x.UserGroup == UserGroup.Admin)
-            .ToListAsync();
+        var admins = await _dtroContext.DtroUsers
+              .OrderBy(dtroUser => dtroUser.Name)
+              .Select(dtroUser => new DtroUserResponse
+              {
+                  Id = dtroUser.Id,
+                  TraId = dtroUser.TraId,
+                  Name = dtroUser.Name,
+                  Prefix = dtroUser.Prefix,
+                  UserGroup = (UserGroup)dtroUser.UserGroup,
+                  xAppId = dtroUser.xAppId
+              }).Where(x => x.UserGroup == UserGroup.Admin)
+              .ToListAsync();
 
         var nonAdmins = await _dtroContext.DtroUsers
             .OrderBy(dtroUser => dtroUser.Name)
@@ -115,7 +114,7 @@ public class DtroUserDal : IDtroUserDal
 
     public async Task<bool> AnyAdminUserExistsAsync()
     {
-        var exists = await _dtroContext.DtroUsers.AnyAsync(it => it.xAppId != Guid.Empty && it.UserGroup == UserGroup.Admin);
+        var exists = await _dtroContext.DtroUsers.AnyAsync(it => it.xAppId != Guid.Empty && it.UserGroup == (int)UserGroup.Admin);
         return exists;
     }
 
@@ -179,7 +178,7 @@ public class DtroUserDal : IDtroUserDal
     ///<inheritdoc cref="IDtroUserDal"/>
     public async Task<GuidResponse> UpdateDtroUserAsync(DtroUserRequest dtroUserRequest)
     {
-      
+
 
         if (!await DtroUserExistsAsync(dtroUserRequest.Id))
         {
@@ -187,7 +186,7 @@ public class DtroUserDal : IDtroUserDal
         }
 
         var existing = await GetDtroUserAsync(dtroUserRequest.Id);
-      
+
         if (dtroUserRequest.UserGroup != UserGroup.Admin)
         {
             if (dtroUserRequest.TraId != null)
