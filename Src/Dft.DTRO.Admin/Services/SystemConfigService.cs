@@ -25,8 +25,12 @@ public class SystemConfigService : ISystemConfigService
         _logger.LogInformation($"Request uri: {request.RequestUri} generated at {DateTime.UtcNow:G}");
 
         _xappIdService.AddXAppIdHeader(ref request);
+        _logger.LogInformation($"Client Base URL: {_client.BaseAddress} generated at {DateTime.UtcNow:G}");
+
         var response = await _client.SendAsync(request);
         _logger.LogInformation($"Response content: {response.Content} generated at {DateTime.UtcNow:G}");
+        _logger.LogInformation($"Response request message: {response.RequestMessage} generated at {DateTime.UtcNow:G}");
+
 
         response.EnsureSuccessStatusCode();
 
@@ -44,12 +48,13 @@ public class SystemConfigService : ISystemConfigService
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/systemConfig");
             _xappIdService.AddXAppIdHeader(ref request);
+            _logger.LogInformation($"Client Base URL: {_client.BaseAddress} generated at {DateTime.UtcNow:G}");
             _logger.LogInformation($"Request headers: {request.Headers} generated at {DateTime.UtcNow:G}");
             _logger.LogInformation($"Request uri: {request.RequestUri} generated at {DateTime.UtcNow:G}");
 
             var response = await _client.SendAsync(request);
             _logger.LogInformation($"Response content: {response.Content} generated at {DateTime.UtcNow:G}");
-            _logger.LogInformation($"Response content: {response.RequestMessage} generated at {DateTime.UtcNow:G}");
+            _logger.LogInformation($"Response request message: {response.RequestMessage} generated at {DateTime.UtcNow:G}");
 
             response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();
