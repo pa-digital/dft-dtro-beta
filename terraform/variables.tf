@@ -136,8 +136,8 @@ variable "dtro_api_url" {
   type        = map(string)
   description = "API url for DTRO"
   default = {
-    dev  = "https://dtro-dev.dft.gov.uk"
-    test = "https://dtro-test.dft.gov.uk"
-    prod = "https://dtro.dft.gov.uk"
+    dev  = "https://dtro-dev.dft.gov.uk/v1"
+    test = "https://dtro-test.dft.gov.uk/v1"
+    prod = "https://dtro.dft.gov.uk/v1"
   }
 }
