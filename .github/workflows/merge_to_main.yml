@@ -13,6 +13,8 @@ jobs:
       workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
       wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
       execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
+      service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_TEST }}
+      service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_TEST }}
     with:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_DEV }}
       gcp-project: ${{ vars.GCP_PROJECT_DEV }}
@@ -36,6 +38,8 @@ jobs:
       workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_TEST }}
       wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}
       execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_TEST }}
+      service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_TEST }}
+      service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_TEST }}
     with:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_TEST }}
       gcp-project: ${{ vars.GCP_PROJECT_ID_TEST }}
