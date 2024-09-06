@@ -87,8 +87,8 @@ jobs:
   deploy-resources:
     name: Deploy GCP Resources to Integration
     if: ${{ inputs.run-terraform }}
-    needs:
-      - build-push-dtro
+#    needs:
+#      - build-push-dtro
     runs-on: ubuntu-latest
     permissions:
       id-token: write
