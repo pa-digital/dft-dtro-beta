@@ -70,8 +70,8 @@ env:
   TF_VAR_service_ui_image: ${{ inputs.service-ui-image-name }}
   TF_VAR_dtro_tag: ${{ inputs.dtro-image-tag }}
   TF_VAR_service_ui_tag: ${{  inputs.service-ui-image-tag }}
-  TF_VAR_service_ui_client_id: ${{ secrets.service_ui_client_id }}
-  TF_VAR_service_ui_client_secret: ${{ secrets.service_ui_client_secret }}
+  TF_VAR_cloud_run_service_ui_client_id: ${{ secrets.service_ui_client_id }}
+  TF_VAR_cloud_run_service_ui_client_secret: ${{ secrets.service_ui_client_secret }}
 
 permissions:
   contents: read
