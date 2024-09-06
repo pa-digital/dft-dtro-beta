@@ -113,6 +113,12 @@ public class DtroUserDal : IDtroUserDal
         return exists;
     }
 
+    public async Task<bool> AnyAdminUserExistsAsync()
+    {
+        var exists = await _dtroContext.DtroUsers.AnyAsync(it => it.xAppId != Guid.Empty && it.UserGroup == UserGroup.Admin);
+        return exists;
+    }
+
     ///<inheritdoc cref="IDtroUserDal"/>
     public async Task<bool> DtroUserExistsAsync(Guid guid)
     {
