@@ -267,11 +267,11 @@ jobs:
         run: apigeecli apis create bundle --name "dtro-${env}-server" --proxy-zip proxy.zip --env "${{ env.name_prefix }}-environment" --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
 
       - name: Create Products
-        if: ${{ inputs.environment != 'prod' }}
+       # if: ${{ inputs.environment != 'prod' }}
         run: |
           sed -i "s/ENV/${env}/g" products/products.json
           apigeecli products import -f products/products.json --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --upsert
 
       - name: Publish Products to Developer Portal
-        if: ${{ inputs.environment != 'prod' }}
+       # if: ${{ inputs.environment != 'prod' }}
         run: portals/publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}
