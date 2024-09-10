@@ -24,7 +24,7 @@ jobs:
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
-          approvers: VinP-PA,stm-john-cooper #TODO: Update when full list is available
+          approvers: VinP-PA,stm-john-cooper,GaTilley #TODO: Update when full list is available
           minimum-approvals: 1
           issue-title: "Deploying Application version ${{steps.releasev.outputs.RELEASE}} to Prod"
           issue-body: "Approving this issue will deploy Application release version '${{steps.releasev.outputs.RELEASE}}' to the Production environment."
