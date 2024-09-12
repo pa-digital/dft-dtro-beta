@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\Dft.DTRO.Admin.props" />
-</Project>

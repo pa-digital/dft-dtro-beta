@@ -31,7 +31,7 @@ public class SystemConfigEditModel : PageModel
             {
                 return RedirectToPage("Index");
             }
-            await _systemConfigService.UpdateSystemConfig(SystemConfig);
+            var isUpdated = await _systemConfigService.UpdateSystemConfig(SystemConfig);
             _logger.LogInformation($"Method '{nameof(_systemConfigService.UpdateSystemConfig)}' called at {DateTime.UtcNow:G} returned {isUpdated}");
             _logger.LogInformation($"x-App-Id\t'{SystemConfig.xAppId}' called at {DateTime.UtcNow:G}");
             _logger.LogInformation($"Current User\t'{SystemConfig.CurrentUserName}' called at {DateTime.UtcNow:G}");
