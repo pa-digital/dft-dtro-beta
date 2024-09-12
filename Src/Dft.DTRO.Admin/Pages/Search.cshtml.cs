@@ -1,5 +1,3 @@
-using Dft.DTRO.Admin.Helpers;
-
 public class SearchModel : PageModel
 {
     public PaginatedResponse<DtroSearchResult> Dtros { get; set; }
@@ -7,6 +5,7 @@ public class SearchModel : PageModel
     private readonly IDtroUserService _dtroUserService;
     private readonly ISystemConfigService _systemConfigService;
     private readonly IXappIdService _xappIdService;
+    private readonly IErrHandlingService _errHandlingService;
 
     [BindProperty(SupportsGet = true)]
     public DtroUserSearch DtroUserSearch { get; set; } = new DtroUserSearch();
@@ -17,12 +16,14 @@ public class SearchModel : PageModel
     public SearchModel(IDtroService dtroService, 
                         IDtroUserService dtroUserService,
                         ISystemConfigService systemConfigService,
-                        IXappIdService xappIdService)
+                        IXappIdService xappIdService,
+                        IErrHandlingService errHandlingService)
     {
         _dtroService = dtroService;
         _dtroUserService = dtroUserService;
         _systemConfigService = systemConfigService;
         _xappIdService = xappIdService;
+        _errHandlingService = errHandlingService;
     }
 
     public async Task<IActionResult> OnGetAsync()
@@ -56,7 +57,7 @@ public class SearchModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 
@@ -76,7 +77,7 @@ public class SearchModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 

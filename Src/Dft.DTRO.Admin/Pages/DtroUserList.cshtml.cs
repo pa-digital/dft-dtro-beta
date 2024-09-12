@@ -1,12 +1,11 @@
-using Dft.DTRO.Admin.Helpers;
-
 public class DtroUserListModel : PageModel
 {
     private readonly IDtroUserService _dtroUserService;
-
-    public DtroUserListModel(IDtroUserService dtroUserService)
+    private readonly IErrHandlingService _errHandlingService;
+    public DtroUserListModel(IDtroUserService dtroUserService, IErrHandlingService errHandlingService)
     {
         _dtroUserService = dtroUserService;
+        _errHandlingService = errHandlingService;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -45,7 +44,7 @@ public class DtroUserListModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 
@@ -89,7 +88,7 @@ public class DtroUserListModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 

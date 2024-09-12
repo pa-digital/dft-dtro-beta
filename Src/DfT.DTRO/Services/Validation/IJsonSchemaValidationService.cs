@@ -4,5 +4,5 @@ namespace DfT.DTRO.Services.Validation;
 
 public interface IJsonSchemaValidationService
 {
-    IList<DtroJsonValidationError> ValidateRequestAgainstJsonSchema(string jsonSchemaAsString, string inputJson);
+    IList<DtroJsonValidationErrorResponse> ValidateRequestAgainstJsonSchema(string jsonSchemaAsString, string inputJson);
 }

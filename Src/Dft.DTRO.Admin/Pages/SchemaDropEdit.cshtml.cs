@@ -1,13 +1,13 @@
-using Dft.DTRO.Admin.Helpers;
 
 public class SchemaDropEditModel : PageModel
 {
     private readonly ISchemaService _schemaService;
-
-    public SchemaDropEditModel(ISchemaService schemaService, IConfiguration configuration)
+    private readonly IErrHandlingService _errHandlingService;
+    public SchemaDropEditModel(ISchemaService schemaService, IConfiguration configuration, IErrHandlingService errHandlingService)
     {
         _schemaService = schemaService;
         ApiBaseUrl = configuration["ExternalApi:BaseUrl"];
+        _errHandlingService = errHandlingService;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -32,7 +32,7 @@ public class SchemaDropEditModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 }

@@ -1,19 +1,19 @@
-using Dft.DTRO.Admin.Helpers;
-
 public class DtroEditModel : PageModel
 {
     private readonly IDtroUserService _dtroUserService;
     private readonly IDtroService _dtroService;
+    private readonly IErrHandlingService _errHandlingService;
     [BindProperty(SupportsGet = true)]
     public DtroUserSearch DtroUserSearch { get; set; } = new DtroUserSearch();
 
     [BindProperty(SupportsGet = true)]
     public string Id { get; set; }
 
-    public DtroEditModel(IDtroService dtroService, IDtroUserService traService)
+    public DtroEditModel(IDtroService dtroService, IDtroUserService traService, IErrHandlingService errHandlingService)
     {
         _dtroService = dtroService;
         _dtroUserService = traService;
+        _errHandlingService = errHandlingService;
     }
 
     public async Task OnGetAsync()
@@ -42,7 +42,7 @@ public class DtroEditModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 }

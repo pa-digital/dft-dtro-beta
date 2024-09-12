@@ -1,7 +1,3 @@
-using Dft.DTRO.Admin.Helpers;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Text;
 
 namespace Dft.DTRO.Admin.Pages
 {
@@ -10,12 +6,13 @@ namespace Dft.DTRO.Admin.Pages
         private readonly ILogger<MetricsModel> _logger;
         private readonly IMetricsService _metricsService;
         private readonly IDtroUserService _dtroUserService;
-
-        public MetricsModel(ILogger<MetricsModel> logger, IMetricsService metricsService, IDtroUserService dtroUserService)
+        private readonly IErrHandlingService _errHandlingService;
+        public MetricsModel(ILogger<MetricsModel> logger, IMetricsService metricsService, IDtroUserService dtroUserService, IErrHandlingService errHandlingService)
         {
             _logger = logger;
             _metricsService = metricsService;
             _dtroUserService = dtroUserService;
+            _errHandlingService = errHandlingService;
         }
         public MetricSummary Metrics { get; set; } = new MetricSummary();
 
@@ -129,7 +126,7 @@ namespace Dft.DTRO.Admin.Pages
             }
             catch (Exception ex)
             {
-                return HttpResponseHelper.HandleError(ex);
+                return _errHandlingService.HandleUiError(ex);
             }
 
         }

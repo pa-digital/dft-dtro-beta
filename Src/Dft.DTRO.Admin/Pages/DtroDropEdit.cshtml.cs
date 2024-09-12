@@ -1,13 +1,13 @@
-using Dft.DTRO.Admin.Helpers;
 
 public class DtroDropEditModel : PageModel
 {
     private readonly IDtroService _dtroService;
-
-    public DtroDropEditModel(IDtroService dtroService, IConfiguration configuration)
+    private readonly IErrHandlingService _errHandlingService;
+    public DtroDropEditModel(IDtroService dtroService, IConfiguration configuration, IErrHandlingService errHandlingService)
     {
         _dtroService = dtroService;
         ApiBaseUrl = configuration["ExternalApi:BaseUrl"];
+        _errHandlingService = errHandlingService;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -29,16 +29,11 @@ public class DtroDropEditModel : PageModel
                 await _dtroService.CreateDtroAsync(file);
             }
 
-            if (HttpResponseHelper.Error != null)
-            {
-                return HttpResponseHelper.HandleApiError();
-            }
-
             return RedirectToPage("Search");
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 }

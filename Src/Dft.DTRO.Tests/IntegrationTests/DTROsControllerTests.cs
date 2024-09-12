@@ -120,10 +120,9 @@ public class DTROsControllerTests
         HttpResponseMessage response = await client.PostAsync("/dtros/createFromBody", payload);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        ApiErrorResponse? data = JsonConvert.DeserializeObject<ApiErrorResponse>(await response.Content.ReadAsStringAsync());
+        DtroValidationExceptionResponse? data = JsonConvert.DeserializeObject<DtroValidationExceptionResponse>(await response.Content.ReadAsStringAsync());
 
         Assert.NotNull(data);
-        Assert.Equal("Dtro Validation Failure", data.Message);
     }
 
     [Fact]

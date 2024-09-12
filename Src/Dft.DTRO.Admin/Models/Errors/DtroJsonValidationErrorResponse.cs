@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json.Schema;
-namespace DfT.DTRO.Models.Errors;
+﻿namespace Dft.DTRO.Admin.Models.Errors;
 
-public class DtroJsonValidationError
+public class DtroJsonValidationErrorResponse
 {
     public string Message { get; set; }
 
@@ -15,5 +14,5 @@ public class DtroJsonValidationError
 
     public string ErrorType { get; set; }
 
-    public IList<DtroJsonValidationError> ChildErrors { get; set; } = new List<DtroJsonValidationError>();
+    public IList<DtroJsonValidationErrorResponse> ChildErrors { get; set; } = new List<DtroJsonValidationErrorResponse>();
 }

@@ -59,8 +59,6 @@ public class DTROsController : ControllerBase
 
         try
         {
-            throw new NotFoundException("Booo");
-
             using (MemoryStream memoryStream = new())
             {
 
@@ -77,7 +75,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
-            return BadRequest(err);
+            return BadRequest(err.MapToResponse());
         }
         catch (NotFoundException nFex)
         {
@@ -141,7 +139,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
-            return BadRequest(err);
+            return BadRequest(err.MapToResponse());
         }
         catch (NotFoundException nFex)
         {
@@ -191,7 +189,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
-            return BadRequest(err);
+            return BadRequest(err.MapToResponse());
         }
         catch (NotFoundException nFex)
         {
@@ -242,7 +240,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
-            return BadRequest(err);
+            return BadRequest(err.MapToResponse());
         }
         catch (NotFoundException nFex)
         {

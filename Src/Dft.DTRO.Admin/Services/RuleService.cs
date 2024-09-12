@@ -3,10 +3,13 @@ public class RuleService : IRuleService
 {
     private readonly HttpClient _client;
     private readonly IXappIdService _xappIdService;
-    public RuleService(IHttpClientFactory clientFactory, IXappIdService xappIdService)
+    private readonly IErrHandlingService _errHandlingService;
+
+    public RuleService(IHttpClientFactory clientFactory, IXappIdService xappIdService, IErrHandlingService errHandlingService)
     {
         _client = clientFactory.CreateClient("ExternalApi");
         _xappIdService = xappIdService;
+        _errHandlingService = errHandlingService;
     }
 
     public async Task UpdateRuleAsync(string version, IFormFile file)
@@ -23,7 +26,7 @@ public class RuleService : IRuleService
         };
         _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
+        await _errHandlingService.RedirectIfErrors(response);
     }
 
     public async Task CreateRuleAsync(string version, IFormFile file)
@@ -39,6 +42,6 @@ public class RuleService : IRuleService
         };
         _xappIdService.AddXAppIdHeader(ref request);
         var response = await _client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
+        await _errHandlingService.RedirectIfErrors(response);
     }
 }

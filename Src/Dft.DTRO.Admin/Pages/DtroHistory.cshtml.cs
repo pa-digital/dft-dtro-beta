@@ -1,10 +1,9 @@
-using Dft.DTRO.Admin.Helpers;
-
 namespace Dft.DTRO.Admin.Pages;
 
 public class DtroHistoryModel : PageModel
 {
     private readonly IDtroService _dtroService;
+    private readonly IErrHandlingService _errHandlingService;
 
     [BindProperty(SupportsGet = true)]
     public Guid Id { get; set; }
@@ -16,9 +15,10 @@ public class DtroHistoryModel : PageModel
     public List<DtroHistorySourceResponse> SourceHistory { get; set; }
 
 
-    public DtroHistoryModel(IDtroService dtroService)
+    public DtroHistoryModel(IDtroService dtroService, IErrHandlingService errHandlingService)
     {
         _dtroService = dtroService;
+        _errHandlingService = errHandlingService;
     }
 
     public async Task<IActionResult> OnGetAsync()
@@ -33,7 +33,7 @@ public class DtroHistoryModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 

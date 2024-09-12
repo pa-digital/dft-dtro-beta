@@ -5,10 +5,12 @@ public class SystemConfigService : ISystemConfigService
 {
     private readonly HttpClient _client;
     private readonly IXappIdService _xappIdService;
-    public SystemConfigService(IHttpClientFactory clientFactory, IXappIdService xappIdService)
+    private readonly IErrHandlingService _errHandlingService;
+    public SystemConfigService(IHttpClientFactory clientFactory, IXappIdService xappIdService, IErrHandlingService errHandlingService)
     {
         _client = clientFactory.CreateClient("ExternalApi");
         _xappIdService = xappIdService;
+        _errHandlingService = errHandlingService;
     }
 
     public async Task<bool> UpdateSystemConfig(SystemConfig systemConfig)
@@ -19,8 +21,9 @@ public class SystemConfigService : ISystemConfigService
             Content = content
         };
         _xappIdService.AddXAppIdHeader(ref request);
+
         var response = await _client.SendAsync(request);
-        response.EnsureSuccessStatusCode();
+        await _errHandlingService.RedirectIfErrors(response);
 
         _xappIdService.ChangeXAppId(systemConfig.xAppId);
         return true;
@@ -35,8 +38,10 @@ public class SystemConfigService : ISystemConfigService
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "/systemConfig");
             _xappIdService.AddXAppIdHeader(ref request);
+
             var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            await _errHandlingService.RedirectIfErrors(response);
+
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (jsonResponse == null)
             {

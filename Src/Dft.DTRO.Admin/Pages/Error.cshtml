@@ -4,89 +4,131 @@
 @{
     ViewData["Title"] = "Error";
 }
-
 <h1>Error</h1>
-<p>@Model.Message</p>
 
-@if (Model.Error is DtroValidationException dtroValidationException)
+<h3>Type: @Model.ErrorView.ErrorType</h3>
+
+@if (Model.ErrorView != null)
 {
-    <h2>Validation Errors</h2>
+    <!-- UI Error Response, Error -->
+    @if (Model.ErrorView?.UiErrorResponse != null)
+    {
+        <h4>Details:</h4>
+        <div>
+            <strong>Message:</strong> @Model.ErrorView.UiErrorResponse.Message<br />
+            <strong>Error:</strong> @Model.ErrorView.UiErrorResponse.Error <br />
+        </div>
+    }
+
+
+    <!-- Api Error Response, Error -->
+    @if (Model.ErrorView?.ApiErrorResponse != null)
+    {
+        <h4>Details:</h4>
+        <div>
+            @if (!string.IsNullOrEmpty(Model.ErrorView.ApiErrorResponse.Message))
+            {
+                <strong>Message:</strong> @Model.ErrorView.ApiErrorResponse.Message
+
+                <br />
+            }
+
+            @if (!string.IsNullOrEmpty(Model.ErrorView.ApiErrorResponse.Error))
+            {
+                <strong>Error:</strong> @Model.ErrorView.ApiErrorResponse.Error
+
+                <br />
+            }
+        </div>
+    }
+
+
+    <!-- Schema Version Error -->
+    @if (Model.ErrorView?.DtroValidationException?.RequestComparedToSchemaVersion != null)
+    {
+        <h4>Request Compared To Schema Version:</h4>
+        <div>
+            <strong>Schema Version Error:</strong> @Model.ErrorView.DtroValidationException?.RequestComparedToSchemaVersion.Message
+        </div>
+    }
+
+    <!-- Request Compared To Schema Errors -->
+    @if (Model.ErrorView?.DtroValidationException?.RequestComparedToSchema != null && Model.ErrorView.DtroValidationException.RequestComparedToSchema.Any())
+    {
+        <h4>Request Compared To Schema Errors:</h4>
+        <ul>
+            @{
+                int? previousLineNumber = null;
+            }
+            @foreach (var jsonError in Model.ErrorView.DtroValidationException.RequestComparedToSchema)
+            {
+                if (previousLineNumber != null && previousLineNumber != jsonError.LineNumber)
+                {
+                    <br />
+                }
+
+                DisplayJsonValidationError(jsonError);
+                previousLineNumber = jsonError.LineNumber;
+            }
+        </ul>
+
+    }
+
+    <!-- Request Compared To Rules Errors -->
+    @if (Model.ErrorView?.DtroValidationException?.RequestComparedToRules != null && Model.ErrorView.DtroValidationException.RequestComparedToRules.Any())
+    {
+        <h4>Request Compared To Rules Errors:</h4>
+        <ul>
+            @foreach (var semanticError in Model.ErrorView.DtroValidationException.RequestComparedToRules)
+            {
+                <li>
+                    <strong>Message:</strong> @semanticError.Message <br />
+                    <strong>Path:</strong> @semanticError.Path <br />
+                </li>
+            }
+        </ul>
+    }
+}
+@functions {
+    void DisplayJsonValidationError(DtroJsonValidationErrorResponse error)
+    {
+        <li>
+            @if (!string.IsNullOrEmpty(error.Message))
+            {
+                <strong>Message:</strong> @error.Message <br />
+            }
+
+            @if (error.LineNumber != 0)
+            {
+                <strong>Line Number:</strong> @error.LineNumber <br />
+            }
+
+            @if (error.LinePosition != 0)
+            {
+                <strong>Line Position:</strong> @error.LinePosition <br />
+            }
+
+            @if (!string.IsNullOrEmpty(error.Path))
+            {
+                <strong>Path:</strong> @error.Path <br />
+            }
+
+            @if (!string.IsNullOrEmpty(error.ErrorType))
+            {
+                <strong>Type:</strong> @error.ErrorType <br />
+            }
+
+           
+        </li>
+    }
+}
+
+@*@if (error.ChildErrors != null && error.ChildErrors.Any())
+{
     <ul>
-        <li>@dtroValidationException.Message</li>
-        @if (dtroValidationException.RequestComparedToSchemaVersion != null)
+        @foreach (var childError in error.ChildErrors)
         {
-            <li>Schema Version: @dtroValidationException.RequestComparedToSchemaVersion.Message</li>
-        }
-        @if (dtroValidationException.RequestComparedToSchema != null && dtroValidationException.RequestComparedToSchema.Any())
-        {
-            <li>
-                Request Compared To Schema:
-                <ul>
-                    @foreach (var error in dtroValidationException.RequestComparedToSchema)
-                    {
-                        <li>
-                            Message: @error.Message<br />
-                            Line Number: @error.LineNumber<br />
-                            Line Position: @error.LinePosition<br />
-                            Path: @error.Path<br />
-                            Value: @error.Value<br />
-                            Error Type: @error.ErrorType
-                            @if (error.ChildErrors != null && error.ChildErrors.Any())
-                            {
-                                <ul>
-                                    <li>Child Errors:</li>
-                                    <ul>
-                                        @foreach (var childError in error.ChildErrors)
-                                        {
-                                            <li>
-                                                Message: @childError.Message<br />
-                                                Line Number: @childError.LineNumber<br />
-                                                Line Position: @childError.LinePosition<br />
-                                                Path: @childError.Path<br />
-                                                Value: @childError.Value<br />
-                                                Error Type: @childError.ErrorType
-                                            </li>
-                                        }
-                                    </ul>
-                                </ul>
-                            }
-                        </li>
-                    }
-                </ul>
-            </li>
-        }
-        @if (dtroValidationException.RequestComparedToRules != null && dtroValidationException.RequestComparedToRules.Any())
-        {
-            <li>
-                Request Compared To Rules:
-                <ul>
-                    @foreach (var error in dtroValidationException.RequestComparedToRules)
-                    {
-                        <li>
-                            Message: @error.Message - Path: @error.Path - ErrorType: @error.ErrorType
-                        </li>
-                    }
-                </ul>
-            </li>
+            DisplayJsonValidationError(childError);
         }
     </ul>
-}
-else if (Model.Error is NotFoundException notFoundException)
-{
-    <h2>Not Found</h2>
-    <p>@notFoundException.Message</p>
-}
-else if (Model.Error is HttpRequestException httpRequestException)
-{
-    <h2>Network Error</h2>
-    <p>@httpRequestException.Message</p>
-}
-else if (Model.Error is Exception exception)
-{
-    <h2>General Error</h2>
-    <p>@exception.Message</p>
-}
-else if (Model.Error != null)
-{
-    <h2>Page cannot handled this Error Type - @Model.Error.GetType().Name</h2>
-}
+} *@

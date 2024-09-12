@@ -8,7 +8,7 @@ namespace DfT.DTRO.Services.Validation;
 
 public class JsonSchemaValidationService : IJsonSchemaValidationService
 {
-    public IList<DtroJsonValidationError> ValidateRequestAgainstJsonSchema(string jsonSchemaAsString, string inputJson)
+    public IList<DtroJsonValidationErrorResponse> ValidateRequestAgainstJsonSchema(string jsonSchemaAsString, string inputJson)
     {
         var parsedSchema = JSchema.Parse(jsonSchemaAsString);
         var parsedBody = JObject.Parse(inputJson);
@@ -20,16 +20,16 @@ public class JsonSchemaValidationService : IJsonSchemaValidationService
         return validationErrorsList;
     }
 
-    private List<DtroJsonValidationError> DepackFrom(List<ValidationError> validationErrors)
+    private List<DtroJsonValidationErrorResponse> DepackFrom(List<ValidationError> validationErrors)
     {
         if (validationErrors.Count == 0)
         {
-            return new List<DtroJsonValidationError>();
+            return new List<DtroJsonValidationErrorResponse>();
         }
-        var depackedList = new List<DtroJsonValidationError>();
+        var depackedList = new List<DtroJsonValidationErrorResponse>();
         foreach (var validationError in validationErrors)
         {
-            var depacked = new DtroJsonValidationError
+            var depacked = new DtroJsonValidationErrorResponse
             {
                 Message = validationError.Message,
                 LineNumber = validationError.LineNumber,

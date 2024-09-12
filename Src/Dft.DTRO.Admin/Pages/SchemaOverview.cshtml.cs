@@ -1,12 +1,12 @@
-using Dft.DTRO.Admin.Helpers;
 
 public class SchemaOverviewModel : PageModel
 {
     private readonly ISchemaService _schemaService;
-
-    public SchemaOverviewModel(ISchemaService schemaService)
+    private readonly IErrHandlingService _errHandlingService;
+    public SchemaOverviewModel(ISchemaService schemaService, IErrHandlingService errHandlingService)
     {
         _schemaService = schemaService;
+        _errHandlingService = errHandlingService;
     }
 
     public ViewSchemaOverview Schemas { get; set; }
@@ -21,7 +21,7 @@ public class SchemaOverviewModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 
@@ -46,7 +46,7 @@ public class SchemaOverviewModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 }

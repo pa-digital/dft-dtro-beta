@@ -6,8 +6,4 @@ public class SemanticValidationError
 
     public string Path { get; set; }
 
-    public string ErrorType
-    {
-        get { return "semantic"; }
-    }
 }

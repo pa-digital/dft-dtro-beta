@@ -1,13 +1,15 @@
-using Dft.DTRO.Admin.Helpers;
 
 public class DtroUserEditModel : PageModel
 {
     private readonly IDtroUserService _dtroUserService;
     private readonly ISystemConfigService _systemConfigService;
-    public DtroUserEditModel(IDtroUserService dtroUserService, ISystemConfigService systemConfigService)
+    private readonly IErrHandlingService _errHandlingService;
+
+    public DtroUserEditModel(IDtroUserService dtroUserService, ISystemConfigService systemConfigService, IErrHandlingService errHandlingService)
     {
         _systemConfigService = systemConfigService;
         _dtroUserService = dtroUserService;
+        _errHandlingService = errHandlingService;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -44,7 +46,7 @@ public class DtroUserEditModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 
@@ -73,7 +75,7 @@ public class DtroUserEditModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 }

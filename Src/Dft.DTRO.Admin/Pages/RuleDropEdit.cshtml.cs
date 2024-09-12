@@ -1,12 +1,11 @@
-using Dft.DTRO.Admin.Helpers;
-
 public class RuleDropEditModel : PageModel
 {
     private readonly IRuleService _ruleService;
-
-    public RuleDropEditModel(IRuleService ruleService)
+    private readonly IErrHandlingService _errHandlingService;
+    public RuleDropEditModel(IRuleService ruleService, IErrHandlingService errHandlingService)
     {
         _ruleService = ruleService;
+        _errHandlingService = errHandlingService;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -31,7 +30,7 @@ public class RuleDropEditModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 }

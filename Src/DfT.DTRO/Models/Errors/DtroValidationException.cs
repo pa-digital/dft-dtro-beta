@@ -15,7 +15,17 @@ public class DtroValidationException : Exception
 
     public ApiErrorResponse RequestComparedToSchemaVersion { get; set; }
 
-    public List<DtroJsonValidationError> RequestComparedToSchema { get; set; }
+    public List<DtroJsonValidationErrorResponse> RequestComparedToSchema { get; set; }
 
     public List<SemanticValidationError> RequestComparedToRules { get; set; }
+
+    public DtroValidationExceptionResponse MapToResponse()
+    {
+        return new DtroValidationExceptionResponse
+        {
+            RequestComparedToSchemaVersion = RequestComparedToSchemaVersion,
+            RequestComparedToSchema = RequestComparedToSchema,
+            RequestComparedToRules = RequestComparedToRules
+        };  
+    }
 }

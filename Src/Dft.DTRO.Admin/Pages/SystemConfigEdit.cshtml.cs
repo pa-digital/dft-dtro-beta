@@ -1,13 +1,14 @@
-using Dft.DTRO.Admin.Helpers;
 using DfT.DTRO.Models.SystemConfig;
 
 public class SystemConfigEditModel : PageModel
 {
     private readonly ISystemConfigService _systemConfigService;
+    private readonly IErrHandlingService _errHandlingService;
 
-    public SystemConfigEditModel(ISystemConfigService systemConfigService)
+    public SystemConfigEditModel(ISystemConfigService systemConfigService, IErrHandlingService errHandlingService)
     {
         _systemConfigService = systemConfigService;
+        _errHandlingService = errHandlingService;
     }
 
     [BindProperty]
@@ -32,7 +33,7 @@ public class SystemConfigEditModel : PageModel
         }
         catch (Exception ex)
         {
-            return HttpResponseHelper.HandleError(ex);
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 }

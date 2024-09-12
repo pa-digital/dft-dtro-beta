@@ -1,15 +1,15 @@
-using Dft.DTRO.Admin.Helpers;
-
 namespace Dft.DTRO.Admin.Pages
 {
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IMetricsService _metricsService;
-        public IndexModel(ILogger<IndexModel> logger, IMetricsService metricsService)
+        private readonly IErrHandlingService _errHandlingService;
+        public IndexModel(ILogger<IndexModel> logger, IMetricsService metricsService, IErrHandlingService errHandlingService)
         {
             _logger = logger;
             _metricsService = metricsService;
+            _errHandlingService = errHandlingService;
         }
 
         public MetricSummary Metrics { get; set; } = new MetricSummary();
@@ -37,7 +37,7 @@ namespace Dft.DTRO.Admin.Pages
             }
             catch (Exception ex)
             {
-                return HttpResponseHelper.HandleError(ex);
+                return _errHandlingService.HandleUiError(ex);
             }
         }
     }
