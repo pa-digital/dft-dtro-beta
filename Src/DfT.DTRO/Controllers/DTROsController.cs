@@ -61,6 +61,7 @@ public class DTROsController : ControllerBase
         {
             using (MemoryStream memoryStream = new())
             {
+
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
@@ -74,7 +75,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
-            return BadRequest(err);
+            return BadRequest(err.MapToResponse());
         }
         catch (NotFoundException nFex)
         {
@@ -138,7 +139,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
-            return BadRequest(err);
+            return BadRequest(err.MapToResponse());
         }
         catch (NotFoundException nFex)
         {
@@ -188,7 +189,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
-            return BadRequest(err);
+            return BadRequest(err.MapToResponse());
         }
         catch (NotFoundException nFex)
         {
@@ -239,7 +240,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, xAppId);
             _logger.LogError(err.Message);
-            return BadRequest(err);
+            return BadRequest(err.MapToResponse());
         }
         catch (NotFoundException nFex)
         {

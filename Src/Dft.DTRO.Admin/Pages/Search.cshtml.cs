@@ -5,6 +5,7 @@ public class SearchModel : PageModel
     private readonly IDtroUserService _dtroUserService;
     private readonly ISystemConfigService _systemConfigService;
     private readonly IXappIdService _xappIdService;
+    private readonly IErrHandlingService _errHandlingService;
 
     [BindProperty(SupportsGet = true)]
     public DtroUserSearch DtroUserSearch { get; set; } = new DtroUserSearch();
@@ -15,38 +16,48 @@ public class SearchModel : PageModel
     public SearchModel(IDtroService dtroService, 
                         IDtroUserService dtroUserService,
                         ISystemConfigService systemConfigService,
-                        IXappIdService xappIdService)
+                        IXappIdService xappIdService,
+                        IErrHandlingService errHandlingService)
     {
         _dtroService = dtroService;
         _dtroUserService = dtroUserService;
         _systemConfigService = systemConfigService;
         _xappIdService = xappIdService;
+        _errHandlingService = errHandlingService;
     }
 
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
-        int? useTraId = null;
-        if(DtroUserSearch.DtroUserIdSelect != null && DtroUserSearch.DtroUserIdSelect != Guid.Empty)
+        try
         {
-            var user = await _dtroUserService.GetDtroUserAsync(DtroUserSearch.DtroUserIdSelect.Value);
-            useTraId = user.TraId;
+            int? useTraId = null;
+            if (DtroUserSearch.DtroUserIdSelect != null && DtroUserSearch.DtroUserIdSelect != Guid.Empty)
+            {
+                var user = await _dtroUserService.GetDtroUserAsync(DtroUserSearch.DtroUserIdSelect.Value);
+                useTraId = user.TraId;
+            }
+            Dtros = await _dtroService.SearchDtros(useTraId);
+            DtroUserSearch.AlwaysButtonHidden = true;
+            DtroUserSearch.UpdateButtonText = "Search";
+            DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
+            DtroUserSearch.DtroUsers.RemoveAll(x => x.UserGroup == UserGroup.Consumer);
+            DtroUserSearch.DtroUsers.Insert(0, new DtroUser { TraId = 0, Name = "[all]" });
+
+
+            var users = await _dtroUserService.GetDtroUsersAsync();
+            var myUser = users.FirstOrDefault(x => x.xAppId == _xappIdService.MyXAppId());
+
+            var systemConfig = await _systemConfigService.GetSystemConfig();
+
+            if (myUser?.TraId != null && systemConfig.IsTest)
+            {
+                AllowAddUpdate = true;
+            }
+            return Page();
         }
-        Dtros = await _dtroService.SearchDtros(useTraId);
-        DtroUserSearch.AlwaysButtonHidden = true;
-        DtroUserSearch.UpdateButtonText = "Search";
-        DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
-        DtroUserSearch.DtroUsers.RemoveAll(x => x.UserGroup == UserGroup.Consumer);
-        DtroUserSearch.DtroUsers.Insert(0, new DtroUser { TraId = 0, Name = "[all]"});
-
-       
-        var users = await _dtroUserService.GetDtroUsersAsync();
-        var myUser = users.FirstOrDefault(x => x.xAppId == _xappIdService.MyXAppId());
-
-        var systemConfig = await _systemConfigService.GetSystemConfig();
-
-        if (myUser?.TraId != null && systemConfig.IsTest)
+        catch (Exception ex)
         {
-            AllowAddUpdate = true;
+            return _errHandlingService.HandleUiError(ex);
         }
     }
 
@@ -57,10 +68,17 @@ public class SearchModel : PageModel
 
     public IActionResult OnGetRefresh()
     {
-        if (TempData.TryGetValue("DtroUserSelect", out object dtroUserSelect))
-            DtroUserSearch.DtroUserIdSelect = (Guid)dtroUserSelect;
+        try
+        {
+            if (TempData.TryGetValue("DtroUserSelect", out object dtroUserSelect))
+                DtroUserSearch.DtroUserIdSelect = (Guid)dtroUserSelect;
 
-        return RedirectToPage(new { DtroUserSearch.DtroUserIdSelect });
+            return RedirectToPage(new { DtroUserSearch.DtroUserIdSelect });
+        }
+        catch (Exception ex)
+        {
+            return _errHandlingService.HandleUiError(ex);
+        }
     }
 
     public string FormatListToSingle(IEnumerable<string> items)

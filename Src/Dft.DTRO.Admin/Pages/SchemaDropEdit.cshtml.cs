@@ -1,11 +1,13 @@
+
 public class SchemaDropEditModel : PageModel
 {
     private readonly ISchemaService _schemaService;
-
-    public SchemaDropEditModel(ISchemaService schemaService, IConfiguration configuration)
+    private readonly IErrHandlingService _errHandlingService;
+    public SchemaDropEditModel(ISchemaService schemaService, IConfiguration configuration, IErrHandlingService errHandlingService)
     {
         _schemaService = schemaService;
         ApiBaseUrl = configuration["ExternalApi:BaseUrl"];
+        _errHandlingService = errHandlingService;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -16,14 +18,21 @@ public class SchemaDropEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(IFormFile file, bool IsEdit, string Version)
     {
-        if (IsEdit)
+        try
         {
-            await _schemaService.UpdateSchemaAsync(Version, file);
+            if (IsEdit)
+            {
+                await _schemaService.UpdateSchemaAsync(Version, file);
+            }
+            else
+            {
+                await _schemaService.CreateSchemaAsync(Version, file);
+            }
+            return RedirectToPage("SchemaOverview");
         }
-        else
+        catch (Exception ex)
         {
-            await _schemaService.CreateSchemaAsync(Version, file);
+            return _errHandlingService.HandleUiError(ex);
         }
-        return RedirectToPage("SchemaOverview");
     }
 }

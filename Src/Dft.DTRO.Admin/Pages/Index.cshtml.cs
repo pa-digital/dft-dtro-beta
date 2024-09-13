@@ -4,18 +4,21 @@ namespace Dft.DTRO.Admin.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IMetricsService _metricsService;
-        public IndexModel(ILogger<IndexModel> logger, IMetricsService metricsService)
+        private readonly IErrHandlingService _errHandlingService;
+        public IndexModel(ILogger<IndexModel> logger, IMetricsService metricsService, IErrHandlingService errHandlingService)
         {
             _logger = logger;
             _metricsService = metricsService;
+            _errHandlingService = errHandlingService;
         }
 
         public MetricSummary Metrics { get; set; } = new MetricSummary();
         public bool HealthApi { get; set; } = false;
         public bool HealthDatabase { get; set; } = false;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+
             try
             {
                 HealthApi = await _metricsService.HealthApi();
@@ -29,11 +32,13 @@ namespace Dft.DTRO.Admin.Pages
                 };
                 var metrics = await _metricsService.MetricsForDtroUser(metricRequest);
                 Metrics = metrics ?? new MetricSummary();
-            }
-            catch (Exception)
-            {
-            }
 
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                return _errHandlingService.HandleUiError(ex);
+            }
         }
     }
 }

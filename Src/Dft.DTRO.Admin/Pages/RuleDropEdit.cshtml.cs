@@ -1,10 +1,11 @@
 public class RuleDropEditModel : PageModel
 {
     private readonly IRuleService _ruleService;
-
-    public RuleDropEditModel(IRuleService ruleService)
+    private readonly IErrHandlingService _errHandlingService;
+    public RuleDropEditModel(IRuleService ruleService, IErrHandlingService errHandlingService)
     {
         _ruleService = ruleService;
+        _errHandlingService = errHandlingService;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -15,14 +16,21 @@ public class RuleDropEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(IFormFile file, bool IsEdit, string Version)
     {
-        if (IsEdit)
+        try
         {
-            await _ruleService.UpdateRuleAsync(Version, file);
+            if (IsEdit)
+            {
+                await _ruleService.UpdateRuleAsync(Version, file);
+            }
+            else
+            {
+                await _ruleService.CreateRuleAsync(Version, file);
+            }
+            return RedirectToPage("SchemaOverview");
         }
-        else
+        catch (Exception ex)
         {
-            await _ruleService.CreateRuleAsync(Version, file);
+            return _errHandlingService.HandleUiError(ex);
         }
-        return RedirectToPage("SchemaOverview");
     }
 }

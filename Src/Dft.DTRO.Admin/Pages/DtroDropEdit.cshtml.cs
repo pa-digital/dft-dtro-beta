@@ -1,11 +1,13 @@
+
 public class DtroDropEditModel : PageModel
 {
     private readonly IDtroService _dtroService;
-
-    public DtroDropEditModel(IDtroService dtroService, IConfiguration configuration)
+    private readonly IErrHandlingService _errHandlingService;
+    public DtroDropEditModel(IDtroService dtroService, IConfiguration configuration, IErrHandlingService errHandlingService)
     {
         _dtroService = dtroService;
         ApiBaseUrl = configuration["ExternalApi:BaseUrl"];
+        _errHandlingService = errHandlingService;
     }
 
     [BindProperty(SupportsGet = true)]
@@ -16,16 +18,22 @@ public class DtroDropEditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, string id)
     {
-
-        if (isEdit)
+        try
         {
-            await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);
-        }
-        else
-        {
-            await _dtroService.CreateDtroAsync(file);
-        }
+            if (isEdit)
+            {
+                await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);
+            }
+            else
+            {
+                await _dtroService.CreateDtroAsync(file);
+            }
 
-        return RedirectToPage("Search");
+            return RedirectToPage("Search");
+        }
+        catch (Exception ex)
+        {
+            return _errHandlingService.HandleUiError(ex);
+        }
     }
 }
