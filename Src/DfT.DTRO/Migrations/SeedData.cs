@@ -14,6 +14,24 @@ public static class SeedData
     public static List<DtroUser> TrafficAuthorities = new List<DtroUser>(){
                         new DtroUser
                         {
+                            Id = new Guid("2E69F5B2-9B59-4589-B976-82A58D7340D2"),
+                            xAppId = new Guid("de05d9b1-fc47-4189-b83c-45f60b014bae"),
+                            UserGroup = (int)UserGroup.Admin,
+                            Prefix = "",
+                            Name = "TestAccount_CSO",
+                            TraId = null
+                        },
+                        new DtroUser
+                        {
+                            Id = new Guid("13D2EBDB-7A15-4700-B0E9-B0C90D4C90B8"),
+                            xAppId = new Guid("b42b054c-ed20-4d88-bc11-e042fa7f4276"),
+                            UserGroup = (int)UserGroup.Admin,
+                            Prefix = "",
+                            Name = "Dev_CSO",
+                            TraId = null
+                        },
+                        new DtroUser
+                        {
                             Id = new Guid("67d2adeb-31ac-4962-8025-c14ef2aa7236"),
                             xAppId = Guid.Empty,
                             UserGroup = (int) UserGroup.Admin,
