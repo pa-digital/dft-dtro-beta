@@ -11,24 +11,28 @@ public class SchemasControllerTests
     private readonly WebApplicationFactory<Program> _factory;
 
     private readonly Mock<ISchemaTemplateService> _mockSchemaTemplateService;
-    private readonly Mock<IDtroUserDal> _mockSwaCodeDal;
+    private readonly Mock<IDtroUserDal> _mockDtroUserDal;
     private readonly int? _taForTest = 1585;
     private readonly Guid _xAppIdGuidForTest = Guid.NewGuid();
     public SchemasControllerTests(WebApplicationFactory<Program> factory)
     {
         _mockSchemaTemplateService = new Mock<ISchemaTemplateService>(MockBehavior.Strict);
-        _mockSwaCodeDal = new Mock<IDtroUserDal>(MockBehavior.Strict);
+        _mockDtroUserDal = new Mock<IDtroUserDal>(MockBehavior.Strict);
 
-        _mockSwaCodeDal.Setup(m => m.GetDtroUserByTraIdAsync(It.IsAny<int>()))
+        _mockDtroUserDal.Setup(m => m.GetDtroUserByTraIdAsync(It.IsAny<int>()))
            .ReturnsAsync(new DtroUser() { Id = new Guid(), TraId = (int)_taForTest, UserGroup = (int)UserGroup.Tra, xAppId = _xAppIdGuidForTest, Name = "test" });
-        _mockSwaCodeDal.Setup(m => m.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
+        _mockDtroUserDal.Setup(m => m.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync(new DtroUser() { Id = new Guid(), TraId = (int)_taForTest, UserGroup = (int)UserGroup.Tra, xAppId = _xAppIdGuidForTest, Name = "test" });
+
+
+        _mockDtroUserDal.Setup(m => m.AnyAdminUserExistsAsync())
+            .ReturnsAsync(false);
 
 
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
             services.AddSingleton(_mockSchemaTemplateService.Object);
-            services.AddSingleton(_mockSwaCodeDal.Object);
+            services.AddSingleton(_mockDtroUserDal.Object);
         }));
     }
 

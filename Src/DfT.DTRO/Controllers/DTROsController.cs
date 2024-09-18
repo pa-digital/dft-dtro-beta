@@ -15,23 +15,26 @@ public class DTROsController : ControllerBase
     private readonly IMetricsService _metricsService;
     private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<DTROsController> _logger;
+    private readonly IXappIdMapperService _appIdMapperService;
 
-    /// <summary>
-    /// Default constructor
-    /// </summary>
-    /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
-    /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
-    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
-    /// <param name="logger">An <see cref="ILogger{DTROsController}"/> instance.</param>
-    public DTROsController(
+   /// <summary>
+   /// Default constructor
+   /// </summary>
+   /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
+   /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
+   /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
+   /// <param name="logger">An <see cref="ILogger{DTROsController}"/> instance.</param>
+   public DTROsController(
         IDtroService dtroService,
         IMetricsService metricsService,
         IRequestCorrelationProvider correlationProvider,
+        IXappIdMapperService appIdMapperService,
         ILogger<DTROsController> logger)
     {
         _dtroService = dtroService;
         _metricsService = metricsService;
         _correlationProvider = correlationProvider;
+        _appIdMapperService = appIdMapperService;
         _logger = logger;
     }
 
@@ -52,6 +55,8 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.Publish)]
     public async Task<IActionResult> CreateFromFile([FromHeader(Name = "x-app-id")][Required] Guid xAppId, IFormFile file)
     {
+       
+
         if (file == null || file.Length == 0)
         {
             return BadRequest("File is empty");
@@ -59,6 +64,7 @@ public class DTROsController : ControllerBase
 
         try
         {
+            xAppId = await _appIdMapperService.GetXappId(HttpContext);
             using (MemoryStream memoryStream = new())
             {
 
@@ -124,6 +130,7 @@ public class DTROsController : ControllerBase
 
         try
         {
+            xAppId = await _appIdMapperService.GetXappId(HttpContext);
             using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
@@ -180,6 +187,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
+            xAppId = await _appIdMapperService.GetXappId(HttpContext);
             GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, xAppId);
             await _metricsService.IncrementMetric(MetricType.Submission, xAppId);
             _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using xAppId: '{xAppId}' and body '{dtroSubmit}'");
@@ -231,6 +239,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
+            xAppId = await _appIdMapperService.GetXappId(HttpContext);
             GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(id, dtroSubmit, _correlationProvider.CorrelationId, xAppId);
             await _metricsService.IncrementMetric(MetricType.Submission, xAppId);
             _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using xAppId: '{xAppId}', unique identifier: '{id}' and body: '{dtroSubmit}'");
@@ -310,6 +319,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
+            xAppId = await _appIdMapperService.GetXappId(HttpContext);
             await _dtroService.DeleteDtroAsync(id);
             await _metricsService.IncrementMetric(MetricType.Deletion, xAppId);
             _logger.LogInformation($"'{nameof(Delete)}' method called using xAppId: '{xAppId}' and unique identifier '{id}'");
@@ -411,6 +421,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
+            xAppId = await _appIdMapperService.GetXappId(HttpContext);
             await _dtroService.AssignOwnershipAsync(id, xAppId, assignToTraId, _correlationProvider.CorrelationId);
             _logger.LogInformation($"'{nameof(AssignOwnership)}' method called using xAppId '{xAppId}', unique identifier '{id}' and new assigned TRA Id '{assignToTraId}'");
             return NoContent();

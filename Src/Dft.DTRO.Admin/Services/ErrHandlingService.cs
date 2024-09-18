@@ -10,15 +10,21 @@ public class ErrHandlingService : IErrHandlingService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ITempDataDictionaryFactory _tempDataFactory;
- 
-    public ErrHandlingService(IHttpContextAccessor httpContextAccessor, ITempDataDictionaryFactory tempDataFactory)
+    private readonly ILogger<ErrHandlingService> _logger;
+    public ErrHandlingService(IHttpContextAccessor httpContextAccessor, ITempDataDictionaryFactory tempDataFactory, ILogger<ErrHandlingService> logger)
     {
         _httpContextAccessor = httpContextAccessor;
         _tempDataFactory = tempDataFactory;
+        _logger = logger;
     }
 
     public IActionResult HandleUiError(Exception ex)
     {
+        _logger.LogError(ex, "UI Error occurred: {Message}, StackTrace: {StackTrace}, InnerException: {InnerException}",
+                           ex.Message,
+                           ex.StackTrace,
+                           ex.InnerException != null ? ex.InnerException.Message : "None");
+
         var errorView = new ErrorView
         {
             UiErrorResponse = new ApiErrorResponse() { Error = "Unexpected error", Message = ex.Message  }
@@ -27,7 +33,7 @@ public class ErrHandlingService : IErrHandlingService
         switch (ex)
         {
             case HttpRequestException httpEx:
-                errorView.ErrorType = "UI - A network error";
+                errorView.ErrorType = "UI - A network error - " + httpEx.StatusCode.ToString() + " - " + httpEx.Message;
                 break;
 
             default:
@@ -40,6 +46,7 @@ public class ErrHandlingService : IErrHandlingService
 
         var routeValues = new { errorView = errorViewEncoded };
         return new RedirectToPageResult("/Error", routeValues);
+
     }
 
     public async Task RedirectIfErrors(HttpResponseMessage response)
@@ -59,7 +66,20 @@ public class ErrHandlingService : IErrHandlingService
 
             switch (response.StatusCode)
             {
+                case HttpStatusCode.Forbidden:
+                    errorView.ApiErrorResponse = new ApiErrorResponse() { Error = "StatusCode - Forbidden", Message = "Access Denied" };
+                    break;
                 case HttpStatusCode.NotFound:
+                    if (errorContent == "")
+                    {
+                        errorView.ApiErrorResponse = new ApiErrorResponse() { Error = "StatusCode - Not found", Message = "No payload" };
+                    }
+                    else
+                    {
+                        errorView.ApiErrorResponse = JsonSerializer.Deserialize<ApiErrorResponse>(errorContent, jsonOptions);
+                    }
+                   
+                    break;
                 case HttpStatusCode.InternalServerError:
                     errorView.ApiErrorResponse = JsonSerializer.Deserialize<ApiErrorResponse>(errorContent, jsonOptions);
                     break;
@@ -67,8 +87,6 @@ public class ErrHandlingService : IErrHandlingService
                 case HttpStatusCode.BadRequest:
 
                     var dtroValidationException = JsonSerializer.Deserialize<DtroValidationExceptionResponse>(errorContent, jsonOptions);
-                    // errorView.DtroValidationException = dtroValidationException;
-                 
 
                     if (dtroValidationException == null)
                     {

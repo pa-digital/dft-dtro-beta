@@ -27,8 +27,8 @@ public class DtroUserService : IDtroUserService
 
     public async Task<List<DtroUser>> GetDtroUsersAsync()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, "/dtroUsers");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Get, ConfigHelper.Version + "/dtroUsers");
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -46,8 +46,8 @@ public class DtroUserService : IDtroUserService
 
     public async Task<DtroUser> GetDtroUserAsync(Guid dtroUserId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/dtroUsers/{dtroUserId}");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Get, ConfigHelper.Version + $"/dtroUsers/{dtroUserId}");
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -63,8 +63,8 @@ public class DtroUserService : IDtroUserService
 
     public async Task<List<DtroUser>> SearchDtroUsersAsync(string partialName)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/dtroUsers/search/{partialName}");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Get, ConfigHelper.Version + $"/dtroUsers/search/{partialName}");
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -80,16 +80,16 @@ public class DtroUserService : IDtroUserService
 
     public async Task ActivateDtroUserAsync(Guid dtroUserId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Patch, $"/dtroUsers/activate/{dtroUserId}");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Patch, ConfigHelper.Version + $"/dtroUsers/activate/{dtroUserId}");
+        await _xappIdService.AddXAppIdHeader(request);
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
     }
 
     public async Task DeactivateDtroUserAsync(Guid dtroUserId)
     {
-        var request = new HttpRequestMessage(HttpMethod.Patch, $"/dtroUsers/deactivate/{dtroUserId}");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Patch, ConfigHelper.Version + $"/dtroUsers/deactivate/{dtroUserId}");
+        await _xappIdService.AddXAppIdHeader(request);
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
     }
@@ -98,11 +98,11 @@ public class DtroUserService : IDtroUserService
     {
 
         var content = JsonContent.Create(dtroUser);
-        var request = new HttpRequestMessage(HttpMethod.Put, $"/dtroUsers/updateFromBody/")
+        var request = new HttpRequestMessage(HttpMethod.Put, ConfigHelper.Version + $"/dtroUsers/updateFromBody/")
         {
             Content = content
         };
-        _xappIdService.AddXAppIdHeader(ref request);
+        await _xappIdService.AddXAppIdHeader(request);
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
     }
@@ -110,11 +110,11 @@ public class DtroUserService : IDtroUserService
     public async Task CreateDtroUserAsync(DtroUser dtroUser)
     {
         var content = JsonContent.Create(dtroUser);
-        var request = new HttpRequestMessage(HttpMethod.Post, $"/dtroUsers/createFromBody/")
+        var request = new HttpRequestMessage(HttpMethod.Post, ConfigHelper.Version + $"/dtroUsers/createFromBody/")
         {
             Content = content
         };
-        _xappIdService.AddXAppIdHeader(ref request);
+        await _xappIdService.AddXAppIdHeader(request);
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
     }

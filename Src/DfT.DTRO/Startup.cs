@@ -41,6 +41,7 @@ public class Startup
 
         services.AddFeatureManagement();
 
+        services.AddScoped<IXappIdMapperService, XappIdMapperService>();
         services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
         services.AddScoped<ISemanticValidationService, SemanticValidationService>();
         services.AddScoped<IConditionValidationService, ConditionValidationService>();
@@ -64,6 +65,8 @@ public class Startup
         services.AddScoped<IDtroUserService, DtroUserService>();
         services.AddScoped<ISystemConfigDal, SystemConfigDal>();
         services.AddScoped<ISystemConfigService, SystemConfigService>();
+       
+
         services.TryAddSingleton<ISystemClock, SystemClock>();
 
         services.AddStorage(Configuration);

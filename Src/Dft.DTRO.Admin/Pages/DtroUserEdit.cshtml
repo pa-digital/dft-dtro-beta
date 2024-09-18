@@ -11,9 +11,9 @@
     <div style="max-width:600px">
 
         <div class="form-group row" style="margin-top:10px">
-            <label for="Id" class="col-sm-4 col-form-label">Id</label>
+            <label for="Id" class="col-sm-4 col-form-label" hidden>Id</label>
             <div class="col-sm-8">
-                <input type="text" disabled class="form-control" id="id" name="DtroUser.Id" value="@Model.DtroUser.Id" />
+                <input hidden type="text" disabled class="form-control" id="id" name="DtroUser.Id" value="@Model.DtroUser.Id" />
             </div>
         </div>
 
@@ -128,7 +128,7 @@
                     traIdInput.disabled = false;
                     traIdInput.value = originalValues.traId;
                     traIdInput.required = true;
-                    traIdLabel.textContent = 'TA Id';
+                  
 
                 } 
                 else 
@@ -136,7 +136,7 @@
                     traIdInput.value = "";
                     traIdInput.disabled = true;
                     traIdInput.required = false;
-                    traIdLabel.textContent = 'TA Id';
+        
                 }
 
                 if (userGroup === 'Tra') {

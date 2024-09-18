@@ -18,12 +18,24 @@ namespace Dft.DTRO.Admin.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-
             try
             {
                 HealthApi = await _metricsService.HealthApi();
-                HealthDatabase = await _metricsService.HealthDatabase();
+            }
+            catch (Exception)
+            {
+            }
 
+            try
+            {
+                HealthDatabase = await _metricsService.HealthDatabase();
+            }
+            catch (Exception)
+            {
+            }
+
+            try
+            {
                 var metricRequest = new MetricRequest
                 {
                     DtroUserId = null,
@@ -31,14 +43,12 @@ namespace Dft.DTRO.Admin.Pages
                     DateTo = DateTime.Now
                 };
                 var metrics = await _metricsService.MetricsForDtroUser(metricRequest);
-                Metrics = metrics ?? new MetricSummary();
-
-                return Page();
+                Metrics = metrics ?? new MetricSummary(); 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return _errHandlingService.HandleUiError(ex);
             }
+            return Page();
         }
     }
 }

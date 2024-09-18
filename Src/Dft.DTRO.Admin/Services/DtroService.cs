@@ -14,8 +14,8 @@ public class DtroService : IDtroService
 
     public async Task<List<DtroHistoryProvisionResponse>> DtroProvisionHistory(Guid id)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/dtros/provisionHistory/{id}");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Get, ConfigHelper.Version + $"/dtros/provisionHistory/{id}");
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -27,8 +27,8 @@ public class DtroService : IDtroService
 
     public async Task<List<DtroHistorySourceResponse>> DtroSourceHistory(Guid id)
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/dtros/sourceHistory/{id}");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Get, ConfigHelper.Version + $"/dtros/sourceHistory/{id}");
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -49,12 +49,12 @@ public class DtroService : IDtroService
 
         var jsonContent = JsonSerializer.Serialize(search);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-        var request = new HttpRequestMessage(HttpMethod.Post, "/search")
+        var request = new HttpRequestMessage(HttpMethod.Post, ConfigHelper.Version + "/search")
         {
             Content = param
         };
 
-        _xappIdService.AddXAppIdHeader(ref request);
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -71,12 +71,12 @@ public class DtroService : IDtroService
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
 
-        var request = new HttpRequestMessage(HttpMethod.Post, "/dtros/createFromFile")
+        var request = new HttpRequestMessage(HttpMethod.Post, ConfigHelper.Version + "/dtros/createFromFile")
         {
             Content = content
         };
 
-        _xappIdService.AddXAppIdHeader(ref request);
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -89,12 +89,12 @@ public class DtroService : IDtroService
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
 
-        var request = new HttpRequestMessage(HttpMethod.Put, $"/dtros/updateFromFile/{id}")
+        var request = new HttpRequestMessage(HttpMethod.Put, ConfigHelper.Version + $"/dtros/updateFromFile/{id}")
         {
             Content = content
         };
 
-        _xappIdService.AddXAppIdHeader(ref request);
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -103,8 +103,8 @@ public class DtroService : IDtroService
     public async Task<IActionResult> ReassignDtroAsync(Guid id, Guid toDtroUserId)
     {
 
-        var request = new HttpRequestMessage(HttpMethod.Post, $"/dtros/Ownership/{id}/{toDtroUserId}");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Post, ConfigHelper.Version + $"/dtros/Ownership/{id}/{toDtroUserId}");
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);

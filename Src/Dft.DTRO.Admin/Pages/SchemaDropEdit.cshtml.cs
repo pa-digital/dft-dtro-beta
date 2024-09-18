@@ -6,15 +6,11 @@ public class SchemaDropEditModel : PageModel
     public SchemaDropEditModel(ISchemaService schemaService, IConfiguration configuration, IErrHandlingService errHandlingService)
     {
         _schemaService = schemaService;
-        ApiBaseUrl = configuration["ExternalApi:BaseUrl"];
         _errHandlingService = errHandlingService;
     }
 
     [BindProperty(SupportsGet = true)]
     public string Version { get; set; }
-
-    [BindProperty]
-    public string ApiBaseUrl { get; set; }
 
     public async Task<IActionResult> OnPostAsync(IFormFile file, bool IsEdit, string Version)
     {
