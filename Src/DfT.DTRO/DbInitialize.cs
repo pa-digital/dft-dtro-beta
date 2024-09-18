@@ -17,6 +17,19 @@ public class DbInitialize
     //    }
     //}
 
+    public static void AddCSOUsers(IApplicationBuilder app)
+    {
+        using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
+        {
+            DtroContext context = serviceScope
+                .ServiceProvider
+                .GetService<DtroContext>();
+
+            context.DtroUsers.AddRange(SeedData.CSOUsers);
+            context.SaveChanges();
+        }
+    }
+
     public static void SeedAppData(IApplicationBuilder app)
     {
         SeedDtroUsers(app);

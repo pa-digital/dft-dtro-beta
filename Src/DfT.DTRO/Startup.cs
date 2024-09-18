@@ -65,7 +65,7 @@ public class Startup
         services.AddScoped<IDtroUserService, DtroUserService>();
         services.AddScoped<ISystemConfigDal, SystemConfigDal>();
         services.AddScoped<ISystemConfigService, SystemConfigService>();
-       
+
 
         services.TryAddSingleton<ISystemClock, SystemClock>();
 
@@ -103,6 +103,7 @@ public class Startup
         app.UseHealthChecks("/health");
 
         //DbInitialize.EmptyDtroUsersTable(app);
+        DbInitialize.AddCSOUsers(app);
         DbInitialize.SeedAppData(app);
         if (env.IsDevelopment())
         {
