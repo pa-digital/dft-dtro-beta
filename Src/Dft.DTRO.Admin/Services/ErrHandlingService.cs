@@ -110,14 +110,16 @@ public class ErrHandlingService : IErrHandlingService
 
             if (!httpContext.Response.HasStarted)
             {
-               httpContext.Response.Redirect($"/Error?errorView={errorViewEncoded}", false);
-               httpContext.Response.CompleteAsync().GetAwaiter().GetResult();
-               // or - await httpContext.Response.CompleteAsync();
+              httpContext.Response.Redirect($"/Error?errorView={errorViewEncoded}", false);
+                //httpContext.Response.CompleteAsync().GetAwaiter().GetResult();
+                //await httpContext.Response.CompleteAsync();
+                await httpContext.Response.Body.FlushAsync();
             }
             else
             {
                 throw new InvalidOperationException("Cannot redirect as the response has already started.");
             }
+
         }
     }
 }
