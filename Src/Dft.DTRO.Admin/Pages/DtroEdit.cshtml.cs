@@ -18,7 +18,7 @@ public class DtroEditModel : PageModel
 
     public async Task OnGetAsync()
     {
-        DtroUserSearch.UpdateButtonText = "Assign";
+        DtroUserSearch.AlwaysButtonHidden = true;
         DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
     }
 

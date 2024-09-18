@@ -102,7 +102,6 @@ public class DtroService : IDtroService
 
     public async Task<IActionResult> ReassignDtroAsync(Guid id, Guid toDtroUserId)
     {
-
         var request = new HttpRequestMessage(HttpMethod.Post, ConfigHelper.Version + $"/dtros/Ownership/{id}/{toDtroUserId}");
         await _xappIdService.AddXAppIdHeader(request);
 

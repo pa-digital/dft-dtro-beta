@@ -191,14 +191,14 @@ public class DtroService : IDtroService
     }
 
 
-    public async Task<bool> AssignOwnershipAsync(Guid dtroId, Guid xAppId, int assignToTraId, string correlationId)
+    public async Task<bool> AssignOwnershipAsync(Guid dtroId, Guid xAppId, Guid assignToUser, string correlationId)
     {
-        var dtroUserList  = await _dtroUserDal.GetAllDtroUsersAsync();
+        var dtroUserList = await _dtroUserDal.GetAllDtroUsersAsync();
 
-        var found = dtroUserList.FirstOrDefault(x => x.TraId == assignToTraId);
+        var found = dtroUserList.FirstOrDefault(x => x.Id == assignToUser);
         if (found == null)
         {
-            throw new NotFoundException($"Invalid -assign To TRA Id-: {assignToTraId} , the TRA does not exist");
+            throw new NotFoundException($"Invalid -assign To Id-: {assignToUser} , the User does not exist");
         }
 
         var currentDtro = await _dtroDal.GetDtroByIdAsync(dtroId);
@@ -209,14 +209,19 @@ public class DtroService : IDtroService
 
         var apiDtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
 
-       var apiTraId = apiDtroUser.TraId;
 
-        var ownership = _dtroMappingService.GetOwnership(currentDtro);
 
-        var isCreatorOrOwner = ownership.TrafficAuthorityCreatorId == apiTraId | ownership.TrafficAuthorityOwnerId == apiTraId;
-        if (!isCreatorOrOwner)
+     
+
+        if (apiDtroUser.UserGroup != (int)UserGroup.Admin)
         {
-            throw new DtroValidationException($"Traffic authority {apiTraId} is not the creator or owner in the DTRO data submitted");
+            var ownership = _dtroMappingService.GetOwnership(currentDtro);
+            var apiTraId = apiDtroUser.TraId;
+            var isCreatorOrOwner = ownership.TrafficAuthorityCreatorId == apiTraId | ownership.TrafficAuthorityOwnerId == apiTraId;
+            if (!isCreatorOrOwner)
+            {
+                throw new DtroValidationException($"Traffic authority {apiTraId} is not the creator or owner in the DTRO data submitted");
+            }
         }
        
 
@@ -226,8 +231,19 @@ public class DtroService : IDtroService
         {
             throw new Exception("Failed to write to history table");
         }
+        var assign = await _dtroUserDal.GetDtroUserByIdAsync(assignToUser);
 
-        await _dtroDal.AssignDtroOwnership(dtroId, assignToTraId, correlationId);
+        if (assign == null)
+        {
+            throw new NotFoundException($"Invalid -assign To Id-: {assignToUser} , the User does not exist");
+        }
+
+        if (assign.TraId == null)
+        {
+            throw new NotFoundException($"Invalid -assign To Id-: {assignToUser} , the User does not have a Traffic Authority Id");
+        }
+
+        await _dtroDal.AssignDtroOwnership(dtroId,(int) assign.TraId, correlationId);
 
         return true;
     }
