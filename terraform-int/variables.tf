@@ -75,6 +75,22 @@ variable "service_ui_tag" {
   default     = "latest"
 }
 
+variable "dtro_api_url" {
+  type        = map(string)
+  description = "API url for DTRO"
+  default = {
+    test = "https://dtro-integration.dft.gov.uk"
+  }
+}
+
+variable "oauth_gen_url" {
+  type        = map(string)
+  description = "API url for Oauth Generator"
+  default = {
+    test = "https://dtro-integration.dft.gov.uk/v1/oauth-generator"
+  }
+}
+
 variable "cloud_run_max_concurrency" {
   type        = string
   description = "Maximum number of requests that each serving instance can receive."
@@ -136,12 +152,4 @@ variable "feature_enable_redis_cache" {
   type        = bool
   description = "Feature flag, when enabled MemoryStore (Redis) cache instance is configured and used by the app"
   default     = false
-}
-
-variable "dtro_api_url" {
-  type        = map(string)
-  description = "API url for DTRO"
-  default = {
-    test = "https://dtro-integration.dft.gov.uk"
-  }
 }
