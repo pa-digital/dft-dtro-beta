@@ -35,6 +35,9 @@ jobs:
         shell: bash
         working-directory: apigee/scripts
     steps:
+      - name: Output Workflow Inputs
+        run: echo "${{ toJSON(github.event.inputs) }}"
+
       - name: Checkout
         uses: actions/checkout@v4
 
