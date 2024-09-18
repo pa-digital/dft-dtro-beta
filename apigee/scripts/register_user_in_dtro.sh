@@ -6,7 +6,7 @@ CLIENT_ID=$CLIENT_ID
 CLIENT_SECRET=$CLIENT_SECRET
 uuid=$(uuidgen)
 
-OAUTH_RESPONSE=$(curl -X GET "https://dtro-integration.dft.gov.uk/v1/oauth-generator" \
+OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-generator" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -u ${CLIENT_ID}:${CLIENT_SECRET} \
   -d "grant_type=client_credentials")
