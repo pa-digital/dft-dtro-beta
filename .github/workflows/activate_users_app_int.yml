@@ -11,6 +11,13 @@ on:
         type: string
         description: Email address of developer the application belongs to
         required: true
+      swa-code:
+        type: choice
+        description: Name of the application to activate
+        required: true
+        options:
+          - 1o23
+          - 34r
 
 permissions:
   contents: read
@@ -47,6 +54,9 @@ jobs:
           echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_TEST }}" >> $GITHUB_ENV
           echo "DEV_EMAIL=${{ inputs.dev-email }}" >> $GITHUB_ENV 
           echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV
+          echo "SWA_CODE=${{ inputs.swa-code }}" >> $GITHUB_ENV
+          echo "CLIENT_ID=${{ secrets.CSO_CLIENT_ID_INT }}" >> $GITHUB_ENV
+          echo "CLIENT_SECRET=${{ secrets.CSO_CLIENT_SECRET_INT }}" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
         id: google-auth
@@ -62,5 +72,8 @@ jobs:
           echo "$HOME/.apigeecli/bin" >> $GITHUB_PATH
           echo "APIGEECLI_DEBUG=true" >> $GITHUB_ENV
 
-      - name: Activate User's Application
-        run: ./activate_user_app.sh ${{ steps.google-auth.outputs.access_token }}
+#      - name: Activate User's Application
+#        run: ./activate_user_app.sh ${{ steps.google-auth.outputs.access_token }}
+
+      - name: Register User into D-TRO
+        run: ./register_user_in_dtro.sh
