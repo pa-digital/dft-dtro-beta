@@ -22,5 +22,5 @@ public interface IDtroService
 
     Task<List<DtroHistoryProvisionResponse>> GetDtroProvisionHistoryAsync(Guid dtroId);
 
-    Task<bool> AssignOwnershipAsync(Guid dtroId, Guid xAppId, int assignToTraId, string correlationId);
+    Task<bool> AssignOwnershipAsync(Guid dtroId, Guid xAppId, Guid assignToUser, string correlationId);
 }
