@@ -25,8 +25,12 @@ public class DbInitialize
                 .ServiceProvider
                 .GetService<DtroContext>();
 
-            context.DtroUsers.AddRange(SeedData.CSOUsers);
-            context.SaveChanges();
+            if (!context.DtroUsers.Any(it => it.Name == "TestAccount_CSO" ||
+                                             it.Name == "Dev_CSO"))
+            {
+                context.DtroUsers.AddRange(SeedData.CSOUsers);
+                context.SaveChanges();
+            }
         }
     }
 
