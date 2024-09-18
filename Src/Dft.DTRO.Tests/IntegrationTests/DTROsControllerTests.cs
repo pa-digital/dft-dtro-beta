@@ -39,6 +39,7 @@ public class DTROsControllerTests
     private readonly Mock<IDtroService> _mockDtroService;
     private readonly DtroMappingService _dtroMappingService;
     private readonly Mock<IDtroUserDal> _mockDtroUserDal;
+    private readonly Mock<IXappIdMapperService> _xappIdMapperServiceMock;
     private readonly int _return_taForTest = 1585;
     private readonly Guid _xAppIdGuidForTest = Guid.NewGuid();
 
@@ -46,14 +47,19 @@ public class DTROsControllerTests
     {
         ConfigurationBuilder configurationBuilder = new();
         IConfigurationRoot? configuration = configurationBuilder.Build();
-
+        _xappIdMapperServiceMock = new Mock<IXappIdMapperService>();
         _dtroMappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
         _mockDtroService = new Mock<IDtroService>(MockBehavior.Strict);
         _mockDtroUserDal = new Mock<IDtroUserDal>(MockBehavior.Strict);
-
+        
+        _xappIdMapperServiceMock.Setup(x => x.GetXappId(It.IsAny<HttpContext>())).ReturnsAsync(_xAppIdGuidForTest);
+       
         _mockDtroUserDal.Setup(m => m.GetDtroUserByTraIdAsync(It.IsAny<int>()))
             .ReturnsAsync(new DtroUser() { Id = new Guid(), TraId = _return_taForTest, UserGroup = (int) UserGroup.Tra , xAppId = _xAppIdGuidForTest, Name = "test" });
-       
+
+        _mockDtroUserDal.Setup(m => m.AnyAdminUserExistsAsync())
+         .ReturnsAsync(false);
+
         _mockDtroUserDal.Setup(m => m.GetDtroUserOnAppIdAsync(It.IsAny<Guid>()))
             .ReturnsAsync(new DtroUser() { Id = new Guid(), TraId = (int)_return_taForTest, UserGroup = (int)UserGroup.Tra, xAppId = _xAppIdGuidForTest, Name = "test" });
 

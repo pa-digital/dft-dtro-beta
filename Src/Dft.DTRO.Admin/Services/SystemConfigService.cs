@@ -16,11 +16,11 @@ public class SystemConfigService : ISystemConfigService
     public async Task<bool> UpdateSystemConfig(SystemConfig systemConfig)
     {
         var content = JsonContent.Create(systemConfig);
-        var request = new HttpRequestMessage(HttpMethod.Put, $"/systemConfig/updateFromBody/")
+        var request = new HttpRequestMessage(HttpMethod.Put, ConfigHelper.Version + $"/systemConfig/updateFromBody/")
         {
             Content = content
         };
-        _xappIdService.AddXAppIdHeader(ref request);
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -35,11 +35,10 @@ public class SystemConfigService : ISystemConfigService
         var unknown = new SystemConfig() { SystemName = "Unknown", IsTest = false };
         try
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/systemConfig");
-            _xappIdService.AddXAppIdHeader(ref request);
+            var request = new HttpRequestMessage(HttpMethod.Get, ConfigHelper.Version + "/systemConfig");
+            await _xappIdService.AddXAppIdHeader(request);
 
             var response = await _client.SendAsync(request);
-            await _errHandlingService.RedirectIfErrors(response);
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (jsonResponse == null)
@@ -56,7 +55,7 @@ public class SystemConfigService : ISystemConfigService
         }
         catch (Exception)
         {
-            unknown.SystemName = "Not Found";
+            unknown.SystemName = "Not Connected";
             unknown.CurrentUserName = "";
             return unknown;
         }

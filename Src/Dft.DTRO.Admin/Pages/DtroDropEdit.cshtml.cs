@@ -6,15 +6,11 @@ public class DtroDropEditModel : PageModel
     public DtroDropEditModel(IDtroService dtroService, IConfiguration configuration, IErrHandlingService errHandlingService)
     {
         _dtroService = dtroService;
-        ApiBaseUrl = configuration["ExternalApi:BaseUrl"];
         _errHandlingService = errHandlingService;
     }
 
     [BindProperty(SupportsGet = true)]
     public string Id { get; set; }
-
-    [BindProperty]
-    public string ApiBaseUrl { get; set; }
 
     public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, string id)
     {

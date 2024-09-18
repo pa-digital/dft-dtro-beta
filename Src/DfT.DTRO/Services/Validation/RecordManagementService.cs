@@ -46,7 +46,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = $"TA '{submittedByTa}' cannot add/update a DTRO for another TA. (creator TA is '{creator}', owner TA is '{owner}' )"
+                Message = $"TRA '{submittedByTa}' cannot add/update a DTRO for another TRA. (creator TRA is '{creator}', owner TRA is '{owner}' )"
             });
         }
 

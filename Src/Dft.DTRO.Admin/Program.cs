@@ -1,4 +1,5 @@
 
+using Dft.DTRO.Admin;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
@@ -8,9 +9,12 @@ builder.Services.AddRazorPages();
 
 var apiBaseUrl =
     Environment.GetEnvironmentVariable("BASE_URL") ??
-    builder
-    .Configuration
-    .GetValue<string>("ExternalApi:BaseUrl");
+    builder.Configuration.GetValue<string>("ExternalApi:BaseUrl");
+
+ConfigHelper.Version =
+    Environment.GetEnvironmentVariable("VERSION_URL") ??
+    builder.Configuration.GetValue<string>("ExternalApi:VersionUrl");
+
 
 builder.Services.AddHttpClient("ExternalApi", client =>
 {
@@ -25,6 +29,8 @@ builder.Services.AddScoped<IDtroUserService, DtroUserService>();
 builder.Services.AddScoped<ISystemConfigService, SystemConfigService>();
 
 builder.Services.AddScoped<IErrHandlingService, ErrHandlingService>();
+
+builder.Services.AddScoped<IXappIdService, XappIdService>();
 
 builder.Services.AddSingleton<IXappIdService>(provider => new XappIdService(builder.Configuration));
 builder.Services.AddHealthChecks();

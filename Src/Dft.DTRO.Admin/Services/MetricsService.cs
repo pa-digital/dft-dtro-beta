@@ -15,11 +15,10 @@ public class MetricsService : IMetricsService
     {
         try
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/healthApi");
-            _xappIdService.AddXAppIdHeader(ref request);
+            var request = new HttpRequestMessage(HttpMethod.Get, ConfigHelper.Version + "/healthApi");
+            await _xappIdService.AddXAppIdHeader(request);
 
             var response = await _client.SendAsync(request);
-            await _errHandlingService.RedirectIfErrors(response);
 
             var content = await response.Content.ReadAsStringAsync();
             var result = bool.Parse(content);
@@ -36,11 +35,10 @@ public class MetricsService : IMetricsService
     {
         try
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/healthDatabase");
-            _xappIdService.AddXAppIdHeader(ref request);
+            var request = new HttpRequestMessage(HttpMethod.Get, ConfigHelper.Version + "/healthDatabase");
+            await _xappIdService.AddXAppIdHeader(request);
 
             var response = await _client.SendAsync(request);
-            await _errHandlingService.RedirectIfErrors(response);
 
             var content = await response.Content.ReadAsStringAsync();
             var result = bool.Parse(content);
@@ -57,15 +55,14 @@ public class MetricsService : IMetricsService
     {
         var jsonContent = JsonSerializer.Serialize(metricRequest);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-        var request = new HttpRequestMessage(HttpMethod.Post, "/metricsForDtroUser")
+        var request = new HttpRequestMessage(HttpMethod.Post, ConfigHelper.Version + "/metricsForDtroUser")
         {
             Content = param
         };
 
-        _xappIdService.AddXAppIdHeader(ref request);
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
-        await _errHandlingService.RedirectIfErrors(response);
 
         var jsonResponse = await response.Content.ReadAsStringAsync();
         var metricSummary = JsonSerializer.Deserialize<MetricSummary>(jsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -80,12 +77,12 @@ public class MetricsService : IMetricsService
     {
         var jsonContent = JsonSerializer.Serialize(metricRequest);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-        var request = new HttpRequestMessage(HttpMethod.Post, "/fullMetricsForDtroUser")
+        var request = new HttpRequestMessage(HttpMethod.Post, ConfigHelper.Version + "/fullMetricsForDtroUser")
         {
             Content = param
         };
 
-        _xappIdService.AddXAppIdHeader(ref request);
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);

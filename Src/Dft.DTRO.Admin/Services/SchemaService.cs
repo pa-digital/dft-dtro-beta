@@ -13,8 +13,8 @@ public class SchemaService : ISchemaService
 
     public async Task<List<SchemaTemplateOverview>> GetSchemaVersionsAsync()
     {
-        var request = new HttpRequestMessage(HttpMethod.Get, "/schemas/versions");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Get, ConfigHelper.Version + "/schemas/versions");
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -25,8 +25,8 @@ public class SchemaService : ISchemaService
 
     public async Task ActivateSchemaAsync(string version)
     {
-        var request = new HttpRequestMessage(HttpMethod.Patch, $"/schemas/activate/{version}");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Patch, ConfigHelper.Version + $"/schemas/activate/{version}");
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -35,8 +35,8 @@ public class SchemaService : ISchemaService
     public async Task DeactivateSchemaAsync(string version)
     {
         //var response = await _client.PatchAsync($"/schemas/deactivate/{version}", null);
-        var request = new HttpRequestMessage(HttpMethod.Patch, $"/schemas/deactivate/{version}");
-        _xappIdService.AddXAppIdHeader(ref request);
+        var request = new HttpRequestMessage(HttpMethod.Patch, ConfigHelper.Version + $"/schemas/deactivate/{version}");
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -49,11 +49,11 @@ public class SchemaService : ISchemaService
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
         // var response = await _client.PutAsync($"/schemas/updateFromFile/{version}", content);
-        var request = new HttpRequestMessage(HttpMethod.Put, $"/schemas/updateFromFile/{version}")
+        var request = new HttpRequestMessage(HttpMethod.Put, ConfigHelper.Version + $"/schemas/updateFromFile/{version}")
         {
             Content = content
         };
-        _xappIdService.AddXAppIdHeader(ref request);
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
@@ -66,11 +66,11 @@ public class SchemaService : ISchemaService
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
         // var response = await _client.PostAsync($"/schemas/createFromFile/{version}", content);
-        var request = new HttpRequestMessage(HttpMethod.Post, $"/schemas/createFromFile/{version}")
+        var request = new HttpRequestMessage(HttpMethod.Post, ConfigHelper.Version + $"/schemas/createFromFile/{version}")
         {
             Content = content
         };
-        _xappIdService.AddXAppIdHeader(ref request);
+        await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
         await _errHandlingService.RedirectIfErrors(response);
