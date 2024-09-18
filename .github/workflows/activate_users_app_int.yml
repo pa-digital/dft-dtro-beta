@@ -1,4 +1,4 @@
-name: Activate User's Application
+name: Activate User's Application - INT
 
 on:
   workflow_dispatch:
@@ -11,9 +11,6 @@ on:
         type: string
         description: Email address of developer the application belongs to
         required: true
-
-env:
-  environment: prod
 
 permissions:
   contents: read
@@ -35,19 +32,19 @@ jobs:
         shell: bash
         working-directory: apigee/scripts
     steps:
-      - name: Output Workflow Inputs
-        run: echo "${{ toJSON(github.event.inputs) }}"
-
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Output Workflow Inputs
+        run: echo "${{ toJSON(github.event.inputs) }}"
 
       - name:  Make scripts executable
         run: chmod +x *.sh
 
       - name: Load Env Vars for Apigee script
         run: |
-          echo "workload_identity_service_account=${{ secrets.WIP_SERVICE_ACCOUNT_PROD }}" >> $GITHUB_ENV 
-          echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_PROD }}" >> $GITHUB_ENV
+          echo "workload_identity_service_account=${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}" >> $GITHUB_ENV 
+          echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_TEST }}" >> $GITHUB_ENV
           echo "DEV_EMAIL=${{ inputs.dev-email }}" >> $GITHUB_ENV 
           echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV
 
@@ -55,8 +52,8 @@ jobs:
         id: google-auth
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PROD }}
-          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PROD }}
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_TEST }}
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}
           token_format: access_token
 
       - name: Set up ApigeeCLI
