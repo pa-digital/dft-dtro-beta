@@ -11,6 +11,10 @@ on:
         type: string
         description: Prefix of the name of the application to activate
         required: true
+      app-id:
+        type: string
+        description: ID of the application to activate
+        required: true
       dev-email:
         type: string
         description: Email address of developer the application belongs to
@@ -67,6 +71,7 @@ jobs:
           echo "DEV_EMAIL=${{ inputs.dev-email }}" >> $GITHUB_ENV 
           echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV 
           echo "APP_PREFIX=${{ inputs.app-prefix }}" >> $GITHUB_ENV
+          echo "APP_ID=${{ inputs.app-id }}" >> $GITHUB_ENV
           echo "IS_PUBLISHER=${{ inputs.is-publisher }}" >> $GITHUB_ENV
           echo "SWA_CODE=${{ inputs.swa-code }}" >> $GITHUB_ENV
 

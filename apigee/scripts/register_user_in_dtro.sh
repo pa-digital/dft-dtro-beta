@@ -4,11 +4,6 @@
 ORG=$apigee_organisation
 uuid=$(uuidgen)
 TRA_ID=$SWA_CODE
-if [ "$IS_PUBLISHER" = true ]; then
-    USER_GROUP="tra"
-else
-    USER_GROUP="consumer"
-fi
 
 # Get OAuth access token
 OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-generator" \
@@ -18,8 +13,7 @@ OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-gene
 
 # Extract access token and appId
 access_token=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
-app_id=$(echo "$OAUTH_RESPONSE" | jq -r '.application_name')
-
+echo"Got access token"
 ## Check Health of D-TRO Platform
 #HEALTH_API_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X GET 'https://dtro-integration.dft.gov.uk/v1/healthApi' \
 #  -H "Authorization: Bearer ${access_token}" \
@@ -34,25 +28,57 @@ app_id=$(echo "$OAUTH_RESPONSE" | jq -r '.application_name')
 # exit 1
 #fi
 
-# Add user to D-TRO
-RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
-  -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
-  -H 'Content-Type: application/json' \
-  -H 'Accept: text/plain' \
-  -H "Authorization: Bearer ${access_token}" \
-  -d '{
-    "id": "'${uuid}'",
-    "xAppId": "'${app_id}'",
-    "name": "'${APP_NAME}'",
-    "prefix": "'${APP_PREFIX}'",
-    "userGroup": "'${USER_GROUP}'"
-  }' | jq)
+if [ "$IS_PUBLISHER" = true ]; then
+  # Add Publisher user (tra) to D-TRO
+  USER_GROUP="tra"
 
-#http_code=$(echo "$RESPONSE" | jq )
-# Error checking and handling
-#  if [ "$RESPONSE" -eq 200 ]; then
-#    echo "${APP_NAME}(${app_id}) added to D-TR0"
-#  else
-#    echo "Failed to add ${APP_NAME}(${app_id}) to D-TR0. HTTP response code: $RESPONSE"
-#    exit 1
-#  fi
+  RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+    -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: text/plain' \
+    -H "Authorization: Bearer ${access_token}" \
+    -d '{
+      "id": "'${uuid}'",
+      "xAppId": "'${APP_ID}'",
+      "traId": "'${TRA_ID}'",
+      "name": "'${APP_NAME}'",
+      "prefix": "'${APP_PREFIX}'",
+      "userGroup": "'${USER_GROUP}'"
+    }')
+
+  response_json=$(echo "$RESPONSE" | jq )
+  echo "${response_json}"
+  # Error checking and handling
+  #  if [ "$RESPONSE" -eq 200 ]; then
+  #    echo "${APP_NAME}(${app_id}) added to D-TR0"
+  #  else
+  #    echo "Failed to add ${APP_NAME}(${app_id}) to D-TR0. HTTP response code: $RESPONSE"
+  #    exit 1
+  #  fi
+else
+  # Add Consumer user to D-TRO
+  USER_GROUP="consumer"
+
+  RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+    -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: text/plain' \
+    -H "Authorization: Bearer ${access_token}" \
+    -d '{
+      "id": "'${uuid}'",
+      "xAppId": "'${APP_ID}'",
+      "name": "'${APP_NAME}'",
+      "prefix": "'${APP_PREFIX}'",
+      "userGroup": "'${USER_GROUP}'"
+    }')
+
+  response_json=$(echo "$RESPONSE" | jq )
+  echo "${response_json}"
+  # Error checking and handling
+  #  if [ "$RESPONSE" -eq 200 ]; then
+  #    echo "${APP_NAME}(${app_id}) added to D-TR0"
+  #  else
+  #    echo "Failed to add ${APP_NAME}(${app_id}) to D-TR0. HTTP response code: $RESPONSE"
+  #    exit 1
+  #  fi
+fi
