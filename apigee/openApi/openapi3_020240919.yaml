@@ -682,68 +682,6 @@ paths:
           description: Not found.
         '500':
           description: Internal server error.
-  /metricsForDtroUser:
-    post:
-      tags:
-        - Metrics
-      summary: Get metrics for Dtro User
-      parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
-      requestBody:
-        description: Object containing a metric request.
-        content:
-          application/json-patch+json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          application/json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          text/json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          application/*+json:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          application/xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          text/xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-          application/*+xml:
-            schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
-      responses:
-        '200':
-          description: Metrics retrieved successfully.
-          content:
-            text/plain:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
-            application/json:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
-            text/json:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
-            application/xml:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
-            text/xml:
-              schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
-        '400':
-          description: Dates Incorrect.
-        '404':
-          description: Not found.
-        '500':
-          description: Internal server error.
   /rules/versions:
     get:
       tags:
