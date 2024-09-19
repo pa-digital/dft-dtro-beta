@@ -20,11 +20,11 @@
                 <td>
                     @if (schema.IsActive)
                     {
-                        <img src="~/images/tick.png" alt="Active" style="max-height:20px; vertical-align: center" />
+                        <img src="@Url.Content("~/images/tick.png")" alt="Active" style="max-height:20px; vertical-align: center;" />
                     }
                     else
                     {
-                        <img src="~/images/cross.png" alt="Inactive" style="max-height:20px" />
+                        <img src="@Url.Content("~/images/cross.png")" alt="Inactive" style="max-height:20px; vertical-align: center;" />
                     }
                 </td>
 

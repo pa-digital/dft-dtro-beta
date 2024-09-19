@@ -36,21 +36,21 @@
                     <td>
                         @if (dtroUser.xAppId != Guid.Empty)
                         {
-                            <img src="~/images/tick.png" alt="Active" style="max-height:20px; vertical-align: middle;" />
+                            <img src="@Url.Content("~/images/tick.png")" alt="Active" style="max-height:20px; vertical-align: middle;" />
                         }
                         else
                         {
-                            <img src="~/images/cross.png" alt="Inactive" style="max-height:20px; vertical-align: middle;" />
+                            <img src="@Url.Content("~/images/cross.png")" alt="Inactive" style="max-height:20px; vertical-align: middle;" />
                         }
                     </td>
                     <td>
                         @if (dtroUser.UserGroup == UserGroup.Admin)
                         {
-                            <img src="~/images/tick.png" alt="Active" style="max-height:20px; vertical-align: middle;" />
+                            <img src="@Url.Content("~/images/tick.png")" alt="Active" style="max-height:20px; vertical-align: middle;" />
                         }
                         else
                         {
-                            <img src="~/images/cross.png" alt="Inactive" style="max-height:20px; vertical-align: middle;" />
+                            <img src="@Url.Content("~/images/cross.png")" alt="Inactive" style="max-height:20px; vertical-align: middle;" />
                         }
                     </td>
                     <td>
