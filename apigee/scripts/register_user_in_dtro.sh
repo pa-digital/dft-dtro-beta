@@ -16,18 +16,18 @@ access_token=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
 echo "Got access token"
 
 ## Check Health of D-TRO Platform
-HEALTH_API_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X GET 'https://dtro-integration.dft.gov.uk/v1/healthApi' \
-  -H "Authorization: Bearer ${access_token}" \
-  -H "X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796"
-)
-
-# Error checking and handling
-if [ "$HEALTH_API_RESPONSE" -eq 200 ]; then
- echo "API is healthy"
-else
- echo "API is unhealthy. HTTP response code: $HEALTH_API_RESPONSE"
- exit 1
-fi
+#HEALTH_API_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X GET 'https://dtro-integration.dft.gov.uk/v1/healthApi' \
+#  -H "Authorization: Bearer ${access_token}" \
+#  -H "X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796"
+#)
+#
+## Error checking and handling
+#if [ "$HEALTH_API_RESPONSE" -eq 200 ]; then
+# echo "API is healthy"
+#else
+# echo "API is unhealthy. HTTP response code: $HEALTH_API_RESPONSE"
+# exit 1
+#fi
 
 if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
@@ -37,18 +37,18 @@ if [ "$IS_PUBLISHER" = true ]; then
     -H 'Accept: text/plain' \
     -H "Authorization: Bearer ${access_token}" \
     -d '{
-      "id": "'"${uuid}"'",
-      "xAppId": "'"${APP_ID}"'",
-      "traId": "'${TRA_ID}'",
+      "id": "'${uuid}'",
+      "xAppId": "'${APP_ID}'",
+      "traId": '${TRA_ID}',
       "name": "'"${APP_NAME}"'",
       "prefix": "'"${APP_PREFIX}"'",
       "userGroup": "tra"
-    }')
+    }' | jq )
 
   echo "RESPONSE-tra"
   echo "${RESPONSE}"
-  response_json=$(echo "$RESPONSE" | jq )
-  echo "${response_json}"
+#  response_json=$(echo "$RESPONSE" | jq )
+#  echo "${response_json}"
   # Error checking and handling
   #  if [ "$RESPONSE" -eq 200 ]; then
   #    echo "${APP_NAME}(${app_id}) added to D-TR0"
@@ -71,8 +71,6 @@ else
       "userGroup": "consumer"
     }')
 
-  echo "RESPONSE-consumer"
-  echo "${RESPONSE}"
   response_json=$(echo "$RESPONSE" | jq )
   echo "${response_json}"
   # Error checking and handling
