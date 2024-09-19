@@ -45,7 +45,7 @@ public class DtroService : IDtroService
             traId = null;
         }
         var searchQuery = new SearchQuery { CurrentTraOwner = traId };
-        var search = new DtroSearch() { Page = 1, PageSize = 10, Queries = new List<SearchQuery> { searchQuery } };
+        var search = new DtroSearch() { Page = 1, PageSize = 1000, Queries = new List<SearchQuery> { searchQuery } };
 
         var jsonContent = JsonSerializer.Serialize(search);
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
