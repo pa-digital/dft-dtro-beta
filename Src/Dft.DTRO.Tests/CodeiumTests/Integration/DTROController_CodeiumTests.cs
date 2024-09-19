@@ -6,6 +6,7 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration;
 [ExcludeFromCodeCoverage]
 public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory<Program>>
 {
+    private readonly Mock<IParserService> _mockParserService;
     private readonly Mock<IDtroService> _mockDtroService;
     private readonly Mock<IRequestCorrelationProvider> _correlationProviderMock;
     private readonly Mock<IXappIdMapperService> _xappIdMapperServiceMock;
@@ -19,6 +20,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     public DTROsController_Codeium_Tests(WebApplicationFactory<Program> factory)
     {
         _factory = factory;
+        _mockParserService = new Mock<IParserService>();
         _mockDtroService = new Mock<IDtroService>();
         _xappIdMapperServiceMock = new Mock<IXappIdMapperService>();
         _xappIdMapperServiceMock.Setup(x => x.GetXappId(It.IsAny<HttpContext>())).ReturnsAsync(_xAppIdForTest);
@@ -30,7 +32,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
         metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), _xAppIdForTest)).ReturnsAsync(true);
 
 
-        _controller = new DTROsController(_mockDtroService.Object, metricsMock.Object,
+        _controller = new DTROsController(_mockParserService.Object, _mockDtroService.Object, metricsMock.Object,
             _correlationProviderMock.Object, _xappIdMapperServiceMock.Object, loggerMock.Object);
 
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
@@ -197,7 +199,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     {
         _mockDtroService.Setup(s => s.DeleteDtroAsync(It.IsAny<Guid>(), It.IsAny<DateTime>())).Returns(Task.FromResult(true));
 
-        var response = await _controller.Delete(Guid.NewGuid(),Guid.NewGuid()) as NoContentResult;
+        var response = await _controller.Delete(Guid.NewGuid(), Guid.NewGuid()) as NoContentResult;
 
         Assert.NotNull(response);
         Assert.IsType<NoContentResult>(response);
