@@ -31,6 +31,7 @@ echo "Got access token"
 
 if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
+  APP_ID_CLEAN=$(echo "$APP_ID" | tr -d '"')
   RESPONSE=$(curl -w "%{http_code}" -s -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
@@ -38,7 +39,7 @@ if [ "$IS_PUBLISHER" = true ]; then
     -H "Authorization: Bearer ${access_token}" \
     -d '{
       "id": "'${uuid}'",
-      "xAppId": "'${APP_ID}'",
+      "xAppId": "'${APP_ID_CLEAN}'",
       "traId": '${TRA_ID}',
       "name": "'"${APP_NAME}"'",
       "prefix": "'"${APP_PREFIX}"'",
@@ -66,6 +67,7 @@ if [ "$IS_PUBLISHER" = true ]; then
   #  fi
 else
   # Add Consumer user to D-TRO
+  APP_ID_CLEAN=$(echo "$APP_ID" | tr -d '"')
   RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
@@ -73,7 +75,7 @@ else
     -H "Authorization: Bearer ${access_token}" \
     -d '{
       "id": "'${uuid}'",
-      "xAppId": "'${APP_ID}'",
+      "xAppId": "'${APP_ID_CLEAN}'",
       "name": "'${APP_NAME}'",
       "prefix": "'${APP_PREFIX}'",
       "userGroup": "consumer"
