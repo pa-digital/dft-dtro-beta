@@ -11,9 +11,11 @@ OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-gene
   -u ${CLIENT_ID}:${CLIENT_SECRET} \
   -d "grant_type=client_credentials")
 
+echo "OAUTH_RESPONSE"
+echo "${OAUTH_RESPONSE}"
 # Extract access token and appId
 access_token=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
-echo"Got access token"
+echo "Got access token"
 ## Check Health of D-TRO Platform
 #HEALTH_API_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X GET 'https://dtro-integration.dft.gov.uk/v1/healthApi' \
 #  -H "Authorization: Bearer ${access_token}" \
