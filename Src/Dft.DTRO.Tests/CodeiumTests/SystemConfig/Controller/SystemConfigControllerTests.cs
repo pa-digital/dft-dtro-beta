@@ -2,6 +2,7 @@
 
 public class SystemConfigControllerTests
 {
+    private readonly Mock<IXappIdMapperService> _mockXappIdMapperService;
     private readonly Mock<ISystemConfigService> _mockSystemConfigService;
     private readonly Mock<ILogger<SystemConfigController>> _mockLogger;
     private readonly SystemConfigController _controller;
@@ -10,7 +11,12 @@ public class SystemConfigControllerTests
     {
         _mockSystemConfigService = new Mock<ISystemConfigService>();
         _mockLogger = new Mock<ILogger<SystemConfigController>>();
-        _controller = new SystemConfigController(_mockSystemConfigService.Object, _mockLogger.Object);
+
+        _mockXappIdMapperService = new Mock<IXappIdMapperService>();
+        _mockXappIdMapperService.Setup(service => service.GetXappId(It.IsAny<HttpContext>())).ReturnsAsync(Guid.NewGuid());
+
+
+        _controller = new SystemConfigController(_mockSystemConfigService.Object, _mockXappIdMapperService.Object, _mockLogger.Object);
     }
 
     [Fact]
@@ -19,7 +25,7 @@ public class SystemConfigControllerTests
         // Arrange
         var systemName = "TestSystem";
         _mockSystemConfigService.Setup(service => service.GetSystemConfigAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(new DfT.DTRO.Models.SystemConfig.SystemConfigResponse { IsTest = true, SystemName = "TestSystem" });
+            .ReturnsAsync(new SystemConfigResponse { IsTest = true, SystemName = "TestSystem" });
 
         // Act
         var result = await _controller.GetSystemConfig(Guid.NewGuid());
