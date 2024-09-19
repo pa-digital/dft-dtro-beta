@@ -25,7 +25,7 @@ on:
         description: Select the SWA CODE linked to the Publishers (select 'null' for Consumers)
         required: true
         options:
-          - null
+          - "null"
           - 1o23
           - 34r
 
