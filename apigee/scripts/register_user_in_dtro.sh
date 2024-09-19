@@ -11,43 +11,42 @@ OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-gene
   -u ${CLIENT_ID}:${CLIENT_SECRET} \
   -d "grant_type=client_credentials")
 
-echo "OAUTH_RESPONSE"
-echo "${OAUTH_RESPONSE}"
 # Extract access token and appId
 access_token=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
 echo "Got access token"
+
 ## Check Health of D-TRO Platform
-#HEALTH_API_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X GET 'https://dtro-integration.dft.gov.uk/v1/healthApi' \
-#  -H "Authorization: Bearer ${access_token}" \
-#  -H "X-Correlation-ID: ${app_id}"
-#)
-#
-## Error checking and handling
-#if [ "$HEALTH_API_RESPONSE" -eq 200 ]; then
-# echo "API is healthy"
-#else
-# echo "API is unhealthy. HTTP response code: $HEALTH_API_RESPONSE"
-# exit 1
-#fi
+HEALTH_API_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X GET 'https://dtro-integration.dft.gov.uk/v1/healthApi' \
+  -H "Authorization: Bearer ${access_token}" \
+  -H "X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796"
+)
+
+# Error checking and handling
+if [ "$HEALTH_API_RESPONSE" -eq 200 ]; then
+ echo "API is healthy"
+else
+ echo "API is unhealthy. HTTP response code: $HEALTH_API_RESPONSE"
+ exit 1
+fi
 
 if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
-  USER_GROUP="tra"
-
   RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
     -H "Authorization: Bearer ${access_token}" \
     -d '{
-      "id": "'${uuid}'",
-      "xAppId": "'${APP_ID}'",
+      "id": "'"${uuid}"'",
+      "xAppId": "'"${APP_ID}"'",
       "traId": "'${TRA_ID}'",
-      "name": "'${APP_NAME}'",
-      "prefix": "'${APP_PREFIX}'",
-      "userGroup": "'${USER_GROUP}'"
+      "name": "'"${APP_NAME}"'",
+      "prefix": "'"${APP_PREFIX}"'",
+      "userGroup": "tra"
     }')
 
+  echo "RESPONSE-tra"
+  echo "${RESPONSE}"
   response_json=$(echo "$RESPONSE" | jq )
   echo "${response_json}"
   # Error checking and handling
@@ -59,8 +58,6 @@ if [ "$IS_PUBLISHER" = true ]; then
   #  fi
 else
   # Add Consumer user to D-TRO
-  USER_GROUP="consumer"
-
   RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
@@ -71,9 +68,11 @@ else
       "xAppId": "'${APP_ID}'",
       "name": "'${APP_NAME}'",
       "prefix": "'${APP_PREFIX}'",
-      "userGroup": "'${USER_GROUP}'"
+      "userGroup": "consumer"
     }')
 
+  echo "RESPONSE-consumer"
+  echo "${RESPONSE}"
   response_json=$(echo "$RESPONSE" | jq )
   echo "${response_json}"
   # Error checking and handling

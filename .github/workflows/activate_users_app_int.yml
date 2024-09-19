@@ -30,8 +30,8 @@ on:
         required: true
         options:
           - "null"
-          - 1o23
-          - 34r
+          - "123"
+          - "34"
 
 permissions:
   contents: read
