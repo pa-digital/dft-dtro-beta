@@ -84,8 +84,8 @@ jobs:
           echo "$HOME/.apigeecli/bin" >> $GITHUB_PATH
           echo "APIGEECLI_DEBUG=true" >> $GITHUB_ENV
 
-#      - name: Activate User's Application
-#        run: ./activate_user_app.sh ${{ steps.google-auth.outputs.access_token }}
+      - name: Activate User's Application
+        run: ./activate_user_app.sh ${{ steps.google-auth.outputs.access_token }}
 
       - name: Register User into D-TRO
         run: ./register_user_in_dtro.sh

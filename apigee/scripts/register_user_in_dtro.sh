@@ -35,7 +35,7 @@ app_id=$(echo "$OAUTH_RESPONSE" | jq -r '.application_name')
 #fi
 
 # Add user to D-TRO
-RESPONSE=$(curl -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
   -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
   -H 'Content-Type: application/json' \
   -H 'Accept: text/plain' \
@@ -51,7 +51,7 @@ RESPONSE=$(curl -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/create
 echo "RESPONSE"
 echo "${RESPONSE}"
 # Error checking and handling
-#  if [ "$RESPONSE" -eq 201 ]; then
+#  if [ "$RESPONSE" -eq 200 ]; then
 #    echo "${APP_NAME}(${app_id}) added to D-TR0"
 #  else
 #    echo "Failed to add ${APP_NAME}(${app_id}) to D-TR0. HTTP response code: $RESPONSE"
