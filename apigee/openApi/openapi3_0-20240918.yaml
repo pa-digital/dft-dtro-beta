@@ -22,7 +22,6 @@ paths:
       operationId: create-dtro-form-file
       security:
         - oAuth:
-            - cso
             - dsp
       parameters:
         - name: X-Correlation-ID
@@ -73,7 +72,6 @@ paths:
       operationId: update-dtro-form-file
       security:
         - oAuth:
-            - cso
             - dsp
       parameters:
         - name: id
@@ -133,7 +131,6 @@ paths:
       operationId: create-dtro-form-body
       security:
         - oAuth:
-            - cso
             - dsp
       parameters:
         - name: X-Correlation-ID
@@ -170,7 +167,6 @@ paths:
       operationId: update-dtro-form-body
       security:
         - oAuth:
-            - cso
             - dsp
       parameters:
         - name: id
@@ -214,7 +210,6 @@ paths:
       operationId: get-dtro
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -246,7 +241,6 @@ paths:
       operationId: delete-dtro
       security:
         - oAuth:
-            - cso
             - dsp
       parameters:
         - name: id
@@ -280,7 +274,6 @@ paths:
       operationId: get-dtro-source-history
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -321,7 +314,6 @@ paths:
       operationId: get-dtro-provision-history
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -402,7 +394,6 @@ paths:
       operationId: get-dtro-events
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -690,7 +681,6 @@ paths:
       operationId: get-rule-versions
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -718,7 +708,6 @@ paths:
       operationId: get-rules
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -746,7 +735,6 @@ paths:
       operationId: get-rule-by-version
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -780,7 +768,6 @@ paths:
       operationId: get-rule-by-id
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -931,7 +918,6 @@ paths:
       operationId: get-schema-versions
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -959,7 +945,6 @@ paths:
       operationId: get-schemas
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -987,7 +972,6 @@ paths:
       operationId: get-schema-by-version
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -1021,7 +1005,6 @@ paths:
       operationId: get-schema-by-id
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
@@ -1328,7 +1311,6 @@ paths:
       operationId: search-dtro
       security:
         - oAuth:
-            - cso
             - dsp
             - dc
       parameters:
