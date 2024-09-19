@@ -31,7 +31,7 @@ echo "Got access token"
 
 if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
-  RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+  RESPONSE=$(curl -s -w "%{http_code}" -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
@@ -43,10 +43,18 @@ if [ "$IS_PUBLISHER" = true ]; then
       "name": "'"${APP_NAME}"'",
       "prefix": "'"${APP_PREFIX}"'",
       "userGroup": "tra"
-    }' | jq )
+    }')
 
   echo "RESPONSE-tra"
   echo "${RESPONSE}"
+
+  # Extract the HTTP code (last line) and the response body
+  HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
+  BODY=$(echo "$RESPONSE" | sed '$d')
+
+  # Output the HTTP status code and the response body
+  echo "HTTP Status Code: $HTTP_CODE"
+  echo "Response Body: $BODY"
 #  response_json=$(echo "$RESPONSE" | jq )
 #  echo "${response_json}"
   # Error checking and handling
