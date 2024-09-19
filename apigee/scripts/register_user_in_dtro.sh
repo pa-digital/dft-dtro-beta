@@ -4,6 +4,11 @@
 ORG=$apigee_organisation
 uuid=$(uuidgen)
 TRA_ID=$SWA_CODE
+if [ "$IS_PUBLISHER" = true ]; then
+    USER_GROUP="tra"
+else
+    USER_GROUP="consumer"
+fi
 
 # Get OAuth access token
 OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-generator" \
@@ -30,11 +35,11 @@ app_id=$(echo "$OAUTH_RESPONSE" | jq -r '.application_name')
 #fi
 
 # Add user to D-TRO
-RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+RESPONSE=$(curl -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
   -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
   -H 'Content-Type: application/json' \
   -H 'Accept: text/plain' \
-  -H "Authorization: Bearer ${TOKEN}" \
+  -H "Authorization: Bearer ${access_token}" \
   -d '{
     "id": "'${uuid}'",
     "xAppId": "'${app_id}'",
@@ -43,10 +48,12 @@ RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST 'https://dtro-integrat
     "userGroup": "'${USER_GROUP}'"
   }')
 
+echo "RESPONSE"
+echo "${RESPONSE}"
 # Error checking and handling
-  if [ "$RESPONSE" -eq 200 ]; then
-    echo "${APP_NAME}(${app_id}) added to D-TR0"
-  else
-    echo "Failed to add ${APP_NAME}(${app_id}) to D-TR0. HTTP response code: $RESPONSE"
-    exit 1
-  fi
+#  if [ "$RESPONSE" -eq 201 ]; then
+#    echo "${APP_NAME}(${app_id}) added to D-TR0"
+#  else
+#    echo "Failed to add ${APP_NAME}(${app_id}) to D-TR0. HTTP response code: $RESPONSE"
+#    exit 1
+#  fi
