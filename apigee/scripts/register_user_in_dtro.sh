@@ -46,10 +46,9 @@ RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/cre
     "name": "'${APP_NAME}'",
     "prefix": "'${APP_PREFIX}'",
     "userGroup": "'${USER_GROUP}'"
-  }')
+  }' | jq)
 
-echo "RESPONSE"
-echo "${RESPONSE}"
+#http_code=$(echo "$RESPONSE" | jq )
 # Error checking and handling
 #  if [ "$RESPONSE" -eq 200 ]; then
 #    echo "${APP_NAME}(${app_id}) added to D-TR0"
