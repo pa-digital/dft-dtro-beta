@@ -1,20 +1,16 @@
 ﻿using System.Net;
-using System.Web;
 using Dft.DTRO.Admin.Models.Errors;
 using Dft.DTRO.Admin.Models.Views;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Dft.DTRO.Admin.Services;
 
 public class ErrHandlingService : IErrHandlingService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ITempDataDictionaryFactory _tempDataFactory;
     private readonly ILogger<ErrHandlingService> _logger;
-    public ErrHandlingService(IHttpContextAccessor httpContextAccessor, ITempDataDictionaryFactory tempDataFactory, ILogger<ErrHandlingService> logger)
+    public ErrHandlingService(IHttpContextAccessor httpContextAccessor, ILogger<ErrHandlingService> logger)
     {
         _httpContextAccessor = httpContextAccessor;
-        _tempDataFactory = tempDataFactory;
         _logger = logger;
     }
 
@@ -40,17 +36,15 @@ public class ErrHandlingService : IErrHandlingService
                 errorView.ErrorType = "UI - Internal error";
                 break;
         }
-       
-        string errorViewJson = JsonSerializer.Serialize(errorView);
-        string errorViewEncoded = HttpUtility.UrlEncode(errorViewJson);
+        var httpContext = _httpContextAccessor.HttpContext;
 
-        var routeValues = new { errorView = errorViewEncoded };
-        return new RedirectToPageResult("/Error", routeValues);
-
+        httpContext?.Session.SetString("errorView", JsonSerializer.Serialize(errorView));
+        return new RedirectToPageResult("/Error");
     }
 
     public async Task RedirectIfErrors(HttpResponseMessage response)
     {
+
         if (!response.IsSuccessStatusCode)
         {
             var httpContext = _httpContextAccessor.HttpContext;
@@ -94,8 +88,7 @@ public class ErrHandlingService : IErrHandlingService
                     }
                     else
                     {
-                        var tempData = _tempDataFactory.GetTempData(httpContext);
-                        tempData["dtroValidationException"] = JsonSerializer.Serialize(dtroValidationException);
+                        httpContext?.Session.SetString("dtroValidationException", JsonSerializer.Serialize(dtroValidationException));
                         errorView.ApiErrorResponse = new ApiErrorResponse() { Error = "DTRO Validation error", Message = "" };
                     }
                     break;
@@ -105,21 +98,11 @@ public class ErrHandlingService : IErrHandlingService
                     break;
             }
 
-            string errorViewJson = JsonSerializer.Serialize(errorView);
-            string errorViewEncoded = HttpUtility.UrlEncode(errorViewJson);
-
-            if (!httpContext.Response.HasStarted)
-            {
-              httpContext.Response.Redirect($"/Error?errorView={errorViewEncoded}", false);
-                //httpContext.Response.CompleteAsync().GetAwaiter().GetResult();
-                //await httpContext.Response.CompleteAsync();
-                await httpContext.Response.Body.FlushAsync();
-            }
-            else
-            {
-                throw new InvalidOperationException("Cannot redirect as the response has already started.");
-            }
-
+            httpContext?.Session.SetString("errorView", JsonSerializer.Serialize(errorView));
+            httpContext?.Response.Redirect($"/Error", false);
+            httpContext?.Response.CompleteAsync().GetAwaiter().GetResult();
+            //await httpContext.Response.CompleteAsync();
+            //await httpContext.Response.Body.FlushAsync();  
         }
     }
 }

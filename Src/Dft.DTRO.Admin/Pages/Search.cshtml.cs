@@ -40,7 +40,7 @@ public class SearchModel : PageModel
             DtroUserSearch.AlwaysButtonHidden = true;
             DtroUserSearch.UpdateButtonText = "Search";
             DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
-            DtroUserSearch.DtroUsers.RemoveAll(x => x.UserGroup == UserGroup.Consumer);
+            DtroUserSearch.DtroUsers.RemoveAll(x => x.UserGroup != UserGroup.Tra);
             DtroUserSearch.DtroUsers.Insert(0, new DtroUser { TraId = 0, Name = "[all]" });
 
 

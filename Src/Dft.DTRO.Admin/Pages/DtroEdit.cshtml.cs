@@ -20,6 +20,7 @@ public class DtroEditModel : PageModel
     {
         DtroUserSearch.AlwaysButtonHidden = true;
         DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
+        DtroUserSearch.DtroUsers.RemoveAll(x=> x.UserGroup != UserGroup.Tra);
     }
 
 
