@@ -10,14 +10,14 @@ public class ErrorModel : PageModel
     [BindProperty(SupportsGet = true)]
     public ErrorView ErrorView { get; set; }
 
-    public void OnGet(string errorView)
+    public void OnGet()
     {
+
+
+        var errorView = HttpContext.Session.GetString("errorView");
         if (!string.IsNullOrEmpty(errorView))
         {
-           
-            string decodedMessage = HttpUtility.UrlDecode(errorView);
-
-            ErrorView = JsonSerializer.Deserialize<ErrorView>(decodedMessage);
+            ErrorView = JsonSerializer.Deserialize<ErrorView>(errorView);
 
             if (ErrorView == null)
             {
@@ -26,10 +26,10 @@ public class ErrorModel : PageModel
                     ErrorType = "UI - Unable to process error details"
                 };
             }
-
-            if (TempData["dtroValidationException"] != null)
+           
+            if (HttpContext.Session.GetString("dtroValidationException") != null)
             {
-                ErrorView.DtroValidationException = JsonSerializer.Deserialize<DtroValidationExceptionResponse>((string)TempData["dtroValidationException"]);
+                ErrorView.DtroValidationException = JsonSerializer.Deserialize<DtroValidationExceptionResponse>((string)HttpContext.Session.GetString("dtroValidationException"));
 
                 if (ErrorView.DtroValidationException.RequestComparedToSchema != null)
                 {
