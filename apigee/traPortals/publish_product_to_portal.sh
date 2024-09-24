@@ -61,11 +61,11 @@ for tra_element in "${tra_array[@]}"; do
 
     # Error checking and handling
     if [ "$RESPONSE" -eq 200 ]; then
-      echo "${TITLE} successfully created in the Developer Portal."
+      echo "${TITLE} successfully created in the ${PORTAL_NAME} Portal."
     elif [ "$RESPONSE" -eq 409 ]; then
-      echo "${TITLE} already exists in the Developer Portal."
+      echo "${TITLE} already exists in the ${PORTAL_NAME} Portal."
     else
-      echo "Failed to publish ${TITLE} to developer portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
+      echo "Failed to publish ${TITLE} to ${PORTAL_NAME} portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
       exit 1
     fi
   done
@@ -98,7 +98,7 @@ for tra_element in "${tra_array[@]}"; do
 
     # Error checking and handling
     if [ "$RESPONSE_UPDATE_DOC" -eq 200 ]; then
-      echo "${title} Open API Spec successfully uploaded."
+      echo "${title} Open API Spec successfully uploaded to the ${PORTAL_NAME} Portal.."
     else
       echo "Failed to upload ${title} Open API Spec. HTTP response code: $RESPONSE_UPDATE_DOC"
       exit 1
