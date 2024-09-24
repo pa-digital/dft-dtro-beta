@@ -22,7 +22,7 @@ public class RecordManagementService : IRecordManagementService
 
         List<DtroUserResponse> swaCodes = _dtroUserDal.GetAllDtroUsersAsync().Result;
 
-        int creator = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<int>("traCreator");
+        int creator = dtroSubmit.Data.GetExpando("Source").GetValueOrDefault<int>("traCreator");
         bool isCreatorWithinSwaCodes = swaCodes.Select(response => response.TraId == creator).Any();
         if (!isCreatorWithinSwaCodes)
         {
@@ -32,7 +32,7 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        int owner = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<int>("currentTraOwner");
+        int owner = dtroSubmit.Data.GetExpando("Source").GetValueOrDefault<int>("currentTraOwner");
         bool isOwnerWithinSwaCodes = swaCodes.Select(response => response.TraId == owner).Any();
         if (!isOwnerWithinSwaCodes)
         {
@@ -50,7 +50,7 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        IList<object> traAffected = dtroSubmit.Data.GetExpando("source").GetValue<IList<object>>("traAffected");
+        IList<object> traAffected = dtroSubmit.Data.GetExpando("Source").GetValue<IList<object>>("traAffected");
         if (traAffected.Any(it => it is not long))
         {
             validationErrors.Add(new SemanticValidationError
@@ -71,7 +71,7 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        var sourceReference = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("reference");
+        var sourceReference = dtroSubmit.Data.GetExpando("Source").GetValueOrDefault<string>("reference");
         if (string.IsNullOrWhiteSpace(sourceReference))
         {
             validationErrors.Add(new SemanticValidationError
@@ -80,7 +80,7 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        var sourceActionType = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("actionType");
+        var sourceActionType = dtroSubmit.Data.GetExpando("Source").GetValueOrDefault<string>("actionType");
         if (!sourceActionType.IsEnum("SourceActionType"))
         {
             validationErrors.Add(new SemanticValidationError
@@ -89,7 +89,7 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        List<string> provisionReferences = dtroSubmit.Data.GetValueOrDefault<IList<object>>("source.provision")
+        List<string> provisionReferences = dtroSubmit.Data.GetValueOrDefault<IList<object>>("Source.provision")
         ?.OfType<ExpandoObject>()
         .Select(it => it.GetValue<string>("reference"))
         .ToList() ?? new List<string>();
@@ -119,7 +119,7 @@ public class RecordManagementService : IRecordManagementService
             validationErrors.AddRange(errors);
         }
 
-        List<string> provisionActionTypes = dtroSubmit.Data.GetValueOrDefault<IList<object>>("source.provision")
+        List<string> provisionActionTypes = dtroSubmit.Data.GetValueOrDefault<IList<object>>("Source.provision")
             .OfType<ExpandoObject>()
             .Select(it => it.GetValue<string>("actionType"))
             .ToList();

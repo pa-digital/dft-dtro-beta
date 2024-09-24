@@ -11,7 +11,6 @@ namespace DfT.DTRO.Controllers;
 
 public class DTROsController : ControllerBase
 {
-    private readonly IParserService _parserService;
     private readonly IDtroService _dtroService;
     private readonly IMetricsService _metricsService;
     private readonly IRequestCorrelationProvider _correlationProvider;
@@ -26,14 +25,12 @@ public class DTROsController : ControllerBase
     /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{DTROsController}"/> instance.</param>
     public DTROsController(
-        IParserService parserService,
          IDtroService dtroService,
          IMetricsService metricsService,
          IRequestCorrelationProvider correlationProvider,
          IXappIdMapperService appIdMapperService,
          ILogger<DTROsController> logger)
     {
-        _parserService = parserService;
         _dtroService = dtroService;
         _metricsService = metricsService;
         _correlationProvider = correlationProvider;
@@ -63,27 +60,6 @@ public class DTROsController : ControllerBase
         if (file == null || file.Length == 0)
         {
             return BadRequest("File is empty");
-        }
-
-        try
-        {
-            using (MemoryStream memoryStream = new())
-            {
-                await file.CopyToAsync(memoryStream);
-                string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
-                //TODO: Capture geometry section
-                string geometrySection = _parserService.Capture(fileContent);
-                //TODO: Adjust the geometry
-                string adjustedGeometry = _parserService.Adjust(geometrySection);
-                //TODO: Replace geometry section
-                string replacedGeometry = _parserService.Replace(adjustedGeometry);
-                //TODO: Modify the existing file content
-                string modifiedFileContent = fileContent.Replace(geometrySection, replacedGeometry);
-            }
-        }
-        catch (Exception ex)
-        {
-
         }
 
         try

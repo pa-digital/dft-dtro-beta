@@ -65,8 +65,6 @@ public class Startup
         services.AddScoped<IDtroUserService, DtroUserService>();
         services.AddScoped<ISystemConfigDal, SystemConfigDal>();
         services.AddScoped<ISystemConfigService, SystemConfigService>();
-        services.AddScoped<IParserService, ParserService>();
-
 
         services.TryAddSingleton<ISystemClock, SystemClock>();
 

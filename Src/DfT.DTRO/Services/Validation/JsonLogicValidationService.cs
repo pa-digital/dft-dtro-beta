@@ -33,11 +33,13 @@ public class JsonLogicValidationService : IJsonLogicValidationService
             var result = rule.Rule.Apply(node);
             if (result != null && result.AsValue().TryGetValue(out bool value) && !value)
             {
-                errors.Add(new SemanticValidationError
+                SemanticValidationError error = new()
                 {
                     Message = rule.Message,
                     Path = rule.Path
-                });
+                };
+
+                errors.Add(error);
             }
         }
 
