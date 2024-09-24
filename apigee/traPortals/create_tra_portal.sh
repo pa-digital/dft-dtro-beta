@@ -15,7 +15,7 @@ fi
 for tra_element in "${tra_array[@]}"; do
 
   # Make the API call
-  RESPONSE=$(curl -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites" \
+  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
     -d '{
@@ -23,14 +23,12 @@ for tra_element in "${tra_array[@]}"; do
       "description": "'"This is the ${tra_element^} Portal for D-TRO"'"
     }')
 
-    echo "RESPONSE"
-    echo "${RESPONSE}"
   # Error checking and handling
-#  if [ "$RESPONSE" -eq 200 ]; then
-#    echo "${tra_element^} Portal successfully created in ${ORG}."
-#  elif [ "$RESPONSE" -eq 409 ]; then
-#    echo "${tra_element^} Portal already exists in ${ORG}."
-#  else
-#    echo "Failed to create ${tra_element^} portal in ${ORG}. HTTP response code: $RESPONSE"
-#  fi
+  if [ "$RESPONSE" -eq 200 ]; then
+    echo "${tra_element^} Portal successfully created in ${ORG}."
+  elif [ "$RESPONSE" -eq 409 ]; then
+    echo "${tra_element^} Portal already exists in ${ORG}."
+  else
+    echo "Failed to create ${tra_element^} portal in ${ORG}. HTTP response code: $RESPONSE"
+  fi
 done

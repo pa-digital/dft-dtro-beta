@@ -39,7 +39,7 @@ for tra_element in "${tra_array[@]}"; do
     DESCRIPTION="This is the D-TRO application for ${TITLE}s."
 
     # Make the API call
-    RESPONSE=$(curl -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
+    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.googleapis.com/v1/organizations/${ORG}/sites/${ORG}-${PORTAL_URL}/apidocs" \
       -H "Authorization: Bearer ${TOKEN}" \
       -H "Content-Type: application/json" \
       -d '{
@@ -53,17 +53,15 @@ for tra_element in "${tra_array[@]}"; do
         "apiProductName": "'"${PRODUCT_NAME}"'"
       }')
 
-    echo "RESPONSE"
-    echo "${RESPONSE}"
     # Error checking and handling
-#    if [ "$RESPONSE" -eq 200 ]; then
-#      echo "${TITLE} successfully created in the ${PORTAL_NAME} Portal."
-#    elif [ "$RESPONSE" -eq 409 ]; then
-#      echo "${TITLE} already exists in the ${PORTAL_NAME} Portal."
-#    else
-#      echo "Failed to publish ${TITLE} to ${PORTAL_NAME} portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
-#      exit 1
-#    fi
+    if [ "$RESPONSE" -eq 200 ]; then
+      echo "${TITLE} successfully created in the ${PORTAL_NAME} Portal."
+    elif [ "$RESPONSE" -eq 409 ]; then
+      echo "${TITLE} already exists in the ${PORTAL_NAME} Portal."
+    else
+      echo "Failed to publish ${TITLE} to ${PORTAL_NAME} portal ${PORTAL_NAME}. HTTP response code: $RESPONSE"
+      exit 1
+    fi
   done
 
   # Get the titles and IDs of the Products/Catalog items uploaded earlier to the portal and persist them to a map
