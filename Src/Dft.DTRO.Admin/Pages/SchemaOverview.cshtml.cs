@@ -1,4 +1,4 @@
-
+//TODO: Schema: Icon are missing, enable/disable confirmation pop-up required,
 public class SchemaOverviewModel : PageModel
 {
     private readonly ISchemaService _schemaService;

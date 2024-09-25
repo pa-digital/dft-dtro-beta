@@ -1,4 +1,4 @@
-﻿namespace DfT.DTRO.Migrations;
+﻿namespace DfT.DTRO.Migrations; // TODO: What is the relationship between TraId to AppId
 
 public static class SeedData
 {

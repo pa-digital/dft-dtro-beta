@@ -1,4 +1,4 @@
-namespace Dft.DTRO.Admin.Pages
+namespace Dft.DTRO.Admin.Pages //TODO: Main page, update default user to DfT, Remove Privacy
 {
     public class IndexModel : PageModel
     {
