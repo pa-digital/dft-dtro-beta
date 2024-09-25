@@ -5,9 +5,9 @@ public class MappingServiceTests
 {
     private static readonly string[] ValidDtroHistories =
     {
-        "../../../../../examples/D-TROs/3.2.0/valid-new-x.json",
-        "../../../../../examples/D-TROs/3.2.0/valid-noChange.json",
-        "../../../../../examples/D-TROs/3.2.0/valid-fullRevoke.json"
+        "../../../../../examples/D-TROs/3.2.3/temporary TRO - new-Polygon.json",
+        "../../../../../examples/D-TROs/3.2.3/valid-noChange.json",
+        "../../../../../examples/D-TROs/3.2.3/temporary TRO - fullRevoke.json"
     };
 
     private readonly IDtroMappingService _sut;
@@ -32,7 +32,7 @@ public class MappingServiceTests
 
         Assert.True(actual.Any());
 
-        Assert.Equal(2, actual.Count);
+        Assert.Equal(3, actual.Count);
 
         Assert.Equal(actual[0].Created, actual[1].Created);
 

@@ -153,9 +153,9 @@ namespace Dft.DTRO.Tests
                     Created = new DateTime(2024, 6, 19, 16, 44, 00),
                     LastUpdated = DateTime.Now,
                     Data = expando,
-                    TrafficAuthorityOwnerId = 1585,
-                    TrafficAuthorityCreatorId = 1585,
-                    SchemaVersion = "3.1.2"
+                    TrafficAuthorityOwnerId = 1000,
+                    TrafficAuthorityCreatorId = 1000,
+                    SchemaVersion = "3.2.3"
                 };
 
                 requests.Add(request);
