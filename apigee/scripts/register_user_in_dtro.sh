@@ -35,7 +35,13 @@ if [ "$IS_PUBLISHER" = true ]; then
   echo "APP_ID_CLEAN"
   echo "$APP_ID_CLEAN"
   echo '"'"${APP_ID_CLEAN}"'"'
-  echo "$(cat <<EOF "${APP_ID_CLEAN}" EOF)"
+  cat <<EOF
+{
+    "xAppId": "${APP_ID_CLEAN}",
+    "xAppId": ${APP_ID_CLEAN}
+}
+EOF
+
   RESPONSE=$(curl -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
