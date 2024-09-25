@@ -9,7 +9,7 @@ on:
         required: true
 
 env:
-  environment: test #TODO: Update to for Prod
+  environment: prod #TODO: Update to prod for Prod
   env_name_prefix: int #TODO: Remove for Prod, use 'environment' instead
 
 permissions:
@@ -43,18 +43,19 @@ jobs:
         env:
           github_ref: ${{ github.ref }}
           environment: ${{ env.environment }}
-          env_name_prefix: ${{ env.env_name_prefix }} #TODO: Update to '${{ inputs.environment }}' for Prod
+#          env_name_prefix: ${{ env.env_name_prefix }} #TODO: Update to '${{ inputs.environment }}' for Prod
+          env_name_prefix: ${{ env.environment }}
           tra: ${{ inputs.tra }}
           swa_code: ${{ inputs.swa_code }}
-          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }} #TODO: Update for Prod
-          apigee_organisation: ${{ vars.GCP_PROJECT_ID_TEST }} #TODO: Update for Prod
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PROD }} #TODO: Update for Prod
+          apigee_organisation: ${{ vars.GCP_PROJECT_ID_PROD }} #TODO: Update for Prod
 
       - name: Authenticate to Google Cloud
         id: google-auth
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_TEST }} #TODO: Update to for Prod
-          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }} #TODO: Update to for Prod
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PROD }} #TODO: Update to for Prod
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PROD }} #TODO: Update to for Prod
           token_format: access_token
 
       - name: Set up ApigeeCLI
