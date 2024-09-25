@@ -37,7 +37,7 @@ if [ "$IS_PUBLISHER" = true ]; then
   echo '"'"${APP_ID_CLEAN}"'"'
   cat <<EOF
 {
-    "xAppId": "${APP_ID_CLEAN}",
+    "xAppId": ${APP_ID},
     "xAppId": ${APP_ID_CLEAN}
 }
 EOF
@@ -50,7 +50,7 @@ EOF
     -d "$(cat <<EOF
 {
   "id": "${uuid}",
-  "xAppId": "${APP_ID_CLEAN}",
+  "xAppId": ${APP_ID_CLEAN},
   "traId": "${TRA_ID}",
   "name": "${APP_NAME}",
   "prefix": "${APP_PREFIX}",
