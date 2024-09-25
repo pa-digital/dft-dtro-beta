@@ -32,17 +32,17 @@ echo "Got access token"
 if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
   APP_ID_CLEAN=$(echo "$APP_ID" | tr -d '"')
-  echo "$APP_ID"
-  echo "$APP_ID_CLEAN"
+  echo "APP_ID"
+  echo '"'"${APP_ID}"'"'
   RESPONSE=$(curl -w "%{http_code}" -s -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
     -H "Authorization: Bearer ${access_token}" \
     -d '{
-      "id": "'${uuid}'",
-      "xAppId": '${APP_ID}',
-      "traId": '${TRA_ID}',
+      "id": "'"${uuid}"'",
+      "xAppId": "'"${APP_ID}"'",
+      "traId": "'${TRA_ID}'",
       "name": "'"${APP_NAME}"'",
       "prefix": "'"${APP_PREFIX}"'",
       "userGroup": "tra"
@@ -51,9 +51,6 @@ if [ "$IS_PUBLISHER" = true ]; then
   echo "RESPONSE-tra"
   echo "${RESPONSE}"
 
-  # Extract the HTTP code (last line) and the response body
-  HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
-  BODY=$(echo "$RESPONSE" | sed '$d')
 
   # Output the HTTP status code and the response body
   echo "HTTP Status Code: $HTTP_CODE"
