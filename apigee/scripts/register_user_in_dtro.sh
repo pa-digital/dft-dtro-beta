@@ -34,21 +34,24 @@ if [ "$IS_PUBLISHER" = true ]; then
   APP_ID_CLEAN=$(echo "$APP_ID" | tr -d '"')
   echo "APP_ID_CLEAN"
   echo "$APP_ID_CLEAN"
-  echo '"$APP_ID_CLEAN"'
-  echo '$("APP_ID_CLEAN")'
+  echo '"'"${APP_ID_CLEAN}"'"'
+  echo "$(cat <<EOF "${APP_ID_CLEAN}" EOF)"
   RESPONSE=$(curl -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
     -H "Authorization: Bearer ${access_token}" \
-    -d '{
-      "id": "'"${uuid}"'",
-      "xAppId": $("APP_ID_CLEAN"),
-      "traId": "'${TRA_ID}'",
-      "name": "'"${APP_NAME}"'",
-      "prefix": "'"${APP_PREFIX}"'",
-      "userGroup": "tra"
-    }')
+    -d "$(cat <<EOF
+{
+  "id": "${uuid}",
+  "xAppId": "${APP_ID_CLEAN}",
+  "traId": "${TRA_ID}",
+  "name": "${APP_NAME}",
+  "prefix": "${APP_PREFIX}",
+  "userGroup": "tra"
+}
+EOF
+)")
 
   echo "RESPONSE-tra"
   echo "${RESPONSE}"
