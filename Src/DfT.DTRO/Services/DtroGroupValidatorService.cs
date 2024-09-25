@@ -58,11 +58,11 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToRules = requestComparedToRules.ToList() };
         }
 
-        var requestComparedToConstraints = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);
+        var tuple = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);
 
         if (requestComparedToRules.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = requestComparedToConstraints.ToList() };
+            return new DtroValidationException { RequestComparedToRules = tuple.Item2.ToList() };
         }
 
         return null;

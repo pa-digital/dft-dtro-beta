@@ -67,7 +67,7 @@ namespace Dft.DTRO.Tests
 
             var builder = new ConfigurationBuilder();
             var configuration = builder.Build();
-            var mappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
+            var mappingService = new DtroMappingService(configuration, new BoundingBoxService());
             mappingService.InferIndexFields(ref sampleDtro);
 
             return sampleDtro;
@@ -85,7 +85,7 @@ namespace Dft.DTRO.Tests
             {
                 var builder = new ConfigurationBuilder();
                 var configuration = builder.Build();
-                var mappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
+                var mappingService = new DtroMappingService(configuration, new BoundingBoxService());
                 mappingService.InferIndexFields(ref dtro);
             }
 

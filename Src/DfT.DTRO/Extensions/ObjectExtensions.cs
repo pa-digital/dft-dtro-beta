@@ -52,4 +52,9 @@ public static class ObjectExtensions
         return true;
     }
 
+    public static int AsInt(this string source)
+    {
+        bool isDigit = int.TryParse(source, out int number);
+        return isDigit ? number : 0;
+    }
 }

@@ -9,13 +9,14 @@ public class SemanticValidationServiceTests
     private readonly Mock<ISystemClock> _mockClock;
     private readonly Mock<IConditionValidationService> _mockConditionValidationService;
     private readonly Mock<IDtroDal> _mockDtroDal;
+    private readonly Mock<IBoundingBoxService> _mockBoundingBoxService;
 
     public SemanticValidationServiceTests()
     {
         _mockClock = new Mock<ISystemClock>();
         _mockDtroDal = new Mock<IDtroDal>();
         _mockConditionValidationService = new Mock<IConditionValidationService>();
-
+        _mockBoundingBoxService = new Mock<IBoundingBoxService>();
         _mockClock.Setup(it => it.UtcNow).Returns(new DateTime(2023, 5, 1));
     }
 
@@ -25,11 +26,11 @@ public class SemanticValidationServiceTests
         DtroSubmit dtro = PrepareDtro(@"{""lastUpdateDate"": ""2012-04-23T18:25:43.511Z""}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.Empty(result);
+        Assert.Empty(result.Item2);
     }
 
     [Fact]
@@ -38,11 +39,11 @@ public class SemanticValidationServiceTests
         DtroSubmit dtro = PrepareDtro(@"{""lastUpdateDate"": ""2027-04-23T18:25:43.511Z""}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.NotEmpty(result);
+        Assert.NotEmpty(result.Item2);
     }
 
     [Fact]
@@ -52,11 +53,11 @@ public class SemanticValidationServiceTests
             ""type"": ""Polygon"", ""coordinates"": [[[-10000, -10000],[0,0]]]}}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.Empty(result);
+        Assert.Empty(result.Item2);
     }
 
     [Fact]
@@ -66,11 +67,11 @@ public class SemanticValidationServiceTests
             ""type"": ""Polygon"", ""coordinates"": [[[1, 55],[-3,60.3]]]}}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.Empty(result);
+        Assert.Empty(result.Item2);
     }
 
     [Fact]
@@ -80,11 +81,11 @@ public class SemanticValidationServiceTests
             ""type"": ""Polygon"", ""coordinates"": [[[-103940, 55],[-3,2000000.44]]]}}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.NotEmpty(result);
+        Assert.NotEmpty(result.Item2);
     }
 
     [Fact]
@@ -94,11 +95,11 @@ public class SemanticValidationServiceTests
             ""type"": ""Polygon"", ""coordinates"": [[[-8, 48],[3,60.9]]]}}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.NotEmpty(result);
+        Assert.NotEmpty(result.Item2);
     }
 
     [Fact]
@@ -107,11 +108,11 @@ public class SemanticValidationServiceTests
         DtroSubmit dtro = PrepareDtro(@"{""crossRefTro"": []}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.Empty(result);
+        Assert.Empty(result.Item2);
     }
 
     [Fact]
@@ -120,11 +121,11 @@ public class SemanticValidationServiceTests
         DtroSubmit dtro = PrepareDtro("{}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.Empty(result);
+        Assert.Empty(result.Item2);
     }
 
     [Fact]
@@ -139,12 +140,12 @@ public class SemanticValidationServiceTests
         );
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
         _mockDtroDal.VerifyNoOtherCalls();
-        Assert.Empty(result);
+        Assert.Empty(result.Item2);
     }
 
     [Fact]
@@ -159,12 +160,12 @@ public class SemanticValidationServiceTests
         );
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
         _mockDtroDal.Verify(it => it.DtroExistsAsync(id));
-        Assert.NotEmpty(result);
+        Assert.NotEmpty(result.Item2);
     }
 
     [Fact]
@@ -176,12 +177,12 @@ public class SemanticValidationServiceTests
         DtroSubmit dtro = PrepareDtro($@"{{""source"": {{ ""crossRefTro"": [""{id.ToString()}""] }} }}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
         _mockDtroDal.Verify(it => it.DtroExistsAsync(id));
-        Assert.Empty(result);
+        Assert.Empty(result.Item2);
     }
 
     [Fact]
@@ -193,11 +194,11 @@ public class SemanticValidationServiceTests
         DtroSubmit dtro = PrepareDtro($@"{{""source"": {{ ""crossRefTro"": [""{id.ToString()}""] }} }}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.NotEmpty(result);
+        Assert.NotEmpty(result.Item2);
         _mockDtroDal.Verify(it => it.DtroExistsAsync(id));
     }
 
@@ -208,11 +209,11 @@ public class SemanticValidationServiceTests
                   ""type"": ""Point"", ""coordinates"": [0,0]}}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.Empty(result);
+        Assert.Empty(result.Item2);
     }
 
     [Fact]
@@ -222,11 +223,11 @@ public class SemanticValidationServiceTests
                   ""type"": ""LineString"", ""coordinates"": [[0,0],[0,0],[0,0]]}}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object);
+            _mockConditionValidationService.Object, _mockBoundingBoxService.Object);
 
-        List<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
-        Assert.Empty(result);
+        Assert.Empty(result.Item2);
     }
 
     private static DtroSubmit PrepareDtro(string jsonData, string schemaVersion = "10.0.0")
