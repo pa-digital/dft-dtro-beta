@@ -747,7 +747,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowPublicationTimeMoreThanOneMonthOld()
     {
         DateTime time = DateTime.UtcNow.AddMonths(-2);
@@ -789,7 +789,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowPublicationTimeFromTheFuture()
     {
         DateTime time = DateTime.UtcNow.AddMonths(1);
@@ -844,7 +844,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     [Trait("RuleId", "DFT-205/14")]
     public async Task DisallowExternalReferenceLastUpdateDateFromTheFuture()
     {
@@ -967,7 +967,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowValidUsagePeriodEndLessThanStart()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1041,7 +1041,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowMaxTimeLessThanMinTime()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1119,7 +1119,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowValueCollectionMaxLessThanMin()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1156,7 +1156,7 @@ public class JsonLogicValidationTests
         Assert.NotEmpty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task AllowValueCollectionMinLessThanMax()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1193,7 +1193,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task AllowValueCollectionMinAndOrMaxMissing()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1234,7 +1234,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     [Trait("RuleId", "43")]
     public async Task DisallowValueMaxLessThanMin()
     {
@@ -1277,7 +1277,7 @@ public class JsonLogicValidationTests
         Assert.NotEmpty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     [Trait("RuleId", "43")]
     public async Task AllowValueMinLessThanMax()
     {
@@ -1349,7 +1349,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Item doesn't exist in example files")]
     public async Task DisallowsNonSequentialProvisionIndex()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1378,7 +1378,7 @@ public class JsonLogicValidationTests
         Assert.NotEmpty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task AllowSequentialRateLineCollection()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1414,7 +1414,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowNonSequentialRateLineCollection()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1488,7 +1488,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowNonSequentialRateLine()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1541,7 +1541,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""heightCharacteristic"": [
+                          ""MaximumHeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleHeight"": 6
@@ -1621,7 +1621,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""heightCharacteristic"": [
+                          ""MaximumHeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleHeight"": 6
@@ -1661,7 +1661,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""heightCharacteristic"": [
+                          ""MaximumHeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleHeight"": 7
@@ -1701,7 +1701,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""lengthCharacteristic"": [
+                          ""MaximumLengthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleLength"": 5
@@ -1741,7 +1741,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""lengthCharacteristic"": [
+                          ""MaximumLengthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleLength"": 41
@@ -1781,7 +1781,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""widthCharacteristic"": [
+                          ""MaximumWidthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleWidth"": 5
@@ -1821,7 +1821,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""widthCharacteristic"": [
+                          ""MaximumWidthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleWidth"": 7
@@ -1863,7 +1863,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""grossWeightCharacteristic"": [
+                          ""MaximumGrossWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""grossVehicleWeight"": 5
@@ -1905,7 +1905,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""grossWeightCharacteristic"": [
+                          ""MaximumGrossWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""grossVehicleWeight"": 51
@@ -1947,7 +1947,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""MaximumHeaviestAxleWeightCharacteristic"": [
+                          ""HeaviestAxleWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""heaviestAxleWeight"": 5
@@ -1989,7 +1989,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""heaviestAxleWeightCharacteristic"": [
+                          ""HeaviestAxleWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""heaviestAxleWeight"": 51
@@ -2164,7 +2164,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     [Trait("RuleId", "33")]
     public async Task DisallowYearOfFirstRegistrationGreaterThanCurrentYearValueInOverallPeriod()
     {

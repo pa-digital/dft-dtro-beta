@@ -175,7 +175,7 @@
 								"version": 1,
 								"PointGeometry": {
 									"point": "((10 40), (40 30), (20 20), (30 10))",
-									"represantation": "centreLinePoint"
+									"representation": "centreLinePoint"
 								},
 								"externalReference": [
 									{

@@ -123,7 +123,8 @@ public class SemanticValidationService : ISemanticValidationService
             });
         }
 
-        return _boundingBoxService.SetBoundingBox(errors, obj1, boundingBox);
+        boundingBox = _boundingBoxService.SetBoundingBox(errors, obj1, boundingBox);
+        return boundingBox;
     }
 
     #region Remove the code

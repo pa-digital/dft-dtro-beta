@@ -1298,7 +1298,7 @@
     "id": 30,
     "message": "'comparisonOperator' must be 'lessThan' or 'lessThanOrEqualTo' and 'vehicleHeight' must be between 0 and 6.",
     "name": "WidthCharacteristicValidForRegulationTypeDimensionMaximumWidth",
-    "path": "Source.provision.regulation.conditions.vehicleCharacteristics.widthCharacteristic",
+    "path": "Source.provision.regulation.conditions.vehicleCharacteristics.MaximumWidthCharacteristic",
     "rule": {
       "all": [
         {
@@ -1327,7 +1327,7 @@
                     {
                       "all": [
                         {
-                          "var": "vehicleCharacteristics.widthCharacteristic"
+                          "var": "vehicleCharacteristics.MaximumWidthCharacteristic"
                         },
                         {
                           "and": [
