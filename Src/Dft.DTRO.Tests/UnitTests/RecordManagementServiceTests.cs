@@ -5,15 +5,18 @@ namespace Dft.DTRO.Tests.UnitTests;
 [ExcludeFromCodeCoverage]
 public class RecordManagementServiceTests
 {
-    private const string SourceJsonBasePath = "../../../../../examples/D-TROs/3.2.0";
+    private const string SourceJsonBasePath = "../../../TestFiles/D-TROs/3.2.3";
 
     [Theory]
-    [InlineData("3.2.0", "valid-new-x", true)]
-    [InlineData("3.2.0", "invalid-source-reference", false)]
-    [InlineData("3.2.0", "invalid-source-actionType", false)]
-    [InlineData("3.2.0", "invalid-provision-reference", false)]
-    [InlineData("3.2.0", "invalid-provision-actionType", false)]
-    [InlineData("3.2.0", "invalid-duplicate-provision-reference", false)]
+    [InlineData("3.2.3", "temporary TRO - fullAmendment", true)]
+    [InlineData("3.2.3", "temporary TRO - fullRevoke", true)]
+    [InlineData("3.2.3", "temporary TRO - new-DirectedLinear", true)]
+    [InlineData("3.2.3", "temporary TRO - new-LinearGeometry", true)]
+    [InlineData("3.2.3", "temporary TRO - new-PointGeometry", true)]
+    [InlineData("3.2.3", "temporary TRO - new-Polygon", true)]
+    [InlineData("3.2.3", "temporary TRO - partialAmendment", true)]
+    [InlineData("3.2.3", "temporary TRO - partialRevoke", true)]
+    [InlineData("3.2.3", "valid-noChange", true)]
     public void ProducesCorrectResults(string schemaVersion, string file, bool isValid)
     {
         Mock<IDtroUserDal> mockSwaCodeDal = new();
@@ -30,7 +33,7 @@ public class RecordManagementServiceTests
             Data = JsonConvert.DeserializeObject<ExpandoObject>(input)
         };
 
-        List<SemanticValidationError> actual = sut.ValidateCreationRequest(dtroSubmit, 1585);
+        List<SemanticValidationError> actual = sut.ValidateCreationRequest(dtroSubmit, 1000);
 
         Assert.Equal(isValid, !actual.Any());
     }

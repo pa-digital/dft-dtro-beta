@@ -23,16 +23,16 @@ public class TestFeatureGateMiddleware
 public class DTROsControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {
-    private const string NewDirectedLinear = "../../../../../examples/D-TROs/3.2.3/new-DirectedLinear.json";
-    private const string NewLinearGeometry = "../../../../../examples/D-TROs/3.2.3/new-LinearGeometry.json";
-    private const string NewPointGeometry = "../../../../../examples/D-TROs/3.2.3/new-PointGeometry.json";
-    private const string NewPolygon = "../../../../../examples/D-TROs/3.2.3/new-Polygon.json";
+    private const string NewDirectedLinear = "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-DirectedLinear.json";
+    private const string NewLinearGeometry = "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-LinearGeometry.json";
+    private const string NewPointGeometry = "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-PointGeometry.json";
+    private const string NewPolygon = "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-Polygon.json";
 
     private static readonly string[] ValidDtroHistories =
     {
-        "../../../../../examples/D-TROs/3.2.3/temporary TRO - new-Polygon.json",
-        "../../../../../examples/D-TROs/3.2.3/temporary TRO - fullAmendment.json",
-        "../../../../../examples/D-TROs/3.2.3/temporary TRO - fullRevoke.json"
+        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-Polygon.json",
+        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - fullAmendment.json",
+        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - fullRevoke.json"
     };
 
     private readonly WebApplicationFactory<Program> _factory;
@@ -86,7 +86,7 @@ public class DTROsControllerTests
 
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
-        var payload = await Utils.CreateDtroJsonPayload(dtroPath, version);
+        StringContent payload = await Utils.CreateDtroJsonPayload(dtroPath, version);
 
         HttpResponseMessage response = await client.PostAsync("/dtros/createFromBody", payload);
 

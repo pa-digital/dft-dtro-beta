@@ -188,7 +188,7 @@ public class DtroMappingService : IDtroMappingService
 
     public List<DtroHistoryProvisionResponse> GetProvision(DTROHistory dtroHistory)
     {
-        IList<object> provisions = GetProvision(dtroHistory, "provision");
+        IList<object> provisions = GetProvision(dtroHistory, "Source.provision");
         var ret = new List<DtroHistoryProvisionResponse>();
         foreach (var provision in provisions)
         {

@@ -23,9 +23,9 @@
                                         "vehicleType": [
                                             "taxi"
                                         ],
-										"fuelType": [
-											"petrol"
-										]
+                                        "fuelType": [
+                                            "petrol"
+                                        ]
                                     }
                                 },
                                 {
@@ -170,25 +170,25 @@
                             ]
                         }
                     ],
-	                "regulatedPlace": [
+                    "regulatedPlace": [
                         {
                             "description": "Zone 5, Kenworthy Road, All Odd, All Even",
                             "geometry": {
-								"version": 1,
-								"DirectedLinear": {
-									"directedLineString": "(10 10, 20 20, 10 40)"
-								},
+                                "version": 1,
+                                "DirectedLinear": {
+                                    "directedLineString": "(10 10, 20 20, 10 40)"
+                                },
                                 "externalReference": [
                                     {
                                         "lastUpdateDate": "1981-02-08 11:30:43",
-										"UniqueStreetReferenceNumber": {
-											"usrn": 96854586
-										}
+                                        "UniqueStreetReferenceNumber": {
+                                            "usrn": 96854586
+                                        }
                                     }
                                 ]
                             }
                         }
-                    ],
+                    ]
                 }
             ],
             "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",

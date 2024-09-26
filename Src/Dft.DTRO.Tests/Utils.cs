@@ -10,7 +10,7 @@ namespace Dft.DTRO.Tests
             new()
             {
                 Data = JsonConvert.DeserializeObject<ExpandoObject>(jsonData, new ExpandoObjectConverter()),
-                SchemaVersion = new SchemaVersion(3, 2, 0)
+                SchemaVersion = new SchemaVersion(3, 2, 3)
             };
 
         public static async Task<StringContent> CreateSchemaPayload(string schemaPath, string schemaVersion)
@@ -53,6 +53,7 @@ namespace Dft.DTRO.Tests
         public static async Task<DfT.DTRO.Models.DataBase.DTRO> CreateDtroObject(string dtroJsonPath)
         {
             string sampleDtroDataJson = await File.ReadAllTextAsync(dtroJsonPath);
+
             DateTime createdAt = DateTime.Now;
 
             ExpandoObject? dtroData =
@@ -117,7 +118,7 @@ namespace Dft.DTRO.Tests
 
             List<IList<object>> objects = items
                 .Select(JsonConvert.DeserializeObject<ExpandoObject>)
-                .Select(item => item.GetValueOrDefault<IList<object>>("source.provision"))
+                .Select(item => item.GetValueOrDefault<IList<object>>("Source.provision"))
                 .ToList();
 
             List<DtroHistoryProvisionResponse> provisions = new();
@@ -168,14 +169,14 @@ namespace Dft.DTRO.Tests
         {
             new DtroUserResponse
             {
-                TraId = -1,
+                TraId = 1002,
                 UserGroup = UserGroup.Admin,
                 xAppId = Guid.NewGuid(),
                 Name = "Department for Transport",
                 Prefix = "DfT"
             }, new DtroUserResponse
             {
-                TraId = 1585,
+                TraId = 1000,
                 UserGroup = UserGroup.Tra,
                 xAppId = Guid.NewGuid(),
                 Name = "Essex Council",
@@ -183,7 +184,7 @@ namespace Dft.DTRO.Tests
             },
             new DtroUserResponse
             {
-                TraId = 7563,
+                TraId = 1001,
                 UserGroup = UserGroup.Tra,
                 xAppId = Guid.NewGuid(),
                 Name = "Cornwall Council",

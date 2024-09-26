@@ -1,57 +1,71 @@
 {
-    "schemaVersion": "3.1.2",
+    "schemaVersion": "3.2.1",
     "data": {
         "source": {
+            "actionType": "amendment",
             "provision": [
                 {
+                    "actionType": "fullRevoke",
+                    "addition": true,
+                    "orderReportingPoint": "permanentNoticeOfMaking",
+                    "provisionDescription": "Prohibition of Waiting",
+                    "provisionIndex": 0,
+                    "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
                     "regulatedPlaces": [
                         {
+                            "description": "Zone 9, Nameless Street, All Odd, All Even",
                             "externalReference": [
                                 {
                                     "lastUpdateDate": "1981-02-08T11:30:43.0Z",
                                     "usrn": 96854586
                                 }
                             ],
-                            "geometry": { /* GeoJSON format*/
+                            "geometry": {
                                 "coordinates": {
-                                    "type": "Polygon",
                                     "coordinates": [
                                         [
                                             [
-                                                -104.05,
-                                                48.99
+                                                -6.28,
+                                                55.21
                                             ],
                                             [
-                                                -97.22,
-                                                48.98
+                                                -6.3,
+                                                55.15
                                             ],
                                             [
-                                                -96.58,
-                                                45.94
+                                                -6.19,
+                                                55.11
                                             ],
                                             [
-                                                -104.03,
-                                                45.94
+                                                -6.16,
+                                                55.16
                                             ],
                                             [
-                                                -104.05,
-                                                48.99
+                                                -6.19,
+                                                55.19
+                                            ],
+                                            [
+                                                -6.28,
+                                                55.21
                                             ]
                                         ]
-                                    ]
+                                    ],
+                                    "type": "Polygon"
                                 },
-                                "crs": "osgb36Epsg27700",
+                                "crs": "wkt",
                                 "geometryType": "polygon"
-                            },
-                            "dailyOpeningPeriod": {
-                                "endTimeOfPeriod": "17:00:00.0Z",
-                                "startTimeOfPeriod": "18:00:00.0Z"
-                            },
-                            "description": "Zone 5, Kenworthy Road, All Odd, All Even" /*Comment: example*/
+                            }
                         }
                     ],
                     "regulations": [
                         {
+                            "conditions": [
+                                {
+                                    "vehicleCharacteristics": {
+                                    }
+                                }
+                            ],
+                            "isDynamic": false,
                             "overallPeriod": {
                                 "validityCondition": {
                                     "conditionSet": [
@@ -61,17 +75,11 @@
                                             "conditions": [
                                                 {
                                                     "vehicleCharacteristics": {
-                                                        "vehicleType": [
-                                                            "anyVehicle"
-                                                        ]
                                                     },
                                                     "negate": false
                                                 },
                                                 {
                                                     "vehicleCharacteristics": {
-                                                        "vehicleType": [
-                                                            "taxi"
-                                                        ]
                                                     },
                                                     "negate": true
                                                 }
@@ -83,14 +91,12 @@
                                             {
                                                 "rateLine": [
                                                     {
-                                                        "relativeTimes": false,
                                                         "sequence": 0,
                                                         "type": "flatRateTier",
                                                         "value": 15,
                                                         "durationEnd": "19:00:00.0Z"
                                                     },
                                                     {
-                                                        "relativeTimes": true,
                                                         "sequence": 1,
                                                         "type": "flatRate",
                                                         "value": 20,
@@ -136,17 +142,15 @@
                                             {
                                                 "applicableDay": [
                                                     "monday"
-                                                    /*Comment: there is a comment in the UML - Each day, each week and each month can only occur once in this class. tuesday removed from the example*/
                                                 ],
                                                 "applicableMonth": [
                                                     "october"
-                                                    /*Comment: there is a comment in the UML - Each day, each week and each month can only occur once in this class. april removed from the example*/
                                                 ]
                                             }
                                         ],
                                         "startOfPeriod": "1983-01-05T22:50:50.0Z",
                                         "periodName": "adipisicing incididunt Lorem",
-                                        "endOfPeriod": "1983-03-17T16:47:01.0Z" /*Comment: would be helpful if start was after end :)*/
+                                        "endOfPeriod": "1983-03-17T16:47:01.0Z"
                                     }
                                 ],
                                 "validPeriod": [
@@ -160,7 +164,6 @@
                                                 "startTimeOfPeriod": "17:00:00.0Z",
                                                 "endTimeOfPeriod": "18:00:00.0Z"
                                             }
-                                            /*Comment: twice? adjusted for two different periods*/
                                         ],
                                         "startOfPeriod": "1985-07-01T21:12:04.0Z",
                                         "recurringSpecialDay": [
@@ -194,36 +197,28 @@
                                         "startOfPeriod": "1989-05-12T13:42:51.0Z",
                                         "periodName": "dolor in cillum adipisicing nisi",
                                         "endOfPeriod": "1990-11-03T17:54:21.0Z",
-                                        "recurringDayWeekMonthPeriod": [] /*Comment: empty "recurringDayWeekMonthPeriod" - was that intended? */
-                                    }
-                                ],
-                                "end": "1996-01-05T22:50:50.0Z" /*Comment: could be interesting to exclude "end" i.e. eternal.*/
-                            },
-                            "isDynamic": false,
-                            "regulationStatus": "not valid",
-                            "timeZone": "Europe/London", /*Comment: https://www.iana.org/time-zones*/
-                            "regulationType": "bannedMovementNoEntry",
-                            "conditions": [
-                                {
-                                    "vehicleCharacteristics": {
-                                        "vehicleType": [
-                                            "taxi"
+                                        "recurringDayWeekMonthPeriod": [
                                         ]
                                     }
-                                }
-                            ]
+                                ],
+                                "end": "1996-01-05T22:50:50.0Z"
+                            },
+                            "regulationStatus": "not valid",
+                            "regulationType": "bannedMovementNoEntry",
+                            "timeZone": "Europe/London"
                         }
-                    ],
-                    "addition": true,
-                    "fullPartial": true,
-                    "orderReportingPoint": "ttroTtmoByNotice",
-                    "provisionDescription": "Prohibition of Waiting" /*Comment: example*/,
-                    "provisionIndex": 0 /*Comment: example 123X435 - could be anything the data supplier wants as a key*/
+                    ]
                 }
             ],
-            "ha": 1585 /*Comment: SWA code for Essex County Council https://www.geoplace.co.uk/local-authority-resources/street-works-managers/view-swa-codes*/,
-            "section": "All sections" /*Comment: example*/,
-            "troName": "The Essex County Council (Braintree District) (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019" /*Comment: example*/
+            "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
+            "section": "All sections",
+            "traCreator": 9998,
+            "currentTraOwner": 9998,
+            "traAffected": [
+                9997,
+                9998
+            ],
+            "troName": "Street Manager without a specific code"
         }
     }
 }

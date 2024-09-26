@@ -1,5 +1,5 @@
 {
-    "schemaVersion": "3.1.1",
+    "schemaVersion": "3.1.2",
     "data": {
         "source": {
             "provision": [
@@ -43,10 +43,6 @@
                                 "crs": "osgb36Epsg27700",
                                 "geometryType": "polygon"
                             },
-                            "dailyOpeningPeriod": {
-                                "endTimeOfPeriod": "17:00:00.0Z",
-                                "startTimeOfPeriod": "18:00:00.0Z"
-                            },
                             "description": "Zone 5, Kenworthy Road, All Odd, All Even" /*Comment: example*/
                         }
                     ],
@@ -83,15 +79,13 @@
                                             {
                                                 "rateLine": [
                                                     {
-                                                        "relativeTimes": false,
-                                                        "sequence": 1,
+                                                        "sequence": 0,
                                                         "type": "flatRateTier",
                                                         "value": 15,
                                                         "durationEnd": "19:00:00.0Z"
                                                     },
                                                     {
-                                                        "relativeTimes": true,
-                                                        "sequence": 2,
+                                                        "sequence": 1,
                                                         "type": "flatRate",
                                                         "value": 20,
                                                         "maxValue": 40,
@@ -104,7 +98,7 @@
                                                     }
                                                 ],
                                                 "applicableCurrency": "GBP",
-                                                "sequence": 1,
+                                                "sequence": 0,
                                                 "startValidUsagePeriod": "13:00:00.0Z"
                                             }
                                         ],
@@ -128,8 +122,8 @@
                                         ],
                                         "recurringTimePeriodOfDay": [
                                             {
-                                                "endTimeOfPeriod": "17:00:00.0Z",
-                                                "startTimeOfPeriod": "18:00:00.0Z"
+                                                "startTimeOfPeriod": "17:00:00.0Z",
+                                                "endTimeOfPeriod": "18:00:00.0Z"
                                             }
                                         ],
                                         "recurringDayWeekMonthPeriod": [
@@ -146,23 +140,23 @@
                                         ],
                                         "startOfPeriod": "1983-01-05T22:50:50.0Z",
                                         "periodName": "adipisicing incididunt Lorem",
-                                        "endOfPeriod": "1967-03-17T16:47:01.0Z" /*Comment: would be helpful if start was after end :)*/
+                                        "endOfPeriod": "1983-03-17T16:47:01.0Z" /*Comment: would be helpful if start was after end :)*/
                                     }
                                 ],
                                 "validPeriod": [
                                     {
                                         "recurringTimePeriodOfDay": [
                                             {
-                                                "endTimeOfPeriod": "07:30:00.0Z",
-                                                "startTimeOfPeriod": "09:00:00.0Z"
+                                                "startTimeOfPeriod": "07:30:00.0Z",
+                                                "endTimeOfPeriod": "09:00:00.0Z"
                                             },
                                             {
-                                                "endTimeOfPeriod": "17:00:00.0Z",
-                                                "startTimeOfPeriod": "18:00:00.0Z"
+                                                "startTimeOfPeriod": "17:00:00.0Z",
+                                                "endTimeOfPeriod": "18:00:00.0Z"
                                             }
                                             /*Comment: twice? adjusted for two different periods*/
                                         ],
-                                        "startOfPeriod": "1996-07-01T21:12:04.0Z",
+                                        "startOfPeriod": "1985-07-01T21:12:04.0Z",
                                         "recurringSpecialDay": [
                                             {
                                                 "intersectWithApplicableDays": true,
@@ -191,13 +185,13 @@
                                         ]
                                     },
                                     {
-                                        "startOfPeriod": "2020-05-12T13:42:51.0Z",
+                                        "startOfPeriod": "1989-05-12T13:42:51.0Z",
                                         "periodName": "dolor in cillum adipisicing nisi",
-                                        "endOfPeriod": "2003-11-03T17:54:21.0Z",
+                                        "endOfPeriod": "1990-11-03T17:54:21.0Z",
                                         "recurringDayWeekMonthPeriod": [] /*Comment: empty "recurringDayWeekMonthPeriod" - was that intended? */
                                     }
                                 ],
-                                "end": "1985-01-05T22:50:50.0Z" /*Comment: could be interesting to exclude "end" i.e. eternal.*/
+                                "end": "1996-01-05T22:50:50.0Z" /*Comment: could be interesting to exclude "end" i.e. eternal.*/
                             },
                             "isDynamic": false,
                             "regulationStatus": "not valid",
@@ -215,13 +209,12 @@
                         }
                     ],
                     "addition": true,
-                    "fullPartial": true,
-                    "orderReportingPoint": "ttroTtmoExtension",
+                    "orderReportingPoint": "ttroTtmoByNotice",
                     "provisionDescription": "Prohibition of Waiting" /*Comment: example*/,
-                    "provisionIndex": "magna" /*Comment: example 123X435 - could be anything the data supplier wants as a key*/
+                    "provisionIndex": 0 /*Comment: example 123X435 - could be anything the data supplier wants as a key*/
                 }
             ],
-            "ha": 1585 /*Comment: SWA code for Essex County Council https://www.geoplace.co.uk/local-authority-resources/street-works-managers/view-swa-codes*/,
+            "ta": 1585 /*Comment: SWA code for Essex County Council https://www.geoplace.co.uk/local-authority-resources/street-works-managers/view-swa-codes*/,
             "section": "All sections" /*Comment: example*/,
             "troName": "The Essex County Council (Braintree District) (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019" /*Comment: example*/
         }

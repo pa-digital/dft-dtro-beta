@@ -49,7 +49,7 @@ public class SemanticValidationServiceTests
     [Fact]
     public async Task AllowsCoordinatesWithinBoundingBoxOsgb()
     {
-        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""crs"": ""osgb36Epsg27700"", ""coordinates"": {
+        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": ""1"", ""Polygon"": {
             ""type"": ""Polygon"", ""coordinates"": [[[-10000, -10000],[0,0]]]}}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
