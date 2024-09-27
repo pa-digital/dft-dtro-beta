@@ -1,4 +1,3 @@
-using DfT.DTRO.Migrations;
 using Newtonsoft.Json;
 
 namespace Dft.DTRO.Tests.IntegrationTests;
@@ -7,7 +6,7 @@ namespace Dft.DTRO.Tests.IntegrationTests;
 public class EventsControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {
-    private const string SampleDtroJsonPath = "../../../../../examples/D-TROs/3.1.1/proper-data.json";
+    private const string SampleDtroJsonPath = "../../TestFiles/D-TROs/3.1.1/proper-data.json";
 
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockStorageService;

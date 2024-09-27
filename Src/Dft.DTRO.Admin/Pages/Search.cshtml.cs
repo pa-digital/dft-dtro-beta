@@ -13,7 +13,7 @@ public class SearchModel : PageModel
     [BindProperty(SupportsGet = true)]
     public bool AllowAddUpdate { get; set; } = false;
 
-    public SearchModel(IDtroService dtroService, 
+    public SearchModel(IDtroService dtroService,
                         IDtroUserService dtroUserService,
                         ISystemConfigService systemConfigService,
                         IXappIdService xappIdService,

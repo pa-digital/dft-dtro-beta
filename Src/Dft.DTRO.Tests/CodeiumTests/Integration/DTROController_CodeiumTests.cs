@@ -197,7 +197,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     {
         _mockDtroService.Setup(s => s.DeleteDtroAsync(It.IsAny<Guid>(), It.IsAny<DateTime>())).Returns(Task.FromResult(true));
 
-        var response = await _controller.Delete(Guid.NewGuid(),Guid.NewGuid()) as NoContentResult;
+        var response = await _controller.Delete(Guid.NewGuid(), Guid.NewGuid()) as NoContentResult;
 
         Assert.NotNull(response);
         Assert.IsType<NoContentResult>(response);

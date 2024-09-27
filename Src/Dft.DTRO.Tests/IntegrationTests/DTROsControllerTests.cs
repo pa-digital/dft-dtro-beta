@@ -1,4 +1,3 @@
-using DfT.DTRO.Migrations;
 using Newtonsoft.Json;
 namespace Dft.DTRO.Tests.IntegrationTests;
 
@@ -24,15 +23,16 @@ public class TestFeatureGateMiddleware
 public class DTROsControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {
-    private const string ValidDtroJsonPath = "../../../../../examples/D-TROs/3.1.1/proper-data.json";
-    private const string ValidComplexDtroJsonPath = "../../../../../examples/D-TROs/3.1.2/3.1.2-valid-complex-dtro.json";
-    private const string ValidComplexDtroJsonPathV320 = "../../../../../examples/D-TROs/3.2.0/valid-new-x.json";
-    private const string InvalidDtroJsonPath = "../../../../../examples/D-TROs/3.1.1/provision-empty.json";
+    private const string NewDirectedLinear = "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-DirectedLinear.json";
+    private const string NewLinearGeometry = "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-LinearGeometry.json";
+    private const string NewPointGeometry = "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-PointGeometry.json";
+    private const string NewPolygon = "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-Polygon.json";
+
     private static readonly string[] ValidDtroHistories =
     {
-        "../../../../../examples/D-TROs/3.2.0/valid-new-x.json",
-        "../../../../../examples/D-TROs/3.2.0/valid-fullAmendment.json",
-        "../../../../../examples/D-TROs/3.2.0/valid-fullRevoke.json"
+        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-Polygon.json",
+        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - fullAmendment.json",
+        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - fullRevoke.json"
     };
 
     private readonly WebApplicationFactory<Program> _factory;
@@ -48,14 +48,14 @@ public class DTROsControllerTests
         ConfigurationBuilder configurationBuilder = new();
         IConfigurationRoot? configuration = configurationBuilder.Build();
         _xappIdMapperServiceMock = new Mock<IXappIdMapperService>();
-        _dtroMappingService = new DtroMappingService(configuration, new Proj4SpatialProjectionService());
+        _dtroMappingService = new DtroMappingService(configuration, new BoundingBoxService());
         _mockDtroService = new Mock<IDtroService>(MockBehavior.Strict);
         _mockDtroUserDal = new Mock<IDtroUserDal>(MockBehavior.Strict);
-        
+
         _xappIdMapperServiceMock.Setup(x => x.GetXappId(It.IsAny<HttpContext>())).ReturnsAsync(_xAppIdGuidForTest);
-       
+
         _mockDtroUserDal.Setup(m => m.GetDtroUserByTraIdAsync(It.IsAny<int>()))
-            .ReturnsAsync(new DtroUser() { Id = new Guid(), TraId = _return_taForTest, UserGroup = (int) UserGroup.Tra , xAppId = _xAppIdGuidForTest, Name = "test" });
+            .ReturnsAsync(new DtroUser() { Id = new Guid(), TraId = _return_taForTest, UserGroup = (int)UserGroup.Tra, xAppId = _xAppIdGuidForTest, Name = "test" });
 
         _mockDtroUserDal.Setup(m => m.AnyAdminUserExistsAsync())
          .ReturnsAsync(false);
@@ -73,18 +73,20 @@ public class DTROsControllerTests
     }
 
     [Theory]
-    [InlineData(ValidComplexDtroJsonPath, "3.1.2")]
-    [InlineData(ValidComplexDtroJsonPathV320, "3.2.0")]
+    [InlineData(NewDirectedLinear, "3.3.3")]
+    [InlineData(NewLinearGeometry, "3.2.3")]
+    [InlineData(NewPointGeometry, "3.3.3")]
+    [InlineData(NewPolygon, "3.2.3")]
     public async Task Post_DtroIsValid_CreatesDtroAndReturnsDtroId(string dtroPath, string version)
     {
-        _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(),_xAppIdGuidForTest))
+        _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdGuidForTest))
             .ReturnsAsync(new GuidResponse { Id = Guid.NewGuid() });
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
-        var payload = await Utils.CreateDtroJsonPayload(dtroPath, version);
+        StringContent payload = await Utils.CreateDtroJsonPayload(dtroPath, version);
 
         HttpResponseMessage response = await client.PostAsync("/dtros/createFromBody", payload);
 
@@ -100,13 +102,13 @@ public class DTROsControllerTests
     public async Task Post_SchemaDoesNotExist_ReturnsNotFoundError()
     {
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         _mockDtroService.Setup(mock => mock.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdGuidForTest))
             .Throws((new NotFoundException()));
 
-        StringContent payload = await Utils.CreateDtroJsonPayload(ValidDtroJsonPath, "0.0.0");
+        StringContent payload = await Utils.CreateDtroJsonPayload(NewPolygon, "0.0.0");
         HttpResponseMessage response = await client.PostAsync("/dtros", payload);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -119,10 +121,10 @@ public class DTROsControllerTests
             .Throws((new DtroValidationException()));
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
-        StringContent payload = await Utils.CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
+        StringContent payload = await Utils.CreateDtroJsonPayload(NewLinearGeometry, "3.1.1", false);
         HttpResponseMessage response = await client.PostAsync("/dtros/createFromBody", payload);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -139,10 +141,10 @@ public class DTROsControllerTests
             (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdGuidForTest)).ReturnsAsync(new GuidResponse());
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
-        StringContent payload = await Utils.CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
+        StringContent payload = await Utils.CreateDtroJsonPayload(NewPolygon, "3.2.3");
         HttpResponseMessage response = await client.PutAsync($"/dtros/updateFromBody/{dtroId}", payload);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -163,10 +165,10 @@ public class DTROsControllerTests
 
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
-        StringContent payload = await Utils.CreateDtroJsonPayload(ValidDtroJsonPath, "3.1.1");
+        StringContent payload = await Utils.CreateDtroJsonPayload(NewDirectedLinear, "3.1.1");
         HttpResponseMessage response = await client.PutAsync($"/dtros/updateFromBody/{notExistingDtroId}", payload);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -180,10 +182,10 @@ public class DTROsControllerTests
             (It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdGuidForTest)).Throws(new DtroValidationException());
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
-        StringContent payload = await Utils.CreateDtroJsonPayload(InvalidDtroJsonPath, "3.1.1", false);
+        StringContent payload = await Utils.CreateDtroJsonPayload(NewLinearGeometry, "3.1.1", false);
         HttpResponseMessage response = await client.PutAsync($"/dtros/updateFromBody/{dtroId}", payload);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -191,14 +193,14 @@ public class DTROsControllerTests
     [Fact]
     public async Task Get_DtroExists_ReturnsDtro()
     {
-        var sampleDtro = await Utils.CreateDtroObject(ValidDtroJsonPath);
+        var sampleDtro = await Utils.CreateDtroObject(NewLinearGeometry);
         var sampleDtroResponse = _dtroMappingService.MapToDtroResponse(sampleDtro);
 
         _mockDtroService.Setup(mock => mock.GetDtroByIdAsync
             (It.Is(sampleDtro.Id, EqualityComparer<Guid>.Default))).Returns(Task.FromResult(sampleDtroResponse));
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync($"/dtros/{sampleDtro.Id}");
@@ -214,7 +216,7 @@ public class DTROsControllerTests
             .Throws(new NotFoundException());
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync($"/dtros/{dtroId}");
@@ -232,7 +234,7 @@ public class DTROsControllerTests
             .Returns(Task.FromResult(sourceResponses));
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync($"/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
@@ -247,7 +249,7 @@ public class DTROsControllerTests
             .Throws(new NotFoundException());
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync("/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
@@ -262,7 +264,7 @@ public class DTROsControllerTests
             .Throws(new Exception());
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync("/dtros/sourceHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
@@ -279,7 +281,7 @@ public class DTROsControllerTests
             .Returns(Task.FromResult(provisionResponses));
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync("/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
@@ -294,7 +296,7 @@ public class DTROsControllerTests
             .Throws(new NotFoundException());
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync("/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");
@@ -309,7 +311,7 @@ public class DTROsControllerTests
             .Throws(new Exception());
 
         HttpClient client = _factory.CreateClient();
-        
+
         client.DefaultRequestHeaders.Add("x-app-id", _xAppIdGuidForTest.ToString());
 
         HttpResponseMessage response = await client.GetAsync("/dtros/provisionHistory/C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4");

@@ -4,5 +4,5 @@ namespace DfT.DTRO.Services.Validation;
 
 public interface ISemanticValidationService
 {
-    Task<List<SemanticValidationError>> ValidateCreationRequest(DtroSubmit request);
+    Task<Tuple<BoundingBox, List<SemanticValidationError>>> ValidateCreationRequest(DtroSubmit request);
 }

@@ -6,7 +6,7 @@ public class FileJsonLogicRuleSource : IJsonLogicRuleSource
 {
     public async Task<IEnumerable<JsonLogicValidationRule>> GetRules(string rulesetName)
     {
-        string path = $"../../../../../examples/Rules/{rulesetName}.json";
+        string path = $"../../../TestFiles/Rules/{rulesetName}.json";
 
         if (!File.Exists(path))
         {

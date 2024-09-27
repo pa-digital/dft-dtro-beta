@@ -5,9 +5,9 @@ public class MappingServiceTests
 {
     private static readonly string[] ValidDtroHistories =
     {
-        "../../../../../examples/D-TROs/3.2.0/valid-new-x.json",
-        "../../../../../examples/D-TROs/3.2.0/valid-noChange.json",
-        "../../../../../examples/D-TROs/3.2.0/valid-fullRevoke.json"
+        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-Polygon.json",
+        "../../../TestFiles/D-TROs/3.2.3/valid-noChange.json",
+        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - fullRevoke.json"
     };
 
     private readonly IDtroMappingService _sut;
@@ -16,9 +16,9 @@ public class MappingServiceTests
     {
         Dictionary<string, string> dictionary = new() { { "Key1", "Value1" } };
         IConfigurationRoot? mockConfiguration = new ConfigurationBuilder().AddInMemoryCollection(dictionary).Build();
-        Mock<ISpatialProjectionService> mockSpatialProjectionService = new();
+        Mock<IBoundingBoxService> mockBoundingBoxService = new();
 
-        _sut = new DtroMappingService(mockConfiguration, mockSpatialProjectionService.Object);
+        _sut = new DtroMappingService(mockConfiguration, mockBoundingBoxService.Object);
     }
 
     [Fact]

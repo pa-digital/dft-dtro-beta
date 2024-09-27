@@ -61,6 +61,12 @@ public class DtroUserService : IDtroUserService
         return dtroUser;
     }
 
+    public async Task<DtroUser> GetDtroUserAsyncByXAppId(Guid xAppId)
+    {
+        List<DtroUser> users = await GetDtroUsersAsync();
+        return users.Find(it => it.xAppId == xAppId) ?? new DtroUser();
+    }
+
     public async Task<List<DtroUser>> SearchDtroUsersAsync(string partialName)
     {
         var request = new HttpRequestMessage(HttpMethod.Get, ConfigHelper.Version + $"/dtroUsers/search/{partialName}");

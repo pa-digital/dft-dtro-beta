@@ -44,6 +44,7 @@ public class Startup
         services.AddScoped<IXappIdMapperService, XappIdMapperService>();
         services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
         services.AddScoped<ISemanticValidationService, SemanticValidationService>();
+        services.AddSingleton<IBoundingBoxService, BoundingBoxService>();
         services.AddScoped<IConditionValidationService, ConditionValidationService>();
         services.AddSingleton<ISpatialProjectionService, Proj4SpatialProjectionService>();
         services.AddScoped<IDtroGroupValidatorService, DtroGroupValidatorService>();
@@ -65,7 +66,6 @@ public class Startup
         services.AddScoped<IDtroUserService, DtroUserService>();
         services.AddScoped<ISystemConfigDal, SystemConfigDal>();
         services.AddScoped<ISystemConfigService, SystemConfigService>();
-       
 
         services.TryAddSingleton<ISystemClock, SystemClock>();
 

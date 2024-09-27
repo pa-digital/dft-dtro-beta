@@ -17,11 +17,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""start"": ""1983-01-05T22:50:50.0Z"",
                                     ""end"": ""1985-01-05T22:50:50.0Z""
                                 }
@@ -36,7 +36,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -46,11 +46,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""start"": ""1983-01-05T22:50:50.0Z""
                                 }
                             }
@@ -64,7 +64,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -74,11 +74,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""start"": ""1985-01-05T22:50:50.0Z"",
                                     ""end"": ""1983-01-05T22:50:50.0Z""
                                 }
@@ -93,7 +93,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -103,11 +103,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validPeriod"": [{
                                     ""startOfPeriod"": ""1983-01-05T22:50:50.0Z"",
                                     ""endOfPeriod"": ""1985-01-05T22:50:50.0Z""
@@ -124,7 +124,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -134,11 +134,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validPeriod"": [{
                                     ""startOfPeriod"": ""1985-01-05T22:50:50.0Z"",
                                     ""endOfPeriod"": ""1983-01-05T22:50:50.0Z""
@@ -155,7 +155,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -165,11 +165,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""exceptionPeriod"": [{
                                     ""startOfPeriod"": ""1983-01-05T22:50:50.0Z"",
                                     ""endOfPeriod"": ""1985-01-05T22:50:50.0Z""
@@ -186,7 +186,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -196,11 +196,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""exceptionPeriod"": [{
                                     ""startOfPeriod"": ""1985-01-05T22:50:50.0Z"",
                                     ""endOfPeriod"": ""1983-01-05T22:50:50.0Z""
@@ -217,7 +217,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -227,11 +227,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""start"": ""1984-01-05T22:50:50.0Z"",
                             ""exceptionPeriod"": [{
                                     ""startOfPeriod"": ""1985-01-05T22:50:50.0Z""
@@ -248,7 +248,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -258,11 +258,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""start"": ""1985-01-05T22:50:50.0Z"",
                             ""exceptionPeriod"": [{
                                     ""startOfPeriod"": ""1984-01-05T22:50:50.0Z""
@@ -279,7 +279,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -289,11 +289,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""end"": ""1985-01-05T22:50:50.0Z"",
                             ""exceptionPeriod"": [{
                                     ""endOfPeriod"": ""1984-01-05T22:50:50.0Z""
@@ -310,7 +310,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -320,11 +320,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""end"": ""1984-01-05T22:50:50.0Z"",
                             ""exceptionPeriod"": [{
                                     ""endOfPeriod"": ""1985-01-05T22:50:50.0Z""
@@ -341,7 +341,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -352,11 +352,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""start"": ""1984-01-05T22:50:50.0Z"",
                             ""validPeriod"": [{
                                     ""startOfPeriod"": ""1985-01-05T22:50:50.0Z""
@@ -373,7 +373,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -383,11 +383,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""start"": ""1985-01-05T22:50:50.0Z"",
                             ""validPeriod"": [{
                                     ""startOfPeriod"": ""1984-01-05T22:50:50.0Z""
@@ -404,7 +404,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -414,11 +414,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""end"": ""1985-01-05T22:50:50.0Z"",
                             ""validPeriod"": [{
                                     ""endOfPeriod"": ""1984-01-05T22:50:50.0Z""
@@ -435,7 +435,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -445,11 +445,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""end"": ""1984-01-05T22:50:50.0Z"",
                             ""validPeriod"": [{
                                     ""endOfPeriod"": ""1985-01-05T22:50:50.0Z""
@@ -466,7 +466,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -476,11 +476,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validPeriod"": [{
                                 ""recurringTimePeriodOfDay"": 
                                     [{
@@ -507,7 +507,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -517,11 +517,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validPeriod"": [{
                                 ""recurringTimePeriodOfDay"": 
                                     [{
@@ -548,7 +548,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
         Assert.Equal(2, result.Count);
@@ -559,11 +559,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validPeriod"": [{
                                 ""recurringTimePeriodOfDay"": []
                             }],
@@ -582,7 +582,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -592,11 +592,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validPeriod"": [{
                             }],
                             ""exceptionPeriod"": [{
@@ -613,7 +613,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -623,11 +623,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validPeriod"": []
                         }
                     }
@@ -641,7 +641,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -651,11 +651,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""exceptionPeriod"": []
                         }
                     }
@@ -669,7 +669,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -679,11 +679,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                         }
                     }
                 ]
@@ -696,7 +696,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -706,11 +706,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                         }
                     }
                 ]
@@ -723,7 +723,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -733,7 +733,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""traCreator"": 10,  ""currentTraOwner"": 10
             }
         }");
@@ -742,12 +742,12 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowPublicationTimeMoreThanOneMonthOld()
     {
         DateTime time = DateTime.UtcNow.AddMonths(-2);
@@ -763,7 +763,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -784,12 +784,12 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowPublicationTimeFromTheFuture()
     {
         DateTime time = DateTime.UtcNow.AddMonths(1);
@@ -805,7 +805,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -818,10 +818,10 @@ public class JsonLogicValidationTests
 
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulatedPlaces"": [
+                ""regulatedPlace"": [
                   {
                     ""externalReference"": [
                       {
@@ -839,12 +839,12 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     [Trait("RuleId", "DFT-205/14")]
     public async Task DisallowExternalReferenceLastUpdateDateFromTheFuture()
     {
@@ -852,10 +852,10 @@ public class JsonLogicValidationTests
 
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulatedPlaces"": [
+                ""regulatedPlace"": [
                   {
                     ""externalReference"": [
                       {
@@ -873,7 +873,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -889,7 +889,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -899,11 +899,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -926,7 +926,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -936,11 +936,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -962,21 +962,21 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowValidUsagePeriodEndLessThanStart()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -999,7 +999,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1009,11 +1009,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -1036,21 +1036,21 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowMaxTimeLessThanMinTime()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -1073,7 +1073,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1083,11 +1083,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -1114,21 +1114,21 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowValueCollectionMaxLessThanMin()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -1151,21 +1151,21 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task AllowValueCollectionMinLessThanMax()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -1188,21 +1188,21 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task AllowValueCollectionMinAndOrMaxMissing()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -1229,23 +1229,23 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     [Trait("RuleId", "43")]
     public async Task DisallowValueMaxLessThanMin()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
-                    ""overallPeriod"": {
+                    ""timeValidity"": {
                       ""validityCondition"": {
                         ""rateTable"": {
                           ""rateLineCollection"": [
@@ -1272,23 +1272,23 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     [Trait("RuleId", "43")]
     public async Task AllowValueMinLessThanMax()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
-                    ""overallPeriod"": {
+                    ""timeValidity"": {
                       ""validityCondition"": {
                         ""rateTable"": {
                           ""rateLineCollection"": [
@@ -1315,7 +1315,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1325,7 +1325,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
                     {   
                         ""provisionIndex"": 0
@@ -1344,17 +1344,17 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Item doesn't exist in example files")]
     public async Task DisallowsNonSequentialProvisionIndex()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
                     {   
                         ""provisionIndex"": 0
@@ -1373,21 +1373,21 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task AllowSequentialRateLineCollection()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -1409,21 +1409,21 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowNonSequentialRateLineCollection()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -1445,7 +1445,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1455,11 +1455,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -1483,21 +1483,21 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     public async Task DisallowNonSequentialRateLine()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""source"": {
+            ""Source"": {
                 ""provision"": [
-                    {   ""regulations"": [
+                    {   ""regulation"": [
                             {
-                                ""overallPeriod"": {
+                                ""timeValidity"": {
                                     ""validityCondition"": {
                                         ""rateTable"": {
                                             ""rateLineCollection"": [
@@ -1521,7 +1521,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1532,16 +1532,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": ""dimensionMaximumHeightWithTRO"",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""heightCharacteristic"": [
+                          ""MaximumHeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleHeight"": 6
@@ -1561,7 +1561,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1572,10 +1572,10 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": ""dimensionMaximumHeightWithTRO"",
                     ""conditions"": [
@@ -1601,7 +1601,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1612,16 +1612,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": ""dimensionMaximumHeightStructural"",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""heightCharacteristic"": [
+                          ""MaximumHeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleHeight"": 6
@@ -1641,7 +1641,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1652,16 +1652,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": ""dimensionMaximumHeightStructural"",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""heightCharacteristic"": [
+                          ""MaximumHeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleHeight"": 7
@@ -1681,7 +1681,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1692,16 +1692,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": ""dimensionMaximumLength"",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""lengthCharacteristic"": [
+                          ""MaximumLengthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleLength"": 5
@@ -1721,7 +1721,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1732,16 +1732,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": ""dimensionMaximumLength"",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""lengthCharacteristic"": [
+                          ""MaximumLengthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleLength"": 41
@@ -1761,7 +1761,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1772,16 +1772,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": ""dimensionMaximumWidth"",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""widthCharacteristic"": [
+                          ""MaximumWidthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleWidth"": 5
@@ -1801,7 +1801,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1812,16 +1812,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": ""dimensionMaximumWidth"",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""widthCharacteristic"": [
+                          ""MaximumWidthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleWidth"": 7
@@ -1841,7 +1841,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1854,16 +1854,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": " + JsonSerializer.Serialize(regulationType) + @",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""grossWeightCharacteristic"": [
+                          ""MaximumGrossWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""grossVehicleWeight"": 5
@@ -1883,7 +1883,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1896,16 +1896,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": " + JsonSerializer.Serialize(regulationType) + @",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""grossWeightCharacteristic"": [
+                          ""MaximumGrossWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""grossVehicleWeight"": 51
@@ -1925,7 +1925,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1938,16 +1938,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": " + JsonSerializer.Serialize(regulationType) + @",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""heaviestAxleWeightCharacteristic"": [
+                          ""HeaviestAxleWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""heaviestAxleWeight"": 5
@@ -1967,7 +1967,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1980,16 +1980,16 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""regulationType"": " + JsonSerializer.Serialize(regulationType) + @",
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""heaviestAxleWeightCharacteristic"": [
+                          ""HeaviestAxleWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""heaviestAxleWeight"": 51
@@ -2009,7 +2009,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2020,10 +2020,10 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""conditions"": [
                       {
@@ -2054,7 +2054,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2067,10 +2067,10 @@ public class JsonLogicValidationTests
 
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
                     ""conditions"": [
                       {
@@ -2106,7 +2106,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2117,12 +2117,12 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
-                    ""overallPeriod"": {
+                    ""timeValidity"": {
                       ""validityCondition"": {
                         ""conditionSet"": [
                           {
@@ -2159,12 +2159,12 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact]
+    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
     [Trait("RuleId", "33")]
     public async Task DisallowYearOfFirstRegistrationGreaterThanCurrentYearValueInOverallPeriod()
     {
@@ -2172,12 +2172,12 @@ public class JsonLogicValidationTests
 
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""source"": {
+          ""Source"": {
             ""provision"": [
               {
-                ""regulations"": [
+                ""regulation"": [
                   {
-                    ""overallPeriod"": {
+                    ""timeValidity"": {
                       ""validityCondition"": {
                         ""conditionSet"": [
                           {
@@ -2214,7 +2214,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2224,11 +2224,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""exceptionPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2251,7 +2251,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2261,11 +2261,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""exceptionPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2288,7 +2288,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2298,11 +2298,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""exceptionPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2325,7 +2325,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2335,11 +2335,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""exceptionPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2362,7 +2362,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2373,11 +2373,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""exceptionPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2400,7 +2400,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2410,11 +2410,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""exceptionPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2437,7 +2437,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2448,11 +2448,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validityPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2475,7 +2475,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2485,11 +2485,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validityPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2512,7 +2512,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2522,11 +2522,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validityPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2549,7 +2549,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2559,11 +2559,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validityPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2586,7 +2586,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2597,11 +2597,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validityPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2624,7 +2624,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2634,11 +2634,11 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""source"": {
+    ""Source"": {
         ""provision"": [
-            {   ""regulations"": [
+            {   ""regulation"": [
                     {
-                        ""overallPeriod"": {
+                        ""timeValidity"": {
                             ""validityPeriod"": [{
                                 ""recurringDayWeekMonthPeriod"": [
                                     {
@@ -2661,15 +2661,15 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.0");
+        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
     private async Task UseRulesByName(params string[] names)
     {
-        FileJsonLogicRuleSource source = new();
-        var rules = await source.GetRules("rules-3.2.0");
+        FileJsonLogicRuleSource Source = new();
+        var rules = await Source.GetRules("rules-3.2.3");
         var subset = rules.Where(it => names.Contains(it.Name)).ToList();
 
         _ruleDal.Setup(it => it.GetRuleTemplateDeserializeAsync(It.IsAny<SchemaVersion>())).ReturnsAsync(subset);

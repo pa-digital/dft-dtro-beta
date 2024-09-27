@@ -81,7 +81,7 @@
             const isValidVersion = validVersionRegex.test(versionInput.value);
             const isFileDropped = fileInput.files.length > 0;
 
-            // Enable save button only if both file dropped and valid version entered
+            // Enable save a button only if both file dropped and valid version enter.
             saveButton.disabled = !(isValidVersion && isFileDropped);
         }
 

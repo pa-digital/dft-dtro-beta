@@ -74,17 +74,17 @@
             var dtroUserDal = scope.ServiceProvider.GetRequiredService<IDtroUserDal>();
 
             var anyAdminExists = await dtroUserDal.AnyAdminUserExistsAsync();
-            //if (anyAdminExists)
-            //{
-            //    var dtroUser = await dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
-            //    if (dtroUser == null)
-            //    {
-            //        throw new Exception($"Middleware , access denied: Dtro user for ({xAppId}) not found");
-            //    }
-            //}
+            if (anyAdminExists)
+            {
+                var dtroUser = await dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+                if (dtroUser == null)
+                {
+                    throw new Exception($"Middleware, access denied: Dtro user for ({xAppId}) not found");
+                }
+            }
             return true;
         }
-       
+
     }
 
     public bool ApiHasFeatureGate(HttpContext context)

@@ -17,19 +17,19 @@ public class DTROsController : ControllerBase
     private readonly ILogger<DTROsController> _logger;
     private readonly IXappIdMapperService _appIdMapperService;
 
-   /// <summary>
-   /// Default constructor
-   /// </summary>
-   /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
-   /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
-   /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
-   /// <param name="logger">An <see cref="ILogger{DTROsController}"/> instance.</param>
-   public DTROsController(
-        IDtroService dtroService,
-        IMetricsService metricsService,
-        IRequestCorrelationProvider correlationProvider,
-        IXappIdMapperService appIdMapperService,
-        ILogger<DTROsController> logger)
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
+    /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
+    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
+    /// <param name="logger">An <see cref="ILogger{DTROsController}"/> instance.</param>
+    public DTROsController(
+         IDtroService dtroService,
+         IMetricsService metricsService,
+         IRequestCorrelationProvider correlationProvider,
+         IXappIdMapperService appIdMapperService,
+         ILogger<DTROsController> logger)
     {
         _dtroService = dtroService;
         _metricsService = metricsService;
@@ -55,7 +55,7 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.Publish)]
     public async Task<IActionResult> CreateFromFile([FromHeader(Name = "x-app-id")][Required] Guid xAppId, IFormFile file)
     {
-       
+
 
         if (file == null || file.Length == 0)
         {
@@ -327,7 +327,7 @@ public class DTROsController : ControllerBase
         }
         catch (NotFoundException nFex)
         {
-           
+
             _logger.LogError(nFex.Message);
             return NotFound(new ApiErrorResponse("Not found", "Dtro not found"));
         }

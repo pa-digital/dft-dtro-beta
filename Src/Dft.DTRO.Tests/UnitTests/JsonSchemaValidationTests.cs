@@ -3,9 +3,9 @@
 [ExcludeFromCodeCoverage]
 public class JsonSchemaValidationTests
 {
-    private const string Schema311Files = "../../../../../examples/D-TROs/3.1.1";
-    private const string Schema320Files = "../../../../../examples/D-TROs/3.2.0";
-    private const string SchemaFolder = "../../../../../examples/Schemas/";
+    private const string Schema311Files = "../../../TestFiles/D-TROs/3.1.1";
+    private const string Schema320Files = "../../../TestFiles/D-TROs/3.2.0";
+    private const string SchemaFolder = "../../../TestFiles/Schemas/";
 
     [Theory]
     [InlineData("3.1.1", "ha-missing", false)]

@@ -41,7 +41,7 @@ public class SystemConfigService : ISystemConfigService
             var response = await _client.SendAsync(request);
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
-            if (jsonResponse == null)
+            if (jsonResponse == string.Empty)
             {
                 return unknown;
             }
