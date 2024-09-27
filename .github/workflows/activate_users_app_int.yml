@@ -32,6 +32,7 @@ on:
           - "null"
           - "123"
           - "34"
+          - "456"
 
 permissions:
   contents: read
