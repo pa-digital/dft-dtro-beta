@@ -33,11 +33,9 @@ if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
   APP_ID_CLEAN=$(echo "$APP_ID" | tr -d '"')
   echo "APP_ID_CLEAN"
-  echo "$APP_ID_CLEAN"
-  echo '"'"${APP_ID_CLEAN}"'"'
   cat <<EOF
 {
-    "xAppId": ${APP_ID},
+    "xAppId": "${APP_ID_CLEAN}",
     "xAppId": ${APP_ID_CLEAN}
 }
 EOF
@@ -50,7 +48,7 @@ EOF
     -d "$(cat <<EOF
 {
   "id": "${uuid}",
-  "xAppId": ${APP_ID_CLEAN},
+  "xAppId": "${APP_ID_CLEAN}",
   "traId": "${TRA_ID}",
   "name": "${APP_NAME}",
   "prefix": "${APP_PREFIX}",
