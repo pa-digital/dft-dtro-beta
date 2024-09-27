@@ -5,8 +5,7 @@ ORG=$apigee_organisation
 uuid=$(uuidgen)
 TRA_ID=$SWA_CODE
 
-echo "CLIENT_ID: ${CLIENT_ID})"
-echo "CLIENT_SECRET: ${CLIENT_SECRET})"
+echo "uuid: ${uuid}"
 # Get OAuth access token
 OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-generator" \
   -H "Content-Type: application/x-www-form-urlencoded" \
@@ -15,9 +14,10 @@ OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-gene
 
 # Extract access token and appId
 access_token=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
-product=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
+product=$(echo "$OAUTH_RESPONSE" | jq -r '.api_product_list')
 echo " "
 echo "Access token retrieved"
+echo "product: ${product}"
 echo " "
 
 ## Check Health of D-TRO Platform
@@ -36,7 +36,7 @@ echo " "
 
 if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
-  RESPONSE=$(curl -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+  RESPONSE=$(curl -w '\n%{http_code}' -s -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
@@ -55,6 +55,7 @@ if [ "$IS_PUBLISHER" = true ]; then
   # Error checking and handling
   if [[ -n "$return_id" ]]; then
     echo " "
+    echo "${RESPONSE}"
     echo "Publisher user ${APP_NAME}(TRA_ID:${TRA_ID}) registered to D-TRO"
   else
     echo " "
@@ -63,7 +64,7 @@ if [ "$IS_PUBLISHER" = true ]; then
   fi
 else
   # Add Consumer user to D-TRO
-  RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+  RESPONSE=$(curl -w '\n%{http_code}' -s -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
@@ -81,6 +82,7 @@ else
   # Error checking and handling
   if [[ -n "$return_id" ]]; then
     echo " "
+    echo "${RESPONSE}"
     echo "Consumer user ${APP_NAME} registered to D-TRO"
   else
     echo " "

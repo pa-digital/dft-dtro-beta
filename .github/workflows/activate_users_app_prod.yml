@@ -61,8 +61,7 @@ jobs:
           echo "CLIENT_ID=${{ secrets.CSO_CLIENT_ID_PROD }}" >> $GITHUB_ENV
           echo "CLIENT_SECRET=${{ secrets.CSO_CLIENT_SECRET_PROD }}" >> $GITHUB_ENV
           echo "DEV_EMAIL=${{ inputs.dev-email }}" >> $GITHUB_ENV 
-          echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV 
-          echo "APP_PREFIX=${{ inputs.app-prefix }}" >> $GITHUB_ENV
+          echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV
           echo "APP_ID=${{ inputs.app-id }}" >> $GITHUB_ENV
           echo "IS_PUBLISHER=${{ inputs.is-publisher }}" >> $GITHUB_ENV
           echo "SWA_CODE=${{ inputs.swa-code }}" >> $GITHUB_ENV

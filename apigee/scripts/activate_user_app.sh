@@ -10,6 +10,7 @@ RESPONSE=$(curl -s -X GET "https://apigee.googleapis.com/v1/organizations/${ORG}
 
 # Extract key and product name
 consumerKey=$(echo "$RESPONSE" | jq -r '.credentials[0].consumerKey')
+echo "consumerKey: ${consumerKey}"
 apiproduct=$(echo "$RESPONSE" | jq -r '.credentials[0].apiProducts[0].apiproduct')
 
 # Make the API call to approve api product
