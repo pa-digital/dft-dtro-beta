@@ -47,7 +47,7 @@ if [ "$IS_PUBLISHER" = true ]; then
        "userGroup": "tra"
      }')
 
-  return_id=$(echo "RESPONSE" | jq -r '.id')
+  return_id=$(echo "$RESPONSE" | jq -r '.id')
 
   # Error checking and handling
   if [[ -n "$return_id" ]]; then
@@ -71,7 +71,7 @@ else
       "userGroup": "consumer"
     }')
 
-  return_id=$(echo "RESPONSE" | jq -r '.id')
+  return_id=$(echo "$RESPONSE" | jq -r '.id')
 
   # Error checking and handling
   if [[ -n "$return_id" ]]; then
