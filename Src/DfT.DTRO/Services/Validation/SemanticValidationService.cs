@@ -119,8 +119,20 @@ public class SemanticValidationService : ISemanticValidationService
         {
             errors.Add(new SemanticValidationError
             {
-                Message = "'version' was missing, it must be a number."
+                Message = "'version' was missing."
             });
+        }
+
+        if (obj1.TryGetValue("version", out JToken value))
+        {
+            JTokenType type = value.Type;
+            if (type != JTokenType.Integer)
+            {
+                errors.Add(new SemanticValidationError
+                {
+                    Message = "'version' must be an integer."
+                });
+            }
         }
 
         boundingBox = _boundingBoxService.SetBoundingBox(errors, obj1, boundingBox);

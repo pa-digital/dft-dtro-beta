@@ -1,12 +1,4 @@
-﻿using System.Text.Json.Nodes;
-using DfT.DTRO.DAL;
-using DfT.DTRO.Extensions;
-using DfT.DTRO.JsonLogic.CustomOperators;
-using DfT.DTRO.Models.Filtering;
-using DfT.DTRO.Models.Pagination;
-using DfT.DTRO.Services.Mapping;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services;
 
 public class DtroService : IDtroService
 {
@@ -17,9 +9,9 @@ public class DtroService : IDtroService
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
 
-    public DtroService(IDtroDal dtroDal, IDtroHistoryDal dtroHistoryDal, 
-        ISchemaTemplateDal schemaTemplateDal, 
-        IDtroMappingService dtroMappingService, 
+    public DtroService(IDtroDal dtroDal, IDtroHistoryDal dtroHistoryDal,
+        ISchemaTemplateDal schemaTemplateDal,
+        IDtroMappingService dtroMappingService,
         IDtroGroupValidatorService dtroGroupValidatorService,
         IDtroUserDal swaCodeDal)
     {
@@ -31,7 +23,7 @@ public class DtroService : IDtroService
         _dtroGroupValidatorService = dtroGroupValidatorService;
     }
 
-    public async Task<bool> DeleteDtroAsync( Guid dtroId, DateTime? deletionTime = null)
+    public async Task<bool> DeleteDtroAsync(Guid dtroId, DateTime? deletionTime = null)
     {
         deletionTime ??= DateTime.UtcNow;
 
@@ -211,7 +203,7 @@ public class DtroService : IDtroService
 
 
 
-     
+
 
         if (apiDtroUser.UserGroup != (int)UserGroup.Admin)
         {
@@ -223,7 +215,7 @@ public class DtroService : IDtroService
                 throw new DtroValidationException($"Traffic authority {apiTraId} is not the creator or owner in the DTRO data submitted");
             }
         }
-       
+
 
         DTROHistory historyDtro = _dtroMappingService.MapToDtroHistory(currentDtro);
         var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
@@ -243,7 +235,7 @@ public class DtroService : IDtroService
             throw new NotFoundException($"Invalid -assign To Id-: {assignToUser} , the User does not have a Traffic Authority Id");
         }
 
-        await _dtroDal.AssignDtroOwnership(dtroId,(int) assign.TraId, correlationId);
+        await _dtroDal.AssignDtroOwnership(dtroId, (int)assign.TraId, correlationId);
 
         return true;
     }

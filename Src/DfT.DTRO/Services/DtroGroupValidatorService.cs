@@ -60,7 +60,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
 
         var tuple = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);
 
-        if (requestComparedToRules.Count > 0)
+        if (tuple.Item2.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = tuple.Item2.ToList() };
         }
