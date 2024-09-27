@@ -12,17 +12,17 @@ public class SchemaDropEditModel : PageModel
     [BindProperty(SupportsGet = true)]
     public string Version { get; set; }
 
-    public async Task<IActionResult> OnPostAsync(IFormFile file, bool IsEdit, string Version)
+    public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, string version)
     {
         try
         {
-            if (IsEdit)
+            if (isEdit)
             {
-                await _schemaService.UpdateSchemaAsync(Version, file);
+                await _schemaService.UpdateSchemaAsync(version, file);
             }
             else
             {
-                await _schemaService.CreateSchemaAsync(Version, file);
+                await _schemaService.CreateSchemaAsync(version, file);
             }
             return RedirectToPage("SchemaOverview");
         }

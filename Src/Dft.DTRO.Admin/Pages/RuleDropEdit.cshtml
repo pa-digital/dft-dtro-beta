@@ -1,7 +1,13 @@
 ﻿@page
 @model RuleDropEditModel
+@inject ISystemConfigService SystemConfigService
+@inject IDtroUserService DtroUserService
 @{
-    bool isEdit = Request.Query["IsEdit"].ToString().ToLower() == "true";
+    var systemConfig = await SystemConfigService.GetSystemConfig();
+    var user = await DtroUserService.GetDtroUserAsyncByXAppId(systemConfig.xAppId);
+    var isAdmin = user.UserGroup == UserGroup.Admin;
+
+    var isEdit = Request.Query["IsEdit"].ToString().ToLower() == isAdmin.ToString();
     string version = Request.Query["version"];
 }
 

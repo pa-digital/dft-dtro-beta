@@ -48,7 +48,6 @@ public class SchemaService : ISchemaService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        // var response = await _client.PutAsync($"/schemas/updateFromFile/{version}", content);
         var request = new HttpRequestMessage(HttpMethod.Put, ConfigHelper.Version + $"/schemas/updateFromFile/{version}")
         {
             Content = content
@@ -65,7 +64,6 @@ public class SchemaService : ISchemaService
         {
             { new StreamContent(file.OpenReadStream()), "file", file.FileName }
         };
-        // var response = await _client.PostAsync($"/schemas/createFromFile/{version}", content);
         var request = new HttpRequestMessage(HttpMethod.Post, ConfigHelper.Version + $"/schemas/createFromFile/{version}")
         {
             Content = content
