@@ -13,7 +13,9 @@ OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-gene
 
 # Extract access token and appId
 access_token=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
+echo " "
 echo "Got access token"
+echo " "
 
 ## Check Health of D-TRO Platform
 #HEALTH_API_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X GET 'https://dtro-integration.dft.gov.uk/v1/healthApi' \
@@ -31,31 +33,19 @@ echo "Got access token"
 
 if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
-  APP_ID_CLEAN=$(echo "$APP_ID" | tr -d '"')
-  echo "APP_ID_CLEAN"
-  cat <<EOF
-{
-    "xAppId": "${APP_ID_CLEAN}",
-    "xAppId": ${APP_ID_CLEAN}
-}
-EOF
-
-  RESPONSE=$(curl -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
     -H "Authorization: Bearer ${access_token}" \
-    -d "$(cat <<EOF
-{
-  "id": "${uuid}",
-  "xAppId": "${APP_ID_CLEAN}",
-  "traId": "${TRA_ID}",
-  "name": "${APP_NAME}",
-  "prefix": "${APP_PREFIX}",
-  "userGroup": "tra"
-}
-EOF
-)")
+    -d '{
+       "id": "'"${uuid}"'",
+       "xAppId": "'"${app_id}"'",
+       "traId": '${TRA_ID}',
+       "name": "'"${APP_NAME}"'",
+       "prefix": "'"${APP_PREFIX}"'",
+       "userGroup": "tra"
+     }')
 
   echo "RESPONSE-tra"
   echo "${RESPONSE}"
