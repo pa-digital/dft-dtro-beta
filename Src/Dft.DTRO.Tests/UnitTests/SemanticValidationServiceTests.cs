@@ -53,7 +53,7 @@ public class SemanticValidationServiceTests
     public async Task AllowsCoordinatesWithinPolygon()
     {
         DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""Polygon"": {
-            ""polygon"": ""((30 10, 40 40, 20 40, 10 20, 30 10))""}}}");
+            ""polygon"": ""((30 10, 40 40, 20 40, 10 20, 30 10))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _boundingBoxService);
@@ -68,7 +68,7 @@ public class SemanticValidationServiceTests
     public async Task AllowsCoordinatesWithinPointGeometry()
     {
         DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""PointGeometry"": {
-            ""point"": ""((10 40), (40 30), (20 20), (30 10))"", ""representation"": ""centreLinePoint""}}}");
+            ""point"": ""((10 40), (40 30), (20 20), (30 10))"", ""representation"": ""centreLinePoint""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _boundingBoxService);
@@ -83,7 +83,7 @@ public class SemanticValidationServiceTests
     public async Task AllowsCoordinatesWithinLinearGeometry()
     {
         DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""LinearGeometry"": {
-            ""direction"": ""bidirectional"", ""lateralPosition"": ""centreline"",""linestring"": ""(30 10, 10 30, 40 40)""}}}");
+            ""direction"": ""bidirectional"", ""lateralPosition"": ""centreline"",""linestring"": ""(30 10, 10 30, 40 40)""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _boundingBoxService);
@@ -98,7 +98,7 @@ public class SemanticValidationServiceTests
     public async Task AllowsCoordinatesWithinDirectedLinearGeometry()
     {
         DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""DirectedLinear"": {
-            ""directedLineString"": ""(10 10, 20 20, 10 40)""}}}");
+            ""directedLineString"": ""(10 10, 20 20, 10 40)""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _boundingBoxService);
@@ -113,7 +113,7 @@ public class SemanticValidationServiceTests
     public async Task WhenVersionGeometryIsIntegerReturnsNoError()
     {
         DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""Polygon"": {
-            ""polygon"": ""((30 10, 40 40, 20 40, 10 20, 30 10))""}}}");
+            ""polygon"": ""((30 10, 40 40, 20 40, 10 20, 30 10))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}");
 
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
@@ -124,10 +124,10 @@ public class SemanticValidationServiceTests
     }
 
     [Fact]
-    public async Task WhenVersionGeometryIsIntegerReturnsError()
+    public async Task WhenVersionGeometryIsNotIntegerReturnsError()
     {
         DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": ""1"", ""Polygon"": {
-            ""polygon"": ""((30 10, 40 40, 20 40, 10 20, 30 10))""}}}");
+            ""polygon"": ""((30 10, 40 40, 20 40, 10 20, 30 10))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}");
 
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
@@ -141,7 +141,7 @@ public class SemanticValidationServiceTests
     public async Task DoNotAllowsCoordinatesWithNotAcceptedGeometry()
     {
         DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""Square"": {
-            ""Circle"": ""((30 10, 40 40, 20 40, 10 20, 30 10))""}}}");
+            ""Circle"": ""((30 10, 40 40, 20 40, 10 20, 30 10))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _boundingBoxService);
@@ -151,6 +151,19 @@ public class SemanticValidationServiceTests
         Assert.NotEmpty(actual.Item2);
     }
 
+    [Fact]
+    public async Task TypoInExternalReferenceReturnsError()
+    {
+        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""Polygon"": {
+            ""polygon"": ""((30 10, 40 40, 20 40, 10 20, 30 10))""}, ""externalR"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}");
+
+        SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
+            _mockConditionValidationService.Object, _boundingBoxService);
+
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
+
+        Assert.NotEmpty(result.Item2);
+    }
     private static DtroSubmit PrepareDtro(string jsonData, string schemaVersion = "3.2.3")
     {
         return new DtroSubmit

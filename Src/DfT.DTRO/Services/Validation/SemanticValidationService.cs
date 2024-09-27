@@ -285,6 +285,21 @@ public class SemanticValidationService : ISemanticValidationService
 
     private void ValidateLastUpdatedDate(JObject data, List<SemanticValidationError> errors)
     {
+        IEnumerable<JProperty> externalReferences = data
+            .DescendantsAndSelf()
+            .OfType<JProperty>()
+            .Where(it => it.Name == "externalReference")
+            .Select(it => it);
+
+        if (!externalReferences.Any())
+        {
+            errors.Add(new SemanticValidationError()
+            {
+                Message = "externalReference cannot be found",
+                Path = "Source.provision.regulatedPlace.geometry"
+            });
+        }
+
         IEnumerable<JProperty> lastUpdatedDateNodes = data.DescendantsAndSelf().OfType<JProperty>()
             .Where(p => p.Name == "lastUpdateDate")
             .Select(p => p);
@@ -326,7 +341,7 @@ public class SemanticValidationService : ISemanticValidationService
                     new SemanticValidationError
                     {
                         Message = $"Referenced D-TRO with id {dtroId} does not exist.",
-                        Path = "source.crossRefTro"
+                        Path = "Source.reference"
                     });
             }
         }
