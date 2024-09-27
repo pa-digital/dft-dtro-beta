@@ -15,7 +15,7 @@ public class SchemaOverviewModel : PageModel
     {
         try
         {
-            var data = await _schemaService.GetSchemaVersionsAsync();
+            List<SchemaTemplateOverview> data = await _schemaService.GetSchemaVersionsAsync();
             Schemas = new ViewSchemaOverview() { Items = data };
             return Page();
         }

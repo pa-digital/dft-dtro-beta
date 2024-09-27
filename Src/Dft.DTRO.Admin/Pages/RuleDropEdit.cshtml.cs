@@ -14,17 +14,17 @@ public class RuleDropEditModel : PageModel
     [BindProperty]
     public string ApiBaseUrl { get; set; }
 
-    public async Task<IActionResult> OnPostAsync(IFormFile file, bool IsEdit, string Version)
+    public async Task<IActionResult> OnPostAsync(IFormFile file, bool isEdit, string version)
     {
         try
         {
-            if (IsEdit)
+            if (isEdit)
             {
-                await _ruleService.UpdateRuleAsync(Version, file);
+                await _ruleService.UpdateRuleAsync(version, file);
             }
             else
             {
-                await _ruleService.CreateRuleAsync(Version, file);
+                await _ruleService.CreateRuleAsync(version, file);
             }
             return RedirectToPage("SchemaOverview");
         }

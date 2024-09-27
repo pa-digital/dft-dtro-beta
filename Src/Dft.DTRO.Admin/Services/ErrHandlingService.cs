@@ -23,7 +23,7 @@ public class ErrHandlingService : IErrHandlingService
 
         var errorView = new ErrorView
         {
-            UiErrorResponse = new ApiErrorResponse() { Error = "Unexpected error", Message = ex.Message  }
+            UiErrorResponse = new ApiErrorResponse() { Error = "Unexpected error", Message = ex.Message }
         };
 
         switch (ex)
@@ -72,7 +72,7 @@ public class ErrHandlingService : IErrHandlingService
                     {
                         errorView.ApiErrorResponse = JsonSerializer.Deserialize<ApiErrorResponse>(errorContent, jsonOptions);
                     }
-                   
+
                     break;
                 case HttpStatusCode.InternalServerError:
                     errorView.ApiErrorResponse = JsonSerializer.Deserialize<ApiErrorResponse>(errorContent, jsonOptions);
@@ -89,12 +89,12 @@ public class ErrHandlingService : IErrHandlingService
                     else
                     {
                         httpContext?.Session.SetString("dtroValidationException", JsonSerializer.Serialize(dtroValidationException));
-                        errorView.ApiErrorResponse = new ApiErrorResponse() { Error = "DTRO Validation error", Message = "" };
+                        errorView.ApiErrorResponse = new ApiErrorResponse() { Error = "DTRO Validation error", Message = errorContent };
                     }
                     break;
 
                 default:
-                    errorView.ApiErrorResponse = new ApiErrorResponse() { Error  = "Unexpected error", Message = errorContent   };
+                    errorView.ApiErrorResponse = new ApiErrorResponse() { Error = "Unexpected error", Message = errorContent };
                     break;
             }
 
