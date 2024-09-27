@@ -7,9 +7,26 @@ on:
         type: string
         description: Name of the application to activate
         required: true
+      app-prefix:
+        type: string
+        description: Prefix of the name of the application to activate
+        required: true
+      app-id:
+        type: string
+        description: ID of the application to activate
+        required: true
       dev-email:
         type: string
         description: Email address of developer the application belongs to
+        required: true
+      is-publisher:
+        type: boolean
+        description: Is application for Publisher?
+        required: true
+        default: false
+      swa-code:
+        type: string
+        description: Select the SWA CODE(TRA ID) linked to the Publishers (enter 'null' for Consumers)
         required: true
 
 permissions:
@@ -45,8 +62,14 @@ jobs:
         run: |
           echo "workload_identity_service_account=${{ secrets.WIP_SERVICE_ACCOUNT_PROD }}" >> $GITHUB_ENV 
           echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_PROD }}" >> $GITHUB_ENV
+          echo "CLIENT_ID=${{ secrets.CSO_CLIENT_ID_PROD }}" >> $GITHUB_ENV
+          echo "CLIENT_SECRET=${{ secrets.CSO_CLIENT_SECRET_PROD }}" >> $GITHUB_ENV
           echo "DEV_EMAIL=${{ inputs.dev-email }}" >> $GITHUB_ENV 
-          echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV
+          echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV 
+          echo "APP_PREFIX=${{ inputs.app-prefix }}" >> $GITHUB_ENV
+          echo "APP_ID=${{ inputs.app-id }}" >> $GITHUB_ENV
+          echo "IS_PUBLISHER=${{ inputs.is-publisher }}" >> $GITHUB_ENV
+          echo "SWA_CODE=${{ inputs.swa-code }}" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
         id: google-auth
@@ -64,3 +87,6 @@ jobs:
 
       - name: Activate User's Application
         run: ./activate_user_app.sh ${{ steps.google-auth.outputs.access_token }}
+
+      - name: Register User into D-TRO
+        run: ./register_user_in_dtro.sh

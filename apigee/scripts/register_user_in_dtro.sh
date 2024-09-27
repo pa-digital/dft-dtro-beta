@@ -14,7 +14,7 @@ OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-gene
 # Extract access token and appId
 access_token=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
 echo " "
-echo "Got access token"
+echo "Access token retrieved"
 echo " "
 
 ## Check Health of D-TRO Platform
@@ -51,8 +51,10 @@ if [ "$IS_PUBLISHER" = true ]; then
 
   # Error checking and handling
   if [[ -n "$return_id" ]]; then
+    echo " "
     echo "Publisher user ${APP_NAME}(TRA_ID:${TRA_ID}) registered to D-TRO"
   else
+    echo " "
     echo "${RESPONSE}"
     exit 1
   fi
@@ -75,8 +77,10 @@ else
 
   # Error checking and handling
   if [[ -n "$return_id" ]]; then
+    echo " "
     echo "Consumer user ${APP_NAME} registered to D-TRO"
   else
+    echo " "
     echo "${RESPONSE}"
     exit 1
   fi

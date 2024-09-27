@@ -25,14 +25,9 @@ on:
         required: true
         default: false
       swa-code:
-        type: choice
-        description: Select the SWA CODE linked to the Publishers (select 'null' for Consumers)
+        type: string
+        description: Select the SWA CODE(TRA ID) linked to the Publishers (enter 'null' for Consumers)
         required: true
-        options:
-          - "null"
-          - "123"
-          - "34"
-          - "456"
 
 permissions:
   contents: read
