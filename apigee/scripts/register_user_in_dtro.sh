@@ -47,41 +47,37 @@ if [ "$IS_PUBLISHER" = true ]; then
        "userGroup": "tra"
      }')
 
-  echo "RESPONSE-tra"
-  echo "${RESPONSE}"
+  return_id=$(echo "RESPONSE" | jq -r '.id')
 
-#  response_json=$(echo "$RESPONSE" | jq )
-#  echo "${response_json}"
   # Error checking and handling
-  #  if [ "$RESPONSE" -eq 200 ]; then
-  #    echo "${APP_NAME}(${app_id}) added to D-TR0"
-  #  else
-  #    echo "Failed to add ${APP_NAME}(${app_id}) to D-TR0. HTTP response code: $RESPONSE"
-  #    exit 1
-  #  fi
+  if [[ -n "$return_id" ]]; then
+    echo "Publisher user ${APP_NAME}(TRA_ID:${TRA_ID}) registered to D-TRO"
+  else
+    echo "${RESPONSE}"
+    exit 1
+  fi
 else
   # Add Consumer user to D-TRO
-  APP_ID_CLEAN=$(echo "$APP_ID" | tr -d '"')
   RESPONSE=$(curl -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
     -H "Authorization: Bearer ${access_token}" \
     -d '{
-      "id": "'${uuid}'",
-      "xAppId": "'${APP_ID_CLEAN}'",
-      "name": "'${APP_NAME}'",
-      "prefix": "'${APP_PREFIX}'",
+       "id": "'"${uuid}"'",
+       "xAppId": "'"${APP_ID}"'",
+       "name": "'"${APP_NAME}"'",
+       "prefix": "'"${APP_PREFIX}"'",
       "userGroup": "consumer"
     }')
 
-  response_json=$(echo "$RESPONSE" | jq )
-  echo "${response_json}"
+  return_id=$(echo "RESPONSE" | jq -r '.id')
+
   # Error checking and handling
-  #  if [ "$RESPONSE" -eq 200 ]; then
-  #    echo "${APP_NAME}(${app_id}) added to D-TR0"
-  #  else
-  #    echo "Failed to add ${APP_NAME}(${app_id}) to D-TR0. HTTP response code: $RESPONSE"
-  #    exit 1
-  #  fi
+  if [[ -n "$return_id" ]]; then
+    echo "Consumer user ${APP_NAME} registered to D-TRO"
+  else
+    echo "${RESPONSE}"
+    exit 1
+  fi
 fi
