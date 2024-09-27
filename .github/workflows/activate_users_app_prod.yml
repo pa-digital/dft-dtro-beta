@@ -7,10 +7,6 @@ on:
         type: string
         description: Name of the application to activate
         required: true
-      app-prefix:
-        type: string
-        description: Prefix of the name of the application to activate
-        required: true
       app-id:
         type: string
         description: ID of the application to activate

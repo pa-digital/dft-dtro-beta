@@ -43,7 +43,7 @@ if [ "$IS_PUBLISHER" = true ]; then
        "xAppId": "'"${APP_ID}"'",
        "traId": '${TRA_ID}',
        "name": "'"${APP_NAME}"'",
-       "prefix": "'"${APP_PREFIX}"'",
+       "prefix": "PUB",
        "userGroup": "tra"
      }')
 
@@ -69,7 +69,7 @@ else
        "id": "'"${uuid}"'",
        "xAppId": "'"${APP_ID}"'",
        "name": "'"${APP_NAME}"'",
-       "prefix": "'"${APP_PREFIX}"'",
+       "prefix": "CON",
       "userGroup": "consumer"
     }')
 
