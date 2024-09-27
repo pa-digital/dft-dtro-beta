@@ -22,7 +22,7 @@ on:
         default: false
       swa-code:
         type: string
-        description: Select the SWA CODE(TRA ID) linked to the Publishers (enter 'null' for Consumers)
+        description: Enter the SWA CODE(TRA ID) linked to the Publishers (enter 'null' for Consumers)
         required: true
 
 permissions:
