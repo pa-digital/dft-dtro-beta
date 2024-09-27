@@ -33,7 +33,7 @@ echo " "
 
 if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
-  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+  RESPONSE=$(curl -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
