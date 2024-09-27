@@ -137,6 +137,20 @@ public class SemanticValidationServiceTests
         Assert.NotEmpty(actual.Item2);
     }
 
+    [Fact]
+    public async Task DoNotAllowsCoordinatesWithNotAcceptedGeometry()
+    {
+        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""Square"": {
+            ""Circle"": ""((30 10, 40 40, 20 40, 10 20, 30 10))""}}}");
+
+        SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
+            _mockConditionValidationService.Object, _boundingBoxService);
+
+        Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
+
+        Assert.NotEmpty(actual.Item2);
+    }
+
     private static DtroSubmit PrepareDtro(string jsonData, string schemaVersion = "3.2.3")
     {
         return new DtroSubmit
