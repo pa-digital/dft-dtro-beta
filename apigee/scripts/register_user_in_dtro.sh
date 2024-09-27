@@ -40,7 +40,7 @@ if [ "$IS_PUBLISHER" = true ]; then
     -H "Authorization: Bearer ${access_token}" \
     -d '{
        "id": "'"${uuid}"'",
-       "xAppId": "'"${app_id}"'",
+       "xAppId": "'"${APP_ID}"'",
        "traId": '${TRA_ID}',
        "name": "'"${APP_NAME}"'",
        "prefix": "'"${APP_PREFIX}"'",
