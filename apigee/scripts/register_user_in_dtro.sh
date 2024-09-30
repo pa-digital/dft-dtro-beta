@@ -35,7 +35,7 @@ echo " "
 
 if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
-  RESPONSE=$(curl -w '\n%{http_code}' -s -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+  RESPONSE=$(curl -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
@@ -50,12 +50,12 @@ if [ "$IS_PUBLISHER" = true ]; then
      }')
 
   return_id=$(echo $RESPONSE | jq -r '.id')
-#  http_code=$(echo $RESPONSE | awk '{print $NF}')
+
   # Error checking and handling
   if [[ -n "$return_id" ]]; then
     echo " "
-#    echo "${http_code}"
     echo "Publisher user ${APP_NAME}(TRA_ID:${TRA_ID}) registered to D-TRO"
+    echo "${RESPONSE}"
   else
     echo " "
     echo "${RESPONSE}"
@@ -63,7 +63,7 @@ if [ "$IS_PUBLISHER" = true ]; then
   fi
 else
   # Add Consumer user to D-TRO
-  RESPONSE=$(curl -w '\n%{http_code}' -s -i -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
+  RESPONSE=$(curl -X POST 'https://dtro-integration.dft.gov.uk/v1/dtroUsers/createFromBody' \
     -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
@@ -81,8 +81,8 @@ else
   # Error checking and handling
   if [[ -n "$return_id" ]]; then
     echo " "
-    echo "${RESPONSE}"
     echo "Consumer user ${APP_NAME} registered to D-TRO"
+    echo "${RESPONSE}"
   else
     echo " "
     echo "${RESPONSE}"
