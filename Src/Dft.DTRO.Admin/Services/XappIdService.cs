@@ -11,25 +11,21 @@ public class XappIdService : IXappIdService
 
     public XappIdService(IConfiguration configuration)
     {
-        _clientId = Environment.GetEnvironmentVariable("CLIENT_ID");
-        _clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET");
-        _tokenEndpoint = Environment.GetEnvironmentVariable("TOKEN_ENDPOINT");
+        _clientId = ConfigHelper.ClientId;
+        _clientSecret = ConfigHelper.ClientSecret;
+        _tokenEndpoint = ConfigHelper.TokenEndpoint;
 
-        bool enviromentVarExist = false;
-        if (!string.IsNullOrEmpty(_clientId))
-        {
-            enviromentVarExist = true;
-        }
+        bool environmentVariableExists = !string.IsNullOrEmpty(_clientId);
 
-        if(!enviromentVarExist)
+        if (!environmentVariableExists)
         {
-            _clientId = configuration.GetValue<string>("CLIENT_ID");
-            _clientSecret = configuration.GetValue<string>("CLIENT_SECRET");
-            _tokenEndpoint = configuration.GetValue<string>("TOKEN_ENDPOINT");
+            _clientId = ConfigHelper.ClientId;
+            _clientSecret = ConfigHelper.ClientSecret;
+            _tokenEndpoint = ConfigHelper.TokenEndpoint;
         }
 
 
-        var xAppIdConfigValue = configuration.GetValue<string>("X_APP_ID_OVERRIDE");
+        var xAppIdConfigValue = ConfigHelper.XAppIdOverride;
 
         if (!string.IsNullOrEmpty(xAppIdConfigValue) && Guid.TryParse(xAppIdConfigValue, out Guid configXAppId))
         {
@@ -44,7 +40,7 @@ public class XappIdService : IXappIdService
             var accessToken = await GetAccessTokenAsync();
             httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
-       
+
         if (_xAppIdOverride != Guid.Empty)
         {
             httpRequestMessage.Headers.Add("x-app-id-override", _xAppIdOverride.ToString());
@@ -129,15 +125,15 @@ public class XappIdService : IXappIdService
 
     private class TokenResponse
     {
-        public string  organization_name { get; set; }
+        public string organization_name { get; set; }
         public string token_type { get; set; }
-        public string issued_at { get; set; } 
-        public string client_id  { get; set; }
+        public string issued_at { get; set; }
+        public string client_id { get; set; }
         public string access_token { get; set; }
         public string application_name { get; set; }
-        public string scope  { get; set; }
-        public string expires_in  { get; set; } 
-        public string refresh_count  { get; set; }
+        public string scope { get; set; }
+        public string expires_in { get; set; }
+        public string refresh_count { get; set; }
         public string status { get; set; }
     }
 }
