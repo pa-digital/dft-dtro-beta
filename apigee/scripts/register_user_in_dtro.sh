@@ -50,16 +50,16 @@ if [ "$IS_PUBLISHER" = true ]; then
      }')
 
   return_id=$(echo $RESPONSE | jq -r '.id')
-  http_code=$(echo $RESPONSE | awk '{print $NF}')
+#  http_code=$(echo $RESPONSE | awk '{print $NF}')
   # Error checking and handling
   if [[ -n "$return_id" ]]; then
     echo " "
-    echo "${http_code}"
+#    echo "${http_code}"
     echo "Publisher user ${APP_NAME}(TRA_ID:${TRA_ID}) registered to D-TRO"
   else
     echo " "
     echo "${RESPONSE}"
-#    exit 1
+    exit 1
   fi
 else
   # Add Consumer user to D-TRO
