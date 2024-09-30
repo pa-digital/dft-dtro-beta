@@ -23,6 +23,7 @@ locals {
       DEPLOYED       = timestamp()
       PROJECTID      = data.google_project.project.project_id
       BASE_URL       = var.dtro_api_url[var.environment]
+      VERSION_URL    = var.dtro_version
       TOKEN_ENDPOINT = var.oauth_gen_url[var.environment]
       CLIENT_ID      = var.cloud_run_service_ui_client_id
       CLIENT_SECRET  = var.cloud_run_service_ui_client_secret

@@ -1,13 +1,12 @@
-
 using Dft.DTRO.Admin;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 
-var apiBaseUrl =
+ConfigHelper.ApiBaseUrl =
     Environment.GetEnvironmentVariable("BASE_URL") ??
     builder.Configuration.GetValue<string>("ExternalApi:BaseUrl");
 
@@ -15,10 +14,25 @@ ConfigHelper.Version =
     Environment.GetEnvironmentVariable("VERSION_URL") ??
     builder.Configuration.GetValue<string>("ExternalApi:VersionUrl");
 
+ConfigHelper.ClientId =
+    Environment.GetEnvironmentVariable("CLIENT_ID") ??
+    builder.Configuration.GetValue<string>("CLIENT_ID");
+
+ConfigHelper.ClientSecret =
+    Environment.GetEnvironmentVariable("CLIENT_SECRET") ??
+    builder.Configuration.GetValue<string>("CLIENT_SECRET");
+
+ConfigHelper.XAppIdOverride =
+    Environment.GetEnvironmentVariable("X_APP_ID_OVERRIDE") ??
+    builder.Configuration.GetValue<string>("X_APP_ID_OVERRIDE");
+
+ConfigHelper.TokenEndpoint =
+    Environment.GetEnvironmentVariable("TOKEN_ENDPOINT") ??
+    builder.Configuration.GetValue<string>("TOKEN_ENDPOINT");
 
 builder.Services.AddHttpClient("ExternalApi", client =>
 {
-    client.BaseAddress = new Uri(apiBaseUrl);
+    client.BaseAddress = new Uri(ConfigHelper.ApiBaseUrl);
 });
 
 builder.Services.AddScoped<ISchemaService, SchemaService>();

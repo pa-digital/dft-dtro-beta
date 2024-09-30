@@ -89,6 +89,12 @@ variable "oauth_gen_url" {
   }
 }
 
+variable "dtro_version" {
+  type        = string
+  description = "Version of the D-TRO application"
+  default     = "/v1"
+}
+
 variable "cloud_run_max_concurrency" {
   type        = string
   description = "Maximum number of requests that each serving instance can receive."
