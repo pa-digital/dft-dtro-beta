@@ -22,7 +22,7 @@ on:
         default: false
       swa-code:
         type: string
-        description: Select the SWA CODE(TRA ID) linked to the Publishers (enter 'null' for Consumers)
+        description: Enter the SWA CODE(TRA ID) linked to the Publishers (enter 'null' for Consumers)
         required: true
 
 permissions:
@@ -62,7 +62,6 @@ jobs:
           echo "CLIENT_SECRET=${{ secrets.CSO_CLIENT_SECRET_INT }}" >> $GITHUB_ENV
           echo "DEV_EMAIL=${{ inputs.dev-email }}" >> $GITHUB_ENV 
           echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV 
-          echo "APP_PREFIX=${{ inputs.app-prefix }}" >> $GITHUB_ENV
           echo "APP_ID=${{ inputs.app-id }}" >> $GITHUB_ENV
           echo "IS_PUBLISHER=${{ inputs.is-publisher }}" >> $GITHUB_ENV
           echo "SWA_CODE=${{ inputs.swa-code }}" >> $GITHUB_ENV
