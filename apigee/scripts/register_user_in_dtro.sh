@@ -49,12 +49,12 @@ if [ "$IS_PUBLISHER" = true ]; then
        "userGroup": "tra"
      }')
 
-  return_id=$(echo "$RESPONSE" | jq -r '.id')
-
+  return_id=$(echo $RESPONSE | jq -r '.id')
+  http_code=$(echo $RESPONSE | awk '{print $NF}')
   # Error checking and handling
   if [[ -n "$return_id" ]]; then
     echo " "
-    echo "${RESPONSE}"
+    echo "${http_code}"
     echo "Publisher user ${APP_NAME}(TRA_ID:${TRA_ID}) registered to D-TRO"
   else
     echo " "
@@ -89,12 +89,3 @@ else
     exit 1
   fi
 fi
-
-GET_USERS_RESPONSE=$(curl -X GET 'https://dtro-integration.dft.gov.uk/v1/dtroUsers' \
-  -H "Authorization: Bearer ${access_token}" \
-  -H "X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796" \
-  -H 'Accept: text/plain'
-)
-
-echo "GET_USERS_RESPONSE"
-echo "${GET_USERS_RESPONSE}"
