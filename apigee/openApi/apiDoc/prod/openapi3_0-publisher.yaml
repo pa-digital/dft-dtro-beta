@@ -1,16 +1,15 @@
 openapi: 3.0.1
 info:
   title: D-TRO
-  description: Digital Traffic Regulation Order
-  termsOfService: https://cloud.google.com/terms
+  description: Digital Traffic Regulation Orders - D-TRO Publication API Interface Control Document for Data Publishers (Traffic Regulation Authority and/or Digital Solution Provider)
+  termsOfService: https://www.gov.uk/help/terms-conditions
   contact:
-    name: Jon Doe
-    url: https://contact-url.com
-    email: jon@doe.com
+    name: John Cooper
+    email: john.cooper@dft.gov.uk
   license:
-    name: DfT
-    url: https://license-url.com
-  version: 0.0.1
+    name: Crown copyright
+    url: https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/
+  version: 1.0.0
 servers:
   - url: 'https://dtro.dft.gov.uk'
 paths:
