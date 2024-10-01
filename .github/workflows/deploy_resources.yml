@@ -216,6 +216,7 @@ jobs:
           github_ref: ${{ github.ref }}
           environment: ${{ inputs.environment }}
           env_name_prefix: ${{ inputs.environment }}
+          service: ${{ inputs.dtro-image-name }}
           service_account: ${{ secrets.wip_service_account }}
           apigee_organisation: ${{ inputs.gcp-project-id }}
 
@@ -235,6 +236,27 @@ jobs:
 
       - name: Make scripts directory executable
         run: chmod +x portals/*
+
+      - name: Delete Oldest Revision
+        shell: bash
+        run: |
+          revision_list=($(apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r --arg proxy_name "dtro-${env}-server" '.proxies[] | select(.name == $proxy_name) | .revision[]'))
+          revision_count=${#revision_list[@]}
+          if [ "$revision_count" -ge 200 ]; then
+            echo "There are 200 or more revisions, there is a max of 250 so the oldest two revisions will be deleted."
+            smallest_revision_1=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 1)
+            smallest_revision_2=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 2 | tail -n 1)
+
+            echo "Deleting revision $smallest_revision_1" 
+            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_1 --token ${{ inputs.google_auth }} --org ${{ env.apigee_organisation }}
+            echo "Revision $smallest_revision_1 deleted"
+
+            echo "Deleting revision $smallest_revision_2"
+            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_2 --token ${{ inputs.google_auth }} --org ${{ env.apigee_organisation }}
+            echo "Revision $smallest_revision_2 deleted"
+
+            echo "Revisions $smallest_revision_1 and $smallest_revision_2 for dtro-${env}-server deleted."
+          fi  
 
       - name: Deploy Proxy
         run: apigeecli apis create oas --name "dtro-${env}-server" --oas-base-folderpath openApi --oas-name openapi3_0.yaml --target-url $target_url --basepath /v1 --add-cors=true --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
@@ -259,6 +281,59 @@ jobs:
           python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
           python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
           cp -a oauth/* apiproxy/policies
+
+      - name: Get Cloud Run URL for D-TRO and Create Service XML # TODO
+        shell: bash
+        run: |
+          # Get the Cloud Run URL
+          url=$(gcloud run services describe "${service}" \
+            --platform managed \
+            --project "${gcp_project}" \
+            --region europe-west1 \
+            --format 'value(metadata.annotations."run.googleapis.com/urls")' 2>&1)
+
+          if [[ $? -ne 0 ]]; then
+            echo "Error: Failed to describe '${service}'. Command output:"
+            echo "$url"
+            exit 1
+          fi
+
+          # Parse and extract the europe-west1.run.app URL
+          regional_url=$(echo "$url" | grep -o 'https://[^,"]*europe-west1.run.app')
+
+          # Check if the regional URL was found
+          if [[ -z "$regional_url" ]]; then
+            echo "Error: No europe-west1.run.app URL found for '${service}'"
+            exit 1
+          else
+            echo "Service: ${service}, URL: $regional_url"
+          fi
+
+          # Define the target XML file based on the service name
+          xml_file="apiproxy/targets/${service}.xml"
+
+          # Copy the default.xml template to the new service file
+          cp apiproxy/targets/default.xml "$xml_file"
+
+          # Replace the placeholder <TargetEndpoint name="ENDPOINT_NAME_TO_REPLACE"> with the service name
+          sed -i "s#<TargetEndpoint name=\"ENDPOINT_NAME_TO_REPLACE\">#<TargetEndpoint name=\"${service}\">#" "$xml_file"
+
+          # Replace the placeholder <Server name="ENV_TO_UPDATE-target-server"/> with the appropriate environment value
+          sed -i "s#<Server name=\"ENV_TO_UPDATE-target-server\"/>#<Server name=\"${env}-target-server\"/>#" "$xml_file"
+
+          # Replace the placeholder <Audience>CLOUD_RUN_URL_TO_UPDATE</Audience> with the actual Cloud Run URL
+          sed -i "s#<Audience>CLOUD_RUN_URL_TO_UPDATE</Audience>#<Audience>${regional_url}</Audience>#" "$xml_file"
+
+          echo "Created and updated file: $xml_file"
+          
+          rm apiproxy/targets/default.xml
+
+      - name: Add Proxy Route Rules
+        shell: bash
+        run: |
+          sed '/<RouteRule name="default">/,/<\/RouteRule>/d' apiproxy/proxies/default.xml > apiproxy/proxies/temp.xml
+          awk 'NR==FNR{a=a $0 ORS; next} /<\/ProxyEndpoint>/{print a} 1' apigee/proxies/default.xml apiproxy/proxies/temp.xml > apiproxy/proxies/default.xml
+          rm apiproxy/proxies/temp.xml
 
       - name: Create API bundle
         run: zip -r proxy.zip apiproxy
