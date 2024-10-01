@@ -1,7 +1,10 @@
+namespace Dft.DTRO.Admin.Pages;
+
 public class DtroUserListModel : PageModel
 {
     private readonly IDtroUserService _dtroUserService;
     private readonly IErrHandlingService _errHandlingService;
+
     public DtroUserListModel(IDtroUserService dtroUserService, IErrHandlingService errHandlingService)
     {
         _dtroUserService = dtroUserService;

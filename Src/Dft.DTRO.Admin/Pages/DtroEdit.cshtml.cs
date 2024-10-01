@@ -1,3 +1,4 @@
+namespace Dft.DTRO.Admin.Pages;
 public class DtroEditModel : PageModel
 {
     private readonly IDtroUserService _dtroUserService;
@@ -20,7 +21,7 @@ public class DtroEditModel : PageModel
     {
         DtroUserSearch.AlwaysButtonHidden = true;
         DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
-        DtroUserSearch.DtroUsers.RemoveAll(x=> x.UserGroup != UserGroup.Tra);
+        DtroUserSearch.DtroUsers.RemoveAll(x => x.UserGroup != UserGroup.Tra);
     }
 
 
@@ -35,10 +36,10 @@ public class DtroEditModel : PageModel
 
             if (DtroUserSearch.DtroUserIdSelect != null)
             {
-              await _dtroService.ReassignDtroAsync(id, DtroUserSearch.DtroUserIdSelect.Value);
-            
+                await _dtroService.ReassignDtroAsync(id, DtroUserSearch.DtroUserIdSelect.Value);
+
             }
-           
+
             return RedirectToPage("Search");
         }
         catch (Exception ex)

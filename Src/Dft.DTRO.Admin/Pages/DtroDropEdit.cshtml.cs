@@ -1,4 +1,4 @@
-
+namespace Dft.DTRO.Admin.Pages;
 public class DtroDropEditModel : PageModel
 {
     private readonly IDtroService _dtroService;
@@ -18,11 +18,11 @@ public class DtroDropEditModel : PageModel
         {
             if (isEdit)
             {
-               await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);
+                await _dtroService.UpdateDtroAsync(Guid.Parse(id), file);
             }
             else
             {
-                await _dtroService.CreateDtroAsync(file);              
+                await _dtroService.CreateDtroAsync(file);
             }
 
             return RedirectToPage("Search");

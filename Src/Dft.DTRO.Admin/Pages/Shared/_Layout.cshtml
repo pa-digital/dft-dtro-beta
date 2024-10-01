@@ -1,9 +1,12 @@
 ﻿@using Dft.DTRO.Admin.Services
 @inject ISystemConfigService SystemConfigService
+@inject IDtroUserService DtroUserService
 @{
     var systemConfig = await SystemConfigService.GetSystemConfig();
     var systemName = systemConfig.SystemName;
     var userName = systemConfig.CurrentUserName;
+    var user = await DtroUserService.GetDtroUserAsyncByXAppId(systemConfig.xAppId);
+    var isAdmin = user.UserGroup == UserGroup.Admin;
 }
 
 <!DOCTYPE html>
@@ -63,6 +66,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/DtroUserList">Users</a>
                         </li>
+                        <li class='nav-item'>
+                            <a class='nav-link text-dark @(isAdmin ? "": "visually-hidden")' asp-area="" asp-page="/DtroUserDelete">Delete Users</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Metrics">Metrics</a>
                         </li>
@@ -81,7 +87,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted fixed-bottom p-3">
+    <footer class="border-top footer text-muted p-3 fixed-bottom">
         <div class="container text-center">
             &copy; 2024 Department Of Transport
         </div>

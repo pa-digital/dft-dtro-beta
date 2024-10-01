@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace DfT.DTRO.Extensions;
+﻿namespace DfT.DTRO.Extensions;
 
 public static class EnumerableExtensions
 {

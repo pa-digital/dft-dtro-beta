@@ -33,6 +33,18 @@ public class DtroUserDal : IDtroUserDal
         return user;
     }
 
+    ///<inheritdoc cref="IDtroUserDal"/>
+    public async Task<List<DtroUserResponse>> GetAllDtroUsersAsync(List<Guid> ids) =>
+        await _dtroContext
+            .DtroUsers
+            .Where(user => ids.Contains(user.Id))
+            .Select(user => new DtroUserResponse
+            {
+                Id = user.Id,
+                Name = user.Name,
+                TraId = user.TraId,
+                xAppId = user.xAppId
+            }).ToListAsync();
 
     ///<inheritdoc cref="IDtroUserDal"/>
     public async Task<List<DtroUserResponse>> GetAllDtroUsersAsync()
@@ -208,5 +220,21 @@ public class DtroUserDal : IDtroUserDal
 
         await _dtroContext.SaveChangesAsync();
         return new GuidResponse() { Id = existing.Id };
+    }
+
+    ///<inheritdoc cref="IDtroUserDal"/>
+    public async Task<bool> DeleteDtroUsersAsync(List<DtroUser> users)
+    {
+        try
+        {
+            _dtroContext.DtroUsers.RemoveRange(users);
+            await _dtroContext.SaveChangesAsync();
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

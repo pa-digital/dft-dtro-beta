@@ -23,7 +23,7 @@ public class DtroHistoryModel : PageModel
 
     public async Task<IActionResult> OnGetAsync()
     {
-       
+
 
         try
         {
