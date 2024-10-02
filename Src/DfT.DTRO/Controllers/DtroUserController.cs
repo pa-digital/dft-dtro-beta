@@ -205,7 +205,6 @@ public class DtroUserController : ControllerBase
     {
         try
         {
-//            List<Guid> userIds = request.Ids.Split(',').Select(id => new Guid(id)).ToList();
             if (request.Ids == null || !request.Ids.Any())
             {
                 return BadRequest(new ApiErrorResponse("Bad Request", "No user IDs provided."));
