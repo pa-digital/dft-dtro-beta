@@ -10,4 +10,5 @@ public interface IDtroUserService
     Task<List<DtroUser>> SearchDtroUsersAsync(string partialName);
     Task CreateDtroUserAsync(DtroUser dtroUserRequest);
     Task UpdateDtroUserAsync(DtroUser dtroUserRequest);
+    Task<bool> DeleteDtroUserAsync(List<Guid> selectedUsers);
 }

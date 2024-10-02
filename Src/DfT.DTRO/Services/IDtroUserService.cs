@@ -7,4 +7,5 @@ public interface IDtroUserService
     Task<List<DtroUserResponse>> SearchDtroUsers(string partialName);
     Task<GuidResponse> SaveDtroUserAsync(DtroUserRequest dtroUserRequest);
     Task<GuidResponse> UpdateDtroUserAsync(DtroUserRequest dtroUserRequest);
+    Task<bool> DeleteDtroUsersAsync(List<Guid> dtroUserIds);
 }

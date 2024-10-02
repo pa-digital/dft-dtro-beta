@@ -1,10 +1,8 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DtroUserListModel
 
 <h2>Users <a class="btn btn-primary" asp-page="DtroUserEdit" asp-route-IsEdit="false">+</a></h2>
-
-@* <input  style="color: palegoldenrod" name="TraSearch.PreviousSearch" value="@Model.TraSearch.PreviousSearch" /> *@
-
 
 <form id="searchSection" method="post" asp-page-handler="Update" style=" margin-top: 30px;margin-right: 20px;margin-bottom: 20px;">
     <div>
@@ -71,4 +69,3 @@
         </tbody>
     </table>
 </form>
-

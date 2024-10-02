@@ -1,3 +1,4 @@
+namespace Dft.DTRO.Admin.Pages;
 public class RuleDropEditModel : PageModel
 {
     private readonly IRuleService _ruleService;
