@@ -1820,10 +1820,18 @@ paths:
       requestBody:
         required: true
         content:
-          ids:
+          application/json:
             schema:
-              type: string
-              description: The OAuth 2.0 grant type.
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: A list of D-TRO user IDs to delete.
+              required:
+                - ids
       responses:
         '200':
           description: OK
