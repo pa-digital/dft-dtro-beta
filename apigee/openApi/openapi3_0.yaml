@@ -1807,8 +1807,8 @@ paths:
       summary: Delete D-TRO Users by IDs
       operationId: delete-d-tro-users-by-ids
       security:
-        -oAuth:
-           - cso
+        - oAuth:
+            - cso
       parameters:
         - name: ids
           in: path
