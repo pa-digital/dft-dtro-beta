@@ -176,7 +176,7 @@
                             "geometry": {
                                 "version": 1,
                                 "DirectedLinear": {
-                                    "directedLineString": "(10 10, 20 20, 10 40)"
+                                    "directedLineString": "SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"
                                 },
                                 "externalReference": [
                                     {

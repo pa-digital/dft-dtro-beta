@@ -176,7 +176,7 @@
 								"LinearGeometry": {
 									"direction": "bidirectional",
 									"lateralPosition": "centreline",
-									"linestring": "(30 10, 10 30, 40 40)"
+									"linestring": "SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"
 								},
 								"externalReference": [
 									{
