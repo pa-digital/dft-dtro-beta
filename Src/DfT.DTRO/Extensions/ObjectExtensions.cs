@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace DfT.DTRO.Extensions;
+
 public static class ObjectExtensions
 {
     public static string ToIndentedJsonString(this object obj)
@@ -56,5 +57,13 @@ public static class ObjectExtensions
     {
         bool isDigit = int.TryParse(source, out int number);
         return isDigit ? number : 0;
+    }
+
+    public static string GetBetween(this string source, string before, string after)
+    {
+        int start = source.IndexOf(before, StringComparison.Ordinal);
+        int adjStart = start + before.Length;
+        int end = source.LastIndexOf(after, StringComparison.Ordinal);
+        return end <= adjStart ? "" : source.Substring(adjStart, end - adjStart);
     }
 }

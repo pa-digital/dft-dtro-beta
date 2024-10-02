@@ -174,7 +174,7 @@
 							"geometry": {
 								"version": 1,
 								"PointGeometry": {
-									"point": "((10 40), (40 30), (20 20), (30 10))",
+									"point": "SRID=27700;POINT(529157 178805)",
 									"representation": "centreLinePoint"
 								},
 								"externalReference": [
