@@ -1800,7 +1800,7 @@ paths:
             text/xml:
               schema:
                 $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-  /dtroUsers/{ids}:
+  /dtroUsers/redundant:
     delete:
       tags:
         - DtroUsers
@@ -1810,11 +1810,6 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - name: ids
-          in: path
-          required: true
-          schema: 
-            type: string
         - name: X-Correlation-ID
           in: header
           required: true
@@ -1822,6 +1817,21 @@ paths:
             type: string
             description: UUID formatted string to track the request through the enquiries stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                    format: uuid
+                  description: A list of D-TRO user IDs to delete.
+              required:
+                - ids
       responses:
         '200':
           description: OK
