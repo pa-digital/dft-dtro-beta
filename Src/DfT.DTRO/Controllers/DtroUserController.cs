@@ -201,11 +201,11 @@ public class DtroUserController : ControllerBase
     [SwaggerResponse(statusCode: 200, type: typeof(bool), description: "Ok")]
     [SwaggerResponse(statusCode: 404, description: "Not Found.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
-    public async Task<ActionResult<bool>> DeleteDtroUsers([FromBody] DeleteDtroUsersRequest body)
+    public async Task<ActionResult<bool>> DeleteDtroUsers([FromBody] DeleteDtroUsersRequest request)
     {
         try
         {
-            List<Guid> userIds = body.Split(',').Select(id => new Guid(id)).ToList();
+            List<Guid> userIds = request.Ids.Split(',').Select(id => new Guid(id)).ToList();
             bool state = await _dtroUserService.DeleteDtroUsersAsync(userIds);
             _logger.LogInformation($"Method '{nameof(DeleteDtroUsers)}' called at {DateTime.Now:g}");
             return Ok(state);

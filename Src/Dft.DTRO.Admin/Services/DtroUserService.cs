@@ -118,7 +118,7 @@ public class DtroUserService : IDtroUserService
         var ids = string.Join(",", dtroUserIds);
         var content = JsonContent.Create(new {ids});
         var request =
-            new HttpRequestMessage(HttpMethod.Delete, ConfigHelper.Version + $"/dtroUsers/redundant");
+            new HttpRequestMessage(HttpMethod.Delete, ConfigHelper.Version + $"/dtroUsers/redundant")
             {
                 Content = content
             };
