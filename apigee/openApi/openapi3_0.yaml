@@ -1824,12 +1824,13 @@ paths:
             description: UUID formatted string to track the request through the enquiries stack.
             default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
-              '200':
-                description: OK
-              '404':
-                description: Not found.
-              '500':
-                description: Internal Server Error.
+        '200':
+          description: OK
+        '404':
+          description: Not found.
+        '500':
+          description: Internal Server Error.
+components:
   schemas:
     DfT.DTRO.Models.DtroDtos.DtroResponse:
       type: object
