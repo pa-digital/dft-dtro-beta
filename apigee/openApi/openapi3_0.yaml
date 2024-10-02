@@ -1815,7 +1815,6 @@ paths:
           required: true
           schema: 
             type: string
-            format: string
         - name: X-Correlation-ID
           in: header
           required: true
