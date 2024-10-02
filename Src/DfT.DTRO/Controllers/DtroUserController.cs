@@ -188,9 +188,9 @@ public class DtroUserController : ControllerBase
     }
 
     /// <summary>
-    /// Delete a list of users
+    /// Delete Dtro users by ids
     /// </summary>
-    /// <param name="ids">List of Dtro user ID</param>
+    /// <param name="ids">List of D-TRO User ID, comma separated</param>
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
