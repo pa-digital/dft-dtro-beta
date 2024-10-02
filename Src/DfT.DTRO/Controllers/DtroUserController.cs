@@ -205,8 +205,12 @@ public class DtroUserController : ControllerBase
     {
         try
         {
-            List<Guid> userIds = request.Ids.Split(',').Select(id => new Guid(id)).ToList();
-            bool state = await _dtroUserService.DeleteDtroUsersAsync(userIds);
+//            List<Guid> userIds = request.Ids.Split(',').Select(id => new Guid(id)).ToList();
+            if (request.Ids == null || !request.Ids.Any())
+            {
+                return BadRequest(new ApiErrorResponse("Bad Request", "No user IDs provided."));
+            }
+            bool state = await _dtroUserService.DeleteDtroUsersAsync(request.Ids);
             _logger.LogInformation($"Method '{nameof(DeleteDtroUsers)}' called at {DateTime.Now:g}");
             return Ok(state);
         }

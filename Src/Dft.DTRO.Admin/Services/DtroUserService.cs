@@ -115,8 +115,8 @@ public class DtroUserService : IDtroUserService
 
     public async Task<bool> DeleteDtroUserAsync(List<Guid> dtroUserIds)
     {
-        var ids = string.Join(",", dtroUserIds);
-        var content = JsonContent.Create(new {ids});
+//        var ids = string.Join(",", dtroUserIds);
+        var content = JsonContent.Create(new { Ids = dtroUserIds });
         var request =
             new HttpRequestMessage(HttpMethod.Delete, ConfigHelper.Version + $"/dtroUsers/redundant")
             {

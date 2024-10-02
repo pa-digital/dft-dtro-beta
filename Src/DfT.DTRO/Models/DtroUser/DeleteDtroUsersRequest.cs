@@ -2,5 +2,5 @@
 
 public class DeleteDtroUsersRequest
 {
-    public string Ids { get; set; }
+    public List<Guid> Ids { get; set; }
 }
