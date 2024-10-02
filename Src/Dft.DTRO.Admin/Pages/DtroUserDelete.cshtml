@@ -9,6 +9,10 @@
 <form method='post'>
     <table class='table table-responsive table-striped'>
         <thead>
+        <th>
+        <!-- Button to select all checkboxes -->
+        <button type="button" class="btn btn-primary" onclick="selectAllCheckboxes()">Select All</button>
+        </th>
         <th>Id</th>
         <th>AppId</th>
         <th>Name</th>
@@ -38,3 +42,15 @@
     <button class='btn btn-secondary' name="action" type='submit' value='cancel'>Cancel</button>
 </form>
 
+@section Scripts {
+    <script>
+        function selectAllCheckboxes() {
+            // Get all checkboxes with name 'SelectedUsers'
+            var checkboxes = document.querySelectorAll("input[name='SelectedUsers']");
+            // Loop through and check each checkbox
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = true;
+            });
+        }
+    </script>
+}
