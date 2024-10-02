@@ -1,16 +1,15 @@
 openapi: 3.0.1
 info:
   title: D-TRO
-  description: Digital Traffic Regulation Order
-  termsOfService: https://cloud.google.com/terms
+  description: Digital Traffic Regulation Orders - D-TRO Publication API Interface Control Document for Data Consumers
+  termsOfService: https://www.gov.uk/help/terms-conditions
   contact:
-    name: Jon Doe
-    url: https://contact-url.com
-    email: jon@doe.com
+    name: John Cooper
+    email: john.cooper@dft.gov.uk
   license:
-    name: DfT
-    url: https://license-url.com
-  version: 0.0.1
+    name: Crown copyright
+    url: https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/
+  version: 1.0.0
 servers:
   - url: 'https://dtro-integration.dft.gov.uk'
 paths:
@@ -19,6 +18,7 @@ paths:
       tags:
         - DTROs
       summary: Gets a D-TRO by its ID
+      description: Gets a D-TRO by its ID
       operationId: get-dtro
       parameters:
         - name: id
@@ -46,7 +46,8 @@ paths:
     get:
       tags:
         - DTROs
-      summary: Retrieve the Source History for existing D-TROs
+      summary: Retrieve the Source History for existing D-TRO by its ID
+      description: Retrieve the Source History for existing D-TRO by its ID
       operationId: get-dtro-source-history
       parameters:
         - name: dtroId
@@ -82,7 +83,8 @@ paths:
     get:
       tags:
         - DTROs
-      summary: Retrieve the Provision History for existing D-TROs
+      summary: Retrieve the Provision History for existing D-TRO by its ID
+      description: Retrieve the Provision History for existing D-TRO by its ID
       operationId: get-dtro-provision-history
       parameters:
         - name: dtroId
@@ -119,6 +121,7 @@ paths:
       tags:
         - Events
       summary: Retrieve all data store events
+      description: Retrieve all data store events
       operationId: get-dtro-events
       parameters:
         - name: X-Correlation-ID
@@ -182,6 +185,7 @@ paths:
       tags:
         - Metrics
       summary: Check API health.
+      description: Check API health.
       operationId: check-api-health
       parameters:
         - name: X-Correlation-ID
@@ -217,6 +221,7 @@ paths:
       tags:
         - Metrics
       summary: Check database health.
+      description: Check database health.
       operationId: check-db-health
       parameters:
         - name: X-Correlation-ID
@@ -254,6 +259,7 @@ paths:
       tags:
         - Rules
       summary: Get rule template versions.
+      description: Get rule template versions.
       operationId: get-rule-versions
       parameters:
         - name: X-Correlation-ID
@@ -277,6 +283,7 @@ paths:
       tags:
         - Rules
       summary: Get rule templates.
+      description: Get rule templates.
       operationId: get-rules
       parameters:
         - name: X-Correlation-ID
@@ -300,6 +307,7 @@ paths:
       tags:
         - Rules
       summary: Get rule template by its rule version
+      description: Get rule template by its rule version
       operationId: get-rule-by-version
       parameters:
         - name: version
@@ -329,6 +337,7 @@ paths:
       tags:
         - Rules
       summary: Get rule template by its ID
+      description: Get rule template by its ID
       operationId: get-rule-by-id
       parameters:
         - name: id
@@ -359,6 +368,7 @@ paths:
       tags:
         - Schemas
       summary: Get schema template versions.
+      description: Get schema template versions.
       operationId: get-schema-versions
       parameters:
         - name: X-Correlation-ID
@@ -382,6 +392,7 @@ paths:
       tags:
         - Schemas
       summary: Get schema templates.
+      description: Get schema templates.
       operationId: get-schemas
       parameters:
         - name: X-Correlation-ID
@@ -405,6 +416,7 @@ paths:
       tags:
         - Schemas
       summary: Get schema template by its schema version
+      description: Get schema template by its schema version
       operationId: get-schema-by-version
       parameters:
         - name: version
@@ -434,6 +446,7 @@ paths:
       tags:
         - Schemas
       summary: Get schema template by its ID
+      description: Get schema template by its ID
       operationId: get-schema-by-id
       parameters:
         - name: id
@@ -464,6 +477,7 @@ paths:
       tags:
         - Search
       summary: Finds existing D-TROs that match the required criteria.
+      description: Finds existing D-TROs that match the required criteria.
       operationId: search-dtro
       parameters:
         - name: X-Correlation-ID
@@ -495,6 +509,7 @@ paths:
   /v1/oauth-generator:
     post:
       summary: Generate OAuth 2.0 Token (Client Credentials)
+      description: Generate OAuth 2.0 Token (Client Credentials). Please note that this endpoint is not part of the D-TRO application but a 3rd party security application.
       operationId: oauth-generator
       requestBody:
         required: true
