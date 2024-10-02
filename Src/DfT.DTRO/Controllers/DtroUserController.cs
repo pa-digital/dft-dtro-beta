@@ -195,17 +195,17 @@ public class DtroUserController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>True if successful, False otherwise</returns>
-    [HttpDelete("/dtroUsers/{ids}")]
+    [HttpDelete("/dtroUsers/redundant")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(bool), description: "Ok")]
     [SwaggerResponse(statusCode: 404, description: "Not Found.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
-    public async Task<ActionResult<bool>> DeleteDtroUsers(string ids)
+    public async Task<ActionResult<bool>> DeleteDtroUsers([FromBody] DeleteDtroUsersRequest body)
     {
         try
         {
-            List<Guid> userIds = ids.Split(',').Select(it => new Guid(it)).ToList();
+            List<Guid> userIds = body.Split(',').Select(id => new Guid(id)).ToList();
             bool state = await _dtroUserService.DeleteDtroUsersAsync(userIds);
             _logger.LogInformation($"Method '{nameof(DeleteDtroUsers)}' called at {DateTime.Now:g}");
             return Ok(state);
