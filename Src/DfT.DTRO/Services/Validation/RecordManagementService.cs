@@ -28,7 +28,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = $"TRA creator '{creator}' is not within accepted SWA codes."
+                Message = $"TRA creator '{creator}' is in our records."
             });
         }
 
@@ -38,7 +38,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = $"TRA owner '{owner}' is not within accepted SWA codes."
+                Message = $"TRA owner '{owner}' is not in our records."
             });
         }
 
@@ -67,7 +67,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = "One or more TRA affected is not within accepted SWA codes."
+                Message = "One or more TRA affected is not in our records."
             });
         }
 
