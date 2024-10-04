@@ -6,9 +6,9 @@ public class Location
 {
     [Required]
     [RegularExpression(
-        "^(?:osgb36Epsg27700|wgs84Epsg4326)$",
-        ErrorMessage = "Value must be one of 'osgb36Epsg27700' and 'wgs84Epsg4326'.")]
-    public string Crs { get; set; }
+        "^(?:osgb36Epsg27700|wgs84Epsg4326|wkt)$",
+        ErrorMessage = "Value must be one of 'osgb36Epsg27700', 'wgs84Epsg4326', or 'wkt'.")]
+    public string Format { get; set; }
 
     [JsonConverter(typeof(BoundingBoxJsonConverter))]
     [Required]

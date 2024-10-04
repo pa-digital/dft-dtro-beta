@@ -14,8 +14,6 @@ public class BoundingBoxService : IBoundingBoxService
         JProperty children = obj.Children<JProperty>().ElementAt(1);
         IEnumerable<JToken> values;
         string json;
-        string geometry;
-        JToken token;
         bool isValid;
         string toValidate;
         switch (children.Name)
@@ -34,19 +32,22 @@ public class BoundingBoxService : IBoundingBoxService
                     return new BoundingBox();
                 }
                 toValidate = json.GetBetween(";", "\"");
+                isValid = ArePairsValid(errors, toValidate, GeometryType.PointGeometry);
+                if (!isValid)
+                {
+                    return new BoundingBox();
+                }
                 isValid = IsInUk(errors, toValidate, GeometryType.PointGeometry);
                 if (!isValid)
                 {
-                    errors.Add(new SemanticValidationError()
+                    errors.Add(new SemanticValidationError
                     {
                         Message = "Coordinates you provided are not within UK coordinates",
                         Path = "Source.provision.regulatedPlace.geometry"
                     });
                     return new BoundingBox();
                 }
-                geometry = json.GetBetween("(", ")");
-                token = JToken.FromObject(geometry);
-                boundingBox = ValidateAgainstBoundingBox(token);
+
                 break;
             case "LinearGeometry":
                 values = children.DescendantsAndSelf().Skip(7).FirstOrDefault();
@@ -61,6 +62,11 @@ public class BoundingBoxService : IBoundingBoxService
                     return new BoundingBox();
                 }
                 toValidate = json.GetBetween(";", "\"");
+                isValid = ArePairsValid(errors, toValidate, GeometryType.LinearGeometry);
+                if (!isValid)
+                {
+                    return new BoundingBox();
+                }
                 isValid = IsInUk(errors, toValidate, GeometryType.LinearGeometry);
                 if (!isValid)
                 {
@@ -71,9 +77,7 @@ public class BoundingBoxService : IBoundingBoxService
                     });
                     return new BoundingBox();
                 }
-                geometry = json.GetBetween("(", ")");
-                token = JToken.FromObject(geometry);
-                boundingBox = ValidateAgainstBoundingBox(token);
+
                 break;
             case "Polygon":
                 values = children.DescendantsAndSelf().LastOrDefault();
@@ -89,6 +93,12 @@ public class BoundingBoxService : IBoundingBoxService
                 }
 
                 toValidate = json.GetBetween(";", "\"");
+
+                isValid = ArePairsValid(errors, toValidate, GeometryType.Polygon);
+                if (!isValid)
+                {
+                    return new BoundingBox();
+                }
                 isValid = IsInUk(errors, toValidate, GeometryType.Polygon);
                 if (!isValid)
                 {
@@ -99,9 +109,8 @@ public class BoundingBoxService : IBoundingBoxService
                     });
                     return new BoundingBox();
                 }
-                geometry = json.GetBetween("(", ")");
-                token = JToken.FromObject(geometry);
-                boundingBox = ValidateAgainstBoundingBox(token);
+
+
                 break;
             case "DirectedLinear":
                 values = children.DescendantsAndSelf().LastOrDefault();
@@ -116,6 +125,13 @@ public class BoundingBoxService : IBoundingBoxService
                     return new BoundingBox();
                 }
                 toValidate = json.GetBetween(";", "\"");
+
+                isValid = ArePairsValid(errors, toValidate, GeometryType.DirectedLinear);
+                if (!isValid)
+                {
+                    return new BoundingBox();
+                }
+
                 isValid = IsInUk(errors, toValidate, GeometryType.DirectedLinear);
                 if (!isValid)
                 {
@@ -126,9 +142,7 @@ public class BoundingBoxService : IBoundingBoxService
                     });
                     return new BoundingBox();
                 }
-                geometry = json.GetBetween("(", ")");
-                token = JToken.FromObject(geometry);
-                boundingBox = ValidateAgainstBoundingBox(token);
+
                 break;
             default:
                 errors.Add(new SemanticValidationError
@@ -137,8 +151,11 @@ public class BoundingBoxService : IBoundingBoxService
                     Message = $"Selected geometry is not one of accepted types: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
                 return new BoundingBox();
-                break;
         }
+
+        string geometry = json.GetBetween("(", ")");
+        JToken token = JToken.FromObject(geometry);
+        boundingBox = ValidateAgainstBoundingBox(token);
 
         return boundingBox;
     }
@@ -183,6 +200,93 @@ public class BoundingBoxService : IBoundingBoxService
                 break;
         }
         return isWithinUk;
+    }
+
+
+    private static bool ArePairsValid(List<SemanticValidationError> errors, string toValidate,
+        GeometryType geometryType)
+    {
+        WKTReader wktReader = new();
+        bool arePairsValid = false;
+        switch (geometryType)
+        {
+            case GeometryType.PointGeometry:
+                try
+                {
+                    wktReader.Read(toValidate);
+                    arePairsValid = true;
+                }
+                catch
+                {
+                    errors.Add(new SemanticValidationError
+                    {
+                        Message = $"Invalid number of pairs in {GeometryType.PointGeometry}",
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.PointGeometry}"
+                    });
+                }
+                break;
+            case GeometryType.LinearGeometry:
+                try
+                {
+                    wktReader.Read(toValidate);
+                    arePairsValid = true;
+                }
+                catch
+                {
+                    errors.Add(new SemanticValidationError
+                    {
+                        Message = $"Invalid number of pairs in {GeometryType.LinearGeometry}",
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.LinearGeometry}"
+                    });
+                }
+                break;
+            case GeometryType.Polygon:
+                try
+                {
+                    wktReader.Read(toValidate);
+                    arePairsValid = true;
+                }
+                catch
+                {
+                    errors.Add(new SemanticValidationError
+                    {
+                        Message = $"Invalid number of pairs in {GeometryType.Polygon}",
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.Polygon}"
+                    });
+                }
+                break;
+            case GeometryType.DirectedLinear:
+                try
+                {
+                    wktReader.Read(toValidate);
+                    arePairsValid = true;
+                }
+                catch
+                {
+                    errors.Add(new SemanticValidationError
+                    {
+                        Message = $"Invalid number of pairs in {GeometryType.DirectedLinear}",
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.DirectedLinear}"
+                    });
+                }
+                break;
+            case GeometryType.Unknown:
+                errors.Add(new SemanticValidationError
+                {
+                    Path = "Source.provision.regulatedPlace.geometry",
+                    Message = $"Selected geometry is not one of accepted types: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
+                });
+                break;
+            default:
+                errors.Add(new SemanticValidationError
+                {
+                    Path = "Source.provision.regulatedPlace.geometry",
+                    Message = $"Selected geometry is not one of accepted types: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
+                });
+                break;
+        }
+
+        return arePairsValid;
     }
 
     private static BoundingBox ValidateAgainstBoundingBox(IEnumerable<JToken> values)

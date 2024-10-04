@@ -234,7 +234,7 @@ public class DTROsController : ControllerBase
     [Route("/dtros/updateFromBody/{id:guid}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
-    [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Okay")]
+    [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Ok")]
     public async Task<IActionResult> UpdateFromBody([FromHeader(Name = "x-app-id")][Required] Guid xAppId, [FromRoute] Guid id, [FromBody] DtroSubmit dtroSubmit)
     {
         try

@@ -2,7 +2,7 @@ namespace DfT.DTRO.Models.Filtering;
 
 public class SearchQuery
 {
-    public Location Location { get; set; }
+    //public Location Location { get; set; }
 
     [DataType(DataType.DateTime)]
     public DateTime? PublicationTime { get; set; }
