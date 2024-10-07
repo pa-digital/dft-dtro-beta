@@ -13,6 +13,8 @@ on:
         required: true
       service_ui_client_secret:
         required: true
+      gcp_project_number:
+        required: true
     inputs:
       gcp-project-id:
         type: string
@@ -72,6 +74,7 @@ env:
   TF_VAR_service_ui_tag: ${{  inputs.service-ui-image-tag }}
   TF_VAR_cloud_run_service_ui_client_id: ${{ secrets.service_ui_client_id }}
   TF_VAR_cloud_run_service_ui_client_secret: ${{ secrets.service_ui_client_secret }}
+  cloud_url: https://dtro-${{ inputs.environment }}-${{ inputs.dtro-image-name }}-${{ secrets.service_ui_client_secret }}.${{ inputs.gcp-region }}.run.app
 
 permissions:
   contents: read
@@ -217,6 +220,7 @@ jobs:
           environment: ${{ inputs.environment }}
           env_name_prefix: ${{ inputs.environment }}
           service: ${{ inputs.dtro-image-name }}
+          cloud_url: ${{ env.cloud_url  }}
           service_account: ${{ secrets.wip_service_account }}
           apigee_organisation: ${{ inputs.gcp-project-id }}
 
@@ -282,32 +286,10 @@ jobs:
           python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
           cp -a oauth/* apiproxy/policies
 
-      - name: Get Cloud Run URL for D-TRO and Create Service XML # TODO
+      - name: Create Service XML from Default XML # TODO
         shell: bash
         run: |
-          # Get the Cloud Run URL
-          url=$(gcloud run services describe "${service}" \
-            --platform managed \
-            --project "${gcp_project}" \
-            --region europe-west1 \
-            --format 'value(metadata.annotations."run.googleapis.com/urls")' 2>&1)
-
-          if [[ $? -ne 0 ]]; then
-            echo "Error: Failed to describe '${service}'. Command output:"
-            echo "$url"
-            exit 1
-          fi
-
-          # Parse and extract the europe-west1.run.app URL
-          regional_url=$(echo "$url" | grep -o 'https://[^,"]*europe-west1.run.app')
-
-          # Check if the regional URL was found
-          if [[ -z "$regional_url" ]]; then
-            echo "Error: No europe-west1.run.app URL found for '${service}'"
-            exit 1
-          else
-            echo "Service: ${service}, URL: $regional_url"
-          fi
+          echo "Service: ${service}, URL: ${cloud_url}"
 
           # Define the target XML file based on the service name
           xml_file="apiproxy/targets/${service}.xml"
@@ -319,10 +301,10 @@ jobs:
           sed -i "s#<TargetEndpoint name=\"ENDPOINT_NAME_TO_REPLACE\">#<TargetEndpoint name=\"${service}\">#" "$xml_file"
 
           # Replace the placeholder <Server name="ENV_TO_UPDATE-target-server"/> with the appropriate environment value
-          sed -i "s#<Server name=\"ENV_TO_UPDATE-target-server\"/>#<Server name=\"${env}-target-server\"/>#" "$xml_file"
+          sed -i "s#<Server name=\"ENV_TO_UPDATE-target-server\"/>#<Server name=\"$dtro-{env}-target-server\"/>#" "$xml_file"
 
           # Replace the placeholder <Audience>CLOUD_RUN_URL_TO_UPDATE</Audience> with the actual Cloud Run URL
-          sed -i "s#<Audience>CLOUD_RUN_URL_TO_UPDATE</Audience>#<Audience>${regional_url}</Audience>#" "$xml_file"
+          sed -i "s#<Audience>CLOUD_RUN_URL_TO_UPDATE</Audience>#<Audience>${cloud_url}</Audience>#" "$xml_file"
 
           echo "Created and updated file: $xml_file"
           

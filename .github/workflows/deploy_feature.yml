@@ -35,6 +35,7 @@ jobs:
       execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
       service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_DEV }}
       service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_DEV }}
+      gcp_project_number: ${{ secrets.GCP_PROJECT_NUMBER_DEV }}
     with:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_DEV }}
       gcp-project: ${{ vars.GCP_PROJECT_DEV }}
@@ -59,6 +60,7 @@ jobs:
      execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_TEST }}
      service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_TEST }}
      service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_TEST }}
+     gcp_project_number: ${{ secrets.GCP_PROJECT_NUMBER_TEST }}
    with:
      gcp-project-id: ${{ vars.GCP_PROJECT_ID_TEST }}
      gcp-project: ${{ vars.GCP_PROJECT_ID_TEST }}
