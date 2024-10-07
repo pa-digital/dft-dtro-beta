@@ -244,7 +244,7 @@ jobs:
       - name: Delete Oldest Revision - test
         shell: bash
         run: |
-          apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
+          apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r --arg proxy_name "dtro-${env}-server" '.proxies[] | select(.name == $proxy_name) | .revision[]'
 
       - name: Delete Oldest Revision
         shell: bash
