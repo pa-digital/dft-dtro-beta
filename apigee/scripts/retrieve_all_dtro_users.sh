@@ -18,7 +18,8 @@ RESPONSE=$(curl -X GET 'https://dtro-integration.dft.gov.uk/v1/dtroUsers' \
   -H 'Accept: text/plain' \
   -H "Authorization: Bearer ${access_token}"
 )
+number_of_users=$(echo "$RESPONSE" | jq '. | length')
 echo " "
-echo "Response for Retrieve All Dtro Users:"
+echo "Number of users found: $number_of_users"
 echo " "
 echo "$RESPONSE" | jq .
