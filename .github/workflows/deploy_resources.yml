@@ -242,7 +242,7 @@ jobs:
         run: chmod +x portals/*
 
       - name: Delete Oldest Revision - test output
-        run: ./apigeecli_apis_list.sh ${{ steps.google-auth.outputs.access_token }}
+        run: portals/apigeecli_apis_list.sh ${{ steps.google-auth.outputs.access_token }}
 
       - name: Delete Oldest Revision
         shell: bash
