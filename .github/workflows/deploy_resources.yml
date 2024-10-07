@@ -320,7 +320,7 @@ jobs:
         shell: bash
         run: |
           sed '/<RouteRule name="default">/,/<\/RouteRule>/d' apiproxy/proxies/default.xml > apiproxy/proxies/temp.xml
-          awk 'NR==FNR{a=a $0 ORS; next} /<\/ProxyEndpoint>/{print a} 1' apigee/proxies/default.xml apiproxy/proxies/temp.xml > apiproxy/proxies/default.xml
+          awk 'NR==FNR{a=a $0 ORS; next} /<\/ProxyEndpoint>/{print a} 1' proxies/default.xml apiproxy/proxies/temp.xml > apiproxy/proxies/default.xml
           rm apiproxy/proxies/temp.xml
 
       - name: Create API bundle
