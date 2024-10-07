@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get OAuth access token
-OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-generator" \
+OAUTH_RESPONSE=$(curl -X POST "https://${domain}.dft.gov.uk/v1/oauth-generator" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -u ${CLIENT_ID}:${CLIENT_SECRET} \
   -d "grant_type=client_credentials")
@@ -12,8 +12,8 @@ echo " "
 echo "Access token retrieved"
 echo " "
 
-## Check Health of D-TRO Platform
-RESPONSE=$(curl -X GET 'https://dtro-integration.dft.gov.uk/v1/dtroUsers' \
+## Get
+RESPONSE=$(curl -X GET "https://${domain}.dft.gov.uk/v1/dtroUsers" \
   -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
   -H 'Accept: text/plain' \
   -H "Authorization: Bearer ${access_token}"
