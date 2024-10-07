@@ -241,6 +241,11 @@ jobs:
       - name: Make scripts directory executable
         run: chmod +x portals/*
 
+      - name: Delete Oldest Revision - test
+        shell: bash
+        run: |
+          apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
+
       - name: Delete Oldest Revision
         shell: bash
         run: |
