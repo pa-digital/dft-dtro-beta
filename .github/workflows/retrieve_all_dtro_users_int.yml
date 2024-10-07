@@ -49,4 +49,4 @@ jobs:
           echo "APIGEECLI_DEBUG=true" >> $GITHUB_ENV
 
       - name: Retrieve All Dtro Users
-        run: ./retrieve_all_dtro_users_int.sh
+        run: ./retrieve_all_dtro_users.sh
