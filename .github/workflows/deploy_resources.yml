@@ -240,9 +240,6 @@ jobs:
       - name: Make scripts directory executable
         run: chmod +x portals/*
 
-#      - name: Delete Oldest Revision - test output
-#        run: ./apigeecli_apis_list.sh ${{ steps.google-auth.outputs.access_token }}
-
       - name: Delete Oldest Revision
         shell: bash
         run: |
@@ -280,6 +277,8 @@ jobs:
 
       - name: Setup Python
         uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
       - name: Create OAuth Policies
         run: |
@@ -288,7 +287,12 @@ jobs:
           python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
           cp -a oauth/* apiproxy/policies
 
-      - name: Create Service XML from Default XML # TODO
+      - name: Copy Target Folder
+        shell: bash
+        run: |
+          cp -a apigee/targets/* apiproxy/targets 
+
+      - name: Create Service XML
         shell: bash
         run: |
           echo "Service: ${service}, URL: ${cloud_url}"
