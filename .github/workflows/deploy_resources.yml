@@ -236,13 +236,12 @@ jobs:
         run: |
           curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh
           echo "$HOME/.apigeecli/bin" >> $GITHUB_PATH
-          echo "APIGEECLI_DEBUG=true" >> $GITHUB_ENV
 
       - name: Make scripts directory executable
         run: chmod +x portals/*
 
-      - name: Delete Oldest Revision - test output
-        run: portals/apigeecli_apis_list.sh ${{ steps.google-auth.outputs.access_token }}
+#      - name: Delete Oldest Revision - test output
+#        run: ./apigeecli_apis_list.sh ${{ steps.google-auth.outputs.access_token }}
 
       - name: Delete Oldest Revision
         shell: bash
