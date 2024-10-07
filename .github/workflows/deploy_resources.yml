@@ -298,7 +298,7 @@ jobs:
           echo "Service: ${service}, URL: ${cloud_url}"
 
           # Define the target XML file based on the service name
-          xml_file="apiproxy/targets/${service}.xml"
+          xml_file="apiproxy/targets/default.xml"
 
           # Copy the default.xml template to the new service file
           cp apiproxy/targets/default.xml "$xml_file"
