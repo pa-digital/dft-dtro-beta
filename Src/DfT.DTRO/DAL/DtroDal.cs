@@ -222,15 +222,17 @@ public class DtroDal : IDtroDal
                 expressionsToConjunct.Add(it => it.OrderReportingPoints.Contains(query.OrderReportingPoint));
             }
 
-            if (query.Location is not null)
-            {
-                var boundingBox =
-                    query.Location.Crs != "osgb36Epsg27700"
-                        ? _projectionService.Wgs84ToOsgb36(query.Location.Bbox)
-                        : query.Location.Bbox;
+            //if (query.Location is not null)
+            //{
+            //    BoundingBox boundingBox = query.Location.Format switch
+            //    {
+            //        "wgs84Epsg4326" => _projectionService.Wgs84ToOsgb36(query.Location.Bbox),
+            //        "osgb36Epsg27700" or "wkt" => query.Location.Bbox,
+            //        _ => new()
+            //    };
 
-                expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(boundingBox, it.Location));
-            }
+            //    expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(boundingBox, it.Location));
+            //}
 
             if (query.RegulationStart is not null)
             {
@@ -345,15 +347,15 @@ public class DtroDal : IDtroDal
             expressionsToConjunct.Add(it => it.OrderReportingPoints.Contains(search.OrderReportingPoint));
         }
 
-        if (search.Location is not null)
-        {
-            var boundingBox =
-                search.Location.Crs != "osgb36Epsg27700"
-                    ? _projectionService.Wgs84ToOsgb36(search.Location.Bbox)
-                    : search.Location.Bbox;
+        //if (search.Location is not null)
+        //{
+        //    var boundingBox =
+        //        search.Location.Format != "osgb36Epsg27700"
+        //            ? _projectionService.Wgs84ToOsgb36(search.Location.Bbox)
+        //            : search.Location.Bbox;
 
-            expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(boundingBox, it.Location));
-        }
+        //    expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(boundingBox, it.Location));
+        //}
 
         if (search.RegulationStart is not null)
         {
