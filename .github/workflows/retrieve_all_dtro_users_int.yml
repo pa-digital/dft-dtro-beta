@@ -33,6 +33,8 @@ jobs:
         run: |
           echo "workload_identity_service_account=${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}" >> $GITHUB_ENV 
           echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_TEST }}" >> $GITHUB_ENV
+          echo "CLIENT_ID=${{ secrets.CSO_CLIENT_ID_INT }}" >> $GITHUB_ENV
+          echo "CLIENT_SECRET=${{ secrets.CSO_CLIENT_SECRET_INT }}" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
         id: google-auth
