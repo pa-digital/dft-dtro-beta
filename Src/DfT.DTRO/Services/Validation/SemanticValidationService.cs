@@ -113,9 +113,9 @@ public class SemanticValidationService : ISemanticValidationService
             });
         }
 
-        JObject obj1 = geometry?.Value as JObject;
+        JObject jobj = geometry?.Value as JObject;
 
-        if (!obj1.TryGetValue("version", out JToken _))
+        if (!jobj.TryGetValue("version", out JToken _))
         {
             errors.Add(new SemanticValidationError
             {
@@ -123,7 +123,7 @@ public class SemanticValidationService : ISemanticValidationService
             });
         }
 
-        if (obj1.TryGetValue("version", out JToken value))
+        if (jobj.TryGetValue("version", out JToken value))
         {
             JTokenType type = value.Type;
             if (type != JTokenType.Integer)
@@ -135,7 +135,7 @@ public class SemanticValidationService : ISemanticValidationService
             }
         }
 
-        boundingBox = _boundingBoxService.SetBoundingBox(errors, obj1, boundingBox);
+        boundingBox = _boundingBoxService.SetBoundingBox(errors, jobj, boundingBox);
         return boundingBox;
     }
 

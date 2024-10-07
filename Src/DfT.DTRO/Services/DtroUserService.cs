@@ -21,6 +21,7 @@ public class DtroUserService : IDtroUserService
         {
             ret.Add(FormatNameForUi(response));
         }
+
         return ret;
     }
 
@@ -50,8 +51,10 @@ public class DtroUserService : IDtroUserService
                 sb.Append(' ');
                 sb.Append(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(words[i].ToLower()));
             }
+
             response.Name = sb.ToString();
         }
+
         return response;
     }
 
@@ -78,7 +81,7 @@ public class DtroUserService : IDtroUserService
 
     public async Task<GuidResponse> SaveDtroUserAsync(DtroUserRequest dtroUserRequest)
     {
-        
+
         var guid = await _dtroUserDal.SaveDtroUserAsync(dtroUserRequest);
         return guid;
     }
@@ -89,8 +92,23 @@ public class DtroUserService : IDtroUserService
         var guid = await _dtroUserDal.UpdateDtroUserAsync(dtroUserRequest);
         if (exisitng.UserGroup != dtroUserRequest.UserGroup)
         {
-           await _metricsDal.UpdateUserGroupForMetricsAsync(dtroUserRequest.Id, dtroUserRequest.UserGroup);
+            await _metricsDal.UpdateUserGroupForMetricsAsync(dtroUserRequest.Id, dtroUserRequest.UserGroup);
         }
+
         return guid;
+    }
+
+    public async Task<bool> DeleteDtroUsersAsync(List<Guid> dtroUserIds)
+    {
+        List<DtroUser> users = (await _dtroUserDal.GetAllDtroUsersAsync())
+            .Where(response => dtroUserIds.Contains(response.Id))
+            .Select(it => new DtroUser { Id = it.Id })
+            .ToList();
+        if (!users.Any())
+        {
+            return false;
+        }
+
+        return await _dtroUserDal.DeleteDtroUsersAsync(users);
     }
 }

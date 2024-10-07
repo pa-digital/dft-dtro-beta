@@ -1,9 +1,12 @@
+namespace Dft.DTRO.Admin.Pages;
+
 using DfT.DTRO.Models.SystemConfig;
 
 public class SystemConfigEditModel : PageModel
 {
     private readonly ISystemConfigService _systemConfigService;
     private readonly IErrHandlingService _errHandlingService;
+
     public SystemConfigEditModel(ISystemConfigService systemConfigService, IErrHandlingService errHandlingService)
     {
         _systemConfigService = systemConfigService;

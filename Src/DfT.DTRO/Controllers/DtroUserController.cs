@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Models.DataBase;
-
-namespace DfT.DTRO.Controllers;
+﻿namespace DfT.DTRO.Controllers;
 
 /// <summary>
 /// Controller for capturing Dtro Users
@@ -163,7 +161,7 @@ public class DtroUserController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>A Dtro User</returns>
-    [HttpGet("/dtroUsers/{dtroUserId}")]
+    [HttpGet("/dtroUsers/{dtroUserId:guid}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
@@ -188,4 +186,43 @@ public class DtroUserController : ControllerBase
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
+
+    /// <summary>
+    /// Delete Dtro users by ids
+    /// </summary>
+    /// <param name="ids">List of D-TRO User ID, comma separated</param>
+    /// <response code="200">OK.</response>
+    /// <response code="404">Not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>True if successful, False otherwise</returns>
+    [HttpDelete("/dtroUsers/redundant")]
+    [ValidateModelState]
+    [FeatureGate(FeatureNames.Admin)]
+    [SwaggerResponse(statusCode: 200, type: typeof(bool), description: "Ok")]
+    [SwaggerResponse(statusCode: 404, description: "Not Found.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
+    public async Task<ActionResult<bool>> DeleteDtroUsers([FromBody] DeleteDtroUsersRequest request)
+    {
+        try
+        {
+            if (request.Ids == null || !request.Ids.Any())
+            {
+                return BadRequest(new ApiErrorResponse("Bad Request", "No user IDs provided."));
+            }
+            bool state = await _dtroUserService.DeleteDtroUsersAsync(request.Ids);
+            _logger.LogInformation($"Method '{nameof(DeleteDtroUsers)}' called at {DateTime.Now:g}");
+            return Ok(state);
+        }
+        catch (NotFoundException nFex)
+        {
+            _logger.LogError(nFex.Message);
+            return NotFound(new ApiErrorResponse("Unknown User", "User not found"));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+        }
+    }
+
 }

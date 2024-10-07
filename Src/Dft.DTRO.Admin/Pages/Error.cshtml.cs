@@ -1,6 +1,6 @@
-using System.Web;
 using Dft.DTRO.Admin.Models.Errors;
 using Dft.DTRO.Admin.Models.Views;
+
 namespace Dft.DTRO.Admin.Pages;
 
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -26,7 +26,7 @@ public class ErrorModel : PageModel
                     ErrorType = "UI - Unable to process error details"
                 };
             }
-           
+
             if (HttpContext.Session.GetString("dtroValidationException") != null)
             {
                 ErrorView.DtroValidationException = JsonSerializer.Deserialize<DtroValidationExceptionResponse>((string)HttpContext.Session.GetString("dtroValidationException"));
@@ -77,7 +77,7 @@ public class DtroJsonValidationErrorResponseComparer : IEqualityComparer<DtroJso
         return x.Message.Trim() == y.Message.Trim() &&
                x.LineNumber == y.LineNumber &&
                x.LinePosition == y.LinePosition &&
-               x.Path == y.Path ;
+               x.Path == y.Path;
     }
 
     public int GetHashCode(DtroJsonValidationErrorResponse obj)

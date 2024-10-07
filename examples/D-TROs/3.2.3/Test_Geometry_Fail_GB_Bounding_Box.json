@@ -1,10 +1,12 @@
 {
+	"schemaVersion": "3.2.3",
+    "data": {
 		"Source": {
-			"actionType": "noChange",
+			"actionType": "new",
 			"currentTraOwner": 1000,
 			"provision": [
 				{
-					"actionType": "noChange",
+					"actionType": "new",
 					"orderReportingPoint": "ttroTtmoByNotice",
 					"provisionDescription": "Prohibition of Waiting",
 					"reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
@@ -173,9 +175,8 @@
 							"description": "Zone 5, Kenworthy Road, All Odd, All Even",
 							"geometry": {
 								"version": 1,
-								"PointGeometry": {
-									"polygon": "SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))",
-									"represantation": "centreLinePoint"
+								"Polygon": {
+									"polygon": "SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 1300001, 529100 178750))"
 								},
 								"externalReference": [
 									{
@@ -193,11 +194,10 @@
 			"reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
 			"section": "All sections",
 			"traAffected": [
-				1000,
-				1001,
-				1002
+				1000
 			],
 			"traCreator": 1000,
 			"troName": "The Sample County Council (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"
 		}
 	}
+}

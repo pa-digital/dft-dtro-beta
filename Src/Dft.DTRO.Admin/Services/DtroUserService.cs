@@ -113,6 +113,27 @@ public class DtroUserService : IDtroUserService
         await _errHandlingService.RedirectIfErrors(response);
     }
 
+    public async Task<bool> DeleteDtroUserAsync(List<Guid> dtroUserIds)
+    {
+        var content = new StringContent(JsonSerializer.Serialize(new { Ids = dtroUserIds }), Encoding.UTF8, "application/json");
+        var request =
+            new HttpRequestMessage(HttpMethod.Delete, ConfigHelper.Version + $"/dtroUsers/redundant")
+            {
+                Content = content
+            };
+        await _xappIdService.AddXAppIdHeader(request);
+
+        var response = await _client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return true;
+        }
+
+        await _errHandlingService.RedirectIfErrors(response);
+        return false;
+    }
+
     public async Task CreateDtroUserAsync(DtroUser dtroUser)
     {
         var content = JsonContent.Create(dtroUser);

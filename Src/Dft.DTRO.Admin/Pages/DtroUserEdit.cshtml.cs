@@ -1,4 +1,4 @@
-
+namespace Dft.DTRO.Admin.Pages;
 public class DtroUserEditModel : PageModel
 {
     private readonly IDtroUserService _dtroUserService;

@@ -1,4 +1,4 @@
-
+namespace Dft.DTRO.Admin.Pages;
 public class SchemaOverviewModel : PageModel
 {
     private readonly ISchemaService _schemaService;

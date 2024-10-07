@@ -60,4 +60,20 @@ public class Proj4SpatialProjectionService : ISpatialProjectionService
 
         return new BoundingBox(coordinateArray[0], coordinateArray[1], coordinateArray[2], coordinateArray[3]);
     }
+
+    public BoundingBox WktSrid27700(double eastLongitude, double southLatitude, double westLongitude, double northLatitude)
+    {
+        var coordinateArray = new double[4] { eastLongitude, southLatitude, westLongitude, northLatitude };
+        var altitude = new double[2] { 0, 1 };
+
+        Reproject.ReprojectPoints(
+            xy: coordinateArray,
+            z: altitude,
+            source: Wgs84ProjectionInfo,
+            dest: Osgb36ProjectionInfo,
+            startIndex: 0,
+            numPoints: 2);
+
+        return new BoundingBox(coordinateArray[0], coordinateArray[1], coordinateArray[2], coordinateArray[3]);
+    }
 }

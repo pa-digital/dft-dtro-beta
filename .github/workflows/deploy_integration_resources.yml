@@ -128,8 +128,8 @@ jobs:
   build-apigee-proxies-and-products:
     name: Build GCP Apigee proxies and products in Integration
     if: ${{ inputs.run-apigee }}
-    #        needs:
-    #          - deploy-resources
+    needs:
+      - deploy-resources
     runs-on: ubuntu-latest
     permissions:
       id-token: write

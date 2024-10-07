@@ -1,6 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
 using DfT.DTRO.Models.Validation;
-using NpgsqlTypes;
 
 namespace DfT.DTRO.Models.DtroJson;
 public record struct BoundingBox(double WestLongitude, double SouthLatitude, double EastLongitude, double NorthLatitude)
@@ -8,6 +6,8 @@ public record struct BoundingBox(double WestLongitude, double SouthLatitude, dou
     public static readonly BoundingBox ForOsgb36Epsg27700 = new(-103976.3, -16703.87, 652897.98, 1199851.44);
 
     public static readonly BoundingBox ForWgs84Epsg4326 = new(-7.5600, 49.9600, 1.7800, 60.8400);
+
+    public static readonly BoundingBox ForWktSrid27700 = new(0, 0, 700000, 1300000);
 
     public bool Contains(double longitude, double latitude)
         => latitude >= SouthLatitude && latitude <= NorthLatitude &&

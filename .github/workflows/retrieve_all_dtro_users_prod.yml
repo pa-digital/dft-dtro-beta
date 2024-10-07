@@ -1,0 +1,55 @@
+name: Retrieve All Dtro Users - PROD
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+  actions: read
+
+jobs:
+  retrieve-all-dtro-users:
+    name: Retrieve All Dtro Users
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+      actions: read
+      pull-requests: write
+    defaults:
+      run:
+        shell: bash
+        working-directory: apigee/scripts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name:  Make scripts executable
+        run: chmod +x *.sh
+
+      - name: Load Env Vars for Apigee script
+        run: |
+          echo "workload_identity_service_account=${{ secrets.WIP_SERVICE_ACCOUNT_PROD }}" >> $GITHUB_ENV 
+          echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_PROD }}" >> $GITHUB_ENV
+          echo "CLIENT_ID=${{ secrets.CSO_CLIENT_ID_PROD }}" >> $GITHUB_ENV
+          echo "CLIENT_SECRET=${{ secrets.CSO_CLIENT_SECRET_PROD }}" >> $GITHUB_ENV
+          echo "DOMAIN=dtro" >> $GITHUB_ENV
+
+      - name: Authenticate to Google Cloud
+        id: google-auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PROD }}
+          service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PROD }}
+          token_format: access_token
+
+      - name: Set up ApigeeCLI
+        run: |
+          curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh
+          echo "$HOME/.apigeecli/bin" >> $GITHUB_PATH
+          echo "APIGEECLI_DEBUG=true" >> $GITHUB_ENV
+
+      - name: Retrieve All Dtro Users
+        run: ./retrieve_all_dtro_users.sh

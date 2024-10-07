@@ -1,5 +1,3 @@
-using DfT.DTRO.Models.Filtering;
-
 namespace DfT.DTRO.Models.DtroEvent;
 
 [DataContract]
@@ -41,8 +39,8 @@ public class DtroEventSearch
     [DataMember(Name = "orderReportingPoint")]
     public string OrderReportingPoint { get; set; }
 
-    [DataMember(Name = "location")]
-    public Location Location { get; set; }
+    //[DataMember(Name = "location")]
+    //public Location Location { get; set; }
 
     [DataMember(Name = "regulationStart")]
     public ValueCondition<DateTime> RegulationStart { get; set; }

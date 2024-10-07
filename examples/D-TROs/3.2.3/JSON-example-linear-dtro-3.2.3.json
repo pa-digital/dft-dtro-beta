@@ -6,7 +6,7 @@
             "currentTraOwner": 1000,
             "provision": [
                 {
-                    "actionType": "fullRevoke",
+                    "actionType": "partialAmendment",
                     "orderReportingPoint": "ttroTtmoByNotice",
                     "provisionDescription": "Prohibition of Waiting",
                     "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
@@ -20,6 +20,9 @@
                             "condition": [
                                 {
                                     "vehicleCharacteristics": {
+                                        "vehicleType": [
+                                            "bus"
+										]
                                     }
                                 },
                                 {
@@ -32,11 +35,17 @@
                                                     "conditions": [
                                                         {
                                                             "vehicleCharacteristics": {
+                                                                "vehicleType": [
+                                                                    "anyVehicle"
+                                                                ]
                                                             },
                                                             "negate": false
                                                         },
                                                         {
                                                             "vehicleCharacteristics": {
+                                                                "vehicleType": [
+                                                                    "taxi"
+                                                                ]
                                                             },
                                                             "negate": true
                                                         }
@@ -163,8 +172,10 @@
                             "description": "Zone 5, Kenworthy Road, All Odd, All Even",
                             "geometry": {
 								"version": 1,
-								"Polygon": {
-									"polygon": "SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"
+								"LinearGeometry": {
+									"direction": "bidirectional",
+									"lateralPosition": "centreline",
+									"linestring": "SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"
 								},
                                 "externalReference": [
                                     {
@@ -182,9 +193,7 @@
             "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
             "section": "All sections",
             "traAffected": [
-                1000,
-                1001,
-                1002
+                1000
             ],
             "traCreator": 1000,
             "troName": "The Sample County Council (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"

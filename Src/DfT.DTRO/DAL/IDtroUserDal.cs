@@ -6,6 +6,13 @@
 public interface IDtroUserDal
 {
     /// <summary>
+    /// Get all Dtro Users based on their IDs.
+    /// </summary>
+    /// <param name="ids">List of Dtro users.</param>
+    /// <returns> A <see cref="Task"/> representing the asynchronous get operation.</returns>
+    Task<List<DtroUserResponse>> GetAllDtroUsersAsync(List<Guid> ids);
+
+    /// <summary>
     /// Get all DtroUser.
     /// </summary>
     /// <returns>A <see cref="Task"/> representing the asynchronous get operation.</returns>
@@ -80,4 +87,11 @@ public interface IDtroUserDal
     /// <param name="dtroUserRequest">DtroUser request.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous update operation.</returns>
     Task<GuidResponse> UpdateDtroUserAsync(DtroUserRequest dtroUserRequest);
+
+    /// <summary>
+    /// Delete Dtro users
+    /// </summary>
+    /// <param name="users">List of IDs of the users to be deleted.</param>
+    /// <returns>A <see cref="Task"/> representing the asynchronous delete operation.</returns>
+    Task<bool> DeleteDtroUsersAsync(List<DtroUser> users);
 }

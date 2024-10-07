@@ -1,3 +1,4 @@
+namespace Dft.DTRO.Admin.Pages;
 public class SearchModel : PageModel
 {
     public PaginatedResponse<DtroSearchResult> Dtros { get; set; }

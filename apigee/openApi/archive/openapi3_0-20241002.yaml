@@ -1800,45 +1800,6 @@ paths:
             text/xml:
               schema:
                 $ref: #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
-  /dtroUsers/redundant:
-    delete:
-      tags:
-        - DtroUsers
-      summary: Delete D-TRO Users by IDs
-      operationId: delete-d-tro-users-by-ids
-      security:
-        - oAuth:
-            - cso
-      parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                ids:
-                  type: array
-                  items:
-                    type: string
-                    format: uuid
-                  description: A list of D-TRO user IDs to delete.
-              required:
-                - ids
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not found.
-        '500':
-          description: Internal Server Error.
 components:
   schemas:
     DfT.DTRO.Models.DtroDtos.DtroResponse:
