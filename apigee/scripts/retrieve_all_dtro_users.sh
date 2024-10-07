@@ -10,13 +10,14 @@ OAUTH_RESPONSE=$(curl -X POST "https://dtro-integration.dft.gov.uk/v1/oauth-gene
 access_token=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
 echo " "
 echo "Access token retrieved"
+echo "$OAUTH_RESPONSE"
 echo " "
 
 ## Check Health of D-TRO Platform
 RESPONSE=$(curl -X GET 'https://dtro-integration.dft.gov.uk/v1/dtroUsers' \
-  -H "Authorization: Bearer ${access_token}" \
-  -H "X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796" \
-  -H 'Accept: text/plain'
+  -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
+  -H 'Accept: text/plain' \
+  -H "Authorization: Bearer ${access_token}"
 )
 echo " "
 echo "Response for Retrieve All Dtro Users:"
