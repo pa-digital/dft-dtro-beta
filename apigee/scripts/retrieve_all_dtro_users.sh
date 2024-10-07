@@ -1,6 +1,5 @@
 #!/bin/bash
 
-DOMAIN=$domain
 echo "$DOMAIN"
 
 # Get OAuth access token

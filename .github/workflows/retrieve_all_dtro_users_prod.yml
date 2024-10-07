@@ -35,6 +35,7 @@ jobs:
           echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_PROD }}" >> $GITHUB_ENV
           echo "CLIENT_ID=${{ secrets.CSO_CLIENT_ID_PROD }}" >> $GITHUB_ENV
           echo "CLIENT_SECRET=${{ secrets.CSO_CLIENT_SECRET_PROD }}" >> $GITHUB_ENV
+          echo "DOMAIN=dtro" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
         id: google-auth
