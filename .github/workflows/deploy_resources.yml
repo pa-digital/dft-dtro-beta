@@ -249,7 +249,7 @@ jobs:
       - name: Delete Oldest Revision - test jq .proxies
         shell: bash
         run: |
-          apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r '.proxies[]'
+          apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq .
 
       - name: Delete Oldest Revision - test jq proxy_name
         shell: bash
