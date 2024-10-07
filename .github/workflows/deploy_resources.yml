@@ -290,7 +290,7 @@ jobs:
       - name: Copy Target Folder
         shell: bash
         run: |
-          cp -a apigee/targets/* apiproxy/targets 
+          cp -a targets/* apiproxy/targets 
 
       - name: Create Service XML
         shell: bash
