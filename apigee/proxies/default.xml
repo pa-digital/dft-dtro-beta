@@ -1,4 +1,3 @@
-  <RouteRule name="places">
-    <Condition>(proxy.pathsuffix MatchesPath "/places") or (proxy.pathsuffix MatchesPath "/places/*")</Condition>
+  <RouteRule name="default">
     <TargetEndpoint>default</TargetEndpoint>
   </RouteRule>
