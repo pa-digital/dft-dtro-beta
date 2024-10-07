@@ -21,4 +21,4 @@ RESPONSE=$(curl -X GET 'https://dtro-integration.dft.gov.uk/v1/dtroUsers' \
 echo " "
 echo "Response for Retrieve All Dtro Users:"
 echo " "
-echo "($RESPONSE| jq)"
+echo "$RESPONSE" | jq .
