@@ -163,12 +163,18 @@ public class DtroDal : IDtroDal
     public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
     {
         IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
-        Console.WriteLine($"Dtros:\t{string.Join("-", result)}");
+        Console.WriteLine($"Dtros: ");
+        foreach (var item in result)
+        {
+            var properties = item.GetType().GetProperties();
+            Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(item)}")));
+        }
         var expressionsToDisjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
 
         foreach (var query in search.Queries)
         {
-            Console.WriteLine($"Queries:\t{string.Join("-", search.Queries)}");
+            var properties = query.GetType().GetProperties();
+            Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(query)}")));
             var expressionsToConjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
 
             if (query.DeletionTime is { } deletionTime)
