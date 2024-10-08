@@ -46,11 +46,13 @@ public class SearchController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Consumer)]
     [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]
+    [SwaggerResponse(statusCode: 400, description: "Bad Request.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal Server Error.")]
     public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromHeader(Name = "x-app-id")][Required] Guid xAppId, [FromBody] DtroSearch body)
     {
+        _logger.LogInformation($"Entering method: {nameof(SearchDtros)}");
         try
         {
-            _logger.LogInformation($"Entering method: {nameof(SearchDtros)}");
             xAppId = await _appIdMapperService.GetXappId(HttpContext);
             PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
             _logger.LogInformation($"{string.Join(",", response)}");
@@ -60,12 +62,14 @@ public class SearchController : ControllerBase
         catch (InvalidOperationException err)
         {
             _logger.LogError(err.Message);
+            _logger.LogInformation(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
+            _logger.LogInformation(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
