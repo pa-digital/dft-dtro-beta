@@ -53,7 +53,10 @@ public class SearchController : ControllerBase
             xAppId = await _appIdMapperService.GetXappId(HttpContext);
             Console.WriteLine(xAppId);
             PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
-            Console.WriteLine();
+            Console.WriteLine("Page:\t" + response.Page);
+            Console.WriteLine("Size:\t" + response.PageSize);
+            Console.WriteLine("Total:\t" + response.TotalCount);
+            Console.WriteLine("Result:\t" + string.Join(",", response.Results));
             await _metricsService.IncrementMetric(MetricType.Search, xAppId);
             _logger.LogInformation($"'{nameof(SearchDtros)}' method called and body '{body}'");
             return Ok(response);
@@ -61,15 +64,16 @@ public class SearchController : ControllerBase
         catch (InvalidOperationException err)
         {
             _logger.LogError(err.Message);
-            Console.WriteLine(err.Message);
+            Console.WriteLine("Inner exception:\t" + err.InnerException.Message);
+            Console.WriteLine("Main exception:\t" + err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
-            Console.WriteLine(ex.InnerException.Message);
-            Console.WriteLine(ex.Message);
+            Console.WriteLine("Inner exception:\t" + ex.InnerException.Message);
+            Console.WriteLine("Main exception:\t" + ex.Message);
             return StatusCode(500, new ApiErrorResponse(ex.InnerException.Message, ex.Message));
         }
     }
