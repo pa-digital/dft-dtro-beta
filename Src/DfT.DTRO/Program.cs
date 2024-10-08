@@ -17,7 +17,7 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureServices(services =>
             {
-                using (var stream = new FileStream("", FileMode.Open, FileAccess.Read))
+                using (var stream = new FileStream(@"C:\Users\BELGP3\Downloads\application_default_credentials.json", FileMode.Open, FileAccess.Read))
                 {
                     var userCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                         GoogleClientSecrets.FromStream(stream).Secrets,
