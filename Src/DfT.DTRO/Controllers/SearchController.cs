@@ -65,7 +65,7 @@ public class SearchController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", ex.Message));
+            return StatusCode(500, new ApiErrorResponse(ex.InnerException.Message, ex.Message));
         }
     }
 }
