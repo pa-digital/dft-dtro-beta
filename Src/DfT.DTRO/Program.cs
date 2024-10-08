@@ -1,3 +1,6 @@
+using System.Threading;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Util.Store;
 using Google.Cloud.Diagnostics.Common;
 using Microsoft.AspNetCore.Connections;
 
@@ -14,12 +17,22 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureServices(services =>
             {
+                using (var stream = new FileStream("", FileMode.Open, FileAccess.Read))
+                {
+                    var userCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                        GoogleClientSecrets.FromStream(stream).Secrets,
+                        new[] { "dtro-dev-dft-dtro-beta" },
+                        "gabriel.popescu@dft.gov.uk",
+                        CancellationToken.None,
+                        new FileDataStore("dft-dtro-dev-01")).Result;
+                }
+
                 services
                     .AddGoogleDiagnostics("dft-dtro-dev-01",
-                        "dtro-dev-dft-dtro-beta",
-                        traceOptions: TraceOptions.Create(),
-                        loggingOptions: LoggingOptions.Create(),
-                        errorReportingOptions: ErrorReportingOptions.Create());
+                            "dtro-dev-dft-dtro-beta",
+                            traceOptions: TraceOptions.Create(),
+                            loggingOptions: LoggingOptions.Create(),
+                            errorReportingOptions: ErrorReportingOptions.Create());
             })
             .ConfigureAppConfiguration((context, config) =>
             {

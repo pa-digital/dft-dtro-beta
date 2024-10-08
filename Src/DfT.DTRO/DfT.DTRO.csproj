@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
 	<PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
+	<PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.68.0" />
 	<PackageReference Include="Google.Cloud.Diagnostics.Common" Version="5.2.0" />
 	<PackageReference Include="Google.Cloud.Storage.V1" Version="4.5.0" />
 	<PackageReference Include="JsonLogic" Version="4.0.4" />
