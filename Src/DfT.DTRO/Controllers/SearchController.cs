@@ -50,10 +50,11 @@ public class SearchController : ControllerBase
     {
         try
         {
+            _logger.LogInformation($"Entering method: {nameof(SearchDtros)}");
             xAppId = await _appIdMapperService.GetXappId(HttpContext);
             PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
+            _logger.LogInformation($"{string.Join(",", response)}");
             await _metricsService.IncrementMetric(MetricType.Search, xAppId);
-            _logger.LogInformation($"'{nameof(SearchDtros)}' method called and body '{body}'");
             return Ok(response);
         }
         catch (InvalidOperationException err)

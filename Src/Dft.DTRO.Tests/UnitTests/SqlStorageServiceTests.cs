@@ -4,8 +4,11 @@
 public class SqlStorageServiceTests : IDisposable
 {
     private readonly DtroContext _context;
-    private readonly DfT.DTRO.Models.DataBase.DTRO _deletedDtro;
+    private readonly Mock<IDtroMappingService> _mappingServiceMock = new();
+    private readonly ISpatialProjectionService _spatialProjectionService;
+    private readonly Mock<ILogger<IDtroDal>> _mockDtroDalLogger = new();
 
+    private readonly DfT.DTRO.Models.DataBase.DTRO _deletedDtro;
     private readonly Guid _deletedDtroKey = Guid.NewGuid();
     private readonly DfT.DTRO.Models.DataBase.DTRO _dtroWithCreationDate;
     private readonly Guid _dtroWithCreationDateKey = Guid.NewGuid();
@@ -24,9 +27,6 @@ public class SqlStorageServiceTests : IDisposable
 
     private readonly DfT.DTRO.Models.DataBase.DTRO _existingDtro;
     private readonly Guid _existingDtroKey = Guid.NewGuid();
-
-    private readonly Mock<IDtroMappingService> _mappingServiceMock = new();
-    private readonly ISpatialProjectionService _spatialProjectionService;
 
     public SqlStorageServiceTests()
     {
@@ -137,7 +137,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task DtroExists_ReturnsFalse_ForNonexistentDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         bool result = await sut.DtroExistsAsync(Guid.NewGuid());
 
@@ -147,7 +147,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task DtroExists_ReturnsFalse_ForDeletedDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         bool result = await sut.DtroExistsAsync(_deletedDtroKey);
 
@@ -157,7 +157,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task DtroExists_ReturnsTrue_ForExistingDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         bool result = await sut.DtroExistsAsync(_existingDtroKey);
 
@@ -167,7 +167,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task GetDtro_ReturnsNull_ForNonExistedDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         DfT.DTRO.Models.DataBase.DTRO? result = await sut.GetDtroByIdAsync(Guid.NewGuid());
 
@@ -177,7 +177,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task GetDtro_ReturnsValue_ForExistingDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         DfT.DTRO.Models.DataBase.DTRO? result = await sut.GetDtroByIdAsync(_existingDtroKey);
 
@@ -188,7 +188,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task SoftDeleteDtro_ReturnsFalse_ForNonexistentDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         bool result = await sut.SoftDeleteDtroAsync(Guid.NewGuid(), DateTime.UtcNow);
 
@@ -198,7 +198,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task DeleteDtro_ReturnsFalse_ForNonExistingDtro()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         bool actual = await sut.DeleteDtroAsync(Guid.NewGuid());
 
@@ -208,7 +208,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task SoftDeleteDtro_ReturnsFalse_ForDeletedDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         bool result = await sut.SoftDeleteDtroAsync(_deletedDtroKey, DateTime.UtcNow);
 
@@ -219,7 +219,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task SoftDeleteDtro_ReturnsTrue_OnSuccessfulDelete()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         bool result = await sut.SoftDeleteDtroAsync(_existingDtroKey, DateTime.UtcNow);
 
@@ -229,7 +229,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task DeleteDtro_ReturnsTrue_OnSuccessfulDelete()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         bool actual = await sut.DeleteDtroAsync(_existingDtroKey);
 
@@ -239,7 +239,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task TryUpdateDtro_ReturnsFalse_ForNonexistentDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         Guid newValueKey = Guid.NewGuid();
 
@@ -253,7 +253,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task TryUpdateDtro_ReturnsFalse_ForDeletedDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         DtroSubmit dtro = new() { SchemaVersion = new SchemaVersion("3.1.2"), Data = new ExpandoObject() };
 
@@ -265,7 +265,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task TryUpdateDtro_ReturnsTrue_ForExistingDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
 
         DtroSubmit dtro = new() { SchemaVersion = new SchemaVersion("3.1.2"), Data = new ExpandoObject() };
@@ -278,7 +278,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task UpdateDtro_Throws_ForNonexistentDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         DtroSubmit newValue = new() { SchemaVersion = new SchemaVersion("3.1.2"), Data = new ExpandoObject() };
 
@@ -289,7 +289,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task UpdateDtro_Throws_ForDeletedDtros()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         DtroSubmit newValue = new() { SchemaVersion = new SchemaVersion("3.1.2"), Data = new ExpandoObject() };
 
@@ -300,7 +300,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtros_ReturnsOnlyNotDeleted_ByDefault()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>? result =
             await sut.FindDtrosAsync(new DtroSearch
@@ -316,7 +316,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtros_ReturnsDeleted_WhenDeletionTimeInQuery()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>? result = await sut.FindDtrosAsync(new DtroSearch
         {
@@ -331,7 +331,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtros_ReturnsDeletedAfterDeletionTime_WhenDeletionTimeInQuery()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>? result = await sut.FindDtrosAsync(new DtroSearch
         {
@@ -346,7 +346,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtros_ReturnsOnlyDtrosWithSpecifiedTrafficAuthorityId()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>? result = await sut.FindDtrosAsync(new DtroSearch
         {
@@ -362,7 +362,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtros_ReturnsOnlyDtrosAfterSpecifiedPublicationTime()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>? result = await sut.FindDtrosAsync(new DtroSearch
         {
@@ -378,7 +378,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtros_ReturnsOnlyDtrosAfterSpecifiedModificationTime()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>? result = await sut.FindDtrosAsync(new DtroSearch
         {
@@ -394,7 +394,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtros_ReturnsOnlyDtrosContainingSpecifiedStringInName()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>? result = await sut.FindDtrosAsync(new DtroSearch
         {
@@ -410,7 +410,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtros_ReturnsOnlyDtrosContainingSpecifiedVehicleType()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>? result = await sut.FindDtrosAsync(new DtroSearch
         {
@@ -426,7 +426,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtros_ReturnsOnlyDtrosContainingSpecifiedRegulationTypes()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>? result = await sut.FindDtrosAsync(new DtroSearch
         {
@@ -442,7 +442,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtros_ReturnsOnlyDtrosContainingSpecifiedOrderReportingPoint()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>? result = await sut.FindDtrosAsync(new DtroSearch
         {
@@ -458,7 +458,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtrosForEvents_ReturnsDeleted_ByDefault()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         List<DfT.DTRO.Models.DataBase.DTRO>? result =
             await sut.FindDtrosAsync(new DtroEventSearch { Page = 1, PageSize = 10 });
@@ -469,7 +469,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtrosForEvents_ReturnsDeleted_WhenDeletionTimeInQuery()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         List<DfT.DTRO.Models.DataBase.DTRO>? result =
             await sut.FindDtrosAsync(new DtroEventSearch
@@ -486,7 +486,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtrosForEvents_ReturnsDeletedAfterDeletionTime_WhenDeletionTimeInQuery()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         List<DfT.DTRO.Models.DataBase.DTRO>? result =
             await sut.FindDtrosAsync(new DtroEventSearch
@@ -502,7 +502,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtrosForEvents_ReturnsOnlyDtrosWithSpecifiedTrafficAuthorityId()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         List<DfT.DTRO.Models.DataBase.DTRO>? result =
             await sut.FindDtrosAsync(new DtroEventSearch { Page = 1, PageSize = 10, TraCreator = 1234 });
@@ -514,7 +514,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtrosForEvents_ReturnsOnlyDtrosAfterSpecifiedPublicationTime()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         List<DfT.DTRO.Models.DataBase.DTRO>? result =
             await sut.FindDtrosAsync(
@@ -527,7 +527,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtrosForEvents_ReturnsOnlyDtrosAfterSpecifiedModificationTime()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         List<DfT.DTRO.Models.DataBase.DTRO>? result = await sut.FindDtrosAsync(
             new DtroEventSearch { Page = 1, PageSize = 10, ModificationTime = new DateTime(2023, 07, 21) });
@@ -539,7 +539,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtrosForEvents_ReturnsOnlyDtrosContainingSpecifiedStringInName()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         List<DfT.DTRO.Models.DataBase.DTRO>? result =
             await sut.FindDtrosAsync(new DtroEventSearch { Page = 1, PageSize = 10, TroName = "test" });
@@ -563,7 +563,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtrosForEvents_ReturnsOnlyDtrosContainingSpecifiedRegulationTypes()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         List<DfT.DTRO.Models.DataBase.DTRO>? result =
             await sut.FindDtrosAsync(new DtroEventSearch
@@ -580,7 +580,7 @@ public class SqlStorageServiceTests : IDisposable
     [Fact]
     public async Task FindDtrosForEvents_ReturnsOnlyDtrosContainingSpecifiedOrderReportingPoint()
     {
-        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache());
+        DtroDal sut = new(_context, _spatialProjectionService, _mappingServiceMock.Object, new NoopCache(), _mockDtroDalLogger.Object);
 
         List<DfT.DTRO.Models.DataBase.DTRO>? result =
             await sut.FindDtrosAsync(new DtroEventSearch { Page = 1, PageSize = 10, OrderReportingPoint = "test-orp" });

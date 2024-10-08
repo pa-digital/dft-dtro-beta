@@ -173,9 +173,8 @@
 							"description": "Zone 5, Kenworthy Road, All Odd, All Even",
 							"geometry": {
 								"version": 1,
-								"PointGeometry": {
-									"polygon": "SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))",
-									"represantation": "centreLinePoint"
+								"Polygon": {
+									"polygon": "SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"
 								},
 								"externalReference": [
 									{

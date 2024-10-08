@@ -19,7 +19,6 @@ public class SearchQuery
     [DataMember(Name = "currentTraOwner")]
     public int? CurrentTraOwner { get; set; }
 
-
     [MinLength(0)]
     [MaxLength(500)]
     public string TroName { get; set; }

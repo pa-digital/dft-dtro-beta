@@ -10,6 +10,7 @@ public class DtroDal : IDtroDal
     private readonly ISpatialProjectionService _projectionService;
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IRedisCache _dtroCache;
+    private readonly ILogger<IDtroDal> _logger;
 
     /// <summary>
     /// Default constructor
@@ -18,12 +19,18 @@ public class DtroDal : IDtroDal
     /// <param name="projectionService"><see cref="ISpatialProjectionService"/> service.</param>
     /// <param name="dtroMappingService"><see cref="IDtroMappingService"/> service.</param>
     /// <param name="dtroCache"><see cref="IRedisCache"/> service.</param>
-    public DtroDal(DtroContext dtroContext, ISpatialProjectionService projectionService, IDtroMappingService dtroMappingService, IRedisCache dtroCache)
+    /// <param name="logger"><see cref="ILogger{TCategoryName}"/> service.</param>
+    public DtroDal(DtroContext dtroContext,
+        ISpatialProjectionService projectionService,
+        IDtroMappingService dtroMappingService,
+        IRedisCache dtroCache,
+        ILogger<IDtroDal> logger)
     {
         _dtroContext = dtroContext;
         _projectionService = projectionService;
         _dtroMappingService = dtroMappingService;
         _dtroCache = dtroCache;
+        _logger = logger;
     }
 
     ///<inheritdoc cref="IDtroService"/>
@@ -162,6 +169,8 @@ public class DtroDal : IDtroDal
     ///<inheritdoc cref="IDtroService"/>
     public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
     {
+        _logger.LogInformation($"Entering method: {nameof(FindDtrosAsync)}")
+            ;
         IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
 
         var expressionsToDisjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
@@ -173,6 +182,7 @@ public class DtroDal : IDtroDal
             if (query.DeletionTime is { } deletionTime)
             {
                 deletionTime = DateTime.SpecifyKind(deletionTime, DateTimeKind.Utc);
+                _logger.LogInformation($"Deletion time added: {deletionTime}");
                 expressionsToConjunct.Add(it => it.DeletionTime >= deletionTime);
             }
             else
@@ -182,43 +192,51 @@ public class DtroDal : IDtroDal
 
             if (query.TraCreator is { } traCreator)
             {
+                _logger.LogInformation($"Tra creation added: {traCreator}");
                 expressionsToConjunct.Add(it => it.TrafficAuthorityCreatorId == traCreator);
             }
 
             if (query.CurrentTraOwner is { } currentTraOwner)
             {
+                _logger.LogInformation($"Current tra owner added: {currentTraOwner}");
                 expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == currentTraOwner);
             }
 
             if (query.PublicationTime is { } publicationTime)
             {
                 publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc);
+                _logger.LogInformation($"Publication time added: {publicationTime}");
                 expressionsToConjunct.Add(it => it.Created >= publicationTime);
             }
 
             if (query.ModificationTime is { } modificationTime)
             {
                 modificationTime = DateTime.SpecifyKind(modificationTime, DateTimeKind.Utc);
+                _logger.LogInformation($"Modification time added: {modificationTime}");
                 expressionsToConjunct.Add(it => it.LastUpdated >= modificationTime);
             }
 
             if (query.TroName is not null)
             {
+                _logger.LogInformation($"Tro name added: {query.TroName}");
                 expressionsToConjunct.Add(it => it.TroName.ToLower().Contains(query.TroName.ToLower()));
             }
 
             if (query.VehicleType is not null)
             {
+                _logger.LogInformation($"Vehicle type added: {query.VehicleType}");
                 expressionsToConjunct.Add(it => it.VehicleTypes.Contains(query.VehicleType));
             }
 
             if (query.RegulationType is not null)
             {
+                _logger.LogInformation($"Regulation type added: {query.RegulationType}");
                 expressionsToConjunct.Add(it => it.RegulationTypes.Contains(query.RegulationType));
             }
 
             if (query.OrderReportingPoint is not null)
             {
+                _logger.LogInformation($"Order reporting type added: {query.OrderReportingPoint}");
                 expressionsToConjunct.Add(it => it.OrderReportingPoints.Contains(query.OrderReportingPoint));
             }
 
@@ -248,6 +266,8 @@ public class DtroDal : IDtroDal
                     _ => throw new InvalidOperationException("Unsupported comparison operator.")
                 };
 
+                _logger.LogInformation($"Regulation start time added: {query.RegulationStart}");
+
                 expressionsToConjunct.Add(expr);
             }
 
@@ -265,6 +285,8 @@ public class DtroDal : IDtroDal
                     _ => throw new InvalidOperationException("Unsupported comparison operator.")
                 };
 
+                _logger.LogInformation($"Regulation end time added: {query.RegulationEnd}");
+
                 expressionsToConjunct.Add(expr);
             }
 
@@ -281,11 +303,14 @@ public class DtroDal : IDtroDal
                 .Where(expressionsToDisjunct.AnyOf())
             : result;
 
+        _logger.LogInformation($"Data query: {dataQuery}");
+
         IQueryable<Models.DataBase.DTRO> paginatedQuery = dataQuery
             .OrderBy(it => it.Created)
             .Skip((search.Page - 1) * search.PageSize)
             .Take(search.PageSize);
 
+        _logger.LogInformation($"Paginated query: {paginatedQuery}");
         return new PaginatedResult<Models.DataBase.DTRO>(await paginatedQuery.ToListAsync(), await dataQuery.CountAsync());
     }
 

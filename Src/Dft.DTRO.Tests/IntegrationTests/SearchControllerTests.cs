@@ -6,11 +6,11 @@ namespace Dft.DTRO.Tests.IntegrationTests;
 public class SearchControllerTests
     : IClassFixture<WebApplicationFactory<Program>>
 {
-    private const string SampleDtroJsonPath = "../../../../../examples/D-TROs/3.1.1/proper-data.json";
+    private const string SampleDtroJsonPath = "../../../TestFiles/D-TROs/3.2.3/valid-noChange.json";
 
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Mock<IDtroService> _mockStorageService;
-    private readonly int? _taForTest = 1585;
+    private readonly Guid _xAppId = Guid.NewGuid();
     public SearchControllerTests(WebApplicationFactory<Program> factory)
     {
         _mockStorageService = new Mock<IDtroService>(MockBehavior.Strict);
@@ -23,14 +23,14 @@ public class SearchControllerTests
         }));
     }
 
-    [Fact(Skip = "Method too complicated")]
+    [Fact(Skip = "Test needs to be simplified")]
     public async Task Post_Search_NoDtroIsMatchingTheCriteria_ReturnsEmptyResult()
     {
         _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroSearch>()))
             .Returns(Task.FromResult(
                 new PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>(Array.Empty<DfT.DTRO.Models.DataBase.DTRO>(), 0)));
         HttpClient client = _factory.CreateClient();
-        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+        client.DefaultRequestHeaders.Add("x-app-id", _xAppId.ToString());
 
         DtroSearch search =
             new() { Queries = new[] { new SearchQuery { TraCreator = 1585 } }, Page = 1, PageSize = 10 };
@@ -51,7 +51,7 @@ public class SearchControllerTests
         Assert.Empty(data.Results);
     }
 
-    [Fact(Skip = "Method too complicated")]
+    [Fact(Skip = "Test needs to be simplified")]
     public async Task Post_Search_DtroMatchingTheCriteriaExists_ReturnsMatchingDtros()
     {
         DfT.DTRO.Models.DataBase.DTRO sampleDtro = await Utils.CreateDtroObject(SampleDtroJsonPath);
@@ -59,7 +59,7 @@ public class SearchControllerTests
         _mockStorageService.Setup(mock => mock.FindDtrosAsync(It.IsAny<DtroSearch>()))
             .Returns(Task.FromResult(new PaginatedResult<DfT.DTRO.Models.DataBase.DTRO>(new[] { sampleDtro }.ToList(), 1)));
         HttpClient client = _factory.CreateClient();
-        client.DefaultRequestHeaders.Add("ta", _taForTest.ToString());
+        client.DefaultRequestHeaders.Add("x-app-id", _xAppId.ToString());
 
         DtroSearch search =
             new() { Queries = new[] { new SearchQuery { TraCreator = 1585 } }, Page = 1, PageSize = 10 };

@@ -8,12 +8,13 @@ public class DtroService : IDtroService
     private readonly ISchemaTemplateDal _schemaTemplateDal;
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
+    private readonly ILogger<IDtroService> _logger;
 
     public DtroService(IDtroDal dtroDal, IDtroHistoryDal dtroHistoryDal,
         ISchemaTemplateDal schemaTemplateDal,
         IDtroMappingService dtroMappingService,
         IDtroGroupValidatorService dtroGroupValidatorService,
-        IDtroUserDal swaCodeDal)
+        IDtroUserDal swaCodeDal, ILogger<IDtroService> logger)
     {
         _dtroUserDal = swaCodeDal;
         _dtroDal = dtroDal;
@@ -21,6 +22,7 @@ public class DtroService : IDtroService
         _schemaTemplateDal = schemaTemplateDal;
         _dtroMappingService = dtroMappingService;
         _dtroGroupValidatorService = dtroGroupValidatorService;
+        _logger = logger;
     }
 
     public async Task<bool> DeleteDtroAsync(Guid dtroId, DateTime? deletionTime = null)
@@ -104,6 +106,7 @@ public class DtroService : IDtroService
 
     public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
     {
+        _logger.LogInformation($"Entering method: {nameof(FindDtrosAsync)}");
         return await _dtroDal.FindDtrosAsync(search);
     }
 
