@@ -13,10 +13,10 @@ public static class SeedData
     public static List<DtroUser> TrafficAuthorities = new List<DtroUser>(){
                         new DtroUser
                         {
-                            Id = new Guid("67d2adeb-31ac-4962-8025-c14ef2aa7236"),
-                            xAppId = Guid.Empty,
+                            Id = Guid.NewGuid(),
+                            xAppId = new Guid("2e95f17a-d8bd-4ab3-840f-6bf49c5d989c"),
                             UserGroup = (int) UserGroup.Admin,
-                            Name = "Department of Transport",
+                            Name = "Prod_CSO",
                             Prefix = "",
                             TraId = null
                         }
