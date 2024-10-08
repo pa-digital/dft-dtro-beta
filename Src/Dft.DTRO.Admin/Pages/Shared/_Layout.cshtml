@@ -65,6 +65,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/DtroUserList">Users</a>
                         </li>
+                        <li class='nav-item'>
+                            <a class='nav-link text-dark @(isAdmin ? "": "visually-hidden")' asp-area="" asp-page="/DtroUserDelete">Delete Users</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Metrics">Metrics</a>
                         </li>

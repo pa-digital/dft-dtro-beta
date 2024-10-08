@@ -25,50 +25,74 @@ on:
         default: false
 
 jobs:
-  deploy-feature-dev:
+#  deploy-feature-dev:
+#    if: ${{ ! inputs.deploy-to-test }}
+#    name: Deploy Feature Branch to Dev
+#    uses: ./.github/workflows/deploy_resources.yml
+#    secrets:
+#      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
+#      wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
+#      execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
+#      service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_DEV }}
+#      service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_DEV }}
+#    with:
+#      gcp-project-id: ${{ vars.GCP_PROJECT_ID_DEV }}
+#      gcp-project: ${{ vars.GCP_PROJECT_DEV }}
+#      gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
+#      environment: dev
+#      dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
+#      dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
+#      service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
+#      service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
+#      # do-validation-checks: true
+#      run-build-push: ${{ inputs.run-build-push }}
+#      run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
+#      run-apigee: ${{ inputs.run-apigee }}
+#
+#  deploy-feature-test:
+#   if: ${{ inputs.deploy-to-test }}
+#   name: Deploy to Test
+#   uses: ./.github/workflows/deploy_resources.yml
+#   secrets:
+#     workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_TEST }}
+#     wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}
+#     execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_TEST }}
+#     service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_TEST }}
+#     service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_TEST }}
+#   with:
+#     gcp-project-id: ${{ vars.GCP_PROJECT_ID_TEST }}
+#     gcp-project: ${{ vars.GCP_PROJECT_ID_TEST }}
+#     gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
+#     environment: test
+#     dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
+#     dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
+#     service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
+#     service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
+#     # do-validation-checks: true
+#     run-build-push: ${{ inputs.run-build-push }}
+#     run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
+#     run-apigee: ${{ inputs.run-apigee }}
+
+  deploy-feature-prod:
     if: ${{ ! inputs.deploy-to-test }}
-    name: Deploy Feature Branch to Dev
+    name: Deploy Feature Branch to Prod
     uses: ./.github/workflows/deploy_resources.yml
     secrets:
-      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-      wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
-      execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
-      service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_DEV }}
-      service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_DEV }}
-    with:
-      gcp-project-id: ${{ vars.GCP_PROJECT_ID_DEV }}
-      gcp-project: ${{ vars.GCP_PROJECT_DEV }}
-      gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
-      environment: dev
-      dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
-      dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
-      service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
-      service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
-      # do-validation-checks: true
-      run-build-push: ${{ inputs.run-build-push }}
-      run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
-      run-apigee: ${{ inputs.run-apigee }}
-
-  deploy-feature-test:
-   if: ${{ inputs.deploy-to-test }}
-   name: Deploy to Test
-   uses: ./.github/workflows/deploy_resources.yml
-   secrets:
-     workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_TEST }}
-     wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}
-     execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_TEST }}
-     service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_TEST }}
-     service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_TEST }}
-   with:
-     gcp-project-id: ${{ vars.GCP_PROJECT_ID_TEST }}
-     gcp-project: ${{ vars.GCP_PROJECT_ID_TEST }}
-     gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
-     environment: test
-     dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
-     dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
-     service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
-     service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
-     # do-validation-checks: true
-     run-build-push: ${{ inputs.run-build-push }}
-     run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
-     run-apigee: ${{ inputs.run-apigee }}
+      workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PROD }}
+      wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PROD }}
+      execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_PROD }}
+      service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_PROD }}
+      service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_PROD }}
+      with:
+        gcp-project-id: ${{ vars.GCP_PROJECT_ID_PROD }}
+        gcp-project: ${{ vars.GCP_PROJECT_ID_PROD }}
+        gcp-region: ${{ vars.DEFAULT_GCP_REGION }}
+        environment: prod
+        dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
+        dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
+        service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
+        service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
+        run-build-push: true
+        run-deploy-CR-job: true
+        run-apigee: false #TODO: Default value when no major endpoint or OAuth changes have been made
+      #      run-apigee: true
