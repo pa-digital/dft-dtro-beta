@@ -104,7 +104,9 @@ public class DtroService : IDtroService
 
     public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
     {
-        return await _dtroDal.FindDtrosAsync(search);
+        var result = await _dtroDal.FindDtrosAsync(search);
+        Console.WriteLine($"Result:\t{string.Join("-", result)}");
+        return result;
     }
 
     public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search)
