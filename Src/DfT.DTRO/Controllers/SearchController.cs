@@ -1,3 +1,5 @@
+using ILogger = Google.Apis.Logging.ILogger;
+
 namespace DfT.DTRO.Controllers;
 
 /// <summary>
@@ -11,8 +13,9 @@ public class SearchController : ControllerBase
 {
     private readonly ISearchService _searchService;
     private readonly IMetricsService _metricsService;
-    private readonly ILogger<SearchController> _logger;
     private readonly IXappIdMapperService _appIdMapperService;
+
+    private readonly ILogger _logger;
 
     /// <summary>
     /// Default constructor.
@@ -23,8 +26,7 @@ public class SearchController : ControllerBase
     public SearchController(
         ISearchService searchService,
         IMetricsService metricsService,
-        IXappIdMapperService appIdMapperService,
-        ILogger<SearchController> logger)
+        IXappIdMapperService appIdMapperService, ILogger logger)
     {
         _searchService = searchService;
         _metricsService = metricsService;
@@ -50,26 +52,26 @@ public class SearchController : ControllerBase
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error.")]
     public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromHeader(Name = "x-app-id")][Required] Guid xAppId, [FromBody] DtroSearch body)
     {
-        _logger.LogInformation($"Entering method: {nameof(SearchDtros)}");
+        _logger.Info($"Entering method: {nameof(SearchDtros)}");
         try
         {
             xAppId = await _appIdMapperService.GetXappId(HttpContext);
             PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
-            _logger.LogInformation($"{string.Join(",", response)}");
+            _logger.Info($"{string.Join(",", response)}");
             await _metricsService.IncrementMetric(MetricType.Search, xAppId);
             return Ok(response);
         }
         catch (InvalidOperationException err)
         {
-            _logger.LogError(err.Message);
-            _logger.LogInformation(err.Message);
+            _logger.Error(err.Message);
+            _logger.Info(err.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
-            _logger.LogError(ex.Message);
-            _logger.LogInformation(ex.Message);
+            _logger.Error(ex.Message);
+            _logger.Info(ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }

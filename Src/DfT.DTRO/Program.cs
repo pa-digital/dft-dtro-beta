@@ -1,3 +1,4 @@
+using Google.Cloud.Diagnostics.Common;
 using Microsoft.AspNetCore.Connections;
 
 namespace DfT.DTRO;
@@ -11,7 +12,15 @@ public class Program
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureSerilog()
+            .ConfigureServices(services =>
+            {
+                services
+                    .AddGoogleDiagnostics("dft-dtro-dev-01",
+                        "dtro-dev-dft-dtro-beta",
+                        traceOptions: TraceOptions.Create(),
+                        loggingOptions: LoggingOptions.Create(),
+                        errorReportingOptions: ErrorReportingOptions.Create());
+            })
             .ConfigureAppConfiguration((context, config) =>
             {
                 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
