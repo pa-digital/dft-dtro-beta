@@ -1,3 +1,8 @@
+using System.Threading;
+using Google.Apis.Auth.AspNetCore3;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Util.Store;
+using Google.Cloud.Diagnostics.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -73,6 +78,34 @@ public class Startup
         services.AddJsonLogic();
         services.AddRequestCorrelation();
         services.AddCache(Configuration);
+
+        UserCredential credential;
+        using (var stream = new FileStream(@"C:\Users\BELGP3\Downloads\application_default_credentials.json", FileMode.Open, FileAccess.Read))
+        {
+            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                GoogleClientSecrets.FromStream(stream).Secrets,
+                new[] { "dtro-dev-dft-dtro-beta" },
+                "gabriel.popescu@dft.gov.uk",
+                CancellationToken.None,
+                new FileDataStore("dft-dtro-dev-01")).Result;
+        }
+
+        services.AddAuthentication(o =>
+            {
+                o.DefaultChallengeScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
+                o.DefaultForbidScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
+                o.DefaultScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
+            }).AddCookie().AddGoogleOpenIdConnect(options =>
+            {
+                options.Authority = credential.UserId;
+            });
+
+        services
+            .AddGoogleDiagnostics("dft-dtro-dev-01",
+                "dtro-dev-dft-dtro-beta",
+                traceOptions: TraceOptions.Create(),
+                loggingOptions: LoggingOptions.Create(),
+                errorReportingOptions: ErrorReportingOptions.Create());
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)

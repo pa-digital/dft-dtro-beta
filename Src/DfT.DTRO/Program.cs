@@ -1,8 +1,3 @@
-using System.Threading;
-using Google.Apis.Auth.AspNetCore3;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Util.Store;
-using Google.Cloud.Diagnostics.Common;
 using Microsoft.AspNetCore.Connections;
 
 namespace DfT.DTRO;
@@ -16,39 +11,6 @@ public class Program
 
     private static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureServices(services =>
-            {
-                UserCredential credential;
-                using (var stream = new FileStream(@"C:\Users\BELGP3\Downloads\application_default_credentials.json", FileMode.Open, FileAccess.Read))
-                {
-                    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                        GoogleClientSecrets.FromStream(stream).Secrets,
-                        new[] { "dtro-dev-dft-dtro-beta" },
-                        "gabriel.popescu@dft.gov.uk",
-                        CancellationToken.None,
-                        new FileDataStore("dft-dtro-dev-01")).Result;
-                }
-
-
-                services.AddAuthentication(o =>
-                {
-                    o.DefaultChallengeScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
-                    o.DefaultForbidScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
-                    o.DefaultScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
-                })
-                    .AddCookie()
-                    .AddGoogleOpenIdConnect(options =>
-                {
-                    options.Authority = credential.UserId;
-                });
-
-                services
-                    .AddGoogleDiagnostics("dft-dtro-dev-01",
-                            "dtro-dev-dft-dtro-beta",
-                            traceOptions: TraceOptions.Create(),
-                            loggingOptions: LoggingOptions.Create(),
-                            errorReportingOptions: ErrorReportingOptions.Create());
-            })
             .ConfigureAppConfiguration((context, config) =>
             {
                 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
