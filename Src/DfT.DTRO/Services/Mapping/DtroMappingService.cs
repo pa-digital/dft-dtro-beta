@@ -90,10 +90,37 @@ public class DtroMappingService : IDtroMappingService
                }
             }
             Console.WriteLine("Before List<ExpandoObject> regulations");
-            List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
-                .OfType<ExpandoObject>()
-                .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())
-                .ToList();
+//            List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
+//                .OfType<ExpandoObject>()
+//                .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())
+//                .ToList();
+            try
+            {
+                var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision");
+                if (provisions == null)
+                {
+                    Console.WriteLine("Error: 'Source.provision' is null or not found.");
+                }
+
+                var expandoProvisions = provisions.OfType<ExpandoObject>();
+
+                foreach (var provision in expandoProvisions)
+                {
+                    var regulationList = provision.GetValue<IList<object>>("regulation");
+                    if (regulationList == null)
+                    {
+                        Console.WriteLine("Warning: 'regulation' not found in one of the provisions.");
+                        continue;
+                    }
+
+                    var expandoRegulations = regulationList.OfType<ExpandoObject>();
+                    regulations.AddRange(expandoRegulations);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
 
             Console.WriteLine("Mapping regulations");
             foreach (ExpandoObject item in regulations)
