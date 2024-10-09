@@ -66,34 +66,38 @@ public class DtroMappingService : IDtroMappingService
         return result;
     }
 
+    public static void PrindDtroData(ExpandoObject dtroData, string indent = "")
+    {
+        var dtroDataDict = (IDictionary<string, object>)dtroData;
+        Console.WriteLine($"Size of ExpandoObject: {dtroDataDict.Count}");
+        foreach (var kvp in (IDictionary<string, object>)dtroData)
+        {
+            if (kvp.Value is ExpandoObject)
+            {
+                Console.WriteLine($"{indent}{kvp.Key}:");
+                PrindDtroData((ExpandoObject)kvp.Value, indent + "  ");
+            }
+            else
+            {
+                Console.WriteLine($"{indent}{kvp.Key}: {kvp.Value}");
+            }
+        }
+    }
+
     public IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros)
     {
         List<DtroSearchResult> results = new List<DtroSearchResult>();
-
         Console.WriteLine($"dtros size:{dtros.Count()}");
         foreach (Models.DataBase.DTRO dtro in dtros)
         {
-            var expandoDict = (IDictionary<string, object>)dtro.Data;
-            Console.WriteLine($"Size of ExpandoObject: {expandoDict.Count}");
-
             Console.WriteLine("MapToSearchResult-DTRO:");
-            foreach (var kvp in (IDictionary<string, object>)dtro.Data)
-            {
-               if (kvp.Value is ExpandoObject)
-               {
-                   Console.WriteLine($"{indent}{kvp.Key}:");
-                   PrintExpando((ExpandoObject)kvp.Value, indent + "  ");
-               }
-               else
-               {
-                   Console.WriteLine($"{indent}{kvp.Key}: {kvp.Value}");
-               }
-            }
+            PrindDtroData(dtro.Data);
             Console.WriteLine("Before List<ExpandoObject> regulations");
 //            List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
 //                .OfType<ExpandoObject>()
 //                .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())
 //                .ToList();
+            var regulations = new List<ExpandoObject>();
             try
             {
                 var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision");
