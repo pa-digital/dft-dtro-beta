@@ -65,6 +65,7 @@ jobs:
           echo "APP_ID=${{ inputs.app-id }}" >> $GITHUB_ENV
           echo "IS_PUBLISHER=${{ inputs.is-publisher }}" >> $GITHUB_ENV
           echo "SWA_CODE=${{ inputs.swa-code }}" >> $GITHUB_ENV
+          echo "DOMAIN=dtro-integration" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
         id: google-auth
