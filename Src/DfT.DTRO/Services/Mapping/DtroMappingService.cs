@@ -77,6 +77,21 @@ public class DtroMappingService : IDtroMappingService
                 Console.WriteLine($"{indent}{kvp.Key}:");
                 PrindDtroData((ExpandoObject)kvp.Value, indent + "  ");
             }
+            else if (kvp.Value is IList<object> list)
+            {
+                Console.WriteLine($"{indent}{kvp.Key}:");
+                foreach (var item in list)
+                {
+                    if (item is ExpandoObject)
+                    {
+                        PrindDtroData((ExpandoObject)item, indent + "  ");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{indent}  - {item}");
+                    }
+                }
+            }
             else
             {
                 Console.WriteLine($"{indent}{kvp.Key}: {kvp.Value}");
@@ -105,6 +120,7 @@ public class DtroMappingService : IDtroMappingService
                 {
                     Console.WriteLine("Error: 'Source.provision' is null or not found.");
                 }
+                Console.WriteLine("'Source.provision' found.");
 
                 var expandoProvisions = provisions.OfType<ExpandoObject>();
 
