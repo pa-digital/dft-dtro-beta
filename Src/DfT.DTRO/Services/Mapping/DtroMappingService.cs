@@ -70,12 +70,18 @@ public class DtroMappingService : IDtroMappingService
     {
         List<DtroSearchResult> results = new List<DtroSearchResult>();
 
+        Console.WriteLine($"dtros size:{dtros.Count()}");
         foreach (Models.DataBase.DTRO dtro in dtros)
         {
-            Console.WriteLine("DTRO:");
-            var props = dtro.Data.GetType().GetProperties();
-            Console.WriteLine(string.Join(", ", props.Select(p => $"{p.Name}: {p.GetValue(dtro)}")));
+            var expandoDict = (IDictionary<string, object>)dtro.Data;
+            Console.WriteLine($"Size of ExpandoObject: {expandoDict.Count}");
 
+            Console.WriteLine("MapToSearchResult-DTRO:");
+            foreach (var kvp in (IDictionary<string, object>)dtro.Data)
+            {
+                Console.WriteLine($"dtros: {kvp.Key}: {kvp.Value}");
+            }
+            Console.WriteLine("Before List<ExpandoObject> regulations");
             List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
                 .OfType<ExpandoObject>()
                 .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())

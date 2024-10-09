@@ -26,6 +26,7 @@ public class SearchService : ISearchService
             var properties = item.GetType().GetProperties();
             Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(item)}")));
         }
+        Console.WriteLine($"result.Results size:{result.Results.Count()}");
         IEnumerable<DtroSearchResult> mappedResult = _dtroMappingService.MapToSearchResult(result.Results);
         Console.WriteLine("Mapped results: ");
         foreach (var item in mappedResult)
