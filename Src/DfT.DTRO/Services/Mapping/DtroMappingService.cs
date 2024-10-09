@@ -69,7 +69,6 @@ public class DtroMappingService : IDtroMappingService
     public static void PrindDtroData(ExpandoObject dtroData, string indent = "")
     {
         var dtroDataDict = (IDictionary<string, object>)dtroData;
-        Console.WriteLine($"Size of ExpandoObject: {dtroDataDict.Count}");
         foreach (var kvp in (IDictionary<string, object>)dtroData)
         {
             if (kvp.Value is ExpandoObject)
@@ -102,7 +101,6 @@ public class DtroMappingService : IDtroMappingService
     public IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros)
     {
         List<DtroSearchResult> results = new List<DtroSearchResult>();
-        Console.WriteLine($"dtros size:{dtros.Count()}");
         foreach (Models.DataBase.DTRO dtro in dtros)
         {
             Console.WriteLine("MapToSearchResult-DTRO:");
@@ -157,39 +155,16 @@ public class DtroMappingService : IDtroMappingService
                 .Where(it => it is not null)
                 .ToList();
 
-            Console.WriteLine("Mapping time validity");
-            foreach (ExpandoObject item in timeValidity)
-            {
-                var properties = item.GetType().GetProperties();
-                Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(item)}")));
-
-            }
-
             List<DateTime> regulationStartTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<string>("start"))
                 .Select(it => DateTime.Parse(it).ToUniversalTime())
                 .ToList();
-
-            Console.WriteLine("Mapping regulation start time");
-            foreach (DateTime item in regulationStartTimes)
-            {
-                var properties = item.GetType().GetProperties();
-                Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(item)}")));
-
-            }
 
             List<DateTime> regulationEndTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<string>("end"))
                 .Select(it => DateTime.Parse(it).ToUniversalTime())
                 .ToList();
 
-            Console.WriteLine("Mapping regulation end time");
-            foreach (DateTime item in regulationEndTimes)
-            {
-                var properties = item.GetType().GetProperties();
-                Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(item)}")));
-
-            }
             DtroSearchResult searchResult = CopyDtroToSearchResult(dtro, regulationStartTimes, regulationEndTimes);
             results.Add(searchResult);
         }
