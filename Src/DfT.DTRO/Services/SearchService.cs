@@ -20,7 +20,7 @@ public class SearchService : ISearchService
             Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(query)}")));
         }
         PaginatedResult<Models.DataBase.DTRO> result = await _dtroService.FindDtrosAsync(search);
-        Console.WriteLine($"PaginatedResult: ");
+        Console.WriteLine($"Paginated Result: ");
         foreach (var item in result.Results)
         {
             var properties = item.GetType().GetProperties();
@@ -38,7 +38,7 @@ public class SearchService : ISearchService
                 search.Page,
                 result.TotalCount);
 
-        Console.WriteLine("Paginated result: ");
+        Console.WriteLine("Paginated response: ");
         foreach (var item in paginatedResult.Results)
         {
             var properties = item.GetType().GetProperties();
