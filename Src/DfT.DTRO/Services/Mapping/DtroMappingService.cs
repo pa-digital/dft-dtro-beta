@@ -76,7 +76,6 @@ public class DtroMappingService : IDtroMappingService
             var props = dtro.Data.GetType().GetProperties();
             Console.WriteLine(string.Join(", ", props.Select(p => $"{p.Name}: {p.GetValue(dtro)}")));
 
-
             List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
                 .OfType<ExpandoObject>()
                 .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())
