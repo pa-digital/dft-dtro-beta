@@ -27,7 +27,7 @@ public class SearchService : ISearchService
             Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(item)}")));
         }
         IEnumerable<DtroSearchResult> mappedResult = _dtroMappingService.MapToSearchResult(result.Results);
-        Console.WriteLine("Mapped result:\t" + string.Join("-", mappedResult));
+        Console.WriteLine("Mapped results: ");
         foreach (var item in mappedResult)
         {
             var properties = item.GetType().GetProperties();
@@ -38,7 +38,12 @@ public class SearchService : ISearchService
                 search.Page,
                 result.TotalCount);
 
-        Console.WriteLine("Paginated result:\t" + string.Join("-", paginatedResult));
+        Console.WriteLine("Paginated result: ");
+        foreach (var item in paginatedResult.Results)
+        {
+            var properties = item.GetType().GetProperties();
+            Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(item)}")));
+        }
         return paginatedResult;
     }
 }
