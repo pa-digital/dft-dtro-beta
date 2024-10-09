@@ -14,7 +14,6 @@ else
   access_token=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
   echo " "
   echo "Access token retrieved"
-  echo "$OAUTH_RESPONSE" | jq .
   echo " "
 fi
 
