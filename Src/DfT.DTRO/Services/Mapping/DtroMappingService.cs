@@ -79,7 +79,15 @@ public class DtroMappingService : IDtroMappingService
             Console.WriteLine("MapToSearchResult-DTRO:");
             foreach (var kvp in (IDictionary<string, object>)dtro.Data)
             {
-                Console.WriteLine($"dtros: {kvp.Key}: {kvp.Value}");
+               if (kvp.Value is ExpandoObject)
+               {
+                   Console.WriteLine($"{indent}{kvp.Key}:");
+                   PrintExpando((ExpandoObject)kvp.Value, indent + "  ");
+               }
+               else
+               {
+                   Console.WriteLine($"{indent}{kvp.Key}: {kvp.Value}");
+               }
             }
             Console.WriteLine("Before List<ExpandoObject> regulations");
             List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
