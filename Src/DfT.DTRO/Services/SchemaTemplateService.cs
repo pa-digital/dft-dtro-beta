@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Services.Mapping;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services;
 
 public class SchemaTemplateService : ISchemaTemplateService
 {
@@ -105,13 +103,6 @@ public class SchemaTemplateService : ISchemaTemplateService
         if (!schemaTemplateExists)
         {
             throw new NotFoundException();
-        }
-
-        var countDtros = await _dtroDal.DtroCountForSchemaAsync(version);
-
-        if (countDtros > 0)
-        {
-            throw new InvalidOperationException($"Cannot update the schema as in use by exising DTRO's");
         }
 
         return await _schemaTemplateDal.UpdateSchemaTemplateAsJsonAsync(version, expandoObject, correlationId);
