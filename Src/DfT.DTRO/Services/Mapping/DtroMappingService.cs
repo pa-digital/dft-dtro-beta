@@ -103,13 +103,10 @@ public class DtroMappingService : IDtroMappingService
         List<DtroSearchResult> results = new List<DtroSearchResult>();
         foreach (Models.DataBase.DTRO dtro in dtros)
         {
-            Console.WriteLine("MapToSearchResult-DTRO:");
-            PrindDtroData(dtro.Data);
-            Console.WriteLine("Before List<ExpandoObject> regulations");
-//            List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
-//                .OfType<ExpandoObject>()
-//                .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())
-//                .ToList();
+            //            List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
+            //                .OfType<ExpandoObject>()
+            //                .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())
+            //                .ToList();
             var regulations = new List<ExpandoObject>();
             try
             {
@@ -347,27 +344,19 @@ public class DtroMappingService : IDtroMappingService
 
     private DtroSearchResult CopyDtroToSearchResult(Models.DataBase.DTRO dtro, List<DateTime> regulationStartDates, List<DateTime> regulationEndDates)
     {
-        DtroSearchResult result = new DtroSearchResult();
-        result.TroName = dtro.Data.GetValueOrDefault<string>("Source.troName");
-        Console.WriteLine($"Tro name:\t {result.TroName}");
-        result.TrafficAuthorityCreatorId = dtro.Data.GetValueOrDefault<int>("Source.traCreator");
-        Console.WriteLine($"TRA Creator:\t {result.TrafficAuthorityCreatorId}");
-        result.TrafficAuthorityOwnerId = dtro.Data.GetValueOrDefault<int>("Source.currentTraOwner");
-        Console.WriteLine($"TRA Owner:\t{result.TrafficAuthorityOwnerId}");
-        result.PublicationTime = dtro.Created.Value;
-        Console.WriteLine($"Publication:\t {result.PublicationTime}");
-        result.RegulationType = dtro.RegulationTypes;
-        Console.WriteLine($"Regulation:\t{result.RegulationType}");
-        result.VehicleType = dtro.VehicleTypes;
-        Console.WriteLine($"Vehicle:\t{result.VehicleType}");
-        result.OrderReportingPoint = dtro.OrderReportingPoints;
-        Console.WriteLine($"TRA type:\t{result.OrderReportingPoint}");
-        result.RegulationStart = regulationStartDates;
-        Console.WriteLine($"Regulation start:\t{result.RegulationStart}");
-        result.RegulationEnd = regulationEndDates;
-        Console.WriteLine($"Regulation end:\t{result.RegulationEnd}");
-        result.Id = dtro.Id;
-        Console.WriteLine($"Id:\t{result.Id}");
+        DtroSearchResult result = new()
+        {
+            TroName = dtro.Data.GetValueOrDefault<string>("Source.troName"),
+            TrafficAuthorityCreatorId = dtro.Data.GetValueOrDefault<int>("Source.traCreator"),
+            TrafficAuthorityOwnerId = dtro.Data.GetValueOrDefault<int>("Source.currentTraOwner"),
+            PublicationTime = dtro.Created.Value,
+            RegulationType = dtro.RegulationTypes,
+            VehicleType = dtro.VehicleTypes,
+            OrderReportingPoint = dtro.OrderReportingPoints,
+            RegulationStart = regulationStartDates,
+            RegulationEnd = regulationEndDates,
+            Id = dtro.Id
+        };
         return result;
     }
 
