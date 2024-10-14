@@ -164,8 +164,7 @@
                                             }
                                         ],
                                         "end": "1996-01-05 22:50:50"
-                                    },
-									"regulationStatus": "not valid"
+                                    }
                                 }
                             ]
                         }
@@ -194,7 +193,9 @@
             "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
             "section": "All sections",
             "traAffected": [
-                1000
+                1000,
+                1001,
+                1002
             ],
             "traCreator": 1000,
             "troName": "The Sample County Council (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"

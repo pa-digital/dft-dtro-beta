@@ -161,7 +161,8 @@
 											}
 										],
 										"end": "1996-01-05 22:50:50"
-									}
+									},
+									"regulationStatus": "not valid"
 								}
 							]
 						}

@@ -3,7 +3,7 @@
 	"data": {
 		"Source": {
 			"actionType": "amendment",
-			"currentTraOwner": 3579,
+			"currentTraOwner": 1000,
 			"provision": [
 				{
 					"actionType": "partialAmendment",
@@ -161,8 +161,7 @@
 											}
 										],
 										"end": "1996-01-05 22:50:50"
-									},
-									"regulationStatus": "not valid"
+									}
 								}
 							]
 						}
@@ -175,7 +174,7 @@
 								"LinearGeometry": {
 									"direction": "bidirectional",
 									"lateralPosition": "centreline",
-									"linestring": "SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"
+									"linestring": "SRID=27700;LINESTRING(529157 178805)"
 								},
 								"externalReference": [
 									{
@@ -193,9 +192,9 @@
 			"reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
 			"section": "All sections",
 			"traAffected": [
-				3579
+				1000
 			],
-			"traCreator": 3579,
+			"traCreator": 1000,
 			"troName": "The Sample County Council (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"
 		}
 	}
