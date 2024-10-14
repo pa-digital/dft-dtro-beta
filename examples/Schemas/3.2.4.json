@@ -1781,12 +1781,8 @@
                     "type": "string"
                 },
                 "section": {
-                    "description": "Reference to the section of the TRO",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "minItems": 1
+					"description": "Reference to the section of the TRO",
+                    "type": "string"
                 },
                 "currentTraOwner": {
                     "description": "Current Traffic Regulation Authority maintaining this TRO - SWA-like code",
