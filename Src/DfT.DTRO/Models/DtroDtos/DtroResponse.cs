@@ -10,6 +10,12 @@ namespace DfT.DTRO.Models.DtroDtos;
 public class DtroResponse
 {
     /// <summary>
+    /// D-TRO unique identifier.
+    /// </summary>
+    [DataMember(Name = "id")]
+    public Guid Id { get; set; }
+
+    /// <summary>
     /// Schema version of the D-TRO data payload response.
     /// </summary>
     [DataMember(Name = "schemaVersion")]

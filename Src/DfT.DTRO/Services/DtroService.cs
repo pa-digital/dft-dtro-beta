@@ -48,14 +48,13 @@ public class DtroService : IDtroService
 
     public async Task<DtroResponse> GetDtroByIdAsync(Guid id)
     {
-        var dtro = await _dtroDal.GetDtroByIdAsync(id);
+        Models.DataBase.DTRO dtro = await _dtroDal.GetDtroByIdAsync(id);
         if (dtro is null)
         {
             throw new NotFoundException();
         }
 
-        var dtroResponse = _dtroMappingService.MapToDtroResponse(dtro);
-        return dtroResponse;
+        return _dtroMappingService.MapToDtroResponse(dtro);
     }
 
     public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId)

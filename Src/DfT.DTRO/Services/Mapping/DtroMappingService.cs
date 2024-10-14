@@ -55,16 +55,13 @@ public class DtroMappingService : IDtroMappingService
         return events;
     }
 
-    public DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro)
-    {
-        var result = new DtroResponse()
+    public DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro) =>
+        new()
         {
+            Id = dtro.Id,
             SchemaVersion = dtro.SchemaVersion,
             Data = dtro.Data
         };
-
-        return result;
-    }
 
     public static void PrindDtroData(ExpandoObject dtroData, string indent = "")
     {
