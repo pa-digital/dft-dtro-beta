@@ -1,0 +1,216 @@
+{
+    "schemaVersion": "3.2.4",
+    "data": {
+        "Source": {
+            "actionType": "amendment",
+            "currentTraOwner": 3579,
+            "Provision": [
+                {
+                    "actionType": "partialAmendment",
+                    "orderReportingPoint": "ttroTtmoByNotice",
+                    "provisionDescription": "Prohibition of Waiting",
+                    "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
+                    "Regulation": {
+                        "isDynamic": false,
+                        "timeZone": "Europe/London",
+                        "Condition": [
+                            {
+                                "RateTable": {
+                                    "RateLineCollection": [
+                                        {
+                                            "RateLine": [
+                                                {
+                                                    "sequence": 0,
+                                                    "type": "flatRateTier",
+                                                    "value": 15,
+                                                    "durationEnd": "19:00:00"
+                                                },
+                                                {
+                                                    "sequence": 1,
+                                                    "type": "flatRate",
+                                                    "value": 20,
+                                                    "maxValue": 40,
+                                                    "durationStart": "19:00:00",
+                                                    "incrementPeriod": "PT1H",
+                                                    "durationEnd": "19:30:00",
+                                                    "usageCondition": "unlimited",
+                                                    "description": "eiusmod nisi",
+                                                    "minValue": 10
+                                                }
+                                            ],
+                                            "applicableCurrency": "GBP",
+                                            "sequence": 0,
+                                            "startValidUsagePeriod": "13:00:00"
+                                        }
+                                    ],
+                                    "type": "hourly",
+                                    "additionalInformation": "https://some-url.com/"
+                                },
+                                "VehicleCharacteristics": {
+                                    "vehicleType": [
+                                        "bus"
+                                    ]
+                                }
+                            }
+                        ],
+                        "TimeValidity": {
+                            "ValidityCondition": {
+                                "ConditionSet": [
+                                    {
+                                        "operator": "and",
+                                        "negate": false,
+                                        "Condition": [
+                                            {
+                                                "VehicleCharacteristics": {
+                                                    "vehicleType": [
+                                                        "bus"
+                                                    ]
+                                                },
+                                                "negate": false
+                                            },
+                                            {
+                                                "VehicleCharacteristics": {
+                                                    "vehicleType": [
+                                                        "bus"
+                                                    ]
+                                                },
+                                                "negate": true
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "rateTable": {
+                                    "rateLineCollection": [
+                                        {
+                                            "rateLine": [
+                                                {
+                                                    "sequence": 0,
+                                                    "type": "flatRateTier",
+                                                    "value": 15,
+                                                    "durationEnd": "19:00:00"
+                                                },
+                                                {
+                                                    "sequence": 1,
+                                                    "type": "flatRate",
+                                                    "value": 20,
+                                                    "maxValue": 40,
+                                                    "durationStart": "19:00:00",
+                                                    "incrementPeriod": "PT1H",
+                                                    "durationEnd": "19:30:00",
+                                                    "usageCondition": "unlimited",
+                                                    "description": "eiusmod nisi",
+                                                    "minValue": 10
+                                                }
+                                            ],
+                                            "applicableCurrency": "GBP",
+                                            "sequence": 0,
+                                            "startValidUsagePeriod": "13:00:00"
+                                        }
+                                    ],
+                                    "type": "hourly",
+                                    "additionalInformation": "id"
+                                }
+                            },
+                            "start": "1983-01-05 22:50:50",
+                            "exceptionPeriod": [
+                                {
+                                    "recurringSpecialDay": [
+                                        {
+                                            "intersectWithApplicableDays": true,
+                                            "specialDayType": "matchDay"
+                                        },
+                                        {
+                                            "intersectWithApplicableDays": false,
+                                            "specialDayType": "matchDay",
+                                            "publicEvent": "footballMatch"
+                                        }
+                                    ],
+                                    "recurringTimePeriodOfDay": [
+                                        {
+                                            "startTimeOfPeriod": "17:00:00",
+                                            "endTimeOfPeriod": "18:00:00"
+                                        }
+                                    ],
+                                    "recurringDayWeekMonthPeriod": [
+                                        {
+                                            "applicableDay": [
+                                                "monday"
+                                            ],
+                                            "applicableMonth": [
+                                                "october"
+                                            ]
+                                        }
+                                    ],
+                                    "startOfPeriod": "1983-01-05 22:50:50",
+                                    "periodName": "adipisicing incididunt Lorem",
+                                    "endOfPeriod": "1983-03-17 16:47:01"
+                                }
+                            ],
+                            "validPeriod": [
+                                {
+                                    "recurringTimePeriodOfDay": [
+                                        {
+                                            "startTimeOfPeriod": "07:30:00",
+                                            "endTimeOfPeriod": "09:00:00"
+                                        },
+                                        {
+                                            "startTimeOfPeriod": "17:00:00",
+                                            "endTimeOfPeriod": "18:00:00"
+                                        }
+                                    ],
+                                    "startOfPeriod": "1985-07-01 21:12:04",
+                                    "recurringSpecialDay": [
+                                        {
+                                            "intersectWithApplicableDays": true,
+                                            "specialDayType": "eventDay"
+                                        },
+                                        {
+                                            "intersectWithApplicableDays": true,
+                                            "specialDayType": "eventDay"
+                                        }
+                                    ],
+                                    "periodName": "ea et eiusmod",
+                                    "recurringDayWeekMonthPeriod": [
+                                        {
+                                            "applicableDay": [
+                                                "tuesday"
+                                            ]
+                                        },
+                                        {
+                                            "applicableMonth": [
+                                                "june"
+                                            ],
+                                            "applicableDay": [
+                                                "monday"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "end": "1996-01-05 22:50:50"
+                        }
+                    },
+                    "RegulatedPlace": [
+                        {
+                            "description": "Zone 5, Kenworthy Road, All Odd, All Even",
+                            "Geometry": {
+                                "version": 1,
+                                "Polygon": {
+                                    "polygon": "SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"
+                                },
+                                "ExternalReference": [
+                                    {
+                                        "lastUpdateDate": "1981-02-08 11:30:43",
+                                        "UniqueStreetReferenceNumber": {
+                                            "usrn": 96854586
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

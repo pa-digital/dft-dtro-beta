@@ -5,12 +5,12 @@
             "description": "Object indicating condition controlling access",
             "properties": {
                 "ConditionSet": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ConditionSet"
                 },
-				"accessConditionType": {
+                "accessConditionType": {
                     "$ref": "#/$defs/AccessConditionType",
-                    "description": "Indicates access restriction type."
+                    "description": "Indicates access restriction type.",
                     "type": "string"
                 },
                 "otherAccessRestriction": {
@@ -65,7 +65,7 @@
             },
             "required": [
                 "name",
-				"PermitCondition"
+                "PermitCondition"
             ],
             "type": "object"
         },
@@ -73,7 +73,7 @@
             "additionalProperties": false,
             "description": "Calendar week within month (see ISO 8601-1). First Calendar week contains the first of the month, with the calendar week starting on a Monday. Several days of the first week of the month may occur in the previous calendar month. By construction, the last week of a preceding month can also be the first week of a subsequent month.",
             "properties": {
-				"DayWeekMonth": {
+                "DayWeekMonth": {
                     "type": "object",
                     "$ref": "#/$defs/DayWeekMonth"
                 },
@@ -110,11 +110,11 @@
             "description": "Specifies the time period with changeable (but defined) characteristics",
             "properties": {
                 "ChangeableTimePeriodEnd": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ChangeableTimePeriodEnd"
                 },
                 "ChangeableTimePeriodStart": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ChangeableTimePeriodStart"
                 }
             },
@@ -132,7 +132,7 @@
                     "minItems": 0
                 },
                 "ChangeableTimePeriodSource": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ChangeableTimePeriodSource"
                 },
                 "SpecialDay": {
@@ -189,8 +189,8 @@
                     "$ref": "#/$defs/ChangeableTimePeriodStart"
                 },
                 "definition": {
-                    "description": "indicates the type of changeable characteristic time measure used",
                     "type": "string",
+                    "description": "indicates the type of changeable characteristic time measure used"
                 },
                 "sourceLocator": {
                     "description": "URL where values and related dates of changeable characteristic time concepts are found",
@@ -219,11 +219,11 @@
                     "minItems": 0
                 },
                 "ChangeableTimePeriodSource": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ChangeableTimePeriodSource"
                 },
                 "SpecialDay": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/SpecialDay"
                 },
                 "startType": {
@@ -262,18 +262,18 @@
             "description": "Abstract class that specifies a condition for the validity of a certain road feature such as time, weather conditions, vehicle type, vehicle propulsion fuel, vehicle occupancy, vehicle usage, vehicle dimensions or weight characteristics.",
             "properties": {
                 "ConditionSet": {
-					"type": "array",
+                    "type": "array",
                     "items": {
                         "$ref": "#/$defs/ConditionSet"
                     },
-					"minItems": 0
+                    "minItems": 0
                 },
                 "negate": {
                     "description": "If set to true means that the entire condition shall be negated.",
                     "type": "boolean"
                 },
                 "RateTable": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/RateTable"
                 },
                 "Regulation": {
@@ -282,9 +282,9 @@
                 }
             },
             "type": "object",
-			"required": [
-				"Regulation"
-			]
+            "required": [
+                "Regulation"
+            ]
         },
         "ConditionOperatorType": {
             "description": "Logical operators",
@@ -436,7 +436,7 @@
             "description": "Object indicating characteristics relating to specified direction linear geometric location",
             "properties": {
                 "destination": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ExternalReference"
                 },
                 "directedLineString": {
@@ -451,7 +451,7 @@
                     "minItems": 0
                 },
                 "origin": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ExternalReference"
                 }
             },
@@ -475,10 +475,10 @@
             "description": "Object indicating condition related to driver characteristics",
             "properties": {
                 "ConditionSet": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ConditionSet"
                 },
-				"driverCharacteristicsType": {
+                "driverCharacteristicsType": {
                     "description": "indicates a specific type of driver characteristic",
                     "$ref": "#/$defs/DriverCharacteristicsType",
                     "type": "string"
@@ -495,8 +495,8 @@
                     "type": "object"
                 },
                 "esu": {
-                    "maximum": 9.22337203685478E+18,
-                    "minimum": -9.22337203685478E+18,
+                    "maximum": 9.2233720368547799E+18,
+                    "minimum": -9.2233720368547799E+18,
                     "type": "integer"
                 }
             },
@@ -533,17 +533,17 @@
                 "emissionClassificationEuro": {
                     "description": "The minimum Euro emission classification the vehicle(s) have to comply with according to the 1970 Directive 70/220/EEC and its several amendments. Note that vehicleType and fuelType need to be provided in order to make this classification explicit.",
                     "type": "string",
-                    "$ref": "#/$defs/EmissionClassificationEuroType",
-					},
+                    "$ref": "#/$defs/EmissionClassificationEuroType"
+                },
                 "emissionClassificationOther": {
                     "description": "Locally defined value(s) for emission classification.",
                     "type": "string"
                 }
             },
             "type": "object",
-			"required": [
-				"VehicleCharacteristics"
-			]
+            "required": [
+                "VehicleCharacteristics"
+            ]
         },
         "ExtensionEnumeration": {
             "additionalProperties": false,
@@ -554,7 +554,7 @@
                     "type": "string"
                 },
                 "enumeratedList": {
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/TargetEnumeratedList",
                     "description": "enumeration list of the data model that the next list entry is to be applied to"
                 },
@@ -569,19 +569,19 @@
             "description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer",
             "properties": {
                 "DirectedLinear": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/DirectedLinear"
                 },
                 "LinearGeometry": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/LinearGeometry"
                 },
                 "PointGeometry": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/PointGeometry"
                 },
                 "Polygon": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/Polygon"
                 },
                 "lastUpdateDate": {
@@ -598,7 +598,7 @@
             },
             "required": [
                 "lastUpdateDate",
-				"UniqueStreetReferenceNumber"
+                "UniqueStreetReferenceNumber"
             ],
             "type": "object"
         },
@@ -637,7 +637,7 @@
             "properties": {
                 "regulationType": {
                     "$ref": "#/$defs/RegulationType",
-					"type": "string",
+                    "type": "string",
                     "description": "indicates the type of regulation referenced"
                 }
             },
@@ -652,7 +652,7 @@
             "properties": {
                 "RegulatedPlace": {
                     "type": "object",
-                    "$ref": "#/$defs/RegulatedPlace",
+                    "$ref": "#/$defs/RegulatedPlace"
                 },
                 "version": {
                     "type": "integer"
@@ -660,7 +660,7 @@
             },
             "required": [
                 "version",
-				"RegulatedPlace"
+                "RegulatedPlace"
             ],
             "type": "object"
         },
@@ -675,12 +675,12 @@
                 "heaviestAxleWeight": {
                     "description": "indicates a characteristic relating to the heaviest axle of vehicle. Defined in metric tonnes, with one decimal place",
                     "type": "number",
-                    "multipleOf": 0.1
+                    "multipleOf": 0.10000000000000001
                 }
             },
             "required": [
                 "heaviestAxleWeight",
-				"VehicleCharacteristics"
+                "VehicleCharacteristics"
             ],
             "type": "object"
         },
@@ -738,12 +738,12 @@
                 },
                 "direction": {
                     "description": "indicates the direction of the applicability of the referenced regulation",
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/LinearDirectionType"
                 },
                 "lateralPosition": {
                     "description": "indicates the lateral position across a road of the linear representation of a regulated place.",
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/LinearLateralPositionType"
                 },
                 "linestring": {
@@ -793,7 +793,7 @@
                 "grossVehicleWeight": {
                     "description": "The gross weight of the vehicle and its load, including any trailers. Defined in metric tonnes, with one decimal place",
                     "type": "number",
-                    "multipleOf": 0.1
+                    "multipleOf": 0.10000000000000001
                 },
                 "typeOfWeight": {
                     "description": "The meaning of the weight value",
@@ -804,7 +804,7 @@
             "required": [
                 "grossVehicleWeight",
                 "typeOfWeight",
-				"VehicleCharacteristics"
+                "VehicleCharacteristics"
             ],
             "type": "object"
         },
@@ -824,7 +824,7 @@
             },
             "required": [
                 "vehicleHeight",
-				"VehicleCharacteristics"
+                "VehicleCharacteristics"
             ]
         },
         "MaximumLengthCharacteristic": {
@@ -843,7 +843,7 @@
             },
             "required": [
                 "vehicleLength",
-				"VehicleCharacteristics"
+                "VehicleCharacteristics"
             ]
         },
         "MaximumWidthCharacteristic": {
@@ -862,7 +862,7 @@
             },
             "required": [
                 "vehicleWidth",
-				"VehicleCharacteristics"
+                "VehicleCharacteristics"
             ]
         },
         "MonthType": {
@@ -887,11 +887,11 @@
             "description": "Object indicating characteristics about non-vehicular road users",
             "properties": {
                 "ConditionSet": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ConditionSet"
                 },
-				"nonVehicularRoadUser": {
-                    "$ref": "#/$defs/NonVehicularRoadUserType"
+                "nonVehicularRoadUser": {
+                    "$ref": "#/$defs/NonVehicularRoadUserType",
                     "description": "Indicates the type of non-vehicular road user",
                     "type": "string"
                 }
@@ -931,7 +931,7 @@
             "required": [
                 "comparisonOperator",
                 "numberOfAxles",
-				"VehicleCharacteristics"
+                "VehicleCharacteristics"
             ]
         },
         "NumbersOfOccupants": {
@@ -961,8 +961,8 @@
         "OccupantCondition": {
             "description": "Object indicating specific vehicle occupant condition restrictions",
             "properties": {
-				"ConditionSet": {
-					"type": "object",
+                "ConditionSet": {
+                    "type": "object",
                     "$ref": "#/$defs/ConditionSet"
                 },
                 "NumbersOfOccupants": {
@@ -1091,23 +1091,23 @@
                     "format": "date-time"
                 }
             },
-			"required": [
-				"TimeValidity"
-			]
+            "required": [
+                "TimeValidity"
+            ]
         },
         "PermitCondition": {
             "description": "Object supporting the characteristics of a permit related condition",
             "properties": {
                 "ConditionSet": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ConditionSet"
                 },
-				"Authority": {
-					"type": "object",
+                "Authority": {
+                    "type": "object",
                     "$ref": "#/$defs/Authority"
                 },
                 "PermitSubjectToFee": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/PermitSubjectToFee"
                 },
                 "locationRelatedPermit": {
@@ -1129,7 +1129,7 @@
                 "type": {
                     "description": "the type of the referenced permit",
                     "$ref": "#/$defs/PermitType",
-					"type": "string"
+                    "type": "string"
                 },
                 "whereToApplyForPermit": {
                     "description": "URL of the competent authority where an application for a permit can be requested",
@@ -1151,7 +1151,7 @@
             "properties": {
                 "PermitCondition": {
                     "type": "object",
-                   "$ref": "#/$defs/PermitCondition"
+                    "$ref": "#/$defs/PermitCondition"
                 },
                 "amountDue": {
                     "description": "Monetary amount related to use of or purchase of permit. Defined in Pounds Sterling, to two decimal places (pence)",
@@ -1172,9 +1172,9 @@
                     "format": "uri"
                 }
             },
-			"required": [
-				"PermitCondition"
-			]
+            "required": [
+                "PermitCondition"
+            ]
         },
         "PermitType": {
             "description": "List of permit types",
@@ -1200,7 +1200,7 @@
                 },
                 "representation": {
                     "description": "indicates the nature of the point location for a point representation of a regulated place.",
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/PointType"
                 }
             },
@@ -1257,11 +1257,11 @@
                     "$ref": "#/$defs/Source"
                 },
                 "actionType": {
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/ActionType"
                 },
                 "orderReportingPoint": {
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/OrderReportingPointType"
                 },
                 "provisionDescription": {
@@ -1277,9 +1277,9 @@
                 "orderReportingPoint",
                 "provisionDescription",
                 "reference",
-				"Source",
-				"Regulation",
-				"RegulatedPlace"
+                "Source",
+                "Regulation",
+                "RegulatedPlace"
             ]
         },
         "PublicEventType": {
@@ -1419,8 +1419,8 @@
             "required": [
                 "sequence",
                 "type",
-                "value"
-				"RateLineCollection"
+                "value",
+                "RateLineCollection"
             ]
         },
         "RateLineCollection": {
@@ -1485,8 +1485,8 @@
                 "sequence",
                 "applicableCurrency",
                 "startValidUsagePeriod",
-				"RateTable",
-				"RateLine"
+                "RateTable",
+                "RateLine"
             ]
         },
         "RateLineType": {
@@ -1521,14 +1521,14 @@
                 },
                 "type": {
                     "description": "Defines the type of rate in use.",
-					"type": "string"
+                    "type": "string",
                     "$ref": "#/$defs/RateType"
                 }
             },
-			"required": [
-				"Condition",
-				"RateLineCollection"
-			]
+            "required": [
+                "Condition",
+                "RateLineCollection"
+            ]
         },
         "RateType": {
             "description": "List of rate types",
@@ -1573,8 +1573,8 @@
             },
             "required": [
                 "description",
-				"Provision",
-				"Geometry"
+                "Provision",
+                "Geometry"
             ]
         },
         "Regulation": {
@@ -1615,8 +1615,8 @@
             "required": [
                 "isDynamic",
                 "timeZone",
-				"Provision",
-				"TimeValidity"
+                "Provision",
+                "TimeValidity"
             ]
         },
         "RegulationType": {
@@ -1680,7 +1680,7 @@
                 "miscSuspensionOfOneWay",
                 "miscSuspensionOfParkingRestriction",
                 "miscSuspensionOfWeightRestriction",
-				"miscSuspensionOfBusway",
+                "miscSuspensionOfBusway",
                 "miscTemporarySpeedLimit",
                 "miscRoadClosureCrossingPoint",
                 "miscBaySuspension",
@@ -1693,11 +1693,11 @@
             "description": "Object indicating characteristics concerning the type of road.",
             "properties": {
                 "ConditionSet": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ConditionSet"
                 },
                 "RateTable": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/RateTable"
                 },
                 "Regulation": {
@@ -1747,7 +1747,7 @@
                     "minItems": 1
                 },
                 "actionType": {
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/ActionType"
                 },
                 "currentTraOwner": {
@@ -1783,7 +1783,7 @@
                 "traAffected",
                 "traCreator",
                 "troName",
-				"Provision"
+                "provision"
             ],
             "type": "object"
         },
@@ -1814,16 +1814,16 @@
                 },
                 "specialDayType": {
                     "description": "Specification of a special day, for example schoolDay, publicHoliday, ...",
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/SpecialDayType"
                 }
             },
             "required": [
                 "intersectWithApplicableDays",
                 "specialDayType",
-				"ChangeableTimePeriodStart",
-				"ChangeableTimePeriodEnd",
-				"Period"
+                "ChangeableTimePeriodStart",
+                "ChangeableTimePeriodEnd",
+                "Period"
             ]
         },
         "SpecialDayType": {
@@ -1851,7 +1851,7 @@
             "properties": {
                 "type": {
                     "description": "nature of the speed limit profile used",
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/SpeedLimitProfileType"
                 }
             },
@@ -1877,7 +1877,7 @@
                 },
                 "type": {
                     "description": "type of speed limit value indicated",
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/SpeedLimitValueType"
                 }
             },
@@ -1934,7 +1934,7 @@
             "required": [
                 "startTimeOfPeriod",
                 "endTimeOfPeriod",
-				"Period"
+                "Period"
             ]
         },
         "TimeValidity": {
@@ -1976,8 +1976,8 @@
             },
             "required": [
                 "start",
-				"Regulation",
-				"ValidityCondition"
+                "Regulation",
+                "ValidityCondition"
             ]
         },
         "UniqueStreetReferenceNumber": {
@@ -1993,7 +1993,7 @@
                 },
                 "ExternalReference": {
                     "type": "object",
-                    "$ref": "#/$defs/ExternalReference",
+                    "$ref": "#/$defs/ExternalReference"
                 },
                 "nsgStreetName": {
                     "type": "string"
@@ -2013,44 +2013,44 @@
             "description": "Object indicating conditional restrictions based on times/timing.",
             "properties": {
                 "ConditionSet": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ConditionSet"
                 },
                 "TimeValidity": {
                     "type": "object",
-                    "$ref": "#/$defs/TimeValidity",
+                    "$ref": "#/$defs/TimeValidity"
                 }
             },
-			"required": [
-				"TimeValidity"
-			]
+            "required": [
+                "TimeValidity"
+            ]
         },
         "VehicleCharacteristics": {
             "type": "object",
             "description": "The characteristics of a vehicle, e.g. lorry of gross weight greater than 30 tonnes.",
             "properties": {
                 "Emissions": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/Emissions"
                 },
                 "HeaviestAxleWeightCharacteristic": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/HeaviestAxleWeightCharacteristic"
                 },
                 "MaximumGrossWeightCharacteristic": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/MaximumGrossWeightCharacteristic"
                 },
                 "MaximumHeightCharacteristic": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/MaximumHeightCharacteristic"
                 },
                 "MaximumLengthCharacteristic": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/MaximumLengthCharacteristic"
                 },
                 "MaximumWidthCharacteristic": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/MaximumWidthCharacteristic"
                 },
                 "NumberOfAxlesCharacteristic": {
@@ -2072,12 +2072,12 @@
                 },
                 "loadType": {
                     "description": "The type of load carried by the vehicle, especially in respect of hazardous loads.",
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/PayloadType"
                 },
                 "vehicleEquipment": {
                     "description": "The type of equipment in use or on board the vehicle.",
-					"type": "string",
+                    "type": "string",
                     "$ref": "#/$defs/VehicleEquipmentType"
                 },
                 "vehicleType": {
@@ -2088,32 +2088,32 @@
                 "vehicleUsage": {
                     "description": "The type of usage of the vehicle (i.e. for what purpose is the vehicle being used).",
                     "$ref": "#/$defs/VehicleUsageType",
-					"type": "string"
+                    "type": "string"
                 },
                 "yearOfFirstRegistration": {
                     "description": "Year of first registration of the vehicle",
                     "type": "integer"
                 }
             },
-			"required": [
-				"VehicleCondition"
-			]
+            "required": [
+                "VehicleCondition"
+            ]
         },
         "VehicleCondition": {
             "description": "Conditions for a vehicle",
             "properties": {
                 "ConditionSet": {
-					"type": "object",
+                    "type": "object",
                     "$ref": "#/$defs/ConditionSet"
                 },
-				"VehicleCharacteristics": {
+                "VehicleCharacteristics": {
                     "type": "object",
                     "$ref": "#/$defs/VehicleCharacteristics"
                 }
             },
-			"required": [
-				"VehicleCharacteristics"
-			]
+            "required": [
+                "VehicleCharacteristics"
+            ]
         },
         "VehicleEquipmentType": {
             "description": "The type of equipment in use or on board the vehicle.",
@@ -2191,7 +2191,7 @@
         "WeekOfMonth": {
             "description": "provides information concerning an identifiable week in a calendar month - where the week starts on the same day of the week as the month",
             "properties": {
-				"DayWeekMonth": {
+                "DayWeekMonth": {
                     "type": "object",
                     "$ref": "#/$defs/DayWeekMonth"
                 },
