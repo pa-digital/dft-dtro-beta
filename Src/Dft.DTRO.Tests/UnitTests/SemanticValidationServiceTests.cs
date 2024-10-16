@@ -60,7 +60,7 @@ public class SemanticValidationServiceTests
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
 
-        BoundingBox expected = new() { WestLongitude = 529100, SouthLatitude = 178750, EastLongitude = 529200, NorthLatitude = 178860 };
+        BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529200, NorthLatitude = 529200 };
         Assert.Equal(expected, actual.Item1);
     }
 
@@ -75,7 +75,7 @@ public class SemanticValidationServiceTests
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
 
-        BoundingBox expected = new() { WestLongitude = 529157, SouthLatitude = 178805, EastLongitude = 529157, NorthLatitude = 178805 };
+        BoundingBox expected = new() { WestLongitude = 178805, SouthLatitude = 178805, EastLongitude = 529157, NorthLatitude = 529157 };
         Assert.Equal(expected, actual.Item1);
     }
 
@@ -90,7 +90,7 @@ public class SemanticValidationServiceTests
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
 
-        BoundingBox expected = new() { WestLongitude = 529050, SouthLatitude = 178750, EastLongitude = 529250, NorthLatitude = 178860 };
+        BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529250, NorthLatitude = 529250 };
         Assert.Equal(expected, actual.Item1);
     }
 
@@ -105,7 +105,7 @@ public class SemanticValidationServiceTests
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
 
-        BoundingBox expected = new() { WestLongitude = 529050, SouthLatitude = 178750, EastLongitude = 529250, NorthLatitude = 178860 };
+        BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529250, NorthLatitude = 529250 };
         Assert.Equal(expected, actual.Item1);
     }
 

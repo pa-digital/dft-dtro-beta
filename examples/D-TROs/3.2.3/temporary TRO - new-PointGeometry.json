@@ -3,7 +3,7 @@
 	"data": {
 		"Source": {
 			"actionType": "new",
-			"currentTraOwner": 1234,
+			"currentTraOwner": 1000,
 			"provision": [
 				{
 					"actionType": "new",
@@ -195,9 +195,9 @@
 			"reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
 			"section": "All sections",
 			"traAffected": [
-				1234
+				1000
 			],
-			"traCreator": 1234,
+			"traCreator": 1000,
 			"troName": "The Sample County Council (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"
 		}
 	}
