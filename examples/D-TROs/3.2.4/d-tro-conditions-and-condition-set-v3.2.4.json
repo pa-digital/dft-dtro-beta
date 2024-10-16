@@ -1,0 +1,80 @@
+{
+    "schemaVersion": "3.2.4",
+    "data": {
+        "Source": {
+            "actionType": "new",
+            "currentTraOwner": 1000,
+            "reference": "D08AB2A6-08FD-4F16-B0D9-A93D79814B9A",
+            "section": "All section",
+            "traAffected": [
+                1000,
+                1001,
+                1002
+            ],
+            "traCreator": 1000,
+            "troName": "Lorem Ipsum",
+            "Provision": [
+                {
+                    "actionType": "new",
+                    "orderReportingPoint": "permanentNoticeOfProposal",
+                    "provisionDescription": "Prohibition of Entering",
+                    "reference": "BE19B2D0-79F5-42A2-B494-A75527D3CBC5",
+                    "RegulatedPlace": [
+                        {
+                            "description": "Zone 5",
+                            "Geometry": {
+                                "version": 2,
+                                "PointGeometry": {
+                                    "point": "SRID=27700;POINT(529157 178805)",
+                                    "representation": "centreLinePoint"
+                                },
+                                "ExternalReference": {
+                                    "lastUpdatedDate": "1981-02-08T11:30:43",
+                                    "UniqueStreetReferenceNumber": {
+                                        "usrn": 96854586,
+                                        "ElementaryStreetUnit": {
+                                            "esu": 1234567890123456789
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "Regulation": {
+                        "isDynamic": false,
+                        "timeZone": "Europe/London",
+                        "ConditionSet": [
+                            {
+                                "operator": "and",
+                                "VehicleCondition": [
+                                    {
+                                        "VehicleCharacteristics": [
+                                            {
+                                                "vehicleType": "taxi"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "ValidityCondition": {
+                                    "TimeValidity": {
+                                        "start": "2023-01-23T08:00:00",
+                                        "validPeriod": [
+                                            {
+                                                "recurringTimePeriodOfDay": [
+                                                    {
+                                                        "startTimeOfPeriod": "18:00:00",
+                                                        "endTimeOfPeriod": "23:59:59"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
