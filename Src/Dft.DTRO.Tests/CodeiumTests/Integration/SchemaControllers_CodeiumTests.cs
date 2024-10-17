@@ -47,7 +47,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     }
 
     private static string JsonExample =>
-        File.ReadAllText("../../../../../examples/Schemas/3.2.0.json");
+        File.ReadAllText("../../../../../examples/Schemas/schemas-3.2.0.json");
 
     [Fact]
     public async Task GetSchemas_ReturnsOk_WhenTemplatesExist()
