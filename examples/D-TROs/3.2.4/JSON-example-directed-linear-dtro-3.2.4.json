@@ -27,9 +27,9 @@
                                             "petrol"
                                         ]
                                     }
-                                },
-                                {
-                                    "timeValidity": {
+                                }
+                            ],
+							"timeValidity": {
                                         "validityCondition": {
                                             "conditionSet": [
                                                 {
@@ -165,8 +165,6 @@
                                         ],
                                         "end": "1996-01-05 22:50:50"
                                     }
-                                }
-                            ]
                         }
                     ],
                     "regulatedPlace": [
