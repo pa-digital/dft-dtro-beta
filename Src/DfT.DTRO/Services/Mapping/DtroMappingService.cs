@@ -22,17 +22,34 @@ public class DtroMappingService : IDtroMappingService
 
         foreach (var dtro in dtros)
         {
-            var periods = dtro.Data
-                .GetValueOrDefault<IList<object>>("Source.provision")
-                .OfType<ExpandoObject>()
-                .SelectMany(it => it.GetValueOrDefault<IList<object>>("regulation"))
+            var regulations = new List<ExpandoObject>();
+            var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision").OfType<ExpandoObject>().ToList();
+
+            foreach (var provision in provisions)
+            {
+                regulations.AddRange(provision.GetValue<IList<object>>("regulation").OfType<ExpandoObject>().ToList());
+
+            }
+
+            var timeValidity = regulations
+                .SelectMany(it => it.GetListOrDefault("condition"))
                 .Where(it => it is not null)
                 .OfType<ExpandoObject>()
-                .Select(it => it.GetExpando("timeValidity"))
-                .OfType<ExpandoObject>();
+                .Select(it => it.GetExpandoOrDefault("timeValidity"))
+                .Where(it => it is not null)
+                .ToList();
 
-            var regulationStartTimes = periods.Select(it => it.GetValueOrDefault<DateTime?>("start")).Where(it => it is not null).Select(it => it.Value).ToList();
-            var regulationEndTimes = periods.Select(it => it.GetValueOrDefault<DateTime?>("end")).Where(it => it is not null).Select(it => it.Value).ToList();
+            var regulationStartTimes = timeValidity
+                .Select(it => it.GetValueOrDefault<DateTime?>("start"))
+                .Where(it => it is not null)
+                .Select(it => it.Value)
+                .ToList();
+
+            var regulationEndTimes = timeValidity
+                .Select(it => it.GetValueOrDefault<DateTime?>("end"))
+                .Where(it => it is not null)
+                .Select(it => it.Value)
+                .ToList();
 
             DtroEvent fromCreation = DtroEvent.FromCreation(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
             events.Add(fromCreation);
@@ -100,10 +117,6 @@ public class DtroMappingService : IDtroMappingService
         List<DtroSearchResult> results = new List<DtroSearchResult>();
         foreach (Models.DataBase.DTRO dtro in dtros)
         {
-            //            List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
-            //                .OfType<ExpandoObject>()
-            //                .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())
-            //                .ToList();
             var regulations = new List<ExpandoObject>();
             try
             {
