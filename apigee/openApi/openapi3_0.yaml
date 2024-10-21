@@ -1083,7 +1083,7 @@ paths:
       security:
         - oAuth:
             - cso
-      paramaters:
+      parameters:
         - name: version
           in: path
           description: Schema version by which schema template to delete.
