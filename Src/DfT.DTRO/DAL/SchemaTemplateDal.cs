@@ -56,6 +56,15 @@ public class SchemaTemplateDal : ISchemaTemplateDal
         return exists;
     }
 
+    /// <inheritdoc cref="ISchemaTemplateDal"/>
+    public async Task<bool> DeleteSchemaTemplateByVersionAsync(string version)
+    {
+        var schemaTemplate = await _dtroContext.SchemaTemplate.FirstOrDefaultAsync(it => it.SchemaVersion == version);
+        _dtroContext.SchemaTemplate.Remove(schemaTemplate);
+        await _dtroContext.SaveChangesAsync();
+        return true;
+    }
+
     ///<inheritdoc cref="ISchemaTemplateDal"/>
     public async Task<SchemaTemplate> GetSchemaTemplateByIdAsync(Guid id)
     {

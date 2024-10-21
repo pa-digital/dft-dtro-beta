@@ -4,13 +4,11 @@ public class SchemaTemplateService : ISchemaTemplateService
 {
     private readonly ISchemaTemplateDal _schemaTemplateDal;
     private readonly IRuleTemplateDal _ruleTemplateDal;
-    private readonly IDtroDal _dtroDal;
     private readonly ISchemaTemplateMappingService _schemaTemplateMappingService;
 
-    public SchemaTemplateService(ISchemaTemplateDal schemaTemplateDal, IRuleTemplateDal ruleTemplateDal, IDtroDal dtroDal, ISchemaTemplateMappingService schemaTemplateMappingService)
+    public SchemaTemplateService(ISchemaTemplateDal schemaTemplateDal, IRuleTemplateDal ruleTemplateDal, ISchemaTemplateMappingService schemaTemplateMappingService)
     {
         _schemaTemplateDal = schemaTemplateDal;
-        _dtroDal = dtroDal;
         _schemaTemplateMappingService = schemaTemplateMappingService;
         _ruleTemplateDal = ruleTemplateDal;
     }
@@ -46,6 +44,18 @@ public class SchemaTemplateService : ISchemaTemplateService
     public async Task<bool> SchemaTemplateExistsAsync(SchemaVersion schemaVersion)
     {
         return await _schemaTemplateDal.SchemaTemplateExistsAsync(schemaVersion);
+    }
+
+    ///<inheritdoc cref="ISchemaTemplateService"/>
+    public async Task<bool> DeleteSchemaTemplateAsync(string version)
+    {
+        var schemaTemplate = await GetSchemaTemplateAsync(version);
+        if (schemaTemplate.IsActive)
+        {
+            return false;
+        }
+
+        return await _schemaTemplateDal.DeleteSchemaTemplateByVersionAsync(version);
     }
 
     public async Task<SchemaTemplateResponse> GetSchemaTemplateByIdAsync(Guid id)

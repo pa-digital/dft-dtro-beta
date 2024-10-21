@@ -19,4 +19,6 @@ public interface ISchemaTemplateService
     Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId);
 
     Task<bool> SchemaTemplateExistsAsync(SchemaVersion schemaVersion);
+
+    Task<bool> DeleteSchemaTemplateAsync(string version);
 }
