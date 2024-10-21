@@ -1079,11 +1079,11 @@ paths:
       tags:
         - Schemas
       summary: Delete schema template by its schema version
-      operationId: delete-schema
+      operationId: delete-schema-by-version
       security:
         - oAuth:
             - cso
-      parmaters:
+      paramaters:
         - name: version
           in: path
           description: Schema version by which schema template to delete.
