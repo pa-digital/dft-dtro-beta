@@ -1075,37 +1075,6 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-    delete:
-      tags:
-        - Schemas
-      summary: Delete schema template by its schema version
-      operationId: delete-schema-by-version
-      security:
-        - oAuth:
-            - cso
-      parameters:
-        - name: version
-          in: path
-          description: Schema version by which schema template to delete.
-          required: true
-          schema:
-            type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
-      responses:
-        '200':
-          description: OK.
-        '400':
-          description: Bad Request.
-        '404':
-          description: Not found.
-        '500':
-          description: Internal Server Error.
   /schemas/{id}:
     get:
       tags:
