@@ -162,7 +162,7 @@ public class BoundingBoxService : IBoundingBoxService
 
     private static bool IsInUk(List<SemanticValidationError> errors, string toValidate, GeometryType geometryType)
     {
-        const string ukBoundaryWkt = "POLYGON((500000 100000, 700000 100000, 700000 200000, 500000 200000, 500000 100000))";
+        const string ukBoundaryWkt = "POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))";
         WKTReader wktReader = new();
         Polygon ukBoundary = wktReader.Read(ukBoundaryWkt) as Polygon;
         bool isWithinUk = false;
@@ -306,9 +306,7 @@ public class BoundingBoxService : IBoundingBoxService
         {
             Coordinates coordinate = new();
             coordinate.Longitude = points[index].AsInt();
-            index++;
             coordinate.Latitude = points[index].AsInt();
-
             coordinates.Add(coordinate);
         }
 

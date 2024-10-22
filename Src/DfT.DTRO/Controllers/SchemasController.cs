@@ -410,4 +410,59 @@ public class SchemasController : ControllerBase
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
+
+    /// <summary>
+    /// Delete schema template
+    /// </summary>
+    /// <param name="version">Schema template version by which schema template will delete.</param>
+    /// <response code="200">OK.</response>
+    /// <response code="400">Bad Request.</response>
+    /// <response code="404">Schema not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    /// <returns>
+    /// A <see cref="Task"/> whose result is <see langword="true"/> if schema template
+    /// with specified schema version is deleted. Otherwise <see langword="false"/>
+    /// </returns>
+    [HttpDelete]
+    [Route("/schemas/{version}")]
+    [ValidateModelState]
+    [FeatureGate(FeatureNames.Admin)]
+    [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Successfully deleted schema template.")]
+    [SwaggerResponse(statusCode: 404, description: "Could not find the schema template with the specified version.")]
+    [SwaggerResponse(statusCode: 400, description: "Bad Request.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
+    public async Task<IActionResult> DeleteByVersion(string version)
+    {
+        _logger.LogTrace($"'{nameof(DeleteByVersion)}' method called.");
+        try
+        {
+            var response = await _schemaTemplateService.GetSchemaTemplateAsync(version);
+            if (response == null)
+            {
+                _logger.LogError($"Schema template with version '{version}' not found.");
+                return NotFound(new ApiErrorResponse("Schema not found.", $"Schema template with version '{version}' not found."));
+            }
+
+            var isDeleted = await _schemaTemplateService.DeleteSchemaTemplateAsync(version);
+            if (!isDeleted)
+            {
+                _logger.LogError($"Schema template with version '{version}' couldn't be deleted. Make sure is deactivated first.");
+                return BadRequest(new ApiErrorResponse("Schema not deleted", $"Schema template with version '{version}' couldn't be deleted. Make sure is deactivated first."));
+            }
+
+            _logger.LogInformation($"Schema template with version '{version}' deleted.");
+            return Ok(true);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError(ex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", ex.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", ex.Message));
+        }
+    }
 }
+

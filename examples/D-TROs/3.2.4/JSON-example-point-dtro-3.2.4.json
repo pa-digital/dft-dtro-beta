@@ -1,12 +1,12 @@
 {
-    "schemaVersion": "3.2.3",
+    "schemaVersion": "3.2.4",
     "data": {
         "Source": {
             "actionType": "amendment",
-            "currentTraOwner": 1234,
+            "currentTraOwner": 1000,
             "provision": [
                 {
-                    "actionType": "partialRevoke",
+                    "actionType": "fullRevoke",
                     "orderReportingPoint": "ttroTtmoByNotice",
                     "provisionDescription": "Prohibition of Waiting",
                     "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
@@ -20,9 +20,7 @@
                             "condition": [
                                 {
                                     "vehicleCharacteristics": {
-										"vehicleType": [
-											"taxi"
-										]
+
                                     }
                                 },
                                 {
@@ -35,17 +33,13 @@
                                                     "conditions": [
                                                         {
                                                             "vehicleCharacteristics": {
-                                                                "vehicleType": [
-                                                                    "bus"
-                                                                ]
+
                                                             },
                                                             "negate": false
                                                         },
                                                         {
                                                             "vehicleCharacteristics": {
-                                                                "vehicleType": [
-                                                                    "bus"
-                                                                ]
+
                                                             },
                                                             "negate": true
                                                         }
@@ -161,8 +155,7 @@
                                             }
                                         ],
                                         "end": "1996-01-05 22:50:50"
-                                    },
-                                    "regulationStatus": "not valid"
+                                    }
                                 }
                             ]
                         }
@@ -172,8 +165,9 @@
                             "description": "Zone 5, Kenworthy Road, All Odd, All Even",
                             "geometry": {
 								"version": 1,
-								"Polygon": {
-									"polygon": "SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"
+								"PointGeometry": {
+									"point": "SRID=27700;POINT(529157 178805)",
+									"representation": "centreLinePoint"
 								},
                                 "externalReference": [
                                     {
@@ -191,9 +185,9 @@
             "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
             "section": "All sections",
             "traAffected": [
-                1234
+                1000
             ],
-            "traCreator": 1234,
+            "traCreator": 1000,
             "troName": "The Sample County Council (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"
         }
     }

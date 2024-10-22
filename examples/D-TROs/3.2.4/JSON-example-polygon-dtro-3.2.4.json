@@ -1,6 +1,6 @@
 {
-	"schemaVersion": "3.2.3",
-	"data": {
+	"schemaVersion": "3.2.4",
+    "data": {
 		"Source": {
 			"actionType": "new",
 			"currentTraOwner": 1000,
@@ -164,8 +164,7 @@
 											}
 										],
 										"end": "1996-01-05 22:50:50"
-									},
-									"regulationStatus": "not valid"
+									}
 								}
 							]
 						}
@@ -175,9 +174,8 @@
 							"description": "Zone 5, Kenworthy Road, All Odd, All Even",
 							"geometry": {
 								"version": 1,
-								"PointGeometry": {
-									"point": "SRID=27700;POINT(529157 178805)",
-									"representation": "centreLinePoint"
+								"Polygon": {
+									"polygon": "SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"
 								},
 								"externalReference": [
 									{

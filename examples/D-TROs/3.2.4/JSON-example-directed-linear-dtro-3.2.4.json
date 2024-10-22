@@ -1,12 +1,12 @@
 {
-    "schemaVersion": "3.2.3",
+    "schemaVersion": "3.2.4",
     "data": {
         "Source": {
-            "actionType": "amendment",
-            "currentTraOwner": 1234,
+            "actionType": "new",
+            "currentTraOwner": 1000,
             "provision": [
                 {
-                    "actionType": "partialRevoke",
+                    "actionType": "new",
                     "orderReportingPoint": "ttroTtmoByNotice",
                     "provisionDescription": "Prohibition of Waiting",
                     "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
@@ -20,9 +20,12 @@
                             "condition": [
                                 {
                                     "vehicleCharacteristics": {
-										"vehicleType": [
-											"taxi"
-										]
+                                        "vehicleType": [
+                                            "taxi"
+                                        ],
+                                        "fuelType": [
+                                            "petrol"
+                                        ]
                                     }
                                 },
                                 {
@@ -36,7 +39,7 @@
                                                         {
                                                             "vehicleCharacteristics": {
                                                                 "vehicleType": [
-                                                                    "bus"
+                                                                    "anyVehicle"
                                                                 ]
                                                             },
                                                             "negate": false
@@ -44,7 +47,7 @@
                                                         {
                                                             "vehicleCharacteristics": {
                                                                 "vehicleType": [
-                                                                    "bus"
+                                                                    "taxi"
                                                                 ]
                                                             },
                                                             "negate": true
@@ -161,26 +164,25 @@
                                             }
                                         ],
                                         "end": "1996-01-05 22:50:50"
-                                    },
-                                    "regulationStatus": "not valid"
+                                    }
                                 }
                             ]
                         }
                     ],
-	                "regulatedPlace": [
+                    "regulatedPlace": [
                         {
                             "description": "Zone 5, Kenworthy Road, All Odd, All Even",
                             "geometry": {
-								"version": 1,
-								"Polygon": {
-									"polygon": "SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"
-								},
+                                "version": 1,
+                                "DirectedLinear": {
+                                    "directedLineString": "SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"
+                                },
                                 "externalReference": [
                                     {
                                         "lastUpdateDate": "1981-02-08 11:30:43",
-										"UniqueStreetReferenceNumber": {
-											"usrn": 96854586
-										}
+                                        "UniqueStreetReferenceNumber": {
+                                            "usrn": 96854586
+                                        }
                                     }
                                 ]
                             }
@@ -191,9 +193,9 @@
             "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
             "section": "All sections",
             "traAffected": [
-                1234
+                1000
             ],
-            "traCreator": 1234,
+            "traCreator": 1000,
             "troName": "The Sample County Council (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"
         }
     }
