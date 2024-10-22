@@ -93,7 +93,7 @@
                    class='d-inline'
                    asp-page-handler='Delete'
                    asp-route-version='@schema.SchemaVersion'>
-                    <button class='btn btn-danger @(isAdmin)? "": "disabled"'
+                    <button class='@(isAdmin ? "btn btn-danger": "disabled btn-btn-danger")'
                             type='submit'>
                         Delete
                     </button>

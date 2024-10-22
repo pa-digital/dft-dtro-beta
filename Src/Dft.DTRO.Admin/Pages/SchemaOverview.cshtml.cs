@@ -66,7 +66,7 @@ public class SchemaOverviewModel : PageModel
 
             if (schema.IsActive)
             {
-                return BadRequest($"Schema with version '{version}' is active. Make sure is deactivated before trying to delete it.");
+                return _errHandlingService.HandleUiError(new InvalidOperationException($"Schema with version '{version}' is active. Make sure is deactivated before trying to delete it."));
             }
 
             await _schemaService.DeleteSchemaAsync(version);
