@@ -246,15 +246,15 @@ jobs:
           revision_list=($(apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r --arg proxy_name "dtro-${env}-server" '.proxies[] | select(.name == $proxy_name) | .revision[]'))
           revision_count=${#revision_list[@]}
           if [ "$revision_count" -ge 50 ]; then
-            echo "There are $revision_count revisions. The oldest two revisions will be deleted."
             smallest_revision_1=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 1)
             smallest_revision_2=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 2 | tail -n 1)
-
-            echo "Deleting first revision: revision $smallest_revision_1"
+            echo "There are $revision_count revisions. The oldest two revisions ($smallest_revision_1 and $smallest_revision_2) will be deleted."
+          
+            echo "Deleting revision: $smallest_revision_1"
             apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_1 --token ${{ inputs.google_auth }} --org $apigee_organisation
             echo "Revision $smallest_revision_1 deleted"
 
-            echo "Deleting second revision: revision $smallest_revision_2"
+            echo "Deleting revision: $smallest_revision_2"
             apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_2 --token ${{ inputs.google_auth }} --org $apigee_organisation
             echo "Revision $smallest_revision_2 deleted"
 
