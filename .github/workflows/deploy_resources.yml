@@ -251,11 +251,11 @@ jobs:
             smallest_revision_2=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 2 | tail -n 1)
 
             echo "Deleting first revision: revision $smallest_revision_1"
-            apigeecli apis delete --name "dtro-${env}-server" --rev "$smallest_revision_1" --token ${{ inputs.google_auth }} --org "$apigee_organisation"
+            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_1 --token ${{ inputs.google_auth }} --org $apigee_organisation
             echo "Revision $smallest_revision_1 deleted"
 
             echo "Deleting second revision: revision $smallest_revision_2"
-            apigeecli apis delete --name "dtro-${env}-server" --rev "$smallest_revision_2" --token ${{ inputs.google_auth }} --org "$apigee_organisation"
+            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_2 --token ${{ inputs.google_auth }} --org $apigee_organisation
             echo "Revision $smallest_revision_2 deleted"
 
             echo "Revisions $smallest_revision_1 and $smallest_revision_2 for dtro-${env}-server deleted."
