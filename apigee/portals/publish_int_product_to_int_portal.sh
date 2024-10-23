@@ -2,8 +2,8 @@
 
 # Script Variables
 ORG=$apigee_organisation
-PUBLISHER_YAML_FILE="../openApi/apiDoc/$env_name_prefix/openapi3_0-publisher.yaml"
-CONSUMER_YAML_FILE="../openApi/apiDoc/$env_name_prefix/openapi3_0-consumer.yaml"
+PUBLISHER_YAML_FILE="openApi/apiDoc/$env_name_prefix/openapi3_0-publisher.yaml"
+CONSUMER_YAML_FILE="openApi/apiDoc/$env_name_prefix/openapi3_0-consumer.yaml"
 
 to_title_case() {
   echo "$1" | sed -e 's/\b./\u&/g' -e 's/-/ /g'
