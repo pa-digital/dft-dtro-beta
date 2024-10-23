@@ -2,6 +2,7 @@
 
 # Script Variables
 ORG=$apigee_organisation
+YAML_FILE="openApi/openapi3_0.yaml"
 PUBLISHER_YAML_FILE="../openApi/apiDoc/$env_name_prefix/openapi3_0-publisher.yaml"
 CONSUMER_YAML_FILE="../openApi/apiDoc/$env_name_prefix/openapi3_0-consumer.yaml"
 
@@ -65,7 +66,9 @@ while IFS="=" read -r title id; do
 done < <((echo "$RESPONSE_GET_CATELOG_ITEM" | jq -r '.data[] | "\(.title)=\(.id)"'))
 
 # Read the appropriate YAML file and convert it to a base64 string with no wrap around
-if [ "$PRODUCT" = "publisher" ]; then
+if [[ "$env" == "dev" || "$env" == "test" ]]; then
+  base64_string=$(base64 -w 0 "$YAML_FILE")
+elif [ "$PRODUCT" = "publisher" ]; then
   base64_string=$(base64 -w 0 "$PUBLISHER_YAML_FILE")
 else
   base64_string=$(base64 -w 0 "$CONSUMER_YAML_FILE")
