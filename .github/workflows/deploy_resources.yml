@@ -308,7 +308,7 @@ jobs:
 
           echo "Created and updated file: $xml_file"
           
-          rm apiproxy/targets/default.xml
+#          rm apiproxy/targets/default.xml
 
       - name: Add Proxy Route Rules
         shell: bash
