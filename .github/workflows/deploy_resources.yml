@@ -320,7 +320,7 @@ jobs:
         run: zip -r proxy.zip apiproxy
 
       - name: Upload and Deploy API Proxy Bundle
-        run: apigeecli apis create bundle --name "dtro-${env}-server" --proxy-zip proxy.zip --env "${{ env.name_prefix }}-environment" --sa sa-execution@{apigee_organisation}.iam.gserviceaccount.com --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
+        run: apigeecli apis create bundle --name "dtro-${env}-server" --proxy-zip proxy.zip --env "${{ env.name_prefix }}-environment" --sa sa-execution@${apigee_organisation}.iam.gserviceaccount.com --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
 
       - name: Create Products
         if: ${{ inputs.environment != 'prod' }}
