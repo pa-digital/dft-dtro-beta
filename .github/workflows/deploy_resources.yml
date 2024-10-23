@@ -74,7 +74,7 @@ env:
   TF_VAR_service_ui_tag: ${{  inputs.service-ui-image-tag }}
   TF_VAR_cloud_run_service_ui_client_id: ${{ secrets.service_ui_client_id }}
   TF_VAR_cloud_run_service_ui_client_secret: ${{ secrets.service_ui_client_secret }}
-  cloud_url: https://dtro-${{ inputs.environment }}-${{ inputs.dtro-image-name }}-${{ secrets.service_ui_client_secret }}.${{ inputs.gcp-region }}.run.app
+  cloud_url: https://dtro-${{ inputs.environment }}-${{ inputs.dtro-image-name }}-1015461613607.${{ inputs.gcp-region }}.run.app
 
 permissions:
   contents: read
