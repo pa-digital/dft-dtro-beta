@@ -164,11 +164,13 @@ public class DtroMappingService : IDtroMappingService
 
             List<DateTime> regulationStartTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<string>("start"))
+                .Where(it => it is not null)
                 .Select(it => DateTime.Parse(it).ToUniversalTime())
                 .ToList();
 
             List<DateTime> regulationEndTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<string>("end"))
+                .Where(it => it is not null)
                 .Select(it => DateTime.Parse(it).ToUniversalTime())
                 .ToList();
 
@@ -331,15 +333,15 @@ public class DtroMappingService : IDtroMappingService
 
         dtro.RegulationStart = timeValidity
             .Select(it => it.GetValueOrDefault<string>("start"))
-            .Select(DateTime.Parse)
-            .FirstOrDefault()
-            .ToUniversalTime();
+            .Where(it => it is not null)
+            .Select(it => DateTime.Parse(it).ToUniversalTime())
+            .FirstOrDefault();
 
         dtro.RegulationEnd = timeValidity
             .Select(it => it.GetValueOrDefault<string>("end"))
-            .Select(DateTime.Parse)
-            .FirstOrDefault()
-            .ToUniversalTime();
+            .Where(it => it is not null)
+            .Select(it => DateTime.Parse(it).ToUniversalTime())
+            .FirstOrDefault();
 
         string json = dtro.Data.ToIndentedJsonString();
         JObject obj = JObject.Parse(json);
