@@ -215,7 +215,7 @@ jobs:
           xml_file="apiproxy/targets/default.xml"
 
           # Replace the placeholder <Server name="ENV_TO_UPDATE-target-server"/> with the appropriate environment value
-          sed -i "s#<Server name=\"ENV_TO_UPDATE-target-server\"/>#<Server name=\"dtro-${env}-target-server\"/>#" "$xml_file"
+          sed -i "s#<Server name=\"ENV_TO_UPDATE-target-server\"/>#<Server name=\"dtro-${env_name_prefix}-target-server\"/>#" "$xml_file"
 
           # Replace the placeholder <Audience>CLOUD_RUN_URL_TO_UPDATE</Audience> with the actual Cloud Run URL
           sed -i "s#<Audience>CLOUD_RUN_URL_TO_UPDATE</Audience>#<Audience>${cloud_url}</Audience>#" "$xml_file"
