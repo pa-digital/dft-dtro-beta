@@ -55,12 +55,13 @@ public static class ExceptionExtensions
 
         if (response.RequestComparedToRules.Any())
         {
-            foreach (var error in response.RequestComparedToRules)
+            for (int index = 0; index < response.RequestComparedToRules.Count; index++)
             {
-                errors.Add("Name", error.Name);
-                errors.Add("Message", error.Message);
-                errors.Add("Path", error.Path);
-                errors.Add("Rule", error.Rule);
+                SemanticValidationError error = response.RequestComparedToRules[index];
+                errors.Add($"{index}_Name", error.Name);
+                errors.Add($"{index}_Message", error.Message);
+                errors.Add($"{index}_Path", error.Path);
+                errors.Add($"{index}_Rule", error.Rule);
             }
         }
         else if (response.RequestComparedToSchema.Any())
@@ -79,15 +80,16 @@ public static class ExceptionExtensions
     private static IDictionary<string, object> Beautify(this IList<DtroJsonValidationErrorResponse> response)
     {
         IDictionary<string, object> errors = new Dictionary<string, object>();
-        foreach (DtroJsonValidationErrorResponse item in response)
+        for (int index = 0; index < response.Count; index++)
         {
-            errors.Add("Path", item.Path);
-            errors.Add("Message", item.Message);
-            errors.Add("Children", string.Join("|", item.ChildErrors.Beautify()));
-            errors.Add("ErrorType", item.ErrorType);
-            errors.Add("LineNumber", item.LineNumber);
-            errors.Add("LinePosition", item.LinePosition);
-            errors.Add("Value", item.Value);
+            DtroJsonValidationErrorResponse item = response[index];
+            errors.Add($"{index}_Path", item.Path);
+            errors.Add($"{index}_Message", item.Message);
+            errors.Add($"{index}_Children", string.Join("|", item.ChildErrors.Beautify()));
+            errors.Add($"{index}_ErrorType", item.ErrorType);
+            errors.Add($"{index}_LineNumber", item.LineNumber);
+            errors.Add($"{index}_LinePosition", item.LinePosition);
+            errors.Add($"{index}_Value", item.Value);
         }
 
         return errors;
