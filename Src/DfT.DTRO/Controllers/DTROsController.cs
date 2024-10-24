@@ -203,6 +203,7 @@ public class DTROsController : ControllerBase
             DtroValidationExceptionResponse dtroValidationExceptionResponse = ex.MapToResponse();
 
             _logger.LogError(ex.Message);
+
             return BadRequest(dtroValidationExceptionResponse.Beautify());
         }
         catch (NotFoundException ex)

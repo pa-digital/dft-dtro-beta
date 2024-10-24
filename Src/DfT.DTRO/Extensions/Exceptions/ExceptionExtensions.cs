@@ -45,9 +45,9 @@ public static class ExceptionExtensions
             .ToList();
     }
 
-    public static IDictionary<string, object> Beautify(this DtroValidationExceptionResponse response)
+    public static IDictionary<string, Dictionary<string, object>> Beautify(this DtroValidationExceptionResponse response)
     {
-        var errors = new Dictionary<string, object>();
+        IDictionary<string, Dictionary<string, object>> errors = new Dictionary<string, Dictionary<string, object>>();
         if (response == null)
         {
             return errors;
@@ -58,10 +58,13 @@ public static class ExceptionExtensions
             for (int index = 0; index < response.RequestComparedToRules.Count; index++)
             {
                 SemanticValidationError error = response.RequestComparedToRules[index];
-                errors.Add($"{index}_Name", error.Name);
-                errors.Add($"{index}_Message", error.Message);
-                errors.Add($"{index}_Path", error.Path);
-                errors.Add($"{index}_Rule", error.Rule);
+                errors.Add($"RuleError_{index}", new Dictionary<string, object>
+                {
+                    { "Name", error.Name },
+                    { "Message", error.Message },
+                    { "Path", error.Path },
+                    { "Rule", error.Rule }
+                });
             }
         }
         else if (response.RequestComparedToSchema.Any())
@@ -70,8 +73,11 @@ public static class ExceptionExtensions
         }
         else if (response.RequestComparedToSchemaVersion != null)
         {
-            errors.Add("Error", response.RequestComparedToSchemaVersion.Error);
-            errors.Add("Message", response.RequestComparedToSchemaVersion.Message);
+            errors.Add("SchemaVersionError", new Dictionary<string, object>
+            {
+                { "Error", response.RequestComparedToSchemaVersion.Error },
+                { "Message", response.RequestComparedToSchemaVersion.Message }
+            });
         }
 
         return errors;
