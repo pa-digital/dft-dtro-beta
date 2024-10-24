@@ -56,26 +56,26 @@ public static class ExceptionExtensions
             errors += string
                 .Join("", response
                     .RequestComparedToRules
-                    .Select(error => $"{error.Path}{Environment.NewLine}{error.Message}"));
+                    .Select(error => $"{error.Path} {error.Message}"));
         }
         else if (response.RequestComparedToSchema.Any())
         {
             errors += string
                 .Join("", response
                     .RequestComparedToSchema
-                    .Select(error => $"Path: {error.Path}{Environment.NewLine}" +
-                                     $"Message: {error.Message}{Environment.NewLine}" +
-                                     $"Child errors count: {error.ChildErrors.Count}{Environment.NewLine}" +
-                                     $"Error Type: {error.ErrorType}{Environment.NewLine}" +
-                                     $"Line number: {error.LineNumber}{Environment.NewLine}" +
-                                     $"Line position: {error.LinePosition}{Environment.NewLine}" +
+                    .Select(error => $"Path: {error.Path} " +
+                                     $"Message: {error.Message} " +
+                                     $"Child errors count: {error.ChildErrors.Count} " +
+                                     $"Error Type: {error.ErrorType} " +
+                                     $"Line number: {error.LineNumber} " +
+                                     $"Line position: {error.LinePosition} " +
                                      $"Value: {error.Value}"));
         }
         else if (response.RequestComparedToSchemaVersion != null)
 
         {
-            errors += response.RequestComparedToSchemaVersion?.Error + Environment.NewLine +
-                      response.RequestComparedToSchemaVersion?.Message;
+            errors += $"{response.RequestComparedToSchemaVersion?.Error} " +
+                      $"{response.RequestComparedToSchemaVersion?.Message}";
         }
 
         return errors;

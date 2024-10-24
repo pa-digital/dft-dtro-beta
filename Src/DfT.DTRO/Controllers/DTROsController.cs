@@ -57,8 +57,6 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.Publish)]
     public async Task<IActionResult> CreateFromFile([FromHeader(Name = "x-app-id")][Required] Guid xAppId, IFormFile file)
     {
-
-
         if (file == null || file.Length == 0)
         {
             return BadRequest("File is empty");
@@ -110,7 +108,7 @@ public class DTROsController : ControllerBase
     /// <summary>
     /// Update an existing D-TRO
     /// </summary>
-    /// <param name="xAppId">xappid identification a D-TRO is being updated for.</param>
+    /// <param name="xAppId">xAppId identification a D-TRO is being updated for.</param>
     /// <param name="id">ID of the D-TRO to update.</param>
     /// <param name="file">JSON file containing a full D-TRO details</param>
     /// <response code="200">OK.</response>
