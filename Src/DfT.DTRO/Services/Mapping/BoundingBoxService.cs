@@ -242,10 +242,10 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.PointGeometry} ",
-                        Message = "Selected geometry ",
-                        Name = "Wrong geometry ",
-                        Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry} "
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.PointGeometry}",
+                        Message = "Selected geometry",
+                        Name = "Incorrect pairs.",
+                        Rule = $"Incorrect pairs for selected geometry: {GeometryType.PointGeometry}"
                     });
                 }
                 break;
@@ -259,10 +259,10 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.LinearGeometry} ",
-                        Message = "Selected geometry ",
-                        Name = "Wrong geometry ",
-                        Rule = $"Geometry accepted should be one of: {GeometryType.LinearGeometry} "
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.LinearGeometry}",
+                        Message = "Selected geometry",
+                        Name = "Incorrect pairs",
+                        Rule = $"Incorrect pairs for selected geometry: {GeometryType.LinearGeometry} "
                     });
                 }
                 break;
@@ -276,10 +276,10 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.Polygon} ",
-                        Message = "Selected geometry ",
-                        Name = "Wrong geometry ",
-                        Rule = $"Geometry accepted should be one of: {GeometryType.Polygon} "
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.Polygon}",
+                        Message = "Selected geometry",
+                        Name = "Incorrect pairs",
+                        Rule = $"Incorrect pairs for selected geometry: {GeometryType.Polygon} "
                     });
                 }
                 break;
@@ -293,10 +293,10 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.DirectedLinear} ",
-                        Message = "Selected geometry ",
-                        Name = "Wrong geometry ",
-                        Rule = $"Geometry accepted should be one of: {GeometryType.DirectedLinear} "
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.DirectedLinear}",
+                        Message = "Selected geometry",
+                        Name = "Incorrect pairs",
+                        Rule = $"Incorrect pairs for selected geometry: {GeometryType.DirectedLinear} "
                     });
                 }
                 break;
@@ -304,8 +304,8 @@ public class BoundingBoxService : IBoundingBoxService
                 errors.Add(new SemanticValidationError
                 {
                     Path = "Source.provision.regulatedPlace.geometry",
-                    Message = "Selected geometry ",
-                    Name = "Wrong geometry",
+                    Message = "Selected geometry",
+                    Name = "Unknown geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
                 break;
@@ -313,7 +313,7 @@ public class BoundingBoxService : IBoundingBoxService
                 errors.Add(new SemanticValidationError
                 {
                     Path = "Source.provision.regulatedPlace.geometry",
-                    Message = "Selected geometry ",
+                    Message = "Selected geometry",
                     Name = "Wrong geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
@@ -325,8 +325,6 @@ public class BoundingBoxService : IBoundingBoxService
 
     private static BoundingBox ValidateAgainstBoundingBox(IEnumerable<JToken> values)
     {
-        List<Coordinates> coordinates = new();
-
         List<string> points = values
             .Value<string>()
             .Split(" ")
@@ -336,13 +334,13 @@ public class BoundingBoxService : IBoundingBoxService
                 .Replace(",", ""))
             .ToList();
 
-        for (int index = 0; index < points.Count; index++)
-        {
-            Coordinates coordinate = new();
-            coordinate.Longitude = points[index].AsInt();
-            coordinate.Latitude = points[index].AsInt();
-            coordinates.Add(coordinate);
-        }
+        List<Coordinates> coordinates = points
+            .Select(paint => new Coordinates
+            {
+                Longitude = paint.AsInt(),
+                Latitude = paint.AsInt()
+            })
+            .ToList();
 
         return BoundingBox.Wrapping(coordinates);
 
