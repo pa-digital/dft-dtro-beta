@@ -101,7 +101,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", ex.Message));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
         }
     }
 
@@ -168,7 +168,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", ex.Message));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
         }
     }
 
@@ -221,7 +221,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", ex.Message));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
         }
     }
 
@@ -275,7 +275,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", ex.Message));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
         }
     }
 
@@ -306,7 +306,7 @@ public class DTROsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
         }
     }
 
@@ -343,7 +343,7 @@ public class DTROsController : ControllerBase
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", ex.Message));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
         }
     }
 
@@ -375,7 +375,7 @@ public class DTROsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", ex.Message));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
         }
     }
 
@@ -407,7 +407,7 @@ public class DTROsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", ex.Message));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
         }
     }
 
@@ -442,7 +442,7 @@ public class DTROsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", ex.Message));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
         }
     }
 }
