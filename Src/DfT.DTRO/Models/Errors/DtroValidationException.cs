@@ -26,6 +26,6 @@ public class DtroValidationException : Exception
             RequestComparedToSchemaVersion = RequestComparedToSchemaVersion,
             RequestComparedToSchema = RequestComparedToSchema,
             RequestComparedToRules = RequestComparedToRules
-        };  
+        };
     }
 }

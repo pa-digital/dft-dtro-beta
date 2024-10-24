@@ -45,9 +45,9 @@ public static class ExceptionExtensions
             .ToList();
     }
 
-    public static string Beautify(this DtroValidationExceptionResponse response)
+    public static IDictionary<string, object> Beautify(this DtroValidationExceptionResponse response)
     {
-        var errors = string.Empty;
+        var errors = new Dictionary<string, object>();
         if (response == null)
         {
             return errors;
@@ -55,32 +55,39 @@ public static class ExceptionExtensions
 
         if (response.RequestComparedToRules.Any())
         {
-            errors += string
-                .Join("", response
-                    .RequestComparedToRules
-                    .Select(error => $"Name: {error.Name}{Environment.NewLine}" +
-                                     $"Message: {error.Message}{Environment.NewLine}" +
-                                     $"Path: {error.Path}{Environment.NewLine}" +
-                                     $"Rule: {error.Rule}"));
+            foreach (var error in response.RequestComparedToRules)
+            {
+                errors.Add("Name", error.Name);
+                errors.Add("Message", error.Message);
+                errors.Add("Path", error.Path);
+                errors.Add("Rule", error.Rule);
+            }
         }
         else if (response.RequestComparedToSchema.Any())
         {
-            errors += string
-                .Join("", response
-                    .RequestComparedToSchema
-                    .Select(error => $"Path: {error.Path}{Environment.NewLine}" +
-                                     $"Message: {error.Message}{Environment.NewLine}" +
-                                     $"Child errors count: {error.ChildErrors.Count}{Environment.NewLine}" +
-                                     $"Error Type: {error.ErrorType}{Environment.NewLine}" +
-                                     $"Line number: {error.LineNumber}{Environment.NewLine}" +
-                                     $"Line position: {error.LinePosition}{Environment.NewLine}" +
-                                     $"Value: {error.Value}"));
+            response.RequestComparedToSchema.Beautify();
         }
         else if (response.RequestComparedToSchemaVersion != null)
-
         {
-            errors += $"Error: {response.RequestComparedToSchemaVersion?.Error}{Environment.NewLine}" +
-                      $"Message: {response.RequestComparedToSchemaVersion?.Message}";
+            errors.Add("Error", response.RequestComparedToSchemaVersion.Error);
+            errors.Add("Message", response.RequestComparedToSchemaVersion.Message);
+        }
+
+        return errors;
+    }
+
+    private static IDictionary<string, object> Beautify(this IList<DtroJsonValidationErrorResponse> response)
+    {
+        IDictionary<string, object> errors = new Dictionary<string, object>();
+        foreach (DtroJsonValidationErrorResponse item in response)
+        {
+            errors.Add("Path", item.Path);
+            errors.Add("Message", item.Message);
+            errors.Add("Children", string.Join("|", item.ChildErrors.Beautify()));
+            errors.Add("ErrorType", item.ErrorType);
+            errors.Add("LineNumber", item.LineNumber);
+            errors.Add("LinePosition", item.LinePosition);
+            errors.Add("Value", item.Value);
         }
 
         return errors;
