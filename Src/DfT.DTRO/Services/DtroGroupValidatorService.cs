@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.Services;
+﻿using DfT.DTRO.Extensions.Exceptions;
+
+namespace DfT.DTRO.Services;
 public class DtroGroupValidatorService : IDtroGroupValidatorService
 {
     private readonly IJsonSchemaValidationService _jsonSchemaValidationService;
@@ -49,20 +51,20 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         var requests = _recordManagementService.ValidateCreationRequest(dtroSubmit, headerTa);
         if (requests.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = requests.ToList() };
+            return new DtroValidationException { RequestComparedToRules = requests.ToList().MapFrom() };
         }
 
         var requestComparedToRules = await _jsonLogicValidationService.ValidateCreationRequest(dtroSubmit, schemaVersion.ToString());
         if (requestComparedToRules.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = requestComparedToRules.ToList() };
+            return new DtroValidationException { RequestComparedToRules = requestComparedToRules.ToList().MapFrom() };
         }
 
         var tuple = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);
 
         if (tuple.Item2.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = tuple.Item2.ToList() };
+            return new DtroValidationException { RequestComparedToRules = tuple.Item2.ToList().MapFrom() };
         }
 
         return null;

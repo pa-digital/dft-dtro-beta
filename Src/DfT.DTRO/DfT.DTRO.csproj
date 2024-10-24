@@ -53,6 +53,7 @@
 	<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
+	<Folder Include="Extensions\Exceptions\" />
 	<Folder Include="Logs\" />
   </ItemGroup>
 </Project>
