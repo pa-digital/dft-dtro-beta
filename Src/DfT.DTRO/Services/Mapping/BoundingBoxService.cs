@@ -26,7 +26,9 @@ public class BoundingBoxService : IBoundingBoxService
                     errors.Add(new SemanticValidationError
                     {
                         Message = "British National Grid - Spatial Reference not present in the geometry or it is wrong referenced.",
-                        Path = "Source.provision.regulatedPlace.geometry"
+                        Path = "Source.provision.regulatedPlace.geometry",
+                        Name = "Spatial reference",
+                        Rule = "Spatial reference should be SRID=27700"
                     });
 
                     return new BoundingBox();
@@ -43,7 +45,9 @@ public class BoundingBoxService : IBoundingBoxService
                     errors.Add(new SemanticValidationError
                     {
                         Message = "Coordinates you provided are not within UK coordinates",
-                        Path = "Source.provision.regulatedPlace.geometry"
+                        Path = "Source.provision.regulatedPlace.geometry",
+                        Name = "Wrong coordinates",
+                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
                     return new BoundingBox();
                 }
@@ -57,7 +61,9 @@ public class BoundingBoxService : IBoundingBoxService
                     errors.Add(new SemanticValidationError
                     {
                         Message = "British National Grid - Spatial Reference not present in the geometry or it is wrong referenced.",
-                        Path = "Source.provision.regulatedPlace.geometry"
+                        Path = "Source.provision.regulatedPlace.geometry",
+                        Name = "Spatial reference",
+                        Rule = "Spatial reference should be SRID=27700"
                     });
                     return new BoundingBox();
                 }
@@ -70,10 +76,12 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = IsInUk(errors, toValidate, GeometryType.LinearGeometry);
                 if (!isValid)
                 {
-                    errors.Add(new SemanticValidationError()
+                    errors.Add(new SemanticValidationError
                     {
                         Message = "Coordinates you provided are not within UK coordinates",
-                        Path = "Source.provision.regulatedPlace.geometry"
+                        Path = "Source.provision.regulatedPlace.geometry",
+                        Name = "Wrong coordinates",
+                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
                     return new BoundingBox();
                 }
@@ -87,7 +95,9 @@ public class BoundingBoxService : IBoundingBoxService
                     errors.Add(new SemanticValidationError
                     {
                         Message = "British National Grid - Spatial Reference not present in the geometry or it is wrong referenced.",
-                        Path = "Source.provision.regulatedPlace.geometry"
+                        Path = "Source.provision.regulatedPlace.geometry",
+                        Name = "Spatial reference",
+                        Rule = "Spatial reference should be SRID=27700"
                     });
                     return new BoundingBox();
                 }
@@ -102,10 +112,12 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = IsInUk(errors, toValidate, GeometryType.Polygon);
                 if (!isValid)
                 {
-                    errors.Add(new SemanticValidationError()
+                    errors.Add(new SemanticValidationError
                     {
                         Message = "Coordinates you provided are not within UK coordinates",
-                        Path = "Source.provision.regulatedPlace.geometry"
+                        Path = "Source.provision.regulatedPlace.geometry",
+                        Name = "Wrong coordinates",
+                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
                     return new BoundingBox();
                 }
@@ -120,7 +132,9 @@ public class BoundingBoxService : IBoundingBoxService
                     errors.Add(new SemanticValidationError
                     {
                         Message = "British National Grid - Spatial Reference not present in the geometry or it is wrong referenced.",
-                        Path = "Source.provision.regulatedPlace.geometry"
+                        Path = "Source.provision.regulatedPlace.geometry",
+                        Name = "Spatial reference",
+                        Rule = "Spatial reference should be SRID=27700"
                     });
                     return new BoundingBox();
                 }
@@ -135,10 +149,12 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = IsInUk(errors, toValidate, GeometryType.DirectedLinear);
                 if (!isValid)
                 {
-                    errors.Add(new SemanticValidationError()
+                    errors.Add(new SemanticValidationError
                     {
                         Message = "Coordinates you provided are not within UK coordinates",
-                        Path = "Source.provision.regulatedPlace.geometry"
+                        Path = "Source.provision.regulatedPlace.geometry",
+                        Name = "Wrong coordinates",
+                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
                     return new BoundingBox();
                 }
@@ -148,7 +164,9 @@ public class BoundingBoxService : IBoundingBoxService
                 errors.Add(new SemanticValidationError
                 {
                     Path = "Source.provision.regulatedPlace.geometry",
-                    Message = $"Selected geometry is not one of accepted types: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
+                    Message = "Selected geometry ",
+                    Name = "Wrong geometry",
+                    Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
                 return new BoundingBox();
         }
@@ -188,14 +206,18 @@ public class BoundingBoxService : IBoundingBoxService
                 errors.Add(new SemanticValidationError
                 {
                     Path = "Source.provision.regulatedPlace.geometry",
-                    Message = $"Selected geometry is not one of accepted types: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
+                    Message = "Selected geometry ",
+                    Name = "Wrong geometry",
+                    Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
                 break;
             default:
                 errors.Add(new SemanticValidationError
                 {
                     Path = "Source.provision.regulatedPlace.geometry",
-                    Message = $"Selected geometry is not one of accepted types: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
+                    Message = "Selected geometry ",
+                    Name = "Wrong geometry",
+                    Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
                 break;
         }
@@ -220,8 +242,10 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = $"Invalid number of pairs in {GeometryType.PointGeometry}",
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.PointGeometry}"
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.PointGeometry} ",
+                        Message = "Selected geometry ",
+                        Name = "Wrong geometry ",
+                        Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry} "
                     });
                 }
                 break;
@@ -235,8 +259,10 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = $"Invalid number of pairs in {GeometryType.LinearGeometry}",
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.LinearGeometry}"
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.LinearGeometry} ",
+                        Message = "Selected geometry ",
+                        Name = "Wrong geometry ",
+                        Rule = $"Geometry accepted should be one of: {GeometryType.LinearGeometry} "
                     });
                 }
                 break;
@@ -250,8 +276,10 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = $"Invalid number of pairs in {GeometryType.Polygon}",
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.Polygon}"
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.Polygon} ",
+                        Message = "Selected geometry ",
+                        Name = "Wrong geometry ",
+                        Rule = $"Geometry accepted should be one of: {GeometryType.Polygon} "
                     });
                 }
                 break;
@@ -265,8 +293,10 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = $"Invalid number of pairs in {GeometryType.DirectedLinear}",
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.DirectedLinear}"
+                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.DirectedLinear} ",
+                        Message = "Selected geometry ",
+                        Name = "Wrong geometry ",
+                        Rule = $"Geometry accepted should be one of: {GeometryType.DirectedLinear} "
                     });
                 }
                 break;
@@ -274,14 +304,18 @@ public class BoundingBoxService : IBoundingBoxService
                 errors.Add(new SemanticValidationError
                 {
                     Path = "Source.provision.regulatedPlace.geometry",
-                    Message = $"Selected geometry is not one of accepted types: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
+                    Message = "Selected geometry ",
+                    Name = "Wrong geometry",
+                    Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
                 break;
             default:
                 errors.Add(new SemanticValidationError
                 {
                     Path = "Source.provision.regulatedPlace.geometry",
-                    Message = $"Selected geometry is not one of accepted types: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
+                    Message = "Selected geometry ",
+                    Name = "Wrong geometry",
+                    Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
                 break;
         }

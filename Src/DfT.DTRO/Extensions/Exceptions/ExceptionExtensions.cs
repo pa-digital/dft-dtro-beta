@@ -27,7 +27,7 @@ public static class ExceptionExtensions
             .ToList();
     }
 
-    public static List<SemanticValidationError> MapFrom(this List<SemanticValidationError> validationErrors)
+    public static List<SemanticValidationError> MapFrom(this IList<SemanticValidationError> validationErrors)
     {
         if (validationErrors.Count == 0)
         {
@@ -38,7 +38,9 @@ public static class ExceptionExtensions
             .Select(validationError => new SemanticValidationError
             {
                 Message = validationError.Message,
-                Path = validationError.Path
+                Path = validationError.Path,
+                Name = validationError.Name,
+                Rule = validationError.Rule
             })
             .ToList();
     }
@@ -56,25 +58,25 @@ public static class ExceptionExtensions
             errors += string
                 .Join("", response
                     .RequestComparedToRules
-                    .Select(error => $"{error.Path} {error.Message}"));
+                    .Select(error => $"{error.Name}| {error.Message}| {error.Path}| {error.Rule}"));
         }
         else if (response.RequestComparedToSchema.Any())
         {
             errors += string
                 .Join("", response
                     .RequestComparedToSchema
-                    .Select(error => $"Path: {error.Path} " +
-                                     $"Message: {error.Message} " +
-                                     $"Child errors count: {error.ChildErrors.Count} " +
-                                     $"Error Type: {error.ErrorType} " +
-                                     $"Line number: {error.LineNumber} " +
-                                     $"Line position: {error.LinePosition} " +
+                    .Select(error => $"Path: {error.Path} | " +
+                                     $"Message: {error.Message} | " +
+                                     $"Child errors count: {error.ChildErrors.Count} | " +
+                                     $"Error Type: {error.ErrorType} | " +
+                                     $"Line number: {error.LineNumber} | " +
+                                     $"Line position: {error.LinePosition} | " +
                                      $"Value: {error.Value}"));
         }
         else if (response.RequestComparedToSchemaVersion != null)
 
         {
-            errors += $"{response.RequestComparedToSchemaVersion?.Error} " +
+            errors += $"{response.RequestComparedToSchemaVersion?.Error} | " +
                       $"{response.RequestComparedToSchemaVersion?.Message}";
         }
 

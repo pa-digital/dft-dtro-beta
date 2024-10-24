@@ -51,20 +51,20 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         var requests = _recordManagementService.ValidateCreationRequest(dtroSubmit, headerTa);
         if (requests.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = requests.ToList().MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = requests.MapFrom() };
         }
 
         var requestComparedToRules = await _jsonLogicValidationService.ValidateCreationRequest(dtroSubmit, schemaVersion.ToString());
         if (requestComparedToRules.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = requestComparedToRules.ToList().MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = requestComparedToRules.MapFrom() };
         }
 
         var tuple = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);
 
         if (tuple.Item2.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = tuple.Item2.ToList().MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = tuple.Item2.MapFrom() };
         }
 
         return null;
