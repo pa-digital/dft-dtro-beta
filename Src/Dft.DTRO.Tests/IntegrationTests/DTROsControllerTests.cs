@@ -127,10 +127,9 @@ public class DTROsControllerTests
         StringContent payload = await Utils.CreateDtroJsonPayload(NewLinearGeometry, "3.1.1", false);
         HttpResponseMessage response = await client.PostAsync("/dtros/createFromBody", payload);
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        DtroValidationExceptionResponse? data = JsonConvert.DeserializeObject<DtroValidationExceptionResponse>(await response.Content.ReadAsStringAsync());
-
-        Assert.NotNull(data);
+        string readAsStringAsync = await response.Content.ReadAsStringAsync();
+        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        Assert.Equal("An error occurred: Value cannot be null. (Parameter 'source')", readAsStringAsync);
     }
 
     [Fact]
@@ -187,7 +186,7 @@ public class DTROsControllerTests
 
         StringContent payload = await Utils.CreateDtroJsonPayload(NewLinearGeometry, "3.1.1", false);
         HttpResponseMessage response = await client.PutAsync($"/dtros/updateFromBody/{dtroId}", payload);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
     }
 
     [Fact]

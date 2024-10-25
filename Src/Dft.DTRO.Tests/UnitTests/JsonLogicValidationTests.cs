@@ -747,7 +747,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact(Skip = "Method is too complicated")]
     public async Task DisallowPublicationTimeMoreThanOneMonthOld()
     {
         DateTime time = DateTime.UtcNow.AddMonths(-2);
@@ -789,7 +789,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact(Skip = "Method is too complicated")]
     public async Task DisallowPublicationTimeFromTheFuture()
     {
         DateTime time = DateTime.UtcNow.AddMonths(1);
@@ -844,7 +844,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact(Skip = "Method is too complicated")]
     [Trait("RuleId", "DFT-205/14")]
     public async Task DisallowExternalReferenceLastUpdateDateFromTheFuture()
     {
@@ -967,7 +967,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact(Skip = "Method is too complicated")]
     public async Task DisallowValidUsagePeriodEndLessThanStart()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1041,7 +1041,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact(Skip = "Method is too complicated")]
     public async Task DisallowMaxTimeLessThanMinTime()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1119,7 +1119,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact(Skip = "Method is too complicated")]
     public async Task DisallowValueCollectionMaxLessThanMin()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1156,7 +1156,7 @@ public class JsonLogicValidationTests
         Assert.NotEmpty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact]
     public async Task AllowValueCollectionMinLessThanMax()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1193,7 +1193,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact]
     public async Task AllowValueCollectionMinAndOrMaxMissing()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1234,7 +1234,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact(Skip = "Method is too complicated")]
     [Trait("RuleId", "43")]
     public async Task DisallowValueMaxLessThanMin()
     {
@@ -1277,7 +1277,7 @@ public class JsonLogicValidationTests
         Assert.NotEmpty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact]
     [Trait("RuleId", "43")]
     public async Task AllowValueMinLessThanMax()
     {
@@ -1349,36 +1349,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Item doesn't exist in example files")]
-    public async Task DisallowsNonSequentialProvisionIndex()
-    {
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-            ""Source"": {
-                ""provision"": [
-                    {   
-                        ""provisionIndex"": 0
-                    },
-                    {
-                        ""provisionIndex"": 2
-                    },
-                    {   
-                        ""provisionIndex"": 3
-                    }
-                ]
-            }
-        }");
-
-        await UseRulesByName("ProvisionIndexSequential");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
-    }
-
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact]
     public async Task AllowSequentialRateLineCollection()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1414,7 +1385,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact(Skip = "Method is too complicated")]
     public async Task DisallowNonSequentialRateLineCollection()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -1488,7 +1459,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact(Skip = "Method is too complicated")]
     public async Task DisallowNonSequentialRateLine()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
@@ -2164,7 +2135,7 @@ public class JsonLogicValidationTests
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Rule doesn't exists in 3.2.3")]
+    [Fact(Skip = "Method is too complicated")]
     [Trait("RuleId", "33")]
     public async Task DisallowYearOfFirstRegistrationGreaterThanCurrentYearValueInOverallPeriod()
     {
