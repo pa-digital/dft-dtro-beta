@@ -2,7 +2,7 @@
 <AssignMessage name="AM-Set-Http-Security-Header">
   <Set>
     <Headers>
-      <Header name='Strict-Transport-Security'>"default-src 'self'"</Header>
+      <Header name='Content-Security-Policy'>"default-src 'self'"</Header>
     </Headers>
   </Set>
   <AssignTo>request</AssignTo>
