@@ -12,6 +12,8 @@
 /Src/Dft.DTRO.Admin/bin
 /Src/Dft.DTRO/Admin/bin/Debug/net6.0
 /Src/Dft.DTRO.Admin/obj
+/Src/Dft.DTRO.Admin/.vs/Dft.DTRO.Admin/xs
+/Src/DfT.DTRO/.vs/DfT.DTRO/xs/project-cache
 /.vs
 /Src/Dft.DTRO.Admin/obj/Debug/net6.0/ref/Dft.DTRO.Admin.dll
 /Src/Dft.DTRO.Admin/bin/Debug/net6.0/Dft.DTRO.Admin.dll
@@ -40,5 +42,5 @@
 /apigee/openApi/apds.yaml
 /Src/Dft.DTRO.Admin/appsettings.json
 /Src/DfT.DTRO/DfT.DTRO.sln
-/Src/DfT.DTRO/.vs/DfT.DTRO/xs/project-cache/DfT.DTRO-Debug.json
 /Src/DfT.DTRO/.vs/DfT.DTRO/xs/UserPrefs.xml
+/Src/Dft.DTRO.Admin/Dft.DTRO.Admin.sln
