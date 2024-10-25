@@ -2,7 +2,7 @@
 <AssignMessage name="AM-Set-Http-Security-Header">
   <Set>
     <Headers>
-      <Header name='Content-Security-Policy'>default-src 'self'</Header>
+      <Header name='Content-Security-Policy'>default-src 'self'; form-action 'self'; object-src 'none'</Header>
     </Headers>
   </Set>
 </AssignMessage>
