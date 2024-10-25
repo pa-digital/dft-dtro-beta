@@ -275,6 +275,10 @@ jobs:
           cp policies/AM-Set-App-Id-Header.xml apiproxy/policies/AM-Set-App-Id-Header.xml
           gawk -i inplace '/<PostFlow name="PostFlow">/ { print; getline; print "   <Request>\n      <Step>\n        <Name>AM-Set-App-Id-Header</Name>\n      </Step>\n   </Request>"; next } 1' apiproxy/proxies/default.xml
           gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
+          
+          cp policies/AM-Set-Http-Security-Header.xml apiproxy/policies/AM-Set-Http-Security-Header.xml
+          gawk -i inplace '/<PreFlow name="PreFlow">/,/<\/Request>/ { if (/^ *<\/Request>/) { print "      <Step>\n        <Name>AM-Set-Http-Security-Header</Name>\n      </Step>" } } 1' apiproxy/proxies/default.xml
+          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-Http-Security-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
 
       - name: Setup Python
         uses: actions/setup-python@v5

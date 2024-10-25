@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage name="AM-Set-Http-Security-Header">
+  <Set>
+    <Headers>
+      <Header name='Strict-Transport-Security'>"default-src 'self'"</Header>
+    </Headers>
+  </Set>
+  <AssignTo>request</AssignTo>
+</AssignMessage>
