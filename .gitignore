@@ -7,11 +7,12 @@
 /Src/DfT.DTRO/bin/Debug/net6.0
 /Src/DfT.DTRO/obj
 /Src/Dft.DTRO.Tests/bin/
-/Src/Dft.DTRO.Tests/bin/Debug/net6.0
+/Src/Dft.DTRO.Tests/bin/Debug/net6.0/
 /Src/Dft.DTRO.Tests/obj/
 /Src/Dft.DTRO.Admin/bin/
-/Src/Dft.DTRO/Admin/bin/Debug/net6.0
+/Src/Dft.DTRO/Admin/bin/Debug/net6.0/
 /Src/Dft.DTRO.Admin/obj/
+/Src/Dft.DTRO.Admin/obj/Debug/net6.0/
 /Src/Dft.DTRO.Admin/.vs/Dft.DTRO.Admin/xs
 /Src/DfT.DTRO/.vs/DfT.DTRO/xs/project-cache
 /.vs
@@ -44,4 +45,3 @@
 /Src/DfT.DTRO/DfT.DTRO.sln
 /Src/DfT.DTRO/.vs/DfT.DTRO/xs/UserPrefs.xml
 /Src/Dft.DTRO.Admin/Dft.DTRO.Admin.sln
-/Src/Dft.DTRO.Admin/obj/Debug/net6.0/
