@@ -9,7 +9,7 @@
 
     public async Task InvokeAsync(HttpContext context)
     {
-        context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; form-action 'self'; object-src 'none'; img-src 'self', script-src 'self' https://cdn.jsdelivr.net");
+        context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; form-action 'self'; object-src 'none'; img-src 'self' blob:; script-src 'self' https://cdn.jsdelivr.net/npm/chart.js");
         context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
         context.Response.Headers.Add("X-Frame-Options", "DENY");
         context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
