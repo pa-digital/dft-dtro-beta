@@ -1,46 +1,7 @@
 ﻿@page
 @model IndexModel
-@using System.Security.Cryptography
-@using System.Text
-
 @{
     ViewData["Title"] = "Dashboard";
-
-    // Define your inline script and style
-    string inlineScript = "<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>";
-    string inlineStyle = @"
-<div id=""stats"" style=""position: absolute; bottom: 60px; right: 0;"">
-    <div style=""padding: 10px; flex: 1;"">
-        <div class=""checkbox-container"" style=""border: 1px solid lightgrey; padding: 10px;border-radius: 5px;"">
-            <div style=""margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;"">
-                <span>Api Health</span>
-                <div style=""display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthApi ? ""rgba(119, 221, 119, 0.5)"" : ""rgba(255, 105, 97, 0.5)""); border: 1px solid grey; border-radius: 5px; margin-left: 10px;""></div>
-            </div>
-            <div style=""display: flex; align-items: center; justify-content: flex-end;"">
-                <span>Database Health</span>
-                <div style=""display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthDatabase ? ""rgba(119, 221, 119, 0.5)"" : ""rgba(255, 105, 97, 0.5)""); border: 1px solid grey; border-radius: 5px; margin-left: 10px;""></div>
-            </div>
-        </div>
-    </div>
-</div>";
-
-    // Calculate the hashes for the inline script and style
-    string scriptHash = GenerateSha256Hash(inlineScript);
-    string styleHash = GenerateSha256Hash(inlineStyle);
-
-    // Store the hashes in HttpContext.Items for use in the middleware
-    HttpContext.Items["InlineScriptHash"] = $"sha256-{scriptHash}";
-    HttpContext.Items["InlineStyleHash"] = $"sha256-{styleHash}";
-
-    // Function to compute SHA256 hash
-    string GenerateSha256Hash(string input)
-    {
-        using (var sha256 = SHA256.Create())
-        {
-            byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
-            return Convert.ToBase64String(hashBytes);
-        }
-    }
 }
 
 <div class="text-center" style="margin-top: 50px; margin-bottom: 50px">
@@ -57,26 +18,29 @@
         </div>
     </div>
 
+
     <div id="stats" style="position: absolute; bottom: 60px; right: 0;">
         <div style="padding: 10px; flex: 1;">
             <div class="checkbox-container" style="border: 1px solid lightgrey; padding: 10px;border-radius: 5px;">
                 <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
                     <span>Api Health</span>
-                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthApi ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthApi ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
                 </div>
+
                 <div style="display: flex; align-items: center; justify-content: flex-end;">
                     <span>Database Health</span>
-                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthDatabase ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthDatabase ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
                 </div>
+
             </div>
         </div>
     </div>
+
 </div>
 
 @section Scripts {
-    @* The inline script is already being calculated for the CSP hash *@
-    @Html.Raw(inlineScript)
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var canvas = document.getElementById('metricSummaryChart');
@@ -109,14 +73,16 @@
                 datasets: [{
                     data: dataValues.map(value => value > 0 ? value : minimalValue),
                     backgroundColor: [
+
                         'rgb(144, 238, 144,0.5)',  // pastel green
                         'rgba(255, 159, 64, 0.5)', // pastel orange
                         'rgba(255, 99, 132, 0.5)' // pastel red
+
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)', // pastel green
+                        'rgba(75, 192, 192, 1)',// pastel green
                         'rgba(255, 159, 64, 1)', // pastel orange
-                        'rgba(255, 99, 132, 1)' // pastel red
+                        'rgba(255, 99, 132, 1)'// pastel red
                     ],
                     borderWidth: 1,
                     hoverOffset: 10
@@ -214,4 +180,7 @@
             metricSummaryChart.update();
         });
     </script>
+
 }
+
+

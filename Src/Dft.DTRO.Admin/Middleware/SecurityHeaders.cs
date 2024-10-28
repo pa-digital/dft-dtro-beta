@@ -9,20 +9,8 @@
 
     public async Task InvokeAsync(HttpContext context)
     {
-        var scriptHash = context.Items["InlineScriptHash"]?.ToString() ?? "";
-        var styleHash = context.Items["InlineStyleHash"]?.ToString() ?? "";
+        context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; form-action 'self'; object-src 'none'; img-src 'self' data:; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none';");
 
-        context.Response.Headers.Add("Content-Security-Policy",
-            $"default-src 'self'; " +
-            $"form-action 'self'; " +
-            $"object-src 'none'; " +
-            $"img-src 'self' data:; " +
-            $"script-src 'self' https://cdn.jsdelivr.net {scriptHash}; " +
-            $"style-src 'self' {styleHash}; " +
-            $"frame-ancestors 'none'; " +
-            $"script-src-elem 'self' https://cdn.jsdelivr.net {scriptHash}; " +
-            $"style-src-elem 'self' {styleHash}; " +
-            $"unsafe-hashes");
         context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
         context.Response.Headers.Add("X-Frame-Options", "DENY");
         context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
