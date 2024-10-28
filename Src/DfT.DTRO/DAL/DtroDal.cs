@@ -95,11 +95,19 @@ public class DtroDal : IDtroDal
         dtro.LastUpdatedCorrelationId = correlationId;
         dtro.CreatedCorrelationId = dtro.LastUpdatedCorrelationId;
 
-        _dtroMappingService.InferIndexFields(ref dtro);
+        try
+        {
+            _dtroMappingService.InferIndexFields(ref dtro);
 
-        await _dtroContext.Dtros.AddAsync(dtro);
+            await _dtroContext.Dtros.AddAsync(dtro);
 
-        await _dtroContext.SaveChangesAsync();
+            await _dtroContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Issue with D-TRO record persistence: {ex.Message}");
+        }
+
         return response;
     }
 
