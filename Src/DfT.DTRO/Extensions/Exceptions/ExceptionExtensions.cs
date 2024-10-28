@@ -53,7 +53,7 @@ public static class ExceptionExtensions
             return errors;
         }
 
-        if (response.RequestComparedToRules.Any())
+        if (response.RequestComparedToRules != null && response.RequestComparedToRules.Any())
         {
             for (int index = 0; index < response.RequestComparedToRules.Count; index++)
             {
@@ -67,9 +67,19 @@ public static class ExceptionExtensions
                 });
             }
         }
-        else if (response.RequestComparedToSchema.Any())
+        else if (response.RequestComparedToSchema != null && response.RequestComparedToSchema.Any())
         {
-            response.RequestComparedToSchema.Beautify();
+            var dictionary = response.RequestComparedToSchema.Beautify();
+            for (int index = 0; index < response.RequestComparedToSchema.Count; index++)
+            {
+                errors.Add($"RuleError_{index}", new Dictionary<string, object>
+                {
+                    { "Message", dictionary["Message"] },
+                    { "Path", dictionary["Path"] },
+                    { "Value", dictionary["Value"] },
+                    { "ErrorType", dictionary["ErrorType"] }
+                });
+            }
         }
         else if (response.RequestComparedToSchemaVersion != null)
         {

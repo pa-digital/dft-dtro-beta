@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Schema;
-namespace DfT.DTRO.Models.Errors;
+﻿namespace DfT.DTRO.Models.Errors;
 
 public class DtroJsonValidationErrorResponse
 {
