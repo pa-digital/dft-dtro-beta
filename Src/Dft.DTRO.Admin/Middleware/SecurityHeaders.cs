@@ -9,8 +9,7 @@
 
     public async Task InvokeAsync(HttpContext context)
     {
-        context.Response.Headers.Add("Cache-Control", "no-store");
-        context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; form-action 'self'; object-src 'none'; img-src 'self' data:; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'");
+        context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; form-action 'self'; object-src 'none'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'");
         context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
         context.Response.Headers.Add("X-Frame-Options", "DENY");
         context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
