@@ -6,6 +6,8 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 
+builder.Services.AddSingleton<SecurityHeaders>();
+
 ConfigHelper.ApiBaseUrl =
     Environment.GetEnvironmentVariable("BASE_URL") ??
     builder.Configuration.GetValue<string>("ExternalApi:BaseUrl");
@@ -64,6 +66,8 @@ builder.Services.AddSession(options =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<SecurityHeaders>();
 
 if (!app.Environment.IsDevelopment())
 {

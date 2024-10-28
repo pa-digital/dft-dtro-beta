@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <ItemGroup>
     <Compile Remove="Pages\SchemaDropAdd.cshtml.cs" />
   </ItemGroup>
@@ -17,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\" />
+    <Folder Include="Middleware\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,4 +34,7 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Middleware\" />
+  </ItemGroup>
 </Project>
