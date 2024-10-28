@@ -19,7 +19,10 @@
             $"img-src 'self' data:; " +
             $"script-src 'self' https://cdn.jsdelivr.net {scriptHash}; " +
             $"style-src 'self' {styleHash}; " +
-            $"frame-ancestors 'none'");
+            $"frame-ancestors 'none'; " +
+            $"script-src-elem 'self' https://cdn.jsdelivr.net {scriptHash}; " +
+            $"style-src-elem 'self' {styleHash}; " +
+            $"unsafe-hashes");
         context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
         context.Response.Headers.Add("X-Frame-Options", "DENY");
         context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
