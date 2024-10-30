@@ -60,7 +60,8 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set the session timeoutß
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set the session timeout
+    options.Cookie.HttpOnly = true; // Make the session cookie HTTP only
     options.Cookie.IsEssential = true; // Make the session cookie essential
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // All subsequent pages requiring the authenticated identity are HTTPS
     options.Cookie.SameSite = SameSiteMode.Strict; // Prevent the cookie from being sent by the browser to the target site in all cross-site browsing contexts
