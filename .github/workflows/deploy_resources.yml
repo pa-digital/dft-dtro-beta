@@ -284,8 +284,9 @@ jobs:
         run: |
           cp policies/Add-CORS.xml apiproxy/policies/Add-CORS.xml
           target_file="apiproxy/policies/Add-CORS.xml"
-          sed -i "s#<AllowOrigins>TRUSTED_URL_TO_UPDATE</AllowOrigins>#<AllowOrigins>${trusted_url}</AllowOrigins>#" "$target_file"
-          echo "Updated file: target_file"
+          sed -i "s#<AllowOrigins>TRUSTED_DOMAIN_TO_UPDATE</AllowOrigins>#<AllowOrigins>${trusted_domain}</AllowOrigins>#" "$target_file"
+          cat apiproxy/policies/Add-CORS.xml
+          echo "Updated file: $target_file"
 
       - name: Setup Python
         uses: actions/setup-python@v5
