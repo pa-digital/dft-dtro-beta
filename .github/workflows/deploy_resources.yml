@@ -280,6 +280,13 @@ jobs:
           gawk -i inplace '/<PostFlow name="PostFlow">/,/<\/PostFlow>/ { if (/^ *<Response><\/Response>/) { print "  <Response>\n      <Step>\n        <Name>AM-Set-Http-Security-Header</Name>\n      </Step>\n   </Response>"; next } } 1' apiproxy/proxies/default.xml
           gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-Http-Security-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
 
+      - name: Update CORS policy
+        run: |
+          cp policies/Add-CORS.xml apiproxy/policies/Add-CORS.xml
+          target_file="apiproxy/policies/Add-CORS.xml"
+          sed -i "s#<AllowOrigins>TRUSTED_DOMAIN_TO_UPDATE</AllowOrigins>#<AllowOrigins>${trusted_domain}</AllowOrigins>#" "$target_file"
+          echo "Updated file: $target_file"
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
