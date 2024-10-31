@@ -282,8 +282,8 @@ jobs:
 
       - name: Update CORS policy
         run: |
-          cp policies/ADD-CORS.xml apiproxy/policies/ADD-CORS.xml
-          target_file="apiproxy/policies/ADD-CORS.xml"
+          cp policies/Add-CORS.xml apiproxy/policies/Add-CORS.xml
+          target_file="apiproxy/policies/Add-CORS.xml"
           sed -i "s#<AllowOrigins>TRUSTED_URL_TO_UPDATE</AllowOrigins>#<AllowOrigins>${trusted_url}</AllowOrigins>#" "$target_file"
           echo "Updated file: target_file"
 
