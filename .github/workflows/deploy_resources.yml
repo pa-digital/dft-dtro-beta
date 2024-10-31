@@ -191,8 +191,8 @@ jobs:
   build-apigee-proxies-and-products:
     if: ${{ inputs.run-apigee }}
     name: Build GCP Apigee proxies and products in ${{ inputs.environment }}
-#    needs:
-#      - deploy-dtro
+    needs:
+      - deploy-dtro
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -285,7 +285,6 @@ jobs:
           cp policies/Add-CORS.xml apiproxy/policies/Add-CORS.xml
           target_file="apiproxy/policies/Add-CORS.xml"
           sed -i "s#<AllowOrigins>TRUSTED_DOMAIN_TO_UPDATE</AllowOrigins>#<AllowOrigins>${trusted_domain}</AllowOrigins>#" "$target_file"
-          cat apiproxy/policies/Add-CORS.xml
           echo "Updated file: $target_file"
 
       - name: Setup Python
