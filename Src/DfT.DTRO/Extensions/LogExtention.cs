@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace DfT.DTRO.Extensions
 {
@@ -19,8 +18,6 @@ namespace DfT.DTRO.Extensions
         public string AppId { get; private set; }
         public string Message { get; private set; }
         public string ExceptionMessage { get; private set; }
-
-        private LoggingExtension() { }
 
         public class Builder
         {
