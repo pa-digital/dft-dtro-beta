@@ -43,7 +43,7 @@ public class MetricsController : ControllerBase
             _logger.LogInformation($"'{nameof(HealthApi)}' method called");
             new LoggingExtension.Builder()
                     .WithLogType(LogType.INFO)
-                    .WithMethodCalledFrom("healthApi")
+                    .WithMethodCalledFrom(nameof(HealthApi))
                     .WithEndpoint("/healthApi")
                     .WithMessage($"'{nameof(HealthApi)}' method called")
                     .Build()
@@ -53,7 +53,14 @@ public class MetricsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            new LoggingExtension.Builder()
+                    .WithLogType(LogType.ERROR)
+                    .WithMethodCalledFrom(nameof(HealthApi))
+                    .WithEndpoint("/healthApi")
+                    .WithExceptionMessage(ex.Message)
+                    .Build()
+                    .PrintToConsole();
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "The application is unavialable"));
         }
     }
 
@@ -76,15 +83,28 @@ public class MetricsController : ControllerBase
             if (check)
             {
                 _logger.LogInformation($"'{nameof(HealthDatabase)}' method called");
+                new LoggingExtension.Builder()
+                        .WithLogType(LogType.INFO)
+                        .WithMethodCalledFrom(nameof(HealthDatabase))
+                        .WithEndpoint("/HealthDatabase")
+                        .WithMessage($"'{nameof(HealthDatabase)}' method called")
+                        .Build()
+                        .PrintToConsole();
                 return Ok(true);
             }
 
-            _logger.LogInformation($"'{nameof(HealthDatabase)}' method called");
             return NotFound(new ApiErrorResponse("Not found", "Database is not available"));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
+            new LoggingExtension.Builder()
+                    .WithLogType(LogType.ERROR)
+                    .WithMethodCalledFrom(nameof(HealthDatabase))
+                    .WithEndpoint("/HealthDatabase")
+                    .WithExceptionMessage(ex.Message)
+                    .Build()
+                    .PrintToConsole();
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "Database is not available"));
         }
     }
@@ -109,18 +129,39 @@ public class MetricsController : ControllerBase
         {
             MetricSummary metrics = await _metricsService.GetMetrics(metricRequest) ?? new MetricSummary();
             _logger.LogInformation($"'{nameof(GetMetricsForDtroUser)}' method called using DtroUserId '{metricRequest.DtroUserId}'");
+            new LoggingExtension.Builder()
+                    .WithLogType(LogType.INFO)
+                    .WithMethodCalledFrom(nameof(GetMetricsForDtroUser))
+                    .WithEndpoint("/metricsForDtroUser")
+                    .WithMessage($"'{nameof(GetMetricsForDtroUser)}' method called using DtroUserId '{metricRequest.DtroUserId}'")
+                    .Build()
+                    .PrintToConsole();
             return Ok(metrics);
         }
         catch (ArgumentException err)
         {
             _logger.LogError(err.Message);
+            new LoggingExtension.Builder()
+                    .WithLogType(LogType.ERROR)
+                    .WithMethodCalledFrom(nameof(GetMetricsForDtroUser))
+                    .WithEndpoint("/metricsForDtroUser")
+                    .WithExceptionMessage(err.Message)
+                    .Build()
+                    .PrintToConsole();
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message);
-            _logger.LogError(ex, "An error occurred while retrieving metrics for TRA.");
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            new LoggingExtension.Builder()
+                    .WithLogType(LogType.ERROR)
+                    .WithMethodCalledFrom(nameof(GetMetricsForDtroUser))
+                    .WithEndpoint("/metricsForDtroUser")
+                    .WithMessage($"An error occurred while retrieving full metrics for Dtro User: {metricRequest.DtroUserId}")
+                    .WithExceptionMessage(ex.Message)
+                    .Build()
+                    .PrintToConsole();
+            _logger.LogError(ex, "An error occurred while retrieving metrics for Dtro User.");
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An error occurred while retrieving metrics for Dtro User."));
         }
     }
 
@@ -140,22 +181,44 @@ public class MetricsController : ControllerBase
 
     public async Task<ActionResult<List<FullMetricSummary>>> GetFullMetricsForDtroUser([FromBody] MetricRequest metricRequest)
     {
+        var dtroUserId = metricRequest.DtroUserId;
         try
         {
             List<FullMetricSummary> metrics = await _metricsService.GetFullMetrics(metricRequest) ?? new List<FullMetricSummary>();
-            _logger.LogInformation($"'{nameof(GetMetricsForDtroUser)}' method called using DtroUserId '{metricRequest.DtroUserId}'");
+            _logger.LogInformation($"'{nameof(GetFullMetricsForDtroUser)}' method called using DtroUserId '{metricRequest.DtroUserId}'");
+            new LoggingExtension.Builder()
+                    .WithLogType(LogType.INFO)
+                    .WithMethodCalledFrom(nameof(GetFullMetricsForDtroUser))
+                    .WithEndpoint("/metricsForDtroUser")
+                    .WithMessage($"'{nameof(GetFullMetricsForDtroUser)}' method called using DtroUserId '{metricRequest.DtroUserId}'")
+                    .Build()
+                    .PrintToConsole();
             return Ok(metrics);
         }
         catch (ArgumentException err)
         {
             _logger.LogError(err.Message);
+            new LoggingExtension.Builder()
+                    .WithLogType(LogType.ERROR)
+                    .WithMethodCalledFrom(nameof(GetFullMetricsForDtroUser))
+                    .WithEndpoint("/fullMetricsForDtroUser")
+                    .WithExceptionMessage(err.Message)
+                    .Build()
+                    .PrintToConsole();
             return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message);
-            _logger.LogError(ex, "An error occurred while retrieving metrics for TRA.");
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            new LoggingExtension.Builder()
+                    .WithLogType(LogType.ERROR)
+                    .WithMethodCalledFrom(nameof(GetFullMetricsForDtroUser))
+                    .WithEndpoint("/fullMetricsForDtroUser")
+                    .WithMessage($"An error occurred while retrieving full metrics for Dtro User: {metricRequest.DtroUserId}")
+                    .WithExceptionMessage(ex.Message)
+                    .Build()
+                    .PrintToConsole();
+            _logger.LogError(ex, $"An error occurred while retrieving full metrics for Dtro User: {metricRequest.DtroUserId}");
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An error occurred while retrieving full metrics for Dtro User: {metricRequest.DtroUserId}"));
         }
     }
 }

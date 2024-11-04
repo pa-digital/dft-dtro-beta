@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DfT.DTRO.Extensions
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum LogType
     {
         DEBUG,
