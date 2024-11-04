@@ -17,6 +17,7 @@ public class DTROsController : ControllerBase
     private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<DTROsController> _logger;
     private readonly IXappIdMapperService _appIdMapperService;
+    private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
     /// Default constructor
@@ -31,13 +32,15 @@ public class DTROsController : ControllerBase
          IMetricsService metricsService,
          IRequestCorrelationProvider correlationProvider,
          IXappIdMapperService appIdMapperService,
-         ILogger<DTROsController> logger)
+         ILogger<DTROsController> logger,
+         LoggingExtension loggingExtension)
     {
         _dtroService = dtroService;
         _metricsService = metricsService;
         _correlationProvider = correlationProvider;
         _appIdMapperService = appIdMapperService;
         _logger = logger;
+        _loggingExtension = loggingExtension;
     }
 
     /// <summary>
@@ -74,6 +77,13 @@ public class DTROsController : ControllerBase
                 GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, xAppId);
                 await _metricsService.IncrementMetric(MetricType.Submission, xAppId);
                 _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using xAppId: '{xAppId}' and file '{file.Name}'");
+                new LoggingExtension.Builder()
+                    .WithLogType(LogType.INFO)
+                    .WithMethodCalledFrom("CreateFromFile")
+                    .WithEndpoint("/dtros/createFromFile")
+                    .WithMessage($"'{nameof(CreateFromFile)}' method called using xAppId: '{xAppId}' and file '{file.Name}'")
+                    .Build()
+                    .ToString();
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }

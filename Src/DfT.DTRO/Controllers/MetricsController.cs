@@ -9,6 +9,7 @@ public class MetricsController : ControllerBase
 {
     private readonly IMetricsService _metricsService;
     private readonly ILogger<MetricsController> _logger;
+    private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
     /// Default constructor.
@@ -17,10 +18,12 @@ public class MetricsController : ControllerBase
     /// <param name="logger">An <see cref="ILogger{MetricsController}"/> instance.</param>
     public MetricsController(
         IMetricsService metricsService,
-        ILogger<MetricsController> logger)
+        ILogger<MetricsController> logger,
+         LoggingExtension loggingExtension)
     {
         _metricsService = metricsService;
         _logger = logger;
+        _loggingExtension = loggingExtension;
     }
 
     /// <summary>
@@ -38,6 +41,13 @@ public class MetricsController : ControllerBase
         try
         {
             _logger.LogInformation($"'{nameof(HealthApi)}' method called");
+            new LoggingExtension.Builder()
+                    .WithLogType(LogType.INFO)
+                    .WithMethodCalledFrom("healthApi")
+                    .WithEndpoint("/healthApi")
+                    .WithMessage($"'{nameof(HealthApi)}' method called")
+                    .Build()
+                    .ToString();
             return Ok(true);
         }
         catch (Exception ex)
