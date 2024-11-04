@@ -16,6 +16,7 @@ public class MetricsController : ControllerBase
     /// </summary>
     /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{MetricsController}"/> instance.</param>
+    /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
     public MetricsController(
         IMetricsService metricsService,
         ILogger<MetricsController> logger,
