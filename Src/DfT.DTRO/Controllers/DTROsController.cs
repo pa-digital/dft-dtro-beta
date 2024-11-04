@@ -83,7 +83,7 @@ public class DTROsController : ControllerBase
                     .WithEndpoint("/dtros/createFromFile")
                     .WithMessage($"'{nameof(CreateFromFile)}' method called using xAppId: '{xAppId}' and file '{file.Name}'")
                     .Build()
-                    .ToString();
+                    .PrintToConsole();
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }

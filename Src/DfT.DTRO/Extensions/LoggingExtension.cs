@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 
 namespace DfT.DTRO.Extensions
 {
@@ -73,6 +74,11 @@ namespace DfT.DTRO.Extensions
         public override string ToString()
         {
             return JsonSerializer.Serialize(this);
+        }
+
+        public void PrintToConsole()
+        {
+            Console.WriteLine(ToString());
         }
     }
 }

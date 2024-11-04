@@ -47,7 +47,7 @@ public class MetricsController : ControllerBase
                     .WithEndpoint("/healthApi")
                     .WithMessage($"'{nameof(HealthApi)}' method called")
                     .Build()
-                    .ToString();
+                    .PrintToConsole();
             return Ok(true);
         }
         catch (Exception ex)
