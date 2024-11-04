@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.Services;
+﻿using System.Data;
+
+namespace DfT.DTRO.Services;
 
 public class DtroService : IDtroService
 {
@@ -94,7 +96,7 @@ public class DtroService : IDtroService
         var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
         if (!isSaved)
         {
-            throw new Exception("Failed to write to history table");
+            throw new DataException("Failed to write update to history table");
         }
 
         await _dtroDal.UpdateDtroAsJsonAsync(id, dtroSubmit, correlationId);

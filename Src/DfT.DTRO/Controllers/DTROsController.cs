@@ -1,3 +1,4 @@
+using System.Data;
 using DfT.DTRO.Extensions.Exceptions;
 using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.Models.DtroDtos;
@@ -247,12 +248,12 @@ public class DTROsController : ControllerBase
                 .WithLogType(LogType.ERROR)
                 .WithMethodCalledFrom(nameof(UpdateFromFile))
                 .WithEndpoint($"/dtros/UpdateFromFile/{id}")
-                .WithMessage("DTRO not found")
+                .WithMessage("TRO not found")
                 .WithExceptionMessage(ex.Message)
                 .Build()
                 .PrintToConsole();
             _logger.LogError(ex.Message);
-            return NotFound(new ApiErrorResponse("DTRO not found", ex.Message));
+            return NotFound(new ApiErrorResponse("TRO not found", ex.Message));
         }
         catch (InvalidOperationException ex)
         {
@@ -268,6 +269,20 @@ public class DTROsController : ControllerBase
                 .PrintToConsole();
             _logger.LogError(ex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", ex.Message));
+        }
+        catch (DataException ex)
+        {
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
+
+            new LoggingExtension.Builder()
+                .WithLogType(LogType.ERROR)
+                .WithMethodCalledFrom(nameof(UpdateFromFile))
+                .WithEndpoint($"/dtros/UpdateFromFile/{id}")
+                .WithExceptionMessage(ex.Message)
+                .Build()
+                .PrintToConsole();
+            _logger.LogError(ex.Message);
+            return NotFound(new ApiErrorResponse("", ex.Message));
         }
         catch (Exception ex)
         {
