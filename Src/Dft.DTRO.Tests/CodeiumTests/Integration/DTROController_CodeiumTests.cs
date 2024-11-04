@@ -8,7 +8,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
 {
     private readonly Mock<IDtroService> _mockDtroService;
     private readonly Mock<IRequestCorrelationProvider> _correlationProviderMock;
-    private readonly Mock<IXappIdMapperService> _xappIdMapperServiceMock;
+    private readonly Mock<IAppIdMapperService> _xappIdMapperServiceMock;
     private readonly DTROsController _controller;
     private readonly WebApplicationFactory<Program> _factory;
 
@@ -20,8 +20,8 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     {
         _factory = factory;
         _mockDtroService = new Mock<IDtroService>();
-        _xappIdMapperServiceMock = new Mock<IXappIdMapperService>();
-        _xappIdMapperServiceMock.Setup(x => x.GetXappId(It.IsAny<HttpContext>())).ReturnsAsync(_xAppIdForTest);
+        _xappIdMapperServiceMock = new Mock<IAppIdMapperService>();
+        _xappIdMapperServiceMock.Setup(x => x.GetAppId(It.IsAny<HttpContext>())).ReturnsAsync(_xAppIdForTest);
 
         _correlationProviderMock = new Mock<IRequestCorrelationProvider>();
         Mock<ILogger<DTROsController>> loggerMock = new();

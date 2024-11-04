@@ -109,7 +109,7 @@ public class SemanticValidationService : ISemanticValidationService
         {
             errors.Add(new SemanticValidationError
             {
-                Message = $"'geometry' was {geometry?.Value.Type}, it must be an object."
+                Message = $"'geometry' is of type '{geometry?.Value.Type}', this it must be an 'object'."
             });
         }
 
@@ -295,7 +295,7 @@ public class SemanticValidationService : ISemanticValidationService
         {
             errors.Add(new SemanticValidationError()
             {
-                Message = "externalReference cannot be found",
+                Message = "value 'externalReference' cannot be found",
                 Path = "Source.provision.regulatedPlace.geometry"
             });
         }
@@ -312,7 +312,7 @@ public class SemanticValidationService : ISemanticValidationService
                 errors.Add(
                     new SemanticValidationError
                     {
-                        Message = "lastUpdateDate cannot be in the future",
+                        Message = "value 'lastUpdateDate' cannot be in the future",
                         Path = lastUpdatedDateNode.Path
                     });
             }
@@ -324,7 +324,7 @@ public class SemanticValidationService : ISemanticValidationService
         SchemaVersion dtroSchemaVersion,
         List<SemanticValidationError> errors)
     {
-        if (dtroSchemaVersion < "3.1.2")
+        if (dtroSchemaVersion < "3.1.2") //TODO: Could this be a env var which can change over time?
         {
             return;
         }
@@ -340,7 +340,7 @@ public class SemanticValidationService : ISemanticValidationService
                 errors.Add(
                     new SemanticValidationError
                     {
-                        Message = $"Referenced D-TRO with id {dtroId} does not exist.",
+                        Message = $"Referenced TRO with id '{dtroId}' does not exist.",
                         Path = "Source.reference"
                     });
             }

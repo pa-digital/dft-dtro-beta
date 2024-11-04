@@ -10,7 +10,7 @@ public class EventsController : ControllerBase
     private readonly IEventSearchService _eventSearchService;
     private readonly IMetricsService _metricsService;
     private readonly ILogger<EventsController> _logger;
-    private readonly IXappIdMapperService _appIdMapperService;
+    private readonly IAppIdMapperService _appIdMapperService;
 
     /// <summary>
     /// Default constructor
@@ -21,7 +21,7 @@ public class EventsController : ControllerBase
     public EventsController(
         IEventSearchService eventSearchService,
         IMetricsService metricsService,
-          IXappIdMapperService appIdMapperService,
+          IAppIdMapperService appIdMapperService,
         ILogger<EventsController> logger)
     {
         _eventSearchService = eventSearchService;
@@ -49,7 +49,7 @@ public class EventsController : ControllerBase
     {
         try
         {
-            xAppId = await _appIdMapperService.GetXappId(HttpContext);
+            xAppId = await _appIdMapperService.GetAppId(HttpContext);
             DtroEventSearchResult response = await _eventSearchService.SearchAsync(search);
             await _metricsService.IncrementMetric(MetricType.Event, xAppId);
             _logger.LogInformation($"'{nameof(Events)}' method called '{search}'");

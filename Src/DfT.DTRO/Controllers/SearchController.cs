@@ -12,7 +12,7 @@ public class SearchController : ControllerBase
     private readonly ISearchService _searchService;
     private readonly IMetricsService _metricsService;
     private readonly ILogger<SearchController> _logger;
-    private readonly IXappIdMapperService _appIdMapperService;
+    private readonly IAppIdMapperService _appIdMapperService;
 
     /// <summary>
     /// Default constructor.
@@ -23,7 +23,7 @@ public class SearchController : ControllerBase
     public SearchController(
         ISearchService searchService,
         IMetricsService metricsService,
-        IXappIdMapperService appIdMapperService,
+        IAppIdMapperService appIdMapperService,
         ILogger<SearchController> logger)
     {
         _searchService = searchService;
@@ -50,7 +50,7 @@ public class SearchController : ControllerBase
     {
         try
         {
-            xAppId = await _appIdMapperService.GetXappId(HttpContext);
+            xAppId = await _appIdMapperService.GetAppId(HttpContext);
             PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
             await _metricsService.IncrementMetric(MetricType.Search, xAppId);
             _logger.LogInformation($"'{nameof(SearchDtros)}' method called and body '{body}'");

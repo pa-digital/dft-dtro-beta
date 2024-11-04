@@ -41,7 +41,7 @@ public class Startup
 
         services.AddFeatureManagement();
 
-        services.AddScoped<IXappIdMapperService, XappIdMapperService>();
+        services.AddScoped<IAppIdMapperService, AppIdMapperService>();
         services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
         services.AddScoped<ISemanticValidationService, SemanticValidationService>();
         services.AddSingleton<IBoundingBoxService, BoundingBoxService>();

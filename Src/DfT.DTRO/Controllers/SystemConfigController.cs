@@ -7,9 +7,9 @@ public class SystemConfigController : ControllerBase
 {
     private readonly ISystemConfigService _systemConfigService;
     private readonly ILogger<SystemConfigController> _logger;
-    private readonly IXappIdMapperService _appIdMapperService;
+    private readonly IAppIdMapperService _appIdMapperService;
 
-    public SystemConfigController(ISystemConfigService systemConfigService, IXappIdMapperService appIdMapperService, ILogger<SystemConfigController> logger)
+    public SystemConfigController(ISystemConfigService systemConfigService, IAppIdMapperService appIdMapperService, ILogger<SystemConfigController> logger)
     {
         _systemConfigService = systemConfigService;
         _appIdMapperService = appIdMapperService;
@@ -24,7 +24,7 @@ public class SystemConfigController : ControllerBase
     {
         try
         {
-            xAppId = await _appIdMapperService.GetXappId(HttpContext);
+            xAppId = await _appIdMapperService.GetAppId(HttpContext);
             var res = await _systemConfigService.GetSystemConfigAsync(xAppId);
             _logger.LogInformation($"'{nameof(GetSystemConfig)}' method called");
             return Ok(res);

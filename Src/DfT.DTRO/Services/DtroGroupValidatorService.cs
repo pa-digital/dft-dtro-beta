@@ -29,13 +29,13 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         var schema = await _schemaTemplateService.GetSchemaTemplateAsync(schemaVersion);
         if (schema == null)
         {
-            var error = new ApiErrorResponse("Not found", "Schema version not found");
+            var error = new ApiErrorResponse("Not found", $"Schema version '{schemaVersion}' not found");
             return new DtroValidationException { RequestComparedToSchemaVersion = error };
         }
 
         if (!schema.IsActive)
         {
-            var error = new ApiErrorResponse("Not found", "Schema version is not active");
+            var error = new ApiErrorResponse("Not found", $"Schema version '{schemaVersion}' is not active");
             return new DtroValidationException { RequestComparedToSchemaVersion = error };
         }
 

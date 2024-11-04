@@ -28,7 +28,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = $"TRA creator '{creator}' is in our records."
+                Message = $"TRA creator with ID of '{creator}' has not been registered."
             });
         }
 
@@ -38,7 +38,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = $"TRA owner '{owner}' is not in our records."
+                Message = $"TRA owner with ID of '{owner}' has not been registered."
             });
         }
 
@@ -46,7 +46,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = $"TRA '{submittedByTa}' cannot add/update a DTRO for another TRA. (creator TRA is '{creator}', owner TRA is '{owner}' )"
+                Message = $"TRA '{submittedByTa}' cannot add/update a TRO for another TRA. (This TRO's creator ID is '{creator}', owner ID is '{owner}' )"
             });
         }
 
@@ -55,7 +55,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = "One or more TRA affected identification is incorrect."
+                Message = "One or more TRA(s) affected identification is incorrect."
             });
         }
 
@@ -67,7 +67,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = "One or more TRA affected is not in our records."
+                Message = "One or more TRA(s) affected has not been registered."
             });
         }
 
@@ -76,7 +76,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = "Source reference is not of type string"
+                Message = "Source reference is not of type 'string'."
             });
         }
 
@@ -85,7 +85,7 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = "Source action type has to be contain one of the accepted values: new, amendment, noChange, errorFix."
+                Message = "Source action type must contain one of the following accepted values: new, amendment, noChange, errorFix."
             });
         }
 
@@ -98,7 +98,7 @@ public class RecordManagementService : IRecordManagementService
         {
             SemanticValidationError error = new()
             {
-                Message = "One or more provision reference is not of type string"
+                Message = "One or more provision reference is not of type 'string'."
             };
             validationErrors.Add(error);
         }
@@ -128,7 +128,14 @@ public class RecordManagementService : IRecordManagementService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Message = "Provision action type(s) has to contain one of the accepted values: new, partialAmendment, fullAmendment, partialRevoke, fullRevoke, noChange, errorFix"
+                Message = "Provision action type(s) must one of the following accepted values: new, partialAmendment, fullAmendment, partialRevoke, fullRevoke, noChange, errorFix"
+            });
+        }
+
+        if (validationErrors.Count > 0) {
+            validationErrors.Add(new SemanticValidationError
+            {
+                Message = "Please review your TRO and amend any necessary issues. Don’t hesitate to contact the CSO if you need assistance."
             });
         }
 
