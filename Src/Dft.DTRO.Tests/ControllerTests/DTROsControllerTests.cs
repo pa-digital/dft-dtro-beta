@@ -16,13 +16,16 @@ public class DTROsControllerTests
     public DTROsControllerTests()
     {
         ILogger<DTROsController> mockLogger = MockLogger.Setup<DTROsController>();
+        Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        var mockLoggingExtension = new Mock<LoggingExtension>();
 
         _sut = new DTROsController(
             _mockDtroService.Object,
             _mockMetricsService.Object,
             _mockRequestCorrelationProvider.Object,
             _mockXAppIdMapperService.Object,
-            mockLogger);
+            mockLogger,
+            mockLoggingExtension.Object);
 
         _xAppId = Guid.NewGuid();
         Mock<HttpContext> mockContext = MockHttpContext.Setup();

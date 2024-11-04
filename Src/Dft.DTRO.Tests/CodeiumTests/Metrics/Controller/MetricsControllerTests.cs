@@ -14,10 +14,13 @@ public class MetricsControllerTests
     {
         _mockMetricsService = new Mock<IMetricsService>();
         Mock<ILogger<MetricsController>> mockLogger = new();
+        Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        var mockLoggingExtension = new Mock<LoggingExtension>();
 
         _controller = new MetricsController(
             _mockMetricsService.Object,
-            mockLogger.Object);
+            mockLogger.Object,
+            mockLoggingExtension.Object);
     }
 
     [Fact]

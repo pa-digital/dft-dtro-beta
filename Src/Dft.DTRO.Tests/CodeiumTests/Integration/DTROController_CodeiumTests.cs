@@ -26,12 +26,14 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
         _correlationProviderMock = new Mock<IRequestCorrelationProvider>();
         Mock<ILogger<DTROsController>> loggerMock = new();
         Mock<IMetricsService> metricsMock = new();
+        Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        var mockLoggingExtension = new Mock<LoggingExtension>();
 
         metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), _xAppIdForTest)).ReturnsAsync(true);
 
 
         _controller = new DTROsController(_mockDtroService.Object, metricsMock.Object,
-            _correlationProviderMock.Object, _xappIdMapperServiceMock.Object, loggerMock.Object);
+            _correlationProviderMock.Object, _xappIdMapperServiceMock.Object, loggerMock.Object, mockLoggingExtension.Object);
 
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
