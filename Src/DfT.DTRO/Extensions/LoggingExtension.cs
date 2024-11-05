@@ -82,6 +82,29 @@ namespace DfT.DTRO.Extensions
         {
             Console.WriteLine(ToString());
         }
+
+        public void LogInformation(string methodName, string endpoint, string message)
+        {
+            new Builder()
+                .WithLogType(LogType.INFO)
+                .WithMethodCalledFrom(methodName)
+                .WithEndpoint(endpoint)
+                .WithMessage(message)
+                .Build()
+                .PrintToConsole();
+        }
+
+        public void LogError(string methodName, string endpoint, string message, string exceptionMessage)
+        {
+            new Builder()
+                .WithLogType(LogType.ERROR)
+                .WithMethodCalledFrom(methodName)
+                .WithEndpoint(endpoint)
+                .WithMessage(message)
+                .WithExceptionMessage(exceptionMessage)
+                .Build()
+                .PrintToConsole();
+        }
     }
 }
 
