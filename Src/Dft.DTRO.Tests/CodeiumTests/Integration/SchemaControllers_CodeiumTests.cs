@@ -25,9 +25,11 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         _mockSchemaTemplateService = new Mock<ISchemaTemplateService>();
         _mockCorrelationProvider = new Mock<IRequestCorrelationProvider>();
         Mock<ILogger<SchemasController>> mockLogger = new();
+        Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        var mockLoggingExtension = new Mock<LoggingExtension>();
 
         _controller = new SchemasController(_mockSchemaTemplateService.Object,
-            _mockCorrelationProvider.Object, mockLogger.Object);
+            _mockCorrelationProvider.Object, mockLogger.Object, mockLoggingExtension.Object);
 
         _schemaTemplate = new ExpandoObject();
         try

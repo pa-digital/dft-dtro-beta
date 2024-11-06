@@ -1,3 +1,5 @@
+using System;
+
 namespace DfT.DTRO.Controllers;
 
 /// <summary>
@@ -12,6 +14,7 @@ public class RulesController : ControllerBase
     private readonly IRuleTemplateService _ruleTemplateService;
     private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<RulesController> _logger;
+    private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
     /// Default constructor.
@@ -19,14 +22,17 @@ public class RulesController : ControllerBase
     /// <param name="ruleTemplateService">An <see cref="IRuleTemplateService"/> instance.</param>
     /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{RulesController}"/> instance.</param>
+    /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
     public RulesController(
         IRuleTemplateService ruleTemplateService,
         IRequestCorrelationProvider correlationProvider,
-        ILogger<RulesController> logger)
+        ILogger<RulesController> logger,
+         LoggingExtension loggingExtension)
     {
         _ruleTemplateService = ruleTemplateService;
         _correlationProvider = correlationProvider;
         _logger = logger;
+        _loggingExtension = loggingExtension;
     }
 
     /// <summary>
@@ -46,11 +52,32 @@ public class RulesController : ControllerBase
         {
             List<RuleTemplateOverview> versions = await _ruleTemplateService.GetRuleTemplatesVersionsAsync();
             _logger.LogInformation($"'{nameof(GetVersions)}' method called");
+            _loggingExtension.LogInformation(
+                nameof(GetVersions),
+                "/rules/versions",
+                $"'{nameof(GetVersions)}' method called");
             return Ok(versions);
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(nameof(GetVersions), "/rules/versions", "Unexpected Null value was found", anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(GetVersions),
+                "/rules/versions",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
+            _loggingExtension.LogError(nameof(GetVersions), "/rules/versions", "", ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -72,11 +99,32 @@ public class RulesController : ControllerBase
         {
             List<RuleTemplateResponse> templates = await _ruleTemplateService.GetRuleTemplatesAsync();
             _logger.LogInformation($"'{nameof(Get)}' method called");
+            _loggingExtension.LogInformation(
+                nameof(Get),
+                "/rules",
+                $"'{nameof(Get)}' method called");
             return Ok(templates);
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(nameof(Get),"/rules", "Unexpected Null value was found", anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(Get),
+                "/rules",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
+            _loggingExtension.LogError(nameof(Get),"/rules", "", ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -99,22 +147,45 @@ public class RulesController : ControllerBase
         {
             RuleTemplateResponse result = await _ruleTemplateService.GetRuleTemplateAsync(version);
             _logger.LogInformation($"'{nameof(GetByVersion)}' method called using version '{version}'");
+            _loggingExtension.LogInformation(
+                nameof(GetByVersion),
+                $"/rules/{version}",
+                $"'{nameof(GetByVersion)}' method called using version '{version}'");
             return Ok(result);
         }
-        catch (NotFoundException nFex)
+        catch (NotFoundException nfex)
         {
-            _logger.LogError(nFex.Message);
+            _logger.LogError(nfex.Message);
+            _loggingExtension.LogError(nameof(GetByVersion),$"/rules/{version}", $"Schema version '{version}' not found", nfex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
         }
-        catch (InvalidOperationException err)
+        catch (InvalidOperationException ioex)
         {
-            _logger.LogError(err.Message);
-            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+            _logger.LogError(ioex.Message);
+            _loggingExtension.LogError(nameof(GetByVersion),$"/rules/{version}", "", ioex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(nameof(GetByVersion), $"/rules/{version}", "Unexpected Null value was found", anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(GetByVersion),
+                $"/rules/{version}",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            _loggingExtension.LogError(nameof(GetByVersion), $"/rules/{version}", $"An unexpected error occurred: {ex.Message}", ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -136,22 +207,49 @@ public class RulesController : ControllerBase
         {
             RuleTemplateResponse response = await _ruleTemplateService.GetRuleTemplateByIdAsync(id);
             _logger.LogInformation($"'{nameof(GetById)}' method called using unique identifier'{id}'");
+            _loggingExtension.LogInformation(
+                nameof(GetById),
+                $"/rules/{id}",
+                $"'{nameof(GetById)}' method called using unique identifier'{id}'");
             return Ok(response);
         }
-        catch (NotFoundException nFex)
+        catch (NotFoundException nfex)
         {
-            _logger.LogError(nFex.Message);
-            return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
+            _logger.LogError(nfex.Message);
+            _loggingExtension.LogError(nameof(GetById),$"/rules/{id}", "", nfex.Message);
+            return NotFound(new ApiErrorResponse("Rules version", "Rules version not found"));
         }
-        catch (InvalidOperationException err)
+        catch (InvalidOperationException ioex)
         {
-            _logger.LogError(err.Message);
-            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+            _logger.LogError(ioex.Message);
+            _loggingExtension.LogError(nameof(GetById),$"/rules/{id}", "Bad Request", ioex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(nameof(GetById), $"/rules/{id}", "Unexpected Null value was found", anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(GetById),
+                $"/rules/{id}",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            _loggingExtension.LogError(
+                nameof(GetById),
+                $"/rules/{id}",
+                $"An unexpected error occurred: {ex.Message}",
+                ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -185,19 +283,72 @@ public class RulesController : ControllerBase
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 GuidResponse response = await _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
                 _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using version '{version}' and file '{file.Name}'");
+                _loggingExtension.LogInformation(
+                    nameof(CreateFromFile),
+                    $"/rules/createFromFile/{version}",
+                    $"'{nameof(CreateFromFile)}' method called using version '{version}' and file '{file.Name}'");
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }
-        catch (InvalidOperationException err)
+        catch (InvalidOperationException ioex)
         {
-            _logger.LogError(err.Message);
-            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+            _logger.LogError(ioex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromFile),
+                $"/rules/createFromFile/{version}",
+                "Bad Request",
+                ioex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
+        }
+        catch (DecoderFallbackException dfex)
+        {
+            _logger.LogError(dfex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromFile),
+                $"/rules/createFromFile/{version}",
+                "File decoding failed",
+                dfex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", dfex.Message));
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromFile),
+                $"/rules/createFromFile/{version}",
+                "Unexpected Null value was found",
+                anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromFile),
+                $"/rules/createFromFile/{version}",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
+        }
+        catch (DbUpdateException duex)
+        {
+            _logger.LogError(duex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromFile),
+                $"/rules/createFromFile/{version}",
+                "Unable to save record(s) to the database",
+                duex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to save record(s) to the database."));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message);
             _logger.LogError(ex, "An error occurred while processing CreateFromFile request.");
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            _loggingExtension.LogError(
+                nameof(CreateFromFile),
+                $"/rules/createFromFile/{version}",
+                $"An unexpected error occurred: {ex.Message}",
+                ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -233,23 +384,82 @@ public class RulesController : ControllerBase
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 GuidResponse response = await _ruleTemplateService.UpdateRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
                 _logger.LogInformation($"'{nameof(UpdateFromFile)}' method called using version '{version}' and file '{file.Name}'");
+                _loggingExtension.LogInformation(
+                    nameof(UpdateFromFile),
+                    $"/rules/updateFromFile/{version}",
+                    $"'{nameof(UpdateFromFile)}' method called using version '{version}' and file '{file.Name}'");
                 return Ok(response);
             }
         }
-        catch (NotFoundException nFex)
+        catch (NotFoundException nfex)
         {
-            _logger.LogError(nFex.Message);
+            _logger.LogError(nfex.Message);
+            _loggingExtension.LogError(
+                nameof(UpdateFromFile),
+                $"/rules/updateFromFile/{version}",
+                "Rule for Schema version not found",
+                nfex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Rule for Schema version not found"));
         }
-        catch (InvalidOperationException err)
+        catch (InvalidOperationException ioex)
         {
-            _logger.LogError(err.Message);
-            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+            _logger.LogError(ioex.Message);
+            _loggingExtension.LogError(
+                nameof(UpdateFromFile),
+                $"/rules/updateFromFile/{version}",
+                "Bad Request",
+                ioex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
+        }
+        catch (DecoderFallbackException dfex)
+        {
+            _logger.LogError(dfex.Message);
+            _loggingExtension.LogError(
+                nameof(UpdateFromFile),
+                $"/rules/updateFromFile/{version}",
+                "File decoding failed",
+                dfex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", dfex.Message));
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(
+                nameof(UpdateFromFile),
+                $"/rules/updateFromFile/{version}",
+                "Unexpected Null value was found",
+                anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(UpdateFromFile),
+                $"/rules/updateFromFile/{version}",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
+        }
+        catch (DbUpdateException duex)
+        {
+            _logger.LogError(duex.Message);
+            _loggingExtension.LogError(
+                nameof(UpdateFromFile),
+                $"/rules/updateFromFile/{version}",
+                "Unable to save record(s) to the database",
+                duex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to save record(s) to the database."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            _loggingExtension.LogError(
+                nameof(UpdateFromFile),
+                $"/rules/updateFromFile/{version}",
+                $"An unexpected error occurred: {ex.Message}",
+                ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 }

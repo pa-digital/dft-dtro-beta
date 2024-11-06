@@ -5,16 +5,22 @@ public class RulesControllerVersionTests
 {
     private readonly RulesController _controller;
     private readonly Mock<IRuleTemplateService> _mockRuleTemplateService;
+    private readonly Mock<LoggingExtension.Builder> _mockLoggingBuilder;
+    private readonly Mock<LoggingExtension> _mockLoggingExtension;
 
     public RulesControllerVersionTests()
     {
         _mockRuleTemplateService = new Mock<IRuleTemplateService>();
         Mock<IRequestCorrelationProvider> mockCorrelationProvider = new();
         Mock<ILogger<RulesController>> mockLogger = new();
+        _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        _mockLoggingExtension = new Mock<LoggingExtension>();
+
         _controller = new RulesController(
             _mockRuleTemplateService.Object,
             mockCorrelationProvider.Object,
-            mockLogger.Object);
+            mockLogger.Object,
+            _mockLoggingExtension.Object);
     }
 
 
