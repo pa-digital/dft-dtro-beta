@@ -575,6 +575,16 @@ public class SchemasController : ControllerBase
                 $"'{nameof(UpdateFromBodyByVersion)}' method called using version '{version}' and body '{body}'");
             return Ok(response);
         }
+        catch (NotFoundException nfex)
+        {
+            _logger.LogError(nfex.Message);
+            _loggingExtension.LogError(
+                nameof(UpdateFromBodyByVersion),
+                $"/schemas/updateFromBody/{version}",
+                "Schema version not found",
+                nfex.Message);
+            return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
+        }
         catch (InvalidOperationException ioex)
         {
             _logger.LogError(ioex.Message);
