@@ -1,3 +1,5 @@
+using DfT.DTRO.Models.DataBase;
+
 namespace DfT.DTRO.Controllers;
 
 /// <summary>
@@ -13,6 +15,7 @@ public class SearchController : ControllerBase
     private readonly IMetricsService _metricsService;
     private readonly ILogger<SearchController> _logger;
     private readonly IAppIdMapperService _appIdMapperService;
+    private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
     /// Default constructor.
@@ -20,16 +23,19 @@ public class SearchController : ControllerBase
     /// <param name="searchService">An <see cref="ISearchService"/> instance.</param>
     /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{SearchController}"/> intance.</param>
+    /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
     public SearchController(
         ISearchService searchService,
         IMetricsService metricsService,
         IAppIdMapperService appIdMapperService,
-        ILogger<SearchController> logger)
+        ILogger<SearchController> logger,
+        LoggingExtension loggingExtension)
     {
         _searchService = searchService;
         _metricsService = metricsService;
         _appIdMapperService = appIdMapperService;
         _logger = logger;
+        _loggingExtension = loggingExtension;
     }
 
     /// <summary>
@@ -46,26 +52,38 @@ public class SearchController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Consumer)]
     [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]
-    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromHeader(Name = "x-app-id")][Required] Guid xAppId, [FromBody] DtroSearch body)
+    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromBody] DtroSearch body)
     {
         try
         {
-            xAppId = await _appIdMapperService.GetAppId(HttpContext);
+            appId = await _appIdMapperService.GetAppId(HttpContext);
             PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
-            await _metricsService.IncrementMetric(MetricType.Search, xAppId);
+            await _metricsService.IncrementMetric(MetricType.Search, appId);
             _logger.LogInformation($"'{nameof(SearchDtros)}' method called and body '{body}'");
+            _loggingExtension.LogInformation(
+                nameof(SearchDtros),
+                "/search",
+                $"'{nameof(SearchDtros)}' method called and body '{body}'");
             return Ok(response);
         }
-        catch (InvalidOperationException err)
+        catch (InvalidOperationException ioex)
         {
-            _logger.LogError(err.Message);
-            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+            _logger.LogError(ioex.Message);
+            _loggingExtension.LogError(nameof(SearchDtros), "/search", "Bad Request", ioex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(nameof(SearchDtros), "/search", "Unexpected Null value was found", anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
         }
         catch (Exception ex)
         {
-            await _metricsService.IncrementMetric(MetricType.SystemFailure, xAppId);
+            await _metricsService.IncrementMetric(MetricType.SystemFailure, appId);
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse(ex.InnerException.Message, ex.Message));
+            _loggingExtension.LogError(nameof(SearchDtros), "/search", "", ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
         }
     }
 }

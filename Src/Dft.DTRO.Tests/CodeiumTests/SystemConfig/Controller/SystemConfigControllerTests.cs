@@ -5,18 +5,26 @@ public class SystemConfigControllerTests
     private readonly Mock<IAppIdMapperService> _mockXappIdMapperService;
     private readonly Mock<ISystemConfigService> _mockSystemConfigService;
     private readonly Mock<ILogger<SystemConfigController>> _mockLogger;
+    private readonly Mock<LoggingExtension.Builder> _mockLoggingBuilder;
+    private readonly Mock<LoggingExtension> _mockLoggingExtension;
     private readonly SystemConfigController _controller;
 
     public SystemConfigControllerTests()
     {
         _mockSystemConfigService = new Mock<ISystemConfigService>();
         _mockLogger = new Mock<ILogger<SystemConfigController>>();
+        _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        _mockLoggingExtension = new Mock<LoggingExtension>();
 
         _mockXappIdMapperService = new Mock<IAppIdMapperService>();
         _mockXappIdMapperService.Setup(service => service.GetAppId(It.IsAny<HttpContext>())).ReturnsAsync(Guid.NewGuid());
 
 
-        _controller = new SystemConfigController(_mockSystemConfigService.Object, _mockXappIdMapperService.Object, _mockLogger.Object);
+        _controller = new SystemConfigController(
+            _mockSystemConfigService.Object,
+            _mockXappIdMapperService.Object,
+            _mockLogger.Object,
+            _mockLoggingExtension.Object);
     }
 
     [Fact]
