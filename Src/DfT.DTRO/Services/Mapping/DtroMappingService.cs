@@ -1,4 +1,6 @@
-﻿using DfT.DTRO.Models.Validation;
+﻿using DfT.DTRO.Extensions;
+using DfT.DTRO.Models.Validation;
+using Google.Protobuf;
 using Newtonsoft.Json.Linq;
 
 namespace DfT.DTRO.Services.Mapping;
@@ -7,11 +9,13 @@ public class DtroMappingService : IDtroMappingService
 {
     private readonly IConfiguration _configuration;
     private readonly IBoundingBoxService _service;
+    private readonly LoggingExtension _loggingExtension;
 
-    public DtroMappingService(IConfiguration configuration, IBoundingBoxService service)
+    public DtroMappingService(IConfiguration configuration, IBoundingBoxService service, LoggingExtension loggingExtension)
     {
         _configuration = configuration;
         _service = service;
+        _loggingExtension = loggingExtension;
     }
 
     public IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros)
@@ -31,13 +35,22 @@ public class DtroMappingService : IDtroMappingService
 
             }
 
-            var timeValidity = regulations
-                .SelectMany(it => it.GetListOrDefault("condition"))
+            List<ExpandoObject> timeValidity;
+            try
+            {
+                timeValidity = regulations
+                .SelectMany(it => it.GetListOrDefault("condition") ?? Enumerable.Empty<object>())
                 .Where(it => it is not null)
                 .OfType<ExpandoObject>()
                 .Select(it => it.GetExpandoOrDefault("timeValidity"))
                 .Where(it => it is not null)
                 .ToList();
+            }
+            catch (Exception ex)
+            {
+                _loggingExtension.LogError(nameof(InferIndexFields), "", "An error occurred while processing timeValidity.", ex.Message);
+                timeValidity = new List<ExpandoObject>();
+            }
 
             var regulationStartTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<DateTime?>("start"))
@@ -154,13 +167,22 @@ public class DtroMappingService : IDtroMappingService
                 Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(item)}")));
             }
 
-            List<ExpandoObject> timeValidity = regulations
-                .SelectMany(it => it.GetListOrDefault("condition"))
+            List<ExpandoObject> timeValidity;
+            try
+            {
+                timeValidity = regulations
+                .SelectMany(it => it.GetListOrDefault("condition") ?? Enumerable.Empty<object>())
                 .Where(it => it is not null)
                 .OfType<ExpandoObject>()
                 .Select(it => it.GetExpandoOrDefault("timeValidity"))
                 .Where(it => it is not null)
                 .ToList();
+            }
+            catch (Exception ex)
+            {
+                _loggingExtension.LogError(nameof(InferIndexFields), "", "An error occurred while processing timeValidity.", ex.Message);
+                timeValidity = new List<ExpandoObject>();
+            }
 
             List<DateTime> regulationStartTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<string>("start"))
@@ -323,13 +345,22 @@ public class DtroMappingService : IDtroMappingService
             .Distinct()
             .ToList();
 
-        List<ExpandoObject> timeValidity = regulations
-            .SelectMany(it => it.GetListOrDefault("condition"))
+        List<ExpandoObject> timeValidity;
+        try
+        {
+            timeValidity = regulations
+            .SelectMany(it => it.GetListOrDefault("condition") ?? Enumerable.Empty<object>())
             .Where(it => it is not null)
             .OfType<ExpandoObject>()
             .Select(it => it.GetExpandoOrDefault("timeValidity"))
             .Where(it => it is not null)
             .ToList();
+        }
+        catch (Exception ex)
+        {
+            _loggingExtension.LogError(nameof(InferIndexFields), "", "An error occurred while processing timeValidity.", ex.Message);
+            timeValidity = new List<ExpandoObject>();
+        }
 
         dtro.RegulationStart = timeValidity
             .Select(it => it.GetValueOrDefault<string>("start"))
