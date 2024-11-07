@@ -192,43 +192,43 @@ public class RulesController : ControllerBase
     /// <summary>
     /// Get rule template by its ID
     /// </summary>
-    /// <param name="id">ID of the rule template to retrieve.</param>
+    /// <param name="ruleId">ID of the rule template to retrieve.</param>
     /// <response code="200">OK.</response>
     /// <response code="400">Bad Request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Rule template.</returns>
     [HttpGet]
-    [Route("/rules/{id:guid}")]
+    [Route("/rules/{ruleId:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<IActionResult> GetById(Guid ruleId)
     {
         try
         {
-            RuleTemplateResponse response = await _ruleTemplateService.GetRuleTemplateByIdAsync(id);
-            _logger.LogInformation($"'{nameof(GetById)}' method called using unique identifier'{id}'");
+            RuleTemplateResponse response = await _ruleTemplateService.GetRuleTemplateByIdAsync(ruleId);
+            _logger.LogInformation($"'{nameof(GetById)}' method called using unique identifier'{ruleId}'");
             _loggingExtension.LogInformation(
                 nameof(GetById),
-                $"/rules/{id}",
-                $"'{nameof(GetById)}' method called using unique identifier'{id}'");
+                $"/rules/{ruleId}",
+                $"'{nameof(GetById)}' method called using unique identifier'{ruleId}'");
             return Ok(response);
         }
         catch (NotFoundException nfex)
         {
             _logger.LogError(nfex.Message);
-            _loggingExtension.LogError(nameof(GetById),$"/rules/{id}", "", nfex.Message);
+            _loggingExtension.LogError(nameof(GetById),$"/rules/{ruleId}", "", nfex.Message);
             return NotFound(new ApiErrorResponse("Rules version", "Rules version not found"));
         }
         catch (InvalidOperationException ioex)
         {
             _logger.LogError(ioex.Message);
-            _loggingExtension.LogError(nameof(GetById),$"/rules/{id}", "Bad Request", ioex.Message);
+            _loggingExtension.LogError(nameof(GetById),$"/rules/{ruleId}", "Bad Request", ioex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
         }
         catch (ArgumentNullException anex)
         {
             _logger.LogError(anex.Message);
-            _loggingExtension.LogError(nameof(GetById), $"/rules/{id}", "Unexpected Null value was found", anex.Message);
+            _loggingExtension.LogError(nameof(GetById), $"/rules/{ruleId}", "Unexpected Null value was found", anex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
         }
         catch (OperationCanceledException ocex)
@@ -236,7 +236,7 @@ public class RulesController : ControllerBase
             _logger.LogError(ocex.Message);
             _loggingExtension.LogError(
                 nameof(GetById),
-                $"/rules/{id}",
+                $"/rules/{ruleId}",
                 "Operation to the database was unexpectedly canceled",
                 ocex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
@@ -246,7 +246,7 @@ public class RulesController : ControllerBase
             _logger.LogError(ex.Message);
             _loggingExtension.LogError(
                 nameof(GetById),
-                $"/rules/{id}",
+                $"/rules/{ruleId}",
                 $"An unexpected error occurred: {ex.Message}",
                 ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
