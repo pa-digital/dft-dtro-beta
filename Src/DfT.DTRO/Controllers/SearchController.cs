@@ -41,6 +41,7 @@ public class SearchController : ControllerBase
     /// <summary>
     /// Finds existing D-TROs that match the required criteria.
     /// </summary>
+    /// <param name="appId">AppId identification.</param>
     /// <param name="body">A D-TRO object search criteria.</param>
     /// <response code="200">OK.</response>
     /// <response code="400">Bad Request.</response>

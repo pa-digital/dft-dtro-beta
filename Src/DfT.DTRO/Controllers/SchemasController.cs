@@ -205,50 +205,50 @@ public class SchemasController : ControllerBase
     /// <summary>
     /// Get schema template by its ID
     /// </summary>
-    /// <param name="id">ID of the schema template to retrieve.</param>
+    /// <param name="schemaId">ID of the schema template to retrieve.</param>
     /// <response code="200">OK.</response>
     /// <response code="400">Bad Request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Schema template.</returns>
     [HttpGet]
-    [Route("/schemas/{id:guid}")]
+    [Route("/schemas/{schemaId:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<IActionResult> GetById(Guid schemaId)
     {
         try
         {
-            SchemaTemplateResponse response = await _schemaTemplateService.GetSchemaTemplateByIdAsync(id);
-            _logger.LogInformation($"'{nameof(GetById)}' method called using unique identifier '{id}'");
+            SchemaTemplateResponse response = await _schemaTemplateService.GetSchemaTemplateByIdAsync(schemaId);
+            _logger.LogInformation($"'{nameof(GetById)}' method called using unique identifier '{schemaId}'");
             _loggingExtension.LogInformation(
                 nameof(GetById),
-                $"/schemas/{id}",
-                $"'{nameof(GetById)}' method called using unique identifier'{id}'");
+                $"/schemas/{schemaId}",
+                $"'{nameof(GetById)}' method called using unique identifier'{schemaId}'");
             return Ok(response);
         }
         catch (NotFoundException nfex)
         {
             _logger.LogError(nfex.Message);
-            _loggingExtension.LogError(nameof(GetById), $"/schemas/{id}", "", nfex.Message);
+            _loggingExtension.LogError(nameof(GetById), $"/schemas/{schemaId}", "", nfex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
         }
         catch (InvalidOperationException ioex)
         {
             _logger.LogError(ioex.Message);
-            _loggingExtension.LogError(nameof(GetById), $"/schemas/{id}", "Bad Request", ioex.Message);
+            _loggingExtension.LogError(nameof(GetById), $"/schemas/{schemaId}", "Bad Request", ioex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
         }
         catch (ArgumentNullException anex)
         {
             _logger.LogError(anex.Message);
-            _loggingExtension.LogError(nameof(GetById), $"/schemas/{id}", "Unexpected Null value was found", anex.Message);
+            _loggingExtension.LogError(nameof(GetById), $"/schemas/{schemaId}", "Unexpected Null value was found", anex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
         }
         catch (OperationCanceledException ocex)
         {
             _logger.LogError(ocex.Message);
             _loggingExtension.LogError(
-                nameof(GetById), $"/schemas/{id}",
+                nameof(GetById), $"/schemas/{schemaId}",
                 "Operation to the database was unexpectedly canceled",
                 ocex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
@@ -257,7 +257,7 @@ public class SchemasController : ControllerBase
         {
             _logger.LogError(ex.Message);
             _loggingExtension.LogError(nameof(GetById),
-                $"/schemas/{id}", $"An unexpected error occurred: {ex.Message}", ex.Message);
+                $"/schemas/{schemaId}", $"An unexpected error occurred: {ex.Message}", ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }

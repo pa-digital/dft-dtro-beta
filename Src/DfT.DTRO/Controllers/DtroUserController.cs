@@ -294,6 +294,7 @@ public class DtroUserController : ControllerBase
     /// <summary>
     /// Retrieve a Dtro User
     /// </summary>
+    /// <param name="dtroUserId">ID of the Dtro User.</param>
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
@@ -361,7 +362,7 @@ public class DtroUserController : ControllerBase
     /// <summary>
     /// Delete Dtro users by ids
     /// </summary>
-    /// <param name="ids">List of D-TRO User ID, comma separated</param>
+    /// <param name="request">List of D-TRO User ID, comma separated</param>
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>

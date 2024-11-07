@@ -34,7 +34,7 @@ public class SystemConfigController : ControllerBase
     /// <summary>
     /// Get System Config details
     /// </summary>
-    /// <param name="appId">AppId identification a D-TRO is being submitted for.</param>
+    /// <param name="appId">AppId identification.</param>
     /// <response code="200">System name retrieved successfully.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>SystemConfigResponse</returns>

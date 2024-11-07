@@ -166,7 +166,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
     [HttpPut]
-    [Route("/dtros/updateFromFile/{id:guid}")]
+    [Route("/dtros/updateFromFile/{dtroId:guid}")]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
@@ -368,7 +368,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
     [HttpPut]
-    [Route("/dtros/updateFromBody/{id:guid}")]
+    [Route("/dtros/updateFromBody/{dtroId:guid}")]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Ok")]
@@ -456,7 +456,7 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     /// <returns>D-TRO object.</returns>
     [HttpGet]
-    [Route("/dtros/{id:guid}")]
+    [Route("/dtros/{dtroId:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid dtroId)
     {
@@ -493,7 +493,7 @@ public class DTROsController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpDelete("/dtros/{id:guid}")]
+    [HttpDelete("/dtros/{dtroId:guid}")]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
@@ -651,7 +651,7 @@ public class DTROsController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpPost("/dtros/Ownership/{id:guid}/{assignToTraId:guid}")]
+    [HttpPost("/dtros/Ownership/{dtroId:guid}/{assignToTraId:guid}")]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
