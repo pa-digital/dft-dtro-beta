@@ -20,7 +20,7 @@ public class EventSearchService : IEventSearchService
 
         var searchRes = await _dtroService.FindDtrosAsync(search);
 
-        List<DtroEvent> events = _dtroMappingService.MapToEvents(searchRes).ToList();
+        var events = _dtroMappingService.MapToEvents(searchRes);
 
         if (!events.Any())
         {
@@ -34,7 +34,7 @@ public class EventSearchService : IEventSearchService
 
         var res = new DtroEventSearchResult
         {
-            TotalCount = events.Count,
+            TotalCount = events.Count(),
             Events = paginatedEvents,
             Page = search.Page.Value,
             PageSize = Math.Min(search.PageSize.Value, paginatedEvents.Count)

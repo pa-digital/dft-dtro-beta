@@ -36,7 +36,9 @@ public class JsonLogicValidationService : IJsonLogicValidationService
                 SemanticValidationError error = new()
                 {
                     Message = rule.Message,
-                    Path = rule.Path
+                    Path = rule.Path,
+                    Name = rule.Name,
+                    Rule = rule.Rule.ToIndentedJsonString()
                 };
 
                 errors.Add(error);

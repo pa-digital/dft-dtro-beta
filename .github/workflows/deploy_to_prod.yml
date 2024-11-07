@@ -24,7 +24,7 @@ jobs:
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
-          approvers: VinP-PA,stm-john-cooper #TODO: Update when full list is available
+          approvers: VinP-PA,stm-john-cooper,GaTilley,MehrajRM #TODO: Update when full list is available
           minimum-approvals: 1
           issue-title: "Deploying Application version ${{steps.releasev.outputs.RELEASE}} to Prod"
           issue-body: "Approving this issue will deploy Application release version '${{steps.releasev.outputs.RELEASE}}' to the Production environment."
@@ -41,6 +41,7 @@ jobs:
       execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_PROD }}
       service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_PROD }}
       service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_PROD }}
+      gcp_project_number: ${{ secrets.GCP_PROJECT_NUMBER_PROD }}
     with:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_PROD }}
       gcp-project: ${{ vars.GCP_PROJECT_ID_PROD }}
@@ -52,5 +53,5 @@ jobs:
       service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
       run-build-push: true
       run-deploy-CR-job: true
-      run-apigee: false #TODO: Default value when no major endpoint or OAuth changes have been made
-#      run-apigee: true
+#      run-apigee: false #TODO: Default value when no major endpoint or OAuth changes have been made
+      run-apigee: true

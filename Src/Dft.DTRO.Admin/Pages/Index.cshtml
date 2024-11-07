@@ -73,16 +73,16 @@
                 datasets: [{
                     data: dataValues.map(value => value > 0 ? value : minimalValue),
                     backgroundColor: [
-                        
+
                         'rgb(144, 238, 144,0.5)',  // pastel green
                         'rgba(255, 159, 64, 0.5)', // pastel orange
                         'rgba(255, 99, 132, 0.5)' // pastel red
-                       
+
                     ],
                     borderColor: [
                         'rgba(75, 192, 192, 1)',// pastel green
                         'rgba(255, 159, 64, 1)', // pastel orange
-                        'rgba(255, 99, 132, 1)'// pastel red   
+                        'rgba(255, 99, 132, 1)'// pastel red
                     ],
                     borderWidth: 1,
                     hoverOffset: 10
@@ -149,10 +149,10 @@
 
                     ctx.fillStyle = 'grey';
 
-                    ctx.font = (fontSize * 0.7) + "em sans-serif"; 
+                    ctx.font = (fontSize * 0.7) + "em sans-serif";
                     var label = "Successful";
                     var labelX = Math.round((width - ctx.measureText(label).width) / 2);
-                    var labelY = textY + (height * 0.1); 
+                    var labelY = textY + (height * 0.1);
 
                     ctx.fillText(label, labelX, labelY);
 

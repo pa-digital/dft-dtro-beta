@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.Services;
+﻿using System.Data;
+
+namespace DfT.DTRO.Services;
 
 public class DtroService : IDtroService
 {
@@ -48,14 +50,13 @@ public class DtroService : IDtroService
 
     public async Task<DtroResponse> GetDtroByIdAsync(Guid id)
     {
-        var dtro = await _dtroDal.GetDtroByIdAsync(id);
+        Models.DataBase.DTRO dtro = await _dtroDal.GetDtroByIdAsync(id);
         if (dtro is null)
         {
             throw new NotFoundException();
         }
 
-        var dtroResponse = _dtroMappingService.MapToDtroResponse(dtro);
-        return dtroResponse;
+        return _dtroMappingService.MapToDtroResponse(dtro);
     }
 
     public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
@@ -95,7 +96,7 @@ public class DtroService : IDtroService
         var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
         if (!isSaved)
         {
-            throw new Exception("Failed to write to history table");
+            throw new DataException("Failed to write update to history table");
         }
 
         await _dtroDal.UpdateDtroAsJsonAsync(id, dtroSubmit, correlationId);
@@ -104,7 +105,8 @@ public class DtroService : IDtroService
 
     public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
     {
-        return await _dtroDal.FindDtrosAsync(search);
+        var result = await _dtroDal.FindDtrosAsync(search);
+        return result;
     }
 
     public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search)
@@ -183,7 +185,7 @@ public class DtroService : IDtroService
     }
 
 
-    public async Task<bool> AssignOwnershipAsync(Guid dtroId, Guid xAppId, Guid assignToUser, string correlationId)
+    public async Task<bool> AssignOwnershipAsync(Guid dtroId, Guid appId, Guid assignToUser, string correlationId)
     {
         var dtroUserList = await _dtroUserDal.GetAllDtroUsersAsync();
 
@@ -199,12 +201,7 @@ public class DtroService : IDtroService
             throw new NotFoundException($"Invalid DTRO Id: {dtroId}");
         }
 
-        var apiDtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
-
-
-
-
-
+        var apiDtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
         if (apiDtroUser.UserGroup != (int)UserGroup.Admin)
         {
             var ownership = _dtroMappingService.GetOwnership(currentDtro);
@@ -215,7 +212,6 @@ public class DtroService : IDtroService
                 throw new DtroValidationException($"Traffic authority {apiTraId} is not the creator or owner in the DTRO data submitted");
             }
         }
-
 
         DTROHistory historyDtro = _dtroMappingService.MapToDtroHistory(currentDtro);
         var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);

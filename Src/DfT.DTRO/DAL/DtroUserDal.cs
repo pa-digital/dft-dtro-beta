@@ -207,7 +207,7 @@ public class DtroUserDal : IDtroUserDal
                 {
                     if (await TraExistsAsync((int)dtroUserRequest.TraId))
                     {
-                        throw new InvalidOperationException($"There is an existing DtroUser with TRA Id {dtroUserRequest.TraId}");
+                        throw new InvalidOperationException($"There is an existing DtroUser with TRA Id of '{dtroUserRequest.TraId}'");
                     }
                 }
             }

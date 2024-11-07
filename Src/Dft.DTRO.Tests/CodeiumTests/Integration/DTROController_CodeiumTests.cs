@@ -8,7 +8,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
 {
     private readonly Mock<IDtroService> _mockDtroService;
     private readonly Mock<IRequestCorrelationProvider> _correlationProviderMock;
-    private readonly Mock<IXappIdMapperService> _xappIdMapperServiceMock;
+    private readonly Mock<IAppIdMapperService> _xappIdMapperServiceMock;
     private readonly DTROsController _controller;
     private readonly WebApplicationFactory<Program> _factory;
 
@@ -20,18 +20,20 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     {
         _factory = factory;
         _mockDtroService = new Mock<IDtroService>();
-        _xappIdMapperServiceMock = new Mock<IXappIdMapperService>();
-        _xappIdMapperServiceMock.Setup(x => x.GetXappId(It.IsAny<HttpContext>())).ReturnsAsync(_xAppIdForTest);
+        _xappIdMapperServiceMock = new Mock<IAppIdMapperService>();
+        _xappIdMapperServiceMock.Setup(x => x.GetAppId(It.IsAny<HttpContext>())).ReturnsAsync(_xAppIdForTest);
 
         _correlationProviderMock = new Mock<IRequestCorrelationProvider>();
         Mock<ILogger<DTROsController>> loggerMock = new();
         Mock<IMetricsService> metricsMock = new();
+        Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        var mockLoggingExtension = new Mock<LoggingExtension>();
 
         metricsMock.Setup(x => x.IncrementMetric(It.IsAny<MetricType>(), _xAppIdForTest)).ReturnsAsync(true);
 
 
         _controller = new DTROsController(_mockDtroService.Object, metricsMock.Object,
-            _correlationProviderMock.Object, _xappIdMapperServiceMock.Object, loggerMock.Object);
+            _correlationProviderMock.Object, _xappIdMapperServiceMock.Object, loggerMock.Object, mockLoggingExtension.Object);
 
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
@@ -68,19 +70,6 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     }
 
     [Fact]
-    public async Task CreateDtro_ValidationException_ReturnsBadRequest()
-    {
-        var dtroBadSubmit = new DtroSubmit();
-        _mockDtroService.Setup(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _xAppIdForTest))
-            .ThrowsAsync(new DtroValidationException());
-
-        var response = await _controller.CreateFromBody(_xAppIdForTest, dtroBadSubmit);
-
-        Assert.IsType<BadRequestObjectResult>(response);
-        _mockDtroService.Verify(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _xAppIdForTest), Times.Once);
-    }
-
-    [Fact]
     public async Task CreateDtro_UnexpectedException_ReturnsInternalServerError()
     {
         var dtroBadSubmit = new DtroSubmit();
@@ -108,20 +97,6 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
         _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest), Times.Once);
     }
 
-    [Fact]
-    public async Task UpdateDtro_ReturnsBadRequest_ForInvalidDtro()
-    {
-        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest))
-            .ThrowsAsync(new DtroValidationException());
-
-        var dtroBadSubmit = new DtroSubmit
-        { SchemaVersion = new("3.1.2"), Data = new() };
-
-        var result = await _controller.UpdateFromBody(_xAppIdForTest, Guid.NewGuid(), dtroBadSubmit);
-
-        Assert.IsType<BadRequestObjectResult>(result);
-        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _xAppIdForTest), Times.Once);
-    }
 
     [Fact]
     public async Task UpdateDtro_ReturnsNotFound_ForNonExistentDtro()

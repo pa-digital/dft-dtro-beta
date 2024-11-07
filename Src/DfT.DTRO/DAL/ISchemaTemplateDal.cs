@@ -82,4 +82,15 @@ public interface ISchemaTemplateDal
     /// with specified schema ID exists. Otherwise <see langword="false" />
     /// </returns>
     Task<bool> SchemaTemplateExistsByIdAsync(Guid id);
+
+
+    /// <summary>
+    /// Delete schema template by <paramref name="version"/>
+    /// </summary>
+    /// <param name="version">Schema template version by which schema template deletion is done by.</param>
+    /// <returns>
+    /// A <see cref="Task"/> whose result is <see langword="true"/> if schema template
+    /// with specified schema version is deleted. Otherwise <see langword="false"/>
+    /// </returns>
+    Task<bool> DeleteSchemaTemplateByVersionAsync(string version);
 }

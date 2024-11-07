@@ -10,16 +10,21 @@
 
 <h2>
     Schemas
-    <a class="@(isAdmin ? "btn btn-primary" : "")" asp-page="SchemaDropEdit" asp-route-IsEdit="@(isAdmin ? "true" : "false")">@(isAdmin ? "+" : "")</a>
+    <a class="@(isAdmin ? "btn btn-primary" : "")"
+       asp-page="SchemaDropEdit"
+       asp-route-IsEdit="@(isAdmin ? "true" : "false")">
+        @(isAdmin ? "+" : "")
+    </a>
 </h2>
 
 <table class="table">
     <thead>
     <tr>
         <th>Schema Version</th>
-        <th>Active</th>
+        <th>Schema Status</th>
         <th>Schema Actions</th>
         <th>Rule Actions</th>
+        <th>Delete Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -41,10 +46,8 @@
                          style="max-height: 20px; vertical-align: center;"/>
                 }
             </td>
-
-
             <td>
-                    <a class="@(isAdmin? "btn btn-info": "disabled btn btn-info")"
+                <a class="@(isAdmin? "btn btn-info": "disabled btn btn-info")"
                    asp-page="SchemaDropEdit"
                    asp-route-IsEdit="true"
                    asp-route-version="@schema.SchemaVersion">
@@ -85,6 +88,17 @@
                     </a>
                 </td>
             }
+            <td>
+                <form method='post' style="min-width: 100px;"
+                   class='d-inline'
+                   asp-page-handler='Delete'
+                   asp-route-version='@schema.SchemaVersion'>
+                    <button class='btn btn-danger @(isAdmin ? "": "disabled")'
+                            type='submit'>
+                        Delete
+                    </button>
+                </form>
+            </td>
         </tr>
     }
     </tbody>

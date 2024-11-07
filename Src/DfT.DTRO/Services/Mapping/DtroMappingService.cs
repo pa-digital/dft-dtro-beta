@@ -22,17 +22,34 @@ public class DtroMappingService : IDtroMappingService
 
         foreach (var dtro in dtros)
         {
-            var periods = dtro.Data
-                .GetValueOrDefault<IList<object>>("Source.provision")
-                .OfType<ExpandoObject>()
-                .SelectMany(it => it.GetValueOrDefault<IList<object>>("regulation"))
+            var regulations = new List<ExpandoObject>();
+            var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision").OfType<ExpandoObject>().ToList();
+
+            foreach (var provision in provisions)
+            {
+                regulations.AddRange(provision.GetValue<IList<object>>("regulation").OfType<ExpandoObject>().ToList());
+
+            }
+
+            var timeValidity = regulations
+                .SelectMany(it => it.GetListOrDefault("condition"))
                 .Where(it => it is not null)
                 .OfType<ExpandoObject>()
-                .Select(it => it.GetExpando("timeValidity"))
-                .OfType<ExpandoObject>();
+                .Select(it => it.GetExpandoOrDefault("timeValidity"))
+                .Where(it => it is not null)
+                .ToList();
 
-            var regulationStartTimes = periods.Select(it => it.GetValueOrDefault<DateTime?>("start")).Where(it => it is not null).Select(it => it.Value).ToList();
-            var regulationEndTimes = periods.Select(it => it.GetValueOrDefault<DateTime?>("end")).Where(it => it is not null).Select(it => it.Value).ToList();
+            var regulationStartTimes = timeValidity
+                .Select(it => it.GetValueOrDefault<DateTime?>("start"))
+                .Where(it => it is not null)
+                .Select(it => it.Value)
+                .ToList();
+
+            var regulationEndTimes = timeValidity
+                .Select(it => it.GetValueOrDefault<DateTime?>("end"))
+                .Where(it => it is not null)
+                .Select(it => it.Value)
+                .ToList();
 
             DtroEvent fromCreation = DtroEvent.FromCreation(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
             events.Add(fromCreation);
@@ -55,27 +72,87 @@ public class DtroMappingService : IDtroMappingService
         return events;
     }
 
-    public DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro)
-    {
-        var result = new DtroResponse()
+    public DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro) =>
+        new()
         {
+            Id = dtro.Id,
             SchemaVersion = dtro.SchemaVersion,
             Data = dtro.Data
         };
 
-        return result;
+    public static void PrindDtroData(ExpandoObject dtroData, string indent = "")
+    {
+        var dtroDataDict = (IDictionary<string, object>)dtroData;
+        foreach (var kvp in (IDictionary<string, object>)dtroData)
+        {
+            if (kvp.Value is ExpandoObject)
+            {
+                Console.WriteLine($"{indent}{kvp.Key}:");
+                PrindDtroData((ExpandoObject)kvp.Value, indent + "  ");
+            }
+            else if (kvp.Value is IList<object> list)
+            {
+                Console.WriteLine($"{indent}{kvp.Key}:");
+                foreach (var item in list)
+                {
+                    if (item is ExpandoObject)
+                    {
+                        PrindDtroData((ExpandoObject)item, indent + "  ");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{indent}  - {item}");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"{indent}{kvp.Key}: {kvp.Value}");
+            }
+        }
     }
 
     public IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros)
     {
         List<DtroSearchResult> results = new List<DtroSearchResult>();
-
         foreach (Models.DataBase.DTRO dtro in dtros)
         {
-            List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
-                .OfType<ExpandoObject>()
-                .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())
-                .ToList();
+            var regulations = new List<ExpandoObject>();
+            try
+            {
+                var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision");
+                if (provisions == null)
+                {
+                    Console.WriteLine("Error: 'Source.provision' is null or not found.");
+                }
+                Console.WriteLine("'Source.provision' found.");
+
+                var expandoProvisions = provisions.OfType<ExpandoObject>();
+
+                foreach (var provision in expandoProvisions)
+                {
+                    var regulationList = provision.GetValue<IList<object>>("regulation");
+                    if (regulationList == null)
+                    {
+                        Console.WriteLine("Warning: 'regulation' not found in one of the provisions.");
+                        continue;
+                    }
+
+                    var expandoRegulations = regulationList.OfType<ExpandoObject>();
+                    regulations.AddRange(expandoRegulations);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+            Console.WriteLine("Mapping regulations");
+            foreach (ExpandoObject item in regulations)
+            {
+                var properties = item.GetType().GetProperties();
+                Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(item)}")));
+            }
 
             List<ExpandoObject> timeValidity = regulations
                 .SelectMany(it => it.GetListOrDefault("condition"))
@@ -87,11 +164,13 @@ public class DtroMappingService : IDtroMappingService
 
             List<DateTime> regulationStartTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<string>("start"))
+                .Where(it => it is not null)
                 .Select(it => DateTime.Parse(it).ToUniversalTime())
                 .ToList();
 
             List<DateTime> regulationEndTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<string>("end"))
+                .Where(it => it is not null)
                 .Select(it => DateTime.Parse(it).ToUniversalTime())
                 .ToList();
 
@@ -254,15 +333,15 @@ public class DtroMappingService : IDtroMappingService
 
         dtro.RegulationStart = timeValidity
             .Select(it => it.GetValueOrDefault<string>("start"))
-            .Select(DateTime.Parse)
-            .FirstOrDefault()
-            .ToUniversalTime();
+            .Where(it => it is not null)
+            .Select(it => DateTime.Parse(it).ToUniversalTime())
+            .FirstOrDefault();
 
         dtro.RegulationEnd = timeValidity
             .Select(it => it.GetValueOrDefault<string>("end"))
-            .Select(DateTime.Parse)
-            .FirstOrDefault()
-            .ToUniversalTime();
+            .Where(it => it is not null)
+            .Select(it => DateTime.Parse(it).ToUniversalTime())
+            .FirstOrDefault();
 
         string json = dtro.Data.ToIndentedJsonString();
         JObject obj = JObject.Parse(json);
@@ -275,8 +354,9 @@ public class DtroMappingService : IDtroMappingService
         dtro.Location = _service.SetBoundingBox(new List<SemanticValidationError>(), obj1, new BoundingBox());
     }
 
-    private DtroSearchResult CopyDtroToSearchResult(Models.DataBase.DTRO dtro, List<DateTime> regulationStartDates, List<DateTime> regulationEndDates) =>
-        new()
+    private DtroSearchResult CopyDtroToSearchResult(Models.DataBase.DTRO dtro, List<DateTime> regulationStartDates, List<DateTime> regulationEndDates)
+    {
+        DtroSearchResult result = new()
         {
             TroName = dtro.Data.GetValueOrDefault<string>("Source.troName"),
             TrafficAuthorityCreatorId = dtro.Data.GetValueOrDefault<int>("Source.traCreator"),
@@ -289,6 +369,8 @@ public class DtroMappingService : IDtroMappingService
             RegulationEnd = regulationEndDates,
             Id = dtro.Id
         };
+        return result;
+    }
 
     private string Get(DTROHistory request, string key) =>
         request.Data.GetValueOrDefault<string>(key);

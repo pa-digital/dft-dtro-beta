@@ -95,11 +95,19 @@ public class DtroDal : IDtroDal
         dtro.LastUpdatedCorrelationId = correlationId;
         dtro.CreatedCorrelationId = dtro.LastUpdatedCorrelationId;
 
-        _dtroMappingService.InferIndexFields(ref dtro);
+        try
+        {
+            _dtroMappingService.InferIndexFields(ref dtro);
 
-        await _dtroContext.Dtros.AddAsync(dtro);
+            await _dtroContext.Dtros.AddAsync(dtro);
 
-        await _dtroContext.SaveChangesAsync();
+            await _dtroContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Issue with D-TRO record persistence: {ex.Message}");
+        }
+
         return response;
     }
 
@@ -163,11 +171,11 @@ public class DtroDal : IDtroDal
     public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
     {
         IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
-
         var expressionsToDisjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
 
         foreach (var query in search.Queries)
         {
+            var properties = query.GetType().GetProperties();
             var expressionsToConjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
 
             if (query.DeletionTime is { } deletionTime)
@@ -222,15 +230,17 @@ public class DtroDal : IDtroDal
                 expressionsToConjunct.Add(it => it.OrderReportingPoints.Contains(query.OrderReportingPoint));
             }
 
-            if (query.Location is not null)
-            {
-                var boundingBox =
-                    query.Location.Crs != "osgb36Epsg27700"
-                        ? _projectionService.Wgs84ToOsgb36(query.Location.Bbox)
-                        : query.Location.Bbox;
+            //if (query.Location is not null)
+            //{
+            //    BoundingBox boundingBox = query.Location.Format switch
+            //    {
+            //        "wgs84Epsg4326" => _projectionService.Wgs84ToOsgb36(query.Location.Bbox),
+            //        "osgb36Epsg27700" or "wkt" => query.Location.Bbox,
+            //        _ => new()
+            //    };
 
-                expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(boundingBox, it.Location));
-            }
+            //    expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(boundingBox, it.Location));
+            //}
 
             if (query.RegulationStart is not null)
             {
@@ -345,15 +355,15 @@ public class DtroDal : IDtroDal
             expressionsToConjunct.Add(it => it.OrderReportingPoints.Contains(search.OrderReportingPoint));
         }
 
-        if (search.Location is not null)
-        {
-            var boundingBox =
-                search.Location.Crs != "osgb36Epsg27700"
-                    ? _projectionService.Wgs84ToOsgb36(search.Location.Bbox)
-                    : search.Location.Bbox;
+        //if (search.Location is not null)
+        //{
+        //    var boundingBox =
+        //        search.Location.Format != "osgb36Epsg27700"
+        //            ? _projectionService.Wgs84ToOsgb36(search.Location.Bbox)
+        //            : search.Location.Bbox;
 
-            expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(boundingBox, it.Location));
-        }
+        //    expressionsToConjunct.Add(it => DatabaseMethods.Overlaps(boundingBox, it.Location));
+        //}
 
         if (search.RegulationStart is not null)
         {

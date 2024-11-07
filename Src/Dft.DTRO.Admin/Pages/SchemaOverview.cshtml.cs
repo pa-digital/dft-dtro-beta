@@ -52,4 +52,30 @@ public class SchemaOverviewModel : PageModel
             return _errHandlingService.HandleUiError(ex);
         }
     }
+
+    public async Task<IActionResult> OnPostDeleteAsync(string version)
+    {
+        try
+        {
+            OnGetAsync().Wait();
+            var schema = Schemas.Items.Find(it => it.SchemaVersion == version);
+            if (schema == null)
+            {
+                return NotFound();
+            }
+
+            if (schema.IsActive)
+            {
+                return _errHandlingService.HandleUiError(new InvalidOperationException($"Schema with version '{version}' is active. Make sure is deactivated before trying to delete it."));
+            }
+
+            await _schemaService.DeleteSchemaAsync(version);
+
+            return RedirectToPage();
+        }
+        catch (Exception ex)
+        {
+            return _errHandlingService.HandleUiError(ex);
+        }
+    }
 }

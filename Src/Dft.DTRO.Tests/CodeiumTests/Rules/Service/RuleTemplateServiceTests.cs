@@ -129,19 +129,6 @@ public class RuleTemplateServiceTests
     }
 
     [Fact]
-    public async Task UpdateRuleTemplateAsJsonAsync_InUseByExistingDtros()
-    {
-        const string version = "1.0.0";
-        SchemaVersion schemaVersion = new("1.0.0");
-        const string rule = "{}";
-        const string correlationId = "test-correlation-id";
-        _mockRuleTemplateDal.Setup(x => x.RuleTemplateExistsAsync(schemaVersion)).ReturnsAsync(true);
-        _mockDtroDal.Setup(x => x.DtroCountForSchemaAsync(schemaVersion)).ReturnsAsync(1);
-        await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            _ruleTemplateService.UpdateRuleTemplateAsJsonAsync(version, rule, correlationId));
-    }
-
-    [Fact]
     public async Task GetRuleTemplateAsync_NotFound()
     {
         SchemaVersion schemaVersion = new("1.0.0");

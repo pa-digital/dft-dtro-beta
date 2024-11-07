@@ -1,4 +1,10 @@
-﻿namespace DfT.DTRO.Controllers;
+﻿using DfT.DTRO.Migrations;
+using DfT.DTRO.Models.DataBase;
+using Google.Protobuf.WellKnownTypes;
+using System;
+using System.Drawing;
+
+namespace DfT.DTRO.Controllers;
 
 /// <summary>
 /// Controller for capturing Dtro Users
@@ -9,18 +15,22 @@ public class DtroUserController : ControllerBase
 {
     private readonly IDtroUserService _dtroUserService;
     private readonly ILogger<DtroUserController> _logger;
+    private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
     /// Default constructor.
     /// </summary>
     /// <param name="dtroUserService">An <see cref="IDtroUserService"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{DtroUserController}"/> instance.</param>
+    /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
     public DtroUserController(
         IDtroUserService dtroUserService,
-        ILogger<DtroUserController> logger)
+        ILogger<DtroUserController> logger,
+         LoggingExtension loggingExtension)
     {
         _dtroUserService = dtroUserService;
         _logger = logger;
+        _loggingExtension = loggingExtension;
     }
 
     /// <summary>
@@ -40,12 +50,29 @@ public class DtroUserController : ControllerBase
         {
             List<DtroUserResponse> dtroUserResponses = await _dtroUserService.GetAllDtroUsersAsync() ?? new List<DtroUserResponse>();
             _logger.LogInformation($"'{nameof(GetDtroUsers)}' method called");
+            _loggingExtension.LogInformation(
+                nameof(GetDtroUsers),
+                "/dtroUsers",
+                $"'{nameof(GetDtroUsers)}' method called");
             return Ok(dtroUserResponses);
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(nameof(GetDtroUsers), "/dtroUsers", "Unexpected Null value was found", anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(nameof(GetDtroUsers), "/dtroUsers", "Operation to the database was unexpectedly canceled", ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            _loggingExtension.LogError(nameof(GetDtroUsers), "/dtroUsers", "", ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -68,12 +95,33 @@ public class DtroUserController : ControllerBase
         {
             List<DtroUserResponse> dtroUserResponses = await _dtroUserService.SearchDtroUsers(partialName) ?? new List<DtroUserResponse>();
             _logger.LogInformation($"'{nameof(SearchDtroUsers)}' method called");
+            _loggingExtension.LogInformation(
+                nameof(SearchDtroUsers),
+                $"/dtroUsers/search/{partialName}",
+                $"'{nameof(SearchDtroUsers)}' method called for {partialName}");
             return Ok(dtroUserResponses);
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(nameof(SearchDtroUsers), $"/dtroUsers/search/{partialName}", "Unexpected Null value was found", anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(SearchDtroUsers),
+                $"/dtroUsers/search/{partialName}",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            _loggingExtension.LogError(nameof(SearchDtroUsers), $"/dtroUsers/search/{partialName}", "", ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -98,17 +146,57 @@ public class DtroUserController : ControllerBase
         {
             var response = await _dtroUserService.SaveDtroUserAsync(body);
             _logger.LogInformation($"'{nameof(CreateFromBody)}' method called using ID '{body.Id}'");
+            _loggingExtension.LogInformation(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+                $"'{nameof(CreateFromBody)}' method called using ID '{body.Id}'");
             return CreatedAtAction(nameof(CreateFromBody), new { id = response.Id }, response);
         }
-        catch (InvalidOperationException err)
+        catch (InvalidOperationException ioex)
         {
-            _logger.LogError(err.Message);
-            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+            _logger.LogError(ioex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+                $"Bad Request using ID '{body.Id}'",
+                ioex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+                "Unexpected Null value was found",
+                anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
+        }
+        catch (DbUpdateException duex)
+        {
+            _logger.LogError(duex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+                "Unable to save record(s) to the database",
+                duex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to save record(s) to the database."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            _loggingExtension.LogError(nameof(CreateFromBody),"/dtroUsers/createFromBody", "", ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -135,28 +223,78 @@ public class DtroUserController : ControllerBase
         {
             GuidResponse response = await _dtroUserService.UpdateDtroUserAsync(body);
             _logger.LogInformation($"'{nameof(UpdateFromBody)}' method called using ID '{body.Id}'");
+            _loggingExtension.LogInformation(
+                nameof(UpdateFromBody),
+                "/dtroUsers/updateFromBody",
+                $"'{nameof(UpdateFromBody)}' method called using ID '{body.Id}'");
             return Ok(response);
         }
-        catch (NotFoundException nFex)
+        catch (NotFoundException nfex)
         {
-            _logger.LogError(nFex.Message);
-            return NotFound(new ApiErrorResponse("Not Found", "User not found"));
+            _logger.LogError(nfex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+                $"User not found with ID '{body.Id}'",
+                nfex.Message);
+            return NotFound(new ApiErrorResponse("Not Found", $"User not found with ID '{body.Id}'"));
         }
-        catch (InvalidOperationException err)
+        catch (InvalidOperationException ioex)
         {
-            _logger.LogError(err.Message);
-            return BadRequest(new ApiErrorResponse("Bad Request", err.Message));
+            _logger.LogError(ioex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+                $"Bad Request with ID '{body.Id}'",
+                ioex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+                "Unexpected Null value was found",
+                anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
+        }
+        catch (DbUpdateException duex)
+        {
+            _logger.LogError(duex.Message);
+            _loggingExtension.LogError(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+               "Unable to save record(s) to the database",
+                duex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to save record(s) to the database."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            _loggingExtension.LogError(
+                nameof(CreateFromBody),
+                "/dtroUsers/createFromBody",
+               "",
+                ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
     /// <summary>
     /// Retrieve a Dtro User
     /// </summary>
+    /// <param name="dtroUserId">ID of the Dtro User.</param>
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
@@ -172,25 +310,59 @@ public class DtroUserController : ControllerBase
         try
         {
             DtroUserResponse dtroUserResponses = await _dtroUserService.GetDtroUserAsync(dtroUserId) ?? new DtroUserResponse();
-            _logger.LogInformation($"'{nameof(GetDtroUser)}' method called");
+            _logger.LogInformation($"'{nameof(GetDtroUser)}' method called for User ID {dtroUserId}");
+            _loggingExtension.LogInformation(
+                nameof(GetDtroUser),
+                $"/dtroUsers/{dtroUserId}",
+                $"'{nameof(GetDtroUser)}' method called for User ID {dtroUserId}");
             return Ok(dtroUserResponses);
         }
-        catch (NotFoundException nFex)
+        catch (NotFoundException nfex)
         {
-            _logger.LogError(nFex.Message);
-            return NotFound(new ApiErrorResponse("Not Found", "User not found"));
+            _logger.LogError(nfex.Message);
+            _loggingExtension.LogError(
+                nameof(GetDtroUser),
+                $"/dtroUsers/{dtroUserId}",
+                $"User not found with ID '{dtroUserId}'",
+                nfex.Message);
+            return NotFound(new ApiErrorResponse("Not Found", $"User not found with ID '{dtroUserId}'"));
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(
+                nameof(GetDtroUser),
+                $"/dtroUsers/{dtroUserId}",
+                "Unexpected Null value was found",
+                anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(GetDtroUser),
+                $"/dtroUsers/{dtroUserId}",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            _loggingExtension.LogError(
+                nameof(GetDtroUser),
+                $"/dtroUsers/{dtroUserId}",
+                "",
+                ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
     /// <summary>
     /// Delete Dtro users by ids
     /// </summary>
-    /// <param name="ids">List of D-TRO User ID, comma separated</param>
+    /// <param name="request">List of D-TRO User ID, comma separated</param>
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
@@ -210,19 +382,62 @@ public class DtroUserController : ControllerBase
                 return BadRequest(new ApiErrorResponse("Bad Request", "No user IDs provided."));
             }
             bool state = await _dtroUserService.DeleteDtroUsersAsync(request.Ids);
-            _logger.LogInformation($"Method '{nameof(DeleteDtroUsers)}' called at {DateTime.Now:g}");
+            _logger.LogInformation($"Method '{nameof(DeleteDtroUsers)}' called");
+            _loggingExtension.LogInformation(
+                nameof(DeleteDtroUsers),
+                "/dtroUsers/redundant",
+                $"'{nameof(DeleteDtroUsers)}' method called for {request.Ids}");
             return Ok(state);
         }
-        catch (NotFoundException nFex)
+        catch (NotFoundException nfex)
         {
-            _logger.LogError(nFex.Message);
+            _logger.LogError(nfex.Message);
+            _loggingExtension.LogError(
+                nameof(DeleteDtroUsers),
+                "/dtroUsers/redundant",
+                "User not found",
+                nfex.Message);
             return NotFound(new ApiErrorResponse("Unknown User", "User not found"));
+        }
+        catch (ArgumentNullException anex)
+        {
+            _logger.LogError(anex.Message);
+            _loggingExtension.LogError(
+                nameof(DeleteDtroUsers),
+                "/dtroUsers/redundant",
+                "Unexpected Null value was found",
+                anex.Message);
+            return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
+        }
+        catch (OperationCanceledException ocex)
+        {
+            _logger.LogError(ocex.Message);
+            _loggingExtension.LogError(
+                nameof(DeleteDtroUsers),
+                "/dtroUsers/redundant",
+                "Operation to the database was unexpectedly canceled",
+                ocex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
+        }
+        catch (DbUpdateException duex)
+        {
+            _logger.LogError(duex.Message);
+            _loggingExtension.LogError(
+                nameof(DeleteDtroUsers),
+                "/dtroUsers/redundant",
+                "Unable to save record(s) to the database",
+                duex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to update record(s) to the database."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
+            _loggingExtension.LogError(
+                nameof(DeleteDtroUsers),
+                "/dtroUsers/redundant",
+                "",
+                ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
-
 }

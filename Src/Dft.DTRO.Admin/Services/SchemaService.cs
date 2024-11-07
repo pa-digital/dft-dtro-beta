@@ -58,6 +58,15 @@ public class SchemaService : ISchemaService
         await _errHandlingService.RedirectIfErrors(response);
     }
 
+    public async Task DeleteSchemaAsync(string version)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Delete, ConfigHelper.Version + $"/schemas/{version}");
+        await _xappIdService.AddXAppIdHeader(request);
+
+        var response = await _client.SendAsync(request);
+        await _errHandlingService.RedirectIfErrors(response);
+    }
+
     public async Task CreateSchemaAsync(string version, IFormFile file)
     {
         using var content = new MultipartFormDataContent

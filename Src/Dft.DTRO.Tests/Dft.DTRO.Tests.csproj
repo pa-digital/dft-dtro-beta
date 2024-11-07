@@ -29,12 +29,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Configurations\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
 		<Compile Remove="CodeiumTests\Unit\**" />
 		<Compile Remove="TestResults\**" />
 		<EmbeddedResource Remove="CodeiumTests\Unit\**" />

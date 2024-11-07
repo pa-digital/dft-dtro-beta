@@ -1,7 +1,4 @@
-﻿using DfT.DTRO.Models.RuleTemplate;
-using DfT.DTRO.Services.Mapping;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services;
 
 public class RuleTemplateService : IRuleTemplateService
 {
@@ -76,13 +73,6 @@ public class RuleTemplateService : IRuleTemplateService
         if (!ruleTemplateExists)
         {
             throw new NotFoundException();
-        }
-
-        var countDtros = await _dtroDal.DtroCountForSchemaAsync(version);
-
-        if (countDtros > 0)
-        {
-            throw new InvalidOperationException($"Cannot update the schema as in use by exising DTRO's");
         }
 
         return await _ruleTemplateDal.UpdateRuleTemplateAsJsonAsync(version, rule, correlationId);

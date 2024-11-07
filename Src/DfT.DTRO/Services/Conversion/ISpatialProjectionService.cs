@@ -17,4 +17,6 @@ public interface ISpatialProjectionService
     BoundingBox Wgs84ToOsgb36(double westLongitude, double southLatitude, double eastLongitude, double northLatitude);
 
     BoundingBox Osgb36ToWgs84(double eastLongitude, double southLatitude, double westLongitude, double northLatitude);
+
+    BoundingBox WktSrid27700(double eastLongitude, double southLatitude, double westLongitude, double northLatitude);
 }

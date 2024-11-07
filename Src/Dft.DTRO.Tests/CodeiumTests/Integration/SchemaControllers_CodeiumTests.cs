@@ -25,8 +25,11 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         _mockSchemaTemplateService = new Mock<ISchemaTemplateService>();
         _mockCorrelationProvider = new Mock<IRequestCorrelationProvider>();
         Mock<ILogger<SchemasController>> mockLogger = new();
+        Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        var mockLoggingExtension = new Mock<LoggingExtension>();
+
         _controller = new SchemasController(_mockSchemaTemplateService.Object,
-            _mockCorrelationProvider.Object, mockLogger.Object);
+            _mockCorrelationProvider.Object, mockLogger.Object, mockLoggingExtension.Object);
 
         _schemaTemplate = new ExpandoObject();
         try
@@ -47,7 +50,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     }
 
     private static string JsonExample =>
-        File.ReadAllText("../../../../../examples/Schemas/3.2.0.json");
+        File.ReadAllText("../../../../../examples/Schemas/schemas-3.2.0.json");
 
     [Fact]
     public async Task GetSchemas_ReturnsOk_WhenTemplatesExist()
@@ -397,5 +400,70 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         ApiErrorResponse errorResponse = Assert.IsType<ApiErrorResponse>(result.Value);
         Assert.Equal((int)HttpStatusCode.InternalServerError, result.StatusCode);
         Assert.Equal("Internal Server Error", errorResponse.Message);
+    }
+
+    [Fact]
+    public async Task DeleteSchema_WhenSchemaTemplateFound_ReturnsOk()
+    {
+        string version = "1.0.0";
+
+        _mockSchemaTemplateService.Setup(it => it.GetSchemaTemplateAsync(version))
+            .ReturnsAsync(() => new SchemaTemplateResponse());
+
+        _mockSchemaTemplateService.Setup(s => s.DeleteSchemaTemplateAsync(version))
+            .ReturnsAsync(true);
+
+        IActionResult? result = await _controller.DeleteByVersion(version);
+
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task DeleteSchema_WhenSchemaTemplateNotFound_ReturnsNotFound()
+    {
+        _mockSchemaTemplateService.Setup(it => it.GetSchemaTemplateAsync("4.2.2"))
+            .ReturnsAsync(() => new SchemaTemplateResponse());
+
+        _mockSchemaTemplateService.Setup(s => s.DeleteSchemaTemplateAsync("4.2.4"))
+            .ReturnsAsync(() => false);
+
+        var actual = await _controller.DeleteByVersion(BadSchemaVersion);
+
+        Assert.Equal(404, ((NotFoundObjectResult)actual).StatusCode);
+    }
+
+    [Fact]
+    public async Task DeleteSchema_ThrowsInvalidOperationException_ReturnsBadRequest()
+    {
+        string version = "1.0.0";
+
+        _mockSchemaTemplateService.Setup(it => it.GetSchemaTemplateAsync(version))
+            .ReturnsAsync(() => new SchemaTemplateResponse());
+
+        _mockSchemaTemplateService.Setup(s => s.DeleteSchemaTemplateAsync(version))
+            .ThrowsAsync(new InvalidOperationException("Invalid version"));
+
+        BadRequestObjectResult? result = await _controller.DeleteByVersion(version) as BadRequestObjectResult;
+
+        Assert.IsType<BadRequestObjectResult>(result);
+        ApiErrorResponse errorResponse = Assert.IsType<ApiErrorResponse>(result.Value);
+        Assert.Equal("Bad Request", errorResponse.Message);
+    }
+
+    [Fact]
+    public async Task DeleteSchema_ThrowsUnexpectedException_ReturnsInternalServerError()
+    {
+        string version = "1.0.0";
+
+        _mockSchemaTemplateService.Setup(it => it.GetSchemaTemplateAsync(version))
+            .ReturnsAsync(() => new SchemaTemplateResponse());
+
+        _mockSchemaTemplateService.Setup(s => s.DeleteSchemaTemplateAsync(version))
+            .ThrowsAsync(new Exception("Invalid version"));
+
+        var actual = await _controller.DeleteByVersion(version);
+
+
+        Assert.Equal(500, ((ObjectResult)actual).StatusCode);
     }
 }
