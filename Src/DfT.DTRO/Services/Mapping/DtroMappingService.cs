@@ -1,6 +1,7 @@
 ﻿using DfT.DTRO.Extensions;
 using DfT.DTRO.Models.Validation;
 using Google.Protobuf;
+using Grpc.Net.Client.Configuration;
 using Newtonsoft.Json.Linq;
 
 namespace DfT.DTRO.Services.Mapping;
@@ -93,38 +94,6 @@ public class DtroMappingService : IDtroMappingService
             Data = dtro.Data
         };
 
-    public static void PrindDtroData(ExpandoObject dtroData, string indent = "")
-    {
-        var dtroDataDict = (IDictionary<string, object>)dtroData;
-        foreach (var kvp in (IDictionary<string, object>)dtroData)
-        {
-            if (kvp.Value is ExpandoObject)
-            {
-                Console.WriteLine($"{indent}{kvp.Key}:");
-                PrindDtroData((ExpandoObject)kvp.Value, indent + "  ");
-            }
-            else if (kvp.Value is IList<object> list)
-            {
-                Console.WriteLine($"{indent}{kvp.Key}:");
-                foreach (var item in list)
-                {
-                    if (item is ExpandoObject)
-                    {
-                        PrindDtroData((ExpandoObject)item, indent + "  ");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{indent}  - {item}");
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine($"{indent}{kvp.Key}: {kvp.Value}");
-            }
-        }
-    }
-
     public IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros)
     {
         List<DtroSearchResult> results = new List<DtroSearchResult>();
@@ -136,9 +105,9 @@ public class DtroMappingService : IDtroMappingService
                 var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision");
                 if (provisions == null)
                 {
-                    Console.WriteLine("Error: 'Source.provision' is null or not found.");
+                    _loggingExtension.LogError(nameof(InferIndexFields), "", "Error: 'Source.provision' is null or not found.", "");
+                    continue;
                 }
-                Console.WriteLine("'Source.provision' found.");
 
                 var expandoProvisions = provisions.OfType<ExpandoObject>();
 
@@ -147,7 +116,7 @@ public class DtroMappingService : IDtroMappingService
                     var regulationList = provision.GetValue<IList<object>>("regulation");
                     if (regulationList == null)
                     {
-                        Console.WriteLine("Warning: 'regulation' not found in one of the provisions.");
+                        _loggingExtension.LogWarn(nameof(InferIndexFields), "Warning: 'regulation' not found in one of the provisions.");
                         continue;
                     }
 
@@ -157,14 +126,13 @@ public class DtroMappingService : IDtroMappingService
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                _loggingExtension.LogError(nameof(InferIndexFields), "", "An error occurred", ex.Message);
+                throw new NotFoundException(ex.Message);
             }
 
-            Console.WriteLine("Mapping regulations");
             foreach (ExpandoObject item in regulations)
             {
                 var properties = item.GetType().GetProperties();
-                Console.WriteLine(string.Join(", ", properties.Select(p => $"{p.Name}: {p.GetValue(item)}")));
             }
 
             List<ExpandoObject> timeValidity;
@@ -408,4 +376,35 @@ public class DtroMappingService : IDtroMappingService
 
     private IList<object> GetProvision(DTROHistory request, string key) =>
         request.Data.GetValueOrDefault<IList<object>>(key);
+
+    private static void Debug_PrintdDtroData(ExpandoObject dtroData, string indent = "")
+    {
+        foreach (var kvp in (IDictionary<string, object>)dtroData)
+        {
+            if (kvp.Value is ExpandoObject)
+            {
+                Console.WriteLine($"{indent}{kvp.Key}:");
+                Debug_PrintdDtroData((ExpandoObject)kvp.Value, indent + "  ");
+            }
+            else if (kvp.Value is IList<object> list)
+            {
+                Console.WriteLine($"{indent}{kvp.Key}:");
+                foreach (var item in list)
+                {
+                    if (item is ExpandoObject)
+                    {
+                        Debug_PrintdDtroData((ExpandoObject)item, indent + "  ");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{indent}  - {item}");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"{indent}{kvp.Key}: {kvp.Value}");
+            }
+        }
+    }
 }
