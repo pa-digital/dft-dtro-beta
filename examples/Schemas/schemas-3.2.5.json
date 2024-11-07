@@ -1655,13 +1655,6 @@
 					},
 					"minItems": 0
 				},
-				"TimeValidity": {
-					"type": "array",
-					"items": {
-						"$ref": "#/$defs/TimeValidity"
-					},
-					"minItems": 1
-				},
 				"isDynamic": {
 					"description": "Indicates if the regulation is dynamic in nature",
 					"type": "boolean"
