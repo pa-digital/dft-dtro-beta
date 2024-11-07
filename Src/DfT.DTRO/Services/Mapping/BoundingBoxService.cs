@@ -25,7 +25,7 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = "British National Grid - Spatial Reference not present in the geometry or it is wrong referenced.",
+                        Message = "British National Grid - Spatial Reference is not present in the geometry or is referenced incorrectly.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Spatial reference",
                         Rule = "Spatial reference should be SRID=27700"
@@ -44,7 +44,7 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = "Coordinates you provided are not within UK coordinates",
+                        Message = "The provided coordinates are outside the recognized UK boundaries.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
@@ -60,7 +60,7 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = "British National Grid - Spatial Reference not present in the geometry or it is wrong referenced.",
+                        Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Spatial reference",
                         Rule = "Spatial reference should be SRID=27700"
@@ -78,7 +78,7 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = "Coordinates you provided are not within UK coordinates",
+                        Message = "The provided coordinates are outside the recognized UK boundaries.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
@@ -94,7 +94,7 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = "British National Grid - Spatial Reference not present in the geometry or it is wrong referenced.",
+                        Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Spatial reference",
                         Rule = "Spatial reference should be SRID=27700"
@@ -114,7 +114,7 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = "Coordinates you provided are not within UK coordinates",
+                        Message = "The provided coordinates are outside the recognized UK boundaries.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
@@ -131,7 +131,7 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = "British National Grid - Spatial Reference not present in the geometry or it is wrong referenced.",
+                        Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Spatial reference",
                         Rule = "Spatial reference should be SRID=27700"
@@ -151,7 +151,7 @@ public class BoundingBoxService : IBoundingBoxService
                 {
                     errors.Add(new SemanticValidationError
                     {
-                        Message = "Coordinates you provided are not within UK coordinates",
+                        Message = "The provided coordinates are outside the recognized UK boundaries.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"

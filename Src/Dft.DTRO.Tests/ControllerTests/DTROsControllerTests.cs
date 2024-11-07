@@ -8,7 +8,7 @@ public class DTROsControllerTests
     private readonly Mock<IDtroService> _mockDtroService = new();
     private readonly Mock<IMetricsService> _mockMetricsService = new();
     private readonly Mock<IRequestCorrelationProvider> _mockRequestCorrelationProvider = new();
-    private readonly Mock<IXappIdMapperService> _mockXAppIdMapperService = new();
+    private readonly Mock<IAppIdMapperService> _mockXAppIdMapperService = new();
 
     private readonly DTROsController _sut;
     private readonly Guid _xAppId;
@@ -16,19 +16,22 @@ public class DTROsControllerTests
     public DTROsControllerTests()
     {
         ILogger<DTROsController> mockLogger = MockLogger.Setup<DTROsController>();
+        Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        var mockLoggingExtension = new Mock<LoggingExtension>();
 
         _sut = new DTROsController(
             _mockDtroService.Object,
             _mockMetricsService.Object,
             _mockRequestCorrelationProvider.Object,
             _mockXAppIdMapperService.Object,
-            mockLogger);
+            mockLogger,
+            mockLoggingExtension.Object);
 
         _xAppId = Guid.NewGuid();
         Mock<HttpContext> mockContext = MockHttpContext.Setup();
 
         _mockXAppIdMapperService
-            .Setup(it => it.GetXappId(mockContext.Object))
+            .Setup(it => it.GetAppId(mockContext.Object))
             .ReturnsAsync(() => _xAppId);
 
         _mockMetricsService

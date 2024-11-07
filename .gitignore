@@ -14,8 +14,10 @@
 /Src/Dft.DTRO.Admin/obj/
 /Src/Dft.DTRO.Admin/obj/Debug/net6.0/
 /Src/Dft.DTRO.Admin/.vs/Dft.DTRO.Admin/xs/
+/Src/DfT.DTRO/.vs/DfT.DTRO/
 /Src/DfT.DTRO/.vs/DfT.DTRO/xs/project-cache/
-/.vs
+/Src/DfT.DTRO/.vs/
+
 /Src/Dft.DTRO.Admin/obj/Debug/net6.0/ref/Dft.DTRO.Admin.dll
 /Src/Dft.DTRO.Admin/bin/Debug/net6.0/Dft.DTRO.Admin.dll
 /Src/Dft.DTRO.Admin/bin/Debug/net6.0/Dft.DTRO.Admin.exe
@@ -68,3 +70,4 @@
 /Src/Dft.DTRO.Admin/obj/Dft.DTRO.Admin.csproj.nuget.g.targets
 /Src/Dft.DTRO.Admin/obj/project.assets.json
 /Src/Dft.DTRO.Admin/obj/project.nuget.cache
+/.vs

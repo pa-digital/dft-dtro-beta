@@ -9,15 +9,20 @@ public class MetricsControllerTests
         new() { DateFrom = new DateTime(2024, 1, 2), DateTo = new DateTime(2024, 1, 12) };
 
     private readonly Mock<IMetricsService> _mockMetricsService;
+    private readonly Mock<LoggingExtension.Builder> _mockLoggingBuilder;
+    private readonly Mock<LoggingExtension> _mockLoggingExtension;
 
     public MetricsControllerTests()
     {
         _mockMetricsService = new Mock<IMetricsService>();
         Mock<ILogger<MetricsController>> mockLogger = new();
+        _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        _mockLoggingExtension = new Mock<LoggingExtension>();
 
         _controller = new MetricsController(
             _mockMetricsService.Object,
-            mockLogger.Object);
+            mockLogger.Object,
+            _mockLoggingExtension.Object);
     }
 
     [Fact]

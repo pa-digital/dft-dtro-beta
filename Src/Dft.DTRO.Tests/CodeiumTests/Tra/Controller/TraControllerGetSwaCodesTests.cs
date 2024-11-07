@@ -5,12 +5,16 @@ public class TraControllerGetSwaCodesTests
     private readonly Mock<IDtroUserService> _traServiceMock;
     private readonly Mock<ILogger<DtroUserController>> _loggerMock;
     private readonly DtroUserController _controller;
+    private readonly Mock<LoggingExtension.Builder> _mockLoggingBuilder;
+    private readonly Mock<LoggingExtension> _mockLoggingExtension;
 
     public TraControllerGetSwaCodesTests()
     {
         _traServiceMock = new Mock<IDtroUserService>();
         _loggerMock = new Mock<ILogger<DtroUserController>>();
-        _controller = new DtroUserController(_traServiceMock.Object, _loggerMock.Object);
+        _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        _mockLoggingExtension = new Mock<LoggingExtension>();
+        _controller = new DtroUserController(_traServiceMock.Object, _loggerMock.Object, _mockLoggingExtension.Object);
     }
 
     [Fact]
