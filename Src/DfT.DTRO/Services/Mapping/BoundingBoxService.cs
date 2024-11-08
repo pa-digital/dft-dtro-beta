@@ -189,7 +189,7 @@ public class BoundingBoxService : IBoundingBoxService
         switch (jProperty.Name)
         {
             case "PointGeometry":
-                values = jProperty.DescendantsAndSelf().Skip(3).FirstOrDefault();
+                values = jProperty.DescendantsAndSelf().Skip(4).FirstOrDefault();
                 json = values.ToIndentedJsonString();
                 if (!json.Contains("SRID=27700;"))
                 {
@@ -224,7 +224,7 @@ public class BoundingBoxService : IBoundingBoxService
 
                 break;
             case "LinearGeometry":
-                values = jProperty.DescendantsAndSelf().Skip(7).FirstOrDefault();
+                values = jProperty.DescendantsAndSelf().Skip(8).FirstOrDefault();
                 json = values.ToIndentedJsonString();
                 if (!json.Contains("SRID=27700;"))
                 {
@@ -258,7 +258,7 @@ public class BoundingBoxService : IBoundingBoxService
 
                 break;
             case "Polygon":
-                values = jProperty.DescendantsAndSelf().LastOrDefault();
+                values = jProperty.DescendantsAndSelf().Skip(4).FirstOrDefault();
                 json = values.ToIndentedJsonString();
                 if (!json.Contains("SRID=27700;"))
                 {
