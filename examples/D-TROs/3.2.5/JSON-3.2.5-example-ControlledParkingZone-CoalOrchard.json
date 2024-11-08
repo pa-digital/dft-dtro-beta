@@ -1,0 +1,72 @@
+{
+    "schemaVersion": "3.2.5",
+    "data": {
+        "Source": {
+            "actionType": "new",
+            "currentTraOwner": 3300,
+            "provision": [
+                {
+                    "actionType": "new",
+                    "orderReportingPoint": "permanentNoticeOfMaking",
+                    "provisionDescription": "Controlled Parking Zone, Coal Orchard, Taunton",
+                    "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
+                    "regulation": [
+                        {
+                            "isDynamic": false,
+                            "timeZone": "Europe/London",
+                            "generalRegulation": {
+                                "regulationType": "kerbsideControlledParkingZone"
+                            },
+                            "condition": [
+                                {
+                                    "timeValidity": {
+                                        "start": "2024-10-22T06:00:00"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "regulatedPlace": [
+                        {
+                            "description": "Coal Orchard, Taunton",
+                            "LinearGeometry": {
+                                "version": 1,
+                                "direction": "bidirectional",
+                                "lateralPosition": "centreline",
+                                "linestring": "SRID=27700;LINESTRING(322796 124805, 322791 124826, 322781 124888)",
+                                "representation": "representingZone",
+                                "externalReference": [
+                                    {
+                                        "lastUpdateDate": "2024-10-01T00:00:00",
+                                        "UniqueStreetReferenceNumber": {
+                                            "usrn": 39605612
+                                        }
+                                    }
+                                ]
+                            },
+                            "Polygon": {
+                                "version": 2,
+                                "polygon": "SRID=27700;POLYGON(322790 124805, 322778 124866, 322777 124886, 322782 124885, 322785 124859, 322800 124806, 322790 124805)",
+                                "externalReference": [
+                                    {
+                                        "lastUpdateDate": "2024-10-01T00:00:00",
+                                        "UniqueStreetReferenceNumber": {
+                                            "usrn": 39605612
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ],
+            "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
+            "section": "All sections",
+            "traAffected": [
+                3300
+            ],
+            "traCreator": 3300,
+            "troName": "DfT Example - Controlled Parking Zone, Coal Orchard, Taunton v1, Nov. 2024"
+        }
+    }
+}
