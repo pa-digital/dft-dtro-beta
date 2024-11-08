@@ -133,7 +133,7 @@ public class DTROsController : ControllerBase
                 "/dtros/createFromFile",
                 "Operation to the database was unexpectedly canceled",
                 ocex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: Operation to the database was unexpectedly canceled."));
         }
         catch (DbUpdateException duex)
         {
@@ -143,14 +143,14 @@ public class DTROsController : ControllerBase
                 "/dtros/createFromFile",
                 "Unable to save record(s) to the database",
                 duex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to save record(s) to the database."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: Unable to save record(s) to the database."));
         }
         catch (Exception ex)
         {
             await _metricsService.IncrementMetric(MetricType.SystemFailure, appId);
             _logger.LogError(ex.Message);
             _loggingExtension.LogError(nameof(CreateFromFile), "/dtros/createFromFile", "", ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -242,7 +242,7 @@ public class DTROsController : ControllerBase
                 $"/dtros/UpdateFromFile/{dtroId}",
                 "Unable to save record(s) to the database",
                 duex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to save record(s) to the database."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: Unable to save record(s) to the database."));
         }
         catch (Exception ex)
         {
@@ -250,7 +250,7 @@ public class DTROsController : ControllerBase
 
             _logger.LogError(ex.Message);
             _loggingExtension.LogError(nameof(UpdateFromFile), $"/dtros/UpdateFromFile/{dtroId}", "", ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -330,7 +330,7 @@ public class DTROsController : ControllerBase
                 "/dtros/createFromBody",
                 "Operation to the database was unexpectedly canceled",
                 ocex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: Operation to the database was unexpectedly canceled."));
         }
         catch (DbUpdateException duex)
         {
@@ -340,7 +340,7 @@ public class DTROsController : ControllerBase
                 "/dtros/createFromBody",
                 "Unable to save record(s) to the database",
                 duex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to save record(s) to the database."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: Unable to save record(s) to the database."));
         }
         catch (Exception ex)
         {
@@ -352,7 +352,7 @@ public class DTROsController : ControllerBase
                 "/dtros/createFromBody",
                 "",
                 ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -435,7 +435,7 @@ public class DTROsController : ControllerBase
                 $"/dtros/updateFromBody/{dtroId}",
                 "Unable to save record(s) to the database",
                 duex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to save record(s) to the database."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: Unable to save record(s) to the database."));
         }
         catch (Exception ex)
         {
@@ -443,44 +443,44 @@ public class DTROsController : ControllerBase
 
             _logger.LogError(ex.Message);
             _loggingExtension.LogError(nameof(UpdateFromBody), $"/dtros/updateFromBody/{dtroId}", "", ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
     /// <summary>
     /// Gets a D-TRO by its ID
     /// </summary>
-    /// <param name="dtroId">ID of the D-TRO to retrieve.</param>
+    /// <param name="id">ID of the D-TRO to retrieve.</param>
     /// <response code="200">OK.</response>
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>D-TRO object.</returns>
     [HttpGet]
-    [Route("/dtros/{dtroId:guid}")]
+    [Route("/dtros/{id:guid}")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
-    public async Task<IActionResult> GetById(Guid dtroId)
+    public async Task<IActionResult> GetById(Guid id)
     {
         try
         {
-            DtroResponse dtroResponse = await _dtroService.GetDtroByIdAsync(dtroId);
-            _logger.LogInformation($"'{nameof(GetById)}' method called using '{dtroId}' unique identifier");
+            DtroResponse dtroResponse = await _dtroService.GetDtroByIdAsync(id);
+            _logger.LogInformation($"'{nameof(GetById)}' method called using '{id}' unique identifier");
             _loggingExtension.LogInformation(
                 nameof(GetById),
-                $"/dtros/{dtroId}",
-                $"'{nameof(GetById)}' method called using '{dtroId}' unique identifier");
+                $"/dtros/{id}",
+                $"'{nameof(GetById)}' method called using '{id}' unique identifier");
             return Ok(dtroResponse);
         }
         catch (NotFoundException nfex)
         {
             _logger.LogError(nfex.Message);
-            _loggingExtension.LogError(nameof(GetById), $"/dtros/{dtroId}", $"TRO '{dtroId}' not found", nfex.Message);
-            return NotFound(new ApiErrorResponse($"TRO '{dtroId}' not found", nfex.Message));
+            _loggingExtension.LogError(nameof(GetById), $"/dtros/{id}", $"TRO '{id}' not found", nfex.Message);
+            return NotFound(new ApiErrorResponse($"TRO '{id}' not found", nfex.Message));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            _loggingExtension.LogError(nameof(GetById), $"/dtros/{dtroId}", "", ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
+            _loggingExtension.LogError(nameof(GetById), $"/dtros/{id}", "", ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -531,7 +531,7 @@ public class DTROsController : ControllerBase
                 $"/dtros/{dtroId}",
                 "Operation to the database was unexpectedly canceled",
                 ocex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Operation to the database was unexpectedly canceled."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: Operation to the database was unexpectedly canceled."));
         }
         catch (DbUpdateException duex)
         {
@@ -541,7 +541,7 @@ public class DTROsController : ControllerBase
                 $"/dtros/{dtroId}",
                 "Unable to save record(s) to the database",
                 duex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to update record(s) to the database."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: Unable to update record(s) to the database."));
         }
         catch (Exception ex)
         {
@@ -553,7 +553,7 @@ public class DTROsController : ControllerBase
                 $"/dtros/{dtroId}",
                 "",
                 ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -595,7 +595,7 @@ public class DTROsController : ControllerBase
         {
             _logger.LogError(ex.Message);
             _loggingExtension.LogError(nameof(GetSourceHistory), $"/dtros/sourceHistory/{dtroId}", "", ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -637,7 +637,7 @@ public class DTROsController : ControllerBase
         {
             _logger.LogError(ex.Message);
             _loggingExtension.LogError(nameof(GetProvisionHistory), $"/dtros/provisionHistory/{dtroId}", "", ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 
@@ -696,7 +696,7 @@ public class DTROsController : ControllerBase
                 $"/dtros/Ownership/{dtroId}/{assignToTraId}",
                 "operation to the database was unexpectedly canceled",
                 ocex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: operation to the database was unexpectedly canceled."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: operation to the database was unexpectedly canceled."));
         }
         catch (DbUpdateException duex)
         {
@@ -706,13 +706,13 @@ public class DTROsController : ControllerBase
                 $"/dtros/Ownership/{dtroId}/{assignToTraId}",
                 "Unable to save record(s) to the database",
                 duex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occured: Unable to save record(s) to the database."));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: Unable to save record(s) to the database."));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
             _loggingExtension.LogError(nameof(AssignOwnership), $"/dtros/Ownership/{dtroId}/{assignToTraId}", "", ex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occured: {ex.Message}"));
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
 }

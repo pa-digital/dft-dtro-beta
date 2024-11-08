@@ -160,7 +160,7 @@ public static class ExpandoObjectExtensions
             return typedList;
         }
 
-        return default;
+        return new List<object>();
     }
 
     public static ExpandoObject GetExpandoOrDefault(this ExpandoObject source, string key)
@@ -172,7 +172,7 @@ public static class ExpandoObjectExtensions
             return expando;
         }
 
-        return default;
+        return null;
     }
 
     private static T GetFieldValueOrDefault<T>(this ExpandoObject source, string key)

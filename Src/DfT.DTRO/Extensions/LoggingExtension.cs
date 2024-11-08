@@ -105,6 +105,16 @@ namespace DfT.DTRO.Extensions
                 .Build()
                 .PrintToConsole();
         }
+
+        public void LogWarn(string methodName, string message)
+        {
+            new Builder()
+                .WithLogType(LogType.WARN)
+                .WithMethodCalledFrom(methodName)
+                .WithMessage(message)
+                .Build()
+                .PrintToConsole();
+        }
     }
 }
 
