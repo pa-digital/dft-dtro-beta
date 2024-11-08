@@ -12,22 +12,42 @@ public class SemanticValidationService : ISemanticValidationService
     private readonly ISystemClock _clock;
     private readonly IDtroDal _dtroDal;
     private readonly IConditionValidationService _conditionValidationService;
-    private readonly IBoundingBoxService _boundingBoxService;
+    private readonly IGeometryValidation _geometryValidation;
 
     public SemanticValidationService(
         ISystemClock clock,
         IDtroDal dtroDal,
         IConditionValidationService conditionValidationService,
-        IBoundingBoxService boundingBoxService)
+        IGeometryValidation geometryValidation)
     {
         _clock = clock;
         _dtroDal = dtroDal;
         _conditionValidationService = conditionValidationService;
-        _boundingBoxService = boundingBoxService;
+        _geometryValidation = geometryValidation;
     }
 
     public Task<Tuple<BoundingBox, List<SemanticValidationError>>> ValidateCreationRequest(DtroSubmit dtroSubmit) =>
         Validate(dtroSubmit.Data.ToIndentedJsonString(), dtroSubmit.SchemaVersion);
+
+    private async Task<Tuple<BoundingBox, List<SemanticValidationError>>> Validate(
+        string dtroDataString,
+        SchemaVersion dtroSchemaVersion)
+    {
+        List<SemanticValidationError> validationErrors = new();
+        JObject parsedBody = JObject.Parse(dtroDataString);
+
+        ValidateLastUpdatedDate(parsedBody, validationErrors);
+        BoundingBox boundingBox = dtroSchemaVersion.ToString() == "3.2.5"
+            ? _geometryValidation.ValidateCoordinatesAgainstBoundingBoxesForCurrentSchemaVersion(parsedBody,
+                validationErrors)
+            : _geometryValidation.ValidateCoordinatesAgainstBoundingBoxesForLowerSchemaVersions(parsedBody,
+                validationErrors);
+
+        await ValidateReferencedTroId(parsedBody, dtroSchemaVersion, validationErrors);
+        ValidateConditions(parsedBody, validationErrors);
+
+        return new Tuple<BoundingBox, List<SemanticValidationError>>(boundingBox, validationErrors);
+    }
 
     private static IEnumerable<IValueRule> GetValueRules(Condition condition)
     {
@@ -97,128 +117,6 @@ public class SemanticValidationService : ISemanticValidationService
         }
     }
 
-    public BoundingBox ValidateCoordinatesAgainstBoundingBoxes(JObject data, List<SemanticValidationError> errors)
-    {
-        JProperty geometry = data
-            .DescendantsAndSelf()
-            .OfType<JProperty>()
-            .FirstOrDefault(property => property.Name == "geometry");
-
-        BoundingBox boundingBox = new();
-        if (geometry?.Value is not JObject)
-        {
-            errors.Add(new SemanticValidationError
-            {
-                Message = $"'geometry' is of type '{geometry?.Value.Type}', this it must be an 'object'."
-            });
-        }
-
-        JObject jobj = geometry?.Value as JObject;
-
-        if (!jobj.TryGetValue("version", out JToken _))
-        {
-            errors.Add(new SemanticValidationError
-            {
-                Message = "'version' was missing."
-            });
-        }
-
-        if (jobj.TryGetValue("version", out JToken value))
-        {
-            JTokenType type = value.Type;
-            if (type != JTokenType.Integer)
-            {
-                errors.Add(new SemanticValidationError
-                {
-                    Message = "'version' must be an integer."
-                });
-            }
-        }
-
-        boundingBox = _boundingBoxService.SetBoundingBox(errors, jobj, boundingBox);
-        return boundingBox;
-    }
-
-    #region Remove the code
-    //private static BoundingBox ValidateLinearGeometryAgainstBoundingBox(IEnumerable<JToken> values, GeometryType geometryType)
-    //{
-    //    List<Coordinates> coordinates = new();
-
-    //    List<string> points = values
-    //        .Value<string>()
-    //        .Split(" ")
-    //        .Select(it => it
-    //            .Replace("(", "")
-    //            .Replace(")", "")
-    //            .Replace(",", ""))
-    //        .ToList();
-
-    //    for (int index = 0; index < points.Count; index++)
-    //    {
-    //        Coordinates coordinate = new();
-    //        coordinate.Longitude = points[index].AsInt();
-    //        index++;
-    //        coordinate.Latitude = points[index].AsInt();
-
-    //        coordinates.Add(coordinate);
-    //    }
-
-    //    return BoundingBox.Wrapping(coordinates);
-    //}
-
-    //private static BoundingBox ValidatePolygonAgainstBoundingBox(IEnumerable<JToken> values, GeometryType geometryType)
-    //{
-    //    List<Coordinates> coordinates = new();
-
-    //    List<string> points = values
-    //        .Value<string>()
-    //        .Split(" ")
-    //        .Select(it => it
-    //            .Replace("(", "")
-    //            .Replace(")", "")
-    //            .Replace(",", ""))
-    //        .ToList();
-
-    //    for (int index = 0; index < points.Count; index++)
-    //    {
-    //        Coordinates coordinate = new();
-    //        coordinate.Longitude = points[index].AsInt();
-    //        index++;
-    //        coordinate.Latitude = points[index].AsInt();
-
-    //        coordinates.Add(coordinate);
-    //    }
-
-    //    return BoundingBox.Wrapping(coordinates);
-    //}
-
-    //private static BoundingBox ValidateDirectedLinearAgainstBoundingBox(IEnumerable<JToken> values, GeometryType geometryType)
-    //{
-    //    List<Coordinates> coordinates = new();
-
-    //    List<string> points = values
-    //        .Value<string>()
-    //        .Split(" ")
-    //        .Select(it => it
-    //            .Replace("(", "")
-    //            .Replace(")", "")
-    //            .Replace(",", ""))
-    //        .ToList();
-
-    //    for (int index = 0; index < points.Count; index++)
-    //    {
-    //        Coordinates coordinate = new();
-    //        coordinate.Longitude = points[index].AsInt();
-    //        index++;
-    //        coordinate.Latitude = points[index].AsInt();
-
-    //        coordinates.Add(coordinate);
-    //    }
-
-    //    return BoundingBox.Wrapping(coordinates);
-    //}
-    #endregion
-
     private void ValidateConditions(JObject data, List<SemanticValidationError> errors)
     {
         var conditionArrays =
@@ -268,20 +166,6 @@ public class SemanticValidationService : ISemanticValidationService
         }
     }
 
-    private async Task<Tuple<BoundingBox, List<SemanticValidationError>>> Validate(
-        string dtroDataString,
-        SchemaVersion dtroSchemaVersion)
-    {
-        List<SemanticValidationError> validationErrors = new();
-        JObject parsedBody = JObject.Parse(dtroDataString);
-
-        ValidateLastUpdatedDate(parsedBody, validationErrors);
-        BoundingBox boundingBox = ValidateCoordinatesAgainstBoundingBoxes(parsedBody, validationErrors);
-        await ValidateReferencedTroId(parsedBody, dtroSchemaVersion, validationErrors);
-        ValidateConditions(parsedBody, validationErrors);
-
-        return new Tuple<BoundingBox, List<SemanticValidationError>>(boundingBox, validationErrors);
-    }
 
     private void ValidateLastUpdatedDate(JObject data, List<SemanticValidationError> errors)
     {
