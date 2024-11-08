@@ -17,8 +17,13 @@ public class MappingServiceTests
         Dictionary<string, string> dictionary = new() { { "Key1", "Value1" } };
         IConfigurationRoot? mockConfiguration = new ConfigurationBuilder().AddInMemoryCollection(dictionary).Build();
         Mock<IBoundingBoxService> mockBoundingBoxService = new();
+        Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
+        Mock<LoggingExtension> _mockLoggingExtension = new Mock<LoggingExtension>();
 
-        _sut = new DtroMappingService(mockConfiguration, mockBoundingBoxService.Object);
+        _sut = new DtroMappingService(
+            mockConfiguration,
+            mockBoundingBoxService.Object,
+            _mockLoggingExtension.Object);
     }
 
     [Fact]
