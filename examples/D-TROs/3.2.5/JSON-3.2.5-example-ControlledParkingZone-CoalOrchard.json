@@ -29,14 +29,12 @@
                     "regulatedPlace": [
                         {
                             "description": "Coal Orchard, Taunton",
-                            "geometry": {
+                            "LinearGeometry": {
                                 "version": 1,
-                                "LinearGeometry": {
-                                    "direction": "bidirectional",
-                                    "lateralPosition": "centreline",
-                                    "linestring": "SRID=27700;LINESTRING(322796 124805, 322791 124826, 322781 124888)",
-                                    "representation": "representingZone"
-                                },
+                                "direction": "bidirectional",
+                                "lateralPosition": "centreline",
+                                "linestring": "SRID=27700;LINESTRING(322796 124805, 322791 124826, 322781 124888)",
+                                "representation": "representingZone",
                                 "externalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
@@ -45,15 +43,10 @@
                                         }
                                     }
                                 ]
-                            }
-                        },
-                        {
-                            "description": "Coal Orchard Taunton",
-                            "geometry": {
+                            },
+                            "Polygon": {
                                 "version": 2,
-                                "Polygon": {
-                                    "polygon": "SRID=27700;POLYGON(322790 124805, 322778 124866, 322777 124886, 322782 124885, 322785 124859, 322800 124806, 322790 124805)"
-                                },
+                                "polygon": "SRID=27700;POLYGON(322790 124805, 322778 124866, 322777 124886, 322782 124885, 322785 124859, 322800 124806, 322790 124805)",
                                 "externalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
