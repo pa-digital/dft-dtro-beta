@@ -68,8 +68,8 @@ public static class Utils
 
         var builder = new ConfigurationBuilder();
         var configuration = builder.Build();
-        var loggingExtension = new LoggingExtension.Builder().Build();
-        var mappingService = new DtroMappingService(configuration, new BoundingBoxService(), loggingExtension);
+        var loggingExtensions = new LoggingExtension();
+        var mappingService = new DtroMappingService(configuration, new BoundingBoxService(new LoggingExtension.Builder().Build()), new LoggingExtension.Builder().Build());
         mappingService.InferIndexFields(ref sampleDtro);
 
         return sampleDtro;
@@ -88,7 +88,7 @@ public static class Utils
             var builder = new ConfigurationBuilder();
             var configuration = builder.Build();
             var loggingExtension = new LoggingExtension.Builder().Build();
-            var mappingService = new DtroMappingService(configuration, new BoundingBoxService(), loggingExtension);
+            var mappingService = new DtroMappingService(configuration, new BoundingBoxService(new LoggingExtension.Builder().Build()), loggingExtension);
             mappingService.InferIndexFields(ref dtro);
         }
 

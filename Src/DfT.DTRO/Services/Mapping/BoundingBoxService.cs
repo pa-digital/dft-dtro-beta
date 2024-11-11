@@ -10,6 +10,13 @@ namespace DfT.DTRO.Services.Mapping;
 
 public class BoundingBoxService : IBoundingBoxService
 {
+    private readonly LoggingExtension _loggingExtension;
+
+    public BoundingBoxService(LoggingExtension loggingExtension)
+    {
+        _loggingExtension = loggingExtension;
+    }
+
     public BoundingBox SetBoundingBoxForSingleGeometry(List<SemanticValidationError> errors, JObject jObject, BoundingBox boundingBox)
     {
         JProperty children = jObject.Children<JProperty>().ElementAt(1);
@@ -29,8 +36,10 @@ public class BoundingBoxService : IBoundingBoxService
                         Message = "British National Grid - Spatial Reference is not present in the geometry or is referenced incorrectly.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Spatial reference",
-                        Rule = "Spatial reference should be SRID=27700"
+                        Rule = "Spatial reference should be 'SRID=27700'"
                     });
+
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Spatial reference error", string.Join(",", errors));
 
                     return new BoundingBox();
                 }
@@ -50,6 +59,9 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
+
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Geometry boundary error", string.Join(",", errors));
+
                     return new BoundingBox();
                 }
 
@@ -64,8 +76,11 @@ public class BoundingBoxService : IBoundingBoxService
                         Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Spatial reference",
-                        Rule = "Spatial reference should be SRID=27700"
+                        Rule = "Spatial reference should be 'SRID=27700'"
                     });
+
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Spatial reference error", string.Join(",", errors));
+
                     return new BoundingBox();
                 }
                 toValidate = json.GetBetween(";", "\"");
@@ -84,6 +99,9 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
+
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Geometry boundary error", string.Join(",", errors));
+
                     return new BoundingBox();
                 }
 
@@ -98,8 +116,11 @@ public class BoundingBoxService : IBoundingBoxService
                         Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Spatial reference",
-                        Rule = "Spatial reference should be SRID=27700"
+                        Rule = "Spatial reference should be 'SRID=27700'"
                     });
+
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Spatial reference error", string.Join(",", errors));
+
                     return new BoundingBox();
                 }
 
@@ -120,6 +141,9 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
+
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Geometry boundary error", string.Join(",", errors));
+
                     return new BoundingBox();
                 }
 
@@ -135,8 +159,11 @@ public class BoundingBoxService : IBoundingBoxService
                         Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Spatial reference",
-                        Rule = "Spatial reference should be SRID=27700"
+                        Rule = "Spatial reference should be 'SRID=27700'"
                     });
+
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Spatial reference error", string.Join(",", errors));
+
                     return new BoundingBox();
                 }
                 toValidate = json.GetBetween(";", "\"");
@@ -157,6 +184,9 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
+
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Geometry boundary error", string.Join(",", errors));
+
                     return new BoundingBox();
                 }
 
@@ -169,6 +199,9 @@ public class BoundingBoxService : IBoundingBoxService
                     Name = "Wrong geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
+
+                _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Geometry type error", string.Join(",", errors));
+
                 return new BoundingBox();
         }
 
@@ -198,9 +231,10 @@ public class BoundingBoxService : IBoundingBoxService
                         Message = "British National Grid - Spatial Reference is not present in the geometry or is referenced incorrectly.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Spatial reference",
-                        Rule = "Spatial reference should be SRID=27700"
+                        Rule = "Spatial reference should be 'SRID=27700'"
                     });
 
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
                     return new BoundingBox();
                 }
                 toValidate = json.GetBetween(";", "\"");
@@ -219,6 +253,7 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry boundary error", string.Join(",", errors));
                     return new BoundingBox();
                 }
 
@@ -233,8 +268,9 @@ public class BoundingBoxService : IBoundingBoxService
                         Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
                         Path = "Source.provision.regulatedPlace.geometry",
                         Name = "Spatial reference",
-                        Rule = "Spatial reference should be SRID=27700"
+                        Rule = "Spatial reference should be 'SRID=27700'"
                     });
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
                     return new BoundingBox();
                 }
                 toValidate = json.GetBetween(";", "\"");
@@ -253,6 +289,7 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry boundary error", string.Join(",", errors));
                     return new BoundingBox();
                 }
 
@@ -269,6 +306,7 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Spatial reference",
                         Rule = "Spatial reference should be SRID=27700"
                     });
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
                     return new BoundingBox();
                 }
 
@@ -289,6 +327,7 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry boundary error", string.Join(",", errors));
                     return new BoundingBox();
                 }
 
@@ -306,6 +345,7 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Spatial reference",
                         Rule = "Spatial reference should be SRID=27700"
                     });
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
                     return new BoundingBox();
                 }
                 toValidate = json.GetBetween(";", "\"");
@@ -326,6 +366,7 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Wrong coordinates",
                         Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
                     });
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry boundary error", string.Join(",", errors));
                     return new BoundingBox();
                 }
 
@@ -338,6 +379,7 @@ public class BoundingBoxService : IBoundingBoxService
                     Name = "Wrong geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
+                _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry type error", string.Join(",", errors));
                 return new BoundingBox();
         }
 
@@ -348,7 +390,7 @@ public class BoundingBoxService : IBoundingBoxService
         return boundingBox;
     }
 
-    private static bool IsInUk(List<SemanticValidationError> errors, string toValidate, GeometryType geometryType)
+    private bool IsInUk(List<SemanticValidationError> errors, string toValidate, GeometryType geometryType)
     {
         const string ukBoundaryWkt = "POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))";
         WKTReader wktReader = new();
@@ -380,6 +422,8 @@ public class BoundingBoxService : IBoundingBoxService
                     Name = "Wrong geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
+                _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry type error", string.Join(",", errors));
+
                 break;
             default:
                 errors.Add(new SemanticValidationError
@@ -389,13 +433,15 @@ public class BoundingBoxService : IBoundingBoxService
                     Name = "Wrong geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
+                _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry type error", string.Join(",", errors));
+
                 break;
         }
         return isWithinUk;
     }
 
 
-    private static bool ArePairsValid(List<SemanticValidationError> errors, string toValidate,
+    private bool ArePairsValid(List<SemanticValidationError> errors, string toValidate,
         GeometryType geometryType)
     {
         WKTReader wktReader = new();
@@ -417,6 +463,8 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Incorrect pairs.",
                         Rule = $"Incorrect pairs for selected geometry: {GeometryType.PointGeometry}"
                     });
+
+                    _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
                 }
                 break;
             case GeometryType.LinearGeometry:
@@ -434,6 +482,8 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Incorrect pairs",
                         Rule = $"Incorrect pairs for selected geometry: {GeometryType.LinearGeometry} "
                     });
+
+                    _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
                 }
                 break;
             case GeometryType.Polygon:
@@ -451,6 +501,8 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Incorrect pairs",
                         Rule = $"Incorrect pairs for selected geometry: {GeometryType.Polygon} "
                     });
+
+                    _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
                 }
                 break;
             case GeometryType.DirectedLinear:
@@ -468,6 +520,8 @@ public class BoundingBoxService : IBoundingBoxService
                         Name = "Incorrect pairs",
                         Rule = $"Incorrect pairs for selected geometry: {GeometryType.DirectedLinear} "
                     });
+
+                    _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
                 }
                 break;
             case GeometryType.Unknown:
@@ -478,6 +532,9 @@ public class BoundingBoxService : IBoundingBoxService
                     Name = "Unknown geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
+
+                _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
+
                 break;
             default:
                 errors.Add(new SemanticValidationError
@@ -487,6 +544,9 @@ public class BoundingBoxService : IBoundingBoxService
                     Name = "Wrong geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
                 });
+
+                _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
+
                 break;
         }
 

@@ -8,13 +8,15 @@ namespace DfT.DTRO.Services.Validation;
 public class GeometryValidation : IGeometryValidation
 {
     private readonly IBoundingBoxService _boundingBoxService;
+    private readonly LoggingExtension _loggingExtension;
 
-    public GeometryValidation(IBoundingBoxService boundingBoxService)
+    public GeometryValidation(IBoundingBoxService boundingBoxService, LoggingExtension loggingExtension)
     {
         _boundingBoxService = boundingBoxService;
+        _loggingExtension = loggingExtension;
     }
 
-    public BoundingBox ValidateCoordinatesAgainstBoundingBoxesForCurrentSchemaVersion(JObject data,
+    public BoundingBox ValidateGeometryAgainstCurrentSchemaVersion(JObject data,
        List<SemanticValidationError> errors)
     {
         BoundingBox boundingBox = new();
@@ -36,6 +38,7 @@ public class GeometryValidation : IGeometryValidation
                 };
 
                 errors.Add(semanticValidationError);
+                _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Geometry error", string.Join(",", errors));
             }
 
             jObject = geometry?.Value as JObject;
@@ -47,6 +50,7 @@ public class GeometryValidation : IGeometryValidation
                     Message = "'version' was missing."
                 };
                 errors.Add(semanticValidationError);
+                _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Version error", string.Join(",", errors));
             }
 
             if (jObject != null && jObject.TryGetValue("version", out JToken value))
@@ -59,6 +63,7 @@ public class GeometryValidation : IGeometryValidation
                         Message = "'version' must be an integer."
                     };
                     errors.Add(semanticValidationError);
+                    _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Version type error", string.Join(",", errors));
                 }
             }
         }
@@ -67,7 +72,7 @@ public class GeometryValidation : IGeometryValidation
         return _boundingBoxService.SetBoundingBoxForMultipleGeometries(errors, jProperty, boundingBox);
     }
 
-    public BoundingBox ValidateCoordinatesAgainstBoundingBoxesForLowerSchemaVersions(JObject data, List<SemanticValidationError> errors)
+    public BoundingBox ValidateGeometryAgainstPreviousSchemaVersions(JObject data, List<SemanticValidationError> errors)
     {
         JProperty geometry = data
             .DescendantsAndSelf()
@@ -81,6 +86,8 @@ public class GeometryValidation : IGeometryValidation
             {
                 Message = $"'geometry' is of type '{geometry?.Value.Type}', this it must be an 'object'."
             });
+            _loggingExtension.LogError(nameof(ValidateGeometryAgainstPreviousSchemaVersions), "", "Geometry error", string.Join(",", errors));
+
         }
 
         JObject jObject = geometry?.Value as JObject;
@@ -91,6 +98,7 @@ public class GeometryValidation : IGeometryValidation
             {
                 Message = "'version' was missing."
             });
+            _loggingExtension.LogError(nameof(ValidateGeometryAgainstPreviousSchemaVersions), "", "Version error", string.Join(",", errors));
         }
 
         if (jObject != null && jObject.TryGetValue("version", out JToken value))
@@ -102,6 +110,7 @@ public class GeometryValidation : IGeometryValidation
                 {
                     Message = "'version' must be an integer."
                 });
+                _loggingExtension.LogError(nameof(ValidateGeometryAgainstPreviousSchemaVersions), "", "Version type error", string.Join(",", errors));
             }
         }
 

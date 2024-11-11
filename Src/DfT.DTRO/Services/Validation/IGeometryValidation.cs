@@ -6,7 +6,7 @@ namespace DfT.DTRO.Services.Validation;
 
 public interface IGeometryValidation
 {
-    BoundingBox ValidateCoordinatesAgainstBoundingBoxesForCurrentSchemaVersion(JObject jObject, List<SemanticValidationError> errors);
+    BoundingBox ValidateGeometryAgainstCurrentSchemaVersion(JObject jObject, List<SemanticValidationError> errors);
 
-    BoundingBox ValidateCoordinatesAgainstBoundingBoxesForLowerSchemaVersions(JObject jObject, List<SemanticValidationError> errors);
+    BoundingBox ValidateGeometryAgainstPreviousSchemaVersions(JObject jObject, List<SemanticValidationError> errors);
 }

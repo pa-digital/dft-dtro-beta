@@ -11,6 +11,7 @@ public class SemanticValidationServiceTests
     private readonly Mock<IDtroDal> _mockDtroDal;
     private readonly IGeometryValidation _geometryValidation;
     private readonly IBoundingBoxService _boundingBoxService;
+    private readonly LoggingExtension _loggingExtension;
 
 
     public SemanticValidationServiceTests()
@@ -18,8 +19,9 @@ public class SemanticValidationServiceTests
         _mockClock = new Mock<ISystemClock>();
         _mockDtroDal = new Mock<IDtroDal>();
         _mockConditionValidationService = new Mock<IConditionValidationService>();
-        _boundingBoxService = new BoundingBoxService();
-        _geometryValidation = new GeometryValidation(_boundingBoxService);
+        _loggingExtension = new LoggingExtension();
+        _boundingBoxService = new BoundingBoxService(_loggingExtension);
+        _geometryValidation = new GeometryValidation(_boundingBoxService, _loggingExtension);
         _mockClock.Setup(it => it.UtcNow).Returns(new DateTime(2023, 5, 1));
     }
 
@@ -33,7 +35,7 @@ public class SemanticValidationServiceTests
             : @"{""Polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""externalReference"": [{ ""lastUpdateDate"": ""1927-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
@@ -50,7 +52,7 @@ public class SemanticValidationServiceTests
             : @"{""Polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""externalReference"": [{ ""lastUpdateDate"": ""2227-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 
@@ -67,7 +69,7 @@ public class SemanticValidationServiceTests
             : @"{""Polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
 
@@ -85,7 +87,7 @@ public class SemanticValidationServiceTests
             : @"{""PointGeometry"": { ""version"": 1, ""point"": ""SRID=27700;POINT(529157 178805)"", ""representation"": ""centreLinePoint"", ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
 
@@ -103,7 +105,7 @@ public class SemanticValidationServiceTests
             : @"{""LinearGeometry"": { ""version"": 1, ""direction"": ""bidirectional"", ""lateralPosition"": ""centreline"",""linestring"": ""SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"", ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
 
@@ -121,7 +123,7 @@ public class SemanticValidationServiceTests
          : @"{""DirectedLinear"": { ""version"": 1, ""directedLineString"": ""SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"", ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
 
@@ -140,7 +142,7 @@ public class SemanticValidationServiceTests
 
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
         Assert.Empty(actual.Item2);
@@ -157,7 +159,7 @@ public class SemanticValidationServiceTests
 
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
         Assert.NotEmpty(actual.Item2);
@@ -174,7 +176,7 @@ public class SemanticValidationServiceTests
 
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
         Assert.NotEmpty(actual.Item2);
@@ -190,7 +192,7 @@ public class SemanticValidationServiceTests
 
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
         Assert.NotEmpty(actual.Item2);
@@ -205,7 +207,7 @@ public class SemanticValidationServiceTests
             ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalR"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation);
+            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
         Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
 

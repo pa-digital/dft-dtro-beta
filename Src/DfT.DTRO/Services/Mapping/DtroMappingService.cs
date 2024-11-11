@@ -343,7 +343,7 @@ public class DtroMappingService : IDtroMappingService
         string json = dtro.Data.ToIndentedJsonString();
         JObject obj = JObject.Parse(json);
 
-        if (dtro.SchemaVersion.ToString() == "3.2.5")
+        if (dtro.SchemaVersion >= new SchemaVersion("3.2.5"))
         {
             var geometries = obj
                 .Descendants()

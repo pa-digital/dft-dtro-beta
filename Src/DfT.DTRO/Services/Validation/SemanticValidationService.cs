@@ -13,17 +13,20 @@ public class SemanticValidationService : ISemanticValidationService
     private readonly IDtroDal _dtroDal;
     private readonly IConditionValidationService _conditionValidationService;
     private readonly IGeometryValidation _geometryValidation;
+    private readonly LoggingExtension _loggingExtension;
 
     public SemanticValidationService(
         ISystemClock clock,
         IDtroDal dtroDal,
         IConditionValidationService conditionValidationService,
-        IGeometryValidation geometryValidation)
+        IGeometryValidation geometryValidation,
+        LoggingExtension loggingExtension)
     {
         _clock = clock;
         _dtroDal = dtroDal;
         _conditionValidationService = conditionValidationService;
         _geometryValidation = geometryValidation;
+        _loggingExtension = loggingExtension;
     }
 
     public Task<Tuple<BoundingBox, List<SemanticValidationError>>> ValidateCreationRequest(DtroSubmit dtroSubmit) =>
@@ -38,9 +41,9 @@ public class SemanticValidationService : ISemanticValidationService
 
         ValidateLastUpdatedDate(parsedBody, validationErrors);
         BoundingBox boundingBox = dtroSchemaVersion.ToString() == "3.2.5"
-            ? _geometryValidation.ValidateCoordinatesAgainstBoundingBoxesForCurrentSchemaVersion(parsedBody,
+            ? _geometryValidation.ValidateGeometryAgainstCurrentSchemaVersion(parsedBody,
                 validationErrors)
-            : _geometryValidation.ValidateCoordinatesAgainstBoundingBoxesForLowerSchemaVersions(parsedBody,
+            : _geometryValidation.ValidateGeometryAgainstPreviousSchemaVersions(parsedBody,
                 validationErrors);
 
         await ValidateReferencedTroId(parsedBody, dtroSchemaVersion, validationErrors);
@@ -177,11 +180,13 @@ public class SemanticValidationService : ISemanticValidationService
 
         if (!externalReferences.Any())
         {
-            errors.Add(new SemanticValidationError()
+            errors.Add(new SemanticValidationError
             {
                 Message = "value 'externalReference' cannot be found",
                 Path = "Source.provision.regulatedPlace.geometry"
             });
+
+            _loggingExtension.LogError(nameof(ValidateLastUpdatedDate), "", "ExternalReference error", string.Join(",", errors));
         }
 
         IEnumerable<JProperty> lastUpdatedDateNodes = data.DescendantsAndSelf().OfType<JProperty>()
@@ -199,6 +204,7 @@ public class SemanticValidationService : ISemanticValidationService
                         Message = "value 'lastUpdateDate' cannot be in the future",
                         Path = lastUpdatedDateNode.Path
                     });
+                _loggingExtension.LogError(nameof(ValidateLastUpdatedDate), "", "LastUpdatedDate error", string.Join(",", errors));
             }
         }
     }
