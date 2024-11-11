@@ -12,7 +12,10 @@ public class DtroUserDal : IDtroUserDal
     /// Default constructor
     /// </summary>
     /// <param name="dtroContext"><see cref="DtroContext"/> database context.</param>
-    public DtroUserDal(DtroContext dtroContext) => _dtroContext = dtroContext;
+    public DtroUserDal(DtroContext dtroContext)
+    {
+        _dtroContext = dtroContext;
+    }
 
     ///<inheritdoc cref="IDtroUserDal"/>
     public async Task<DtroUserResponse> GetDtroUserByIdAsync(Guid userId)
@@ -118,11 +121,8 @@ public class DtroUserDal : IDtroUserDal
          .ToListAsync();
 
     ///<inheritdoc cref="IDtroUserDal"/>
-    public async Task<bool> TraExistsAsync(int traId)
-    {
-        var exists = await _dtroContext.DtroUsers.AnyAsync(it => it.TraId == traId);
-        return exists;
-    }
+    public async Task<bool> TraExistsAsync(int traId) =>
+        await _dtroContext.DtroUsers.AnyAsync(dtroUser => dtroUser.TraId == traId);
 
     public async Task<bool> AnyAdminUserExistsAsync()
     {
@@ -164,6 +164,21 @@ public class DtroUserDal : IDtroUserDal
         var dtroUser = new DtroUser();
         var response = new GuidResponse();
 
+        if (dtroUserRequest.Id == Guid.Empty)
+        {
+            throw new InvalidOperationException("System ID cannot be zero value");
+        }
+
+        if (string.IsNullOrEmpty(dtroUserRequest.Name))
+        {
+            throw new InvalidOperationException("Name cannot be null");
+        }
+
+        if (dtroUserRequest.xAppId == Guid.Empty)
+        {
+            throw new InvalidOperationException("App Id cannot be zero value");
+        }
+
         dtroUser.Id = response.Id;
         dtroUser.TraId = dtroUserRequest.TraId;
         dtroUser.Name = dtroUserRequest.Name;
@@ -171,16 +186,6 @@ public class DtroUserDal : IDtroUserDal
         dtroUser.UserGroup = (int)dtroUserRequest.UserGroup;
         dtroUser.xAppId = dtroUserRequest.xAppId;
 
-        if (dtroUserRequest.UserGroup != UserGroup.Admin)
-        {
-            if (dtroUserRequest.TraId != null)
-            {
-                if (await TraExistsAsync((int)dtroUserRequest.TraId))
-                {
-                    throw new InvalidOperationException($"There is an existing TRA with Id {dtroUserRequest.TraId}");
-                }
-            }
-        }
         await _dtroContext.DtroUsers.AddAsync(dtroUser);
 
         await _dtroContext.SaveChangesAsync();
@@ -190,8 +195,6 @@ public class DtroUserDal : IDtroUserDal
     ///<inheritdoc cref="IDtroUserDal"/>
     public async Task<GuidResponse> UpdateDtroUserAsync(DtroUserRequest dtroUserRequest)
     {
-
-
         if (!await DtroUserExistsAsync(dtroUserRequest.Id))
         {
             throw new InvalidOperationException($"There is no DtroUser with Id {dtroUserRequest.Id}");
@@ -199,19 +202,6 @@ public class DtroUserDal : IDtroUserDal
 
         var existing = await GetDtroUserAsync(dtroUserRequest.Id);
 
-        if (dtroUserRequest.UserGroup != UserGroup.Admin)
-        {
-            if (dtroUserRequest.TraId != null)
-            {
-                if (existing.TraId != dtroUserRequest.TraId)
-                {
-                    if (await TraExistsAsync((int)dtroUserRequest.TraId))
-                    {
-                        throw new InvalidOperationException($"There is an existing DtroUser with TRA Id of '{dtroUserRequest.TraId}'");
-                    }
-                }
-            }
-        }
         existing.TraId = dtroUserRequest.TraId;
         existing.Name = dtroUserRequest.Name;
         existing.Prefix = dtroUserRequest.Prefix ?? "";
