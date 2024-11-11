@@ -6,18 +6,15 @@
 [ExcludeFromCodeCoverage]
 public class DtroUserDal : IDtroUserDal
 {
-    private readonly LoggingExtension _loggingExtension;
     private readonly DtroContext _dtroContext;
 
     /// <summary>
     /// Default constructor
     /// </summary>
     /// <param name="dtroContext"><see cref="DtroContext"/> database context.</param>
-    /// <param name="loggingExtension"><see cref="LoggingExtension"/></param>
-    public DtroUserDal(DtroContext dtroContext, LoggingExtension loggingExtension)
+    public DtroUserDal(DtroContext dtroContext)
     {
         _dtroContext = dtroContext;
-        _loggingExtension = loggingExtension;
     }
 
     ///<inheritdoc cref="IDtroUserDal"/>
@@ -169,29 +166,17 @@ public class DtroUserDal : IDtroUserDal
 
         if (dtroUserRequest.Id == Guid.Empty)
         {
-            _loggingExtension.LogError(nameof(SaveDtroUserAsync), "", "System ID cannot be null", "");
-        }
-        else
-        {
-            throw new InvalidOperationException(_loggingExtension.Message);
+            throw new InvalidOperationException("System ID cannot be zero value");
         }
 
         if (string.IsNullOrEmpty(dtroUserRequest.Name))
         {
-            _loggingExtension.LogError(nameof(SaveDtroUserAsync), "", "Name cannot be null", "");
-        }
-        else
-        {
-            throw new InvalidOperationException(_loggingExtension.Message);
+            throw new InvalidOperationException("Name cannot be null");
         }
 
         if (dtroUserRequest.xAppId == Guid.Empty)
         {
-            _loggingExtension.LogError(nameof(SaveDtroUserAsync), "", "App ID cannot be null", "");
-        }
-        else
-        {
-            throw new InvalidOperationException(_loggingExtension.Message);
+            throw new InvalidOperationException("App Id cannot be zero value");
         }
 
         dtroUser.Id = response.Id;
