@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Migrations;
-
-namespace DfT.DTRO.Models.SwaCode;
+﻿namespace DfT.DTRO.Models.SwaCode;
 
 public class DtroUserRequest
 {

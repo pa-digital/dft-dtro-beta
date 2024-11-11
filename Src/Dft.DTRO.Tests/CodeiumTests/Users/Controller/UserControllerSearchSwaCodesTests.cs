@@ -1,6 +1,6 @@
-﻿namespace Dft.DTRO.Tests.CodeiumTests.Tra.Controller;
+﻿namespace Dft.DTRO.Tests.CodeiumTests.Users.Controller;
 
-public class TraControllerSearchSwaCodesTests
+public class UserControllerSearchSwaCodesTests
 {
     private readonly Mock<IDtroUserService> _traServiceMock;
     private readonly Mock<ILogger<DtroUserController>> _loggerMock;
@@ -8,7 +8,7 @@ public class TraControllerSearchSwaCodesTests
     private readonly Mock<LoggingExtension.Builder> _mockLoggingBuilder;
     private readonly Mock<LoggingExtension> _mockLoggingExtension;
 
-    public TraControllerSearchSwaCodesTests()
+    public UserControllerSearchSwaCodesTests()
     {
         _traServiceMock = new Mock<IDtroUserService>();
         _loggerMock = new Mock<ILogger<DtroUserController>>();

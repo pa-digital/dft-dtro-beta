@@ -1,6 +1,6 @@
-﻿namespace Dft.DTRO.Tests.CodeiumTests.Tra.Controller;
+﻿namespace Dft.DTRO.Tests.CodeiumTests.Users.Controller;
 
-public class TraControllerCreateFromBodyTests
+public class UserControllerCreateFromBodyTests
 {
     private readonly Mock<IDtroUserService> _traServiceMock;
     private readonly Mock<ILogger<DtroUserController>> _loggerMock;
@@ -8,7 +8,7 @@ public class TraControllerCreateFromBodyTests
     private readonly Mock<LoggingExtension.Builder> _mockLoggingBuilder;
     private readonly Mock<LoggingExtension> _mockLoggingExtension;
 
-    public TraControllerCreateFromBodyTests()
+    public UserControllerCreateFromBodyTests()
     {
         _traServiceMock = new Mock<IDtroUserService>();
         _loggerMock = new Mock<ILogger<DtroUserController>>();
