@@ -40,7 +40,7 @@ public class SemanticValidationService : ISemanticValidationService
         JObject parsedBody = JObject.Parse(dtroDataString);
 
         ValidateLastUpdatedDate(parsedBody, validationErrors);
-        BoundingBox boundingBox = dtroSchemaVersion.ToString() == "3.2.5"
+        BoundingBox boundingBox = dtroSchemaVersion >= new SchemaVersion("3.2.5")
             ? _geometryValidation.ValidateGeometryAgainstCurrentSchemaVersion(parsedBody,
                 validationErrors)
             : _geometryValidation.ValidateGeometryAgainstPreviousSchemaVersions(parsedBody,
