@@ -171,15 +171,27 @@ public class DtroUserDal : IDtroUserDal
         {
             _loggingExtension.LogError(nameof(SaveDtroUserAsync), "", "System ID cannot be null", "");
         }
+        else
+        {
+            throw new InvalidOperationException(_loggingExtension.Message);
+        }
 
         if (string.IsNullOrEmpty(dtroUserRequest.Name))
         {
             _loggingExtension.LogError(nameof(SaveDtroUserAsync), "", "Name cannot be null", "");
         }
+        else
+        {
+            throw new InvalidOperationException(_loggingExtension.Message);
+        }
 
         if (dtroUserRequest.xAppId == Guid.Empty)
         {
             _loggingExtension.LogError(nameof(SaveDtroUserAsync), "", "App ID cannot be null", "");
+        }
+        else
+        {
+            throw new InvalidOperationException(_loggingExtension.Message);
         }
 
         dtroUser.Id = response.Id;
