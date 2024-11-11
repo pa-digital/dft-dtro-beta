@@ -6,7 +6,7 @@ namespace DfT.DTRO.Services.Mapping;
 
 public interface IBoundingBoxService
 {
-    BoundingBox SetBoundingBoxForSingleGeometry(List<SemanticValidationError> errors, JObject jObject, BoundingBox boundingBox);
+    BoundingBox SetBoundingBoxForSingleGeometry(List<SemanticValidationError> errors, JProperty jProperty, BoundingBox boundingBox);
 
     BoundingBox SetBoundingBoxForMultipleGeometries(List<SemanticValidationError> errors, JProperty jProperty,
         BoundingBox boundingBox);

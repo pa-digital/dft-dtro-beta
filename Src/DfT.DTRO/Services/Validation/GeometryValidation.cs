@@ -114,7 +114,7 @@ public class GeometryValidation : IGeometryValidation
             }
         }
 
-        return _boundingBoxService.SetBoundingBoxForSingleGeometry(errors, jObject, boundingBox);
+        return _boundingBoxService.SetBoundingBoxForSingleGeometry(errors, geometry, boundingBox);
     }
 
 }

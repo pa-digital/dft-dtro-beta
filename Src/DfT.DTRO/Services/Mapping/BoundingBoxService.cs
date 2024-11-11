@@ -17,14 +17,16 @@ public class BoundingBoxService : IBoundingBoxService
         _loggingExtension = loggingExtension;
     }
 
-    public BoundingBox SetBoundingBoxForSingleGeometry(List<SemanticValidationError> errors, JObject jObject, BoundingBox boundingBox)
+    public BoundingBox SetBoundingBoxForSingleGeometry(List<SemanticValidationError> errors, JProperty jProperty, BoundingBox boundingBox)
     {
-        JProperty children = jObject.Children<JProperty>().ElementAt(1);
+        JObject jObject = jProperty.Value as JObject;
+
+        JProperty children = jObject?.Children<JProperty>().ElementAt(1);
         IEnumerable<JToken> values;
         string json;
         bool isValid;
         string toValidate;
-        switch (children.Name)
+        switch (children?.Name)
         {
             case "PointGeometry":
                 values = children.DescendantsAndSelf().Skip(3).FirstOrDefault();

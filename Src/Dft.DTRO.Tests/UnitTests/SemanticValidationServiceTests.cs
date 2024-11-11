@@ -10,7 +10,6 @@ public class SemanticValidationServiceTests
     private readonly Mock<IConditionValidationService> _mockConditionValidationService;
     private readonly Mock<IDtroDal> _mockDtroDal;
     private readonly IGeometryValidation _geometryValidation;
-    private readonly IBoundingBoxService _boundingBoxService;
     private readonly LoggingExtension _loggingExtension;
 
 
@@ -20,8 +19,8 @@ public class SemanticValidationServiceTests
         _mockDtroDal = new Mock<IDtroDal>();
         _mockConditionValidationService = new Mock<IConditionValidationService>();
         _loggingExtension = new LoggingExtension();
-        _boundingBoxService = new BoundingBoxService(_loggingExtension);
-        _geometryValidation = new GeometryValidation(_boundingBoxService, _loggingExtension);
+        IBoundingBoxService boundingBoxService = new BoundingBoxService(_loggingExtension);
+        _geometryValidation = new GeometryValidation(boundingBoxService, _loggingExtension);
         _mockClock.Setup(it => it.UtcNow).Returns(new DateTime(2023, 5, 1));
     }
 

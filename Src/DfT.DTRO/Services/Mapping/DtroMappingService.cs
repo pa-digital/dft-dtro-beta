@@ -362,9 +362,7 @@ public class DtroMappingService : IDtroMappingService
                 .DescendantsAndSelf()
                 .OfType<JProperty>()
                 .FirstOrDefault(property => property.Name == "geometry");
-            JObject obj1 = geometry?.Value as JObject;
-            dtro.Location =
-                _service.SetBoundingBoxForSingleGeometry(new List<SemanticValidationError>(), obj1, new BoundingBox());
+            dtro.Location = _service.SetBoundingBoxForSingleGeometry(new List<SemanticValidationError>(), geometry, new BoundingBox());
         }
     }
 
