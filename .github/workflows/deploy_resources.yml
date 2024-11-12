@@ -191,8 +191,8 @@ jobs:
   build-apigee-proxies-and-products:
     if: ${{ inputs.run-apigee }}
     name: Build GCP Apigee proxies and products in ${{ inputs.environment }}
-#    needs:
-#      - deploy-dtro
+    needs:
+      - deploy-dtro
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -291,8 +291,6 @@ jobs:
         run: |
           cp policies/SA-Rate-Limiting.xml apiproxy/policies/SA-Rate-Limiting.xml
           gawk -i inplace '/<Request>/ && c == 0 { c=1; print; print "      <Step>\n        <Name>SA-Rate-Limiting</Name>\n      </Step>"; next } 1' apiproxy/proxies/default.xml
-          echo "default.xml"
-          cat apiproxy/proxies/default.xml
           gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>SA-Rate-Limiting</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
 
       - name: Setup Python
