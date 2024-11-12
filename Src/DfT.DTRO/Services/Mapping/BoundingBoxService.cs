@@ -168,7 +168,10 @@ public class BoundingBoxService : IBoundingBoxService
         switch (jProperty.Name)
         {
             case "PointGeometry":
-                values = jProperty.DescendantsAndSelf().Skip(4).FirstOrDefault();
+                values = jProperty
+                    .DescendantsAndSelf()
+                    .Select(token => token.First?.Value<JToken>(Constants.Point))
+                    .FirstOrDefault();
                 json = values.ToIndentedJsonString();
                 if (!json.Contains(Constants.Srid27000))
                 {
@@ -188,7 +191,10 @@ public class BoundingBoxService : IBoundingBoxService
 
                 break;
             case "LinearGeometry":
-                values = jProperty.DescendantsAndSelf().Skip(8).FirstOrDefault();
+                values = jProperty
+                    .DescendantsAndSelf()
+                    .Select(token => token.First?.Value<JToken>(Constants.LineString))
+                    .FirstOrDefault();
                 json = values.ToIndentedJsonString();
                 if (!json.Contains(Constants.Srid27000))
                 {
@@ -207,7 +213,10 @@ public class BoundingBoxService : IBoundingBoxService
 
                 break;
             case "Polygon":
-                values = jProperty.DescendantsAndSelf().Skip(4).FirstOrDefault();
+                values = jProperty
+                    .DescendantsAndSelf()
+                    .Select(token => token.First?.Value<JToken>(Constants.Polygon))
+                    .FirstOrDefault();
                 json = values.ToIndentedJsonString();
                 if (!json.Contains(Constants.Srid27000))
                 {
@@ -229,7 +238,10 @@ public class BoundingBoxService : IBoundingBoxService
 
                 break;
             case "DirectedLinear":
-                values = jProperty.DescendantsAndSelf().ElementAt(4);
+                values = jProperty
+                    .DescendantsAndSelf()
+                    .Select(token => token.First?.Value<JToken>(Constants.DirectedLineString))
+                    .FirstOrDefault();
                 json = values.ToIndentedJsonString();
                 if (!json.Contains(Constants.Srid27000))
                 {
