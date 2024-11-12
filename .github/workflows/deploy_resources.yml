@@ -290,12 +290,10 @@ jobs:
       - name: Add Spike Arrest Rate Limiting
         run: |
           cp policies/SA-Rate-Limiting.xml apiproxy/policies/SA-Rate-Limiting.xml
-          gawk -i inplace '/<Request>/ && c == 0 { c=1; print; getline; print "      <Step>\n        <Name>SA-Rate-Limiting</Name>\n      </Step>"; next } 1' apiproxy/proxies/default.xml
+          gawk -i inplace '/<Request>/ && c == 0 { c=1; print; print "      <Step>\n        <Name>SA-Rate-Limiting</Name>\n      </Step>"; next } 1' apiproxy/proxies/default.xml
           echo "default.xml"
           cat apiproxy/proxies/default.xml
           gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>SA-Rate-Limiting</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
-          echo "dtro-${env}-server.xml"
-          cat apiproxy/dtro-${env}-server.xml
 
       - name: Setup Python
         uses: actions/setup-python@v5
