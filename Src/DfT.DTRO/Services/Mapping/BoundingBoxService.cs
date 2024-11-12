@@ -1,8 +1,8 @@
-﻿using DfT.DTRO.Models.Validation;
+﻿using DfT.DTRO.Helpers;
+using DfT.DTRO.Models.Validation;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json.Linq;
-using Coordinates = DfT.DTRO.Models.DtroJson.Coordinates;
 using GeometryType = DfT.DTRO.Enums.GeometryType;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
@@ -12,34 +12,35 @@ public class BoundingBoxService : IBoundingBoxService
 {
     private readonly LoggingExtension _loggingExtension;
 
-    public BoundingBoxService(LoggingExtension loggingExtension)
-    {
-        _loggingExtension = loggingExtension;
-    }
+    private static SemanticValidationError Error => new();
+
+    public BoundingBoxService(LoggingExtension loggingExtension) => _loggingExtension = loggingExtension;
 
     public BoundingBox SetBoundingBoxForSingleGeometry(List<SemanticValidationError> errors, JProperty jProperty, BoundingBox boundingBox)
     {
         JObject jObject = jProperty.Value as JObject;
 
-        JProperty children = jObject?.Children<JProperty>().ElementAt(1);
+        var geometrySelected = jObject?
+            .Children<JProperty>()
+            .FirstOrDefault(property => Constants.ConcreteGeometries.Any(property.Name.Equals));
+
         IEnumerable<JToken> values;
         string json;
         bool isValid;
         string toValidate;
-        switch (children?.Name)
+
+        switch (geometrySelected?.Name)
         {
             case "PointGeometry":
-                values = children.DescendantsAndSelf().Skip(3).FirstOrDefault();
+                values = geometrySelected
+                    .DescendantsAndSelf()
+                    .Select(token => token.First?.Value<JToken>(Constants.Point))
+                    .FirstOrDefault();
+
                 json = values.ToIndentedJsonString();
-                if (!json.Contains("SRID=27700;"))
+                if (!json.Contains(Constants.Srid27000))
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "British National Grid - Spatial Reference is not present in the geometry or is referenced incorrectly.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Spatial reference",
-                        Rule = "Spatial reference should be 'SRID=27700'"
-                    });
+                    errors.Add(Error.SetSetSpatialReferenceValidationError());
 
                     _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Spatial reference error", string.Join(",", errors));
 
@@ -52,34 +53,17 @@ public class BoundingBoxService : IBoundingBoxService
                     return new BoundingBox();
                 }
                 isValid = IsInUk(errors, toValidate, GeometryType.PointGeometry);
-                if (!isValid)
-                {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "The provided coordinates are outside the recognized UK boundaries.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Wrong coordinates",
-                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
-                    });
-
-                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Geometry boundary error", string.Join(",", errors));
-
-                    return new BoundingBox();
-                }
 
                 break;
             case "LinearGeometry":
-                values = children.DescendantsAndSelf().Skip(7).FirstOrDefault();
+                values = geometrySelected
+                    .DescendantsAndSelf()
+                    .Select(token => token.First?.Value<JToken>(Constants.LineString))
+                    .FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains("SRID=27700;"))
+                if (!json.Contains(Constants.Srid27000))
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Spatial reference",
-                        Rule = "Spatial reference should be 'SRID=27700'"
-                    });
+                    errors.Add(Error.SetSetSpatialReferenceValidationError());
 
                     _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Spatial reference error", string.Join(",", errors));
 
@@ -92,34 +76,17 @@ public class BoundingBoxService : IBoundingBoxService
                     return new BoundingBox();
                 }
                 isValid = IsInUk(errors, toValidate, GeometryType.LinearGeometry);
-                if (!isValid)
-                {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "The provided coordinates are outside the recognized UK boundaries.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Wrong coordinates",
-                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
-                    });
-
-                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Geometry boundary error", string.Join(",", errors));
-
-                    return new BoundingBox();
-                }
 
                 break;
             case "Polygon":
-                values = children.DescendantsAndSelf().LastOrDefault();
+                values = geometrySelected
+                    .DescendantsAndSelf()
+                    .Select(token => token.First?.Value<JToken>(Constants.Polygon))
+                    .FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains("SRID=27700;"))
+                if (!json.Contains(Constants.Srid27000))
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Spatial reference",
-                        Rule = "Spatial reference should be 'SRID=27700'"
-                    });
+                    errors.Add(Error.SetSetSpatialReferenceValidationError());
 
                     _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Spatial reference error", string.Join(",", errors));
 
@@ -134,35 +101,18 @@ public class BoundingBoxService : IBoundingBoxService
                     return new BoundingBox();
                 }
                 isValid = IsInUk(errors, toValidate, GeometryType.Polygon);
-                if (!isValid)
-                {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "The provided coordinates are outside the recognized UK boundaries.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Wrong coordinates",
-                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
-                    });
-
-                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Geometry boundary error", string.Join(",", errors));
-
-                    return new BoundingBox();
-                }
 
 
                 break;
             case "DirectedLinear":
-                values = children.DescendantsAndSelf().LastOrDefault();
+                values = geometrySelected
+                    .DescendantsAndSelf()
+                    .Select(token => token.First?.Value<JToken>(Constants.DirectedLineString))
+                    .FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains("SRID=27700;"))
+                if (!json.Contains(Constants.Srid27000))
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Spatial reference",
-                        Rule = "Spatial reference should be 'SRID=27700'"
-                    });
+                    errors.Add(Error.SetSetSpatialReferenceValidationError());
 
                     _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Spatial reference error", string.Join(",", errors));
 
@@ -177,20 +127,6 @@ public class BoundingBoxService : IBoundingBoxService
                 }
 
                 isValid = IsInUk(errors, toValidate, GeometryType.DirectedLinear);
-                if (!isValid)
-                {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "The provided coordinates are outside the recognized UK boundaries.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Wrong coordinates",
-                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
-                    });
-
-                    _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Geometry boundary error", string.Join(",", errors));
-
-                    return new BoundingBox();
-                }
 
                 break;
             default:
@@ -207,11 +143,18 @@ public class BoundingBoxService : IBoundingBoxService
                 return new BoundingBox();
         }
 
+        if (!isValid)
+        {
+            errors.Add(Error.SetCoordinatesValidationError());
+
+            _loggingExtension.LogError(nameof(SetBoundingBoxForSingleGeometry), "", "Geometry boundary error", string.Join(",", errors));
+
+            return new BoundingBox();
+        }
+
         string geometry = json.GetBetween("(", ")");
         JToken token = JToken.FromObject(geometry);
-        boundingBox = ValidateAgainstBoundingBox(token);
-
-        return boundingBox;
+        return boundingBox.ValidateAgainstBoundingBox(token);
     }
 
     public BoundingBox SetBoundingBoxForMultipleGeometries(List<SemanticValidationError> errors, JProperty jProperty,
@@ -221,20 +164,15 @@ public class BoundingBoxService : IBoundingBoxService
         string json;
         bool isValid;
         string toValidate;
+
         switch (jProperty.Name)
         {
             case "PointGeometry":
                 values = jProperty.DescendantsAndSelf().Skip(4).FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains("SRID=27700;"))
+                if (!json.Contains(Constants.Srid27000))
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "British National Grid - Spatial Reference is not present in the geometry or is referenced incorrectly.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Spatial reference",
-                        Rule = "Spatial reference should be 'SRID=27700'"
-                    });
+                    errors.Add(Error.SetSetSpatialReferenceValidationError());
 
                     _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
                     return new BoundingBox();
@@ -243,35 +181,18 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = ArePairsValid(errors, toValidate, GeometryType.PointGeometry);
                 if (!isValid)
                 {
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry pairs are not valid", string.Join(",", errors));
                     return new BoundingBox();
                 }
                 isValid = IsInUk(errors, toValidate, GeometryType.PointGeometry);
-                if (!isValid)
-                {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "The provided coordinates are outside the recognized UK boundaries.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Wrong coordinates",
-                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
-                    });
-                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry boundary error", string.Join(",", errors));
-                    return new BoundingBox();
-                }
 
                 break;
             case "LinearGeometry":
                 values = jProperty.DescendantsAndSelf().Skip(8).FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains("SRID=27700;"))
+                if (!json.Contains(Constants.Srid27000))
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Spatial reference",
-                        Rule = "Spatial reference should be 'SRID=27700'"
-                    });
+                    errors.Add(Error.SetSetSpatialReferenceValidationError());
                     _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
                     return new BoundingBox();
                 }
@@ -279,35 +200,18 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = ArePairsValid(errors, toValidate, GeometryType.LinearGeometry);
                 if (!isValid)
                 {
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry pairs are not valid", string.Join(",", errors));
                     return new BoundingBox();
                 }
                 isValid = IsInUk(errors, toValidate, GeometryType.LinearGeometry);
-                if (!isValid)
-                {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "The provided coordinates are outside the recognized UK boundaries.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Wrong coordinates",
-                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
-                    });
-                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry boundary error", string.Join(",", errors));
-                    return new BoundingBox();
-                }
 
                 break;
             case "Polygon":
                 values = jProperty.DescendantsAndSelf().Skip(4).FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains("SRID=27700;"))
+                if (!json.Contains(Constants.Srid27000))
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Spatial reference",
-                        Rule = "Spatial reference should be SRID=27700"
-                    });
+                    errors.Add(Error.SetSetSpatialReferenceValidationError());
                     _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
                     return new BoundingBox();
                 }
@@ -317,36 +221,19 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = ArePairsValid(errors, toValidate, GeometryType.Polygon);
                 if (!isValid)
                 {
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry pairs are not valid", string.Join(",", errors));
                     return new BoundingBox();
                 }
                 isValid = IsInUk(errors, toValidate, GeometryType.Polygon);
-                if (!isValid)
-                {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "The provided coordinates are outside the recognized UK boundaries.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Wrong coordinates",
-                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
-                    });
-                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry boundary error", string.Join(",", errors));
-                    return new BoundingBox();
-                }
 
 
                 break;
             case "DirectedLinear":
                 values = jProperty.DescendantsAndSelf().ElementAt(4);
                 json = values.ToIndentedJsonString();
-                if (!json.Contains("SRID=27700;"))
+                if (!json.Contains(Constants.Srid27000))
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Spatial reference",
-                        Rule = "Spatial reference should be SRID=27700"
-                    });
+                    errors.Add(Error.SetSetSpatialReferenceValidationError());
                     _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
                     return new BoundingBox();
                 }
@@ -355,22 +242,11 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = ArePairsValid(errors, toValidate, GeometryType.DirectedLinear);
                 if (!isValid)
                 {
+                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry pairs are not valid", string.Join(",", errors));
                     return new BoundingBox();
                 }
 
                 isValid = IsInUk(errors, toValidate, GeometryType.DirectedLinear);
-                if (!isValid)
-                {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Message = "The provided coordinates are outside the recognized UK boundaries.",
-                        Path = "Source.provision.regulatedPlace.geometry",
-                        Name = "Wrong coordinates",
-                        Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
-                    });
-                    _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry boundary error", string.Join(",", errors));
-                    return new BoundingBox();
-                }
 
                 break;
             default:
@@ -385,11 +261,16 @@ public class BoundingBoxService : IBoundingBoxService
                 return new BoundingBox();
         }
 
+        if (!isValid)
+        {
+            errors.Add(Error.SetCoordinatesValidationError());
+            _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry boundary error", string.Join(",", errors));
+            return new BoundingBox();
+        }
+
         string geometry = json.GetBetween("(", ")");
         JToken token = JToken.FromObject(geometry);
-        boundingBox = ValidateAgainstBoundingBox(token);
-
-        return boundingBox;
+        return boundingBox.ValidateAgainstBoundingBox(token);
     }
 
     private bool IsInUk(List<SemanticValidationError> errors, string toValidate, GeometryType geometryType)
@@ -417,24 +298,13 @@ public class BoundingBoxService : IBoundingBoxService
                 isWithinUk = ukBoundary != null && ukBoundary.Contains(lineStringToValidate);
                 break;
             case GeometryType.Unknown:
-                errors.Add(new SemanticValidationError
-                {
-                    Path = "Source.provision.regulatedPlace.geometry",
-                    Message = "Selected geometry ",
-                    Name = "Wrong geometry",
-                    Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
-                });
+                errors.Add(Error.SetGeometryValidationError());
                 _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry type error", string.Join(",", errors));
 
                 break;
             default:
-                errors.Add(new SemanticValidationError
-                {
-                    Path = "Source.provision.regulatedPlace.geometry",
-                    Message = "Selected geometry ",
-                    Name = "Wrong geometry",
-                    Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
-                });
+                errors.Add(Error.SetGeometryValidationError());
+
                 _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry type error", string.Join(",", errors));
 
                 break;
@@ -458,13 +328,7 @@ public class BoundingBoxService : IBoundingBoxService
                 }
                 catch
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.PointGeometry}",
-                        Message = "Selected geometry",
-                        Name = "Incorrect pairs.",
-                        Rule = $"Incorrect pairs for selected geometry: {GeometryType.PointGeometry}"
-                    });
+                    errors.Add(Error.SetIncorrectPairSemanticValidationError(GeometryType.PointGeometry));
 
                     _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
                 }
@@ -477,13 +341,7 @@ public class BoundingBoxService : IBoundingBoxService
                 }
                 catch
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.LinearGeometry}",
-                        Message = "Selected geometry",
-                        Name = "Incorrect pairs",
-                        Rule = $"Incorrect pairs for selected geometry: {GeometryType.LinearGeometry} "
-                    });
+                    errors.Add(Error.SetIncorrectPairSemanticValidationError(GeometryType.LinearGeometry));
 
                     _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
                 }
@@ -496,13 +354,7 @@ public class BoundingBoxService : IBoundingBoxService
                 }
                 catch
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.Polygon}",
-                        Message = "Selected geometry",
-                        Name = "Incorrect pairs",
-                        Rule = $"Incorrect pairs for selected geometry: {GeometryType.Polygon} "
-                    });
+                    errors.Add(Error.SetIncorrectPairSemanticValidationError(GeometryType.Polygon));
 
                     _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
                 }
@@ -515,13 +367,7 @@ public class BoundingBoxService : IBoundingBoxService
                 }
                 catch
                 {
-                    errors.Add(new SemanticValidationError
-                    {
-                        Path = $"Source.provision.regulatedPlace.geometry.{GeometryType.DirectedLinear}",
-                        Message = "Selected geometry",
-                        Name = "Incorrect pairs",
-                        Rule = $"Incorrect pairs for selected geometry: {GeometryType.DirectedLinear} "
-                    });
+                    errors.Add(Error.SetIncorrectPairSemanticValidationError(GeometryType.DirectedLinear));
 
                     _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
                 }
@@ -555,25 +401,25 @@ public class BoundingBoxService : IBoundingBoxService
         return arePairsValid;
     }
 
-    private static BoundingBox ValidateAgainstBoundingBox(IEnumerable<JToken> values)
-    {
-        List<string> points = values
-            .Value<string>()
-            .Split(" ")
-            .Select(it => it
-                .Replace("(", "")
-                .Replace(")", "")
-                .Replace(",", ""))
-            .ToList();
+    //private static BoundingBox ValidateAgainstBoundingBox(IEnumerable<JToken> values)
+    //{
+    //    List<string> points = values
+    //        .Value<string>()
+    //        .Split(" ")
+    //        .Select(it => it
+    //            .Replace("(", "")
+    //            .Replace(")", "")
+    //            .Replace(",", ""))
+    //        .ToList();
 
-        List<Coordinates> coordinates = points
-            .Select(paint => new Coordinates
-            {
-                Longitude = paint.AsInt(),
-                Latitude = paint.AsInt()
-            })
-            .ToList();
+    //    List<Coordinates> coordinates = points
+    //        .Select(point => new Coordinates
+    //        {
+    //            Longitude = point.AsInt(),
+    //            Latitude = point.AsInt()
+    //        })
+    //        .ToList();
 
-        return BoundingBox.Wrapping(coordinates);
-    }
+    //    return BoundingBox.Wrapping(coordinates);
+    //}
 }
