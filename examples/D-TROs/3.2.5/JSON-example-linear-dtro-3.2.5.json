@@ -1,220 +1,216 @@
 {
-	"schemaVersion": "3.2.5",
-	"data": {
-		"Source": {
-			"actionType": "amendment",
-			"currentTraOwner": 1000,
-			"provision": [
-				{
-					"actionType": "partialAmendment",
-					"orderReportingPoint": "ttroTtmoByNotice",
-					"provisionDescription": "Prohibition of Waiting",
-					"reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
-					"regulation": [
-						{
-							"isDynamic": false,
-							"timeZone": "Europe/London",
-							"generalRegulation": {
-								"regulationType": "kerbsideLimitedWaiting"
-							},
-							"condition": [
-								{
-									"vehicleCharacteristics": {
-										"vehicleType": [
-											"bus"
-										]
-									}
-								},
-								{
-									"timeValidity": {
-										"validityCondition": {
-											"conditionSet": [
-												{
-													"operator": "and",
-													"negate": false,
-													"conditions": [
-														{
-															"vehicleCharacteristics": {
-																"vehicleType": [
-																	"anyVehicle"
-																]
-															},
-															"negate": false
-														},
-														{
-															"vehicleCharacteristics": {
-																"vehicleType": [
-																	"taxi"
-																]
-															},
-															"negate": true
-														}
-													]
-												}
-											],
-											"rateTable": {
-												"rateLineCollection": [
-													{
-														"rateLine": [
-															{
-																"sequence": 0,
-																"type": "flatRateTier",
-																"value": 15,
-																"durationEnd": "19:00:00"
-															},
-															{
-																"sequence": 1,
-																"type": "flatRate",
-																"value": 20,
-																"maxValue": 40,
-																"durationStart": "19:00:00",
-																"incrementPeriod": "PT1H",
-																"durationEnd": "19:30:00",
-																"usageCondition": "unlimited",
-																"description": "eiusmod nisi",
-																"minValue": 10
-															}
-														],
-														"applicableCurrency": "GBP",
-														"sequence": 0,
-														"startValidUsagePeriod": "13:00:00"
-													}
-												],
-												"type": "hourly",
-												"additionalInformation": "id"
-											}
-										},
-										"start": "1983-01-05 22:50:50",
-										"exceptionPeriod": [
-											{
-												"recurringSpecialDay": [
-													{
-														"intersectWithApplicableDays": true,
-														"specialDayType": "matchDay"
-													},
-													{
-														"intersectWithApplicableDays": false,
-														"specialDayType": "matchDay",
-														"publicEvent": "footballMatch"
-													}
-												],
-												"recurringTimePeriodOfDay": [
-													{
-														"startTimeOfPeriod": "17:00:00",
-														"endTimeOfPeriod": "18:00:00"
-													}
-												],
-												"recurringDayWeekMonthPeriod": [
-													{
-														"applicableDay": [
-															"monday"
-														],
-														"applicableMonth": [
-															"october"
-														]
-													}
-												],
-												"startOfPeriod": "1983-01-05 22:50:50",
-												"periodName": "adipisicing incididunt Lorem",
-												"endOfPeriod": "1983-03-17 16:47:01"
-											}
-										],
-										"validPeriod": [
-											{
-												"recurringTimePeriodOfDay": [
-													{
-														"startTimeOfPeriod": "07:30:00",
-														"endTimeOfPeriod": "09:00:00"
-													},
-													{
-														"startTimeOfPeriod": "17:00:00",
-														"endTimeOfPeriod": "18:00:00"
-													}
-												],
-												"startOfPeriod": "1985-07-01 21:12:04",
-												"recurringSpecialDay": [
-													{
-														"intersectWithApplicableDays": true,
-														"specialDayType": "eventDay"
-													},
-													{
-														"intersectWithApplicableDays": true,
-														"specialDayType": "eventDay"
-													}
-												],
-												"periodName": "ea et eiusmod",
-												"recurringDayWeekMonthPeriod": [
-													{
-														"applicableDay": [
-															"tuesday"
-														]
-													},
-													{
-														"applicableMonth": [
-															"june"
-														],
-														"applicableDay": [
-															"monday"
-														]
-													}
-												]
-											}
-										],
-										"end": "1996-01-05 22:50:50"
-									}
-								}
-							]
-						}
-					],
-					"regulatedPlace": [
-						{
-							"description": "KEARY CLOSE - side of road: south",
-							"geometry": {
-								"version": 1,
-								"LinearGeometry": {
-									"direction": "bidirectional",
-									"lateralPosition": "near",
-									"linestring": "SRID=27700;LINESTRING(388775.5057 396863.8494,388774.5975 396862.5975,388772.2424 396859.4025,388771.5501 396858.4094,388771.1061 396857.9338,388770.6073 396857.4469,388770.0582 396856.9469,388769.6233 396856.5363,388769.2823 396856.2188,388768.9365 396855.9381,388768.5629 396855.6556,388768.1399 396855.3356,388767.7214 396855.0006,388767.3423 396854.7131,388766.9401 396854.4613,388766.513 396854.2394,388766.0982 396854.0788,388765.664 396853.915,388765.184 396853.7381,388764.677 396853.6106,388748.7936 396850.5506,388747.334 396850.2069,388746.9862 396850.1013)"
-								},
-								"externalReference": [
-									{
-										"lastUpdateDate": "1975-02-24T00:00:00",
-										"UniqueStreetReferenceNumber": {
-											"usrn": 0
-										}
-									}
-								]
-							}
-						},
-						{
-							"description": "KEARY CLOSE - side of road: north",
-							"geometry": {
-								"version": 1,
-								"LinearGeometry": {
-									"direction": "bidirectional",
-									"lateralPosition": "near",
-									"linestring": "SRID=27700;LINESTRING(388746.0226 396854.5481,388758.046 396856.6981,388764.1653 396857.7463,388764.6658 396857.8506,388765.0361 396858.0219,388765.3778 396858.2294,388765.7242 396858.435,388766.0217 396858.6313,388766.2706 396858.8288,388766.4964 396859.0369,388771.9544 396866.8006,388774.8437 396870.5838,388775.5356 396871.4231,388776.2693 396872.2081,388776.5678 396872.4531,388777.8037 396873.5463,388779.0988 396874.4375,388779.4357 396874.6894,388780.9654 396875.575,388782.6028 396876.3225,388784.1876 396876.9119,388786.0395 396877.5144,388787.779 396877.8556,388789.5711 396877.9975,388812.8726 396879.8969,388829.2756 396881.1469,388831.2632 396881.3437,388831.7477 396881.4294,388832.1703 396881.5681,388832.53 396881.7406,388832.8765 396881.9337,388833.2393 396882.1556,388833.5993 396882.4262,388833.923 396882.7475,388834.2389 396883.1381,388834.5867 396883.6237,388834.908 396884.1344,388835.1674 396884.6169,388835.3646 396885.1112,388835.4959 396885.5975,388835.588 396886.0869,388835.6431 396886.6537,388835.6431 396887.2269,388835.5758 396888.5925,388836.5084 396887.8187,388836.8212 396887.7569)"
-								},
-								"externalReference": [
-									{
-										"lastUpdateDate": "1975-02-24T00:00:00",
-										"UniqueStreetReferenceNumber": {
-											"usrn": 0
-										}
-									}
-								]
-							}
-						}
-					]
-				}
-			],
-			"reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
-			"section": "All sections",
-			"traAffected": [
-				1000
-			],
-			"traCreator": 1000,
-			"troName": "The Sample County Council (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"
-		}
-	}
+    "schemaVersion": "3.2.5",
+    "data": {
+        "Source": {
+            "actionType": "amendment",
+            "currentTraOwner": 1000,
+            "provision": [
+                {
+                    "actionType": "partialAmendment",
+                    "orderReportingPoint": "ttroTtmoByNotice",
+                    "provisionDescription": "Prohibition of Waiting",
+                    "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
+                    "regulation": [
+                        {
+                            "isDynamic": false,
+                            "timeZone": "Europe/London",
+                            "generalRegulation": {
+                                "regulationType": "kerbsideLimitedWaiting"
+                            },
+                            "condition": [
+                                {
+                                    "vehicleCharacteristics": {
+                                        "vehicleType": [
+                                            "bus"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "timeValidity": {
+                                        "validityCondition": {
+                                            "conditionSet": [
+                                                {
+                                                    "operator": "and",
+                                                    "negate": false,
+                                                    "conditions": [
+                                                        {
+                                                            "vehicleCharacteristics": {
+                                                                "vehicleType": [
+                                                                    "anyVehicle"
+                                                                ]
+                                                            },
+                                                            "negate": false
+                                                        },
+                                                        {
+                                                            "vehicleCharacteristics": {
+                                                                "vehicleType": [
+                                                                    "taxi"
+                                                                ]
+                                                            },
+                                                            "negate": true
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "rateTable": {
+                                                "rateLineCollection": [
+                                                    {
+                                                        "rateLine": [
+                                                            {
+                                                                "sequence": 0,
+                                                                "type": "flatRateTier",
+                                                                "value": 15,
+                                                                "durationEnd": "19:00:00"
+                                                            },
+                                                            {
+                                                                "sequence": 1,
+                                                                "type": "flatRate",
+                                                                "value": 20,
+                                                                "maxValue": 40,
+                                                                "durationStart": "19:00:00",
+                                                                "incrementPeriod": "PT1H",
+                                                                "durationEnd": "19:30:00",
+                                                                "usageCondition": "unlimited",
+                                                                "description": "eiusmod nisi",
+                                                                "minValue": 10
+                                                            }
+                                                        ],
+                                                        "applicableCurrency": "GBP",
+                                                        "sequence": 0,
+                                                        "startValidUsagePeriod": "13:00:00"
+                                                    }
+                                                ],
+                                                "type": "hourly",
+                                                "additionalInformation": "id"
+                                            }
+                                        },
+                                        "start": "1983-01-05 22:50:50",
+                                        "exceptionPeriod": [
+                                            {
+                                                "recurringSpecialDay": [
+                                                    {
+                                                        "intersectWithApplicableDays": true,
+                                                        "specialDayType": "matchDay"
+                                                    },
+                                                    {
+                                                        "intersectWithApplicableDays": false,
+                                                        "specialDayType": "matchDay",
+                                                        "publicEvent": "footballMatch"
+                                                    }
+                                                ],
+                                                "recurringTimePeriodOfDay": [
+                                                    {
+                                                        "startTimeOfPeriod": "17:00:00",
+                                                        "endTimeOfPeriod": "18:00:00"
+                                                    }
+                                                ],
+                                                "recurringDayWeekMonthPeriod": [
+                                                    {
+                                                        "applicableDay": [
+                                                            "monday"
+                                                        ],
+                                                        "applicableMonth": [
+                                                            "october"
+                                                        ]
+                                                    }
+                                                ],
+                                                "startOfPeriod": "1983-01-05 22:50:50",
+                                                "periodName": "adipisicing incididunt Lorem",
+                                                "endOfPeriod": "1983-03-17 16:47:01"
+                                            }
+                                        ],
+                                        "validPeriod": [
+                                            {
+                                                "recurringTimePeriodOfDay": [
+                                                    {
+                                                        "startTimeOfPeriod": "07:30:00",
+                                                        "endTimeOfPeriod": "09:00:00"
+                                                    },
+                                                    {
+                                                        "startTimeOfPeriod": "17:00:00",
+                                                        "endTimeOfPeriod": "18:00:00"
+                                                    }
+                                                ],
+                                                "startOfPeriod": "1985-07-01 21:12:04",
+                                                "recurringSpecialDay": [
+                                                    {
+                                                        "intersectWithApplicableDays": true,
+                                                        "specialDayType": "eventDay"
+                                                    },
+                                                    {
+                                                        "intersectWithApplicableDays": true,
+                                                        "specialDayType": "eventDay"
+                                                    }
+                                                ],
+                                                "periodName": "ea et eiusmod",
+                                                "recurringDayWeekMonthPeriod": [
+                                                    {
+                                                        "applicableDay": [
+                                                            "tuesday"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "applicableMonth": [
+                                                            "june"
+                                                        ],
+                                                        "applicableDay": [
+                                                            "monday"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "end": "1996-01-05 22:50:50"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "regulatedPlace": [
+                        {
+                            "description": "KEARY CLOSE - side of road: south",
+                            "LinearGeometry": {
+                                "version": 1,
+                                "direction": "bidirectional",
+                                "lateralPosition": "near",
+                                "linestring": "SRID=27700;LINESTRING(388775.5057 396863.8494,388774.5975 396862.5975,388772.2424 396859.4025,388771.5501 396858.4094,388771.1061 396857.9338,388770.6073 396857.4469,388770.0582 396856.9469,388769.6233 396856.5363,388769.2823 396856.2188,388768.9365 396855.9381,388768.5629 396855.6556,388768.1399 396855.3356,388767.7214 396855.0006,388767.3423 396854.7131,388766.9401 396854.4613,388766.513 396854.2394,388766.0982 396854.0788,388765.664 396853.915,388765.184 396853.7381,388764.677 396853.6106,388748.7936 396850.5506,388747.334 396850.2069,388746.9862 396850.1013)",
+                                "externalReference": [
+                                    {
+                                        "lastUpdateDate": "1975-02-24T00:00:00",
+                                        "UniqueStreetReferenceNumber": {
+                                            "usrn": 0
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "description": "KEARY CLOSE - side of road: north",
+                            "LinearGeometry": {
+                                "version": 1,
+                                "direction": "bidirectional",
+                                "lateralPosition": "near",
+                                "linestring": "SRID=27700;LINESTRING(388746.0226 396854.5481,388758.046 396856.6981,388764.1653 396857.7463,388764.6658 396857.8506,388765.0361 396858.0219,388765.3778 396858.2294,388765.7242 396858.435,388766.0217 396858.6313,388766.2706 396858.8288,388766.4964 396859.0369,388771.9544 396866.8006,388774.8437 396870.5838,388775.5356 396871.4231,388776.2693 396872.2081,388776.5678 396872.4531,388777.8037 396873.5463,388779.0988 396874.4375,388779.4357 396874.6894,388780.9654 396875.575,388782.6028 396876.3225,388784.1876 396876.9119,388786.0395 396877.5144,388787.779 396877.8556,388789.5711 396877.9975,388812.8726 396879.8969,388829.2756 396881.1469,388831.2632 396881.3437,388831.7477 396881.4294,388832.1703 396881.5681,388832.53 396881.7406,388832.8765 396881.9337,388833.2393 396882.1556,388833.5993 396882.4262,388833.923 396882.7475,388834.2389 396883.1381,388834.5867 396883.6237,388834.908 396884.1344,388835.1674 396884.6169,388835.3646 396885.1112,388835.4959 396885.5975,388835.588 396886.0869,388835.6431 396886.6537,388835.6431 396887.2269,388835.5758 396888.5925,388836.5084 396887.8187,388836.8212 396887.7569)",
+                                "externalReference": [
+                                    {
+                                        "lastUpdateDate": "1975-02-24T00:00:00",
+                                        "UniqueStreetReferenceNumber": {
+                                            "usrn": 0
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ],
+            "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
+            "section": "All sections",
+            "traAffected": [
+                1000
+            ],
+            "traCreator": 1000,
+            "troName": "The Sample County Council (Prohibition of Waiting, Loading and Stopping) and (on-Street Parking Places) (Civil Enforcement Area) Consolidation Order 2019"
+        }
+    }
 }

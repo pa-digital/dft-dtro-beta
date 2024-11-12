@@ -44,6 +44,7 @@ public class Startup
         services.AddScoped<IAppIdMapperService, AppIdMapperService>();
         services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
         services.AddScoped<ISemanticValidationService, SemanticValidationService>();
+        services.AddScoped<IGeometryValidation, GeometryValidation>();
         services.AddSingleton<IBoundingBoxService, BoundingBoxService>();
         services.AddScoped<IConditionValidationService, ConditionValidationService>();
         services.AddSingleton<ISpatialProjectionService, Proj4SpatialProjectionService>();

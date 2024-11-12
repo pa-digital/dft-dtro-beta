@@ -20,7 +20,6 @@
                             "condition": [
                                 {
                                     "vehicleCharacteristics": {
-
                                     }
                                 },
                                 {
@@ -33,13 +32,11 @@
                                                     "conditions": [
                                                         {
                                                             "vehicleCharacteristics": {
-
                                                             },
                                                             "negate": false
                                                         },
                                                         {
                                                             "vehicleCharacteristics": {
-
                                                             },
                                                             "negate": true
                                                         }
@@ -160,21 +157,19 @@
                             ]
                         }
                     ],
-	                "regulatedPlace": [
+                    "regulatedPlace": [
                         {
                             "description": "Zone 5, Kenworthy Road, All Odd, All Even",
-                            "geometry": {
-								"version": 1,
-								"PointGeometry": {
-									"point": "SRID=27700;POINT(529157 178805)",
-									"representation": "centreLinePoint"
-								},
+                            "PointGeometry": {
+                                "version": 1,
+                                "point": "SRID=27700;POINT(529157 178805)",
+                                "representation": "centreLinePoint",
                                 "externalReference": [
                                     {
                                         "lastUpdateDate": "1981-02-08 11:30:43",
-										"UniqueStreetReferenceNumber": {
-											"usrn": 96854586
-										}
+                                        "UniqueStreetReferenceNumber": {
+                                            "usrn": 96854586
+                                        }
                                     }
                                 ]
                             }
