@@ -1,6 +1,7 @@
 ﻿using DfT.DTRO.Models.Validation;
+using DfT.DTRO.Services.Validation.Contracts;
 
-namespace DfT.DTRO.Services.Validation;
+namespace DfT.DTRO.Services.Validation.Implementation;
 
 public class RecordManagementService : IRecordManagementService
 {
@@ -132,7 +133,8 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        if (validationErrors.Count > 0) {
+        if (validationErrors.Count > 0)
+        {
             validationErrors.Add(new SemanticValidationError
             {
                 Message = "Please review your TRO and amend any necessary issues. Don’t hesitate to contact the CSO if you need assistance."

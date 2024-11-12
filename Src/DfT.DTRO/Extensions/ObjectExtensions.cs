@@ -24,8 +24,8 @@ public static class ObjectExtensions
     {
         List<string> items = type switch
         {
-            "SourceActionType" => typeof(SourceActionType).GetDisplayName<SourceActionType>().ToList(),
-            "ProvisionActionType" => typeof(ProvisionActionType).GetDisplayName<ProvisionActionType>().ToList(),
+            "SourceActionType" => typeof(SourceActionType).GetDisplayNames<SourceActionType>().ToList(),
+            "ProvisionActionType" => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>().ToList(),
             _ => new List<string>()
         };
 

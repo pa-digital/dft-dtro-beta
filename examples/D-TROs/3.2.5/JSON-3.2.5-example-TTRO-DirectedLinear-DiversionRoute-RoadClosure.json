@@ -30,7 +30,7 @@
                     "regulatedPlace": [
                         {
                             "description": "East Reach, Taunton, both directions",
-							"type": "regulationLocation",
+                            "type": "regulationLocation",
                             "DirectedLinear": {
                                 "version": 1,
                                 "directedLineString": "SRID=27700;LINESTRING(323544 124622, 323464 124595)",
@@ -44,22 +44,25 @@
                                 ]
                             }
                         },
-						{
-							"description": "West Reach Tauton",
-							"type": "diversionRoute",
-							"PointGeometry": {
-								"point": "SRID=27700;POINT(323544 124622)",
-								"representation": "centreLinePoint",
-								"externalReference": [
-									{
-										"lastUpdateDate": "2024-10-01T00:00:00",
-										"UniqueStreetReferenceNumber": {
-											"usrn": 39608173
-										}
-									}
-								]
-							}
-						}
+                        {
+                            "description": "Diversion Route - through traffic - Toneway Wickes roundabout (A38) - Priory Avenue (A3038) - Trenchard Way (A3087) - Staplegrove Road (A3027/A338) - Silk Mills Road (A3065) - Galmington Roundabout (A38) - bi-directional",
+                            "type": "diversionRoute",
+                            "LinearGeometry": {
+								"version": 1,
+                                "linestring": "SRID=27700;LINESTRING(323589 125149, 323340 125227, 321986 125569, 320737 126347, 320715 124191)",
+                                "representation": "linear",
+                                "direction": "bidirectional",
+                                "lateralPosition": "centreline",
+                                "externalReference": [
+                                    {
+                                        "lastUpdateDate": "2024-10-01T00:00:00",
+                                        "UniqueStreetReferenceNumber": {
+                                            "usrn": 39606013
+                                        }
+                                    }
+                                ]
+                            }
+                        }
                     ]
                 }
             ],

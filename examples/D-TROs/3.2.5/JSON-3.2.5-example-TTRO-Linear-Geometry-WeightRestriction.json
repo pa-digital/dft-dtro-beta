@@ -24,30 +24,29 @@
                                         "end": "2024-11-29T18:00:00"
                                     }
                                 },
-								{
-									"vehicleCondition": {
-											"vehicleCharacteristics": {
-													"MaximumGrossWeightCharacteristic": {
-														"grossVehicleWeight": 2,
-														"typeOfWeight":"maximumPermitted"
-													}
-												}									
-									}
-								}	
+                                {
+                                    "vehicleCondition": {
+                                        "vehicleCharacteristics": {
+                                            "MaximumGrossWeightCharacteristic": {
+                                                "grossVehicleWeight": 2,
+                                                "typeOfWeight": "maximumPermitted"
+                                            }
+                                        }
+                                    }
+                                }
                             ]
                         }
                     ],
                     "regulatedPlace": [
                         {
                             "description": "Netherclay Bridge, Bishops Hull, Taunton",
-                            "geometry": {
+							"type": "regulationLocation",
+                            "LinearGeometry": {
                                 "version": 1,
-                                "LinearGeometry": {
-									"direction": "bidirectional",
-									"lateralPosition": "centreline",
-									"linestring": "SRID=27700;LINESTRING(320620 124993, 320621 124997, 320625 125007)",
-								    "representation": "representingZone"
-                                },
+                                "direction": "bidirectional",
+                                "lateralPosition": "centreline",
+                                "linestring": "SRID=27700;LINESTRING(320620 124993, 320621 124997, 320625 125007)",
+                                "representation": "representingZone",
                                 "externalReference": [
                                     {
                                         "lastUpdateDate": "2024-08-01 00:00:00",

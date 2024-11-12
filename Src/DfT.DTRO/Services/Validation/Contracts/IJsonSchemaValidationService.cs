@@ -1,6 +1,4 @@
-using Newtonsoft.Json.Schema;
-
-namespace DfT.DTRO.Services.Validation;
+namespace DfT.DTRO.Services.Validation.Contracts;
 
 public interface IJsonSchemaValidationService
 {

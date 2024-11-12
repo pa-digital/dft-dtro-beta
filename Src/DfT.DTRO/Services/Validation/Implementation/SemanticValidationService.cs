@@ -3,9 +3,10 @@ using DfT.DTRO.Models.Conditions;
 using DfT.DTRO.Models.Conditions.Base;
 using DfT.DTRO.Models.Conditions.ValueRules;
 using DfT.DTRO.Models.Validation;
+using DfT.DTRO.Services.Validation.Contracts;
 using Newtonsoft.Json.Linq;
 
-namespace DfT.DTRO.Services.Validation;
+namespace DfT.DTRO.Services.Validation.Implementation;
 
 public class SemanticValidationService : ISemanticValidationService
 {

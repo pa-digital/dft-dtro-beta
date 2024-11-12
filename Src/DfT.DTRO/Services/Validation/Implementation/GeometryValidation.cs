@@ -1,9 +1,11 @@
 ﻿using DfT.DTRO.Helpers;
 using DfT.DTRO.Models.Validation;
+using DfT.DTRO.Services.Validation.Contracts;
 using Newtonsoft.Json.Linq;
+
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-namespace DfT.DTRO.Services.Validation;
+namespace DfT.DTRO.Services.Validation.Implementation;
 
 public class GeometryValidation : IGeometryValidation
 {

@@ -3,7 +3,7 @@ namespace DfT.DTRO.Helpers;
 
 public static class Constants
 {
-    public static IEnumerable<string> ConcreteGeometries => typeof(GeometryType).GetDisplayName<GeometryType>();
+    public static IEnumerable<string> ConcreteGeometries => typeof(GeometryType).GetDisplayNames<GeometryType>();
 
     public static string Version => "version";
 
