@@ -1,4 +1,6 @@
 using DfT.DTRO.Models.Validation;
+using Newtonsoft.Json.Linq;
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace DfT.DTRO.Models.DtroJson;
 public record struct BoundingBox(double WestLongitude, double SouthLatitude, double EastLongitude, double NorthLatitude)
@@ -61,35 +63,60 @@ public record struct BoundingBox(double WestLongitude, double SouthLatitude, dou
             WestLongitude <= other.EastLongitude &&
             other.WestLongitude <= EastLongitude;
 
-    public static implicit operator NpgsqlBox(BoundingBox bbox)
+    public static implicit operator NpgsqlBox(BoundingBox boundingBox) =>
+        new(boundingBox.NorthLatitude,
+            boundingBox.EastLongitude,
+            boundingBox.SouthLatitude,
+            boundingBox.WestLongitude);
+
+    public BoundingBox ValidateAgainstBoundingBox(IEnumerable<JToken> values)
     {
-        return new NpgsqlBox(bbox.NorthLatitude, bbox.EastLongitude, bbox.SouthLatitude, bbox.WestLongitude);
+        List<string> points = values
+            .Value<string>()
+            .Split(" ")
+            .Select(it => it
+                .Replace("(", "")
+                .Replace(")", "")
+                .Replace(",", ""))
+            .ToList();
+
+        List<Coordinates> coordinates = points
+            .Select(point => new Coordinates
+            {
+                Longitude = point.AsInt(),
+                Latitude = point.AsInt()
+            })
+            .ToList();
+
+        return Wrapping(coordinates);
     }
 
-    public static BoundingBox Wrapping(IEnumerable<Coordinates> coordinates)
+    private static BoundingBox Wrapping(IEnumerable<Coordinates> coordinates)
     {
-        (double east, double south) = coordinates.First();
+        IEnumerable<Coordinates> coordinatesEnumerable = coordinates.ToList();
+
+        (double east, double south) = coordinatesEnumerable.First();
         double north = south;
         double west = east;
 
-        foreach (Coordinates crd in coordinates.Skip(1))
+        foreach (Coordinates coordinate in coordinatesEnumerable.Skip(1))
         {
-            if (crd.Latitude < south)
+            if (coordinate.Latitude < south)
             {
-                south = crd.Latitude;
+                south = coordinate.Latitude;
             }
-            else if (crd.Latitude > north)
+            else if (coordinate.Latitude > north)
             {
-                north = crd.Latitude;
+                north = coordinate.Latitude;
             }
 
-            if (crd.Longitude < west)
+            if (coordinate.Longitude < west)
             {
-                west = crd.Longitude;
+                west = coordinate.Longitude;
             }
-            else if (crd.Longitude > east)
+            else if (coordinate.Longitude > east)
             {
-                east = crd.Longitude;
+                east = coordinate.Longitude;
             }
         }
 

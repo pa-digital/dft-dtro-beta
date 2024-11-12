@@ -20,7 +20,6 @@ public class GeometryValidation : IGeometryValidation
        List<SemanticValidationError> errors)
     {
         BoundingBox boundingBox = new();
-        JObject jObject = new();
 
         List<JProperty> geometries = data
             .Descendants()
@@ -34,33 +33,33 @@ public class GeometryValidation : IGeometryValidation
             {
                 SemanticValidationError semanticValidationError = new()
                 {
-                    Message = $"'geometry' is of type '{geometry?.Value.Type}', this it must be an 'object'."
+                    Message = $"'{nameof(geometry)}' is of type '{geometry?.Value.Type}', this it must be an 'object'."
                 };
 
                 errors.Add(semanticValidationError);
                 _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Geometry error", string.Join(",", errors));
             }
 
-            jObject = geometry?.Value as JObject;
+            JObject jObject = geometry?.Value as JObject;
 
-            if (jObject != null && !jObject.TryGetValue("version", out JToken _))
+            if (jObject != null && !jObject.TryGetValue(Constants.Version, out JToken _))
             {
                 SemanticValidationError semanticValidationError = new()
                 {
-                    Message = "'version' was missing."
+                    Message = $"'{Constants.Version}' was missing."
                 };
                 errors.Add(semanticValidationError);
                 _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Version error", string.Join(",", errors));
             }
 
-            if (jObject != null && jObject.TryGetValue("version", out JToken value))
+            if (jObject != null && jObject.TryGetValue(Constants.Version, out JToken value))
             {
                 JTokenType type = value.Type;
                 if (type != JTokenType.Integer)
                 {
                     SemanticValidationError semanticValidationError = new()
                     {
-                        Message = "'version' must be an integer."
+                        Message = $"'{Constants.Version}' must be an integer."
                     };
                     errors.Add(semanticValidationError);
                     _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Version type error", string.Join(",", errors));
@@ -84,7 +83,7 @@ public class GeometryValidation : IGeometryValidation
         {
             errors.Add(new SemanticValidationError
             {
-                Message = $"'geometry' is of type '{geometry?.Value.Type}', this it must be an 'object'."
+                Message = $"'{nameof(geometry)}' is of type '{geometry?.Value.Type}', this it must be an 'object'."
             });
             _loggingExtension.LogError(nameof(ValidateGeometryAgainstPreviousSchemaVersions), "", "Geometry error", string.Join(",", errors));
 
@@ -92,23 +91,23 @@ public class GeometryValidation : IGeometryValidation
 
         JObject jObject = geometry?.Value as JObject;
 
-        if (jObject != null && !jObject.TryGetValue("version", out JToken _))
+        if (jObject != null && !jObject.TryGetValue(Constants.Version, out JToken _))
         {
             errors.Add(new SemanticValidationError
             {
-                Message = "'version' was missing."
+                Message = $"'{Constants.Version}' was missing."
             });
             _loggingExtension.LogError(nameof(ValidateGeometryAgainstPreviousSchemaVersions), "", "Version error", string.Join(",", errors));
         }
 
-        if (jObject != null && jObject.TryGetValue("version", out JToken value))
+        if (jObject != null && jObject.TryGetValue(Constants.Version, out JToken value))
         {
             JTokenType type = value.Type;
             if (type != JTokenType.Integer)
             {
                 errors.Add(new SemanticValidationError
                 {
-                    Message = "'version' must be an integer."
+                    Message = $"'{Constants.Version}' must be an integer."
                 });
                 _loggingExtension.LogError(nameof(ValidateGeometryAgainstPreviousSchemaVersions), "", "Version type error", string.Join(",", errors));
             }

@@ -3,12 +3,9 @@ namespace DfT.DTRO.Helpers;
 
 public static class Constants
 {
-    public static IEnumerable<string> ConcreteGeometries =>
-        new List<string>
-        {
-            "PointGeometry",
-            "LinearGeometry",
-            "Polygon",
-            "DirectedLinear"
-        };
+    public static IEnumerable<string> ConcreteGeometries => typeof(GeometryType).GetDisplayName<GeometryType>();
+
+    public static string Version => "version";
+
+    public static string Srid27000 => "SRID=27700";
 }
