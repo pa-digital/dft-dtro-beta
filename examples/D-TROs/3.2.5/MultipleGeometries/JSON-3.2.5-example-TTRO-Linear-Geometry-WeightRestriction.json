@@ -7,20 +7,31 @@
             "provision": [
                 {
                     "actionType": "new",
-                    "orderReportingPoint": "permanentNoticeOfMaking",
-                    "provisionDescription": "Controlled Parking Zone, Coal Orchard, Taunton",
+                    "orderReportingPoint": "ttroTtmoNoticeOfIntention",
+                    "provisionDescription": "Temporary weight restriction Netherclay Bridge (2 tonnes)",
                     "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
                     "regulation": [
                         {
                             "isDynamic": false,
                             "timeZone": "Europe/London",
                             "generalRegulation": {
-                                "regulationType": "kerbsideControlledParkingZone"
+                                "regulationType": "dimensionMaximumWeightStructural"
                             },
                             "condition": [
                                 {
                                     "timeValidity": {
-                                        "start": "2024-10-22T06:00:00"
+                                        "start": "2024-08-01T08:00:00",
+                                        "end": "2024-11-29T18:00:00"
+                                    }
+                                },
+                                {
+                                    "vehicleCondition": {
+                                        "vehicleCharacteristics": {
+                                            "MaximumGrossWeightCharacteristic": {
+                                                "grossVehicleWeight": 2,
+                                                "typeOfWeight": "maximumPermitted"
+                                            }
+                                        }
                                     }
                                 }
                             ]
@@ -28,30 +39,18 @@
                     ],
                     "regulatedPlace": [
                         {
-                            "description": "Coal Orchard, Taunton",
+                            "description": "Netherclay Bridge, Bishops Hull, Taunton",
                             "LinearGeometry": {
                                 "version": 1,
                                 "direction": "bidirectional",
                                 "lateralPosition": "centreline",
-                                "linestring": "SRID=27700;LINESTRING(322796 124805, 322791 124826, 322781 124888)",
+                                "linestring": "SRID=27700;LINESTRING(320620 124993, 320621 124997, 320625 125007)",
                                 "representation": "representingZone",
                                 "externalReference": [
                                     {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
+                                        "lastUpdateDate": "2024-08-01 00:00:00",
                                         "UniqueStreetReferenceNumber": {
-                                            "usrn": 39605612
-                                        }
-                                    }
-                                ]
-                            },
-                            "Polygon": {
-                                "version": 2,
-                                "polygon": "SRID=27700;POLYGON(322790 124805, 322778 124866, 322777 124886, 322782 124885, 322785 124859, 322800 124806, 322790 124805)",
-                                "externalReference": [
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39605612
+                                            "usrn": 39605836
                                         }
                                     }
                                 ]
@@ -66,7 +65,7 @@
                 3300
             ],
             "traCreator": 3300,
-            "troName": "DfT Example - Controlled Parking Zone, Coal Orchard, Taunton v1, Nov. 2024"
+            "troName": "DfT Example - TTRO weight restriction v1, Oct. 2024"
         }
     }
 }
