@@ -1,4 +1,7 @@
-﻿namespace DfT.DTRO.Extensions.DependencyInjection;
+﻿using DfT.DTRO.Services.Validation.Contracts;
+using DfT.DTRO.Services.Validation.Implementation;
+
+namespace DfT.DTRO.Extensions.DependencyInjection;
 
 public static class JsonLogic
 {

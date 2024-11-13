@@ -16,7 +16,7 @@ public static class EnumerableExtensions
         }
     }
 
-    public static IEnumerable<string> GetDisplayName<T>(this Type type) where T : Enum
+    public static IEnumerable<string> GetDisplayNames<T>(this Type type) where T : Enum
     {
         T[] enums = (T[])Enum.GetValues(type);
         return enums.Select(it => it.GetDisplayName()).ToList();

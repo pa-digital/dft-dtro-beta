@@ -1,8 +1,9 @@
 using DfT.DTRO.Extensions.Exceptions;
+using DfT.DTRO.Services.Validation.Contracts;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 
-namespace DfT.DTRO.Services.Validation;
+namespace DfT.DTRO.Services.Validation.Implementation;
 
 public class JsonSchemaValidationService : IJsonSchemaValidationService
 {

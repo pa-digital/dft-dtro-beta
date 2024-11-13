@@ -280,10 +280,14 @@ public class DtroMappingService : IDtroMappingService
 
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
     {
-        List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
+        List<ExpandoObject> regulations = dtro
+            .Data
+            .GetValueOrDefault<IList<object>>("Source.provision")
             .OfType<ExpandoObject>()
-            .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())
-        .ToList();
+            .SelectMany(expandoObject => expandoObject
+                .GetValue<IList<object>>("regulation")
+                .OfType<ExpandoObject>())
+            .ToList();
 
         dtro.TrafficAuthorityCreatorId = dtro.Data.GetValueOrDefault<int>("Source.traCreator");
 
