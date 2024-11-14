@@ -19,10 +19,16 @@
                             },
                             "condition": [
                                 {
-                                    "timeValidity": {
+                                    "TimeValidity": {
                                         "start": "2024-10-22T08:00:00",
                                         "end": "2024-10-22T20:00:00"
-                                    }
+                                    },
+									"DriverCondition": {
+										"driverCharacteristics": "localResident"
+									},
+									"SomeOtherCondition": {
+										"Key": "Value"
+									}
                                 }
                             ]
                         }

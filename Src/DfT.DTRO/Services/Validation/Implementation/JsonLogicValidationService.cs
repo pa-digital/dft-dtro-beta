@@ -92,6 +92,11 @@ public class JsonLogicValidationService : IJsonLogicValidationService
     {
         var errors = new List<SemanticValidationError>();
 
+        if (schemaVersion < new SchemaVersion("3.2.5"))
+        {
+            return errors;
+        }
+
         List<ExpandoObject> regulations = dtroSubmit
             .Data
             .GetValueOrDefault<IList<object>>("Source.provision")
@@ -116,7 +121,7 @@ public class JsonLogicValidationService : IJsonLogicValidationService
 
         var regulationTypes = typeof(RegulationType).GetDisplayNames<RegulationType>().ToList();
         var passedInRegulations = regulations.SelectMany(regulation => regulation.Select(kv => kv.Key)).ToList();
-        var areAnyAcceptedRegulations = passedInRegulations.Any(it => regulationTypes.Any(it.Contains));
+        var areAnyAcceptedRegulations = passedInRegulations.Any(passedInRegulation => regulationTypes.Any(passedInRegulation.Contains));
 
 
         if (!areAnyAcceptedRegulations)
@@ -124,9 +129,66 @@ public class JsonLogicValidationService : IJsonLogicValidationService
             SemanticValidationError error = new()
             {
                 Name = "Regulations",
-                Message = "You have to have only one accepted regulations.",
+                Message = "You have to have only one accepted regulation.",
                 Path = "Source -> Provision -> Regulation",
                 Rule = $"One of '{string.Join(", ", regulationTypes)}' regulation must be present.",
+            };
+            errors.Add(error);
+        }
+        return errors;
+    }
+
+    public IList<SemanticValidationError> ValidateCondition(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
+    {
+        var errors = new List<SemanticValidationError>();
+
+        if (schemaVersion < new SchemaVersion("3.2.5"))
+        {
+            return errors;
+        }
+
+        List<ExpandoObject> regulations = dtroSubmit
+            .Data
+            .GetValueOrDefault<IList<object>>("Source.provision")
+            .OfType<ExpandoObject>()
+            .SelectMany(expandoObject => expandoObject
+                .GetValue<IList<object>>("regulation")
+                .OfType<ExpandoObject>())
+            .ToList();
+
+        List<ExpandoObject> conditions = regulations
+            .SelectMany(expandoObject => expandoObject
+                .GetValue<IList<object>>("condition")
+                .OfType<ExpandoObject>())
+            .ToList();
+
+
+        var areMultipleConditions = conditions.ElementAt(0).Count() > 1;
+        if (areMultipleConditions)
+        {
+            SemanticValidationError error = new()
+            {
+                Name = "Conditions",
+                Message = "You have to have only one condition in place.",
+                Path = "Source -> Provision -> Regulation -> Condition",
+                Rule = "One regulation must be present.",
+            };
+            errors.Add(error);
+        }
+
+        var conditionTypes = typeof(ConditionType).GetDisplayNames<ConditionType>().ToList();
+        var passedInConditions = conditions.SelectMany(condition => condition.Select(kv => kv.Key)).ToList();
+        var areAnyAcceptedConditions = passedInConditions.All(passedInCondition => conditionTypes.Any(passedInCondition.Contains));
+
+
+        if (!areAnyAcceptedConditions)
+        {
+            SemanticValidationError error = new()
+            {
+                Name = "Condition",
+                Message = "You have to have only one accepted condition.",
+                Path = "Source -> Provision -> Regulation -> Condition",
+                Rule = $"One of '{string.Join(", ", conditionTypes)}' condition must be present.",
             };
             errors.Add(error);
         }

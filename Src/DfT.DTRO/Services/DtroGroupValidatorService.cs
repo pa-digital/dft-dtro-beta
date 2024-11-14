@@ -73,6 +73,12 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToRules = requestComparedToRegulations.MapFrom() };
         }
 
+        var requestComparedToConditions = _jsonLogicValidationService.ValidateCondition(dtroSubmit, schemaVersion);
+        if (requestComparedToConditions.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = requestComparedToConditions.MapFrom() };
+        }
+
         var tuple = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);
         if (tuple.Item2.Count > 0)
         {
