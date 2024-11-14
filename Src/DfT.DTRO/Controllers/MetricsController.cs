@@ -59,7 +59,9 @@ public class MetricsController : ControllerBase
             sb.Append("/n");
             sb.Append($"DateTimeOffset.Now: {nowOffset}");
             sb.Append("/n");
-            return Ok(sb.ToString());
+            Console.WriteLine($"#*# sb: {sb}");
+
+            return Ok(true);
         }
         catch (Exception ex)
         {
