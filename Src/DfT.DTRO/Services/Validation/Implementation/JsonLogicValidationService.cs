@@ -156,39 +156,61 @@ public class JsonLogicValidationService : IJsonLogicValidationService
                 .OfType<ExpandoObject>())
             .ToList();
 
-        List<ExpandoObject> conditions = regulations
+        List<ExpandoObject> conditionSets = regulations
             .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("condition")
+                .GetValue<IList<object>>("conditionSet")
                 .OfType<ExpandoObject>())
             .ToList();
 
+        var operatorTypes = typeof(OperatorType)
+            .GetDisplayNames<OperatorType>()
+            .ToList();
+        var passedInOperators = conditionSets
+            .Select(passedInOperator => passedInOperator
+                .GetValueOrDefault<string>("operator"))
+            .ToList();
+        var hasOperator = passedInOperators
+            .All(it => operatorTypes.Any(it.Contains));
 
-        var areMultipleConditions = conditions.ElementAt(0).Count() > 1;
-        if (areMultipleConditions)
+        if (!hasOperator)
         {
             SemanticValidationError error = new()
             {
-                Name = "Conditions",
-                Message = "You have to have only one condition in place.",
-                Path = "Source -> Provision -> Regulation -> Condition",
-                Rule = "One regulation must be present.",
+                Name = "Condition set",
+                Message = "You have to have at least one operator for the condition set.",
+                Path = "Source -> Provision -> Regulation -> ConditionSet",
+                Rule = $"One of '{string.Join(", ", operatorTypes)}' operators must be present.",
             };
             errors.Add(error);
         }
 
-        var conditionTypes = typeof(ConditionType).GetDisplayNames<ConditionType>().ToList();
-        var passedInConditions = conditions.SelectMany(condition => condition.Select(kv => kv.Key)).ToList();
-        var areAnyAcceptedConditions = passedInConditions.All(passedInCondition => conditionTypes.Any(passedInCondition.Contains));
+        List<ExpandoObject> conditions =
+            conditionSets
+                .Select(conditionSet => conditionSet
+                    .GetValueOrDefault<ExpandoObject>("condition"))
+                .ToList();
+
+        var conditionTypes = typeof(ConditionType)
+            .GetDisplayNames<ConditionType>()
+            .ToList();
+        var passedInConditions = conditions
+            .SelectMany(condition => condition
+                .Select(kv => kv.Key))
+            .ToList();
+        var areEachConditionsAccepted = passedInConditions
+            .Select(passedInCondition => conditionTypes
+                .Any(passedInCondition.Contains))
+            .ToList();
 
 
-        if (!areAnyAcceptedConditions)
+        if (!areEachConditionsAccepted.All(it => it))
         {
             SemanticValidationError error = new()
             {
                 Name = "Condition",
-                Message = "You have to have only one accepted condition.",
+                Message = "You have to have at least one accepted condition.",
                 Path = "Source -> Provision -> Regulation -> Condition",
-                Rule = $"One of '{string.Join(", ", conditionTypes)}' condition must be present.",
+                Rule = $"One or more of '{string.Join(", ", conditionTypes)}' conditions must be present.",
             };
             errors.Add(error);
         }

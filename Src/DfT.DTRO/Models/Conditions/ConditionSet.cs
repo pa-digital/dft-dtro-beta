@@ -3,21 +3,20 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using DfT.DTRO.Models.Conditions.Base;
-using Json.Logic;
 
 namespace DfT.DTRO.Models.Conditions;
 
 [JsonConverter(typeof(ConditionSetJsonConverter))]
 public class ConditionSet : Condition, IEnumerable<Condition>
 {
-    public enum OperatorType
-    {
-        And,
+    //public enum OperatorType
+    //{
+    //    And,
 
-        Or,
+    //    Or,
 
-        XOr,
-    }
+    //    XOr,
+    //}
 
     private readonly IEnumerable<Condition> _conditions;
 
@@ -131,9 +130,9 @@ public class ConditionSetJsonConverter : JsonConverter<ConditionSet>
             conditions,
             operatorString.ToLower() switch
             {
-                "and" => ConditionSet.OperatorType.And,
-                "or" => ConditionSet.OperatorType.Or,
-                "xor" => ConditionSet.OperatorType.XOr,
+                "and" => OperatorType.And,
+                "or" => OperatorType.Or,
+                "xor" => OperatorType.XOr,
                 _ => throw new JsonException("Operator field is required to be one of 'and', 'or' or 'xor'.")
             })
         {

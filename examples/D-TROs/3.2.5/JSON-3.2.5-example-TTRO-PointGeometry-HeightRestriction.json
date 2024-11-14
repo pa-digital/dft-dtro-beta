@@ -4,6 +4,13 @@
         "Source": {
             "actionType": "new",
             "currentTraOwner": 3300,
+            "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
+            "section": "All sections",
+            "traAffected": [
+                3300
+            ],
+            "traCreator": 3300,
+            "troName": "DfT Example - TTRO height restriction v1, Oct. 2024",
             "provision": [
                 {
                     "actionType": "new",
@@ -16,20 +23,24 @@
                             "timeZone": "Europe/London",
                             "SpeedLimitValueBased": {
                                 "type": "minimumSpeedLimit",
-								"mphValue": 30
+                                "mphValue": 30
                             },
-                            "condition": [
+                            "conditionSet": [
                                 {
-                                    "TimeValidity": {
-                                        "start": "2024-08-22T08:00:00",
-                                        "end": "2024-08-22T20:00:00"
-                                    }
-                                },
-                                {
-                                    "VehicleCondition": {
-                                        "vehicleCharacteristics": {
-                                            "MaximumHeightCharacteristic": {
-                                                "vehicleHeight": 2.5
+                                    "operator": "and",
+                                    "condition": {
+										"negate": false,
+                                        "ValidityCondition": {
+                                            "TimeValidity": {
+                                                "start": "2024-08-22T08:00:00",
+                                                "end": "2024-08-22T20:00:00"
+                                            }
+                                        },
+                                        "VehicleCondition": {
+                                            "vehicleCharacteristics": {
+                                                "MaximumHeightCharacteristic": {
+                                                    "vehicleHeight": 2.5
+                                                }
                                             }
                                         }
                                     }
@@ -40,7 +51,7 @@
                     "regulatedPlace": [
                         {
                             "description": "East Reach - Taunton",
-							"type": "regulationLocation",
+                            "type": "regulationLocation",
                             "PointGeometry": {
                                 "version": 1,
                                 "point": "SRID=27700;POINT(323544 124622)",
@@ -57,14 +68,7 @@
                         }
                     ]
                 }
-            ],
-            "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
-            "section": "All sections",
-            "traAffected": [
-                3300
-            ],
-            "traCreator": 3300,
-            "troName": "DfT Example - TTRO height restriction v1, Oct. 2024"
+            ]
         }
     }
 }
