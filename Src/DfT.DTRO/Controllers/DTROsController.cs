@@ -649,7 +649,7 @@ public class DTROsController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpPost("/dtros/Ownership/{dtroId:guid}/{assignToTraId:guid}")]
+    [HttpPost("/dtros/ownership/{dtroId:guid}/{assignToTraId:guid}")]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
@@ -662,7 +662,7 @@ public class DTROsController : ControllerBase
             _logger.LogInformation($"'{nameof(AssignOwnership)}' method called using appId '{appId}', unique identifier '{dtroId}' and new assigned TRA Id '{assignToTraId}'");
             _loggingExtension.LogInformation(
                 nameof(AssignOwnership),
-                $"/dtros/Ownership/{dtroId}/{assignToTraId}",
+                $"/dtros/ownership/{dtroId}/{assignToTraId}",
                 $"'{nameof(AssignOwnership)}' method called using appId '{appId}', unique identifier '{dtroId}' and new assigned TRA Id '{assignToTraId}'");
             return NoContent();
         }
@@ -671,7 +671,7 @@ public class DTROsController : ControllerBase
             _logger.LogError(nfex.Message);
             _loggingExtension.LogError(
                 nameof(AssignOwnership),
-                $"/dtros/Ownership/{dtroId}/{assignToTraId}",
+                $"/dtros/ownership/{dtroId}/{assignToTraId}",
                 "Dtro History not found",
                 nfex.Message);
             return NotFound(new ApiErrorResponse("Not found", nfex.Message));
@@ -681,7 +681,7 @@ public class DTROsController : ControllerBase
             _logger.LogError(anex.Message);
             _loggingExtension.LogError(
                 nameof(AssignOwnership),
-                $"/dtros/Ownership/{dtroId}/{assignToTraId}",
+                $"/dtros/ownership/{dtroId}/{assignToTraId}",
                 "Unexpected Null value was found",
                 anex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
@@ -691,7 +691,7 @@ public class DTROsController : ControllerBase
             _logger.LogError(ocex.Message);
             _loggingExtension.LogError(
                 nameof(AssignOwnership),
-                $"/dtros/Ownership/{dtroId}/{assignToTraId}",
+                $"/dtros/ownership/{dtroId}/{assignToTraId}",
                 "operation to the database was unexpectedly canceled",
                 ocex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: operation to the database was unexpectedly canceled."));
@@ -701,7 +701,7 @@ public class DTROsController : ControllerBase
             _logger.LogError(duex.Message);
             _loggingExtension.LogError(
                 nameof(AssignOwnership),
-                $"/dtros/Ownership/{dtroId}/{assignToTraId}",
+                $"/dtros/ownership/{dtroId}/{assignToTraId}",
                 "Unable to save record(s) to the database",
                 duex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred: Unable to save record(s) to the database."));
@@ -709,7 +709,7 @@ public class DTROsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            _loggingExtension.LogError(nameof(AssignOwnership), $"/dtros/Ownership/{dtroId}/{assignToTraId}", "", ex.Message);
+            _loggingExtension.LogError(nameof(AssignOwnership), $"/dtros/ownership/{dtroId}/{assignToTraId}", "", ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
