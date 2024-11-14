@@ -1,7 +1,5 @@
-﻿using DfT.DTRO.Extensions;
+﻿using DfT.DTRO.Helpers;
 using DfT.DTRO.Models.Validation;
-using Google.Protobuf;
-using Grpc.Net.Client.Configuration;
 using Newtonsoft.Json.Linq;
 
 namespace DfT.DTRO.Services.Mapping;
@@ -282,10 +280,14 @@ public class DtroMappingService : IDtroMappingService
 
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
     {
-        List<ExpandoObject> regulations = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
+        List<ExpandoObject> regulations = dtro
+            .Data
+            .GetValueOrDefault<IList<object>>("Source.provision")
             .OfType<ExpandoObject>()
-            .SelectMany(it => it.GetValue<IList<object>>("regulation").OfType<ExpandoObject>())
-        .ToList();
+            .SelectMany(expandoObject => expandoObject
+                .GetValue<IList<object>>("regulation")
+                .OfType<ExpandoObject>())
+            .ToList();
 
         dtro.TrafficAuthorityCreatorId = dtro.Data.GetValueOrDefault<int>("Source.traCreator");
 
@@ -344,13 +346,28 @@ public class DtroMappingService : IDtroMappingService
 
         string json = dtro.Data.ToIndentedJsonString();
         JObject obj = JObject.Parse(json);
-        JProperty geometry = obj
-            .DescendantsAndSelf()
-            .OfType<JProperty>()
-            .FirstOrDefault(property => property.Name == "geometry");
-        JObject obj1 = geometry?.Value as JObject;
 
-        dtro.Location = _service.SetBoundingBox(new List<SemanticValidationError>(), obj1, new BoundingBox());
+        if (dtro.SchemaVersion >= new SchemaVersion("3.2.5"))
+        {
+            var geometries = obj
+                .Descendants()
+                .OfType<JProperty>()
+                .Where(property => Constants.ConcreteGeometries.Any(property.Name.Contains))
+                .ToList();
+            JProperty geometry = geometries.FirstOrDefault();
+
+            dtro.Location =
+                _service.SetBoundingBoxForMultipleGeometries(new List<SemanticValidationError>(), geometry,
+                    new BoundingBox());
+        }
+        else
+        {
+            var geometry = obj
+                .DescendantsAndSelf()
+                .OfType<JProperty>()
+                .FirstOrDefault(property => property.Name == "geometry");
+            dtro.Location = _service.SetBoundingBoxForSingleGeometry(new List<SemanticValidationError>(), geometry, new BoundingBox());
+        }
     }
 
     private DtroSearchResult CopyDtroToSearchResult(Models.DataBase.DTRO dtro, List<DateTime> regulationStartDates, List<DateTime> regulationEndDates)

@@ -50,7 +50,7 @@ public static class Utils
         return schemaTemplate;
     }
 
-    public static async Task<DfT.DTRO.Models.DataBase.DTRO> CreateDtroObject(string dtroJsonPath)
+    public static async Task<DfT.DTRO.Models.DataBase.DTRO> CreateDtroObject(string dtroJsonPath, string schemaVersion = null)
     {
         string sampleDtroDataJson = await File.ReadAllTextAsync(dtroJsonPath);
 
@@ -61,6 +61,7 @@ public static class Utils
         DfT.DTRO.Models.DataBase.DTRO sampleDtro = new()
         {
             Id = Guid.NewGuid(),
+            SchemaVersion = new SchemaVersion(schemaVersion),
             Created = createdAt,
             LastUpdated = createdAt,
             Data = dtroData
@@ -68,8 +69,8 @@ public static class Utils
 
         var builder = new ConfigurationBuilder();
         var configuration = builder.Build();
-        var loggingExtension = new LoggingExtension.Builder().Build();
-        var mappingService = new DtroMappingService(configuration, new BoundingBoxService(), loggingExtension);
+        var loggingExtensions = new LoggingExtension();
+        var mappingService = new DtroMappingService(configuration, new BoundingBoxService(loggingExtensions), loggingExtensions);
         mappingService.InferIndexFields(ref sampleDtro);
 
         return sampleDtro;
@@ -88,7 +89,7 @@ public static class Utils
             var builder = new ConfigurationBuilder();
             var configuration = builder.Build();
             var loggingExtension = new LoggingExtension.Builder().Build();
-            var mappingService = new DtroMappingService(configuration, new BoundingBoxService(), loggingExtension);
+            var mappingService = new DtroMappingService(configuration, new BoundingBoxService(new LoggingExtension.Builder().Build()), loggingExtension);
             mappingService.InferIndexFields(ref dtro);
         }
 
@@ -146,25 +147,17 @@ public static class Utils
             .ToList();
 
 
-        var requests = new List<DTROHistory>();
-        foreach (ExpandoObject? expando in data)
+        return data.Select(expando => new DTROHistory
         {
-            DTROHistory request = new()
-            {
-                Id = Guid.NewGuid(),
-                DtroId = Guid.Parse("C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4"),
-                Created = new DateTime(2024, 6, 19, 16, 44, 00),
-                LastUpdated = DateTime.Now,
-                Data = expando,
-                TrafficAuthorityOwnerId = 1000,
-                TrafficAuthorityCreatorId = 1000,
-                SchemaVersion = "3.2.3"
-            };
-
-            requests.Add(request);
-        }
-
-        return requests;
+            Id = Guid.NewGuid(),
+            DtroId = Guid.Parse("C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4"),
+            Created = new DateTime(2024, 6, 19, 16, 44, 00),
+            LastUpdated = DateTime.Now,
+            Data = expando,
+            TrafficAuthorityOwnerId = 1000,
+            TrafficAuthorityCreatorId = 1000,
+            SchemaVersion = "3.2.3"
+        }).ToList();
     }
 
     public static List<DtroUserResponse> SwaCodesResponse => new()

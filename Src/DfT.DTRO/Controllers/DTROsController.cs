@@ -1,8 +1,5 @@
 using System.Data;
 using DfT.DTRO.Extensions.Exceptions;
-using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroDtos;
-using DfT.DTRO.Models.Errors;
 using Newtonsoft.Json;
 
 namespace DfT.DTRO.Controllers;
@@ -96,7 +93,7 @@ public class DTROsController : ControllerBase
             DtroValidationExceptionResponse dtroValidationExceptionResponse = dvex.MapToResponse();
 
             _logger.LogError(dvex.Message);
-            _loggingExtension.LogError( nameof(CreateFromFile), "/dtros/createFromFile", "",dvex.Message);
+            _loggingExtension.LogError(nameof(CreateFromFile), "/dtros/createFromFile", "", dvex.Message);
             return BadRequest(dtroValidationExceptionResponse.Beautify());
         }
         catch (NotFoundException nfex)
@@ -301,7 +298,7 @@ public class DTROsController : ControllerBase
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
 
             _logger.LogError(nfex.Message);
-            _loggingExtension.LogError(nameof(CreateFromBody), "/dtros/createFromBody", "Dtro not found",nfex.Message);
+            _loggingExtension.LogError(nameof(CreateFromBody), "/dtros/createFromBody", "Dtro not found", nfex.Message);
             return NotFound(new ApiErrorResponse("Dtro not found", nfex.Message));
         }
         catch (InvalidOperationException ioex)
@@ -624,7 +621,8 @@ public class DTROsController : ControllerBase
             return Ok(response);
         }
         catch (NotFoundException nfex)
-        {;
+        {
+            ;
             _logger.LogError(nfex.Message);
             _loggingExtension.LogError(
                 nameof(GetProvisionHistory),

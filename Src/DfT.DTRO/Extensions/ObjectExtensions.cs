@@ -2,25 +2,43 @@
 
 namespace DfT.DTRO.Extensions;
 
+/// <summary>
+/// Extension class
+/// </summary>
 public static class ObjectExtensions
 {
-    public static string ToIndentedJsonString(this object obj)
-    {
-        return JsonConvert.SerializeObject(obj, Formatting.Indented);
-    }
+    /// <summary>
+    /// Beautify string to JSON
+    /// </summary>
+    /// <param name="obj">source object</param>
+    /// <returns>JSON indented string</returns>
+    public static string ToIndentedJsonString(this object obj) => JsonConvert.SerializeObject(obj, Formatting.Indented);
 
+    /// <summary>
+    /// Check if the string is of type enum
+    /// </summary>
+    /// <param name="value">Value to be checked</param>
+    /// <param name="type">Name of the checked type</param>
+    /// <returns><c>true</c> if is enum, otherwise <c>false</c></returns>
     public static bool IsEnum(this string value, string type)
     {
         List<string> items = type switch
         {
-            "SourceActionType" => typeof(SourceActionType).GetDisplayName<SourceActionType>().ToList(),
-            "ProvisionActionType" => typeof(ProvisionActionType).GetDisplayName<ProvisionActionType>().ToList(),
+            "SourceActionType" => typeof(SourceActionType).GetDisplayNames<SourceActionType>().ToList(),
+            "ProvisionActionType" => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>().ToList(),
             _ => new List<string>()
         };
 
         return items.Contains(value);
     }
 
+    /// <summary>
+    /// Compare properties values
+    /// </summary>
+    /// <typeparam name="T">Type to check</typeparam>
+    /// <param name="obj">First object to compare</param>
+    /// <param name="other">Second object to compare</param>
+    /// <returns><c>true</c> if similar values, otherwise <c>false</c></returns>
     public static bool ComparePropertiesValues<T>(this T obj, T other)
     {
         if (obj == null || other == null)
@@ -40,11 +58,13 @@ public static class ObjectExtensions
             {
                 continue;
             }
-            else if (value1 == null || value2 == null)
+
+            if (value1 == null || value2 == null)
             {
                 return false;
             }
-            else if (!value1.Equals(value2))
+
+            if (!value1.Equals(value2))
             {
                 return false;
             }
@@ -53,12 +73,24 @@ public static class ObjectExtensions
         return true;
     }
 
+    /// <summary>
+    /// Return string as integer
+    /// </summary>
+    /// <param name="source">Source to check</param>
+    /// <returns><c>number</c> if parsing is successful, otherwise <c>zero</c></returns>
     public static int AsInt(this string source)
     {
         bool isDigit = int.TryParse(source, out int number);
         return isDigit ? number : 0;
     }
 
+    /// <summary>
+    /// Capture string between start and end strings
+    /// </summary>
+    /// <param name="source">Source string</param>
+    /// <param name="before">Before item(s)</param>
+    /// <param name="after">After item(s)</param>
+    /// <returns>Captured string</returns>
     public static string GetBetween(this string source, string before, string after)
     {
         int start = source.IndexOf(before, StringComparison.Ordinal);

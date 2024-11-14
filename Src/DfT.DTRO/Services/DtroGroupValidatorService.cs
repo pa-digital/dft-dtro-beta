@@ -1,4 +1,5 @@
 ﻿using DfT.DTRO.Extensions.Exceptions;
+using DfT.DTRO.Services.Validation.Contracts;
 
 namespace DfT.DTRO.Services;
 public class DtroGroupValidatorService : IDtroGroupValidatorService
@@ -55,9 +56,16 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         }
 
         var requestComparedToRules = await _jsonLogicValidationService.ValidateCreationRequest(dtroSubmit, schemaVersion.ToString());
+
         if (requestComparedToRules.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requestComparedToRules.MapFrom() };
+        }
+
+        var requestComparedRegulatedPlaces = _jsonLogicValidationService.ValidateCreationRequest(dtroSubmit, schemaVersion);
+        if (requestComparedRegulatedPlaces.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = requestComparedRegulatedPlaces.MapFrom() };
         }
 
         var tuple = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);

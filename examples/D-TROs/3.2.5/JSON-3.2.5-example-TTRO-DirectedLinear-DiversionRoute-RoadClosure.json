@@ -7,20 +7,21 @@
             "provision": [
                 {
                     "actionType": "new",
-                    "orderReportingPoint": "permanentNoticeOfMaking",
-                    "provisionDescription": "Controlled Parking Zone, Coal Orchard, Taunton",
+                    "orderReportingPoint": "ttroTtmoNoticeOfIntention",
+                    "provisionDescription": "Temporary full road closure, for combined utility works and carriageway repair",
                     "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
                     "regulation": [
                         {
                             "isDynamic": false,
                             "timeZone": "Europe/London",
                             "generalRegulation": {
-                                "regulationType": "kerbsideControlledParkingZone"
+                                "regulationType": "miscRoadClosure"
                             },
                             "condition": [
                                 {
                                     "timeValidity": {
-                                        "start": "2024-10-22T06:00:00"
+                                        "start": "2024-10-22T06:00:00",
+                                        "end": "2024-10-24T20:00:00"
                                     }
                                 }
                             ]
@@ -28,30 +29,35 @@
                     ],
                     "regulatedPlace": [
                         {
-                            "description": "Coal Orchard, Taunton",
-                            "LinearGeometry": {
+                            "description": "East Reach, Taunton, both directions",
+                            "type": "regulationLocation",
+                            "DirectedLinear": {
                                 "version": 1,
-                                "direction": "bidirectional",
-                                "lateralPosition": "centreline",
-                                "linestring": "SRID=27700;LINESTRING(322796 124805, 322791 124826, 322781 124888)",
-                                "representation": "representingZone",
+                                "directedLineString": "SRID=27700;LINESTRING(323544 124622, 323464 124595)",
                                 "externalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
                                         "UniqueStreetReferenceNumber": {
-                                            "usrn": 39605612
+                                            "usrn": 39608173
                                         }
                                     }
                                 ]
-                            },
-                            "Polygon": {
-                                "version": 2,
-                                "polygon": "SRID=27700;POLYGON(322790 124805, 322778 124866, 322777 124886, 322782 124885, 322785 124859, 322800 124806, 322790 124805)",
+                            }
+                        },
+                        {
+                            "description": "Diversion Route - through traffic - Toneway Wickes roundabout (A38) - Priory Avenue (A3038) - Trenchard Way (A3087) - Staplegrove Road (A3027/A338) - Silk Mills Road (A3065) - Galmington Roundabout (A38) - bi-directional",
+                            "type": "diversionRoute",
+                            "LinearGeometry": {
+								"version": 1,
+                                "linestring": "SRID=27700;LINESTRING(323589 125149, 323340 125227, 321986 125569, 320737 126347, 320715 124191)",
+                                "representation": "linear",
+                                "direction": "bidirectional",
+                                "lateralPosition": "centreline",
                                 "externalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
                                         "UniqueStreetReferenceNumber": {
-                                            "usrn": 39605612
+                                            "usrn": 39606013
                                         }
                                     }
                                 ]
@@ -66,7 +72,7 @@
                 3300
             ],
             "traCreator": 3300,
-            "troName": "DfT Example - Controlled Parking Zone, Coal Orchard, Taunton v1, Nov. 2024"
+            "troName": "DfT Example - TTRO road closure v1, Oct. 2024"
         }
     }
 }
