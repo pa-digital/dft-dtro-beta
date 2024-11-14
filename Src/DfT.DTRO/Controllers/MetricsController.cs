@@ -48,7 +48,18 @@ public class MetricsController : ControllerBase
                 nameof(HealthApi),
                 "/healthApi",
                 $"'{nameof(HealthApi)}' method called");
-            return Ok(true);
+
+            var now = DateTime.UtcNow;
+            var nowOffset = DateTimeOffset.Now;
+            StringBuilder sb = new StringBuilder($"DateTime.UtcNow: {now}", 100);
+            sb.Append("/n");
+            sb.Append($"DateTime.UtcNow.ToLocalTime(): {now.ToLocalTime()}");
+            sb.Append("/n");
+            sb.Append($"TimeZone.CurrentTimeZone.ToLocalTime(): {TimeZone.CurrentTimeZone.ToLocalTime(now)}");
+            sb.Append("/n");
+            sb.Append($"DateTimeOffset.Now: {nowOffset}");
+            sb.Append("/n");
+            return Ok(sb.ToString());
         }
         catch (Exception ex)
         {
