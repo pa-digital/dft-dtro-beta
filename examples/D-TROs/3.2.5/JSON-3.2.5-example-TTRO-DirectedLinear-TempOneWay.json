@@ -14,9 +14,9 @@
                         {
                             "isDynamic": false,
                             "timeZone": "Europe/London",
-                            "generalRegulation": {
+                            "GeneralRegulation": {
                                 "regulationType": "mandatoryDirectionOneWay"
-                            },
+                            }
                             "condition": [
                                                                 {
                                     "timeValidity": {
@@ -26,7 +26,7 @@
                                 }
                             ]
                         }
-                    ],
+					],
                     "regulatedPlace": [
                         {
                             "description": "Bishops Hull Road, between Waterfield Drive and Quartly Drive",

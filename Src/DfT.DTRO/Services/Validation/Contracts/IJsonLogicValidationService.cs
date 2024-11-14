@@ -6,7 +6,9 @@ namespace DfT.DTRO.Services.Validation.Contracts;
 
 public interface IJsonLogicValidationService
 {
-    Task<IList<SemanticValidationError>> ValidateCreationRequest(DtroSubmit request, string schemaVersion);
+    Task<IList<SemanticValidationError>> ValidateRules(DtroSubmit request, string schemaVersion);
 
-    IList<SemanticValidationError> ValidateCreationRequest(DtroSubmit request, SchemaVersion schemaVersion);
+    IList<SemanticValidationError> ValidateRegulatedPlacesType(DtroSubmit request, SchemaVersion schemaVersion);
+
+    IList<SemanticValidationError> ValidateRegulation(DtroSubmit dtroSubmit, SchemaVersion schemaVersion);
 }

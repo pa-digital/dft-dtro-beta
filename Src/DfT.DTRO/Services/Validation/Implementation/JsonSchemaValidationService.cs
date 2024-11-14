@@ -7,7 +7,7 @@ namespace DfT.DTRO.Services.Validation.Implementation;
 
 public class JsonSchemaValidationService : IJsonSchemaValidationService
 {
-    public IList<DtroJsonValidationErrorResponse> ValidateRequestAgainstJsonSchema(string jsonSchemaAsString, string inputJson)
+    public IList<DtroJsonValidationErrorResponse> ValidateSchema(string jsonSchemaAsString, string inputJson)
     {
         var parsedSchema = JSchema.Parse(jsonSchemaAsString);
         var parsedBody = JObject.Parse(inputJson);

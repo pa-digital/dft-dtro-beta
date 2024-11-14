@@ -14,7 +14,7 @@
                         {
                             "isDynamic": false,
                             "timeZone": "Europe/London",
-                            "generalRegulation": {
+                            "GeneralRegulation": {
                                 "regulationType": "miscRoadClosure"
                             },
                             "condition": [

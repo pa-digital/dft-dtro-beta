@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using DfT.DTRO.Services.Validation.Implementation;
 
 namespace Dft.DTRO.Tests.UnitTests;
 
@@ -37,7 +36,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -65,7 +64,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -94,7 +93,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -125,7 +124,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -156,7 +155,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -187,7 +186,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -218,7 +217,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -249,7 +248,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -280,7 +279,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -311,7 +310,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -342,7 +341,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -374,7 +373,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -405,7 +404,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -436,7 +435,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -467,7 +466,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -508,7 +507,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -549,7 +548,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
         Assert.Equal(2, result.Count);
@@ -583,7 +582,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -614,7 +613,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -642,7 +641,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -670,7 +669,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -697,7 +696,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -724,7 +723,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -743,7 +742,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -764,7 +763,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -785,7 +784,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -806,7 +805,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -840,7 +839,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -874,7 +873,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -890,7 +889,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -927,7 +926,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -963,7 +962,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1000,7 +999,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1037,7 +1036,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1074,7 +1073,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1115,7 +1114,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1152,7 +1151,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1189,7 +1188,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1230,7 +1229,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1273,7 +1272,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1316,7 +1315,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1345,7 +1344,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1381,7 +1380,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1417,7 +1416,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1455,7 +1454,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1493,7 +1492,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1533,7 +1532,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1573,7 +1572,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1613,7 +1612,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1653,7 +1652,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1693,7 +1692,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1733,7 +1732,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1773,7 +1772,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1813,7 +1812,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1855,7 +1854,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1897,7 +1896,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1939,7 +1938,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1981,7 +1980,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2026,7 +2025,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2078,7 +2077,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2131,7 +2130,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2186,7 +2185,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2223,7 +2222,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2260,7 +2259,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2297,7 +2296,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2334,7 +2333,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2372,7 +2371,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2409,7 +2408,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2447,7 +2446,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2484,7 +2483,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2521,7 +2520,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2558,7 +2557,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2596,7 +2595,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2633,7 +2632,7 @@ public class JsonLogicValidationTests
 
         JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }

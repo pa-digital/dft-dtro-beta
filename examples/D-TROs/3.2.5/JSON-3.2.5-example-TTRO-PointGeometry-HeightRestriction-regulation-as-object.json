@@ -10,37 +10,35 @@
                     "orderReportingPoint": "ttroTtmoNoticeOfIntention",
                     "provisionDescription": "Temporary height restriction (2.5m)",
                     "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
-                    "regulation": [
-                        {
-                            "isDynamic": false,
-                            "timeZone": "Europe/London",
-                            "SpeedLimitValueBased": {
-                                "type": "minimumSpeedLimit",
-								"mphValue": 30
+                    "regulation": {
+                        "isDynamic": false,
+                        "timeZone": "Europe/London",
+                        "SpeedLimitValueBased": {
+                            "type": "minimumSpeedLimit",
+                            "mphValue": 30
+                        },
+                        "condition": [
+                            {
+                                "timeValidity": {
+                                    "start": "2024-08-22T08:00:00",
+                                    "end": "2024-08-22T20:00:00"
+                                }
                             },
-                            "condition": [
-                                {
-                                    "timeValidity": {
-                                        "start": "2024-08-22T08:00:00",
-                                        "end": "2024-08-22T20:00:00"
-                                    }
-                                },
-                                {
-                                    "vehicleCondition": {
-                                        "vehicleCharacteristics": {
-                                            "MaximumHeightCharacteristic": {
-                                                "vehicleHeight": 2.5
-                                            }
+                            {
+                                "vehicleCondition": {
+                                    "vehicleCharacteristics": {
+                                        "MaximumHeightCharacteristic": {
+                                            "vehicleHeight": 2.5
                                         }
                                     }
                                 }
-                            ]
-                        }
-                    ],
+                            }
+                        ]
+                    },
                     "regulatedPlace": [
                         {
                             "description": "East Reach - Taunton",
-							"type": "regulationLocation",
+                            "type": "regulationLocation",
                             "PointGeometry": {
                                 "version": 1,
                                 "point": "SRID=27700;POINT(323544 124622)",

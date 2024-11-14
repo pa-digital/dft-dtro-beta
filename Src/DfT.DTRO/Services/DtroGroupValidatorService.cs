@@ -43,33 +43,37 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         var jsonSchemaAsString = schema.Template.ToIndentedJsonString();
         var dtroSubmitJson = dtroSubmit.Data.ToIndentedJsonString();
 
-        var requestComparedToSchema = _jsonSchemaValidationService.ValidateRequestAgainstJsonSchema(jsonSchemaAsString, dtroSubmitJson);
+        var requestComparedToSchema = _jsonSchemaValidationService.ValidateSchema(jsonSchemaAsString, dtroSubmitJson);
         if (requestComparedToSchema.Count > 0)
         {
             return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
         }
 
-        var requests = _recordManagementService.ValidateCreationRequest(dtroSubmit, headerTa);
+        var requests = _recordManagementService.ValidateRecordManagement(dtroSubmit, headerTa);
         if (requests.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requests.MapFrom() };
         }
 
-        var requestComparedToRules = await _jsonLogicValidationService.ValidateCreationRequest(dtroSubmit, schemaVersion.ToString());
-
+        var requestComparedToRules = await _jsonLogicValidationService.ValidateRules(dtroSubmit, schemaVersion.ToString());
         if (requestComparedToRules.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requestComparedToRules.MapFrom() };
         }
 
-        var requestComparedRegulatedPlaces = _jsonLogicValidationService.ValidateCreationRequest(dtroSubmit, schemaVersion);
+        var requestComparedRegulatedPlaces = _jsonLogicValidationService.ValidateRegulatedPlacesType(dtroSubmit, schemaVersion);
         if (requestComparedRegulatedPlaces.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requestComparedRegulatedPlaces.MapFrom() };
         }
 
-        var tuple = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);
+        var requestComparedToRegulations = _jsonLogicValidationService.ValidateRegulation(dtroSubmit, schemaVersion);
+        if (requestComparedToRegulations.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = requestComparedToRegulations.MapFrom() };
+        }
 
+        var tuple = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);
         if (tuple.Item2.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = tuple.Item2.MapFrom() };

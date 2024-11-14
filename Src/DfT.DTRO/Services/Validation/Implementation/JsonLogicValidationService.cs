@@ -17,7 +17,7 @@ public class JsonLogicValidationService : IJsonLogicValidationService
         _ruleTemplateDal = ruleTemplateDal;
     }
 
-    public async Task<IList<SemanticValidationError>> ValidateCreationRequest(DtroSubmit request, string schemaVersion)
+    public async Task<IList<SemanticValidationError>> ValidateRules(DtroSubmit request, string schemaVersion)
     {
         if (request.SchemaVersion < schemaVersion)
         {
@@ -51,7 +51,7 @@ public class JsonLogicValidationService : IJsonLogicValidationService
         return errors;
     }
 
-    public IList<SemanticValidationError> ValidateCreationRequest(DtroSubmit request, SchemaVersion schemaVersion)
+    public IList<SemanticValidationError> ValidateRegulatedPlacesType(DtroSubmit request, SchemaVersion schemaVersion)
     {
         var errors = new List<SemanticValidationError>();
 
@@ -85,6 +85,51 @@ public class JsonLogicValidationService : IJsonLogicValidationService
         };
         errors.Add(error);
 
+        return errors;
+    }
+
+    public IList<SemanticValidationError> ValidateRegulation(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
+    {
+        var errors = new List<SemanticValidationError>();
+
+        List<ExpandoObject> regulations = dtroSubmit
+            .Data
+            .GetValueOrDefault<IList<object>>("Source.provision")
+            .OfType<ExpandoObject>()
+            .SelectMany(expandoObject => expandoObject
+                .GetValue<IList<object>>("regulation")
+                .OfType<ExpandoObject>())
+            .ToList();
+
+        var areMultipleRegulations = regulations.Count > 1;
+        if (areMultipleRegulations)
+        {
+            SemanticValidationError error = new()
+            {
+                Name = "Regulations",
+                Message = "You have to have only one regulation in place.",
+                Path = "Source -> Provision -> Regulation",
+                Rule = "One regulation must be present.",
+            };
+            errors.Add(error);
+        }
+
+        var regulationTypes = typeof(RegulationType).GetDisplayNames<RegulationType>().ToList();
+        var passedInRegulations = regulations.SelectMany(regulation => regulation.Select(kv => kv.Key)).ToList();
+        var areAnyAcceptedRegulations = passedInRegulations.Any(it => regulationTypes.Any(it.Contains));
+
+
+        if (!areAnyAcceptedRegulations)
+        {
+            SemanticValidationError error = new()
+            {
+                Name = "Regulations",
+                Message = "You have to have only one accepted regulations.",
+                Path = "Source -> Provision -> Regulation",
+                Rule = $"One of '{string.Join(", ", regulationTypes)}' regulation must be present.",
+            };
+            errors.Add(error);
+        }
         return errors;
     }
 }

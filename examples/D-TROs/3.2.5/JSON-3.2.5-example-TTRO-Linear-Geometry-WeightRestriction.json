@@ -14,8 +14,8 @@
                         {
                             "isDynamic": false,
                             "timeZone": "Europe/London",
-                            "generalRegulation": {
-                                "regulationType": "dimensionMaximumWeightStructural"
+                            "SpeedLimitProfileBased": {
+                                "type": "nationalSpeedLimitMotorway"
                             },
                             "condition": [
                                 {
