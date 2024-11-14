@@ -1,5 +1,34 @@
 {
-	"$defs": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": true,
+    "description": "DTRO v3.2.5 data model JSON schema",
+    "oneOf": [
+        {
+            "additionalProperties": true,
+            "properties": {
+                "consultation": {
+                    "$ref": "#/$defs/Consultation"
+                }
+            },
+            "required": [
+                "Consultation"
+            ],
+            "type": "object"
+        },
+        {
+            "additionalProperties": true,
+            "properties": {
+                "source": {
+                    "$ref": "#/$defs/Source"
+                }
+            },
+            "required": [
+                "Source"
+            ],
+            "type": "object"
+        }
+    ],
+    "$defs": {
         "AccessCondition": {
             "allOf": [
                 {
@@ -26,8 +55,8 @@
                         "otherAccessRestriction": {
                             "description": "Free text description of other access restrictions.",
                             "type": "string",
-                            "minItems": 0,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 0
                         }
                     }
                 }
@@ -74,8 +103,8 @@
                 "name": {
                     "description": "Name of the authority issuing permits",
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -93,9 +122,9 @@
                             "items": {
                                 "$ref": "#/$defs/CalendarWeekInMonthType"
                             },
-                            "uniqueItems": true,
+                            "maxItems": 6,
                             "minItems": 1,
-                            "maxItems": 6
+                            "uniqueItems": true
                         }
                     }
                 }
@@ -154,8 +183,8 @@
                     "items": {
                         "$ref": "#/$defs/ChangeableTimeType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "periodEnd": {
                     "type": "array",
@@ -188,8 +217,8 @@
                     "description": "one value in a potential multi-value time set",
                     "type": "string",
                     "format": "date-time",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -214,15 +243,15 @@
                 "definition": {
                     "description": "indicates the type of changeable characteristic time measure used",
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "sourceLocator": {
                     "description": "URL where values and related dates of changeable characteristic time concepts are found",
                     "type": "string",
                     "format": "uri",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -256,8 +285,8 @@
                     "items": {
                         "$ref": "#/$defs/ChangeableTimeType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -286,21 +315,11 @@
             "type": "object",
             "description": "Abstract class that specifies a condition for the validity of a certain road feature such as time, weather conditions, vehicle type, vehicle propulsion fuel, vehicle occupancy, vehicle usage, vehicle dimensions or weight characteristics.",
             "properties": {
-                "ConditionSet": {
-                    "$ref": "#/$defs/ConditionSet"
-                },
-                "RateTable": {
-                    "$ref": "#/$defs/RateTable"
-                },
-                "Regulation": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/$defs/Regulation"
-                    },
-                    "minItems": 1
-                },
                 "AccessCondition": {
                     "$ref": "#/$defs/AccessCondition"
+                },
+                "ConditionSet": {
+                    "$ref": "#/$defs/ConditionSet"
                 },
                 "DriverCondition": {
                     "$ref": "#/$defs/DriverCondition"
@@ -314,6 +333,16 @@
                 "PermitCondition": {
                     "$ref": "#/$defs/PermitCondition"
                 },
+                "RateTable": {
+                    "$ref": "#/$defs/RateTable"
+                },
+                "Regulation": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/Regulation"
+                    },
+                    "minItems": 1
+                },
                 "RoadCondition": {
                     "$ref": "#/$defs/RoadCondition"
                 },
@@ -326,8 +355,8 @@
                 "negate": {
                     "description": "If set to true means that the entire condition shall be negated.",
                     "type": "boolean",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 }
             }
         },
@@ -361,8 +390,8 @@
                             "items": {
                                 "$ref": "#/$defs/ConditionOperatorType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -382,60 +411,60 @@
                 "consultationName": {
                     "description": "Free text descriptive name for the consultation given by the Traffic Regulation Authority.",
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "endOfConsultation": {
                     "description": "Time and date of the end of the consultation period",
                     "type": "string",
                     "format": "date-time",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "howToComment": {
                     "description": "Free text description detailing how to comment on the proposal which is the subject of the consultation.",
                     "type": "string",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "localReference": {
                     "description": "Free text reference to an identifier for the consultation defined by the Traffic Regulation Authority.",
                     "type": "string",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "pointOfContactAddress": {
                     "description": "Postal or office address location to support receipt of comments / objections to consultation proposals.",
                     "type": "string",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "pointOfContactEmail": {
                     "description": "Email address location to support receipt of comments / objections to consultation proposals.",
                     "type": "string",
                     "format": "email",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "startOfConsultation": {
                     "description": "Time and date of the start of the consultation period",
                     "type": "string",
                     "format": "date-time",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "statementOfReason": {
                     "description": "Statement of reason for the proposed traffic regulation measure",
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "urlAdditionalInformation": {
                     "description": "Web address (URL) for where to find further information related to the consultation.",
                     "type": "string",
                     "format": "uri",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 }
             }
         },
@@ -477,9 +506,9 @@
                     "items": {
                         "$ref": "#/$defs/DayType"
                     },
-                    "uniqueItems": true,
+                    "maxItems": 7,
                     "minItems": 0,
-                    "maxItems": 7
+                    "uniqueItems": true
                 },
                 "applicableMonth": {
                     "description": "Applicable month of the year.",
@@ -487,9 +516,9 @@
                     "items": {
                         "$ref": "#/$defs/MonthType"
                     },
-                    "uniqueItems": true,
+                    "maxItems": 12,
                     "minItems": 0,
-                    "maxItems": 12
+                    "uniqueItems": true
                 }
             }
         },
@@ -507,8 +536,8 @@
                         "directedLineString": {
                             "description": "string conforming to WKT standard defining a start and end point, and potentially intermediate points",
                             "type": "string",
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         },
                         "intermediateLocation": {
                             "type": "array",
@@ -542,14 +571,21 @@
                 {
                     "description": "Object indicating condition related to driver characteristics",
                     "properties": {
+                        "Condition": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/$defs/Condition"
+                            },
+                            "minItems": 1
+                        },
                         "driverCharacteristics": {
                             "description": "indicates a specific type of driver characteristic",
                             "type": "array",
                             "items": {
                                 "$ref": "#/$defs/DriverCharacteristicsType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -571,10 +607,10 @@
                     "items": {
                         "type": "integer"
                     },
+                    "maxItems": 1,
                     "maximum": 99999999,
-                    "minimum": 0,
                     "minItems": 1,
-                    "maxItems": 1
+                    "minimum": 0
                 }
             }
         },
@@ -611,12 +647,15 @@
                     "items": {
                         "$ref": "#/$defs/EmissionClassificationEuroType"
                     },
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "emissionClassificationOther": {
                     "description": "Locally defined value(s) for emission classification.",
-                    "type": "string",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
                     "minItems": 0
                 }
             }
@@ -628,8 +667,8 @@
                 "definition": {
                     "description": "user defined definition for the new list entry",
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "enumeratedList": {
                     "description": "enumeration list of the data model that the next list entry is to be applied to",
@@ -637,14 +676,14 @@
                     "items": {
                         "$ref": "#/$defs/TargetEnumeratedList"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "value": {
                     "description": "The user-defined value for the extended enumeration literal entry.",
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -674,8 +713,8 @@
                 "lastUpdateDate": {
                     "type": "string",
                     "format": "date-time",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -716,14 +755,21 @@
                 {
                     "description": "Object indicating a specific regulation (other than speed limit or user-defined off-list regulation)",
                     "properties": {
+                        "Regulation": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/$defs/Regulation"
+                            },
+                            "minItems": 1
+                        },
                         "regulationType": {
                             "description": "Indicates the status of this Regulation",
                             "type": "array",
                             "items": {
                                 "$ref": "#/$defs/RegulationType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -742,8 +788,8 @@
                 },
                 "version": {
                     "type": "number",
-                    "minItems": 1,
                     "maxItems": 1,
+                    "minItems": 1,
                     "multipleOf": 1
                 }
             }
@@ -762,9 +808,9 @@
                 "heaviestAxleWeight": {
                     "description": "indicates a characteristic relating to the heaviest axle of vehicle. Defined in metric tonnes, with one decimal place",
                     "type": "number",
-                    "multipleOf": 0.10000000000000001,
+                    "maxItems": 1,
                     "minItems": 1,
-                    "maxItems": 1
+                    "multipleOf": 0.10000000000000001
                 }
             }
         },
@@ -793,9 +839,9 @@
                             "items": {
                                 "$ref": "#/$defs/InstanceOfDayInMonth"
                             },
-                            "uniqueItems": true,
+                            "maxItems": 5,
                             "minItems": 1,
-                            "maxItems": 5
+                            "uniqueItems": true
                         }
                     }
                 }
@@ -831,8 +877,8 @@
                             "items": {
                                 "$ref": "#/$defs/LinearDirectionType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         },
                         "lateralPosition": {
                             "description": "indicates the lateral position across a road of the linear representation of a regulated place.",
@@ -840,13 +886,13 @@
                             "items": {
                                 "$ref": "#/$defs/LinearLateralPositionType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         },
                         "linestring": {
                             "type": "string",
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         },
                         "representation": {
                             "description": "indicates the nature of the point location for a linear representation of a regulated place.",
@@ -854,8 +900,8 @@
                             "items": {
                                 "$ref": "#/$defs/LinearType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -893,9 +939,9 @@
                 "grossVehicleWeight": {
                     "description": "The gross weight of the vehicle and its load, including any trailers. Defined in metric tonnes, with one decimal place",
                     "type": "number",
-                    "multipleOf": 0.10000000000000001,
+                    "maxItems": 1,
                     "minItems": 1,
-                    "maxItems": 1
+                    "multipleOf": 0.10000000000000001
                 },
                 "typeOfWeight": {
                     "description": "The meaning of the weight value",
@@ -903,8 +949,8 @@
                     "items": {
                         "$ref": "#/$defs/WeightType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -922,9 +968,9 @@
                 "vehicleHeight": {
                     "description": "height of the highest part, excluding antennae, of an individual vehicle from the reference plane defined by the bottom of the wheels touching the ground, in metres, defined to two decimal places.",
                     "type": "number",
-                    "multipleOf": 0.01,
+                    "maxItems": 1,
                     "minItems": 1,
-                    "maxItems": 1
+                    "multipleOf": 0.01
                 }
             }
         },
@@ -942,9 +988,9 @@
                 "vehicleLength": {
                     "description": "The overall distance between the front and back of an individual vehicle, including the length of any trailers, couplings, embedded features etc., in metres, to two decimal places.",
                     "type": "number",
-                    "multipleOf": 0.01,
+                    "maxItems": 1,
                     "minItems": 1,
-                    "maxItems": 1
+                    "multipleOf": 0.01
                 }
             }
         },
@@ -962,9 +1008,9 @@
                 "vehicleWidth": {
                     "description": "The maximum width of an individual vehicle, including any features embedded or fixed on it, in metres, to two decimal places.",
                     "type": "number",
-                    "multipleOf": 0.01,
+                    "maxItems": 1,
                     "minItems": 1,
-                    "maxItems": 1
+                    "multipleOf": 0.01
                 }
             }
         },
@@ -1007,8 +1053,8 @@
                             "items": {
                                 "$ref": "#/$defs/NonVehicularRoadUserType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -1041,15 +1087,15 @@
                     "items": {
                         "$ref": "#/$defs/ComparisonOperatorType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "numberOfAxles": {
                     "description": "The total number of axles of an individual vehicle.",
                     "type": "number",
                     "multipleOf": 1,
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -1070,15 +1116,15 @@
                     "items": {
                         "$ref": "#/$defs/ComparisonOperatorType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "value": {
                     "description": "Indicates the number of occupants.",
                     "type": "number",
                     "multipleOf": 1,
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -1108,8 +1154,8 @@
                         "disabledWithPermit": {
                             "description": "Indicates registered disabled permit holder",
                             "type": "boolean",
-                            "minItems": 0,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 0
                         }
                     }
                 }
@@ -1123,6 +1169,13 @@
                 {
                     "description": "Object indicating type of regulation other than those already listed (extension mechanism)",
                     "properties": {
+                        "Regulation": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/$defs/Regulation"
+                            },
+                            "minItems": 1
+                        },
                         "legislationCrossReference": {
                             "description": "Cross reference to legislative instruments and orders for this regulation",
                             "type": "array",
@@ -1134,14 +1187,14 @@
                         "regulationFullText": {
                             "description": "Full description of the other type of regulation",
                             "type": "string",
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         },
                         "regulationShortName": {
                             "description": "User-defined short name for other type of regulation",
                             "type": "string",
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -1194,21 +1247,21 @@
                     "description": "end date time of period",
                     "type": "string",
                     "format": "date-time",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "periodName": {
                     "description": "Free text name of the period.",
                     "type": "string",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "recurrents": {
                     "description": "the number of repetitions of a repeating period",
                     "type": "number",
                     "multipleOf": 1,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "recurringDayWeekMonthPeriod": {
                     "type": "array",
@@ -1221,8 +1274,8 @@
                     "description": "the duration between the start of instances of repeating periods. Where changeable start and end time concepts are defined (such as Easter) this duration should be set to an appropriate duration (e.g. one year) if the changeable time concept follows a known pattern.",
                     "type": "number",
                     "multipleOf": 1,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "recurringSpecialDay": {
                     "type": "array",
@@ -1242,8 +1295,8 @@
                     "description": "start date time of period",
                     "type": "string",
                     "format": "date-time",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 }
             }
         },
@@ -1271,15 +1324,15 @@
                         "locationRelatedPermit": {
                             "description": "is the referenced permit related to a specified geography?",
                             "type": "boolean",
-                            "minItems": 0,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 0
                         },
                         "maxDurationOfPermit": {
                             "description": "The maximum validity duration a permit has in minutes",
                             "type": "number",
                             "multipleOf": 1,
-                            "minItems": 0,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 0
                         },
                         "permitIdentifier": {
                             "description": "identifier for the permit scheme referenced (e.g. resident parking zone A)",
@@ -1292,8 +1345,8 @@
                         "schemeIdentifier": {
                             "description": "free text name for the permit scheme referenced",
                             "type": "string",
-                            "minItems": 0,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 0
                         },
                         "type": {
                             "description": "the type of the referenced permit",
@@ -1301,20 +1354,21 @@
                             "items": {
                                 "$ref": "#/$defs/PermitType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         },
                         "whereToApplyForPermit": {
                             "description": "URL of the competent authority where an application for a permit can be requested",
                             "type": "string",
-                            "minItems": 0,
-                            "maxItems": 1
+                            "format": "uri",
+                            "maxItems": 1,
+                            "minItems": 0
                         },
                         "whereToCallForPermit": {
                             "description": "Contact telephone number of the competent authority where an application for a permit can be requested",
                             "type": "string",
-                            "minItems": 0,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 0
                         }
                     }
                 }
@@ -1334,30 +1388,30 @@
                 "amountDue": {
                     "description": "Monetary amount related to use of or purchase of permit. Defined in Pounds Sterling, to two decimal places (pence)",
                     "type": "number",
+                    "maxItems": 1,
                     "multipleOf": 0.01,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "minItems": 0
                 },
                 "maximumAccessDuration": {
                     "description": "Maximum duration that is permitted in relationship to use of this permit. Defined in minutes.",
                     "type": "number",
+                    "maxItems": 1,
                     "multipleOf": 1,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "minItems": 0
                 },
                 "minimumTimeToNextEntry": {
                     "description": "Minimum duration between last use of permit and next permitted use of permit. Defined in minutes.",
                     "type": "number",
+                    "maxItems": 1,
                     "multipleOf": 1,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "minItems": 0
                 },
                 "paymentInformation": {
                     "description": "URL for further information on permit and related payment",
                     "type": "string",
                     "format": "uri",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 }
             }
         },
@@ -1386,8 +1440,8 @@
                         },
                         "point": {
                             "type": "string",
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         },
                         "representation": {
                             "description": "indicates the nature of the point location for a point representation of a regulated place.",
@@ -1395,8 +1449,8 @@
                             "items": {
                                 "$ref": "#/$defs/PointType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -1429,8 +1483,8 @@
                         "polygon": {
                             "description": "string conforming to WKT standard defining a closed polygon",
                             "type": "string",
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -1466,27 +1520,27 @@
                     "items": {
                         "$ref": "#/$defs/ActionType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "orderReportingPoint": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/OrderReportingPointType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "provisionDescription": {
                     "description": "free text description of the referenced provision",
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "reference": {
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -1567,8 +1621,8 @@
                         "publicHolidayName": {
                             "description": "free text name for the referenced public holiday",
                             "type": "string",
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -1588,50 +1642,51 @@
                 "description": {
                     "description": "free-text description associated with this rate line.",
                     "type": "string",
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "durationEnd": {
                     "description": "If used, indicates the end time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session. e.g. the end of a time-based tier charge rate.",
                     "type": "string",
-                    "format": "time",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "format": "date",
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "durationStart": {
                     "description": "If used, indicates the start time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session. e.g. the start of a time-based tier charge rate.",
                     "type": "string",
-                    "format": "time",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "format": "date",
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "incrementPeriod": {
                     "description": "the time period for incrementing the rate line charge. If set to the same as the duration of the period between the durationStart and durationEnd the increment will occur once per period, i.e. a flat rate time-based tier charge rate. The duration is defined in integer minutes.",
                     "type": "number",
                     "multipleOf": 1,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "maxValue": {
                     "description": "The maximum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places.",
                     "type": "number",
                     "multipleOf": 0.01,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "minValue": {
                     "description": "The minimum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places.",
                     "type": "number",
                     "multipleOf": 0.01,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "sequence": {
                     "description": "the ordered sequence of this RateLine instance within the RateLineCollection. Used to define the order of operation of multiple rate lines. Typically used to ensure taxes and surcharges are applied correctly.",
                     "type": "number",
                     "multipleOf": 1,
-                    "minimum": 0,
+                    "maxItems": 1,
                     "minItems": 1,
-                    "maxItems": 1
+                    "minimum": 0
                 },
                 "type": {
                     "description": "indicates the nature of the rate line.",
@@ -1639,8 +1694,8 @@
                     "items": {
                         "$ref": "#/$defs/RateLineType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "usageCondition": {
                     "description": "Indicates conditions on the use of this rate line.",
@@ -1648,15 +1703,15 @@
                     "items": {
                         "$ref": "#/$defs/RateUsageConditionsType"
                     },
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "value": {
                     "description": "the value of the fee to be charged in respect of this rate line.  Defined in applicable currency with 2 decimal places.",
                     "type": "number",
-                    "multipleOf": 1,
-                    "minItems": 1,
-                    "maxItems": 1
+                    "multipleOf": 0.01,
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -1684,64 +1739,64 @@
                     "items": {
                         "$ref": "#/$defs/CurrencyType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "endValidUsagePeriod": {
                     "description": "the end time for the validity of this rate line collection.",
                     "type": "string",
                     "format": "date-time",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "maxTime": {
                     "description": "A maximum session duration to be applied to this rate line collection, specified in integer minutes.",
                     "type": "number",
                     "multipleOf": 1,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "maxValueCollection": {
                     "description": "The maximum monetary amount to be applied in conjunction with use of this rate line collection.  Defined in applicable currency with 2 decimal places.",
                     "type": "number",
+                    "maxItems": 1,
                     "multipleOf": 0.01,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "minItems": 0
                 },
                 "minTime": {
                     "description": "A minimum session duration to be applied to this rate line collection. Defined in integer minutes.",
                     "type": "number",
                     "multipleOf": 1,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "minValueCollection": {
                     "description": "The minimum monetary amount to be applied in conjunction with use of this rate line collection. Defined in applicable currency with 2 decimal places.",
                     "type": "number",
+                    "maxItems": 1,
                     "multipleOf": 0.01,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "minItems": 0
                 },
                 "resetTime": {
                     "description": "Time that rate resets.  Example a rate table that charges £2 per hour with a max value collection of £10, resets at 2 am.  At 2 am the £2 per hour fee would start to charge until the £10 is reached.",
                     "type": "string",
                     "format": "time",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "sequence": {
                     "description": "An indicator giving the place in sequence of this rate line collection.",
                     "type": "number",
                     "multipleOf": 1,
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "startValidUsagePeriod": {
                     "description": "the start time for the validity of this rate line collection.",
                     "type": "string",
                     "format": "date-time",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -1777,17 +1832,17 @@
                     "description": "URI locator for supplementary additional information concerning use of the rate table.",
                     "type": "string",
                     "format": "uri",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "type": {
-                    "description": "Defines the type of rate in use.",
+                    "description": "Defines the type of rate in use. [Defined by APDS - ISO/TS 5206-1]",
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/RateType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 }
             }
         },
@@ -1830,8 +1885,8 @@
                 "description": {
                     "description": "Free text description of the regulated place",
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "type": {
                     "description": "Free text description of the regulated place",
@@ -1839,8 +1894,8 @@
                     "items": {
                         "$ref": "#/$defs/RegulatedPlaceType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -1863,12 +1918,24 @@
                     },
                     "minItems": 0
                 },
+                "GeneralRegulation": {
+                    "$ref": "#/$defs/GeneralRegulation"
+                },
+                "OffListRegulation": {
+                    "$ref": "#/$defs/OffListRegulation"
+                },
                 "Provision": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Provision"
                     },
                     "minItems": 1
+                },
+                "SpeedLimitProfileBased": {
+                    "$ref": "#/$defs/SpeedLimitProfileBased"
+                },
+                "SpeedLimitValueBased": {
+                    "$ref": "#/$defs/SpeedLimitValueBased"
                 },
                 "TemporaryRegulation": {
                     "type": "array",
@@ -1887,14 +1954,14 @@
                 "isDynamic": {
                     "description": "Indicates if the regulation is dynamic in nature",
                     "type": "boolean",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "timeZone": {
                     "description": "IANA time-zone (see http://www.iana.org/time-zones)",
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -1939,13 +2006,28 @@
                 "mandatoryDirectionLeftTurnOnly",
                 "mandatoryDirectionOneWay",
                 "mandatoryDirectionRightTurnOnly",
+                "miscBaySuspension",
                 "miscBusGate",
                 "miscBusLaneWithTrafficFlow",
                 "miscBusOnlyStreet",
                 "miscCongestionLowEmissionZone",
+                "miscContraflow",
                 "miscContraflowBusLane",
                 "miscCycleLane",
+                "miscCycleLaneClosure",
+                "miscFootwayClosure",
+                "miscLaneClosure",
+                "miscPROWClosure",
                 "miscPedestrianZone",
+                "miscRoadClosure",
+                "miscRoadClosureCrossingPoint",
+                "miscSuspensionOfBusway",
+                "miscSuspensionOfOneWay",
+                "miscSuspensionOfParkingRestriction",
+                "miscSuspensionOfWeightRestriction",
+                "miscTemporaryParkingBay",
+                "miscTemporaryParkingRestriction",
+                "miscTemporarySpeedLimit",
                 "movementOrderNoOvertaking",
                 "movementOrderPriorityOverOncomingTraffic",
                 "movementOrderProhibitedAccess",
@@ -1973,16 +2055,16 @@
                             "description": "Indicates the type of road",
                             "type": "array",
                             "items": {
-                                "$ref": "#/$defs/RoadTypeEnum"
+                                "$ref": "#/$defs/RoadType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
             ]
         },
-        "RoadTypeEnum": {
+        "RoadType": {
             "description": "List of road types",
             "type": "string",
             "enum": [
@@ -2016,20 +2098,20 @@
                     "items": {
                         "$ref": "#/$defs/ActionType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "currentTraOwner": {
                     "description": "Current Traffic Regulation Authority maintaining this TRO (SWA-like code)",
-                    "type": "string",
+                    "type": "number",
                     "multipleOf": 1,
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "reference": {
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "section": {
                     "description": "Reference to the section of the TRO",
@@ -2039,24 +2121,25 @@
                 },
                 "traAffected": {
                     "description": "Traffic Regulation Authorities who roads are affected by this TRO",
-                    "type": "number",
-                    "multipleOf": 1,
+                    "type": "array",
+                    "items": {
+                        "type": "number",
+                        "multipleOf": 1
+                    },
                     "minItems": 1
                 },
                 "traCreator": {
                     "description": "Highway Regulartion Authority (SWA-like code)",
-                    "type": "array",
-                    "items": {
-                        "type": "number"
-                    },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "type": "number",
+                    "multipleOf": 1,
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "troName": {
                     "description": "Published title of the Traffic Regulation Order",
                     "type": "string",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -2088,8 +2171,8 @@
                 "intersectWithApplicableDays": {
                     "description": "When true, the period is the intersection of applicable days and this special day. When false, the period is the union of applicable days and this special day.",
                     "type": "boolean",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "publicEvent": {
                     "description": "Type of public event on this special day.",
@@ -2097,8 +2180,8 @@
                     "items": {
                         "$ref": "#/$defs/PublicEventType"
                     },
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "specialDayType": {
                     "description": "Specification of a special day, for example schoolDay, publicHoliday, ...",
@@ -2106,8 +2189,8 @@
                     "items": {
                         "$ref": "#/$defs/SpecialDayType"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -2126,18 +2209,6 @@
                 "schoolDay"
             ]
         },
-        "SpeedLimit": {
-            "allOf": [
-                {
-                    "$ref": "#/$defs/Regulation"
-                },
-                {
-                    "description": "Abstract object representing a speed limit regulation",
-                    "properties": {
-                    }
-                }
-            ]
-        },
         "SpeedLimitProfileBased": {
             "allOf": [
                 {
@@ -2146,14 +2217,21 @@
                 {
                     "description": "Object indicating characteristics related to speed limits defined by profile",
                     "properties": {
+                        "Regulation": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/$defs/Regulation"
+                            },
+                            "minItems": 1
+                        },
                         "type": {
                             "description": "nature of the speed limit profile used",
                             "type": "array",
                             "items": {
                                 "$ref": "#/$defs/SpeedLimitProfileType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -2176,6 +2254,13 @@
                 {
                     "description": "Object indicating speed limit regulation - defined by speed value",
                     "properties": {
+                        "Regulation": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/$defs/Regulation"
+                            },
+                            "minItems": 1
+                        },
                         "mphValue": {
                             "description": "speed limit value in mph",
                             "type": "number",
@@ -2187,8 +2272,8 @@
                             "items": {
                                 "$ref": "#/$defs/SpeedLimitValueType"
                             },
-                            "minItems": 1,
-                            "maxItems": 1
+                            "maxItems": 1,
+                            "minItems": 1
                         }
                     }
                 }
@@ -2233,8 +2318,8 @@
                     "items": {
                         "$ref": "#/$defs/Regulation"
                     },
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -2253,15 +2338,15 @@
                     "description": "End of time period.",
                     "type": "string",
                     "format": "time",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "startTimeOfPeriod": {
                     "description": "Start of time period.",
                     "type": "string",
                     "format": "time",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 }
             }
         },
@@ -2287,8 +2372,8 @@
                     "description": "End of Overall Period.",
                     "type": "string",
                     "format": "date-time",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "exceptionPeriod": {
                     "type": "array",
@@ -2301,8 +2386,8 @@
                     "description": "Start of Overall Period",
                     "type": "string",
                     "format": "date-time",
-                    "minItems": 1,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 1
                 },
                 "validPeriod": {
                     "type": "array",
@@ -2329,19 +2414,21 @@
                 },
                 "nsgStreetName": {
                     "type": "string",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "nsgStreetNumber": {
                     "type": "string",
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "usrn": {
                     "type": "number",
                     "multipleOf": 1,
+                    "maxItems": 1,
                     "minItems": 1,
-                    "maxItems": 1
+                    "minimum": 0,
+                    "maximum": 99999999
                 }
             }
         },
@@ -2422,8 +2509,8 @@
                     "items": {
                         "$ref": "#/$defs/PayloadType"
                     },
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "vehicleEquipment": {
                     "description": "The type of equipment in use or on board the vehicle.",
@@ -2431,8 +2518,8 @@
                     "items": {
                         "$ref": "#/$defs/VehicleEquipmentType"
                     },
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "vehicleType": {
                     "description": "Vehicle type",
@@ -2448,15 +2535,15 @@
                     "items": {
                         "$ref": "#/$defs/VehicleUsageType"
                     },
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 },
                 "yearOfFirstRegistration": {
                     "description": "Year of first registration of the vehicle",
                     "type": "number",
                     "multipleOf": 1,
-                    "minItems": 0,
-                    "maxItems": 1
+                    "maxItems": 1,
+                    "minItems": 0
                 }
             }
         },
@@ -2571,9 +2658,9 @@
                             "items": {
                                 "$ref": "#/$defs/WeekInMonthType"
                             },
-                            "uniqueItems": true,
+                            "maxItems": 5,
                             "minItems": 1,
-                            "maxItems": 5
+                            "uniqueItems": true
                         }
                     }
                 }
@@ -2589,35 +2676,5 @@
                 "unladen"
             ]
         }
-    },
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "additionalProperties": true,
-    "description": "DTRO v3.2.5 data model JSON schema",
-    "oneOf": [
-        {
-            "additionalProperties": true,
-            "properties": {
-                "consultation": {
-                    "$ref": "#/$defs/Consultation"
-                }
-            },
-            "required": [
-                "Consultation"
-            ],
-            "type": "object"
-        },
-        {
-            "additionalProperties": true,
-            "properties": {
-                "source": {
-                    "$ref": "#/$defs/Source"
-                }
-            },
-            "required": [
-                "Source"
-            ],
-            "type": "object"
-        }
-    ],
-    "type": "object"
+    }
 }
