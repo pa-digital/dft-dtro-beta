@@ -19,13 +19,13 @@
                             },
                             "condition": [
                                 {
-                                    "timeValidity": {
+                                    "TimeValidity": {
                                         "start": "2024-08-01T08:00:00",
                                         "end": "2024-11-29T18:00:00"
                                     }
                                 },
                                 {
-                                    "vehicleCondition": {
+                                    "VehicleCondition": {
                                         "vehicleCharacteristics": {
                                             "MaximumGrossWeightCharacteristic": {
                                                 "grossVehicleWeight": 2,
