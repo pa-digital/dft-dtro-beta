@@ -9,15 +9,6 @@ namespace DfT.DTRO.Models.Conditions;
 [JsonConverter(typeof(ConditionSetJsonConverter))]
 public class ConditionSet : Condition, IEnumerable<Condition>
 {
-    //public enum OperatorType
-    //{
-    //    And,
-
-    //    Or,
-
-    //    XOr,
-    //}
-
     private readonly IEnumerable<Condition> _conditions;
 
     public OperatorType Operator { get; init; }

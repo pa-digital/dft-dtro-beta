@@ -106,19 +106,6 @@ public class JsonLogicValidationService : IJsonLogicValidationService
                 .OfType<ExpandoObject>())
             .ToList();
 
-        var areMultipleRegulations = regulations.Count > 1;
-        if (areMultipleRegulations)
-        {
-            SemanticValidationError error = new()
-            {
-                Name = "Regulations",
-                Message = "You have to have only one regulation in place.",
-                Path = "Source -> Provision -> Regulation",
-                Rule = "One regulation must be present.",
-            };
-            errors.Add(error);
-        }
-
         var regulationTypes = typeof(RegulationType).GetDisplayNames<RegulationType>().ToList();
         var passedInRegulations = regulations.SelectMany(regulation => regulation.Select(kv => kv.Key)).ToList();
         var areAnyAcceptedRegulations = passedInRegulations.Any(passedInRegulation => regulationTypes.Any(passedInRegulation.Contains));
@@ -208,7 +195,7 @@ public class JsonLogicValidationService : IJsonLogicValidationService
             SemanticValidationError error = new()
             {
                 Name = "Condition",
-                Message = "You have to have at least one accepted condition.",
+                Message = "One or more conditions are not accepted.",
                 Path = "Source -> Provision -> Regulation -> Condition",
                 Rule = $"One or more of '{string.Join(", ", conditionTypes)}' conditions must be present.",
             };
