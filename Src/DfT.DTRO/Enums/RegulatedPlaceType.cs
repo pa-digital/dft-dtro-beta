@@ -6,12 +6,6 @@
 public enum RegulatedPlaceType
 {
     /// <summary>
-    /// None
-    /// </summary>
-    [Display(Name = "None")]
-    None = 0,
-
-    /// <summary>
     /// Indicates that the given location represents the location of the effect of the Regulation.
     /// </summary>
     [Display(Name = "regulationLocation")]

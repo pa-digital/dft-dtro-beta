@@ -2,6 +2,6 @@
 <SpikeArrest continueOnError="false" enabled="true" name="SA-Rate-Limiting">
   <DisplayName>SA-Rate-Limiting</DisplayName>
   <Properties/>
-  <Rate>16pm</Rate>
-  <UseEffectiveCount>false</UseEffectiveCount>
+  <Rate>30pm</Rate>
+  <UseEffectiveCount>true</UseEffectiveCount>
 </SpikeArrest>

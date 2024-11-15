@@ -1,5 +1,4 @@
 ﻿using DfT.DTRO.Services.Validation.Contracts;
-using DfT.DTRO.Services.Validation.Implementation;
 
 namespace DfT.DTRO.Extensions.DependencyInjection;
 
@@ -11,8 +10,11 @@ public static class JsonLogic
     public static IServiceCollection AddJsonLogic(this IServiceCollection services, Assembly assembly = null)
     {
         services.AddScoped<IJsonLogicRuleSource, FileJsonLogicRuleSource>();
-        services.AddScoped<IJsonLogicValidationService, JsonLogicValidationService>();
+        services.AddScoped<IRulesValidation, RulesValidation>();
         services.AddScoped<IRecordManagementService, RecordManagementService>();
+        services.AddScoped<IRegulatedPlaceValidation, RegulatedPlaceValidation>();
+        services.AddScoped<IRegulationValidation, RegulationValidation>();
+        services.AddScoped<IConditionValidation, ConditionValidation>();
 
         AddAllRules(assembly ?? Assembly.GetExecutingAssembly());
 

@@ -354,7 +354,7 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /dtros/ownership/{id}/{assignToTraId}:
+  /dtros/Ownership/{id}/{assignToTraId}:
     post:
       tags:
         - DTROs

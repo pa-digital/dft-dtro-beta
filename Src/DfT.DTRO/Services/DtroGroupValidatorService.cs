@@ -7,21 +7,30 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly IJsonSchemaValidationService _jsonSchemaValidationService;
     private readonly ISchemaTemplateService _schemaTemplateService;
     private readonly ISemanticValidationService _semanticValidationService;
-    private readonly IJsonLogicValidationService _jsonLogicValidationService;
+    private readonly IRulesValidation _rulesValidation;
     private readonly IRecordManagementService _recordManagementService;
+    private readonly IRegulatedPlaceValidation _regulatedPlaceValidation;
+    private readonly IRegulationValidation _regulationValidation;
+    private readonly IConditionValidation _conditionValidation;
 
     public DtroGroupValidatorService(
         IJsonSchemaValidationService jsonSchemaValidationService,
         ISemanticValidationService semanticValidationService,
         ISchemaTemplateService schemaTemplateService,
-        IJsonLogicValidationService jsonLogicValidationService,
-        IRecordManagementService recordManagementService)
+        IRulesValidation rulesValidation,
+        IRecordManagementService recordManagementService,
+        IRegulatedPlaceValidation regulatedPlaceValidation,
+        IRegulationValidation regulationValidation,
+        IConditionValidation conditionValidation)
     {
         _jsonSchemaValidationService = jsonSchemaValidationService;
         _semanticValidationService = semanticValidationService;
         _schemaTemplateService = schemaTemplateService;
-        _jsonLogicValidationService = jsonLogicValidationService;
+        _rulesValidation = rulesValidation;
         _recordManagementService = recordManagementService;
+        _regulatedPlaceValidation = regulatedPlaceValidation;
+        _regulationValidation = regulationValidation;
+        _conditionValidation = conditionValidation;
     }
 
     public async Task<DtroValidationException> ValidateDtro(DtroSubmit dtroSubmit, int? headerTa)
@@ -55,25 +64,25 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToRules = requests.MapFrom() };
         }
 
-        var requestComparedToRules = await _jsonLogicValidationService.ValidateRules(dtroSubmit, schemaVersion.ToString());
+        var requestComparedToRules = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
         if (requestComparedToRules.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requestComparedToRules.MapFrom() };
         }
 
-        var requestComparedRegulatedPlaces = _jsonLogicValidationService.ValidateRegulatedPlacesType(dtroSubmit, schemaVersion);
+        var requestComparedRegulatedPlaces = _regulatedPlaceValidation.ValidateRegulatedPlacesType(dtroSubmit, schemaVersion);
         if (requestComparedRegulatedPlaces.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requestComparedRegulatedPlaces.MapFrom() };
         }
 
-        var requestComparedToRegulations = _jsonLogicValidationService.ValidateRegulation(dtroSubmit, schemaVersion);
+        var requestComparedToRegulations = _regulationValidation.ValidateRegulation(dtroSubmit, schemaVersion);
         if (requestComparedToRegulations.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requestComparedToRegulations.MapFrom() };
         }
 
-        var requestComparedToConditions = _jsonLogicValidationService.ValidateCondition(dtroSubmit, schemaVersion);
+        var requestComparedToConditions = _conditionValidation.ValidateCondition(dtroSubmit, schemaVersion);
         if (requestComparedToConditions.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requestComparedToConditions.MapFrom() };
