@@ -52,14 +52,14 @@ public class MetricsController : ControllerBase
             var now = DateTime.UtcNow;
             var nowOffset = DateTimeOffset.Now;
             StringBuilder sb = new StringBuilder($"DateTime.UtcNow: {now}", 100);
-            sb.Append("/n");
+            sb.Append(Environment.NewLine);
             sb.Append($"DateTime.UtcNow.ToLocalTime(): {now.ToLocalTime()}");
-            sb.Append("/n");
+            sb.Append(Environment.NewLine);
             sb.Append($"TimeZone.CurrentTimeZone.ToLocalTime(): {TimeZone.CurrentTimeZone.ToLocalTime(now)}");
-            sb.Append("/n");
+            sb.Append(Environment.NewLine);
             sb.Append($"DateTimeOffset.Now: {nowOffset}");
-            sb.Append("/n");
-            Console.WriteLine($"#*# sb: {sb}");
+            sb.Append(Environment.NewLine);
+            Console.WriteLine(sb.ToString());
 
             return Ok(true);
         }
