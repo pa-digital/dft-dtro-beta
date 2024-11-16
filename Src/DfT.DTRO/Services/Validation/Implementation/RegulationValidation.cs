@@ -1,5 +1,6 @@
 ﻿using DfT.DTRO.Models.Validation;
 using DfT.DTRO.Services.Validation.Contracts;
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace DfT.DTRO.Services.Validation.Implementation;
 

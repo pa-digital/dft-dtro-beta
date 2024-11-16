@@ -36,13 +36,13 @@ public static class ExpandoObjectExtensions
     }
 
     public static T GetValueOrDefault<T>(this ExpandoObject source, string path)
-        => (path.Split('.') is string[] split && split.Length > 1)
+        => path.Split('.') is { Length: > 1 } split
             ? source.GetValueOrDefault<T>(split)
             : source.GetFieldValueOrDefault<T>(path);
 
     public static void PutValue<T>(this ExpandoObject source, string path, T value)
     {
-        if (path.Split('.') is string[] split && split.Length > 1)
+        if (path.Split('.') is { Length: > 1 } split)
         {
             source.PutValue(split, value);
         }
