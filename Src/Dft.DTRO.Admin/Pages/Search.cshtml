@@ -71,17 +71,8 @@
 
 <!-- Record count and Pagination Controls -->
 <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-    <!-- Record Count Display -->
-    <div>
-        @if (Model.Dtros.TotalCount > 0)
-        {
-            var startRecord = (Model.Dtros.Page - 1) * Model.Dtros.PageSize + 1;
-            var endRecord = Math.Min(Model.Dtros.Page * Model.Dtros.PageSize, Model.Dtros.TotalCount);
-            <span>TRO @startRecord - @endRecord out of @Model.Dtros.TotalCount</span>
-        }
-    </div>
     <!-- Pagination Controls -->
-    <div>
+    <div style="flex: 1; text-align: right;">
         @if (Model.Dtros.TotalCount > Model.Dtros.PageSize)
         {
             <nav aria-label="Page navigation example">
@@ -93,14 +84,18 @@
                         </li>
                     }
 
-                    @for (int i = 1; i <= Math.Ceiling((double)Model.Dtros.TotalCount / Model.Dtros.PageSize); i++)
+                    @{
+                        int totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / Model.Dtros.PageSize);
+                    }
+
+                    @for (int i = 1; i <= totalPages; i++)
                     {
                         <li class="page-item @(i == Model.Dtros.Page ? "active" : "")">
                             <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@i">@i</a>
                         </li>
                     }
 
-                    @if (Model.Dtros.Page < Math.Ceiling((double)Model.Dtros.TotalCount / Model.Dtros.PageSize))
+                    @if (Model.Dtros.Page < totalPages)
                     {
                         <li class="page-item">
                             <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page + 1)">Next</a>
@@ -108,6 +103,15 @@
                     }
                 </ul>
             </nav>
+        }
+    </div>
+    <!-- Record Count Display -->
+    <div style="text-align: left;">
+        @if (Model.Dtros.TotalCount > 0)
+        {
+            var startRecord = (Model.Dtros.Page - 1) * Model.Dtros.PageSize + 1;
+            var endRecord = Math.Min(Model.Dtros.Page * Model.Dtros.PageSize, Model.Dtros.TotalCount);
+            <span>@startRecord - @endRecord of @Model.Dtros.TotalCount</span>
         }
     </div>
 </div>
