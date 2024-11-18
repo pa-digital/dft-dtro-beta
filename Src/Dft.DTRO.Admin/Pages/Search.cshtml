@@ -2,7 +2,7 @@
 @model SearchModel
 
 <h2>
-    DTROs
+    DTROs - Total found: @Model.Dtros.TotalCount
     @if (Model.AllowAddUpdate)
     {
         <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="false">+</a>
