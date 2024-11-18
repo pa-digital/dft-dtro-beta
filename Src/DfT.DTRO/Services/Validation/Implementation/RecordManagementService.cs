@@ -12,7 +12,7 @@ public class RecordManagementService : IRecordManagementService
         _dtroUserDal = swaCodeDal;
     }
 
-    public List<SemanticValidationError> ValidateCreationRequest(DtroSubmit dtroSubmit, int? submittedByTa)
+    public List<SemanticValidationError> ValidateRecordManagement(DtroSubmit dtroSubmit, int? submittedByTa)
     {
         List<SemanticValidationError> validationErrors = new();
 

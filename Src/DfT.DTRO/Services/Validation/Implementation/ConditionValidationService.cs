@@ -43,8 +43,8 @@ public class ConditionValidationService : IConditionValidationService
     private ConditionDnf ToDnf(ConditionSet conditions)
         => conditions.Operator switch
         {
-            ConditionSet.OperatorType.And => AndToDnf(conditions),
-            ConditionSet.OperatorType.Or => OrToDnf(conditions),
+            OperatorType.And => AndToDnf(conditions),
+            OperatorType.Or => OrToDnf(conditions),
 
             _ => throw new InvalidOperationException()
         };
@@ -66,9 +66,9 @@ public class ConditionValidationService : IConditionValidationService
         if (conditionSet.Negate)
         {
             var newOp =
-                conditionSet.Operator == ConditionSet.OperatorType.And
-                ? ConditionSet.OperatorType.Or
-                : ConditionSet.OperatorType.And;
+                conditionSet.Operator == OperatorType.And
+                ? OperatorType.Or
+                : OperatorType.And;
 
             foreach (var condition in conditionSet)
             {
@@ -100,7 +100,7 @@ public class ConditionValidationService : IConditionValidationService
     {
         var newConditions = new ConditionConjunction();
 
-        if (conditions.Operator != ConditionSet.OperatorType.XOr)
+        if (conditions.Operator != OperatorType.XOr)
         {
             foreach (var condition in conditions)
             {

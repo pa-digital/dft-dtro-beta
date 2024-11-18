@@ -6,12 +6,16 @@ namespace Dft.DTRO.Tests;
 [ExcludeFromCodeCoverage]
 public static class Utils
 {
-    public static DtroSubmit PrepareDtro(string jsonData) =>
-        new()
+    public static DtroSubmit PrepareDtro(string jsonData, SchemaVersion schemaVersion)
+    {
+        var result = new DtroSubmit
         {
             Data = JsonConvert.DeserializeObject<ExpandoObject>(jsonData, new ExpandoObjectConverter()),
-            SchemaVersion = new SchemaVersion(3, 2, 3)
+            SchemaVersion = schemaVersion
         };
+
+        return result;
+    }
 
     public static async Task<StringContent> CreateSchemaPayload(string schemaPath, string schemaVersion)
     {

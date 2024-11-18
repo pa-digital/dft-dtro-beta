@@ -23,7 +23,7 @@ public class JsonSchemaValidationTests
             GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
         string inputJson = File.ReadAllText(Path.Join(ExampleFilesForSchema311, $"{sourceJson}.json"));
 
-        bool result = !sut.ValidateRequestAgainstJsonSchema(jsonSchema, inputJson).Any();
+        bool result = !sut.ValidateSchema(jsonSchema, inputJson).Any();
 
         Assert.Equal(expectedResult, result);
     }
@@ -41,7 +41,7 @@ public class JsonSchemaValidationTests
             GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
         string inputJson = File.ReadAllText(Path.Join(ExampleFilesForSchema320, $"{sourceJson}.json"));
 
-        bool actual = sut.ValidateRequestAgainstJsonSchema(jsonSchema, inputJson).Any();
+        bool actual = sut.ValidateSchema(jsonSchema, inputJson).Any();
         Assert.Equal(expectedResult, actual);
     }
 
@@ -58,7 +58,7 @@ public class JsonSchemaValidationTests
             GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
         string inputJson = File.ReadAllText(Path.Join(ExampleFilesForSchema325, $"{sourceJson}.json"));
 
-        bool actual = sut.ValidateRequestAgainstJsonSchema(jsonSchema, inputJson).Any();
+        bool actual = sut.ValidateSchema(jsonSchema, inputJson).Any();
         Assert.Equal(expectedResult, actual);
     }
 

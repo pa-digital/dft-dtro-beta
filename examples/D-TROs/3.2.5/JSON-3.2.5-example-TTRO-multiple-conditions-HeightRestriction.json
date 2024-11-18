@@ -29,7 +29,6 @@
                                 {
                                     "operator": "and",
                                     "condition": {
-										"negate": false,
                                         "ValidityCondition": {
                                             "TimeValidity": {
                                                 "start": "2024-08-22T08:00:00",
@@ -50,11 +49,11 @@
                     ],
                     "regulatedPlace": [
                         {
-                            "description": "East Reach - Taunton",
+                            "description": "Cardiff Castle",
                             "type": "regulationLocation",
                             "PointGeometry": {
                                 "version": 1,
-                                "point": "SRID=27700;POINT(323544 124622)",
+                                "point": "SRID=27700;POINT(318056 176613)",
                                 "representation": "centreLinePoint",
                                 "externalReference": [
                                     {

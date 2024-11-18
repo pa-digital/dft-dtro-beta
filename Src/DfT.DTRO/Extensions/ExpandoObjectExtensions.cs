@@ -35,23 +35,14 @@ public static class ExpandoObjectExtensions
         return next.GetValueOrDefault<T>(remaining);
     }
 
-    public static T GetValueOrDefault<T>(this IList<T> source, IEnumerable<string> paths)
-    {
-        if (!paths.Any())
-        {
-        }
-
-        throw new NotImplementedException();
-    }
-
     public static T GetValueOrDefault<T>(this ExpandoObject source, string path)
-        => (path.Split('.') is string[] split && split.Length > 1)
+        => path.Split('.') is { Length: > 1 } split
             ? source.GetValueOrDefault<T>(split)
             : source.GetFieldValueOrDefault<T>(path);
 
     public static void PutValue<T>(this ExpandoObject source, string path, T value)
     {
-        if (path.Split('.') is string[] split && split.Length > 1)
+        if (path.Split('.') is { Length: > 1 } split)
         {
             source.PutValue(split, value);
         }

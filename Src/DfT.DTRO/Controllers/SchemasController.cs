@@ -1,5 +1,3 @@
-using System;
-using DfT.DTRO.Models.DataBase;
 using Newtonsoft.Json;
 
 namespace DfT.DTRO.Controllers;
@@ -290,8 +288,8 @@ public class SchemasController : ControllerBase
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
-                dynamic expand = JsonConvert.DeserializeObject<ExpandoObject>(fileContent);
-                dynamic response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, expand, _correlationProvider.CorrelationId);
+                var payload = JsonConvert.DeserializeObject<ExpandoObject>(fileContent);
+                dynamic response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, payload, _correlationProvider.CorrelationId);
                 _logger.LogInformation($"'{nameof(CreateFromFileByVersion)}' method called using version '{version}' and file '{file.Name}'");
                 _loggingExtension.LogInformation(
                     nameof(CreateFromFileByVersion),
