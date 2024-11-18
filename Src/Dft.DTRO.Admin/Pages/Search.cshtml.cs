@@ -27,7 +27,7 @@ public class SearchModel : PageModel
         _errHandlingService = errHandlingService;
     }
 
-    public async Task<IActionResult> OnGetAsync()
+    public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
     {
         try
         {
