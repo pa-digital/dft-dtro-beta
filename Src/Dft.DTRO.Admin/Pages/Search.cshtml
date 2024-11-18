@@ -71,7 +71,7 @@
 
 <!-- Record count and Pagination Controls -->
 <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-    <!-- Pagination Controls -->
+    <!-- Pagination Controls to the right -->
     <div style="flex: 1; text-align: right;">
         @if (Model.Dtros.TotalCount > Model.Dtros.PageSize)
         {
@@ -84,6 +84,7 @@
                         </li>
                     }
 
+                    <!-- Corrected loop logic -->
                     @{
                         int totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / Model.Dtros.PageSize);
                     }
@@ -105,13 +106,14 @@
             </nav>
         }
     </div>
-    <!-- Record Count Display -->
+
+    <!-- Record Count Display to the left of pagination -->
     <div style="text-align: left;">
         @if (Model.Dtros.TotalCount > 0)
         {
             var startRecord = (Model.Dtros.Page - 1) * Model.Dtros.PageSize + 1;
             var endRecord = Math.Min(Model.Dtros.Page * Model.Dtros.PageSize, Model.Dtros.TotalCount);
-            <span>@startRecord - @endRecord of @Model.Dtros.TotalCount</span>
+            <span>Records @startRecord - @endRecord out of @Model.Dtros.TotalCount</span>
         }
     </div>
 </div>
