@@ -75,8 +75,12 @@
     <div style="text-align: left;">
         @if (Model.Dtros.TotalCount > 0)
         {
-            var startRecord = (Model.Dtros.Page - 1) * Model.Dtros.PageSize + 1;
-            var endRecord = Math.Min(Model.Dtros.Page * Model.Dtros.PageSize, Model.Dtros.TotalCount);
+                var startRecord = 1;
+                if (Model.Dtros.Page != 1)
+                {
+                    startRecord = Model.Dtros.Page * Model.Dtros.PageSize;
+                }
+                var endRecord = Math.Min(Model.Dtros.Page * Model.Dtros.PageSize, Model.Dtros.TotalCount);
             <span>@startRecord - @endRecord of @Model.Dtros.TotalCount</span>
         }
     </div>
@@ -89,11 +93,11 @@
                     @if (Model.Dtros.Page > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page - 1)">Previous</a>
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page)">Previous</a>
                         </li>
                     }
 
-                     @{
+                    @{
                         int totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / Model.Dtros.PageSize);
                     }
 
@@ -107,7 +111,7 @@
                     @if (Model.Dtros.Page <= totalPages)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page + 1)">Next</a>
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page)">Next</a>
                         </li>
                     }
                 </ul>
