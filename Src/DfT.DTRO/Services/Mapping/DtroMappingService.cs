@@ -54,13 +54,13 @@ public class DtroMappingService : IDtroMappingService
             var regulationStartTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<DateTime?>("start"))
                 .Where(it => it is not null)
-                .Select(it => it.Value)
+                .Select(it => it.Value.ToLocalTime())
                 .ToList();
 
             var regulationEndTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<DateTime?>("end"))
                 .Where(it => it is not null)
-                .Select(it => it.Value)
+                .Select(it => it.Value.ToLocalTime())
                 .ToList();
 
             DtroEvent fromCreation = DtroEvent.FromCreation(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
@@ -153,13 +153,13 @@ public class DtroMappingService : IDtroMappingService
             List<DateTime> regulationStartTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<string>("start"))
                 .Where(it => it is not null)
-                .Select(it => DateTime.Parse(it).ToUniversalTime())
+                .Select(it => DateTime.Parse(it).ToLocalTime())
                 .ToList();
 
             List<DateTime> regulationEndTimes = timeValidity
                 .Select(it => it.GetValueOrDefault<string>("end"))
                 .Where(it => it is not null)
-                .Select(it => DateTime.Parse(it).ToUniversalTime())
+                .Select(it => DateTime.Parse(it).ToLocalTime())
                 .ToList();
 
             DtroSearchResult searchResult = CopyDtroToSearchResult(dtro, regulationStartTimes, regulationEndTimes);
@@ -335,13 +335,13 @@ public class DtroMappingService : IDtroMappingService
         dtro.RegulationStart = timeValidity
             .Select(it => it.GetValueOrDefault<string>("start"))
             .Where(it => it is not null)
-            .Select(it => DateTime.Parse(it).ToUniversalTime())
+            .Select(it => DateTime.Parse(it).ToLocalTime())
             .FirstOrDefault();
 
         dtro.RegulationEnd = timeValidity
             .Select(it => it.GetValueOrDefault<string>("end"))
             .Where(it => it is not null)
-            .Select(it => DateTime.Parse(it).ToUniversalTime())
+            .Select(it => DateTime.Parse(it).ToLocalTime())
             .FirstOrDefault();
 
         string json = dtro.Data.ToIndentedJsonString();
