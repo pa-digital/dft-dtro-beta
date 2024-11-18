@@ -2,7 +2,7 @@
 @model SearchModel
 
 <h2>
-    DTROs - Total found: @Model.Dtros.TotalCount
+    DTROs - Total found: @Model.Dtros.TotalCount - page: @Model.Dtros.Page
     @if (Model.AllowAddUpdate)
     {
         <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="false">+</a>
@@ -71,11 +71,20 @@
 
 <!-- Record count and Pagination Controls -->
 <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-    <!-- Pagination Controls to the right -->
+    <!-- Record Count Display -->
+    <div style="text-align: left;">
+        @if (Model.Dtros.TotalCount > 0)
+        {
+            var startRecord = (Model.Dtros.Page - 1) * Model.Dtros.PageSize + 1;
+            var endRecord = Math.Min(Model.Dtros.Page * Model.Dtros.PageSize, Model.Dtros.TotalCount);
+            <span>@startRecord - @endRecord of @Model.Dtros.TotalCount</span>
+        }
+    </div>
+    <!-- Pagination Controls -->
     <div style="flex: 1; text-align: right;">
         @if (Model.Dtros.TotalCount > Model.Dtros.PageSize)
         {
-            <nav aria-label="Page navigation example">
+            <nav aria-label="tro navigation">
                 <ul class="pagination justify-content-end">
                     @if (Model.Dtros.Page > 1)
                     {
@@ -84,8 +93,7 @@
                         </li>
                     }
 
-                    <!-- Corrected loop logic -->
-                    @{
+                     @{
                         int totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / Model.Dtros.PageSize);
                     }
 
@@ -96,7 +104,7 @@
                         </li>
                     }
 
-                    @if (Model.Dtros.Page < totalPages)
+                    @if (Model.Dtros.Page <= totalPages)
                     {
                         <li class="page-item">
                             <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page + 1)">Next</a>
@@ -104,16 +112,6 @@
                     }
                 </ul>
             </nav>
-        }
-    </div>
-
-    <!-- Record Count Display to the left of pagination -->
-    <div style="text-align: left;">
-        @if (Model.Dtros.TotalCount > 0)
-        {
-            var startRecord = (Model.Dtros.Page - 1) * Model.Dtros.PageSize + 1;
-            var endRecord = Math.Min(Model.Dtros.Page * Model.Dtros.PageSize, Model.Dtros.TotalCount);
-            <span>Records @startRecord - @endRecord out of @Model.Dtros.TotalCount</span>
         }
     </div>
 </div>
