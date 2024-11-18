@@ -1,4 +1,6 @@
-﻿namespace Dft.DTRO.Admin.Services;
+﻿using System.Diagnostics;
+
+namespace Dft.DTRO.Admin.Services;
 public interface IDtroService
 {
     Task CreateDtroAsync(IFormFile file);
@@ -6,5 +8,5 @@ public interface IDtroService
     Task<List<DtroHistoryProvisionResponse>> DtroProvisionHistory(Guid id);
     Task<List<DtroHistorySourceResponse>> DtroSourceHistory(Guid id);
     Task<IActionResult> ReassignDtroAsync(Guid id, Guid toDtroUserId);
-    Task<PaginatedResponse<DtroSearchResult>> SearchDtros(int? traId);
+    Task<PaginatedResponse<DtroSearchResult>> SearchDtros(int? traId, int pageNumber);
 }
