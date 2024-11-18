@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using DfT.DTRO.Services.Validation.Implementation;
+using DfT.DTRO.Services.Validation.Contracts;
 
 namespace Dft.DTRO.Tests.UnitTests;
 
@@ -7,10 +7,13 @@ namespace Dft.DTRO.Tests.UnitTests;
 public class JsonLogicValidationTests
 {
     private readonly Mock<IRuleTemplateDal> _ruleDal = new();
+    private readonly IRulesValidation _sut;
 
     public JsonLogicValidationTests()
     {
         JsonLogic.AddAllRules(typeof(IJsonLogicRuleSource).Assembly);
+
+        _sut = new RulesValidation(_ruleDal.Object);
     }
 
     [Fact]
@@ -31,13 +34,13 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("OverallPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -59,13 +62,13 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("OverallPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -88,13 +91,13 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("OverallPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -119,13 +122,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -150,13 +153,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -181,13 +184,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -212,13 +215,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -243,13 +246,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodStartNotLessThanOverallPeriodStart");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -274,13 +277,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodStartNotLessThanOverallPeriodStart");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -305,13 +308,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodEndNotMoreThanOverallPeriodEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -336,13 +339,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodEndNotMoreThanOverallPeriodEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -368,13 +371,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidPeriodStartNotLessThanOverallPeriodStart");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -399,13 +402,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidPeriodStartNotLessThanOverallPeriodStart");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -430,13 +433,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidPeriodEndNotMoreThanOverallPeriodEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -461,13 +464,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidPeriodEndNotMoreThanOverallPeriodEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -502,13 +505,14 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
-        await UseRulesByName("ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd", "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
+        await UseRulesByName("ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
+            "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -543,13 +547,14 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
-        await UseRulesByName("ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd", "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
+        await UseRulesByName("ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
+            "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
         Assert.Equal(2, result.Count);
@@ -577,13 +582,14 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
-        await UseRulesByName("ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd", "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
+        await UseRulesByName("ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
+            "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -608,13 +614,14 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
-        await UseRulesByName("ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd", "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
+        await UseRulesByName("ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
+            "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -636,13 +643,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd", "ValidPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -664,13 +671,14 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
-        await UseRulesByName("ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd", "ExceptionPeriodStartLessThanEnd");
+        await UseRulesByName("ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd",
+            "ExceptionPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -691,13 +699,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd", "ValidPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -718,13 +726,14 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
-        await UseRulesByName("ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd", "ExceptionPeriodStartLessThanEnd");
+        await UseRulesByName("ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd",
+            "ExceptionPeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -737,36 +746,15 @@ public class JsonLogicValidationTests
             ""Source"": {
                 ""traCreator"": 10,  ""currentTraOwner"": 10
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("TaInSwaCodes");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
-    }
-
-    [Fact(Skip = "Method is too complicated")]
-    public async Task DisallowPublicationTimeMoreThanOneMonthOld()
-    {
-        DateTime time = DateTime.UtcNow.AddMonths(-2);
-
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-            ""header"": {
-                ""publicationTime"": " + JsonSerializer.Serialize(time) + @"
-            }
-        }");
-
-        await UseRulesByName("PublicationTimeAge");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
     }
 
     [Fact]
@@ -779,37 +767,17 @@ public class JsonLogicValidationTests
             ""header"": {
                 ""publicationTime"": " + JsonSerializer.Serialize(time) + @"
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("PublicationTimeAge");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Method is too complicated")]
-    public async Task DisallowPublicationTimeFromTheFuture()
-    {
-        DateTime time = DateTime.UtcNow.AddMonths(1);
-
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-            ""header"": {
-                ""publicationTime"": " + JsonSerializer.Serialize(time) + @"
-            }
-        }");
-
-        await UseRulesByName("PublicationTimeAge");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
-    }
 
     [Fact]
     [Trait("RuleId", "DFT-205/14")]
@@ -834,63 +802,30 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExternalReferenceLastUpdateDate");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Method is too complicated")]
-    [Trait("RuleId", "DFT-205/14")]
-    public async Task DisallowExternalReferenceLastUpdateDateFromTheFuture()
-    {
-        DateTime time = DateTime.UtcNow.AddMonths(2);
-
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulatedPlace"": [
-                  {
-                    ""externalReference"": [
-                      {
-                        ""lastUpdateDate"": " + JsonSerializer.Serialize(time) + @",
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }");
-
-        await UseRulesByName("ExternalReferenceLastUpdateDate");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
-    }
 
     [Fact]
     public async Task AllowHeaderMissing()
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("PublicationTimeAge");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -921,13 +856,13 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidUsagePeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -957,53 +892,17 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidUsagePeriodStartLessThanEnd");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Method is too complicated")]
-    public async Task DisallowValidUsagePeriodEndLessThanStart()
-    {
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-            ""Source"": {
-                ""provision"": [
-                    {   ""regulation"": [
-                            {
-                                ""timeValidity"": {
-                                    ""validityCondition"": {
-                                        ""rateTable"": {
-                                            ""rateLineCollection"": [
-                                                {
-                                                    ""startValidUsagePeriod"": ""14:00:00"",
-                                                    ""endValidUsagePeriod"": ""13:00:00""
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        }");
-
-        await UseRulesByName("ValidUsagePeriodStartLessThanEnd");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
-    }
 
     [Fact]
     public async Task AllowMinTimeLessThanMaxTime()
@@ -1031,53 +930,18 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("MinTimeLessThanMaxTime");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Method is too complicated")]
-    public async Task DisallowMaxTimeLessThanMinTime()
-    {
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-            ""Source"": {
-                ""provision"": [
-                    {   ""regulation"": [
-                            {
-                                ""timeValidity"": {
-                                    ""validityCondition"": {
-                                        ""rateTable"": {
-                                            ""rateLineCollection"": [
-                                                {
-                                                    ""minTime"": ""14:00:00"",
-                                                    ""maxTime"": ""13:00:00""
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        }");
 
-        await UseRulesByName("MinTimeLessThanMaxTime");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
-    }
 
     [Fact]
     public async Task AllowMaxTimeAndOrMinTimeMissing()
@@ -1109,53 +973,18 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("MinTimeLessThanMaxTime");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Method is too complicated")]
-    public async Task DisallowValueCollectionMaxLessThanMin()
-    {
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-            ""Source"": {
-                ""provision"": [
-                    {   ""regulation"": [
-                            {
-                                ""timeValidity"": {
-                                    ""validityCondition"": {
-                                        ""rateTable"": {
-                                            ""rateLineCollection"": [
-                                                {
-                                                        ""minValueCollection"": ""200"",
-                                                        ""maxValueCollection"": ""100""
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        }");
 
-        await UseRulesByName("MinValueCollectionLessThanMax");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
-    }
 
     [Fact]
     public async Task AllowValueCollectionMinLessThanMax()
@@ -1183,13 +1012,13 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("MinValueCollectionLessThanMax");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1224,102 +1053,17 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("MinValueCollectionLessThanMax");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
 
-        Assert.Empty(result);
-    }
-
-    [Fact(Skip = "Method is too complicated")]
-    [Trait("RuleId", "43")]
-    public async Task DisallowValueMaxLessThanMin()
-    {
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""timeValidity"": {
-                      ""validityCondition"": {
-                        ""rateTable"": {
-                          ""rateLineCollection"": [
-                            {
-                              ""rateLine"": [
-                                {
-                                  ""minValue"": 40,
-                                  ""maxValue"": 30
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        }");
-
-        await UseRulesByName("MinValueLessThanMax");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
-    }
-
-    [Fact]
-    [Trait("RuleId", "43")]
-    public async Task AllowValueMinLessThanMax()
-    {
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""timeValidity"": {
-                      ""validityCondition"": {
-                        ""rateTable"": {
-                          ""rateLineCollection"": [
-                            {
-                              ""rateLine"": [
-                                {
-                                  ""minValue"": 10,
-                                  ""maxValue"": 20
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        }");
-
-        await UseRulesByName("MinValueLessThanMax");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
+
 
     [Fact]
     public async Task AllowSequentialProvisionIndex()
@@ -1339,13 +1083,13 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ProvisionIndexSequential");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1375,52 +1119,17 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("RateLineCollectionSequential");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Method is too complicated")]
-    public async Task DisallowNonSequentialRateLineCollection()
-    {
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-            ""Source"": {
-                ""provision"": [
-                    {   ""regulation"": [
-                            {
-                                ""timeValidity"": {
-                                    ""validityCondition"": {
-                                        ""rateTable"": {
-                                            ""rateLineCollection"": [
-                                                { ""sequence"": 1 },
-                                                { ""sequence"": 2 },
-                                                { ""sequence"": 0 }
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        }");
-
-        await UseRulesByName("RateLineCollectionSequential");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
-    }
 
     [Fact]
     public async Task AllowSequentialRateLine()
@@ -1449,54 +1158,18 @@ public class JsonLogicValidationTests
                     }
                 ]
             }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("RateLineSequential");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Method is too complicated")]
-    public async Task DisallowNonSequentialRateLine()
-    {
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-            ""Source"": {
-                ""provision"": [
-                    {   ""regulation"": [
-                            {
-                                ""timeValidity"": {
-                                    ""validityCondition"": {
-                                        ""rateTable"": {
-                                            ""rateLineCollection"": [
-                                                { ""rateLine"": [
-                                                    { ""sequence"": 1 },
-                                                    { ""sequence"": 2 },
-                                                    { ""sequence"": 0 } ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        }");
 
-        await UseRulesByName("RateLineSequential");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
-    }
 
     [Fact]
     [Trait("RuleId", "DFT-205/3")]
@@ -1527,13 +1200,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("HeightCharacteristicValidForRegulationTypeDimensionMaximumHeightWithTRO");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1567,13 +1240,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("HeightCharacteristicValidForRegulationTypeDimensionMaximumHeightWithTRO");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1607,13 +1280,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("HeightCharacteristicValidForRegulationTypeDimensionMaximumHeightStructural");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1647,13 +1320,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("HeightCharacteristicValidForRegulationTypeDimensionMaximumHeightStructural");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1687,13 +1360,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("LengthCharacteristicValidForRegulationTypeDimensionMaximumLength");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1727,13 +1400,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("LengthCharacteristicValidForRegulationTypeDimensionMaximumLength");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1767,13 +1440,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("WidthCharacteristicValidForRegulationTypeDimensionMaximumWidth");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1807,13 +1480,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("WidthCharacteristicValidForRegulationTypeDimensionMaximumWidth");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1849,13 +1522,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("GrossWeightCharacteristicValidForRegulationTypes");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1891,13 +1564,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("GrossWeightCharacteristicValidForRegulationTypes");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -1933,13 +1606,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("HeaviestAxleWeightCharacteristicValidForRegulationTypes");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -1975,13 +1648,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("HeaviestAxleWeightCharacteristicValidForRegulationTypes");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2020,13 +1693,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("YearOfFirstRegistrationLessOrEqualToCurrentYearValueInConditions");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2072,13 +1745,13 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("YearOfFirstRegistrationLessOrEqualToCurrentYearValueInConditions");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2125,71 +1798,17 @@ public class JsonLogicValidationTests
               }
             ]
           }
-        }");
+        }", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("YearOfFirstRegistrationLessOrEqualToCurrentYearValueInOverallPeriod");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
-    [Fact(Skip = "Method is too complicated")]
-    [Trait("RuleId", "33")]
-    public async Task DisallowYearOfFirstRegistrationGreaterThanCurrentYearValueInOverallPeriod()
-    {
-        int year = DateTime.UtcNow.AddYears(1).Year;
-
-        DtroSubmit dtro = Utils.PrepareDtro(@"
-        {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""timeValidity"": {
-                      ""validityCondition"": {
-                        ""conditionSet"": [
-                          {
-                            ""conditions"": [
-                              {
-                                ""vehicleCharacteristics"": {
-                                  ""yearOfFirstRegistration"": 2019
-                                }
-                              },
-                              {
-                                ""operator"": ""and"",
-                                ""negate"": false,
-                                ""conditions"": [
-                                  {
-                                    ""vehicleCharacteristics"": {
-                                      ""yearOfFirstRegistration"": " + JsonSerializer.Serialize(year) + @"
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        }");
-
-        await UseRulesByName("YearOfFirstRegistrationLessOrEqualToCurrentYearValueInOverallPeriod");
-
-        JsonLogicValidationService sut = new(_ruleDal.Object);
-
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
-
-        Assert.NotEmpty(result);
-    }
 
     [Fact]
     public async Task AllowsUniqueWeekInMonthInPeriods()
@@ -2217,13 +1836,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodWeekInMonthInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2254,13 +1873,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodWeekInMonthInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2291,13 +1910,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodApplicableInstanceOfDayWithinMonthInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2328,13 +1947,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodApplicableInstanceOfDayWithinMonthInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2366,13 +1985,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodApplicableWeekInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2403,13 +2022,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ExceptionPeriodApplicableWeekInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2441,13 +2060,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidityPeriodWeekInMonthInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2478,13 +2097,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidityPeriodWeekInMonthInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2515,13 +2134,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidityPeriodApplicableInstanceOfDayWithinMonthInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2552,13 +2171,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidityPeriodApplicableInstanceOfDayWithinMonthInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
@@ -2590,13 +2209,13 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidityPeriodApplicableWeekInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.NotEmpty(result);
     }
@@ -2627,22 +2246,22 @@ public class JsonLogicValidationTests
             }
         ]
     }
-}");
+}", new SchemaVersion("3.2.3"));
 
         await UseRulesByName("ValidityPeriodApplicableWeekInstancesUnique");
 
-        JsonLogicValidationService sut = new(_ruleDal.Object);
 
-        IList<SemanticValidationError>? result = await sut.ValidateCreationRequest(dtro, "3.2.3");
+
+        IList<SemanticValidationError>? result = await _sut.ValidateRules(dtro, "3.2.3");
 
         Assert.Empty(result);
     }
 
     private async Task UseRulesByName(params string[] names)
     {
-        FileJsonLogicRuleSource Source = new();
-        var rules = await Source.GetRules("rules-3.2.3");
-        var subset = rules.Where(it => names.Contains(it.Name)).ToList();
+        FileJsonLogicRuleSource source = new();
+        IEnumerable<JsonLogicValidationRule>? rules = await source.GetRules("rules-3.2.3");
+        List<JsonLogicValidationRule> subset = rules.Where(it => names.Contains(it.Name)).ToList();
 
         _ruleDal.Setup(it => it.GetRuleTemplateDeserializeAsync(It.IsAny<SchemaVersion>())).ReturnsAsync(subset);
     }

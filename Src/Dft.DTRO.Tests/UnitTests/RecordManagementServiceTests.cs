@@ -1,5 +1,4 @@
 ﻿using DfT.DTRO.Services.Validation.Contracts;
-using DfT.DTRO.Services.Validation.Implementation;
 using Newtonsoft.Json;
 
 namespace Dft.DTRO.Tests.UnitTests;
@@ -35,7 +34,7 @@ public class RecordManagementServiceTests
             Data = JsonConvert.DeserializeObject<ExpandoObject>(input)
         };
 
-        List<SemanticValidationError> actual = sut.ValidateCreationRequest(dtroSubmit, 1000);
+        List<SemanticValidationError> actual = sut.ValidateRecordManagement(dtroSubmit, 1000);
 
         Assert.Equal(isValid, !actual.Any());
     }
