@@ -48,7 +48,6 @@ public class MetricsController : ControllerBase
                 nameof(HealthApi),
                 "/healthApi",
                 $"'{nameof(HealthApi)}' method called");
-
             return Ok(true);
         }
         catch (Exception ex)
