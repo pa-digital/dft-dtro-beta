@@ -24,24 +24,43 @@ public class RegulationValidation : IRegulationValidation
                 .OfType<ExpandoObject>())
             .ToList();
 
+        var regulationTypes = typeof(RegulationType)
+            .GetDisplayNames<RegulationType>()
+            .ToList();
+
+        var passedInRegulations = regulations
+            .SelectMany(regulation => regulation.Select(kv => kv.Key))
+            .ToList();
 
         var areMultipleRegulations = regulations.Count > 1;
         if (areMultipleRegulations)
         {
-            SemanticValidationError error = new()
+            var acceptedRegulations = passedInRegulations
+                .Where(passedInRegulation =>
+                    regulationTypes.Any(passedInRegulation.Contains));
+
+            var hasTemporaryRegulation = acceptedRegulations
+                .Any(acceptedRegulation =>
+                    acceptedRegulation
+                        .Equals(RegulationType.TemporaryRegulation.GetDisplayName()));
+
+            if (!hasTemporaryRegulation)
             {
-                Name = "Regulations",
-                Message = "You have to have only one regulation in place.",
-                Path = "Source -> Provision -> Regulation",
-                Rule = "One regulation must be present.",
-            };
-            errors.Add(error);
+                SemanticValidationError error = new()
+                {
+                    Name = "Regulations",
+                    Message = "If more than one regulation is present, the temporary regulation must be one of. " +
+                              "Otherwise, you have to have only one regulation in place.",
+                    Path = "Source -> Provision -> Regulation -> TemporaryRegulation",
+                    Rule = "One regulation must be present.",
+                };
+                errors.Add(error);
+            }
         }
 
-        var regulationTypes = typeof(RegulationType).GetDisplayNames<RegulationType>().ToList();
-        var passedInRegulations = regulations.SelectMany(regulation => regulation.Select(kv => kv.Key)).ToList();
-        var areAnyAcceptedRegulations = passedInRegulations.Any(passedInRegulation => regulationTypes.Any(passedInRegulation.Contains));
-
+        var areAnyAcceptedRegulations = passedInRegulations
+            .Any(passedInRegulation =>
+                regulationTypes.Any(passedInRegulation.Contains));
 
         if (!areAnyAcceptedRegulations)
         {

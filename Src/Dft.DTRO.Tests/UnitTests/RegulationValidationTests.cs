@@ -13,7 +13,7 @@ public class RegulationValidationTests
     [InlineData("3.3.0", 0)]
     public void ValidateRegulationReturnsNoErrors(string version, int errorCount)
     {
-        var dtroSubmit = Utils.PrepareDtro(@"
+        DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
           ""Source"": {
             ""provision"": [
@@ -29,14 +29,14 @@ public class RegulationValidationTests
           }
         }", new SchemaVersion(version));
 
-        var actual = _sut.ValidateRegulation(dtroSubmit, version);
+        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, version);
         Assert.Equal(errorCount, actual.Count);
     }
 
     [Fact]
     public void ValidateRegulationReturnsErrorsWhenMultipleRegulations()
     {
-        var dtroSubmit = Utils.PrepareDtro(@"
+        DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
           ""Source"": {
             ""provision"": [
@@ -56,14 +56,41 @@ public class RegulationValidationTests
           }
         }", new SchemaVersion("3.2.5"));
 
-        var actual = _sut.ValidateRegulation(dtroSubmit, "3.2.5");
+        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.2.5");
         Assert.NotEmpty(actual);
+    }
+
+    [Fact]
+    public void ValidateRegulationReturnsNoErrorsWhenMultipleRegulationsWithTemporaryRegulation()
+    {
+        DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
+        {
+          ""Source"": {
+            ""provision"": [
+              {
+                ""regulation"": [
+                  {
+                  ""GeneralRegulation"":  {
+                    }
+                  },
+                  {
+                    ""TemporaryRegulation"": {
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }", new SchemaVersion("3.2.5"));
+
+        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.2.5");
+        Assert.Empty(actual);
     }
 
     [Fact]
     public void ValidateRegulationReturnsErrorsWhenWrongRegulation()
     {
-        var dtroSubmit = Utils.PrepareDtro(@"
+        DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
           ""Source"": {
             ""provision"": [
@@ -79,7 +106,7 @@ public class RegulationValidationTests
           }
         }", new SchemaVersion("3.2.5"));
 
-        var actual = _sut.ValidateRegulation(dtroSubmit, "3.2.5");
+        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.2.5");
         Assert.NotEmpty(actual);
     }
 }
