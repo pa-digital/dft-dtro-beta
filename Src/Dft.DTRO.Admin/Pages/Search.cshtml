@@ -77,6 +77,11 @@
         {
             var startRecord = (Model.Dtros.Page - 1) * Model.Dtros.PageSize + 1;
             var endRecord = Math.Min(Model.Dtros.Page * Model.Dtros.PageSize, Model.Dtros.TotalCount);
+
+            <script>
+                console.log("startRecord: @startRecord");
+                console.log("endRecord: @endRecord");
+            </script>
             <span>@startRecord - @endRecord of @Model.Dtros.TotalCount</span>
         }
     </div>
@@ -97,9 +102,13 @@
                         int totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / Model.Dtros.PageSize);
                     }
 
+                    <script>
+                        console.log("Total Pages: @totalPages");
+                    </script>
+
                     @for (int i = 1; i <= totalPages; i++)
                     {
-                        <li class="page-item @(i == Model.Dtros.Page ? "active" : "")">
+                        <li>
                             <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@i">@i</a>
                         </li>
                     }
