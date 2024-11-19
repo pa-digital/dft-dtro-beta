@@ -38,6 +38,9 @@ public class SearchModel : PageModel
                 useTraId = user.TraId;
             }
             Dtros = await _dtroService.SearchDtros(useTraId, pageNumber);
+            Console.WriteLine($"#*#-DEBUG: {Dtros.Page}");
+            Console.WriteLine($"#*#-DEBUG: {Dtros.PageSize}");
+            Console.WriteLine($"#*#-DEBUG: {Dtros.TotalCount}");
             DtroUserSearch.AlwaysButtonHidden = true;
             DtroUserSearch.UpdateButtonText = "Search";
             DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
