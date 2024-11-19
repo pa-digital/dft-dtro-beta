@@ -69,7 +69,6 @@
     </tbody>
 </table>
 
-<!-- Record count and Pagination Controls -->
 <div style="display: flex; justify-content: space-between; margin-top: 20px;">
     @{ var maxPageSize = 50; }
     <!-- Record Count Display -->
@@ -78,23 +77,15 @@
         { 
             var startRecord = (Model.Dtros.Page - 1) * maxPageSize + 1;
             var endRecord = Math.Min(Model.Dtros.Page * maxPageSize, Model.Dtros.TotalCount);
-                
-            <script>
-                console.log("Record Count - Model.Dtros.Page: @Model.Dtros.Page");
-                console.log("Record Count - Model.Dtros.PageSize: @Model.Dtros.PageSize");
-                console.log("Record Count - Model.Dtros.TotalCount: @Model.Dtros.TotalCount");
-                console.log("startRecord: @startRecord");
-                console.log("endRecord: @endRecord");
-            </script>
             <span>@startRecord - @endRecord of @Model.Dtros.TotalCount</span>
         }
     </div>
-    <!-- Pagination Controls -->
+    <!-- Pages Controls -->
     <div style="flex: 1; text-align: right;">
         @if (Model.Dtros.TotalCount > Model.Dtros.PageSize)
         {
             <nav aria-label="tro navigation">
-                <ul class="pagination justify-content-end">
+                <ul class="pages justify-content-end">
                     @if (Model.Dtros.Page > 1)
                     {
                         <li class="page-item">
@@ -102,18 +93,9 @@
                         </li>
                     }
 
-                    <script>
-                        console.log("Page - Model.Dtros.Page: @Model.Dtros.Page");
-                        console.log("Page - Model.Dtros.PageSize: @Model.Dtros.PageSize");
-                        console.log("Page - Model.Dtros.TotalCount: @Model.Dtros.TotalCount");
-                    </script>
                     @{
                         int totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / maxPageSize);
                     }
-
-                    <script>
-                        console.log("Total Pages: @totalPages");
-                    </script>
 
                     @for (int i = 1; i <= totalPages; i++)
                     {
