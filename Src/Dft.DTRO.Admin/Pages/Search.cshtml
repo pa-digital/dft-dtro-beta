@@ -13,6 +13,25 @@
     <div>
         @await Html.PartialAsync("_TraSearchPartial", Model.DtroUserSearch)
     </div>
+    <fieldset>
+        <legend>Add Customer</legend>
+        <div>
+            <label for="CompanyName">Company Name:</label>
+            <input type="text" name="CompanyName" value="" />
+        </div>
+        <div>
+            <label for="ContactName">Contact Name:</label>
+            <input type="text" name="ContactName" value="" />
+        </div>
+        <div>
+            <label for="Employees">Employee Count:</label>
+            <input type="text" name="Employees" value="" />
+        </div>
+        <div>
+            <label>&nbsp;</label>
+            <input type="submit" value="Submit" class="submit" />
+        </div>
+    </fieldset>
 </form>
 
 <table style="margin-top:30px" class="table">
@@ -31,28 +50,6 @@
             <th></th>
         </tr>
     </thead>
-
-    <form method="post">
-        <fieldset>
-            <legend>Add Customer</legend>
-            <div>
-                <label for="CompanyName">Company Name:</label>
-                <input type="text" name="CompanyName" value="" />
-            </div>
-            <div>
-                <label for="ContactName">Contact Name:</label>
-                <input type="text" name="ContactName" value="" />
-            </div>
-            <div>
-                <label for="Employees">Employee Count:</label>
-                <input type="text" name="Employees" value="" />
-            </div>
-            <div>
-                <label>&nbsp;</label>
-                <input type="submit" value="Submit" class="submit" />
-            </div>
-        </fieldset>
-    </form>
 
     <tbody>
         @foreach (var result in Model.Dtros.Results)
@@ -96,7 +93,7 @@
     <!-- Record Count Display -->
     <div style="text-align: left;">
         @if (Model.Dtros.TotalCount > 0)
-        { 
+        {
             var startRecord = (Model.Dtros.Page - 1) * maxPageSize + 1;
             var endRecord = Math.Min(Model.Dtros.Page * maxPageSize, Model.Dtros.TotalCount);
             <span>@startRecord - @endRecord of @Model.Dtros.TotalCount</span>
