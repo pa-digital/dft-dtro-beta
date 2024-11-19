@@ -2,7 +2,7 @@
 @model SearchModel
 
 <h2>
-    DTROs - Total found: @Model.Dtros.TotalCount - page: @Model.Dtros.Page
+    DTROs - Total found: @Model.Dtros.TotalCount
     @if (Model.AllowAddUpdate)
     {
         <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="false">+</a>
@@ -71,13 +71,14 @@
 
 <!-- Record count and Pagination Controls -->
 <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+    @{ var maxPageSize = 50; }
     <!-- Record Count Display -->
     <div style="text-align: left;">
         @if (Model.Dtros.TotalCount > 0)
-        {
-            var startRecord = (Model.Dtros.Page - 1) * Model.Dtros.PageSize + 1;
-            var endRecord = Math.Min(Model.Dtros.Page * Model.Dtros.PageSize, Model.Dtros.TotalCount);
-
+        { 
+            var startRecord = (Model.Dtros.Page - 1) * maxPageSize + 1;
+            var endRecord = Math.Min(Model.Dtros.Page * maxPageSize, Model.Dtros.TotalCount);
+                
             <script>
                 console.log("Record Count - Model.Dtros.Page: @Model.Dtros.Page");
                 console.log("Record Count - Model.Dtros.PageSize: @Model.Dtros.PageSize");
@@ -107,7 +108,7 @@
                         console.log("Page - Model.Dtros.TotalCount: @Model.Dtros.TotalCount");
                     </script>
                     @{
-                        int totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / Model.Dtros.PageSize);
+                        int totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / maxPageSize);
                     }
 
                     <script>
