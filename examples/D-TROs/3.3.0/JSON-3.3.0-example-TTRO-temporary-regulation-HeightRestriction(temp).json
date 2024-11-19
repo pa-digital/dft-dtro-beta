@@ -1,10 +1,10 @@
 {
-    "schemaVersion": "3.2.5",
+    "schemaVersion": "3.3.0",
     "data": {
         "Source": {
             "actionType": "new",
             "currentTraOwner": 3300,
-            "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
+            "reference": "C962B51F-E1AA-416E-8F0B-AEFE39A4C099",
             "section": "All sections",
             "traAffected": [
                 3300
@@ -16,20 +16,26 @@
                     "actionType": "new",
                     "orderReportingPoint": "ttroTtmoNoticeOfIntention",
                     "provisionDescription": "Temporary height restriction (2.5m)",
-                    "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
+                    "reference": "B1618E6F-F65C-48C7-9CC7-45DA9F45FBDA",
                     "regulation": [
                         {
                             "isDynamic": false,
                             "timeZone": "Europe/London",
-                            "SpeedLimitValueBased": {
-                                "type": "minimumSpeedLimit",
-                                "mphValue": 30
+                            "TemporaryRegulation": {
+                                "temporaryOverriddenProvision": {
+                                    "actionType": "new",
+                                    "orderReportingPoint": "permanentNoticeOfMaking",
+                                    "provisionDescription": "New parking restrictions, Cardiff",
+                                    "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A"
+                                }
+                            },
+                            "GeneralRegulation": {
+                                "regulationType": "kerbsideNoStopping"
                             },
                             "conditionSet": [
                                 {
                                     "operator": "and",
                                     "condition": {
-										"negate": false,
                                         "ValidityCondition": {
                                             "TimeValidity": {
                                                 "start": "2024-08-22T08:00:00",
@@ -50,11 +56,11 @@
                     ],
                     "regulatedPlace": [
                         {
-                            "description": "East Reach - Taunton",
+                            "description": "Cardiff Castle",
                             "type": "regulationLocation",
                             "PointGeometry": {
                                 "version": 1,
-                                "point": "SRID=27700;POINT(323544 124622)",
+                                "point": "SRID=27700;POINT(318056 176613)",
                                 "representation": "centreLinePoint",
                                 "externalReference": [
                                     {

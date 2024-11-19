@@ -27,6 +27,11 @@ public enum RegulationType
     /// Off list regulation
     /// </summary>
     [Display(Name = "OffListRegulation")]
-    OffListRegulation = 4
+    OffListRegulation = 4,
 
+    /// <summary>
+    /// Temporary regulation
+    /// </summary>
+    [Display(Name = "TemporaryRegulation")]
+    TemporaryRegulation = 5
 }

@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": true,
-    "description": "DTRO v3.2.5 data model JSON schema",
+    "description": "DTRO v3.3.0 Data Specification JSON schema",
     "oneOf": [
         {
             "additionalProperties": true,
@@ -42,7 +42,8 @@
                             "items": {
                                 "$ref": "#/$defs/Condition"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "maxItems": 1
                         },
                         "accessConditionType": {
                             "description": "Indicates access restriction type.",
@@ -58,7 +59,10 @@
                             "maxItems": 1,
                             "minItems": 0
                         }
-                    }
+                    },
+                    "required": [
+                        "AccessConditionType"
+                    ]
                 }
             ]
         },
@@ -98,7 +102,8 @@
                     "items": {
                         "$ref": "#/$defs/PermitCondition"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "name": {
                     "description": "Name of the authority issuing permits",
@@ -106,7 +111,10 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "name"
+            ]
         },
         "CalendarWeekInMonth": {
             "allOf": [
@@ -126,7 +134,10 @@
                             "minItems": 1,
                             "uniqueItems": true
                         }
-                    }
+                    },
+                    "required": [
+                        "weekInMonth"
+                    ]
                 }
             ]
         },
@@ -151,10 +162,14 @@
                     "description": "specifies the time period with changeable (but defined) characteristics",
                     "properties": {
                         "ChangeableTimePeriodEnd": {
-                            "$ref": "#/$defs/ChangeableTimePeriodEnd"
+                            "$ref": "#/$defs/ChangeableTimePeriodEnd",
+                            "minItems": 0,
+                            "maxItems": 1
                         },
                         "ChangeableTimePeriodStart": {
-                            "$ref": "#/$defs/ChangeableTimePeriodStart"
+                            "$ref": "#/$defs/ChangeableTimePeriodStart",
+                            "minItems": 0,
+                            "maxItems": 1
                         }
                     }
                 }
@@ -172,10 +187,14 @@
                     "minItems": 0
                 },
                 "ChangeableTimePeriodSource": {
-                    "$ref": "#/$defs/ChangeableTimePeriodSource"
+                    "$ref": "#/$defs/ChangeableTimePeriodSource",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "SpecialDay": {
-                    "$ref": "#/$defs/SpecialDay"
+                    "$ref": "#/$defs/SpecialDay",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "endType": {
                     "description": "indicates the type of changeable (but defined) characteristic time measure used",
@@ -193,7 +212,10 @@
                     },
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "endType"
+            ]
         },
         "ChangeableTimePeriodEntry": {
             "type": "object",
@@ -204,14 +226,16 @@
                     "items": {
                         "$ref": "#/$defs/ChangeableTimePeriodEnd"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "ChangeableTimePeriodStart": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/ChangeableTimePeriodStart"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "entry": {
                     "description": "one value in a potential multi-value time set",
@@ -220,7 +244,10 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "entry"
+            ]
         },
         "ChangeableTimePeriodSource": {
             "type": "object",
@@ -231,7 +258,8 @@
                     "items": {
                         "$ref": "#/$defs/ChangeableTimePeriodEnd"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "ChangeableTimePeriodStart": {
                     "type": "array",
@@ -253,7 +281,11 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "definition",
+                "sourceLocator"
+            ]
         },
         "ChangeableTimePeriodStart": {
             "type": "object",
@@ -288,7 +320,10 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "startType"
+            ]
         },
         "ChangeableTimeType": {
             "description": "List of available changeable time types",
@@ -316,41 +351,60 @@
             "description": "Abstract class that specifies a condition for the validity of a certain road feature such as time, weather conditions, vehicle type, vehicle propulsion fuel, vehicle occupancy, vehicle usage, vehicle dimensions or weight characteristics.",
             "properties": {
                 "AccessCondition": {
-                    "$ref": "#/$defs/AccessCondition"
+                    "$ref": "#/$defs/AccessCondition",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "ConditionSet": {
                     "$ref": "#/$defs/ConditionSet"
                 },
                 "DriverCondition": {
-                    "$ref": "#/$defs/DriverCondition"
+                    "$ref": "#/$defs/DriverCondition",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "NonVehicularRoadUserCondition": {
-                    "$ref": "#/$defs/NonVehicularRoadUserCondition"
+                    "$ref": "#/$defs/NonVehicularRoadUserCondition",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "OccupantCondition": {
-                    "$ref": "#/$defs/OccupantCondition"
+                    "$ref": "#/$defs/OccupantCondition",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "PermitCondition": {
-                    "$ref": "#/$defs/PermitCondition"
+                    "$ref": "#/$defs/PermitCondition",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "RateTable": {
-                    "$ref": "#/$defs/RateTable"
+                    "$ref": "#/$defs/RateTable",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "Regulation": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Regulation"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "RoadCondition": {
-                    "$ref": "#/$defs/RoadCondition"
+                    "$ref": "#/$defs/RoadCondition",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "ValidityCondition": {
-                    "$ref": "#/$defs/ValidityCondition"
+                    "$ref": "#/$defs/ValidityCondition",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "VehicleCondition": {
-                    "$ref": "#/$defs/VehicleCondition"
+                    "$ref": "#/$defs/VehicleCondition",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "negate": {
                     "description": "If set to true means that the entire condition shall be negated.",
@@ -393,7 +447,10 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "operator"
+                    ]
                 }
             ]
         },
@@ -466,7 +523,13 @@
                     "maxItems": 1,
                     "minItems": 0
                 }
-            }
+            },
+            "required": [
+                "source",
+                "consultationName",
+                "endOfconsultation",
+                "statementOfReason"
+            ]
         },
         "CurrencyType": {
             "description": "Standard specified three-letter (Alpha-3) codes for currencies worldwide in accordance with ISO 4217. Note this is a select subset based on UK usage but permits extension.",
@@ -498,7 +561,8 @@
                     "items": {
                         "$ref": "#/$defs/Period"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "applicableDay": {
                     "description": "Applicable day of the week.",
@@ -520,7 +584,10 @@
                     "minItems": 0,
                     "uniqueItems": true
                 }
-            }
+            },
+            "required": [
+                "Period"
+            ]
         },
         "DirectedLinear": {
             "allOf": [
@@ -531,7 +598,9 @@
                     "description": "Object indicating characteristics relating to specified direction linear geometric location",
                     "properties": {
                         "destination": {
-                            "$ref": "#/$defs/ExternalReference"
+                            "$ref": "#/$defs/ExternalReference",
+                            "minItems": 0,
+                            "maxItems": 1
                         },
                         "directedLineString": {
                             "description": "string conforming to WKT standard defining a start and end point, and potentially intermediate points",
@@ -547,9 +616,14 @@
                             "minItems": 0
                         },
                         "origin": {
-                            "$ref": "#/$defs/ExternalReference"
+                            "$ref": "#/$defs/ExternalReference",
+                            "minItems": 0,
+                            "maxItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "directedLineString"
+                    ]
                 }
             ]
         },
@@ -587,7 +661,10 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "driverCharacteristicsType"
+                    ]
                 }
             ]
         },
@@ -600,7 +677,8 @@
                     "items": {
                         "$ref": "#/$defs/UniqueStreetReferenceNumber"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "esu": {
                     "type": "array",
@@ -612,7 +690,11 @@
                     "minItems": 1,
                     "minimum": 0
                 }
-            }
+            },
+            "required": [
+                "UniqueStreetReferenceNumber",
+                "esu"
+            ]
         },
         "EmissionClassificationEuroType": {
             "description": "List of European emissions classifications",
@@ -639,7 +721,8 @@
                     "items": {
                         "$ref": "#/$defs/VehicleCharacteristics"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "emissionClassificationEuro": {
                     "description": "The minimum Euro emission classification the vehicle(s) have to comply with according to the 1970 Directive 70/220/EEC and its several amendments. Note that vehicleType and fuelType need to be provided in order to make this classification explicit.",
@@ -685,23 +768,36 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "definition",
+                "enumeratedList",
+                "value"
+            ]
         },
         "ExternalReference": {
             "type": "object",
             "description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer",
             "properties": {
                 "DirectedLinear": {
-                    "$ref": "#/$defs/DirectedLinear"
+                    "$ref": "#/$defs/DirectedLinear",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "LinearGeometry": {
-                    "$ref": "#/$defs/LinearGeometry"
+                    "$ref": "#/$defs/LinearGeometry",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "PointGeometry": {
-                    "$ref": "#/$defs/PointGeometry"
+                    "$ref": "#/$defs/PointGeometry",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "Polygon": {
-                    "$ref": "#/$defs/Polygon"
+                    "$ref": "#/$defs/Polygon",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "UniqueStreetReferenceNumber": {
                     "type": "array",
@@ -716,7 +812,10 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "lastUpdateDate"
+            ]
         },
         "FuelType": {
             "description": "List of fuel types",
@@ -760,7 +859,8 @@
                             "items": {
                                 "$ref": "#/$defs/Regulation"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "maxItems": 1
                         },
                         "regulationType": {
                             "description": "Indicates the status of this Regulation",
@@ -771,7 +871,10 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "regulationType"
+                    ]
                 }
             ]
         },
@@ -784,7 +887,8 @@
                     "items": {
                         "$ref": "#/$defs/RegulatedPlace"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "version": {
                     "type": "number",
@@ -792,7 +896,10 @@
                     "minItems": 1,
                     "multipleOf": 1
                 }
-            }
+            },
+            "required": [
+                "version"
+            ]
         },
         "HeaviestAxleWeightCharacteristic": {
             "type": "object",
@@ -803,7 +910,8 @@
                     "items": {
                         "$ref": "#/$defs/VehicleCharacteristics"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "heaviestAxleWeight": {
                     "description": "indicates a characteristic relating to the heaviest axle of vehicle. Defined in metric tonnes, with one decimal place",
@@ -812,7 +920,10 @@
                     "minItems": 1,
                     "multipleOf": 0.10000000000000001
                 }
-            }
+            },
+            "required": [
+                "heaviestAxleWeight"
+            ]
         },
         "InstanceOfDayInMonth": {
             "description": "Specification  of  periods  defined  by  the  instance  of  a specific weekday within a month (e.g. 3rd Tuesday in May).",
@@ -903,7 +1014,13 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "representation",
+                        "direction",
+                        "lateralPosition",
+                        "linestring"
+                    ]
                 }
             ]
         },
@@ -934,7 +1051,8 @@
                     "items": {
                         "$ref": "#/$defs/VehicleCharacteristics"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "grossVehicleWeight": {
                     "description": "The gross weight of the vehicle and its load, including any trailers. Defined in metric tonnes, with one decimal place",
@@ -952,7 +1070,11 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "grossVehicleWeight",
+                "typeOfWeight"
+            ]
         },
         "MaximumHeightCharacteristic": {
             "type": "object",
@@ -963,7 +1085,8 @@
                     "items": {
                         "$ref": "#/$defs/VehicleCharacteristics"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "vehicleHeight": {
                     "description": "height of the highest part, excluding antennae, of an individual vehicle from the reference plane defined by the bottom of the wheels touching the ground, in metres, defined to two decimal places.",
@@ -972,7 +1095,10 @@
                     "minItems": 1,
                     "multipleOf": 0.01
                 }
-            }
+            },
+            "required": [
+                "vehicleHeight"
+            ]
         },
         "MaximumLengthCharacteristic": {
             "type": "object",
@@ -983,7 +1109,8 @@
                     "items": {
                         "$ref": "#/$defs/VehicleCharacteristics"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "vehicleLength": {
                     "description": "The overall distance between the front and back of an individual vehicle, including the length of any trailers, couplings, embedded features etc., in metres, to two decimal places.",
@@ -992,7 +1119,10 @@
                     "minItems": 1,
                     "multipleOf": 0.01
                 }
-            }
+            },
+            "required": [
+                "vehicleLength"
+            ]
         },
         "MaximumWidthCharacteristic": {
             "type": "object",
@@ -1003,7 +1133,8 @@
                     "items": {
                         "$ref": "#/$defs/VehicleCharacteristics"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "vehicleWidth": {
                     "description": "The maximum width of an individual vehicle, including any features embedded or fixed on it, in metres, to two decimal places.",
@@ -1012,7 +1143,10 @@
                     "minItems": 1,
                     "multipleOf": 0.01
                 }
-            }
+            },
+            "required": [
+                "vehicleWidth"
+            ]
         },
         "MonthType": {
             "description": "List containing calendar months",
@@ -1056,7 +1190,10 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "nonVehicularRoadUser"
+                    ]
                 }
             ]
         },
@@ -1079,7 +1216,8 @@
                     "items": {
                         "$ref": "#/$defs/VehicleCharacteristics"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "comparisonOperator": {
                     "description": "The operator to be used in the vehicle characteristic comparison operation.",
@@ -1097,7 +1235,11 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "comparisonOperator",
+                "numberOfAxles"
+            ]
         },
         "NumbersOfOccupants": {
             "type": "object",
@@ -1108,7 +1250,8 @@
                     "items": {
                         "$ref": "#/$defs/OccupantCondition"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "operator": {
                     "description": "The operator to be used in the characteristic comparison operation.",
@@ -1157,7 +1300,12 @@
                             "maxItems": 1,
                             "minItems": 0
                         }
-                    }
+                    },
+                    "required": [
+                        "OccupantCondition",
+                        "operator",
+                        "value"
+                    ]
                 }
             ]
         },
@@ -1174,7 +1322,8 @@
                             "items": {
                                 "$ref": "#/$defs/Regulation"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "maxItems": 1
                         },
                         "legislationCrossReference": {
                             "description": "Cross reference to legislative instruments and orders for this regulation",
@@ -1196,7 +1345,11 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "regulationShortName",
+                        "regulationFullText"
+                    ]
                 }
             ]
         },
@@ -1309,7 +1462,9 @@
                     "description": "Object supporting the characteristics of a permit related condition",
                     "properties": {
                         "Authority": {
-                            "$ref": "#/$defs/Authority"
+                            "$ref": "#/$defs/Authority",
+                            "minItems": 0,
+                            "maxItems": 1
                         },
                         "Condition": {
                             "type": "array",
@@ -1319,7 +1474,9 @@
                             "minItems": 1
                         },
                         "PermitSubjectToFee": {
-                            "$ref": "#/$defs/PermitSubjectToFee"
+                            "$ref": "#/$defs/PermitSubjectToFee",
+                            "minItems": 0,
+                            "maxItems": 1
                         },
                         "locationRelatedPermit": {
                             "description": "is the referenced permit related to a specified geography?",
@@ -1370,7 +1527,10 @@
                             "maxItems": 1,
                             "minItems": 0
                         }
-                    }
+                    },
+                    "required": [
+                        "type"
+                    ]
                 }
             ]
         },
@@ -1383,7 +1543,8 @@
                     "items": {
                         "$ref": "#/$defs/PermitCondition"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "amountDue": {
                     "description": "Monetary amount related to use of or purchase of permit. Defined in Pounds Sterling, to two decimal places (pence)",
@@ -1452,7 +1613,11 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "representation",
+                        "point"
+                    ]
                 }
             ]
         },
@@ -1486,7 +1651,10 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "polygon"
+                    ]
                 }
             ]
         },
@@ -1506,14 +1674,16 @@
                     "items": {
                         "$ref": "#/$defs/Regulation"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "Source": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Source"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "actionType": {
                     "type": "array",
@@ -1542,7 +1712,15 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "orderReportingPoint",
+                "provisionDescription",
+                "actionType",
+                "reference",
+                "Regulation",
+                "Source"
+            ]
         },
         "PublicEventType": {
             "description": "List of public event types",
@@ -1624,7 +1802,10 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "publicHolidayName"
+                    ]
                 }
             ]
         },
@@ -1637,7 +1818,8 @@
                     "items": {
                         "$ref": "#/$defs/RateLineCollection"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "description": {
                     "description": "free-text description associated with this rate line.",
@@ -1713,7 +1895,12 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "sequence",
+                "type",
+                "value"
+            ]
         },
         "RateLineCollection": {
             "type": "object",
@@ -1731,7 +1918,8 @@
                     "items": {
                         "$ref": "#/$defs/RateTable"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "applicableCurrency": {
                     "description": "The monetary currency that rates are specified in this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
@@ -1798,7 +1986,12 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "sequence",
+                "applicableCurrency",
+                "startValidUsagePeriod"
+            ]
         },
         "RateLineType": {
             "description": "List of rate line types",
@@ -1819,7 +2012,8 @@
                     "items": {
                         "$ref": "#/$defs/Condition"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "RateLineCollection": {
                     "type": "array",
@@ -1897,7 +2091,11 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "description",
+                "Provision"
+            ]
         },
         "RegulatedPlaceType": {
             "description": "indicates the nature of RegulatedPlace - location of the Regulation or Diversion Route.",
@@ -1919,23 +2117,32 @@
                     "minItems": 0
                 },
                 "GeneralRegulation": {
-                    "$ref": "#/$defs/GeneralRegulation"
+                    "$ref": "#/$defs/GeneralRegulation",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "OffListRegulation": {
-                    "$ref": "#/$defs/OffListRegulation"
+                    "$ref": "#/$defs/OffListRegulation",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "Provision": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Provision"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "SpeedLimitProfileBased": {
-                    "$ref": "#/$defs/SpeedLimitProfileBased"
+                    "$ref": "#/$defs/SpeedLimitProfileBased",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "SpeedLimitValueBased": {
-                    "$ref": "#/$defs/SpeedLimitValueBased"
+                    "$ref": "#/$defs/SpeedLimitValueBased",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "TemporaryRegulation": {
                     "type": "array",
@@ -1963,7 +2170,12 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "isDynamic",
+                "timeZone",
+                "Provision"
+            ]
         },
         "RegulationType": {
             "description": "A list of regulation types",
@@ -2049,7 +2261,8 @@
                             "items": {
                                 "$ref": "#/$defs/Condition"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "maxItems": 1
                         },
                         "roadType": {
                             "description": "Indicates the type of road",
@@ -2060,7 +2273,11 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "roadType",
+                        "Condition"
+                    ]
                 }
             ]
         },
@@ -2141,7 +2358,16 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "actionType",
+                "currentTraOwner",
+                "reference",
+                "section",
+                "traCreator",
+                "troName",
+                "traAffected"
+            ]
         },
         "SpecialDay": {
             "type": "object",
@@ -2152,21 +2378,24 @@
                     "items": {
                         "$ref": "#/$defs/ChangeableTimePeriodEnd"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "ChangeableTimePeriodStart": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/ChangeableTimePeriodStart"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "Period": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Period"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "intersectWithApplicableDays": {
                     "description": "When true, the period is the intersection of applicable days and this special day. When false, the period is the union of applicable days and this special day.",
@@ -2192,7 +2421,11 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "intersectWithApplicableDays",
+                "specialDayType"
+            ]
         },
         "SpecialDayType": {
             "description": "Collection of special types of days. ",
@@ -2222,7 +2455,8 @@
                             "items": {
                                 "$ref": "#/$defs/Regulation"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "maxItems": 1
                         },
                         "type": {
                             "description": "nature of the speed limit profile used",
@@ -2233,7 +2467,11 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "type",
+                        "Regulation"
+                    ]
                 }
             ]
         },
@@ -2259,7 +2497,8 @@
                             "items": {
                                 "$ref": "#/$defs/Regulation"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "maxItems": 1
                         },
                         "mphValue": {
                             "description": "speed limit value in mph",
@@ -2275,7 +2514,12 @@
                             "maxItems": 1,
                             "minItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "type",
+                        "mphValue",
+                        "Regulation"
+                    ]
                 }
             ]
         },
@@ -2312,16 +2556,20 @@
                     },
                     "minItems": 1
                 },
-                "temporarilyOverriddenRegulations": {
+                "temporarilyOverriddenProvision": {
                     "description": "Indicates the identity of regulations overridden by this temporary regulation",
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/Regulation"
+                        "$ref": "#/$defs/Provision"
                     },
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+			"required": [
+				"Regulation",
+				"temporaryOverridenProvision"
+			]
         },
         "TimePeriodOfDay": {
             "type": "object",
@@ -2332,7 +2580,8 @@
                     "items": {
                         "$ref": "#/$defs/Period"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "endTimeOfPeriod": {
                     "description": "End of time period.",
@@ -2348,7 +2597,11 @@
                     "maxItems": 1,
                     "minItems": 1
                 }
-            }
+            },
+            "required": [
+                "startTimeOfPeriod",
+                "endTimeOfPeriod"
+            ]
         },
         "TimeValidity": {
             "type": "object",
@@ -2366,7 +2619,8 @@
                     "items": {
                         "$ref": "#/$defs/ValidityCondition"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "end": {
                     "description": "End of Overall Period.",
@@ -2396,7 +2650,10 @@
                     },
                     "minItems": 0
                 }
-            }
+            },
+            "required": [
+                "start"
+            ]
         },
         "UniqueStreetReferenceNumber": {
             "type": "object",
@@ -2410,7 +2667,9 @@
                     "minItems": 0
                 },
                 "ExternalReference": {
-                    "$ref": "#/$defs/ExternalReference"
+                    "$ref": "#/$defs/ExternalReference",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "nsgStreetName": {
                     "type": "string",
@@ -2430,7 +2689,10 @@
                     "minimum": 0,
                     "maximum": 99999999
                 }
-            }
+            },
+            "required": [
+                "usrn"
+            ]
         },
         "ValidityCondition": {
             "allOf": [
@@ -2445,16 +2707,21 @@
                             "items": {
                                 "$ref": "#/$defs/Condition"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "maxItems": 1
                         },
                         "TimeValidity": {
                             "type": "array",
                             "items": {
                                 "$ref": "#/$defs/TimeValidity"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "maxItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "Condition"
+                    ]
                 }
             ]
         },
@@ -2466,19 +2733,29 @@
                     "$ref": "#/$defs/Emissions"
                 },
                 "HeaviestAxleWeightCharacteristic": {
-                    "$ref": "#/$defs/HeaviestAxleWeightCharacteristic"
+                    "$ref": "#/$defs/HeaviestAxleWeightCharacteristic",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "MaximumGrossWeightCharacteristic": {
-                    "$ref": "#/$defs/MaximumGrossWeightCharacteristic"
+                    "$ref": "#/$defs/MaximumGrossWeightCharacteristic",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "MaximumHeightCharacteristic": {
-                    "$ref": "#/$defs/MaximumHeightCharacteristic"
+                    "$ref": "#/$defs/MaximumHeightCharacteristic",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "MaximumLengthCharacteristic": {
-                    "$ref": "#/$defs/MaximumLengthCharacteristic"
+                    "$ref": "#/$defs/MaximumLengthCharacteristic",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "MaximumWidthCharacteristic": {
-                    "$ref": "#/$defs/MaximumWidthCharacteristic"
+                    "$ref": "#/$defs/MaximumWidthCharacteristic",
+                    "minItems": 0,
+                    "maxItems": 1
                 },
                 "NumberOfAxlesCharacteristic": {
                     "type": "array",
@@ -2493,7 +2770,8 @@
                     "items": {
                         "$ref": "#/$defs/VehicleCondition"
                     },
-                    "minItems": 1
+                    "minItems": 1,
+                    "maxItems": 1
                 },
                 "fuelType": {
                     "description": "The type of fuel used by the vehicle.",
@@ -2560,16 +2838,21 @@
                             "items": {
                                 "$ref": "#/$defs/Condition"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "maxItems": 1
                         },
                         "VehicleCharacteristics": {
                             "type": "array",
                             "items": {
                                 "$ref": "#/$defs/VehicleCharacteristics"
                             },
-                            "minItems": 1
+                            "minItems": 1,
+                            "maxItems": 1
                         }
-                    }
+                    },
+                    "required": [
+                        "Condition"
+                    ]
                 }
             ]
         },
