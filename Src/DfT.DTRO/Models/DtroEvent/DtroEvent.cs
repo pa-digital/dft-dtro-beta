@@ -57,6 +57,9 @@ public class DtroEvent
     [DataMember(Name = "eventTime")]
     public DateTime EventTime { get; set; }
 
+    [DataMember(Name = "deleted")]
+    public bool Deleted { get; set; }
+
     [DataMember(Name = "_links")]
     public Links Links { get; set; }
 
@@ -75,6 +78,7 @@ public class DtroEvent
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
+            Deleted = dtro.Deleted,
             Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
