@@ -72,7 +72,7 @@
 <div style="display: flex; justify-content: space-between; margin-top: 20px;">
     @{ var maxPageSize = 50; }
     <!-- Record Count Display -->
-    <div style="text-align: left;">
+    <div>
         @if (Model.Dtros.TotalCount > 0)
         { 
             var startRecord = (Model.Dtros.Page - 1) * maxPageSize + 1;
@@ -81,7 +81,7 @@
         }
     </div>
     <!-- Pages Controls -->
-    <div style="flex: 1; text-align: right;">
+    <div>
         @if (Model.Dtros.TotalCount > Model.Dtros.PageSize)
         {
             <nav aria-label="tro navigation">
