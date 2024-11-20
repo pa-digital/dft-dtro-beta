@@ -2,6 +2,7 @@ namespace Dft.DTRO.Admin.Pages;
 public class SearchModel : PageModel
 {
     public PaginatedResponse<DtroSearchResult> Dtros { get; set; }
+    public SearchQuery DtroSearch { get; set; }
     private readonly IDtroService _dtroService;
     private readonly IDtroUserService _dtroUserService;
     private readonly ISystemConfigService _systemConfigService;
@@ -27,7 +28,12 @@ public class SearchModel : PageModel
         _errHandlingService = errHandlingService;
     }
 
-    public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
+    public async Task<IActionResult> OnGetAsync(int pageNumber = 1,
+        DateTime? publicationTime = null, DateTime? modificationTime = null,
+        DateTime? deletionTime = null, int? traCreator = null,
+        string? troName = null, string? regulationType = null,
+        string? vehicleType = null, string? orderReportingPoint = null,
+        ValueCondition<DateTime>? regulationStart = null, ValueCondition<DateTime>? regulationEnd = null)
     {
         try
         {
@@ -37,7 +43,12 @@ public class SearchModel : PageModel
                 var user = await _dtroUserService.GetDtroUserAsync(DtroUserSearch.DtroUserIdSelect.Value);
                 useTraId = user.TraId;
             }
-            Dtros = await _dtroService.SearchDtros(useTraId, pageNumber);
+            var searchQuery = mapToSearchQuery((DateTime)publicationTime,
+                (DateTime)modificationTime, (DateTime)deletionTime,
+                (int)traCreator, troName, regulationType, vehicleType,
+                orderReportingPoint, regulationStart, regulationEnd);
+
+            Dtros = await _dtroService.SearchDtros(useTraId, pageNumber, searchQuery);
             DtroUserSearch.AlwaysButtonHidden = true;
             DtroUserSearch.UpdateButtonText = "Search";
             DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
@@ -60,6 +71,67 @@ public class SearchModel : PageModel
         {
             return _errHandlingService.HandleUiError(ex);
         }
+    }
+
+    private SearchQuery mapToSearchQuery(DateTime publicationTime,
+        DateTime modificationTime, DateTime deletionTime, int traCreator,
+        string troName, string regulationType, string vehicleType,
+        string orderReportingPoint, ValueCondition<DateTime> regulationStart,
+        ValueCondition<DateTime> regulationEnd) {
+
+        var searchQuery = new SearchQuery();
+
+        if (publicationTime != DateTime.MinValue)
+        {
+            searchQuery.PublicationTime = publicationTime;
+        }
+
+        if (modificationTime != DateTime.MinValue)
+        {
+            searchQuery.ModificationTime = modificationTime;
+        }
+
+        if (deletionTime != DateTime.MinValue)
+        {
+            searchQuery.DeletionTime = deletionTime;
+        }
+
+        if (traCreator > 0)
+        {
+            searchQuery.TraCreator = traCreator;
+        }
+
+        if (!string.IsNullOrWhiteSpace(troName))
+        {
+            searchQuery.TroName = troName;
+        }
+
+        if (!string.IsNullOrWhiteSpace(regulationType))
+        {
+            searchQuery.RegulationType = regulationType;
+        }
+
+        if (!string.IsNullOrWhiteSpace(vehicleType))
+        {
+            searchQuery.VehicleType = vehicleType;
+        }
+
+        if (!string.IsNullOrWhiteSpace(orderReportingPoint))
+        {
+            searchQuery.OrderReportingPoint = orderReportingPoint;
+        }
+
+        if (regulationStart != null)
+        {
+            searchQuery.RegulationStart = regulationStart;
+        }
+
+        if (regulationEnd != null)
+        {
+            searchQuery.RegulationEnd = regulationEnd;
+        }
+
+        return searchQuery;
     }
 
     public IActionResult OnPostUpdate()
