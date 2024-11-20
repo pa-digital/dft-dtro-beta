@@ -2,7 +2,7 @@
 @model SearchModel
 
 <h2>
-    DTROs
+    DTROs - Total found: @Model.Dtros.TotalCount
     @if (Model.AllowAddUpdate)
     {
         <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="false">+</a>
@@ -68,3 +68,50 @@
         }
     </tbody>
 </table>
+
+<div style="display: flex; justify-content: space-between; margin-top: 20px;">
+    @{ var maxPageSize = 50; }
+    <!-- Record Count Display -->
+    <div style="text-align: left;">
+        @if (Model.Dtros.TotalCount > 0)
+        { 
+            var startRecord = (Model.Dtros.Page - 1) * maxPageSize + 1;
+            var endRecord = Math.Min(Model.Dtros.Page * maxPageSize, Model.Dtros.TotalCount);
+            <span>@startRecord - @endRecord of @Model.Dtros.TotalCount</span>
+        }
+    </div>
+    <!-- Pages Controls -->
+    <div style="flex: 1; text-align: right;">
+        @if (Model.Dtros.TotalCount > Model.Dtros.PageSize)
+        {
+            <nav aria-label="tro navigation">
+                <ul class="pages justify-content-end">
+                    @if (Model.Dtros.Page > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page - 1)">Previous</a>
+                        </li>
+                    }
+
+                    @{
+                        int totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / maxPageSize);
+                    }
+
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == Model.Dtros.Page ? "active" : "")">
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@i">@i</a>
+                        </li>
+                    }
+
+                    @if (Model.Dtros.Page < totalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page + 1)">Next</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+</div>
