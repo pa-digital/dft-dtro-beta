@@ -2,7 +2,7 @@ namespace Dft.DTRO.Admin.Models.Search;
 
 public class SearchQuery
 {
-    public Location Location { get; set; }
+    // public Location Location { get; set; }
 
     [DataType(DataType.DateTime)]
     public DateTime? PublicationTime { get; set; }

@@ -13,23 +13,54 @@
     <div>
         @await Html.PartialAsync("_TraSearchPartial", Model.DtroUserSearch)
     </div>
+    <div>
+        @await Html.PartialAsync("_TraSearchPartial", Model.Dtros)
+    </div>
     <fieldset>
-        <legend>Add Customer</legend>
+        <legend>Search TROs</legend>
         <div>
-            <label for="CompanyName">Company Name:</label>
-            <input type="text" name="CompanyName" value="" />
+            <label for="PublicationTime">Publication Time:</label>
+            <input type="text" name="PublicationTime" value="" />
         </div>
         <div>
-            <label for="ContactName">Contact Name:</label>
-            <input type="text" name="ContactName" value="" />
+            <label for="ModificationTime">Modification Time:</label>
+            <input type="text" name="ModificationTime" value="" />
         </div>
         <div>
-            <label for="Employees">Employee Count:</label>
-            <input type="text" name="Employees" value="" />
+            <label for="DeletionTime">Deletion Time:</label>
+            <input type="text" name="DeletionTime" value="" />
+        </div>
+        <div>
+            <label for="TraCreator">Tra Creator:</label>
+            <input type="text" name="TraCreator" value="" />
+        </div>
+        <div>
+            <label for="TroName">Tro Name:</label>
+            <input type="text" name="TroName" value="" />
+        </div>
+        <div>
+            <label for="RegulationType">Regulation Type:</label>
+            <input type="text" name="RegulationType" value="" />
+        </div>
+        <div>
+            <label for="VehicleType">Vehicle Type:</label>
+            <input type="text" name="VehicleType" value="" />
+        </div>
+        <div>
+            <label for="OrderReportingPoint">Order Reporting Point:</label>
+            <input type="text" name="OrderReportingPoint" value="" />
+        </div>
+        <div>
+            <label for="RegulationStart">Regulation Start:</label>
+            <input type="text" name="RegulationStart" value="" />
+        </div>
+        <div>
+            <label for="RegulationEnd">Regulation End:</label>
+            <input type="text" name="RegulationEnd" value="" />
         </div>
         <div>
             <label>&nbsp;</label>
-            <input type="submit" value="Submit" class="submit" />
+            <input type="search" value="Search" class="search" />
         </div>
     </fieldset>
 </form>
