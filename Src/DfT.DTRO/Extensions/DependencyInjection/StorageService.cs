@@ -26,7 +26,7 @@ public static class StorageService
 
         string password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
                           ?? configuration.GetValue("Postgres:Password", "admin");
-       
+
         string database = Environment.GetEnvironmentVariable("POSTGRES_DB")
                           ?? configuration.GetValue("Postgres:DbName", "data");
 
