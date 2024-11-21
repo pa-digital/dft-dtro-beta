@@ -73,30 +73,30 @@ public class SearchModel : PageModel
         }
     }
 
-    private SearchQuery mapToSearchQuery(DateTime publicationTime,
-        DateTime modificationTime, DateTime deletionTime, int traCreator,
-        string troName, string regulationType, string vehicleType,
-        string orderReportingPoint, ValueCondition<DateTime> regulationStart,
-        ValueCondition<DateTime> regulationEnd) {
+    private SearchQuery mapToSearchQuery(DateTime? publicationTime,
+        DateTime? modificationTime, DateTime? deletionTime, int? traCreator,
+        string? troName, string? regulationType, string? vehicleType,
+        string? orderReportingPoint, ValueCondition<DateTime>? regulationStart,
+        ValueCondition<DateTime>? regulationEnd) {
 
         var searchQuery = new SearchQuery();
 
-        if (publicationTime != DateTime.MinValue)
+        if (publicationTime.HasValue)
         {
             searchQuery.PublicationTime = publicationTime;
         }
 
-        if (modificationTime != DateTime.MinValue)
+        if (modificationTime.HasValue)
         {
             searchQuery.ModificationTime = modificationTime;
         }
 
-        if (deletionTime != DateTime.MinValue)
+        if (deletionTime.HasValue)
         {
             searchQuery.DeletionTime = deletionTime;
         }
 
-        if (traCreator > 0)
+        if (traCreator.HasValue && traCreator > 0)
         {
             searchQuery.TraCreator = traCreator;
         }
