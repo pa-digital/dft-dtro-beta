@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "Both",
+    "Projects": [
+      {
+        "Path": "DfT.DTRO.csproj",
+        "Action": "Start",
+        "DebugTarget": "DfT.DTRO"
+      },
+      {
+        "Path": "..\\Dft.DTRO.Admin\\Dft.DTRO.Admin.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      }
+    ]
+  }
+]
