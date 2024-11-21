@@ -30,10 +30,10 @@ public enum ConditionType
     AccessCondition = 4,
 
     /// <summary>
-    /// Time validity condition
+    /// Vehicle characteristics condition
     /// </summary>
-    [Display(Name = "ValidityCondition")]
-    ValidityCondition = 5,
+    [Display(Name = "VehicleCharacteristics")]
+    VehicleCharacteristics = 5,
 
     /// <summary>
     /// Non-vehicular road user condition
@@ -48,8 +48,8 @@ public enum ConditionType
     PermitCondition = 7,
 
     /// <summary>
-    /// Vehicle condition
+    /// Time validity condition
     /// </summary>
-    [Display(Name = "VehicleCondition")]
-    VehicleCondition = 8
+    [Display(Name = "TimeValidity")]
+    TimeValidity = 8
 }
