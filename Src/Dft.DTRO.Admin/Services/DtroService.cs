@@ -59,12 +59,12 @@ public class DtroService : IDtroService
 
         var response = await _client.SendAsync(request);
         Console.WriteLine($"##**## response.StatusCode: {response.StatusCode}");
-        Console.WriteLine($"##**## response.: {response.Content.ReadAsStringAsync()}");
-        Console.WriteLine($"##**## response: {response.IsSuccessStatusCode}");
         await _errHandlingService.RedirectIfErrors(response);
 
         var content = await response.Content.ReadAsStringAsync();
+        Console.WriteLine($"##**## response.Content: {content}");
         var paginatedResponse = JsonSerializer.Deserialize<PaginatedResponse<DtroSearchResult>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        Console.WriteLine($"##**## paginatedResponse: {paginatedResponse}");
         return paginatedResponse;
     }
 
