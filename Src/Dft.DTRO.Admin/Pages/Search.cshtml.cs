@@ -122,14 +122,15 @@ public class SearchModel : PageModel
         }
 
         Console.WriteLine($"regulationStart != null: {regulationStart != null}");
-        if (regulationStart != null)
+        Console.WriteLine($"regulationStart.Value != DateTime.MinValue: {regulationStart.Value != DateTime.MinValue}");
+        if (regulationStart != null && regulationStart.Value != DateTime.MinValue)
         {
             searchQuery.RegulationStart = regulationStart;
             Console.WriteLine($"regulationStart: {regulationStart.Value}");
             Console.WriteLine($"regulationStart.Operator: {regulationStart.Operator}");
         }
 
-        if (regulationEnd != null)
+        if (regulationEnd != null && regulationEnd.Value != DateTime.MinValue)
         {
             searchQuery.RegulationEnd = regulationEnd;
         }

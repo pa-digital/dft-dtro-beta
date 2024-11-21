@@ -57,17 +57,6 @@ public class SearchController : ControllerBase
     {
         try
         {
-            Console.WriteLine($"##**## search.body");
-            var query = body.Queries.First();
-            Console.WriteLine($"##**## PublicationTime: {query.PublicationTime}");
-            Console.WriteLine($"##**## ModificationTime: {query.ModificationTime}");
-            Console.WriteLine($"##**## DeletionTime: {query.DeletionTime}");
-            Console.WriteLine($"##**## TraCreator: {query.TraCreator}");
-            Console.WriteLine($"##**## TroName: {query.TroName}");
-            Console.WriteLine($"##**## RegulationType: {query.RegulationType}");
-            Console.WriteLine($"##**## VehicleType: {query.VehicleType}");
-            Console.WriteLine($"##**## RegulationStart: {query.RegulationStart}");
-            Console.WriteLine($"##**## RegulationEnd: {query.RegulationEnd}");
             appId = await _appIdMapperService.GetAppId(HttpContext);
             PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
             await _metricsService.IncrementMetric(MetricType.Search, appId);
@@ -76,6 +65,7 @@ public class SearchController : ControllerBase
                 nameof(SearchDtros),
                 "/search",
                 $"'{nameof(SearchDtros)}' method called and body '{body}'");
+            Console.WriteLine($"##**## response: {response.ToIndentedJsonString}");
             return Ok(response);
         }
         catch (InvalidOperationException ioex)

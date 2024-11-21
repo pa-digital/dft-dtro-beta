@@ -68,7 +68,9 @@ public class DtroService : IDtroService
         await _xappIdService.AddXAppIdHeader(request);
 
         var response = await _client.SendAsync(request);
-        Console.WriteLine($"##**## response: {response.ToString}");
+        Console.WriteLine($"##**## response.StatusCode: {response.StatusCode}");
+        Console.WriteLine($"##**## response.Content: {response.Content.ReadAsStringAsync()}");
+        Console.WriteLine($"##**## response: {response.IsSuccessStatusCode}");
         await _errHandlingService.RedirectIfErrors(response);
 
         var content = await response.Content.ReadAsStringAsync();
