@@ -57,6 +57,7 @@ public class SearchController : ControllerBase
     {
         try
         {
+            Console.WriteLine($"##**## search.body: {body}");
             appId = await _appIdMapperService.GetAppId(HttpContext);
             PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
             await _metricsService.IncrementMetric(MetricType.Search, appId);

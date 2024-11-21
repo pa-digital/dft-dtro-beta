@@ -46,6 +46,7 @@ public class DtroService : IDtroService
         }
 
         searchQuery.CurrentTraOwner = traId;
+        Console.WriteLine($"##**## searchQuery: {searchQuery}");
         var search = new DtroSearch() { Page = pageNumber, PageSize = 50, Queries = new List<SearchQuery> { searchQuery } };
 
         var jsonContent = JsonSerializer.Serialize(search);
