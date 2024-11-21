@@ -43,9 +43,9 @@ public class SearchModel : PageModel
                 var user = await _dtroUserService.GetDtroUserAsync(DtroUserSearch.DtroUserIdSelect.Value);
                 useTraId = user.TraId;
             }
-            var searchQuery = mapToSearchQuery((DateTime)publicationTime,
-                (DateTime)modificationTime, (DateTime)deletionTime,
-                (int)traCreator, troName, regulationType, vehicleType,
+            var searchQuery = mapToSearchQuery(publicationTime ?? DateTime.MinValue,
+                modificationTime ?? DateTime.MinValue, deletionTime ?? DateTime.MinValue,
+                traCreator ?? 0, troName, regulationType, vehicleType,
                 orderReportingPoint, regulationStart, regulationEnd);
 
             Dtros = await _dtroService.SearchDtros(useTraId, pageNumber, searchQuery);
@@ -80,10 +80,11 @@ public class SearchModel : PageModel
         ValueCondition<DateTime>? regulationEnd) {
 
         var searchQuery = new SearchQuery();
-
+        Console.WriteLine($"publicationTime.HasValue: {publicationTime.HasValue}");
         if (publicationTime.HasValue)
         {
             searchQuery.PublicationTime = publicationTime;
+            Console.WriteLine($"publicationTime: {publicationTime}");
         }
 
         if (modificationTime.HasValue)
@@ -101,9 +102,11 @@ public class SearchModel : PageModel
             searchQuery.TraCreator = traCreator;
         }
 
+        Console.WriteLine($"!string.IsNullOrWhiteSpace(troName): {!string.IsNullOrWhiteSpace(troName)}");
         if (!string.IsNullOrWhiteSpace(troName))
         {
             searchQuery.TroName = troName;
+            Console.WriteLine($"troName: {troName}");
         }
 
         if (!string.IsNullOrWhiteSpace(regulationType))
@@ -121,9 +124,11 @@ public class SearchModel : PageModel
             searchQuery.OrderReportingPoint = orderReportingPoint;
         }
 
+        Console.WriteLine($"regulationStart != null: {regulationStart != null}");
         if (regulationStart != null)
         {
             searchQuery.RegulationStart = regulationStart;
+            Console.WriteLine($"regulationStart: {regulationStart.Value}");
         }
 
         if (regulationEnd != null)
