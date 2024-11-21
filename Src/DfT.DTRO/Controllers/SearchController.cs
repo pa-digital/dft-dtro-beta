@@ -65,7 +65,7 @@ public class SearchController : ControllerBase
                 nameof(SearchDtros),
                 "/search",
                 $"'{nameof(SearchDtros)}' method called and body '{body}'");
-            Console.WriteLine($"##**## response: {response.ToIndentedJsonString}");
+            Console.WriteLine($"##**## response.TotalCount: {response.TotalCount}");
             return Ok(response);
         }
         catch (InvalidOperationException ioex)

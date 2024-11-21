@@ -45,20 +45,10 @@ public class DtroService : IDtroService
             traId = null;
         }
 
-        searchQuery.CurrentTraOwner = traId;
-        Console.WriteLine($"##**## searchQuery");
-        Console.WriteLine($"##**## PublicationTime: {searchQuery.PublicationTime}");
-        Console.WriteLine($"##**## ModificationTime: {searchQuery.ModificationTime}");
-        Console.WriteLine($"##**## DeletionTime: {searchQuery.DeletionTime}");
-        Console.WriteLine($"##**## TraCreator: {searchQuery.TraCreator}");
-        Console.WriteLine($"##**## TroName: {searchQuery.TroName}");
-        Console.WriteLine($"##**## RegulationType: {searchQuery.RegulationType}");
-        Console.WriteLine($"##**## VehicleType: {searchQuery.VehicleType}");
-        Console.WriteLine($"##**## RegulationStart: {searchQuery.RegulationStart}");
-        Console.WriteLine($"##**## RegulationEnd: {searchQuery.RegulationEnd}");
         var search = new DtroSearch() { Page = pageNumber, PageSize = 50, Queries = new List<SearchQuery> { searchQuery } };
 
         var jsonContent = JsonSerializer.Serialize(search);
+        Console.WriteLine($"##**## search.jsonContent: {jsonContent}");
         var param = new StringContent(jsonContent, Encoding.UTF8, "application/json");
         var request = new HttpRequestMessage(HttpMethod.Post, ConfigHelper.Version + "/search")
         {
@@ -69,7 +59,7 @@ public class DtroService : IDtroService
 
         var response = await _client.SendAsync(request);
         Console.WriteLine($"##**## response.StatusCode: {response.StatusCode}");
-        Console.WriteLine($"##**## response.Content: {response.Content.ReadAsStringAsync()}");
+        Console.WriteLine($"##**## response.: {response.Content.ReadAsStringAsync()}");
         Console.WriteLine($"##**## response: {response.IsSuccessStatusCode}");
         await _errHandlingService.RedirectIfErrors(response);
 

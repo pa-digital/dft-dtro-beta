@@ -3,10 +3,10 @@
 
 <h2>
     DTROs - Total found: @Model.Dtros.TotalCount
-    @if (Model.AllowAddUpdate)
+    <!-- @if (Model.AllowAddUpdate)
     {
         <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="false">+</a>
-    }
+    } -->
 </h2>
 
 <div style="display: flex; justify-content: space-between; gap: 20px; margin-top: 20px;">
@@ -38,6 +38,10 @@
                 <div>
                     <label for="TroName">Tro Name:</label>
                     <input type="text" name="TroName" value="@Model.DtroSearch.TroName" />
+                </div>
+                <div>
+                    <label for="CurrentTraOwner">Current Tra Owner:</label>
+                    <input type="text" name="CurrentTraOwner" value="@Model.DtroSearch.CurrentTraOwner" />
                 </div>
                 <div>
                     <label for="RegulationType">Regulation Type:</label>

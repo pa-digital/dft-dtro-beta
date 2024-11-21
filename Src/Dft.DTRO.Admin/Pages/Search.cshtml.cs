@@ -31,7 +31,7 @@ public class SearchModel : PageModel
     public async Task<IActionResult> OnGetAsync(int pageNumber = 1,
         DateTime? publicationTime = null, DateTime? modificationTime = null,
         DateTime? deletionTime = null, int? traCreator = null,
-        string? troName = null, string? regulationType = null,
+        string? troName = null, int? CurrentTraOwner = null, string? regulationType = null,
         string? vehicleType = null, string? orderReportingPoint = null,
         ValueCondition<DateTime>? regulationStart = null, ValueCondition<DateTime>? regulationEnd = null)
     {
@@ -45,26 +45,26 @@ public class SearchModel : PageModel
             }
             var searchQuery = mapToSearchQuery(publicationTime ?? DateTime.MinValue,
                 modificationTime ?? DateTime.MinValue, deletionTime ?? DateTime.MinValue,
-                traCreator ?? 0, troName, regulationType, vehicleType,
+                traCreator ?? 0, CurrentTraOwner?? 0, troName, regulationType, vehicleType,
                 orderReportingPoint, regulationStart, regulationEnd);
 
             Dtros = await _dtroService.SearchDtros(useTraId, pageNumber, searchQuery);
-            DtroUserSearch.AlwaysButtonHidden = true;
-            DtroUserSearch.UpdateButtonText = "Search";
-            DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
-            DtroUserSearch.DtroUsers.RemoveAll(x => x.UserGroup != UserGroup.Tra);
-            DtroUserSearch.DtroUsers.Insert(0, new DtroUser { TraId = 0, Name = "[all]" });
+            //DtroUserSearch.AlwaysButtonHidden = true;
+            //DtroUserSearch.UpdateButtonText = "Search";
+            //DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();
+            //DtroUserSearch.DtroUsers.RemoveAll(x => x.UserGroup != UserGroup.Tra);
+            //DtroUserSearch.DtroUsers.Insert(0, new DtroUser { TraId = 0, Name = "[all]" });
 
 
-            var users = await _dtroUserService.GetDtroUsersAsync();
-            var myUser = users.FirstOrDefault(x => x.xAppId == _xappIdService.MyXAppId());
+            //var users = await _dtroUserService.GetDtroUsersAsync();
+            //var myUser = users.FirstOrDefault(x => x.xAppId == _xappIdService.MyXAppId());
 
-            var systemConfig = await _systemConfigService.GetSystemConfig();
+            //var systemConfig = await _systemConfigService.GetSystemConfig();
 
-            if (myUser?.TraId != null && systemConfig.IsTest)
-            {
-                AllowAddUpdate = true;
-            }
+            //if (myUser?.TraId != null && systemConfig.IsTest)
+            //{
+            //    AllowAddUpdate = true;
+            //}
             return Page();
         }
         catch (Exception ex)
@@ -75,8 +75,9 @@ public class SearchModel : PageModel
 
     private SearchQuery mapToSearchQuery(DateTime? publicationTime,
         DateTime? modificationTime, DateTime? deletionTime, int? traCreator,
-        string? troName, string? regulationType, string? vehicleType,
-        string? orderReportingPoint, ValueCondition<DateTime>? regulationStart,
+        int? CurrentTraOwner, string? troName, string? regulationType,
+        string? vehicleType, string? orderReportingPoint,
+        ValueCondition<DateTime>? regulationStart,
         ValueCondition<DateTime>? regulationEnd) {
 
         var searchQuery = new SearchQuery();
@@ -101,6 +102,11 @@ public class SearchModel : PageModel
             searchQuery.TraCreator = traCreator;
         }
 
+        if (CurrentTraOwner.HasValue && CurrentTraOwner > 0)
+        {
+            searchQuery.CurrentTraOwner = CurrentTraOwner;
+        }
+
         if (!string.IsNullOrWhiteSpace(troName))
         {
             searchQuery.TroName = troName;
@@ -121,13 +127,9 @@ public class SearchModel : PageModel
             searchQuery.OrderReportingPoint = orderReportingPoint;
         }
 
-        Console.WriteLine($"regulationStart != null: {regulationStart != null}");
-        Console.WriteLine($"regulationStart.Value != DateTime.MinValue: {regulationStart.Value != DateTime.MinValue}");
         if (regulationStart != null && regulationStart.Value != DateTime.MinValue)
         {
             searchQuery.RegulationStart = regulationStart;
-            Console.WriteLine($"regulationStart: {regulationStart.Value}");
-            Console.WriteLine($"regulationStart.Operator: {regulationStart.Operator}");
         }
 
         if (regulationEnd != null && regulationEnd.Value != DateTime.MinValue)
