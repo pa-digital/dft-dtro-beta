@@ -1,5 +1,6 @@
 ﻿namespace Dft.DTRO.Tests.Mocks;
 
+[ExcludeFromCodeCoverage]
 public static class MockTestObjects
 {
     public static IFormFile TestFile
@@ -11,13 +12,6 @@ public static class MockTestObjects
             return file;
         }
     }
-
-    public static DtroSubmit DtroSubmit =>
-        new()
-        {
-            SchemaVersion = new SchemaVersion("1.0.0"),
-            Data = new ExpandoObject()
-        };
 
     public static GuidResponse GuidResponse =>
         new()
