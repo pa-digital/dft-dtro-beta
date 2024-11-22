@@ -103,7 +103,7 @@ public class DtroEvent
         return new DtroEvent
         {
             EventType = DtroEventType.Update,
-            EventTime = dtro.DeletionTime.Value.ToDateTimeTruncated(),
+            EventTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
             PublicationTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,

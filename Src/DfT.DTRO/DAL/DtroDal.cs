@@ -310,7 +310,7 @@ public class DtroDal : IDtroDal
 
         if (search.DeletionTime is { } deletionTime)
         {
-            deletionTime = DateTime.SpecifyKind(deletionTime, DateTimeKind.Utc).ToDateTimeTruncated();
+            deletionTime = DateTime.SpecifyKind(deletionTime, DateTimeKind.Utc);
 
             expressionsToConjunct.Add(it => it.DeletionTime >= deletionTime);
         }
@@ -327,14 +327,14 @@ public class DtroDal : IDtroDal
 
         if (search.Since is { } publicationTime)
         {
-            publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc).ToDateTimeTruncated();
+            publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc);
 
             expressionsToConjunct.Add(it => it.Created >= publicationTime);
         }
 
         if (search.ModificationTime is { } modificationTime)
         {
-            modificationTime = DateTime.SpecifyKind(modificationTime, DateTimeKind.Utc).ToDateTimeTruncated();
+            modificationTime = DateTime.SpecifyKind(modificationTime, DateTimeKind.Utc);
 
             expressionsToConjunct.Add(it => it.LastUpdated >= modificationTime);
         }

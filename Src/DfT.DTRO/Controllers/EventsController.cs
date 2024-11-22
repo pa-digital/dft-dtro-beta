@@ -67,19 +67,19 @@ public class EventsController : ControllerBase
         catch (NotFoundException nfex)
         {
             _logger.LogError(nfex.Message);
-            _loggingExtension.LogError(nameof(Events), "/events", "Not Found", nfex.Message);
+            _loggingExtension.LogError(nameof(Events), "/events", $"Not Found: {nfex.Message}", nfex.StackTrace);
             return NotFound(new ApiErrorResponse("Not Found", nfex.Message));
         }
         catch (InvalidOperationException ioex)
         {
             _logger.LogError(ioex.Message);
-            _loggingExtension.LogError(nameof(Events), "/events", "Bad Request", ioex.Message);
+            _loggingExtension.LogError(nameof(Events), "/events", $"Bad Request: {ioex.Message}", ioex.StackTrace);
             return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
         }
         catch (ArgumentNullException anex)
         {
             _logger.LogError(anex.Message);
-            _loggingExtension.LogError(nameof(Events), "/events", "Unexpected Null value was found", anex.Message);
+            _loggingExtension.LogError(nameof(Events), "/events", $"Unexpected Null value was found: {anex.Message}", anex.StackTrace);
             return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
         }
         catch (OperationCanceledException ocex)
