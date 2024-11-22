@@ -377,7 +377,7 @@ public class DtroMappingService : IDtroMappingService
             TroName = dtro.Data.GetValueOrDefault<string>("Source.troName"),
             TrafficAuthorityCreatorId = dtro.Data.GetValueOrDefault<int>("Source.traCreator"),
             TrafficAuthorityOwnerId = dtro.Data.GetValueOrDefault<int>("Source.currentTraOwner"),
-            PublicationTime = dtro.Created.Value,
+            PublicationTime = dtro.Created.Value.ToDateTimeTruncated(),
             RegulationType = dtro.RegulationTypes,
             VehicleType = dtro.VehicleTypes,
             OrderReportingPoint = dtro.OrderReportingPoints,

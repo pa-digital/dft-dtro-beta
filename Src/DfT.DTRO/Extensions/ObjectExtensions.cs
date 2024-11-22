@@ -98,4 +98,17 @@ public static class ObjectExtensions
         int end = source.LastIndexOf(after, StringComparison.Ordinal);
         return end <= adjStart ? "" : source.Substring(adjStart, end - adjStart);
     }
+
+    public static DateTime ToDateTimeTruncated(this DateTime dateTime)
+    {
+        return new DateTime(
+            dateTime.Year,
+            dateTime.Month,
+            dateTime.Day,
+            dateTime.Hour,
+            dateTime.Minute,
+            dateTime.Second,
+            DateTimeKind.Utc
+        );
+    }
 }

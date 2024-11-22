@@ -51,6 +51,9 @@ public class DtroService : IDtroService
     public async Task<DtroResponse> GetDtroByIdAsync(Guid id)
     {
         Models.DataBase.DTRO dtro = await _dtroDal.GetDtroByIdAsync(id);
+        dtro.Created = dtro.Created.Value.ToDateTimeTruncated();
+        dtro.LastUpdated = dtro.LastUpdated.Value.ToDateTimeTruncated();
+        dtro.DeletionTime = dtro.DeletionTime.Value.ToDateTimeTruncated();
         if (dtro is null)
         {
             throw new NotFoundException();
@@ -90,7 +93,6 @@ public class DtroService : IDtroService
 
         Models.DataBase.DTRO currentDtro = await _dtroDal.GetDtroByIdAsync(id);
 
-
         DTROHistory historyDtro = _dtroMappingService.MapToDtroHistory(currentDtro);
 
         var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
@@ -106,6 +108,7 @@ public class DtroService : IDtroService
     public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
     {
         var result = await _dtroDal.FindDtrosAsync(search);
+
         return result;
     }
 
