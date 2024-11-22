@@ -53,7 +53,6 @@ public class DtroService : IDtroService
         Models.DataBase.DTRO dtro = await _dtroDal.GetDtroByIdAsync(id);
         dtro.Created = dtro.Created.Value.ToDateTimeTruncated();
         dtro.LastUpdated = dtro.LastUpdated.Value.ToDateTimeTruncated();
-        dtro.DeletionTime = dtro.DeletionTime.Value.ToDateTimeTruncated();
         if (dtro is null)
         {
             throw new NotFoundException();
