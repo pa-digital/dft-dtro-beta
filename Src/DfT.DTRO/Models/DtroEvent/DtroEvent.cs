@@ -65,8 +65,8 @@ public class DtroEvent
         return new DtroEvent
         {
             EventType = DtroEventType.Delete,
-            EventTime = dtro.DeletionTime.Value,
-            PublicationTime = dtro.LastUpdated.Value,
+            EventTime = dtro.DeletionTime.Value.ToDateTimeTruncated(),
+            PublicationTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
@@ -84,8 +84,8 @@ public class DtroEvent
         return new DtroEvent
         {
             EventType = DtroEventType.Create,
-            EventTime = dtro.Created.Value,
-            PublicationTime = dtro.LastUpdated.Value,
+            EventTime = dtro.Created.Value.ToDateTimeTruncated(),
+            PublicationTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
@@ -103,8 +103,8 @@ public class DtroEvent
         return new DtroEvent
         {
             EventType = DtroEventType.Update,
-            EventTime = dtro.LastUpdated.Value,
-            PublicationTime = dtro.LastUpdated.Value,
+            EventTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
+            PublicationTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,

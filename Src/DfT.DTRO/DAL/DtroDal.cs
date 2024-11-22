@@ -89,9 +89,10 @@ public class DtroDal : IDtroDal
 
 
         dtro.Data = dtroSubmit.Data;
-        var now = DateTime.UtcNow;
-        dtro.LastUpdated = now;
-        dtro.Created = now;
+        var utcNow = DateTime.UtcNow.ToDateTimeTruncated();
+
+        dtro.LastUpdated = utcNow;
+        dtro.Created = utcNow;
         dtro.LastUpdatedCorrelationId = correlationId;
         dtro.CreatedCorrelationId = dtro.LastUpdatedCorrelationId;
 
@@ -136,7 +137,8 @@ public class DtroDal : IDtroDal
         existing.SchemaVersion = dtroSubmit.SchemaVersion;
         existing.Data = dtroSubmit.Data;
 
-        existing.LastUpdated = DateTime.UtcNow;
+        var lastUpdated = DateTime.UtcNow.ToDateTimeTruncated();
+        existing.LastUpdated = lastUpdated;
         existing.LastUpdatedCorrelationId = correlationId;
 
         _dtroContext.Entry(existing).Property(e => e.Data).IsModified = true;
@@ -156,7 +158,9 @@ public class DtroDal : IDtroDal
 
         _dtroMappingService.SetOwnership(ref existing, assignToTraId);
         _dtroMappingService.SetSourceActionType(ref existing, Enums.SourceActionType.Amendment);
-        existing.LastUpdated = DateTime.UtcNow;
+
+        var lastUpdated = DateTime.UtcNow.ToDateTimeTruncated();
+        existing.LastUpdated = lastUpdated;
         existing.LastUpdatedCorrelationId = correlationId;
 
         _dtroMappingService.InferIndexFields(ref existing);
@@ -180,7 +184,7 @@ public class DtroDal : IDtroDal
 
             if (query.DeletionTime is { } deletionTime)
             {
-                deletionTime = DateTime.SpecifyKind(deletionTime, DateTimeKind.Utc);
+                deletionTime = DateTime.SpecifyKind(deletionTime, DateTimeKind.Utc).ToDateTimeTruncated();
                 expressionsToConjunct.Add(it => it.DeletionTime >= deletionTime);
             }
             else
@@ -200,13 +204,13 @@ public class DtroDal : IDtroDal
 
             if (query.PublicationTime is { } publicationTime)
             {
-                publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc);
+                publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc).ToDateTimeTruncated();
                 expressionsToConjunct.Add(it => it.Created >= publicationTime);
             }
 
             if (query.ModificationTime is { } modificationTime)
             {
-                modificationTime = DateTime.SpecifyKind(modificationTime, DateTimeKind.Utc);
+                modificationTime = DateTime.SpecifyKind(modificationTime, DateTimeKind.Utc).ToDateTimeTruncated();
                 expressionsToConjunct.Add(it => it.LastUpdated >= modificationTime);
             }
 

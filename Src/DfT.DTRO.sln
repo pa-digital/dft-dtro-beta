@@ -1,0 +1,33 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35514.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DfT.DTRO", "DfT.DTRO\DfT.DTRO.csproj", "{1939A76B-01FF-4B9E-B803-2835C862D94D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dft.DTRO.Admin", "Dft.DTRO.Admin\Dft.DTRO.Admin.csproj", "{C7288465-D620-4662-BBD7-9282B3BEA83A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dft.DTRO.Tests", "Dft.DTRO.Tests\Dft.DTRO.Tests.csproj", "{0080F817-594B-4479-9D05-EBD21BDB8898}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1939A76B-01FF-4B9E-B803-2835C862D94D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1939A76B-01FF-4B9E-B803-2835C862D94D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1939A76B-01FF-4B9E-B803-2835C862D94D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1939A76B-01FF-4B9E-B803-2835C862D94D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7288465-D620-4662-BBD7-9282B3BEA83A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7288465-D620-4662-BBD7-9282B3BEA83A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7288465-D620-4662-BBD7-9282B3BEA83A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7288465-D620-4662-BBD7-9282B3BEA83A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0080F817-594B-4479-9D05-EBD21BDB8898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0080F817-594B-4479-9D05-EBD21BDB8898}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0080F817-594B-4479-9D05-EBD21BDB8898}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0080F817-594B-4479-9D05-EBD21BDB8898}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
