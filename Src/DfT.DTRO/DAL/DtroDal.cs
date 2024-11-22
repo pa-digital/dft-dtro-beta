@@ -89,9 +89,19 @@ public class DtroDal : IDtroDal
 
 
         dtro.Data = dtroSubmit.Data;
-        var now = DateTime.UtcNow;
-        dtro.LastUpdated = now;
-        dtro.Created = now;
+        var utcNow = DateTime.UtcNow;
+        DateTime utcNowTruncated = new DateTime(
+            utcNow.Year,
+            utcNow.Month,
+            utcNow.Day,
+            utcNow.Hour,
+            utcNow.Minute,
+            utcNow.Second,
+            DateTimeKind.Utc
+        );
+
+        dtro.LastUpdated = utcNowTruncated;
+        dtro.Created = utcNowTruncated;
         dtro.LastUpdatedCorrelationId = correlationId;
         dtro.CreatedCorrelationId = dtro.LastUpdatedCorrelationId;
 
@@ -136,7 +146,17 @@ public class DtroDal : IDtroDal
         existing.SchemaVersion = dtroSubmit.SchemaVersion;
         existing.Data = dtroSubmit.Data;
 
-        existing.LastUpdated = DateTime.UtcNow;
+        var utcNow = DateTime.UtcNow;
+        DateTime lastUpdated = new DateTime(
+            utcNow.Year,
+            utcNow.Month,
+            utcNow.Day,
+            utcNow.Hour,
+            utcNow.Minute,
+            utcNow.Second,
+            DateTimeKind.Utc
+        );
+        existing.LastUpdated = lastUpdated;
         existing.LastUpdatedCorrelationId = correlationId;
 
         _dtroContext.Entry(existing).Property(e => e.Data).IsModified = true;
@@ -156,7 +176,17 @@ public class DtroDal : IDtroDal
 
         _dtroMappingService.SetOwnership(ref existing, assignToTraId);
         _dtroMappingService.SetSourceActionType(ref existing, Enums.SourceActionType.Amendment);
-        existing.LastUpdated = DateTime.UtcNow;
+
+        var utcNow = DateTime.UtcNow;
+        DateTime lastUpdated = new DateTime(
+            utcNow.Year,
+            utcNow.Month,
+            utcNow.Day,
+            utcNow.Hour,
+            utcNow.Minute,
+            utcNow.Second,
+            DateTimeKind.Utc);
+        existing.LastUpdated = lastUpdated;
         existing.LastUpdatedCorrelationId = correlationId;
 
         _dtroMappingService.InferIndexFields(ref existing);
