@@ -22,7 +22,7 @@ public class ConditionValidationTests
                   {
                     ""condition"":  [
                         {
-                            ""ValidityCondition"": 
+                            ""TimeValidity"": 
                             {
                                 
                             }
@@ -83,11 +83,11 @@ public class ConditionValidationTests
                             ""operator"": ""and"",
                             ""condition"": 
                             {
-                                ""ValidityCondition"": 
+                                ""TimeValidity"": 
                                 {
                                     
                                 },
-                                ""VehicleCondition"": 
+                                ""VehicleCharacteristics"": 
                                 {
                                     
                                 }
