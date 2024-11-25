@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Services.Validation.Contracts;
-
-namespace Dft.DTRO.Tests.UnitTests;
+﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
 public class ConditionValidationTests
@@ -9,177 +7,136 @@ public class ConditionValidationTests
 
     [Theory]
     [InlineData("3.2.4", 0)]
-    [InlineData("3.2.5", 0)]
     [InlineData("3.3.0", 0)]
-    public void ValidateConditionReturnsNoErrorsWhenSingleCondition(string version, int errorCount)
+    public void ValidateConditionReturnsNoErrorsWhenConditionSetIsPresent(string version, int errorCount)
     {
+        SchemaVersion schemaVersion = (version);
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""condition"":  [
-                        {
-                            ""TimeValidity"": 
+            ""Source"": {
+                ""provision"": [
+                    {
+                        ""regulation"": [
                             {
-                                
-                            }
-                        }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }", new SchemaVersion(version));
+                                ""conditionSet"": [
+                                    {
+                                        ""operator"": ""and"",
+                                        ""condition"": {
+                                            ""conditionSet"": [
+                                                {
+                                                    ""condition"": {
+                                                        ""RoadCondition"": {
+                                                            
+                                                        }
+                                                    }
+                                                }
+                                            ],
+                                            ""TimeValidity"": {
 
-        IList<SemanticValidationError>? actual = _sut.ValidateCondition(dtroSubmit, version);
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }", schemaVersion);
+
+        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
         Assert.Equal(errorCount, actual.Count);
     }
 
-    [Fact]
-    public void ValidateConditionReturnsErrorsWhenUnknownSingleCondition()
+    [Theory]
+    [InlineData("3.2.4", 0)]
+    [InlineData("3.3.0", 1)]
+    public void ValidateConditionReturnsErrorsWhenMultipleConditionsIsPresentWithoutConditionSet(string version, int errorCount)
     {
+        SchemaVersion schemaVersion = (version);
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""condition"":  [
-                        {
-                            ""RandomCondition"": 
+            ""Source"": {
+                ""provision"": [
+                    {
+                        ""regulation"": [
                             {
-                                
-                            }
-                        }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }", new SchemaVersion("3.2.5"));
+                                ""condition"": {
+                                    ""TimeValidity"": {
 
-        IList<SemanticValidationError>? actual = _sut.ValidateCondition(dtroSubmit, "3.2.5");
-        Assert.NotEmpty(actual);
-    }
+                                    },
+                                    ""RoadCondition"": {
 
-    [Fact]
-    public void ValidateConditionReturnsNoErrorsWhenConditionSetIsPresent()
-    {
-        DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
-        {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""conditionSet"":  [
-                        {
-                            ""operator"": ""and"",
-                            ""condition"": 
-                            {
-                                ""TimeValidity"": 
-                                {
-                                    
-                                },
-                                ""VehicleCharacteristics"": 
-                                {
-                                    
+                                    }
                                 }
                             }
-                        }
-                    ]
-                  }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
-        }", new SchemaVersion("3.2.5"));
+            }
+        }", schemaVersion);
 
-        IList<SemanticValidationError>? actual = _sut.ValidateCondition(dtroSubmit, "3.2.5");
-        Assert.Empty(actual);
+        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
+        Assert.Equal(errorCount, actual.Count);
     }
 
-    [Fact]
-    public void ValidateConditionReturnsErrorsWhenOperatorIsWrong()
+    [Theory]
+    [InlineData("3.2.4", 0)]
+    [InlineData("3.3.0", 0)]
+    public void ValidateConditionReturnsNoErrorsWhenOneConditionIsPresent(string version, int errorCount)
     {
+        SchemaVersion schemaVersion = new(version);
+
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""conditionSet"":  [
-                        {
-                            ""operator"": ""test"",
-                            ""condition"": 
+            ""Source"": {
+                ""provision"": [
+                    {
+                        ""regulation"": [
                             {
-                                ""ValidityCondition"": 
-                                {
-                                    
-                                },
-                                ""VehicleCondition"": 
-                                {
-                                    
+                                ""condition"": {
+                                    ""TimeValidity"": {
+
+                                    }
                                 }
                             }
-                        }
-                    ]
-                  }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
-        }", new SchemaVersion("3.2.5"));
+            }
+        }", schemaVersion);
 
-        IList<SemanticValidationError>? actual = _sut.ValidateCondition(dtroSubmit, "3.2.5");
-        Assert.NotEmpty(actual);
+        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
+        Assert.Equal(errorCount, actual.Count);
     }
 
-    [Fact]
-    public void ValidateConditionReturnsErrorsWhenOneConditionWithinConditionSetAreWrong()
+    [Theory]
+    [InlineData("3.2.4", 0)]
+    [InlineData("3.3.0", 1)]
+    public void ValidateConditionReturnsErrorsWhenWrongConditionIsPresent(string version, int errorCount)
     {
+        SchemaVersion schemaVersion = new(version);
+
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": 
-          {
-            ""provision"": 
-            [
-              {
-                ""regulation"": 
-                [
-                  {
-                    ""conditionSet"":
-                    [
-                        {
-                            ""operator"": ""and"",
-                            ""condition"": 
+            ""Source"": {
+                ""provision"": [
+                    {
+                        ""regulation"": [
                             {
-                                ""ValidityCondition"": 
-                                {
-                                    
-                                },
-                                ""BadCondition"": 
-                                {
-                                    
+                                ""condition"": {
+                                    ""SomeCondition"": {
+
+                                    }
                                 }
                             }
-                        }
-                    ]
-                  }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
-        }", new SchemaVersion("3.2.5"));
+            }
+        }", schemaVersion);
 
-        IList<SemanticValidationError>? actual = _sut.ValidateCondition(dtroSubmit, "3.2.5");
-        Assert.NotEmpty(actual);
+        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
+        Assert.Equal(errorCount, actual.Count);
     }
 }

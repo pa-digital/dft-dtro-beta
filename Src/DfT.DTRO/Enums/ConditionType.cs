@@ -51,5 +51,11 @@ public enum ConditionType
     /// Vehicle condition
     /// </summary>
     [Display(Name = "VehicleCharacteristics")]
-    VehicleCharacteristics = 8
+    VehicleCharacteristics = 8,
+
+    /// <summary>
+    /// New set of condition set
+    /// </summary>
+    [Display(Name = "conditionSet")]
+    ConditionSet = 9
 }
