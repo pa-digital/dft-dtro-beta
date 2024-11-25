@@ -241,109 +241,109 @@ jobs:
         run: chmod +x portals/*
 
       # TODO: resolve the issue with the step below: Error: an org name was not set in preferences or supplied in the command
-#      - name: Delete Oldest Revision
+      - name: Delete Oldest Revision
+        shell: bash
+        run: |
+          revision_list=($(apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r --arg proxy_name "dtro-${env}-server" '.proxies[] | select(.name == $proxy_name) | .revision[]'))
+          revision_count=${#revision_list[@]}
+          if [ "$revision_count" -ge 50 ]; then
+            smallest_revision_1=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 1)
+            smallest_revision_2=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 2 | tail -n 1)
+            echo "There are $revision_count revisions. The oldest two revisions ($smallest_revision_1 and $smallest_revision_2) will be deleted."
+
+            echo "Deleting revision: $smallest_revision_1"
+            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_1 --token ${{ inputs.google_auth }} --org ${{ inputs.gcp-project-id }}
+            echo "Revision $smallest_revision_1 deleted"
+
+            echo "Deleting revision: $smallest_revision_2"
+            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_2 --token ${{ inputs.google_auth }} --org ${{ inputs.gcp-project-id }}
+            echo "Revision $smallest_revision_2 deleted"
+
+            echo "Revisions $smallest_revision_1 and $smallest_revision_2 for dtro-${env}-server deleted."
+          fi
+
+#      - name: Deploy Proxy
+#        run: apigeecli apis create oas --name "dtro-${env}-server" --oas-base-folderpath openApi --oas-name openapi3_0.yaml --target-url $target_url --basepath /v1 --add-cors=true --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
+#
+#      - name: Get Proxy Bundle
+#        run: |
+#          apigeecli apis export --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
+#          unzip "dtro-${env}-server.zip"
+#
+#      - name: Add Header Policy
+#        run: |
+#          cp policies/AM-Set-App-Id-Header.xml apiproxy/policies/AM-Set-App-Id-Header.xml
+#          gawk -i inplace '/<PostFlow name="PostFlow">/ { print; getline; print "   <Request>\n      <Step>\n        <Name>AM-Set-App-Id-Header</Name>\n      </Step>\n   </Request>"; next } 1' apiproxy/proxies/default.xml
+#          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
+#
+#          cp policies/AM-Set-Http-Security-Header.xml apiproxy/policies/AM-Set-Http-Security-Header.xml
+#          gawk -i inplace '/<PostFlow name="PostFlow">/,/<\/PostFlow>/ { if (/^ *<Response><\/Response>/) { print "  <Response>\n      <Step>\n        <Name>AM-Set-Http-Security-Header</Name>\n      </Step>\n   </Response>"; next } } 1' apiproxy/proxies/default.xml
+#          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-Http-Security-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
+#
+#      - name: Update CORS policy
+#        run: |
+#          cp policies/Add-CORS.xml apiproxy/policies/Add-CORS.xml
+#          target_file="apiproxy/policies/Add-CORS.xml"
+#          sed -i "s#<AllowOrigins>TRUSTED_DOMAIN_TO_UPDATE</AllowOrigins>#<AllowOrigins>${trusted_domain}</AllowOrigins>#" "$target_file"
+#          echo "Updated file: $target_file"
+#
+#      - name: Add Spike Arrest Rate Limiting
+#        run: |
+#          cp policies/SA-Rate-Limiting.xml apiproxy/policies/SA-Rate-Limiting.xml
+#          gawk -i inplace '/<Request>/ && c == 0 { c=1; print; print "      <Step>\n        <Name>SA-Rate-Limiting</Name>\n      </Step>"; next } 1' apiproxy/proxies/default.xml
+#          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>SA-Rate-Limiting</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
+#
+#      - name: Setup Python
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.10'
+#
+#      - name: Create OAuth Policies
+#        run: |
+#          pip install -r python/requirements.txt
+#          python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
+#          python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
+#          cp -a oauth/* apiproxy/policies
+#
+#      - name: Copy Target Folder
 #        shell: bash
 #        run: |
-#          revision_list=($(apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r --arg proxy_name "dtro-${env}-server" '.proxies[] | select(.name == $proxy_name) | .revision[]'))
-#          revision_count=${#revision_list[@]}
-#          if [ "$revision_count" -ge 50 ]; then
-#            smallest_revision_1=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 1)
-#            smallest_revision_2=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 2 | tail -n 1)
-#            echo "There are $revision_count revisions. The oldest two revisions ($smallest_revision_1 and $smallest_revision_2) will be deleted."
+#          cp -a targets/* apiproxy/targets
 #
-#            echo "Deleting revision: $smallest_revision_1"
-#            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_1 --token ${{ inputs.google_auth }} --org ${{ inputs.gcp-project-id }}
-#            echo "Revision $smallest_revision_1 deleted"
+#      - name: Create Service XML
+#        shell: bash
+#        run: |
+#          echo "Service: $service, URL: $cloud_url"
 #
-#            echo "Deleting revision: $smallest_revision_2"
-#            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_2 --token ${{ inputs.google_auth }} --org ${{ inputs.gcp-project-id }}
-#            echo "Revision $smallest_revision_2 deleted"
+#          # Define the target XML file based on the service name
+#          xml_file="apiproxy/targets/default.xml"
 #
-#            echo "Revisions $smallest_revision_1 and $smallest_revision_2 for dtro-${env}-server deleted."
-#          fi
-
-      - name: Deploy Proxy
-        run: apigeecli apis create oas --name "dtro-${env}-server" --oas-base-folderpath openApi --oas-name openapi3_0.yaml --target-url $target_url --basepath /v1 --add-cors=true --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
-
-      - name: Get Proxy Bundle
-        run: |
-          apigeecli apis export --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
-          unzip "dtro-${env}-server.zip"
-
-      - name: Add Header Policy
-        run: |
-          cp policies/AM-Set-App-Id-Header.xml apiproxy/policies/AM-Set-App-Id-Header.xml
-          gawk -i inplace '/<PostFlow name="PostFlow">/ { print; getline; print "   <Request>\n      <Step>\n        <Name>AM-Set-App-Id-Header</Name>\n      </Step>\n   </Request>"; next } 1' apiproxy/proxies/default.xml
-          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
-          
-          cp policies/AM-Set-Http-Security-Header.xml apiproxy/policies/AM-Set-Http-Security-Header.xml
-          gawk -i inplace '/<PostFlow name="PostFlow">/,/<\/PostFlow>/ { if (/^ *<Response><\/Response>/) { print "  <Response>\n      <Step>\n        <Name>AM-Set-Http-Security-Header</Name>\n      </Step>\n   </Response>"; next } } 1' apiproxy/proxies/default.xml
-          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>AM-Set-Http-Security-Header</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
-
-      - name: Update CORS policy
-        run: |
-          cp policies/Add-CORS.xml apiproxy/policies/Add-CORS.xml
-          target_file="apiproxy/policies/Add-CORS.xml"
-          sed -i "s#<AllowOrigins>TRUSTED_DOMAIN_TO_UPDATE</AllowOrigins>#<AllowOrigins>${trusted_domain}</AllowOrigins>#" "$target_file"
-          echo "Updated file: $target_file"
-
-      - name: Add Spike Arrest Rate Limiting
-        run: |
-          cp policies/SA-Rate-Limiting.xml apiproxy/policies/SA-Rate-Limiting.xml
-          gawk -i inplace '/<Request>/ && c == 0 { c=1; print; print "      <Step>\n        <Name>SA-Rate-Limiting</Name>\n      </Step>"; next } 1' apiproxy/proxies/default.xml
-          gawk -i inplace '/<Policies>/ { print $0 "\n        <Policy>SA-Rate-Limiting</Policy>"; next } 1' apiproxy/dtro-${env}-server.xml
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Create OAuth Policies
-        run: |
-          pip install -r python/requirements.txt
-          python python/update-oauth-flows.py "openApi/openapi3_0.yaml" apiproxy/proxies/default.xml
-          python python/generate-oauth-polices.py apiproxy/policies/OAuth-v20-1.xml "cso","dsp","dc" "oauth" apiproxy/dtro-${env}-server.xml
-          cp -a oauth/* apiproxy/policies
-
-      - name: Copy Target Folder
-        shell: bash
-        run: |
-          cp -a targets/* apiproxy/targets
-
-      - name: Create Service XML
-        shell: bash
-        run: |
-          echo "Service: $service, URL: $cloud_url"
-
-          # Define the target XML file based on the service name
-          xml_file="apiproxy/targets/default.xml"
-
-          # Replace the placeholder <Server name="ENV_TO_UPDATE-target-server"/> with the appropriate environment value
-          sed -i "s#<Server name=\"ENV_TO_UPDATE-target-server\"/>#<Server name=\"dtro-${env}-target-server\"/>#" "$xml_file"
-
-          # Replace the placeholder <Audience>CLOUD_RUN_URL_TO_UPDATE</Audience> with the actual Cloud Run URL
-          sed -i "s#<Audience>CLOUD_RUN_URL_TO_UPDATE</Audience>#<Audience>${cloud_url}</Audience>#" "$xml_file"
-
-          echo "Updated file: $xml_file"
-
-      - name: Add Proxy Route Rules
-        shell: bash
-        run: |
-          sed '/<RouteRule name="default">/,/<\/RouteRule>/d' apiproxy/proxies/default.xml > apiproxy/proxies/temp.xml
-          awk 'NR==FNR{a=a $0 ORS; next} /<\/ProxyEndpoint>/{print a} 1' proxies/default.xml apiproxy/proxies/temp.xml > apiproxy/proxies/default.xml
-          rm apiproxy/proxies/temp.xml
-
-      - name: Create API bundle
-        run: zip -r proxy.zip apiproxy
-
-      - name: Upload and Deploy API Proxy Bundle
-        run: apigeecli apis create bundle --name "dtro-${env}-server" --proxy-zip proxy.zip --env "${{ env.name_prefix }}-environment" --sa sa-execution@${apigee_organisation}.iam.gserviceaccount.com --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
-
-      - name: Create Products
-        if: ${{ inputs.environment != 'prod' }}
-        run: |
-          sed -i "s/ENV/${env}/g" products/products.json
-          apigeecli products import -f products/products.json --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --upsert
-
-      - name: Publish Products to Developer Portal
-        run: portals/publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}
+#          # Replace the placeholder <Server name="ENV_TO_UPDATE-target-server"/> with the appropriate environment value
+#          sed -i "s#<Server name=\"ENV_TO_UPDATE-target-server\"/>#<Server name=\"dtro-${env}-target-server\"/>#" "$xml_file"
+#
+#          # Replace the placeholder <Audience>CLOUD_RUN_URL_TO_UPDATE</Audience> with the actual Cloud Run URL
+#          sed -i "s#<Audience>CLOUD_RUN_URL_TO_UPDATE</Audience>#<Audience>${cloud_url}</Audience>#" "$xml_file"
+#
+#          echo "Updated file: $xml_file"
+#
+#      - name: Add Proxy Route Rules
+#        shell: bash
+#        run: |
+#          sed '/<RouteRule name="default">/,/<\/RouteRule>/d' apiproxy/proxies/default.xml > apiproxy/proxies/temp.xml
+#          awk 'NR==FNR{a=a $0 ORS; next} /<\/ProxyEndpoint>/{print a} 1' proxies/default.xml apiproxy/proxies/temp.xml > apiproxy/proxies/default.xml
+#          rm apiproxy/proxies/temp.xml
+#
+#      - name: Create API bundle
+#        run: zip -r proxy.zip apiproxy
+#
+#      - name: Upload and Deploy API Proxy Bundle
+#        run: apigeecli apis create bundle --name "dtro-${env}-server" --proxy-zip proxy.zip --env "${{ env.name_prefix }}-environment" --sa sa-execution@${apigee_organisation}.iam.gserviceaccount.com --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true
+#
+#      - name: Create Products
+#        if: ${{ inputs.environment != 'prod' }}
+#        run: |
+#          sed -i "s/ENV/${env}/g" products/products.json
+#          apigeecli products import -f products/products.json --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --upsert
+#
+#      - name: Publish Products to Developer Portal
+#        run: portals/publish_product_to_portal.sh ${{ steps.google-auth.outputs.access_token }}
