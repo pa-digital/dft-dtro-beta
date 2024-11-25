@@ -305,7 +305,6 @@ public class DtroMappingService : IDtroMappingService
             .Where(regType => regType is not null)
         .Distinct()
             .ToList();
-        Console.WriteLine($"##**## DEBUG - dtro.RegulationTypes: {string.Join(", ", dtro.RegulationTypes)}");
 
         dtro.VehicleTypes = regulations.SelectMany(it => it.GetListOrDefault("condition") ?? Enumerable.Empty<object>())
             .Where(it => it is not null)
@@ -316,7 +315,6 @@ public class DtroMappingService : IDtroMappingService
             .OfType<string>()
         .Distinct()
         .ToList();
-        Console.WriteLine($"##**## DEBUG - dtro.VehicleTypes: {string.Join(", ", dtro.VehicleTypes)}");
 
         dtro.OrderReportingPoints = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
             .OfType<ExpandoObject>()
