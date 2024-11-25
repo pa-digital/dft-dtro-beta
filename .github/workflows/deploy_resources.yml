@@ -252,16 +252,11 @@ jobs:
             echo "There are $revision_count revisions. The oldest two revisions ($smallest_revision_1 and $smallest_revision_2) will be deleted."
 
             echo "Deleting revision: $smallest_revision_1"
-            echo " apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_1 --token ${{ inputs.google_auth }} --org ${{ inputs.gcp-project-id }}"
-            echo " apigeecli apis delete --name "dtro-$env-server" --rev $smallest_revision_1 --token $inputs.google_auth --org $inputs.gcp-project-id"
-            echo " apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_1 --token ${{ inputs.google_auth }} --org $apigee_organisation"
-            echo " apigeecli apis delete --name "dtro-$env-server" --rev $smallest_revision_1 --token $inputs.google_auth --org \"$apigee_organisation\""
-            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_1 --token ${{ inputs.google_auth }} --org ${{ inputs.gcp-project-id }}
-            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_1 --token ${{ inputs.google_auth }} --org "$apigee_organisation"
+            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_1 --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
             echo "Revision $smallest_revision_1 deleted"
 
             echo "Deleting revision: $smallest_revision_2"
-            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_2 --token ${{ inputs.google_auth }} --org ${{ inputs.gcp-project-id }}
+            apigeecli apis delete --name "dtro-${env}-server" --rev $smallest_revision_2 --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
             echo "Revision $smallest_revision_2 deleted"
 
             echo "Revisions $smallest_revision_1 and $smallest_revision_2 for dtro-${env}-server deleted."
