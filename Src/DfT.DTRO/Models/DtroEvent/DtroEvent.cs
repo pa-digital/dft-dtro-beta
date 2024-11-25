@@ -63,6 +63,9 @@ public class DtroEvent
     [DataMember(Name = "eventTime")]
     public DateTime EventTime { get; set; }
 
+    [DataMember(Name = "_links")]
+    public Links Links { get; set; }
+
     public static DtroEvent FromDeletion(DataBase.DTRO dtro, string baseUrl, List<DateTime> regulationStartTimes, List<DateTime> regulationEndTimes)
     {
         return new DtroEvent
@@ -78,7 +81,8 @@ public class DtroEvent
             RegulationType = dtro.RegulationTypes,
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
-            RegulationEnd = regulationEndTimes
+            RegulationEnd = regulationEndTimes,
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 
@@ -97,7 +101,8 @@ public class DtroEvent
             RegulationType = dtro.RegulationTypes,
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
-            RegulationEnd = regulationEndTimes
+            RegulationEnd = regulationEndTimes,
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 
@@ -116,7 +121,8 @@ public class DtroEvent
             RegulationType = dtro.RegulationTypes,
             TroName = dtro.TroName,
             RegulationStart = regulationStartTimes,
-            RegulationEnd = regulationEndTimes
+            RegulationEnd = regulationEndTimes,
+            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
         };
     }
 }
