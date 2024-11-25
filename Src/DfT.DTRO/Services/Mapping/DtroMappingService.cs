@@ -1,5 +1,8 @@
-﻿using DfT.DTRO.Helpers;
+﻿using System.Collections.Generic;
+using DfT.DTRO.Extensions;
+using DfT.DTRO.Helpers;
 using DfT.DTRO.Models.Validation;
+using NetTopologySuite.Index.HPRtree;
 using Newtonsoft.Json.Linq;
 
 namespace DfT.DTRO.Services.Mapping;
@@ -294,10 +297,15 @@ public class DtroMappingService : IDtroMappingService
         dtro.TrafficAuthorityOwnerId = dtro.Data.GetValueOrDefault<int>("Source.currentTraOwner");
 
         dtro.TroName = dtro.Data.GetValueOrDefault<string>("Source.troName");
-        dtro.RegulationTypes = regulations.Select(it => it.GetValueOrDefault<string>("regulationType"))
-            .Where(it => it is not null)
-            .Distinct()
+
+        dtro.RegulationTypes = regulations.Select(reg => reg.GetExpandoOrDefault("generalRegulation"))
+            .Where(generalReg => generalReg is not null)
+            .OfType<ExpandoObject>()
+            .Select(generalReg => generalReg.GetValueOrDefault<string>("regulationType")) 
+            .Where(regType => regType is not null)
+        .Distinct()
             .ToList();
+        Console.WriteLine($"##**## DEBUG - dtro.RegulationTypes: {string.Join(", ", dtro.RegulationTypes)}");
 
         dtro.VehicleTypes = regulations.SelectMany(it => it.GetListOrDefault("condition") ?? Enumerable.Empty<object>())
             .Where(it => it is not null)
@@ -308,6 +316,7 @@ public class DtroMappingService : IDtroMappingService
             .OfType<string>()
         .Distinct()
         .ToList();
+        Console.WriteLine($"##**## DEBUG - dtro.VehicleTypes: {string.Join(", ", dtro.VehicleTypes)}");
 
         dtro.OrderReportingPoints = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
             .OfType<ExpandoObject>()
