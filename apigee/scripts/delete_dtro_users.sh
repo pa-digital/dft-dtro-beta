@@ -27,7 +27,7 @@ RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "https://${DOMAIN}.d
   -H 'Accept: text/plain' \
   -H "Authorization: Bearer ${access_token}" \
   -d '{
-     "ids": ['"${ID}"']
+     "ids": ["'"${ID}"'"]
    }')
 
 if [ "$RESPONSE" -eq 200 ]; then
