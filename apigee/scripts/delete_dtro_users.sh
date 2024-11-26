@@ -22,6 +22,8 @@ fi
 ## Create array of IDs
 formatted=$(echo "$IDS" | sed 's/[^,]\+/\"&\"/g')
 
+echo "IDS"
+echo "$formatted"
 echo "body"
 echo '{
           "ids": "['"${formatted}"']"
