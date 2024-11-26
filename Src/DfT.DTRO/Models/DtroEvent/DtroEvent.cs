@@ -7,6 +7,12 @@
 public class DtroEvent
 {
     /// <summary>
+    /// D-TRO ID
+    /// </summary>
+    [DataMember(Name = "id")]
+    public Guid DtroId { get; set; }
+
+    /// <summary>
     /// Date and time the D-TRO was published.
     /// </summary>
     [DataMember(Name = "publicationTime")]
@@ -69,6 +75,7 @@ public class DtroEvent
             PublicationTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
+            DtroId = dtro.Id,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
             TrafficAuthorityOwnerId = dtro.TrafficAuthorityOwnerId,
             RegulationType = dtro.RegulationTypes,
@@ -88,6 +95,7 @@ public class DtroEvent
             PublicationTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
+            DtroId = dtro.Id,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
             TrafficAuthorityOwnerId = dtro.TrafficAuthorityOwnerId,
             RegulationType = dtro.RegulationTypes,
@@ -107,6 +115,7 @@ public class DtroEvent
             PublicationTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
             OrderReportingPoint = dtro.OrderReportingPoints,
             VehicleType = dtro.VehicleTypes,
+            DtroId = dtro.Id,
             TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
             TrafficAuthorityOwnerId = dtro.TrafficAuthorityOwnerId,
             RegulationType = dtro.RegulationTypes,
