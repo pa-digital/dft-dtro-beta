@@ -3,9 +3,9 @@ name: Delete Dtro Users - INT
 on:
   workflow_dispatch:
     inputs:
-      user-ids-to-delete:
+      user-id-to-delete:
         type: string
-        description: list of user ids to delete (comma separated only)
+        description: user id to delete
         required: true
       remove-from-apigee:
         type: boolean
