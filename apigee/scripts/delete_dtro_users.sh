@@ -26,8 +26,8 @@ echo "IDS"
 echo "$formatted"
 echo "body"
 echo '{
-          "ids": "['"${formatted}"']"
-        }'
+    "ids": ['"${formatted}"']
+}'
 
 ## Make API call
 RESPONSE=$(curl -X DELETE "https://${DOMAIN}.dft.gov.uk/v1/dtroUsers/redundant" \
@@ -35,7 +35,7 @@ RESPONSE=$(curl -X DELETE "https://${DOMAIN}.dft.gov.uk/v1/dtroUsers/redundant" 
   -H 'Accept: text/plain' \
   -H "Authorization: Bearer ${access_token}" \
   -d '{
-     "ids": "['"${formatted}"']"
+     "ids": ['"${formatted}"']
    }')
 
 echo "$RESPONSE"
