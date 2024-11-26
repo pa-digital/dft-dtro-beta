@@ -1,6 +1,7 @@
 #!/bin/bash
 
-IDS=$1
+# Script Variables
+ID=$1
 
 # Get OAuth access token
 OAUTH_RESPONSE=$(curl -X POST "https://${DOMAIN}.dft.gov.uk/v1/oauth-generator" \
@@ -19,20 +20,18 @@ else
   echo " "
 fi
 
-## Create array of IDs
-formatted=$(echo "$IDS" | sed 's/[^,]\+/\"&\"/g')
-
 ## Make API call
-RESPONSE=$(curl  -s -o /dev/null -w "%{http_code}" -X DELETE "https://${DOMAIN}.dft.gov.uk/v1/dtroUsers/redundant" \
+RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "https://${DOMAIN}.dft.gov.uk/v1/dtroUsers/redundant" \
   -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
+  -H 'Content-Type: application/json' \
   -H 'Accept: text/plain' \
   -H "Authorization: Bearer ${access_token}" \
   -d '{
-     "ids": "['"${formatted}"']"
+     "ids": ["'"${ID}"'"]
    }')
 
 if [ "$RESPONSE" -eq 200 ]; then
-    echo "Users deleted"
+    echo "User {${ID}} deleted."
   else
-    echo "Failed to delete [${formatted}]. HTTP response code: $RESPONSE"
-  fi
+    echo "Failed to delete {${ID}}. HTTP response code: $RESPONSE"
+fi
