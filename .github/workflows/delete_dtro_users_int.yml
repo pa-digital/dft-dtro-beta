@@ -5,8 +5,21 @@ on:
     inputs:
       user-ids-to-delete:
         type: string
-        description: list of user ids to delete(comma separated only)
+        description: list of user ids to delete (comma separated only)
         required: true
+      remove-from-apigee:
+        type: boolean
+        description: Remove user from Apigee? (Only select this if DSP/DC has not done this themselves.)
+        required: true
+        default: false
+      app-name:
+        type: string
+        description: Name of the application to activate (Only use this if 'remove-from-apigee' was selected. )
+        required: false
+      dev-email:
+        type: string
+        description: Email address of developer the application belongs to (Only use this if 'remove-from-apigee' was selected. )
+        required: false
 
 permissions:
   contents: read
@@ -40,6 +53,8 @@ jobs:
           echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_TEST }}" >> $GITHUB_ENV
           echo "CLIENT_ID=${{ secrets.CSO_CLIENT_ID_INT }}" >> $GITHUB_ENV
           echo "CLIENT_SECRET=${{ secrets.CSO_CLIENT_SECRET_INT }}" >> $GITHUB_ENV
+          echo "DEV_EMAIL=${{ inputs.dev-email }}" >> $GITHUB_ENV 
+          echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV 
           echo "DOMAIN=dtro-integration" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
@@ -55,6 +70,10 @@ jobs:
           curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh
           echo "$HOME/.apigeecli/bin" >> $GITHUB_PATH
           echo "APIGEECLI_DEBUG=true" >> $GITHUB_ENV
+
+      - name: Delete User's Application
+        if: ${{  inputs.remove-from-apigee  }}
+        run: ./delete_user_app.sh ${{ steps.google-auth.outputs.access_token }}
 
       - name: Delete Dtro Users
         run: ./delete_dtro_users.sh ${{ inputs.user-ids-to-delete }}
