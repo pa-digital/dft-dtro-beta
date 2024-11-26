@@ -76,4 +76,4 @@ jobs:
         run: ./delete_user_app.sh ${{ steps.google-auth.outputs.access_token }}
 
       - name: Delete Dtro Users
-        run: ./delete_dtro_users.sh ${{ inputs.user-ids-to-delete }}
+        run: ./delete_dtro_users.sh ${{ inputs.user-id-to-delete }}
