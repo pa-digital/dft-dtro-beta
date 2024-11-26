@@ -22,8 +22,13 @@ fi
 ## Create array of IDs
 formatted=$(echo "$IDS" | sed 's/[^,]\+/\"&\"/g')
 
+echo "body"
+echo '{
+          "ids": "['"${formatted}"']"
+        }'
+
 ## Make API call
-RESPONSE=$(curl  -s -o /dev/null -w "%{http_code}" -X DELETE "https://${DOMAIN}.dft.gov.uk/v1/dtroUsers/redundant" \
+RESPONSE=$(curl -X DELETE "https://${DOMAIN}.dft.gov.uk/v1/dtroUsers/redundant" \
   -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
   -H 'Accept: text/plain' \
   -H "Authorization: Bearer ${access_token}" \
@@ -31,8 +36,10 @@ RESPONSE=$(curl  -s -o /dev/null -w "%{http_code}" -X DELETE "https://${DOMAIN}.
      "ids": "['"${formatted}"']"
    }')
 
-if [ "$RESPONSE" -eq 200 ]; then
-    echo "Users deleted"
-  else
-    echo "Failed to delete [${formatted}]. HTTP response code: $RESPONSE"
-  fi
+echo "$RESPONSE"
+
+#if [ "$RESPONSE" -eq 200 ]; then
+#    echo "Users deleted"
+#  else
+#    echo "Failed to delete [${formatted}]. HTTP response code: $RESPONSE"
+#fi
