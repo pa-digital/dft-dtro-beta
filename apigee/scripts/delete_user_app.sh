@@ -10,7 +10,7 @@ RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "https://apigee.goog
 
 # Error checking and handling
   if [ "$RESPONSE" -eq 200 ]; then
-    echo "{${APP_NAME}} deleted."
+    echo "'${APP_NAME}' deleted."
   else
-    echo "Failed to delete {${APP_NAME}}. HTTP response code: $RESPONSE"
+    echo "Failed to delete '${APP_NAME}'. HTTP response code: $RESPONSE"
   fi
