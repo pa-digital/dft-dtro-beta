@@ -21,18 +21,121 @@ public class ConditionValidationTests
                                 ""conditionSet"": [
                                     {
                                         ""operator"": ""and"",
-                                        ""condition"": {
-                                            ""conditionSet"": [
-                                                {
-                                                    ""condition"": {
-                                                        ""RoadCondition"": {
-                                                            
+                                        ""conditionSet"": [
+                                            {
+                                                ""operator"": ""or"",
+                                                ""condition"": [
+                                                    {
+                                                        ""negate"": false,
+                                                        ""VehicleCharacteristics"": {
+                                                            ""MaximumHeightCharacteristic"": {
+                                                                ""vehicleHeight"": 2.5
+                                                            }
                                                         }
+                                                    },
+                                                    {
+                                                        ""negate"": true,
+                                                        ""VehicleCharacteristics"": {
+                                                            ""vehicleType"": ""bus""
+                                                        }
+                                                    },
+                                                    {
+                                                        ""operator"": ""and"",
+                                                        ""condition"": [
+                                                            {
+                                                                ""negate"": ""and"",
+                                                                ""VehicleCharacteristics"": {
+                                                                    ""vehicleType"": ""taxi""
+                                                                }
+                                                            },
+                                                            {
+                                                                ""negate"": false,
+                                                                ""VehicleCharacteristics"": {
+                                                                    ""vehicleUsage"": ""access""
+                                                                }
+                                                            }
+                                                        ]
                                                     }
-                                                }
-                                            ],
+                                                ]
+                                            }
+                                        ],
+                                        ""condition"": {
                                             ""TimeValidity"": {
+                                                ""start"": ""2024-08-22T08:00:00"",
+                                                ""end"": ""2024-08-22T20:00:00""
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }", schemaVersion);
 
+        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData("3.2.4", 0)]
+    [InlineData("3.3.0", 1)]
+    public void ValidateConditionReturnsErrorsWhenConditionSetIsPresentButWrongOperator(string version, int errorCount)
+    {
+        SchemaVersion schemaVersion = (version);
+        DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
+        {
+            ""Source"": {
+                ""provision"": [
+                    {
+                        ""regulation"": [
+                            {
+                                ""conditionSet"": [
+                                    {
+                                        ""operator"": ""some"",
+                                        ""conditionSet"": [
+                                            {
+                                                ""operator"": ""or"",
+                                                ""condition"": [
+                                                    {
+                                                        ""negate"": false,
+                                                        ""VehicleCharacteristics"": {
+                                                            ""MaximumHeightCharacteristic"": {
+                                                                ""vehicleHeight"": 2.5
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        ""negate"": true,
+                                                        ""VehicleCharacteristics"": {
+                                                            ""vehicleType"": ""bus""
+                                                        }
+                                                    },
+                                                    {
+                                                        ""operator"": ""and"",
+                                                        ""condition"": [
+                                                            {
+                                                                ""negate"": ""and"",
+                                                                ""VehicleCharacteristics"": {
+                                                                    ""vehicleType"": ""taxi""
+                                                                }
+                                                            },
+                                                            {
+                                                                ""negate"": false,
+                                                                ""VehicleCharacteristics"": {
+                                                                    ""vehicleUsage"": ""access""
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        ""condition"": {
+                                            ""TimeValidity"": {
+                                                ""start"": ""2024-08-22T08:00:00"",
+                                                ""end"": ""2024-08-22T20:00:00""
                                             }
                                         }
                                     }

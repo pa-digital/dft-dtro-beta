@@ -65,18 +65,6 @@ public class ConditionValidation : IConditionValidation
                 .Select(kv => kv.Key)
                 .ToList();
 
-            if (passedInConditions.Count < 2)
-            {
-                SemanticValidationError error = new()
-                {
-                    Name = "Condition",
-                    Message = "Minimum number of conditions",
-                    Path = "Source -> Provision -> Regulation -> ConditionSet -> operator",
-                    Rule = "More than one condition must be present",
-                };
-                errors.Add(error);
-            }
-
             var conditionTypes = typeof(ConditionType).GetDisplayNames<ConditionType>().ToList();
             var areAllValidConditions = passedInConditions.All(conditionTypes.Contains);
 
