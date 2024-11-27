@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using DfT.DTRO.Extensions;
-using DfT.DTRO.Helpers;
-using DfT.DTRO.Models.Validation;
-using NetTopologySuite.Index.HPRtree;
+﻿using DfT.DTRO.Helpers;
 using Newtonsoft.Json.Linq;
 
 namespace DfT.DTRO.Services.Mapping;
@@ -29,11 +25,11 @@ public class DtroMappingService : IDtroMappingService
         foreach (var dtro in dtros)
         {
             var regulations = new List<ExpandoObject>();
-            var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision").OfType<ExpandoObject>().ToList();
+            var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision").OfType<ExpandoObject>().ToList();
 
             foreach (var provision in provisions)
             {
-                regulations.AddRange(provision.GetValue<IList<object>>("regulation").OfType<ExpandoObject>().ToList());
+                regulations.AddRange(provision.GetValue<IList<object>>("Regulation").OfType<ExpandoObject>().ToList());
 
             }
 
@@ -41,10 +37,10 @@ public class DtroMappingService : IDtroMappingService
             try
             {
                 timeValidity = regulations
-                .SelectMany(it => it.GetListOrDefault("condition") ?? Enumerable.Empty<object>())
+                .SelectMany(it => it.GetListOrDefault("Condition") ?? Enumerable.Empty<object>())
                 .Where(it => it is not null)
                 .OfType<ExpandoObject>()
-                .Select(it => it.GetExpandoOrDefault("timeValidity"))
+                .Select(it => it.GetExpandoOrDefault("TimeValidity"))
                 .Where(it => it is not null)
                 .ToList();
             }
@@ -103,7 +99,7 @@ public class DtroMappingService : IDtroMappingService
             var regulations = new List<ExpandoObject>();
             try
             {
-                var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision");
+                var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision");
                 if (provisions == null)
                 {
                     _loggingExtension.LogError(nameof(InferIndexFields), "", "Error: 'Source.provision' is null or not found.", "");
@@ -114,7 +110,7 @@ public class DtroMappingService : IDtroMappingService
 
                 foreach (var provision in expandoProvisions)
                 {
-                    var regulationList = provision.GetValue<IList<object>>("regulation");
+                    var regulationList = provision.GetValue<IList<object>>("Regulation");
                     if (regulationList == null)
                     {
                         _loggingExtension.LogWarn(nameof(InferIndexFields), "Warning: 'regulation' not found in one of the provisions.");
@@ -140,10 +136,10 @@ public class DtroMappingService : IDtroMappingService
             try
             {
                 timeValidity = regulations
-                .SelectMany(it => it.GetListOrDefault("condition") ?? Enumerable.Empty<object>())
+                .SelectMany(it => it.GetListOrDefault("Condition") ?? Enumerable.Empty<object>())
                 .Where(it => it is not null)
                 .OfType<ExpandoObject>()
-                .Select(it => it.GetExpandoOrDefault("timeValidity"))
+                .Select(it => it.GetExpandoOrDefault("TimeValidity"))
                 .Where(it => it is not null)
                 .ToList();
             }
@@ -243,7 +239,7 @@ public class DtroMappingService : IDtroMappingService
         {
             sourceDetails["actionType"] = sourceActionType.GetDisplayName();
 
-            if (sourceDetails.TryGetValue("provision", out var provisionList) && provisionList is IEnumerable<object> provisions)
+            if (sourceDetails.TryGetValue("Provision", out var provisionList) && provisionList is IEnumerable<object> provisions)
             {
                 foreach (var provision in provisions)
                 {
@@ -258,7 +254,7 @@ public class DtroMappingService : IDtroMappingService
 
     public List<DtroHistoryProvisionResponse> GetProvision(DTROHistory dtroHistory)
     {
-        IList<object> provisions = GetProvision(dtroHistory, "Source.provision");
+        IList<object> provisions = GetProvision(dtroHistory, "Source.Provision");
         var ret = new List<DtroHistoryProvisionResponse>();
         foreach (var provision in provisions)
         {
@@ -285,10 +281,10 @@ public class DtroMappingService : IDtroMappingService
     {
         List<ExpandoObject> regulations = dtro
             .Data
-            .GetValueOrDefault<IList<object>>("Source.provision")
+            .GetValueOrDefault<IList<object>>("Source.Provision")
             .OfType<ExpandoObject>()
             .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("regulation")
+                .GetValue<IList<object>>("Regulation")
                 .OfType<ExpandoObject>())
             .ToList();
 
@@ -298,25 +294,25 @@ public class DtroMappingService : IDtroMappingService
 
         dtro.TroName = dtro.Data.GetValueOrDefault<string>("Source.troName");
 
-        dtro.RegulationTypes = regulations.Select(reg => reg.GetExpandoOrDefault("generalRegulation"))
+        dtro.RegulationTypes = regulations.Select(reg => reg.GetExpandoOrDefault("GeneralRegulation"))
             .Where(generalReg => generalReg is not null)
             .OfType<ExpandoObject>()
-            .Select(generalReg => generalReg.GetValueOrDefault<string>("regulationType")) 
+            .Select(generalReg => generalReg.GetValueOrDefault<string>("regulationType"))
             .Where(regType => regType is not null)
         .Distinct()
             .ToList();
 
-        dtro.VehicleTypes = regulations.SelectMany(it => it.GetListOrDefault("condition") ?? Enumerable.Empty<object>())
+        dtro.VehicleTypes = regulations.SelectMany(it => it.GetListOrDefault("Condition") ?? Enumerable.Empty<object>())
             .Where(it => it is not null)
             .OfType<ExpandoObject>()
-            .Select(it => it.GetExpandoOrDefault("vehicleCharacteristics"))
+            .Select(it => it.GetExpandoOrDefault("VehicleCharacteristics"))
             .Where(it => it is not null)
             .SelectMany(it => it.GetListOrDefault("vehicleType") ?? Enumerable.Empty<object>())
             .OfType<string>()
         .Distinct()
         .ToList();
 
-        dtro.OrderReportingPoints = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision")
+        dtro.OrderReportingPoints = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision")
             .OfType<ExpandoObject>()
             .Select(it => it.GetValue<string>("orderReportingPoint"))
             .Distinct()
@@ -326,10 +322,10 @@ public class DtroMappingService : IDtroMappingService
         try
         {
             timeValidity = regulations
-            .SelectMany(it => it.GetListOrDefault("condition") ?? Enumerable.Empty<object>())
+            .SelectMany(it => it.GetListOrDefault("Condition") ?? Enumerable.Empty<object>())
             .Where(it => it is not null)
             .OfType<ExpandoObject>()
-            .Select(it => it.GetExpandoOrDefault("timeValidity"))
+            .Select(it => it.GetExpandoOrDefault("TimeValidity"))
             .Where(it => it is not null)
             .ToList();
         }
@@ -372,7 +368,7 @@ public class DtroMappingService : IDtroMappingService
             var geometry = obj
                 .DescendantsAndSelf()
                 .OfType<JProperty>()
-                .FirstOrDefault(property => property.Name == "geometry");
+                .FirstOrDefault(property => property.Name == "Geometry");
             dtro.Location = _service.SetBoundingBoxForSingleGeometry(new List<SemanticValidationError>(), geometry, new BoundingBox());
         }
     }

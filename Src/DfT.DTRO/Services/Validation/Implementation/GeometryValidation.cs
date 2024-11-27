@@ -1,5 +1,4 @@
 ﻿using DfT.DTRO.Helpers;
-using DfT.DTRO.Models.Validation;
 using DfT.DTRO.Services.Validation.Contracts;
 using Newtonsoft.Json.Linq;
 
@@ -78,7 +77,7 @@ public class GeometryValidation : IGeometryValidation
         JProperty geometry = data
             .DescendantsAndSelf()
             .OfType<JProperty>()
-            .FirstOrDefault(property => property.Name == "geometry");
+            .FirstOrDefault(property => property.Name == "Geometry");
 
         BoundingBox boundingBox = new();
         if (geometry?.Value is not JObject)
