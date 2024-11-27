@@ -2,13 +2,13 @@
 		"Source": {
 			"actionType": "amendment",
 			"currentTraOwner": 1000,
-			"provision": [
+			"Provision": [
 				{
 					"actionType": "fullRevoke",
 					"orderReportingPoint": "ttroTtmoByNotice",
 					"provisionDescription": "Prohibition of Waiting",
 					"reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
-					"regulation": [
+					"Regulation": [
 						{
 							"isDynamic": false,
 							"timeZone": "Europe/London",
@@ -17,34 +17,34 @@
 							},
 							"condition": [
 								{
-									"vehicleCharacteristics": {
+									"VehicleCharacteristics": {
 									}
 								},
 								{
 									"timeValidity": {
 										"validityCondition": {
-											"conditionSet": [
+											"ConditionSet": [
 												{
 													"operator": "and",
 													"negate": false,
 													"conditions": [
 														{
-															"vehicleCharacteristics": {
+															"VehicleCharacteristics": {
 															},
 															"negate": false
 														},
 														{
-															"vehicleCharacteristics": {
+															"VehicleCharacteristics": {
 															},
 															"negate": true
 														}
 													]
 												}
 											],
-											"rateTable": {
-												"rateLineCollection": [
+											"RateTable": {
+												"RateLineCollection": [
 													{
-														"rateLine": [
+														"RateLine": [
 															{
 																"sequence": 0,
 																"type": "flatRateTier",
@@ -156,7 +156,7 @@
 							]
 						}
 					],
-					"regulatedPlace": [
+					"RegulatedPlace": [
 						{
 							"description": "Zone 5, Kenworthy Road, All Odd, All Even",
 							"geometry": {

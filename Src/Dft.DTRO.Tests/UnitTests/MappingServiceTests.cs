@@ -10,12 +10,6 @@ public class MappingServiceTests
         "../../../TestFiles/D-TROs/3.2.3/temporary TRO - fullRevoke.json"
     };
 
-    private static readonly string[] ValidDtrosForDifferentSchemaVersions =
-    {
-        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-LinearGeometry.json",
-        "../../../TestFiles/D-TROs/3.2.5/JSON-example-polygon-dtro-3.2.5.json"
-    };
-
     private readonly IDtroMappingService _sut;
 
     public MappingServiceTests()
@@ -32,12 +26,21 @@ public class MappingServiceTests
     }
 
     [Theory]
-    [InlineData("../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-LinearGeometry.json", "3.2.3")]
-    [InlineData("../../../TestFiles/D-TROs/3.2.5/JSON-example-polygon-dtro-3.2.5.json", "3.2.5")]
+    [InlineData("../../../TestFiles/D-TROs/3.3.0/JSON-3.3.0-example-Derbyshire 2024 DJ388 partial (somerset test).json", "3.3.0")]
+    [InlineData("../../../TestFiles/D-TROs/3.3.0/JSON-3.3.0-example-TTRO-HeightRestrictionWithConditions.json", "3.3.0")]
+    [InlineData("../../../TestFiles/D-TROs/3.3.0/JSON-3.3.0-example-TTRO-multiple-nested-condition-sets.json", "3.3.0")]
+    [InlineData("../../../TestFiles/D-TROs/3.3.0/JSON-3.3.0-example-TTRO-RoadClosureWithDiversionRoute.json", "3.3.0")]
+    [InlineData("../../../TestFiles/D-TROs/3.3.0/JSON-3.3.0-example-TTRO-SuspensionOneWay.json", "3.3.0")]
+    [InlineData("../../../TestFiles/D-TROs/3.3.0/JSON-3.3.0-example-TTRO-TempOneWayWithConditions.json", "3.3.0")]
+    [InlineData("../../../TestFiles/D-TROs/3.3.0/JSON-3.3.0-example-TTRO-WeightRestriction.json", "3.3.0")]
     public async Task InferIndexFieldsReturnsSampleFiles(string path, string schemaVersion)
     {
         var dtro = await Utils.CreateDtroObject(path, schemaVersion);
         _sut.InferIndexFields(ref dtro);
+
+        Assert.NotNull(dtro.TrafficAuthorityCreatorId);
+        Assert.NotNull(dtro.TrafficAuthorityOwnerId);
+        Assert.NotNull(dtro.TroName);
     }
 
     [Fact]

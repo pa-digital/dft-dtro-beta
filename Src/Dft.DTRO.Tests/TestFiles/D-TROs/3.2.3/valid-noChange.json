@@ -2,13 +2,13 @@
 		"Source": {
 			"actionType": "noChange",
 			"currentTraOwner": 1000,
-			"provision": [
+			"Provision": [
 				{
 					"actionType": "noChange",
 					"orderReportingPoint": "ttroTtmoByNotice",
 					"provisionDescription": "Prohibition of Waiting",
 					"reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
-					"regulation": [
+					"Regulation": [
 						{
 							"isDynamic": false,
 							"timeZone": "Europe/London",
@@ -17,7 +17,7 @@
 							},
 							"condition": [
 								{
-									"vehicleCharacteristics": {
+									"VehicleCharacteristics": {
 										"vehicleType": [
 											"taxi"
 										],
@@ -29,13 +29,13 @@
 								{
 									"timeValidity": {
 										"validityCondition": {
-											"conditionSet": [
+											"ConditionSet": [
 												{
 													"operator": "and",
 													"negate": false,
 													"conditions": [
 														{
-															"vehicleCharacteristics": {
+															"VehicleCharacteristics": {
 																"vehicleType": [
 																	"anyVehicle"
 																]
@@ -43,7 +43,7 @@
 															"negate": false
 														},
 														{
-															"vehicleCharacteristics": {
+															"VehicleCharacteristics": {
 																"vehicleType": [
 																	"taxi"
 																]
@@ -53,10 +53,10 @@
 													]
 												}
 											],
-											"rateTable": {
-												"rateLineCollection": [
+											"RateTable": {
+												"RateLineCollection": [
 													{
-														"rateLine": [
+														"RateLine": [
 															{
 																"sequence": 0,
 																"type": "flatRateTier",
@@ -168,7 +168,7 @@
 							]
 						}
 					],
-					"regulatedPlace": [
+					"RegulatedPlace": [
 						{
 							"description": "Zone 5, Kenworthy Road, All Odd, All Even",
 							"geometry": {
