@@ -32,11 +32,17 @@ public class DtroHistoryDal : IDtroHistoryDal
     ///<inheritdoc cref="IDtroHistoryDal" />
     public async Task<List<DTROHistory>> GetDtroHistory(Guid dtroId)
     {
-        var result = await _dtroContext.DtroHistories
-            .Where(history => history.DtroId == dtroId)
-            .OrderByDescending(history => history.LastUpdated)
-            .ToListAsync();
+        try
+        {
+            var result = await _dtroContext.DtroHistories
+                .Where(history => history.DtroId == dtroId)
+                .OrderByDescending(history => history.LastUpdated)
+                .ToListAsync();
 
-        return result;
+            return result;
+        }
+        catch (Exception ex) {
+            throw new Exception("Error in GetDtroHistory method", ex);
+        }
     }
 }

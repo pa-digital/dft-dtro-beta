@@ -584,14 +584,14 @@ public class DTROsController : ControllerBase
             _loggingExtension.LogError(
                 nameof(GetSourceHistory),
                 $"/dtros/sourceHistory/{dtroId}",
-                "Dtro History not found",
-                nfex.Message);
-            return NotFound(new ApiErrorResponse("Dtro History not found.", nfex.Message));
+                "Dtro not found",
+                nfex.StackTrace);
+            return NotFound(new ApiErrorResponse("Dtro not found.", nfex.Message));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            _loggingExtension.LogError(nameof(GetSourceHistory), $"/dtros/sourceHistory/{dtroId}", "", ex.Message);
+            _loggingExtension.LogError(nameof(GetSourceHistory), $"/dtros/sourceHistory/{dtroId}", "", ex.StackTrace);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }

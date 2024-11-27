@@ -119,6 +119,11 @@ public class DtroService : IDtroService
     public async Task<List<DtroHistorySourceResponse>> GetDtroSourceHistoryAsync(Guid dtroId)
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
+
+        if (dtroHistories.Count() <= 0) {
+            throw new NotFoundException($"Dtro '{dtroId}' not found");
+        }
+
         var histories = dtroHistories
             .Select(_dtroMappingService.GetSource)
             .Where(response => response != null)
