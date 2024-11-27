@@ -14,17 +14,17 @@ public class ConditionValidationTests
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
             ""Source"": {
-                ""provision"": [
+                ""Provision"": [
                     {
-                        ""regulation"": [
+                        ""Regulation"": [
                             {
-                                ""conditionSet"": [
+                                ""ConditionSet"": [
                                     {
                                         ""operator"": ""and"",
-                                        ""conditionSet"": [
+                                        ""ConditionSet"": [
                                             {
                                                 ""operator"": ""or"",
-                                                ""condition"": [
+                                                ""Condition"": [
                                                     {
                                                         ""negate"": false,
                                                         ""VehicleCharacteristics"": {
@@ -41,7 +41,7 @@ public class ConditionValidationTests
                                                     },
                                                     {
                                                         ""operator"": ""and"",
-                                                        ""condition"": [
+                                                        ""Condition"": [
                                                             {
                                                                 ""negate"": ""and"",
                                                                 ""VehicleCharacteristics"": {
@@ -59,7 +59,7 @@ public class ConditionValidationTests
                                                 ]
                                             }
                                         ],
-                                        ""condition"": {
+                                        ""Condition"": {
                                             ""TimeValidity"": {
                                                 ""start"": ""2024-08-22T08:00:00"",
                                                 ""end"": ""2024-08-22T20:00:00""
@@ -87,17 +87,17 @@ public class ConditionValidationTests
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
             ""Source"": {
-                ""provision"": [
+                ""Provision"": [
                     {
-                        ""regulation"": [
+                        ""Regulation"": [
                             {
-                                ""conditionSet"": [
+                                ""ConditionSet"": [
                                     {
                                         ""operator"": ""some"",
-                                        ""conditionSet"": [
+                                        ""ConditionSet"": [
                                             {
                                                 ""operator"": ""or"",
-                                                ""condition"": [
+                                                ""Condition"": [
                                                     {
                                                         ""negate"": false,
                                                         ""VehicleCharacteristics"": {
@@ -114,7 +114,7 @@ public class ConditionValidationTests
                                                     },
                                                     {
                                                         ""operator"": ""and"",
-                                                        ""condition"": [
+                                                        ""Condition"": [
                                                             {
                                                                 ""negate"": ""and"",
                                                                 ""VehicleCharacteristics"": {
@@ -132,7 +132,7 @@ public class ConditionValidationTests
                                                 ]
                                             }
                                         ],
-                                        ""condition"": {
+                                        ""Condition"": {
                                             ""TimeValidity"": {
                                                 ""start"": ""2024-08-22T08:00:00"",
                                                 ""end"": ""2024-08-22T20:00:00""
@@ -160,11 +160,11 @@ public class ConditionValidationTests
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
             ""Source"": {
-                ""provision"": [
+                ""Provision"": [
                     {
-                        ""regulation"": [
+                        ""Regulation"": [
                             {
-                                ""condition"": {
+                                ""Condition"": {
                                     ""TimeValidity"": {
 
                                     },
@@ -193,11 +193,11 @@ public class ConditionValidationTests
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
             ""Source"": {
-                ""provision"": [
+                ""Provision"": [
                     {
-                        ""regulation"": [
+                        ""Regulation"": [
                             {
-                                ""condition"": {
+                                ""Condition"": {
                                     ""TimeValidity"": {
 
                                     }
@@ -223,11 +223,11 @@ public class ConditionValidationTests
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
             ""Source"": {
-                ""provision"": [
+                ""Provision"": [
                     {
-                        ""regulation"": [
+                        ""Regulation"": [
                             {
-                                ""condition"": {
+                                ""Condition"": {
                                     ""SomeCondition"": {
 
                                     }

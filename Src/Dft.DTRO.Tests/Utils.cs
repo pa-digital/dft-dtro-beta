@@ -56,7 +56,7 @@ public static class Utils
 
     public static async Task<DfT.DTRO.Models.DataBase.DTRO> CreateDtroObject(string dtroJsonPath, string schemaVersion = null)
     {
-        string sampleDtroDataJson = await File.ReadAllTextAsync(dtroJsonPath);
+        var sampleDtroDataJson = await File.ReadAllTextAsync(dtroJsonPath);
 
         DateTime createdAt = DateTime.Now;
 

@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Services.Validation.Contracts;
-
-namespace Dft.DTRO.Tests.UnitTests;
+﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
 public class RegulatedPlaceValidationTests
@@ -9,16 +7,16 @@ public class RegulatedPlaceValidationTests
 
     [Theory]
     [InlineData("3.2.4", 0)]
-    [InlineData("3.2.5", 0)]
     [InlineData("3.3.0", 0)]
+    [InlineData("4.0.0", 0)]
     public void ValidateRegulatedPlacesTypesReturnsNoErrors(string version, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro(@"
         {
           ""Source"": {
-            ""provision"": [
+            ""Provision"": [
               {
-                ""regulatedPlace"": [
+                ""RegulatedPlace"": [
                   {
                   ""type"":  ""regulationLocation""
                   },
@@ -41,9 +39,9 @@ public class RegulatedPlaceValidationTests
         var dtroSubmit = Utils.PrepareDtro(@"
         {
           ""Source"": {
-            ""provision"": [
+            ""Provision"": [
               {
-                ""regulatedPlace"": [
+                ""RegulatedPlace"": [
                   {
                   ""type"":  ""diversionRoute""
                   },
@@ -54,9 +52,9 @@ public class RegulatedPlaceValidationTests
               }
             ]
           }
-        }", new SchemaVersion("3.2.5"));
+        }", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateRegulatedPlacesType(dtroSubmit, "3.2.5");
+        var actual = _sut.ValidateRegulatedPlacesType(dtroSubmit, "3.3.0");
         Assert.NotEmpty(actual);
     }
 }

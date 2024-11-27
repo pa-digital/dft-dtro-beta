@@ -20,7 +20,7 @@ public class ConditionJsonConverter : JsonConverter<Condition>
             throw new InvalidOperationException("The Condition must be an object");
         }
 
-        if (jsonObject.ContainsKey("conditions"))
+        if (jsonObject.ContainsKey("Condition"))
         {
             return json.Deserialize<ConditionSet>(options);
         }
@@ -30,7 +30,7 @@ public class ConditionJsonConverter : JsonConverter<Condition>
             return json.Deserialize<RoadCondition>(options);
         }
 
-        if (jsonObject.ContainsKey("numbersOfOccupants") || jsonObject.ContainsKey("disabledWithPermit"))
+        if (jsonObject.ContainsKey("NumbersOfOccupants") || jsonObject.ContainsKey("disabledWithPermit"))
         {
             return json.Deserialize<OccupantCondition>(options);
         }
@@ -53,7 +53,7 @@ public class ConditionJsonConverter : JsonConverter<Condition>
             return json.Deserialize<PermitCondition>(options);
         }
 
-        if (jsonObject.ContainsKey("vehicleCharacteristics"))
+        if (jsonObject.ContainsKey("VehicleCharacteristics"))
         {
             return json.Deserialize<VehicleCondition>(options);
         }

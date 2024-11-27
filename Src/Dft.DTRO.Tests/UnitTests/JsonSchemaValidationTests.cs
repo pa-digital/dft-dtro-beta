@@ -5,7 +5,7 @@ public class JsonSchemaValidationTests
 {
     private const string ExampleFilesForSchema311 = "../../../TestFiles/D-TROs/3.1.1";
     private const string ExampleFilesForSchema320 = "../../../TestFiles/D-TROs/3.2.0";
-    private const string ExampleFilesForSchema325 = "../../../TestFiles/D-TROs/3.2.5";
+    private const string ExampleFilesForSchema330 = "../../../TestFiles/D-TROs/3.3.0";
     private const string SchemaFolder = "../../../TestFiles/Schemas/";
 
     [Theory]
@@ -46,17 +46,17 @@ public class JsonSchemaValidationTests
     }
 
     [Theory]
-    [InlineData("3.2.5", "JSON-example-ControlledParkingZone-CoalOrchard-dtro-3.2.5", false)]
-    [InlineData("3.2.5", "JSON-example-directed-linear-dtro-3.2.5", false)]
-    [InlineData("3.2.5", "JSON-example-linear-dtro-3.2.5", false)]
-    [InlineData("3.2.5", "JSON-example-point-dtro-3.2.5", false)]
-    [InlineData("3.2.5", "JSON-example-polygon-dtro-3.2.5", false)]
+    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-HeightRestrictionWithConditions", false)]
+    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-multiple-nested-condition-sets", false)]
+    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-SuspensionOneWay", false)]
+    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-TempOneWayWithConditions", false)]
+    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-WeightRestriction", false)]
     public void ValidateAgainstSchema325ProducesCorrectResults(string schemaVersion, string sourceJson, bool expectedResult)
     {
         JsonSchemaValidationService sut = new();
         string jsonSchema =
             GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
-        string inputJson = File.ReadAllText(Path.Join(ExampleFilesForSchema325, $"{sourceJson}.json"));
+        string inputJson = File.ReadAllText(Path.Join(ExampleFilesForSchema330, $"{sourceJson}.json"));
 
         bool actual = sut.ValidateSchema(jsonSchema, inputJson).Any();
         Assert.Equal(expectedResult, actual);

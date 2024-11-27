@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Services.Validation.Contracts;
-
-namespace Dft.DTRO.Tests.UnitTests;
+﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
 public class RegulationValidationTests
@@ -9,16 +7,16 @@ public class RegulationValidationTests
 
     [Theory]
     [InlineData("3.2.4", 0)]
-    [InlineData("3.2.5", 0)]
     [InlineData("3.3.0", 0)]
+    [InlineData("4.0.0", 0)]
     public void ValidateRegulationReturnsNoErrors(string version, int errorCount)
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
           ""Source"": {
-            ""provision"": [
+            ""Provision"": [
               {
-                ""regulation"": [
+                ""Regulation"": [
                   {
                   ""GeneralRegulation"":  {
                     }
@@ -39,9 +37,9 @@ public class RegulationValidationTests
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
           ""Source"": {
-            ""provision"": [
+            ""Provision"": [
               {
-                ""regulation"": [
+                ""Regulation"": [
                   {
                   ""GeneralRegulation"":  {
                     }
@@ -54,9 +52,9 @@ public class RegulationValidationTests
               }
             ]
           }
-        }", new SchemaVersion("3.2.5"));
+        }", new SchemaVersion("3.3.0"));
 
-        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.2.5");
+        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.3.0");
         Assert.NotEmpty(actual);
     }
 
@@ -66,9 +64,9 @@ public class RegulationValidationTests
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
           ""Source"": {
-            ""provision"": [
+            ""Provision"": [
               {
-                ""regulation"": [
+                ""Regulation"": [
                   {
                   ""GeneralRegulation"":  {
                     }
@@ -81,9 +79,9 @@ public class RegulationValidationTests
               }
             ]
           }
-        }", new SchemaVersion("3.2.5"));
+        }", new SchemaVersion("3.3.0"));
 
-        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.2.5");
+        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.3.0");
         Assert.Empty(actual);
     }
 
@@ -93,9 +91,9 @@ public class RegulationValidationTests
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
           ""Source"": {
-            ""provision"": [
+            ""Provision"": [
               {
-                ""regulation"": [
+                ""Regulation"": [
                   {
                   ""RandomRegulation"":  {
                     }
@@ -104,9 +102,9 @@ public class RegulationValidationTests
               }
             ]
           }
-        }", new SchemaVersion("3.2.5"));
+        }", new SchemaVersion("3.3.0"));
 
-        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.2.5");
+        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.3.0");
         Assert.NotEmpty(actual);
     }
 }
