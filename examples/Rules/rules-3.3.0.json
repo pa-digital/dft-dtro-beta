@@ -3,16 +3,16 @@
     "id": 1,
     "message": "weekInMonth instances must be unique.",
     "name": "ExceptionPeriodApplicableInstanceOfDayWithinMonthInstancesUnique",
-    "path": "Source.provision.regulation.timeValidity.exceptionPeriod.recurringDayWeekMonthPeriod.applicableInstanceOfDayWithinMonth",
+    "path": "Source.Provision.Regulation.TimeValidity.exceptionPeriod.recurringDayWeekMonthPeriod.applicableInstanceOfDayWithinMonth",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
@@ -24,7 +24,7 @@
                 {
                   "all": [
                     {
-                      "var": "timeValidity.exceptionPeriod"
+                      "var": "TimeValidity.exceptionPeriod"
                     },
                     {
                       "or": [
@@ -73,28 +73,28 @@
     "id": 2,
     "message": "weekInMonth instances must be unique.",
     "name": "ExceptionPeriodApplicableWeekInstancesUnique",
-    "path": "Source.provision.regulation.timeValidity.exceptionPeriod.recurringDayWeekMonthPeriod.applicableWeek",
+    "path": "Source.Provision.Regulation.TimeValidity.exceptionPeriod.recurringDayWeekMonthPeriod.applicableWeek",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.exceptionPeriod"
+                    "var": "TimeValidity.exceptionPeriod"
                   }
                 },
                 {
                   "all": [
                     {
-                      "var": "timeValidity.exceptionPeriod"
+                      "var": "TimeValidity.exceptionPeriod"
                     },
                     {
                       "or": [
@@ -143,22 +143,22 @@
     "id": 3,
     "message": "Period end date must not be later than overall period end date.",
     "name": "ExceptionPeriodEndNotMoreThanOverallPeriodEnd",
-    "path": "Source.provision.regulation.timeValidity.exceptionPeriod",
+    "path": "Source.Provision.Regulation.TimeValidity.exceptionPeriod",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.exceptionPeriod"
+                    "var": "TimeValidity.exceptionPeriod"
                   }
                 },
                 {
@@ -166,7 +166,7 @@
                     {
                       "map": [
                         {
-                          "var": "timeValidity.exceptionPeriod"
+                          "var": "TimeValidity.exceptionPeriod"
                         },
                         {
                           "var": "endOfPeriod"
@@ -182,7 +182,7 @@
                         },
                         {
                           "!": {
-                            "var": "timeValidity.end"
+                            "var": "TimeValidity.end"
                           }
                         },
                         {
@@ -191,7 +191,7 @@
                               "var": ""
                             },
                             {
-                              "var": "timeValidity.end"
+                              "var": "TimeValidity.end"
                             }
                           ]
                         }
@@ -210,28 +210,28 @@
     "id": 4,
     "message": "Period start time must be earlier than end time.",
     "name": "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd",
-    "path": "Source.provision.regulation.timeValidity.exceptionPeriod.recurringTimePeriodOfDay",
+    "path": "Source.Provision.Regulation.TimeValidity.exceptionPeriod.recurringTimePeriodOfDay",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.exceptionPeriod"
+                    "var": "TimeValidity.exceptionPeriod"
                   }
                 },
                 {
                   "all": [
                     {
-                      "var": "timeValidity.exceptionPeriod"
+                      "var": "TimeValidity.exceptionPeriod"
                     },
                     {
                       "or": [
@@ -272,28 +272,28 @@
     "id": 5,
     "message": "Period start date must be earlier than end date.",
     "name": "ExceptionPeriodStartLessThanEnd",
-    "path": "Source.provision.regulation.timeValidity.exceptionPeriod",
+    "path": "Source.Provision.Regulation.TimeValidity.exceptionPeriod",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.exceptionPeriod"
+                    "var": "TimeValidity.exceptionPeriod"
                   }
                 },
                 {
                   "all": [
                     {
-                      "var": "timeValidity.exceptionPeriod"
+                      "var": "TimeValidity.exceptionPeriod"
                     },
                     {
                       "or": [
@@ -332,22 +332,22 @@
     "id": 6,
     "message": "Period start date must not be earlier than overall period start date.",
     "name": "ExceptionPeriodStartNotLessThanOverallPeriodStart",
-    "path": "Source.provision.regulation.timeValidity.exceptionPeriod",
+    "path": "Source.Provision.Regulation.TimeValidity.exceptionPeriod",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.exceptionPeriod"
+                    "var": "TimeValidity.exceptionPeriod"
                   }
                 },
                 {
@@ -355,7 +355,7 @@
                     {
                       "map": [
                         {
-                          "var": "timeValidity.exceptionPeriod"
+                          "var": "TimeValidity.exceptionPeriod"
                         },
                         {
                           "var": "startOfPeriod"
@@ -375,7 +375,7 @@
                               "var": ""
                             },
                             {
-                              "var": "timeValidity.start"
+                              "var": "TimeValidity.start"
                             }
                           ]
                         }
@@ -394,28 +394,28 @@
     "id": 7,
     "message": "weekInMonth instances must be unique.",
     "name": "ExceptionPeriodWeekInMonthInstancesUnique",
-    "path": "Source.provision.regulation.timeValidity.exceptionPeriod.recurringDayWeekMonthPeriod.weekInMonth",
+    "path": "Source.Provision.Regulation.TimeValidity.exceptionPeriod.recurringDayWeekMonthPeriod.weekInMonth",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.exceptionPeriod"
+                    "var": "TimeValidity.exceptionPeriod"
                   }
                 },
                 {
                   "all": [
                     {
-                      "var": "timeValidity.exceptionPeriod"
+                      "var": "TimeValidity.exceptionPeriod"
                     },
                     {
                       "or": [
@@ -464,16 +464,16 @@
     "id": 8,
     "message": "Field is required and 'MaximumGrossVehicleWeight' must be greater than 0 and less than or equal to 50.",
     "name": "GrossWeightCharacteristicValidForRegulationTypes",
-    "path": "Source.provision.regulation.conditions.vehicleCharacteristics.MaximumGrossWeightCharacteristic",
+    "path": "Source.Provision.Regulation.Conditions.VehicleCharacteristics.MaximumGrossWeightCharacteristic",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
@@ -495,7 +495,7 @@
                 {
                   "all": [
                     {
-                      "var": "conditions"
+                      "var": "Condition"
                     },
                     {
                       "all": [
@@ -526,16 +526,16 @@
     "id": 9,
     "message": "Field is required and 'HeaviestAxleWeight' must be greater than 0 and less than or equal to 50.",
     "name": "HeaviestAxleWeightCharacteristicValidForRegulationTypes",
-    "path": "Source.provision.regulation.conditions.vehicleCharacteristics.HeaviestAxleWeightCharacteristic",
+    "path": "Source.Provision.Regulation.Conditions.VehicleCharacteristics.HeaviestAxleWeightCharacteristic",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
@@ -557,7 +557,7 @@
                 {
                   "all": [
                     {
-                      "var": "conditions"
+                      "var": "Condition"
                     },
                     {
                       "all": [
@@ -588,16 +588,16 @@
     "id": 10,
     "message": "'comparisonOperator' must be 'lessThan' or 'lessThanOrEqualTo' and 'vehicleHeight' must be between 0 and 6.",
     "name": "HeightCharacteristicValidForRegulationTypeDimensionMaximumHeightStructural",
-    "path": "Source.provision.regulation.conditions.vehicleCharacteristics.MaximumHeightCharacteristic",
+    "path": "Source.Provision.Regulation.Conditions.VehicleCharacteristics.MaximumHeightCharacteristic",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
@@ -612,7 +612,7 @@
                 {
                   "all": [
                     {
-                      "var": "conditions"
+                      "var": "Condition"
                     },
                     {
                       "all": [
@@ -658,16 +658,16 @@
     "id": 11,
     "message": "'comparisonOperator' must be 'lessThan' or 'lessThanOrEqualTo' and 'vehicleHeight' must be between 0 and 6.",
     "name": "HeightCharacteristicValidForRegulationTypeDimensionMaximumHeightWithTRO",
-    "path": "Source.provision.regulation.conditions.vehicleCharacteristics.MaximumHeightCharacteristic",
+    "path": "Source.Provision.Regulation.Conditions.VehicleCharacteristics.MaximumHeightCharacteristic",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
@@ -682,12 +682,12 @@
                 {
                   "all": [
                     {
-                      "var": "conditions"
+                      "var": "Condition"
                     },
                     {
                       "all": [
                         {
-                          "var": "vehicleCharacteristics.MaximumHeightCharacteristic"
+                          "var": "VehicleCharacteristics.MaximumHeightCharacteristic"
                         },
                         {
                           "and": [
@@ -728,16 +728,16 @@
     "id": 12,
     "message": "'comparisonOperator' must be 'lessThan' or 'lessThanOrEqualTo' and 'vehicleLength' must be between 0 and 40.",
     "name": "LengthCharacteristicValidForRegulationTypeDimensionMaximumLength",
-    "path": "Source.provision.regulation.conditions.vehicleCharacteristics.MaximumLengthCharacteristic",
+    "path": "Source.Provision.Regulation.Conditions.VehicleCharacteristics.MaximumLengthCharacteristic",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
@@ -752,12 +752,12 @@
                 {
                   "all": [
                     {
-                      "var": "conditions"
+                      "var": "Condition"
                     },
                     {
                       "all": [
                         {
-                          "var": "vehicleCharacteristics.MaximumLengthCharacteristic"
+                          "var": "VehicleCharacteristics.MaximumLengthCharacteristic"
                         },
                         {
                           "and": [
@@ -798,31 +798,31 @@
     "id": 13,
     "message": "OverallPeriod start date must be earlier than the end date.",
     "name": "OverallPeriodStartLessThanEnd",
-    "path": "Source.provision.regulation.timeValidity",
+    "path": "Source.Provision.Regulation.TimeValidity",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.end"
+                    "var": "TimeValidity.end"
                   }
                 },
                 {
                   "<": [
                     {
-                      "var": "timeValidity.start"
+                      "var": "TimeValidity.start"
                     },
                     {
-                      "var": "timeValidity.end"
+                      "var": "TimeValidity.end"
                     }
                   ]
                 }
@@ -837,22 +837,22 @@
     "id": 14,
     "message": "Period end date must not be later than overall period end date.",
     "name": "ValidPeriodEndNotMoreThanOverallPeriodEnd",
-    "path": "Source.provision.regulation.timeValidity.validPeriod",
+    "path": "Source.Provision.Regulation.TimeValidity.validPeriod",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.validPeriod"
+                    "var": "TimeValidity.validPeriod"
                   }
                 },
                 {
@@ -860,7 +860,7 @@
                     {
                       "map": [
                         {
-                          "var": "timeValidity.validPeriod"
+                          "var": "TimeValidity.validPeriod"
                         },
                         {
                           "var": "endOfPeriod"
@@ -876,7 +876,7 @@
                         },
                         {
                           "!": {
-                            "var": "timeValidity.end"
+                            "var": "TimeValidity.end"
                           }
                         },
                         {
@@ -885,7 +885,7 @@
                               "var": ""
                             },
                             {
-                              "var": "timeValidity.end"
+                              "var": "TimeValidity.end"
                             }
                           ]
                         }
@@ -904,28 +904,28 @@
     "id": 15,
     "message": "Period start time must be earlier than end time.",
     "name": "ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
-    "path": "Source.provision.regulation.timeValidity.validPeriod.recurringTimePeriodOfDay",
+    "path": "Source.Provision.Regulation.TimeValidity.validPeriod.recurringTimePeriodOfDay",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.validPeriod"
+                    "var": "TimeValidity.validPeriod"
                   }
                 },
                 {
                   "all": [
                     {
-                      "var": "timeValidity.validPeriod"
+                      "var": "TimeValidity.validPeriod"
                     },
                     {
                       "or": [
@@ -966,28 +966,28 @@
     "id": 16,
     "message": "Period start date must be earlier than end date.",
     "name": "ValidPeriodStartLessThanEnd",
-    "path": "Source.provision.regulation.timeValidity.validPeriod",
+    "path": "Source.Provision.Regulation.TimeValidity.validPeriod",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.validPeriod"
+                    "var": "TimeValidity.validPeriod"
                   }
                 },
                 {
                   "all": [
                     {
-                      "var": "timeValidity.validPeriod"
+                      "var": "TimeValidity.validPeriod"
                     },
                     {
                       "or": [
@@ -1026,22 +1026,22 @@
     "id": 17,
     "message": "Period start date must not be earlier than overall period start date.",
     "name": "ValidPeriodStartNotLessThanOverallPeriodStart",
-    "path": "Source.provision.regulation.timeValidity.validPeriod",
+    "path": "Source.Provision.Regulation.TimeValidity.validPeriod",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.validPeriod"
+                    "var": "TimeValidity.validPeriod"
                   }
                 },
                 {
@@ -1049,7 +1049,7 @@
                     {
                       "map": [
                         {
-                          "var": "timeValidity.validPeriod"
+                          "var": "TimeValidity.validPeriod"
                         },
                         {
                           "var": "startOfPeriod"
@@ -1069,7 +1069,7 @@
                               "var": ""
                             },
                             {
-                              "var": "timeValidity.start"
+                              "var": "TimeValidity.start"
                             }
                           ]
                         }
@@ -1088,28 +1088,28 @@
     "id": 18,
     "message": "weekInMonth instances must be unique.",
     "name": "ValidityPeriodApplicableInstanceOfDayWithinMonthInstancesUnique",
-    "path": "Source.provision.regulation.timeValidity.validityPeriod.recurringDayWeekMonthPeriod.applicableInstanceOfDayWithinMonth",
+    "path": "Source.Provision.Regulation.TimeValidity.validityPeriod.recurringDayWeekMonthPeriod.applicableInstanceOfDayWithinMonth",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.validityPeriod"
+                    "var": "TimeValidity.validityPeriod"
                   }
                 },
                 {
                   "all": [
                     {
-                      "var": "timeValidity.validityPeriod"
+                      "var": "TimeValidity.validityPeriod"
                     },
                     {
                       "or": [
@@ -1158,28 +1158,28 @@
     "id": 19,
     "message": "weekInMonth instances must be unique.",
     "name": "ValidityPeriodApplicableWeekInstancesUnique",
-    "path": "Source.provision.regulation.timeValidity.validityPeriod.recurringDayWeekMonthPeriod.applicableWeek",
+    "path": "Source.Provision.Regulation.TimeValidity.validityPeriod.recurringDayWeekMonthPeriod.applicableWeek",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.validityPeriod"
+                    "var": "TimeValidity.validityPeriod"
                   }
                 },
                 {
                   "all": [
                     {
-                      "var": "timeValidity.validityPeriod"
+                      "var": "TimeValidity.validityPeriod"
                     },
                     {
                       "or": [
@@ -1228,28 +1228,28 @@
     "id": 20,
     "message": "weekInMonth instances must be unique.",
     "name": "ValidityPeriodWeekInMonthInstancesUnique",
-    "path": "Source.provision.regulation.timeValidity.validityPeriod.recurringDayWeekMonthPeriod.weekInMonth",
+    "path": "Source.Provision.Regulation.TimeValidity.validityPeriod.recurringDayWeekMonthPeriod.weekInMonth",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": {
-                    "var": "timeValidity.validityPeriod"
+                    "var": "TimeValidity.validityPeriod"
                   }
                 },
                 {
                   "all": [
                     {
-                      "var": "timeValidity.validityPeriod"
+                      "var": "TimeValidity.validityPeriod"
                     },
                     {
                       "or": [
@@ -1298,16 +1298,16 @@
     "id": 21,
     "message": "'comparisonOperator' must be 'lessThan' or 'lessThanOrEqualTo' and 'vehicleHeight' must be between 0 and 6.",
     "name": "WidthCharacteristicValidForRegulationTypeDimensionMaximumWidth",
-    "path": "Source.provision.regulation.conditions.vehicleCharacteristics.MaximumWidthCharacteristic",
+    "path": "Source.Provision.Regulation.Conditions.VehicleCharacteristics.MaximumWidthCharacteristic",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
@@ -1322,12 +1322,12 @@
                 {
                   "all": [
                     {
-                      "var": "conditions"
+                      "var": "Condition"
                     },
                     {
                       "all": [
                         {
-                          "var": "vehicleCharacteristics.widthCharacteristic"
+                          "var": "VehicleCharacteristics.widthCharacteristic"
                         },
                         {
                           "and": [
@@ -1368,23 +1368,23 @@
     "id": 22,
     "message": "The 'yearOfFirstRegistration' must less than or equal to current year value.",
     "name": "YearOfFirstRegistrationLessOrEqualToCurrentYearValueInConditions",
-    "path": "Source.provision.regulation.conditions.vehicleCharacteristics.yearOfFirstRegistration",
+    "path": "Source.Provision.Regulation.Conditions.VehicleCharacteristics.yearOfFirstRegistration",
     "rule": {
       "all": [
         {
-          "var": "Source.provision"
+          "var": "Source.Provision"
         },
         {
           "all": [
             {
-              "var": "regulation"
+              "var": "Regulation"
             },
             {
               "or": [
                 {
                   "!": [
                     {
-                      "var": "conditions"
+                      "var": "Condition"
                     }
                   ]
                 },
@@ -1392,7 +1392,7 @@
                   "all": [
                     {
                       "flatten_conditions": {
-                        "var": "conditions"
+                        "var": "Condition"
                       }
                     },
                     {
@@ -1400,14 +1400,14 @@
                         {
                           "!": [
                             {
-                              "var": "vehicleCharacteristics.yearOfFirstRegistration"
+                              "var": "VehicleCharacteristics.yearOfFirstRegistration"
                             }
                           ]
                         },
                         {
                           "compared_to_current_year": [
                             {
-                              "var": "vehicleCharacteristics.yearOfFirstRegistration"
+                              "var": "VehicleCharacteristics.yearOfFirstRegistration"
                             },
                             "<="
                           ]
