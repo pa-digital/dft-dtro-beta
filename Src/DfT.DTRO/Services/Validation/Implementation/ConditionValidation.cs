@@ -1,7 +1,4 @@
-﻿using DfT.DTRO.Models.Validation;
-using DfT.DTRO.Services.Validation.Contracts;
-using Microsoft.CodeAnalysis;
-
+﻿using DfT.DTRO.Services.Validation.Contracts;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace DfT.DTRO.Services.Validation.Implementation;
@@ -10,19 +7,19 @@ public class ConditionValidation : IConditionValidation
 {
     public IList<SemanticValidationError> ValidateCondition(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
     {
-        var errors = new List<SemanticValidationError>();
+        List<SemanticValidationError> errors = new();
 
-        if (schemaVersion < new SchemaVersion("3.2.5"))
+        if (schemaVersion < new SchemaVersion("3.3.0"))
         {
             return errors;
         }
 
-        List<ExpandoObject> regulations = dtroSubmit
+        var regulations = dtroSubmit
             .Data
             .GetValueOrDefault<IList<object>>("Source.provision")
             .OfType<ExpandoObject>()
-            .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("regulation")
+            .SelectMany(provision => provision
+                .GetValueOrDefault<IList<object>>("regulation")
                 .OfType<ExpandoObject>())
             .ToList();
 
@@ -32,21 +29,23 @@ public class ConditionValidation : IConditionValidation
 
         if (hasConditionSet)
         {
-
-            List<ExpandoObject> conditionSets = regulations
-                .SelectMany(expandoObject => expandoObject
+            var conditionSets = regulations
+                .SelectMany(regulation => regulation
                     .GetValueOrDefault<IList<object>>("conditionSet")
                     .OfType<ExpandoObject>())
                 .ToList();
 
-
-            List<string> passedInOperator = conditionSets
+            var passedInOperator = conditionSets
                 .Select(conditionSet => conditionSet.GetValueOrDefault<string>("operator"))
-                .ToList();
+                .FirstOrDefault();
 
-            List<string> operatorTypes = typeof(OperatorType).GetDisplayNames<OperatorType>().ToList();
-            bool hasOperator = operatorTypes.Select(passedInOperator.Contains).FirstOrDefault();
-            if (!hasOperator)
+            var operatorTypes = typeof(OperatorType).GetDisplayNames<OperatorType>().ToList();
+            var hasValidOperator = passedInOperator != null &&
+                                   operatorTypes
+                                       .Select(passedInOperator.Contains)
+                                       .FirstOrDefault();
+
+            if (!hasValidOperator)
             {
                 SemanticValidationError error = new()
                 {
@@ -66,39 +65,29 @@ public class ConditionValidation : IConditionValidation
                 .Select(kv => kv.Key)
                 .ToList();
 
-            var conditionTypes = typeof(ConditionType)
-                .GetDisplayNames<ConditionType>()
-                .ToList();
-
-            var areAllValidConditions = passedInConditions.All(it => conditionTypes.Contains(it));
+            var conditionTypes = typeof(ConditionType).GetDisplayNames<ConditionType>().ToList();
+            var areAllValidConditions = passedInConditions.All(conditionTypes.Contains);
 
             if (!areAllValidConditions)
             {
                 SemanticValidationError error = new()
                 {
-                    Name = "Condition",
-                    Message = "One or more condition are incorrect.",
+                    Name = "Invalid conditions",
+                    Message = "One or more conditions are invalid",
                     Path = "Source -> Provision -> Regulation -> ConditionSet -> Condition",
-                    Rule = $"One or more of '{string.Join(", ", conditionTypes)}' operators must be present.",
+                    Rule = $"One or more type of '{string.Join(", ", typeof(ConditionType))}' must be present",
                 };
                 errors.Add(error);
             }
         }
-
-        var hasCondition = regulations
-            .Select(regulation => regulation.HasField("condition"))
-            .FirstOrDefault();
-
-        if (hasCondition)
+        else
         {
             var passedInConditions = regulations
-                .SelectMany(expandoObject => expandoObject
-                    .GetValueOrDefault<IList<object>>("condition"))
+                .Select(conditionSet => conditionSet
+                    .GetValueOrDefault<object>("condition"))
                 .OfType<ExpandoObject>()
-                .ToList();
-
-            var conditionTypes = typeof(ConditionType)
-                .GetDisplayNames<ConditionType>()
+                .SelectMany(it => it)
+                .Select(kv => kv.Key)
                 .ToList();
 
             if (passedInConditions.Count > 1)
@@ -106,25 +95,24 @@ public class ConditionValidation : IConditionValidation
                 SemanticValidationError error = new()
                 {
                     Name = "Condition",
-                    Message = "Condition is not accepted.",
+                    Message = "Maximum number of conditions",
                     Path = "Source -> Provision -> Regulation -> Condition",
-                    Rule = $"One of '{string.Join(", ", conditionTypes)}' conditions must be present.",
+                    Rule = "Only one condition must be present",
                 };
                 errors.Add(error);
             }
 
-            var hasValidCondition = passedInConditions
-                .Select(passedInCondition => conditionTypes.Any(passedInCondition.HasField))
-                .FirstOrDefault();
+            var conditionTypes = typeof(ConditionType).GetDisplayNames<ConditionType>().ToList();
+            var areAllValidConditions = passedInConditions.All(conditionTypes.Contains);
 
-            if (!hasValidCondition)
+            if (!areAllValidConditions)
             {
                 SemanticValidationError error = new()
                 {
-                    Name = "Condition",
-                    Message = "Condition is not valid.",
-                    Path = "Source -> Provision -> Regulation -> Condition",
-                    Rule = $"One of '{string.Join(", ", conditionTypes)}' conditions must be present.",
+                    Name = "Invalid conditions",
+                    Message = "One or more conditions are invalid",
+                    Path = "Source -> Provision -> Regulation -> ConditionSet -> Condition",
+                    Rule = $"One or more type of '{string.Join(", ", typeof(ConditionType))}' must be present",
                 };
                 errors.Add(error);
             }

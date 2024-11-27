@@ -33,6 +33,7 @@ global using DfT.DTRO.RequestCorrelation;
 global using DfT.DTRO.Services;
 global using DfT.DTRO.Services.Conversion;
 global using DfT.DTRO.Services.Mapping;
+global using DfT.DTRO.Services.Validation.Contracts;
 global using DfT.DTRO.Services.Validation.Implementation;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;

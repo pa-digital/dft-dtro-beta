@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Services.Validation.Contracts;
-
-namespace Dft.DTRO.Tests.UnitTests;
+﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
 public class ConditionValidationTests
@@ -9,177 +7,239 @@ public class ConditionValidationTests
 
     [Theory]
     [InlineData("3.2.4", 0)]
-    [InlineData("3.2.5", 0)]
     [InlineData("3.3.0", 0)]
-    public void ValidateConditionReturnsNoErrorsWhenSingleCondition(string version, int errorCount)
+    public void ValidateConditionReturnsNoErrorsWhenConditionSetIsPresent(string version, int errorCount)
     {
+        SchemaVersion schemaVersion = (version);
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""condition"":  [
-                        {
-                            ""TimeValidity"": 
+            ""Source"": {
+                ""provision"": [
+                    {
+                        ""regulation"": [
                             {
-                                
+                                ""conditionSet"": [
+                                    {
+                                        ""operator"": ""and"",
+                                        ""conditionSet"": [
+                                            {
+                                                ""operator"": ""or"",
+                                                ""condition"": [
+                                                    {
+                                                        ""negate"": false,
+                                                        ""VehicleCharacteristics"": {
+                                                            ""MaximumHeightCharacteristic"": {
+                                                                ""vehicleHeight"": 2.5
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        ""negate"": true,
+                                                        ""VehicleCharacteristics"": {
+                                                            ""vehicleType"": ""bus""
+                                                        }
+                                                    },
+                                                    {
+                                                        ""operator"": ""and"",
+                                                        ""condition"": [
+                                                            {
+                                                                ""negate"": ""and"",
+                                                                ""VehicleCharacteristics"": {
+                                                                    ""vehicleType"": ""taxi""
+                                                                }
+                                                            },
+                                                            {
+                                                                ""negate"": false,
+                                                                ""VehicleCharacteristics"": {
+                                                                    ""vehicleUsage"": ""access""
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        ""condition"": {
+                                            ""TimeValidity"": {
+                                                ""start"": ""2024-08-22T08:00:00"",
+                                                ""end"": ""2024-08-22T20:00:00""
+                                            }
+                                        }
+                                    }
+                                ]
                             }
-                        }
-                    ]
-                  }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
-        }", new SchemaVersion(version));
+            }
+        }", schemaVersion);
 
-        IList<SemanticValidationError>? actual = _sut.ValidateCondition(dtroSubmit, version);
+        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
         Assert.Equal(errorCount, actual.Count);
     }
 
-    [Fact]
-    public void ValidateConditionReturnsErrorsWhenUnknownSingleCondition()
+    [Theory]
+    [InlineData("3.2.4", 0)]
+    [InlineData("3.3.0", 1)]
+    public void ValidateConditionReturnsErrorsWhenConditionSetIsPresentButWrongOperator(string version, int errorCount)
     {
+        SchemaVersion schemaVersion = (version);
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""condition"":  [
-                        {
-                            ""RandomCondition"": 
+            ""Source"": {
+                ""provision"": [
+                    {
+                        ""regulation"": [
                             {
-                                
+                                ""conditionSet"": [
+                                    {
+                                        ""operator"": ""some"",
+                                        ""conditionSet"": [
+                                            {
+                                                ""operator"": ""or"",
+                                                ""condition"": [
+                                                    {
+                                                        ""negate"": false,
+                                                        ""VehicleCharacteristics"": {
+                                                            ""MaximumHeightCharacteristic"": {
+                                                                ""vehicleHeight"": 2.5
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        ""negate"": true,
+                                                        ""VehicleCharacteristics"": {
+                                                            ""vehicleType"": ""bus""
+                                                        }
+                                                    },
+                                                    {
+                                                        ""operator"": ""and"",
+                                                        ""condition"": [
+                                                            {
+                                                                ""negate"": ""and"",
+                                                                ""VehicleCharacteristics"": {
+                                                                    ""vehicleType"": ""taxi""
+                                                                }
+                                                            },
+                                                            {
+                                                                ""negate"": false,
+                                                                ""VehicleCharacteristics"": {
+                                                                    ""vehicleUsage"": ""access""
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        ""condition"": {
+                                            ""TimeValidity"": {
+                                                ""start"": ""2024-08-22T08:00:00"",
+                                                ""end"": ""2024-08-22T20:00:00""
+                                            }
+                                        }
+                                    }
+                                ]
                             }
-                        }
-                    ]
-                  }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
-        }", new SchemaVersion("3.2.5"));
+            }
+        }", schemaVersion);
 
-        IList<SemanticValidationError>? actual = _sut.ValidateCondition(dtroSubmit, "3.2.5");
-        Assert.NotEmpty(actual);
+        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
+        Assert.Equal(errorCount, actual.Count);
     }
 
-    [Fact]
-    public void ValidateConditionReturnsNoErrorsWhenConditionSetIsPresent()
+    [Theory]
+    [InlineData("3.2.4", 0)]
+    [InlineData("3.3.0", 1)]
+    public void ValidateConditionReturnsErrorsWhenMultipleConditionsIsPresentWithoutConditionSet(string version, int errorCount)
     {
+        SchemaVersion schemaVersion = (version);
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""conditionSet"":  [
-                        {
-                            ""operator"": ""and"",
-                            ""condition"": 
+            ""Source"": {
+                ""provision"": [
+                    {
+                        ""regulation"": [
                             {
-                                ""TimeValidity"": 
-                                {
-                                    
-                                },
-                                ""VehicleCharacteristics"": 
-                                {
-                                    
+                                ""condition"": {
+                                    ""TimeValidity"": {
+
+                                    },
+                                    ""RoadCondition"": {
+
+                                    }
                                 }
                             }
-                        }
-                    ]
-                  }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
-        }", new SchemaVersion("3.2.5"));
+            }
+        }", schemaVersion);
 
-        IList<SemanticValidationError>? actual = _sut.ValidateCondition(dtroSubmit, "3.2.5");
-        Assert.Empty(actual);
+        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
+        Assert.Equal(errorCount, actual.Count);
     }
 
-    [Fact]
-    public void ValidateConditionReturnsErrorsWhenOperatorIsWrong()
+    [Theory]
+    [InlineData("3.2.4", 0)]
+    [InlineData("3.3.0", 0)]
+    public void ValidateConditionReturnsNoErrorsWhenOneConditionIsPresent(string version, int errorCount)
     {
+        SchemaVersion schemaVersion = new(version);
+
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                    ""conditionSet"":  [
-                        {
-                            ""operator"": ""test"",
-                            ""condition"": 
+            ""Source"": {
+                ""provision"": [
+                    {
+                        ""regulation"": [
                             {
-                                ""ValidityCondition"": 
-                                {
-                                    
-                                },
-                                ""VehicleCondition"": 
-                                {
-                                    
+                                ""condition"": {
+                                    ""TimeValidity"": {
+
+                                    }
                                 }
                             }
-                        }
-                    ]
-                  }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
-        }", new SchemaVersion("3.2.5"));
+            }
+        }", schemaVersion);
 
-        IList<SemanticValidationError>? actual = _sut.ValidateCondition(dtroSubmit, "3.2.5");
-        Assert.NotEmpty(actual);
+        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
+        Assert.Equal(errorCount, actual.Count);
     }
 
-    [Fact]
-    public void ValidateConditionReturnsErrorsWhenOneConditionWithinConditionSetAreWrong()
+    [Theory]
+    [InlineData("3.2.4", 0)]
+    [InlineData("3.3.0", 1)]
+    public void ValidateConditionReturnsErrorsWhenWrongConditionIsPresent(string version, int errorCount)
     {
+        SchemaVersion schemaVersion = new(version);
+
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": 
-          {
-            ""provision"": 
-            [
-              {
-                ""regulation"": 
-                [
-                  {
-                    ""conditionSet"":
-                    [
-                        {
-                            ""operator"": ""and"",
-                            ""condition"": 
+            ""Source"": {
+                ""provision"": [
+                    {
+                        ""regulation"": [
                             {
-                                ""ValidityCondition"": 
-                                {
-                                    
-                                },
-                                ""BadCondition"": 
-                                {
-                                    
+                                ""condition"": {
+                                    ""SomeCondition"": {
+
+                                    }
                                 }
                             }
-                        }
-                    ]
-                  }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
-        }", new SchemaVersion("3.2.5"));
+            }
+        }", schemaVersion);
 
-        IList<SemanticValidationError>? actual = _sut.ValidateCondition(dtroSubmit, "3.2.5");
-        Assert.NotEmpty(actual);
+        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
+        Assert.Equal(errorCount, actual.Count);
     }
 }
