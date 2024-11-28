@@ -33,18 +33,17 @@ public class SemanticValidationService : ISemanticValidationService
         Validate(dtroSubmit.Data.ToIndentedJsonString(), dtroSubmit.SchemaVersion);
 
     private async Task<Tuple<BoundingBox, List<SemanticValidationError>>> Validate(
-        string dtroDataString,
-        SchemaVersion dtroSchemaVersion)
+        string dtroDataString, SchemaVersion dtroSchemaVersion)
     {
         List<SemanticValidationError> validationErrors = new();
         JObject parsedBody = JObject.Parse(dtroDataString);
 
-        ValidateLastUpdatedDate(parsedBody, validationErrors);
-        BoundingBox boundingBox = dtroSchemaVersion >= new SchemaVersion("3.2.5")
+        ValidateLastUpdatedDate(parsedBody, dtroSchemaVersion, validationErrors);
+        BoundingBox boundingBox = dtroSchemaVersion >= new SchemaVersion("3.3.0")
             ? _geometryValidation
                 .ValidateGeometryAgainstCurrentSchemaVersion(parsedBody, validationErrors)
             : _geometryValidation
-                .ValidateGeometryAgainstPreviousSchemaVersions(parsedBody, validationErrors);
+                .ValidateGeometryAgainstPreviousSchemaVersions(parsedBody, dtroSchemaVersion, validationErrors);
 
         await ValidateReferencedTroId(parsedBody, dtroSchemaVersion, validationErrors);
         //ValidateConditions(parsedBody, validationErrors);
@@ -169,12 +168,12 @@ public class SemanticValidationService : ISemanticValidationService
     }
 
 
-    private void ValidateLastUpdatedDate(JObject data, List<SemanticValidationError> errors)
+    private void ValidateLastUpdatedDate(JObject data, SchemaVersion schemaVersion, List<SemanticValidationError> errors)
     {
         IEnumerable<JProperty> externalReferences = data
             .DescendantsAndSelf()
             .OfType<JProperty>()
-            .Where(it => it.Name == "ExternalReference")
+            .Where(it => it.Name == "ExternalReference".ToBackwardCompatibility(schemaVersion))
             .Select(it => it);
 
         if (!externalReferences.Any())
@@ -213,7 +212,7 @@ public class SemanticValidationService : ISemanticValidationService
         SchemaVersion dtroSchemaVersion,
         List<SemanticValidationError> errors)
     {
-        if (dtroSchemaVersion < "3.1.2") //TODO: Could this be a env var which can change over time?
+        if (dtroSchemaVersion < "3.1.2")
         {
             return;
         }

@@ -9,19 +9,19 @@ public class RegulatedPlaceValidation : IRegulatedPlaceValidation
     {
         var errors = new List<SemanticValidationError>();
 
-        if (schemaVersion < new SchemaVersion("3.2.5"))
+        List<ExpandoObject> regulatedPlaces = request
+            .Data
+            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(request.SchemaVersion))
+            .OfType<ExpandoObject>()
+            .SelectMany(expandoObject => expandoObject
+                .GetValue<IList<object>>("RegulatedPlace".ToBackwardCompatibility(request.SchemaVersion))
+                .OfType<ExpandoObject>())
+            .ToList();
+
+        if (schemaVersion < new SchemaVersion("3.3.0"))
         {
             return errors;
         }
-
-        List<ExpandoObject> regulatedPlaces = request
-            .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision")
-            .OfType<ExpandoObject>()
-            .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("RegulatedPlace")
-                .OfType<ExpandoObject>())
-            .ToList();
 
         var passedInType = regulatedPlaces.Select(it => it.GetValueOrDefault<string>("type"));
         var regulatedPlaceTypes = typeof(RegulatedPlaceType).GetDisplayNames<RegulatedPlaceType>();

@@ -89,10 +89,13 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        List<string> provisionReferences = dtroSubmit.Data.GetValueOrDefault<IList<object>>("Source.Provision")
-        ?.OfType<ExpandoObject>()
-        .Select(it => it.GetValue<string>("reference"))
-        .ToList() ?? new List<string>();
+        List<string> provisionReferences = dtroSubmit
+            .Data
+            .GetValueOrDefault<IList<object>>("Source.Provision"
+                .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .OfType<ExpandoObject>()
+            .Select(it => it.GetValue<string>("reference"))
+            .ToList();
 
         if (provisionReferences.Any(string.IsNullOrWhiteSpace))
         {
@@ -119,7 +122,10 @@ public class RecordManagementService : IRecordManagementService
             validationErrors.AddRange(errors);
         }
 
-        List<string> provisionActionTypes = dtroSubmit.Data.GetValueOrDefault<IList<object>>("Source.Provision")
+        List<string> provisionActionTypes = dtroSubmit
+            .Data
+            .GetValueOrDefault<IList<object>>("Source.Provision"
+                .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .Select(it => it.GetValue<string>("actionType"))
             .ToList();

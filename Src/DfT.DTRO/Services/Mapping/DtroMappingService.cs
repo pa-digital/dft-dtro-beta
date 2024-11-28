@@ -25,11 +25,11 @@ public class DtroMappingService : IDtroMappingService
         foreach (var dtro in dtros)
         {
             var regulations = new List<ExpandoObject>();
-            var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision").OfType<ExpandoObject>().ToList();
+            var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtro.SchemaVersion)).OfType<ExpandoObject>().ToList();
 
             foreach (var provision in provisions)
             {
-                regulations.AddRange(provision.GetValue<IList<object>>("Regulation").OfType<ExpandoObject>().ToList());
+                regulations.AddRange(provision.GetValue<IList<object>>("Regulation".ToBackwardCompatibility(dtro.SchemaVersion)).OfType<ExpandoObject>().ToList());
 
             }
 
@@ -37,10 +37,10 @@ public class DtroMappingService : IDtroMappingService
             try
             {
                 timeValidity = regulations
-                .SelectMany(it => it.GetListOrDefault("Condition") ?? Enumerable.Empty<object>())
+                .SelectMany(it => it.GetListOrDefault("Condition".ToBackwardCompatibility(dtro.SchemaVersion)) ?? Enumerable.Empty<object>())
                 .Where(it => it is not null)
                 .OfType<ExpandoObject>()
-                .Select(it => it.GetExpandoOrDefault("TimeValidity"))
+                .Select(it => it.GetExpandoOrDefault("TimeValidity".ToBackwardCompatibility(dtro.SchemaVersion)))
                 .Where(it => it is not null)
                 .ToList();
             }
@@ -93,38 +93,28 @@ public class DtroMappingService : IDtroMappingService
 
     public IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros)
     {
-        List<DtroSearchResult> results = new List<DtroSearchResult>();
+        List<DtroSearchResult> results = new();
         foreach (Models.DataBase.DTRO dtro in dtros)
         {
             var regulations = new List<ExpandoObject>();
             try
             {
-                var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision");
+                var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtro.SchemaVersion));
                 if (provisions == null)
                 {
-                    _loggingExtension.LogWarn(nameof(MapToSearchResult), "Warning: 'Source.Provision' is null or not found. Trying with 'Source.provision'");
-                    provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision");
-                    if (provisions == null)
-                    {
-                        _loggingExtension.LogError(nameof(MapToSearchResult), "", "Error: 'Source.provision' is null or not found.", "");
-                        continue;
-                    }
+                    _loggingExtension.LogError(nameof(MapToSearchResult), "", "Error: 'Source.provision' is null or not found.", "");
+                    continue;
                 }
 
                 var expandoProvisions = provisions.OfType<ExpandoObject>();
 
                 foreach (var provision in expandoProvisions)
                 {
-                    var regulationList = provision.GetValue<IList<object>>("Regulation");
+                    var regulationList = provision.GetValue<IList<object>>("Regulation".ToBackwardCompatibility(dtro.SchemaVersion));
                     if (regulationList == null)
                     {
-                        _loggingExtension.LogWarn(nameof(MapToSearchResult), "Warning: 'Regulation' not found in one of the provisions. Trying with 'regulation'");
-                        regulationList = provision.GetValue<IList<object>>("regulation");
-                        if (regulationList == null)
-                        {
-                            _loggingExtension.LogError(nameof(MapToSearchResult), "", "Error: 'regulation' not found in one of the provisions.", "");
-                            continue;
-                        }
+                        _loggingExtension.LogError(nameof(MapToSearchResult), "", "Error: 'regulation' not found in one of the provisions.", "");
+                        continue;
                     }
 
                     var expandoRegulations = regulationList.OfType<ExpandoObject>();
@@ -146,16 +136,12 @@ public class DtroMappingService : IDtroMappingService
             try
             {
                 timeValidity = regulations
-                .SelectMany(it => it.GetListOrDefault("Condition") ?? Enumerable.Empty<object>())
+                .SelectMany(it => it.GetListOrDefault("Condition".ToBackwardCompatibility(dtro.SchemaVersion)) ?? Enumerable.Empty<object>())
                 .Where(it => it is not null)
                 .OfType<ExpandoObject>()
-                .Select(it => it.GetExpandoOrDefault("TimeValidity"))
+                .Select(it => it.GetExpandoOrDefault("TimeValidity".ToBackwardCompatibility(dtro.SchemaVersion)))
                 .Where(it => it is not null)
                 .ToList();
-
-                //if (!timeValidity.Any()) {
-
-                //}
             }
             catch (Exception ex)
             {
@@ -268,7 +254,7 @@ public class DtroMappingService : IDtroMappingService
 
     public List<DtroHistoryProvisionResponse> GetProvision(DTROHistory dtroHistory)
     {
-        IList<object> provisions = GetProvision(dtroHistory, "Source.Provision");
+        IList<object> provisions = GetProvision(dtroHistory, "Source.Provision".ToBackwardCompatibility(dtroHistory.SchemaVersion));
         var ret = new List<DtroHistoryProvisionResponse>();
         foreach (var provision in provisions)
         {
@@ -293,12 +279,13 @@ public class DtroMappingService : IDtroMappingService
 
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
     {
+        var schemaVersion = dtro.SchemaVersion;
         List<ExpandoObject> regulations = dtro
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision")
+            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(schemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("Regulation")
+                .GetValue<IList<object>>("Regulation".ToBackwardCompatibility(schemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 
@@ -316,17 +303,17 @@ public class DtroMappingService : IDtroMappingService
         .Distinct()
             .ToList();
 
-        dtro.VehicleTypes = regulations.SelectMany(it => it.GetListOrDefault("Condition") ?? Enumerable.Empty<object>())
+        dtro.VehicleTypes = regulations.SelectMany(it => it.GetListOrDefault("Condition".ToBackwardCompatibility(schemaVersion)) ?? Enumerable.Empty<object>())
             .Where(it => it is not null)
             .OfType<ExpandoObject>()
-            .Select(it => it.GetExpandoOrDefault("VehicleCharacteristics"))
+            .Select(it => it.GetExpandoOrDefault("VehicleCharacteristics".ToBackwardCompatibility(schemaVersion)))
             .Where(it => it is not null)
             .SelectMany(it => it.GetListOrDefault("vehicleType") ?? Enumerable.Empty<object>())
             .OfType<string>()
         .Distinct()
         .ToList();
 
-        dtro.OrderReportingPoints = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision")
+        dtro.OrderReportingPoints = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(schemaVersion))
             .OfType<ExpandoObject>()
             .Select(it => it.GetValue<string>("orderReportingPoint"))
             .Distinct()
@@ -336,10 +323,10 @@ public class DtroMappingService : IDtroMappingService
         try
         {
             timeValidity = regulations
-            .SelectMany(it => it.GetListOrDefault("Condition") ?? Enumerable.Empty<object>())
+            .SelectMany(it => it.GetListOrDefault("Condition".ToBackwardCompatibility(schemaVersion)) ?? Enumerable.Empty<object>())
             .Where(it => it is not null)
             .OfType<ExpandoObject>()
-            .Select(it => it.GetExpandoOrDefault("TimeValidity"))
+            .Select(it => it.GetExpandoOrDefault("TimeValidity".ToBackwardCompatibility(schemaVersion)))
             .Where(it => it is not null)
             .ToList();
         }
@@ -364,7 +351,7 @@ public class DtroMappingService : IDtroMappingService
         string json = dtro.Data.ToIndentedJsonString();
         JObject obj = JObject.Parse(json);
 
-        if (dtro.SchemaVersion >= new SchemaVersion("3.2.5"))
+        if (dtro.SchemaVersion >= new SchemaVersion("3.3.0"))
         {
             var geometries = obj
                 .Descendants()
@@ -382,7 +369,7 @@ public class DtroMappingService : IDtroMappingService
             var geometry = obj
                 .DescendantsAndSelf()
                 .OfType<JProperty>()
-                .FirstOrDefault(property => property.Name == "Geometry");
+                .FirstOrDefault(property => property.Name == "Geometry".ToBackwardCompatibility(schemaVersion));
             dtro.Location = _service.SetBoundingBoxForSingleGeometry(new List<SemanticValidationError>(), geometry, new BoundingBox());
         }
     }

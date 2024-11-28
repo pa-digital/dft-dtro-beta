@@ -111,4 +111,31 @@ public static class ObjectExtensions
             DateTimeKind.Utc
         );
     }
+
+    public static string ToBackwardCompatibility(this string source, SchemaVersion schemaVersion)
+    {
+        if (schemaVersion >= new SchemaVersion("3.3.0"))
+        {
+            return source;
+        }
+
+        var parts = source.Split('.');
+        if (parts.Length > 1)
+        {
+            var first = parts[0];
+            var last = parts[1];
+            var chars = last.ToCharArray();
+            var toLower = chars[0].ToString().ToLower();
+            var item = $"{first}.{toLower + string.Join("", chars.Skip(1))}";
+            return item;
+        }
+        else
+        {
+            var first = parts[0];
+            var chars = first.ToCharArray();
+            var toLower = chars[0].ToString().ToLower();
+            var item = $"{toLower + string.Join("", chars.Skip(1))}";
+            return item;
+        }
+    }
 }

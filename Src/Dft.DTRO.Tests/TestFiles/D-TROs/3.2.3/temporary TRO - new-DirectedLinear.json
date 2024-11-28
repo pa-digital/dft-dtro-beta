@@ -2,13 +2,13 @@
         "Source": {
             "actionType": "new",
             "currentTraOwner": 1000,
-            "Provision": [
+            "provision": [
                 {
                     "actionType": "new",
                     "orderReportingPoint": "ttroTtmoByNotice",
                     "provisionDescription": "Prohibition of Waiting",
                     "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
-                    "Regulation": [
+                    "regulation": [
                         {
                             "isDynamic": false,
                             "timeZone": "Europe/London",
@@ -168,7 +168,7 @@
                             ]
                         }
                     ],
-                    "RegulatedPlace": [
+                    "regulatedPlace": [
                         {
                             "description": "Zone 5, Kenworthy Road, All Odd, All Even",
                             "geometry": {
