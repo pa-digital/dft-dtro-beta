@@ -9,6 +9,8 @@ OAUTH_RESPONSE=$(curl -X POST "https://${DOMAIN}.dft.gov.uk/v1/oauth-generator" 
 # Extract access token and appId
 if [ -z "$OAUTH_RESPONSE" ] || [ "$OAUTH_RESPONSE" == "[]" ]; then
   echo "Response is empty"
+  echo " "
+  echo "$RESPONSE"
   exit 1
 else
   access_token=$(echo "$OAUTH_RESPONSE" | jq -r '.access_token')
@@ -25,6 +27,8 @@ RESPONSE=$(curl -X GET "https://${DOMAIN}.dft.gov.uk/v1/dtroUsers" \
 )
 if [ -z "$RESPONSE" ] || [ "$RESPONSE" == "[]" ]; then
   echo "Response is empty"
+  echo " "
+  echo "$RESPONSE"
   exit 1
 else
   number_of_users=$(echo "$RESPONSE" | jq '. | length')
