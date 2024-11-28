@@ -102,8 +102,13 @@ public class DtroMappingService : IDtroMappingService
                 var provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision");
                 if (provisions == null)
                 {
-                    _loggingExtension.LogError(nameof(InferIndexFields), "", "Error: 'Source.provision' is null or not found.", "");
-                    continue;
+                    _loggingExtension.LogWarn(nameof(MapToSearchResult), "Warning: 'Source.Provision' is null or not found. Trying with 'Source.provision'");
+                    provisions = dtro.Data.GetValueOrDefault<IList<object>>("Source.provision");
+                    if (provisions == null)
+                    {
+                        _loggingExtension.LogError(nameof(MapToSearchResult), "", "Error: 'Source.provision' is null or not found.", "");
+                        continue;
+                    }
                 }
 
                 var expandoProvisions = provisions.OfType<ExpandoObject>();
@@ -113,8 +118,13 @@ public class DtroMappingService : IDtroMappingService
                     var regulationList = provision.GetValue<IList<object>>("Regulation");
                     if (regulationList == null)
                     {
-                        _loggingExtension.LogWarn(nameof(InferIndexFields), "Warning: 'regulation' not found in one of the provisions.");
-                        continue;
+                        _loggingExtension.LogWarn(nameof(MapToSearchResult), "Warning: 'Regulation' not found in one of the provisions. Trying with 'regulation'");
+                        regulationList = provision.GetValue<IList<object>>("regulation");
+                        if (regulationList == null)
+                        {
+                            _loggingExtension.LogError(nameof(MapToSearchResult), "", "Error: 'regulation' not found in one of the provisions.", "");
+                            continue;
+                        }
                     }
 
                     var expandoRegulations = regulationList.OfType<ExpandoObject>();
@@ -123,7 +133,7 @@ public class DtroMappingService : IDtroMappingService
             }
             catch (Exception ex)
             {
-                _loggingExtension.LogError(nameof(InferIndexFields), "", "An error occurred", ex.Message);
+                _loggingExtension.LogError(nameof(MapToSearchResult), "", "An error occurred", ex.Message);
                 throw new NotFoundException(ex.Message);
             }
 
@@ -142,10 +152,14 @@ public class DtroMappingService : IDtroMappingService
                 .Select(it => it.GetExpandoOrDefault("TimeValidity"))
                 .Where(it => it is not null)
                 .ToList();
+
+                //if (!timeValidity.Any()) {
+
+                //}
             }
             catch (Exception ex)
             {
-                _loggingExtension.LogError(nameof(InferIndexFields), "", "An error occurred while processing timeValidity.", ex.Message);
+                _loggingExtension.LogError(nameof(MapToSearchResult), "", "An error occurred while processing timeValidity.", ex.Message);
                 timeValidity = new List<ExpandoObject>();
             }
 
