@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Models.Validation;
-using DfT.DTRO.Services.Validation.Contracts;
+﻿using DfT.DTRO.Services.Validation.Contracts;
 
 namespace DfT.DTRO.Services.Validation.Implementation;
 
@@ -90,7 +89,7 @@ public class RecordManagementService : IRecordManagementService
             });
         }
 
-        List<string> provisionReferences = dtroSubmit.Data.GetValueOrDefault<IList<object>>("Source.provision")
+        List<string> provisionReferences = dtroSubmit.Data.GetValueOrDefault<IList<object>>("Source.Provision")
         ?.OfType<ExpandoObject>()
         .Select(it => it.GetValue<string>("reference"))
         .ToList() ?? new List<string>();
@@ -120,7 +119,7 @@ public class RecordManagementService : IRecordManagementService
             validationErrors.AddRange(errors);
         }
 
-        List<string> provisionActionTypes = dtroSubmit.Data.GetValueOrDefault<IList<object>>("Source.provision")
+        List<string> provisionActionTypes = dtroSubmit.Data.GetValueOrDefault<IList<object>>("Source.Provision")
             .OfType<ExpandoObject>()
             .Select(it => it.GetValue<string>("actionType"))
             .ToList();

@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Models.Validation;
-using DfT.DTRO.Services.Validation.Contracts;
+﻿using DfT.DTRO.Services.Validation.Contracts;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace DfT.DTRO.Services.Validation.Implementation;
@@ -17,10 +16,10 @@ public class RegulationValidation : IRegulationValidation
 
         List<ExpandoObject> regulations = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.provision")
+            .GetValueOrDefault<IList<object>>("Source.Provision")
             .OfType<ExpandoObject>()
             .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("regulation")
+                .GetValue<IList<object>>("Regulation")
                 .OfType<ExpandoObject>())
             .ToList();
 

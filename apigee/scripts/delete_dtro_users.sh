@@ -34,4 +34,5 @@ if [ "$RESPONSE" -eq 200 ]; then
     echo "User {${ID}} deleted."
   else
     echo "Failed to delete {${ID}}. HTTP response code: $RESPONSE"
+    exit 1
 fi

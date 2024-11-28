@@ -2,7 +2,6 @@ using System.Text.Json;
 using DfT.DTRO.Models.Conditions;
 using DfT.DTRO.Models.Conditions.Base;
 using DfT.DTRO.Models.Conditions.ValueRules;
-using DfT.DTRO.Models.Validation;
 using DfT.DTRO.Services.Validation.Contracts;
 using Newtonsoft.Json.Linq;
 
@@ -42,13 +41,13 @@ public class SemanticValidationService : ISemanticValidationService
 
         ValidateLastUpdatedDate(parsedBody, validationErrors);
         BoundingBox boundingBox = dtroSchemaVersion >= new SchemaVersion("3.2.5")
-            ? _geometryValidation.ValidateGeometryAgainstCurrentSchemaVersion(parsedBody,
-                validationErrors)
-            : _geometryValidation.ValidateGeometryAgainstPreviousSchemaVersions(parsedBody,
-                validationErrors);
+            ? _geometryValidation
+                .ValidateGeometryAgainstCurrentSchemaVersion(parsedBody, validationErrors)
+            : _geometryValidation
+                .ValidateGeometryAgainstPreviousSchemaVersions(parsedBody, validationErrors);
 
         await ValidateReferencedTroId(parsedBody, dtroSchemaVersion, validationErrors);
-        ValidateConditions(parsedBody, validationErrors);
+        //ValidateConditions(parsedBody, validationErrors);
 
         return new Tuple<BoundingBox, List<SemanticValidationError>>(boundingBox, validationErrors);
     }
@@ -126,7 +125,7 @@ public class SemanticValidationService : ISemanticValidationService
         var conditionArrays =
             data.DescendantsAndSelf()
                 .OfType<JProperty>()
-                .Where(it => it.Name == "conditions")
+                .Where(it => it.Name == "Condition")
                 .Select(it => it.Value)
                 .Cast<JArray>();
 
@@ -165,8 +164,7 @@ public class SemanticValidationService : ISemanticValidationService
                 error.Path = conditionArray.Path;
             }
 
-            errors.AddRange(
-                conditionErrors);
+            errors.AddRange(conditionErrors);
         }
     }
 
@@ -176,15 +174,15 @@ public class SemanticValidationService : ISemanticValidationService
         IEnumerable<JProperty> externalReferences = data
             .DescendantsAndSelf()
             .OfType<JProperty>()
-            .Where(it => it.Name == "externalReference")
+            .Where(it => it.Name == "ExternalReference")
             .Select(it => it);
 
         if (!externalReferences.Any())
         {
             errors.Add(new SemanticValidationError
             {
-                Message = "value 'externalReference' cannot be found",
-                Path = "Source.provision.regulatedPlace.geometry"
+                Message = "value 'ExternalReference' cannot be found",
+                Path = "Source -> Provision -> RegulatedPlace -> Geometry -> External Reference"
             });
 
             _loggingExtension.LogError(nameof(ValidateLastUpdatedDate), "", "ExternalReference error", string.Join(",", errors));

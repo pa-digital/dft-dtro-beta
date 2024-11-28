@@ -16,22 +16,22 @@ public class ConditionValidation : IConditionValidation
 
         var regulations = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.provision")
+            .GetValueOrDefault<IList<object>>("Source.Provision")
             .OfType<ExpandoObject>()
             .SelectMany(provision => provision
-                .GetValueOrDefault<IList<object>>("regulation")
+                .GetValueOrDefault<IList<object>>("Regulation")
                 .OfType<ExpandoObject>())
             .ToList();
 
         var hasConditionSet = regulations
-            .Select(regulation => regulation.HasField("conditionSet"))
+            .Select(regulation => regulation.HasField("ConditionSet"))
             .FirstOrDefault();
 
         if (hasConditionSet)
         {
             var conditionSets = regulations
                 .SelectMany(regulation => regulation
-                    .GetValueOrDefault<IList<object>>("conditionSet")
+                    .GetValueOrDefault<IList<object>>("ConditionSet")
                     .OfType<ExpandoObject>())
                 .ToList();
 
@@ -59,7 +59,7 @@ public class ConditionValidation : IConditionValidation
 
             var passedInConditions = conditionSets
                 .Select(conditionSet => conditionSet
-                    .GetValueOrDefault<object>("condition"))
+                    .GetValueOrDefault<object>("Condition"))
                 .OfType<ExpandoObject>()
                 .SelectMany(it => it)
                 .Select(kv => kv.Key)
@@ -84,7 +84,7 @@ public class ConditionValidation : IConditionValidation
         {
             var passedInConditions = regulations
                 .Select(conditionSet => conditionSet
-                    .GetValueOrDefault<object>("condition"))
+                    .GetValueOrDefault<object>("Condition"))
                 .OfType<ExpandoObject>()
                 .SelectMany(it => it)
                 .Select(kv => kv.Key)

@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Services.Validation.Contracts;
-using DfT.DTRO.Services.Validation.Implementation;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace Dft.DTRO.Tests.UnitTests;
 
@@ -21,7 +19,7 @@ public class GeometryValidationTests
     public void ValidateAgainstCurrentSchemaVersionReturnsBoundingBox()
     {
         List<SemanticValidationError> errors = new();
-        const string payload = "{\r\n    \"Polygon\": {\r\n        \"version\": 1,\r\n        \"polygon\": \"SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))\",\r\n        \"externalReference\": [\r\n            {\r\n                \"lastUpdateDate\": \"1981-02-08 11:30:43\",\r\n                \"UniqueStreetReferenceNumber\": {\r\n                    \"usrn\": 96854586\r\n                }\r\n            }\r\n        ]\r\n    }\r\n}";
+        const string payload = "{\r\n    \"Polygon\": {\r\n        \"version\": 1,\r\n        \"polygon\": \"SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))\",\r\n        \"ExternalReference\": [\r\n            {\r\n                \"lastUpdateDate\": \"1981-02-08 11:30:43\",\r\n                \"UniqueStreetReferenceNumber\": {\r\n                    \"usrn\": 96854586\r\n                }\r\n            }\r\n        ]\r\n    }\r\n}";
         BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529200, NorthLatitude = 529200 };
 
         var actual = _sut.ValidateGeometryAgainstCurrentSchemaVersion(JObject.Parse(payload), errors);
@@ -34,7 +32,7 @@ public class GeometryValidationTests
     public void ValidateAgainstPreviousSchemaVersionsReturnsBoundingBox()
     {
         List<SemanticValidationError> errors = new();
-        const string payload = " {\r\n     \"geometry\": {\r\n         \"version\": 1,\r\n         \"DirectedLinear\": {\r\n             \"directedLineString\": \"SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)\"\r\n         },\r\n         \"externalReference\": [\r\n             {\r\n                 \"lastUpdateDate\": \"1981-02-08 11:30:43\",\r\n                 \"UniqueStreetReferenceNumber\": {\r\n                     \"usrn\": 96854586\r\n                 }\r\n             }\r\n         ]\r\n     }\r\n }";
+        const string payload = " {\r\n     \"Geometry\": {\r\n         \"version\": 1,\r\n         \"DirectedLinear\": {\r\n             \"directedLineString\": \"SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)\"\r\n         },\r\n         \"ExternalReference\": [\r\n             {\r\n                 \"lastUpdateDate\": \"1981-02-08 11:30:43\",\r\n                 \"UniqueStreetReferenceNumber\": {\r\n                     \"usrn\": 96854586\r\n                 }\r\n             }\r\n         ]\r\n     }\r\n }";
         BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529250, NorthLatitude = 529250 };
 
         var actual = _sut.ValidateGeometryAgainstPreviousSchemaVersions(JObject.Parse(payload), errors);

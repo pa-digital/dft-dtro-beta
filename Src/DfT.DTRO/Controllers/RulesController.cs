@@ -1,5 +1,3 @@
-using System;
-
 namespace DfT.DTRO.Controllers;
 
 /// <summary>
@@ -108,7 +106,7 @@ public class RulesController : ControllerBase
         catch (ArgumentNullException anex)
         {
             _logger.LogError(anex.Message);
-            _loggingExtension.LogError(nameof(Get),"/rules", "Unexpected Null value was found", anex.Message);
+            _loggingExtension.LogError(nameof(Get), "/rules", "Unexpected Null value was found", anex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", anex.Message));
         }
         catch (OperationCanceledException ocex)
@@ -124,7 +122,7 @@ public class RulesController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            _loggingExtension.LogError(nameof(Get),"/rules", "", ex.Message);
+            _loggingExtension.LogError(nameof(Get), "/rules", "", ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "An unexpected error occurred."));
         }
     }
@@ -156,13 +154,13 @@ public class RulesController : ControllerBase
         catch (NotFoundException nfex)
         {
             _logger.LogError(nfex.Message);
-            _loggingExtension.LogError(nameof(GetByVersion),$"/rules/{version}", $"Schema version '{version}' not found", nfex.Message);
+            _loggingExtension.LogError(nameof(GetByVersion), $"/rules/{version}", $"Schema version '{version}' not found", nfex.Message);
             return NotFound(new ApiErrorResponse("Schema version", "Schema version not found"));
         }
         catch (InvalidOperationException ioex)
         {
             _logger.LogError(ioex.Message);
-            _loggingExtension.LogError(nameof(GetByVersion),$"/rules/{version}", "", ioex.Message);
+            _loggingExtension.LogError(nameof(GetByVersion), $"/rules/{version}", "", ioex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
         }
         catch (ArgumentNullException anex)
@@ -216,13 +214,13 @@ public class RulesController : ControllerBase
         catch (NotFoundException nfex)
         {
             _logger.LogError(nfex.Message);
-            _loggingExtension.LogError(nameof(GetById),$"/rules/{ruleId}", "", nfex.Message);
+            _loggingExtension.LogError(nameof(GetById), $"/rules/{ruleId}", "", nfex.Message);
             return NotFound(new ApiErrorResponse("Rules version", "Rules version not found"));
         }
         catch (InvalidOperationException ioex)
         {
             _logger.LogError(ioex.Message);
-            _loggingExtension.LogError(nameof(GetById),$"/rules/{ruleId}", "Bad Request", ioex.Message);
+            _loggingExtension.LogError(nameof(GetById), $"/rules/{ruleId}", "Bad Request", ioex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", ioex.Message));
         }
         catch (ArgumentNullException anex)
@@ -281,13 +279,13 @@ public class RulesController : ControllerBase
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
-                GuidResponse response = await _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
+                dynamic response = await _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
                 _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using version '{version}' and file '{file.Name}'");
                 _loggingExtension.LogInformation(
                     nameof(CreateFromFile),
                     $"/rules/createFromFile/{version}",
                     $"'{nameof(CreateFromFile)}' method called using version '{version}' and file '{file.Name}'");
-                return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
+                return CreatedAtAction(nameof(CreateFromFile), new { id = response.Id }, response);
             }
         }
         catch (InvalidOperationException ioex)

@@ -20,4 +20,5 @@ RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "https://apigee.google
     echo "${APP_NAME} Activated."
   else
     echo "Failed to activate ${APP_NAME}. HTTP response code: $RESPONSE"
+    exit 1
   fi
