@@ -119,26 +119,21 @@ public class DtroService : IDtroService
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
-        Console.WriteLine($"###***### - dtroHistories.Count(): {dtroHistories.Count()}");
-        if (dtroHistories.Count() == 0) {
-            throw new NotFoundException($"Dtro '{dtroId}' not found");
+        if (dtroHistories.Count() <= 0) {
+            throw new NotFoundException($"History for Dtro '{dtroId}' cannot be found.");
         }
 
         var histories = dtroHistories
             .Select(_dtroMappingService.GetSource)
             .Where(response => response != null)
             .ToList();
-        foreach (var history in histories)
-        {
-            Console.WriteLine("###***###");
-            Console.WriteLine($"TroName: {history.TroName}");
-            Console.WriteLine($"TrafficAuthorityOwnerId: {history.TrafficAuthorityOwnerId}");
-            Console.WriteLine($"Created: {history.Created}");
-            Console.WriteLine($"LastUpdated: {history.LastUpdated}");
-        }
 
         var current = await _dtroDal.GetDtroByIdAsync(dtroId);
-        Console.WriteLine($"###***### - current == null: {current == null}");
+        if (current == null)
+        {
+            throw new NotFoundException($"Dtro '{dtroId}' has either been deleted or cannot be found.");
+        }
+
         var currentAsHistory = _dtroMappingService.MapToDtroHistory(current);
         var currentSource = _dtroMappingService.GetSource(currentAsHistory);
 
