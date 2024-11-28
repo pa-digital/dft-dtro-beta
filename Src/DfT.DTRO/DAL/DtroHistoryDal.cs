@@ -42,7 +42,7 @@ public class DtroHistoryDal : IDtroHistoryDal
             return result;
         }
         catch (Exception ex) {
-            throw new Exception("Error in GetDtroHistory method", ex);
+            throw new Exception($"Error: Unable to get retrieving history for '{dtroId}'", ex);
         }
     }
 }

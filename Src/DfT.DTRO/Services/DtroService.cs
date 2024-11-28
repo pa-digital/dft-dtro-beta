@@ -1,5 +1,4 @@
 ﻿using System.Data;
-
 namespace DfT.DTRO.Services;
 
 public class DtroService : IDtroService
@@ -120,7 +119,8 @@ public class DtroService : IDtroService
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
-        if (dtroHistories.Count() <= 0) {
+        Console.WriteLine($"###***### - dtroHistories.Count(): {dtroHistories.Count()}");
+        if (dtroHistories.Count() == 0) {
             throw new NotFoundException($"Dtro '{dtroId}' not found");
         }
 
@@ -128,8 +128,17 @@ public class DtroService : IDtroService
             .Select(_dtroMappingService.GetSource)
             .Where(response => response != null)
             .ToList();
+        foreach (var history in histories)
+        {
+            Console.WriteLine("###***###");
+            Console.WriteLine($"TroName: {history.TroName}");
+            Console.WriteLine($"TrafficAuthorityOwnerId: {history.TrafficAuthorityOwnerId}");
+            Console.WriteLine($"Created: {history.Created}");
+            Console.WriteLine($"LastUpdated: {history.LastUpdated}");
+        }
 
         var current = await _dtroDal.GetDtroByIdAsync(dtroId);
+        Console.WriteLine($"###***### - current == null: {current == null}");
         var currentAsHistory = _dtroMappingService.MapToDtroHistory(current);
         var currentSource = _dtroMappingService.GetSource(currentAsHistory);
 
