@@ -181,7 +181,7 @@ jobs:
         shell: bash
         run: |
           apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
-          revision_list=($(apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r --arg proxy_name "dtro-${env_name_prefix}-server" '.proxies[] | select(.name == $proxy_name) | .revision[]'))
+          revision_list=($(apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r '.proxies[] | select(.name == "dtro-${env_name_prefix}-server") | .revision[]'))
           revision_count=${#revision_list[@]}
           if [ "$revision_count" -ge 200 ]; then
             smallest_revision_1=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 1)
