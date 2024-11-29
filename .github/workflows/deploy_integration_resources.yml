@@ -177,6 +177,8 @@ jobs:
       - name: Make scripts directory executable
         run: chmod +x portals/*
 
+      # TODO: resolve the issue with the step below: Error:parse error: Invalid numeric literal at line 1, column 6
+      # The below step was copied from 'deploy_resources.yml' and has worked successfully when deploying to Dev, Test and Prod environment.
       - name: Delete Oldest Revision
         shell: bash
         run: |
