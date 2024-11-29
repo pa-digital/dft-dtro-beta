@@ -9,29 +9,24 @@ public class ConditionValidation : IConditionValidation
     {
         List<SemanticValidationError> errors = new();
 
-        if (schemaVersion < new SchemaVersion("3.3.0"))
-        {
-            return errors;
-        }
-
         var regulations = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision")
+            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(provision => provision
-                .GetValueOrDefault<IList<object>>("Regulation")
+                .GetValueOrDefault<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 
         var hasConditionSet = regulations
-            .Select(regulation => regulation.HasField("ConditionSet"))
+            .Select(regulation => regulation.HasField("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .FirstOrDefault();
 
         if (hasConditionSet)
         {
             var conditionSets = regulations
                 .SelectMany(regulation => regulation
-                    .GetValueOrDefault<IList<object>>("ConditionSet")
+                    .GetValueOrDefault<IList<object>>("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .OfType<ExpandoObject>())
                 .ToList();
 
@@ -59,7 +54,7 @@ public class ConditionValidation : IConditionValidation
 
             var passedInConditions = conditionSets
                 .Select(conditionSet => conditionSet
-                    .GetValueOrDefault<object>("Condition"))
+                    .GetValueOrDefault<object>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
                 .OfType<ExpandoObject>()
                 .SelectMany(it => it)
                 .Select(kv => kv.Key)
@@ -84,7 +79,7 @@ public class ConditionValidation : IConditionValidation
         {
             var passedInConditions = regulations
                 .Select(conditionSet => conditionSet
-                    .GetValueOrDefault<object>("Condition"))
+                    .GetValueOrDefault<object>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
                 .OfType<ExpandoObject>()
                 .SelectMany(it => it)
                 .Select(kv => kv.Key)

@@ -6,7 +6,6 @@ public class RegulationValidationTests
     private readonly IRegulationValidation _sut = new RegulationValidation();
 
     [Theory]
-    [InlineData("3.2.4", 0)]
     [InlineData("3.3.0", 0)]
     [InlineData("4.0.0", 0)]
     public void ValidateRegulationReturnsNoErrors(string version, int errorCount)

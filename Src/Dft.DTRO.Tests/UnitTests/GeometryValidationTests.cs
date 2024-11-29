@@ -32,10 +32,10 @@ public class GeometryValidationTests
     public void ValidateAgainstPreviousSchemaVersionsReturnsBoundingBox()
     {
         List<SemanticValidationError> errors = new();
-        const string payload = " {\r\n     \"Geometry\": {\r\n         \"version\": 1,\r\n         \"DirectedLinear\": {\r\n             \"directedLineString\": \"SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)\"\r\n         },\r\n         \"ExternalReference\": [\r\n             {\r\n                 \"lastUpdateDate\": \"1981-02-08 11:30:43\",\r\n                 \"UniqueStreetReferenceNumber\": {\r\n                     \"usrn\": 96854586\r\n                 }\r\n             }\r\n         ]\r\n     }\r\n }";
+        const string payload = " {\r\n     \"geometry\": {\r\n         \"version\": 1,\r\n         \"DirectedLinear\": {\r\n             \"directedLineString\": \"SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)\"\r\n         },\r\n         \"ExternalReference\": [\r\n             {\r\n                 \"lastUpdateDate\": \"1981-02-08 11:30:43\",\r\n                 \"UniqueStreetReferenceNumber\": {\r\n                     \"usrn\": 96854586\r\n                 }\r\n             }\r\n         ]\r\n     }\r\n }";
+        var schemaVersion = new SchemaVersion("3.2.0");
         BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529250, NorthLatitude = 529250 };
-
-        var actual = _sut.ValidateGeometryAgainstPreviousSchemaVersions(JObject.Parse(payload), errors);
+        var actual = _sut.ValidateGeometryAgainstPreviousSchemaVersions(JObject.Parse(payload), schemaVersion, errors);
 
         Assert.NotNull(actual);
         Assert.Equal(expected, actual);
