@@ -406,7 +406,7 @@ public class DTROsController : ControllerBase
                 $"/dtros/updateFromBody/{dtroId}",
                 $"TRO '{dtroId}' not found",
                 nfex.Message);
-            return NotFound(new ApiErrorResponse($"TRO '{dtroId}' not found", nfex.Message));
+            return NotFound(new ApiErrorResponse($"TRO not found", nfex.Message));
         }
         catch (InvalidOperationException ioex)
         {
@@ -584,14 +584,14 @@ public class DTROsController : ControllerBase
             _loggingExtension.LogError(
                 nameof(GetSourceHistory),
                 $"/dtros/sourceHistory/{dtroId}",
-                "Dtro History not found",
-                nfex.Message);
-            return NotFound(new ApiErrorResponse("Dtro History not found.", nfex.Message));
+                "History for DTRO not found",
+                nfex.StackTrace);
+            return NotFound(new ApiErrorResponse("History for DTRO not found.", nfex.Message));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            _loggingExtension.LogError(nameof(GetSourceHistory), $"/dtros/sourceHistory/{dtroId}", "", ex.Message);
+            _loggingExtension.LogError(nameof(GetSourceHistory), $"/dtros/sourceHistory/{dtroId}", "", ex.StackTrace);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
@@ -627,9 +627,9 @@ public class DTROsController : ControllerBase
             _loggingExtension.LogError(
                 nameof(GetProvisionHistory),
                 $"/dtros/provisionHistory/{dtroId}",
-                "Dtro History not found",
+                "History for DTRO not found",
                 nfex.Message);
-            return NotFound(new ApiErrorResponse("Dtro History not found.", nfex.Message));
+            return NotFound(new ApiErrorResponse("History for DTRO not found.", nfex.Message));
         }
         catch (Exception ex)
         {

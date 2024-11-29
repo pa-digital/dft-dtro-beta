@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.DAL;
+﻿using DfT.DTRO.Models.DataBase;
+
+namespace DfT.DTRO.DAL;
 
 /// <summary>
 /// Implementation of the <see cref="IDtroDal" /> service.
@@ -71,7 +73,7 @@ public class DtroDal : IDtroDal
 
         if (dtro is null || dtro.Deleted)
         {
-            return null;
+            throw new NotFoundException($"Dtro '{id}' has either been deleted or cannot be found.");
         }
 
         await _dtroCache.CacheDtro(dtro);

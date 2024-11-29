@@ -1,5 +1,4 @@
 ﻿using System.Data;
-
 namespace DfT.DTRO.Services;
 
 public class DtroService : IDtroService
@@ -119,6 +118,11 @@ public class DtroService : IDtroService
     public async Task<List<DtroHistorySourceResponse>> GetDtroSourceHistoryAsync(Guid dtroId)
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
+
+        if (dtroHistories.Count() <= 0) {
+            throw new NotFoundException($"History for Dtro '{dtroId}' cannot be found.");
+        }
+
         var histories = dtroHistories
             .Select(_dtroMappingService.GetSource)
             .Where(response => response != null)
@@ -198,11 +202,6 @@ public class DtroService : IDtroService
         }
 
         var currentDtro = await _dtroDal.GetDtroByIdAsync(dtroId);
-        if (currentDtro is null)
-        {
-            throw new NotFoundException($"Invalid DTRO Id: {dtroId}");
-        }
-
         var apiDtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
         if (apiDtroUser.UserGroup != (int)UserGroup.Admin)
         {
