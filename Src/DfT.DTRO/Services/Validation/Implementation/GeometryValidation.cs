@@ -17,8 +17,7 @@ public class GeometryValidation : IGeometryValidation
         _loggingExtension = loggingExtension;
     }
 
-    public BoundingBox ValidateGeometryAgainstCurrentSchemaVersion(JObject data,
-       List<SemanticValidationError> errors)
+    public BoundingBox ValidateGeometryAgainstCurrentSchemaVersion(JObject data, List<SemanticValidationError> errors)
     {
         BoundingBox boundingBox = new();
 
@@ -72,12 +71,12 @@ public class GeometryValidation : IGeometryValidation
         return _boundingBoxService.SetBoundingBoxForMultipleGeometries(errors, jProperty, boundingBox);
     }
 
-    public BoundingBox ValidateGeometryAgainstPreviousSchemaVersions(JObject data, List<SemanticValidationError> errors)
+    public BoundingBox ValidateGeometryAgainstPreviousSchemaVersions(JObject data, SchemaVersion schemaVersion, List<SemanticValidationError> errors)
     {
         JProperty geometry = data
             .DescendantsAndSelf()
             .OfType<JProperty>()
-            .FirstOrDefault(property => property.Name == "Geometry");
+            .FirstOrDefault(property => property.Name == "Geometry".ToBackwardCompatibility(schemaVersion));
 
         BoundingBox boundingBox = new();
         if (geometry?.Value is not JObject)

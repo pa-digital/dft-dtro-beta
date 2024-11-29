@@ -9,19 +9,19 @@ public class RegulationValidation : IRegulationValidation
     {
         var errors = new List<SemanticValidationError>();
 
-        if (schemaVersion < new SchemaVersion("3.2.5"))
+        List<ExpandoObject> regulations = dtroSubmit
+            .Data
+            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .OfType<ExpandoObject>()
+            .SelectMany(expandoObject => expandoObject
+                .GetValue<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .OfType<ExpandoObject>())
+            .ToList();
+
+        if (schemaVersion < new SchemaVersion("3.3.0"))
         {
             return errors;
         }
-
-        List<ExpandoObject> regulations = dtroSubmit
-            .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision")
-            .OfType<ExpandoObject>()
-            .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("Regulation")
-                .OfType<ExpandoObject>())
-            .ToList();
 
         var regulationTypes = typeof(RegulationType)
             .GetDisplayNames<RegulationType>()

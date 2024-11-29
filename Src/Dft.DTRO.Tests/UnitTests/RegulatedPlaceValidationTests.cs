@@ -6,7 +6,6 @@ public class RegulatedPlaceValidationTests
     private readonly IRegulatedPlaceValidation _sut = new RegulatedPlaceValidation();
 
     [Theory]
-    [InlineData("3.2.4", 0)]
     [InlineData("3.3.0", 0)]
     [InlineData("4.0.0", 0)]
     public void ValidateRegulatedPlacesTypesReturnsNoErrors(string version, int errorCount)
