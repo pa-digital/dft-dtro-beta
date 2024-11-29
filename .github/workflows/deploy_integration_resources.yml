@@ -180,7 +180,8 @@ jobs:
       - name: Delete Oldest Revision
         shell: bash
         run: |
-          revision_list=($(apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r --arg proxy_name "dtro-int-server" '.proxies[] | select(.name == $proxy_name) | .revision[]'))
+          apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation"
+          revision_list=($(apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r --arg proxy_name "dtro-${env_name_prefix}-server" '.proxies[] | select(.name == $proxy_name) | .revision[]'))
           revision_count=${#revision_list[@]}
           if [ "$revision_count" -ge 200 ]; then
             smallest_revision_1=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 1)
