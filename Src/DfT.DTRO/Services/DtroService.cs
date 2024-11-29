@@ -129,11 +129,6 @@ public class DtroService : IDtroService
             .ToList();
 
         var current = await _dtroDal.GetDtroByIdAsync(dtroId);
-        if (current == null)
-        {
-            throw new NotFoundException($"Dtro '{dtroId}' has either been deleted or cannot be found.");
-        }
-
         var currentAsHistory = _dtroMappingService.MapToDtroHistory(current);
         var currentSource = _dtroMappingService.GetSource(currentAsHistory);
 
@@ -207,11 +202,6 @@ public class DtroService : IDtroService
         }
 
         var currentDtro = await _dtroDal.GetDtroByIdAsync(dtroId);
-        if (currentDtro is null)
-        {
-            throw new NotFoundException($"Invalid DTRO Id: {dtroId}");
-        }
-
         var apiDtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
         if (apiDtroUser.UserGroup != (int)UserGroup.Admin)
         {
