@@ -206,30 +206,10 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
-  /dtros:
-    get:
-      tags:
-        - DTROs
-      summary: Gets D-TRO records
-      operationId: get-dtros
-      security:
-        - oAuth:
-            - cso
-            - dsp
-            - dc
-      parameters:
-        - name: X-Correlation-ID
-      responses:
-        '200':
-          description: OK.
-        '404':
-          description: Not found
-        '500':
-          description: Internal Server Error.
   /dtros/{id}:
     get:
       tags:
-        - DTRO
+        - DTROs
       summary: Gets a D-TRO by its ID
       operationId: get-dtro
       security:
