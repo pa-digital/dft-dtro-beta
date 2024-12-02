@@ -32,6 +32,12 @@ public interface IDtroDal
     Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId);
 
     /// <summary>
+    /// Gets D-TRO records.
+    /// </summary>
+    /// <returns>All active D-TRO records</returns>
+    Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync();
+
+    /// <summary>
     /// Gets a D-TRO by <paramref name="id"/>.
     /// </summary>
     /// <param name="id">D-TRO ID</param>
@@ -94,4 +100,5 @@ public interface IDtroDal
     /// <param name="correlationId">Correlation ID passed when updating the D-TRO.</param>
     /// <returns>A <see cref="Task"/> representing operation.</returns>
     Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId);
+
 }

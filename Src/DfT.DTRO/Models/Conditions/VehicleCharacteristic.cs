@@ -3,13 +3,13 @@ using DfT.DTRO.Models.Conditions.Internal;
 
 namespace DfT.DTRO.Models.Conditions;
 
-public class VehicleCondition : Condition
+public class VehicleCharacteristic : Condition
 {
     public VehicleCharacteristics VehicleCharacteristics { get; init; }
 
     public override object Clone()
     {
-        return new VehicleCondition
+        return new VehicleCharacteristic
         {
             VehicleCharacteristics = VehicleCharacteristics,
             Negate = Negate,
@@ -18,7 +18,7 @@ public class VehicleCondition : Condition
 
     public override bool Contradicts(Condition other)
     {
-        if (other is not VehicleCondition otherVehicleCondition)
+        if (other is not VehicleCharacteristic otherVehicleCondition)
         {
             return false;
         }
@@ -31,7 +31,7 @@ public class VehicleCondition : Condition
 
     public override Condition Negated()
     {
-        return new VehicleCondition
+        return new VehicleCharacteristic
         {
             VehicleCharacteristics = VehicleCharacteristics,
             Negate = !Negate,

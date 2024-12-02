@@ -80,7 +80,7 @@ public class DTRO
     public string CreatedCorrelationId { get; set; }
 
     /// <summary>
-    /// Correlation ID of the request witch which D-TRO document was updated.
+    /// Request Correlation ID which D-TRO document was updated by.
     /// </summary>
     [DataMember(Name = "lastUpdatedCorrelationId")]
     [SwaggerSchema(ReadOnly = true)]
@@ -124,7 +124,7 @@ public class DTRO
     public List<string> OrderReportingPoints { get; set; }
 
     /// <summary>
-    /// The bounding box containing all points for this D-TRO regulated places
+    /// The bounding box containing all points for this D-TRO regulated places.
     /// </summary>
     public BoundingBox Location { get; set; }
 }

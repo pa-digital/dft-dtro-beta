@@ -25,7 +25,8 @@ public class ConditionJsonConverter : JsonConverter<Condition>
             return json.Deserialize<ConditionSet>(options);
         }
 
-        if (jsonObject.ContainsKey("roadType"))
+        if (jsonObject.ContainsKey("roadType") ||
+            jsonObject.ContainsKey("RoadCondition"))
         {
             return json.Deserialize<RoadCondition>(options);
         }
@@ -55,8 +56,14 @@ public class ConditionJsonConverter : JsonConverter<Condition>
 
         if (jsonObject.ContainsKey("VehicleCharacteristics"))
         {
-            return json.Deserialize<VehicleCondition>(options);
+            return json.Deserialize<VehicleCharacteristic>(options);
         }
+
+        if (jsonObject.ContainsKey("TimeValidity"))
+        {
+            return json.Deserialize<TimeValidity>(options);
+        }
+
 
         throw new JsonException("Unknown condition type.");
     }

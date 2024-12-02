@@ -3,12 +3,19 @@ using Newtonsoft.Json.Linq;
 
 namespace DfT.DTRO.Services.Mapping;
 
+/// <inheritdoc cref="IDtroMappingService"/>
 public class DtroMappingService : IDtroMappingService
 {
     private readonly IConfiguration _configuration;
     private readonly IBoundingBoxService _service;
     private readonly LoggingExtension _loggingExtension;
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="configuration"></param>
+    /// <param name="service"></param>
+    /// <param name="loggingExtension"></param>
     public DtroMappingService(IConfiguration configuration, IBoundingBoxService service, LoggingExtension loggingExtension)
     {
         _configuration = configuration;
@@ -16,6 +23,7 @@ public class DtroMappingService : IDtroMappingService
         _loggingExtension = loggingExtension;
     }
 
+    /// <inheritdoc cref="IDtroMappingService"/>
     public IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros)
     {
         var events = new List<DtroEvent>();
@@ -83,6 +91,7 @@ public class DtroMappingService : IDtroMappingService
         return events;
     }
 
+    /// <inheritdoc cref="IDtroMappingService"/>
     public DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro) =>
         new()
         {
@@ -91,6 +100,7 @@ public class DtroMappingService : IDtroMappingService
             Data = dtro.Data
         };
 
+    /// <inheritdoc cref="IDtroMappingService"/>
     public IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros)
     {
         List<DtroSearchResult> results = new();
@@ -168,6 +178,7 @@ public class DtroMappingService : IDtroMappingService
         return results;
     }
 
+    /// <inheritdoc cref="IDtroMappingService"/>
     public DTROHistory MapToDtroHistory(Models.DataBase.DTRO currentDtro) =>
         new()
         {
@@ -209,6 +220,7 @@ public class DtroMappingService : IDtroMappingService
         };
     }
 
+    /// <inheritdoc cref="IDtroMappingService"/>
     public DtroOwner GetOwnership(Models.DataBase.DTRO dtro)
     {
         var traCreator = dtro.Data.GetValueOrDefault<int>("Source.traCreator");
@@ -221,11 +233,13 @@ public class DtroMappingService : IDtroMappingService
         };
     }
 
+    /// <inheritdoc cref="IDtroMappingService"/>
     public void SetOwnership(ref Models.DataBase.DTRO dtro, int currentTraOwner)
     {
         dtro.Data.PutValue("Source.currentTraOwner", currentTraOwner);
     }
 
+    /// <inheritdoc cref="IDtroMappingService"/>
     public void SetSourceActionType(ref Models.DataBase.DTRO dtro, SourceActionType sourceActionType)
     {
         ExpandoObject source = dtro.Data;
@@ -252,6 +266,7 @@ public class DtroMappingService : IDtroMappingService
         }
     }
 
+    /// <inheritdoc cref="IDtroMappingService"/>
     public List<DtroHistoryProvisionResponse> GetProvision(DTROHistory dtroHistory)
     {
         IList<object> provisions = GetProvision(dtroHistory, "Source.Provision".ToBackwardCompatibility(dtroHistory.SchemaVersion));
@@ -277,6 +292,7 @@ public class DtroMappingService : IDtroMappingService
         return ret.OrderByDescending(x => x.Reference).ThenByDescending(x => x.LastUpdated).ToList();
     }
 
+    /// <inheritdoc cref="IDtroMappingService"/>
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
     {
         var schemaVersion = dtro.SchemaVersion;
@@ -339,13 +355,13 @@ public class DtroMappingService : IDtroMappingService
         dtro.RegulationStart = timeValidity
             .Select(it => it.GetValueOrDefault<string>("start"))
             .Where(it => it is not null)
-            .Select(it => DateTime.Parse(it).ToLocalTime())
+            .Select(it => DateTime.Parse(it).ToDateTimeTruncated())
             .FirstOrDefault();
 
         dtro.RegulationEnd = timeValidity
             .Select(it => it.GetValueOrDefault<string>("end"))
             .Where(it => it is not null)
-            .Select(it => DateTime.Parse(it).ToLocalTime())
+            .Select(it => DateTime.Parse(it).ToDateTimeTruncated())
             .FirstOrDefault();
 
         string json = dtro.Data.ToIndentedJsonString();
@@ -374,6 +390,7 @@ public class DtroMappingService : IDtroMappingService
         }
     }
 
+    /// <inheritdoc cref="IDtroMappingService"/>
     private DtroSearchResult CopyDtroToSearchResult(Models.DataBase.DTRO dtro, List<DateTime> regulationStartDates, List<DateTime> regulationEndDates)
     {
         DtroSearchResult result = new()

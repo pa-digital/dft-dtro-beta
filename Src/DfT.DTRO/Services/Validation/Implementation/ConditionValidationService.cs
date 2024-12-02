@@ -1,6 +1,5 @@
 ﻿using DfT.DTRO.Models.Conditions;
 using DfT.DTRO.Models.Conditions.Base;
-using DfT.DTRO.Models.Validation;
 using DfT.DTRO.Services.Validation.Contracts;
 using ConditionConjunction = System.Collections.Generic.List<DfT.DTRO.Models.Conditions.Base.Condition>;
 using ConditionDnf = System.Collections.Generic.List<System.Collections.Generic.List<DfT.DTRO.Models.Conditions.Base.Condition>>;

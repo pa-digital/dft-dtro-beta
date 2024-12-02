@@ -46,7 +46,7 @@ public class SemanticValidationService : ISemanticValidationService
                 .ValidateGeometryAgainstPreviousSchemaVersions(parsedBody, dtroSchemaVersion, validationErrors);
 
         await ValidateReferencedTroId(parsedBody, dtroSchemaVersion, validationErrors);
-        //ValidateConditions(parsedBody, validationErrors);
+        ValidateConditions(parsedBody, validationErrors);
 
         return new Tuple<BoundingBox, List<SemanticValidationError>>(boundingBox, validationErrors);
     }
@@ -64,7 +64,7 @@ public class SemanticValidationService : ISemanticValidationService
                 it => it is not null);
         }
 
-        if (condition is VehicleCondition vehicleCondition)
+        if (condition is VehicleCharacteristic vehicleCondition)
         {
             return new List<IValueRule>
             {
@@ -121,6 +121,35 @@ public class SemanticValidationService : ISemanticValidationService
 
     private void ValidateConditions(JObject data, List<SemanticValidationError> errors)
     {
+        var conditionSetArrays =
+            data.DescendantsAndSelf()
+                .OfType<JObject>()
+                .Where(it => it.ContainsKey("ConditionSet"))
+                .Select(it => it.Value<JObject>());
+
+        if (conditionSetArrays.Any())
+        {
+            return;
+        }
+
+        //foreach (var conditionSetArray in conditionSetArrays)
+        //{
+        //    var mappedConditionSet = JsonSerializer.Deserialize<List<ConditionSet>>(
+        //        conditionSetArray.ToString(),
+        //        new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+        //    var conditionSet = ConditionSet.And(mappedConditionSet);
+
+        //    var conditionErrors = _conditionValidationService.Validate(conditionSet);
+
+        //    foreach (var error in conditionErrors)
+        //    {
+        //        error.Path = conditionSetArray.Path;
+        //    }
+
+        //    errors.AddRange(conditionErrors);
+        //}
+
         var conditionArrays =
             data.DescendantsAndSelf()
                 .OfType<JProperty>()
@@ -153,17 +182,6 @@ public class SemanticValidationService : ISemanticValidationService
             {
                 continue;
             }
-
-            var conditionSet = ConditionSet.And(mappedConditions);
-
-            var conditionErrors = _conditionValidationService.Validate(conditionSet);
-
-            foreach (var error in conditionErrors)
-            {
-                error.Path = conditionArray.Path;
-            }
-
-            errors.AddRange(conditionErrors);
         }
     }
 

@@ -13,6 +13,26 @@ info:
 servers:
   - url: 'https://dtro.dft.gov.uk'
 paths:
+  /v1/dtros:
+    get:
+      tags:
+        - DTROs
+      summary: Gets D-TRO records
+      operationId: get-dtros
+      security:
+        - oAuth:
+            - cso
+            - dsp
+            - dc
+      parameters:
+        - name: X-Correlation-ID
+      responses:
+        '200':
+          description: OK.
+        '404':
+          description: Not found
+        '500':
+          description: Internal Server Error.
   /v1/dtros/{id}:
     get:
       tags:
