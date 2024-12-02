@@ -445,6 +445,43 @@ public class DTROsController : ControllerBase
     }
 
     /// <summary>
+    /// Get D-TRO records
+    /// </summary>
+    /// <returns>A list of D-TRO active records</returns>
+    [HttpGet]
+    [Route("/dtros")]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
+    [SwaggerResponse(statusCode: 404, description: "Could not found any D-TRO records.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
+    [SwaggerResponse(statusCode: 200, description: "Ok")]
+    public async Task<IActionResult> GetAll()
+    {
+        try
+        {
+            IEnumerable<DtroResponse> dtroResponses = await _dtroService.GetDtrosAsync();
+            _logger.LogInformation($"'{nameof(GetAll)}' method called.");
+            _loggingExtension.LogInformation(
+                nameof(GetAll),
+                "/dtros",
+                $"'{nameof(GetAll)}' method called.");
+            return Ok(dtroResponses);
+        }
+        catch (NotFoundException ex)
+        {
+            _logger.LogError(ex.Message);
+            _loggingExtension.LogError(nameof(GetAll), "/dtros", "D-TRO records not found", ex.Message);
+            return NotFound(new ApiErrorResponse("D-TRO records not found", ex.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            _loggingExtension.LogError(nameof(GetAll), "/dtros", "", ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
+        }
+    }
+
+
+    /// <summary>
     /// Gets a D-TRO by its ID
     /// </summary>
     /// <param name="id">ID of the D-TRO to retrieve.</param>

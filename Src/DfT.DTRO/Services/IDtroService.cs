@@ -8,6 +8,8 @@ public interface IDtroService
 
     Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId);
 
+    Task<IEnumerable<DtroResponse>> GetDtrosAsync();
+
     Task<DtroResponse> GetDtroByIdAsync(Guid id);
 
     Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, Guid xAppId);

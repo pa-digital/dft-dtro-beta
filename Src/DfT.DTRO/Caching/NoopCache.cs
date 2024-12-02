@@ -15,6 +15,18 @@ public class NoopCache : IRedisCache
         => Task.CompletedTask;
 
     /// <inheritdoc cref="IRedisCache"/>
+    public Task<List<Models.DataBase.DTRO>> CacheDtros(IEnumerable<Models.DataBase.DTRO> dtros) =>
+        Task.CompletedTask as Task<List<Models.DataBase.DTRO>>;
+
+    /// <inheritdoc cref="IRedisCache"/>
+    public Task CacheDtros(List<Models.DataBase.DTRO> dtros) =>
+        Task.CompletedTask;
+
+    /// <inheritdoc cref="IRedisCache"/>
+    public Task<List<Models.DataBase.DTRO>> GetDtros() =>
+        Task.FromResult(new List<Models.DataBase.DTRO>());
+
+    /// <inheritdoc cref="IRedisCache"/>
     public Task<Models.DataBase.DTRO> GetDtro(Guid key)
         => Task.FromResult<Models.DataBase.DTRO>(null);
 
