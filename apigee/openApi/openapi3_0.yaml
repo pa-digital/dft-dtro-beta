@@ -219,6 +219,12 @@ paths:
             - dc
       parameters:
         - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
           description: OK.
@@ -231,7 +237,7 @@ paths:
       tags:
         - DTRO
       summary: Gets a D-TRO by its ID
-      operationId: get-dtro
+      operationId: get-dtro-by-id
       security:
         - oAuth:
             - cso
