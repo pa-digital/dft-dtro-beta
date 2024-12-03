@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Models.DataBase;
-
-namespace DfT.DTRO.DAL;
+﻿namespace DfT.DTRO.DAL;
 
 /// <summary>
 /// Implementation of the <see cref="IDtroDal" /> service.
@@ -48,19 +46,39 @@ public class DtroDal : IDtroDal
         return true;
     }
 
-    ///<inheritdoc cref="IDtroService"/>
+    ///<inheritdoc cref="IDtroDal"/>
     public async Task<bool> DtroExistsAsync(Guid id)
     {
         return await _dtroContext.Dtros.AnyAsync(it => it.Id == id && !it.Deleted);
     }
 
-    ///<inheritdoc cref="IDtroService"/>
+    ///<inheritdoc cref="IDtroDal"/>
     public async Task<int> DtroCountForSchemaAsync(SchemaVersion schemaVersion)
     {
         return await _dtroContext.Dtros.CountAsync(it => it.SchemaVersion == schemaVersion);
     }
 
-    ///<inheritdoc cref="IDtroService"/>
+    /// <inheritdoc cref="IDtroDal"/>
+    public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync()
+    {
+        var cachedDtros = await _dtroCache.GetDtros();
+        if (cachedDtros.Any())
+        {
+            return cachedDtros;
+        }
+
+        var dtros = await _dtroContext.Dtros.Where(dtro => !dtro.Deleted).ToListAsync();
+
+        if (!dtros.Any())
+        {
+            throw new NotFoundException("Active D-TRO records are not found.");
+        }
+
+        await _dtroCache.CacheDtros(dtros);
+        return dtros;
+    }
+
+    ///<inheritdoc cref="IDtroDal"/>
     public async Task<Models.DataBase.DTRO> GetDtroByIdAsync(Guid id)
     {
         var cachedDtro = await _dtroCache.GetDtro(id);
@@ -80,7 +98,7 @@ public class DtroDal : IDtroDal
         return dtro;
     }
 
-    ///<inheritdoc cref="IDtroService"/>
+    ///<inheritdoc cref="IDtroDal"/>
     public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId)
     {
         var dtro = new Models.DataBase.DTRO();
@@ -114,7 +132,7 @@ public class DtroDal : IDtroDal
         return response;
     }
 
-    ///<inheritdoc cref="IDtroService"/>
+    ///<inheritdoc cref="IDtroDal"/>
     public async Task<bool> TryUpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId)
     {
         try
@@ -128,7 +146,7 @@ public class DtroDal : IDtroDal
         }
     }
 
-    ///<inheritdoc cref="IDtroService"/>
+    ///<inheritdoc cref="IDtroDal"/>
     public async Task UpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId)
     {
         if (await _dtroContext.Dtros.FindAsync(id) is not { } existing || existing.Deleted)
@@ -150,7 +168,7 @@ public class DtroDal : IDtroDal
         await _dtroContext.SaveChangesAsync();
     }
 
-    ///<inheritdoc cref="IDtroService"/>
+    ///<inheritdoc cref="IDtroDal"/>
     public async Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId)
     {
         if (await _dtroContext.Dtros.FindAsync(id) is not { } existing || existing.Deleted)
@@ -173,7 +191,7 @@ public class DtroDal : IDtroDal
         await _dtroContext.SaveChangesAsync();
     }
 
-    ///<inheritdoc cref="IDtroService"/>
+    ///<inheritdoc cref="IDtroDal"/>
     public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
     {
         IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
@@ -303,7 +321,7 @@ public class DtroDal : IDtroDal
         return new PaginatedResult<Models.DataBase.DTRO>(await paginatedQuery.ToListAsync(), await dataQuery.CountAsync());
     }
 
-    ///<inheritdoc cref="IDtroService"/>
+    ///<inheritdoc cref="IDtroDal"/>
     public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search)
     {
         IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
@@ -417,7 +435,7 @@ public class DtroDal : IDtroDal
         return await sqlQuery.ToListAsync();
     }
 
-    ///<inheritdoc cref="IDtroService"/>
+    ///<inheritdoc cref="IDtroDal"/>
     public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
     {
         var dtro = await _dtroContext.Dtros.FindAsync(id);

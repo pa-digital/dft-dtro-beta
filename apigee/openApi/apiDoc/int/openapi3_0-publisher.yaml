@@ -193,6 +193,32 @@ paths:
           description: Not found.
         '500':
           description: Internal Server Error.
+  /v1/dtros:
+    get:
+      tags:
+        - DTROs
+      summary: Gets D-TRO records
+      operationId: get-dtros
+      security:
+        - oAuth:
+            - cso
+            - dsp
+            - dc
+      parameters:
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
+      responses:
+        '200':
+          description: OK.
+        '404':
+          description: Not found
+        '500':
+          description: Internal Server Error.
   /v1/dtros/{id}:
     get:
       tags:

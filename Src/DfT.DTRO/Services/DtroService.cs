@@ -47,11 +47,28 @@ public class DtroService : IDtroService
         return await _dtroDal.DtroCountForSchemaAsync(schemaVersion);
     }
 
+    public async Task<IEnumerable<DtroResponse>> GetDtrosAsync()
+    {
+        List<Models.DataBase.DTRO> dtros = (await _dtroDal.GetDtrosAsync()).ToList();
+        if (!dtros.Any())
+        {
+            throw new NotFoundException();
+        }
+
+        foreach (Models.DataBase.DTRO dtro in dtros)
+        {
+            dtro.Created = dtro.Created?.ToDateTimeTruncated();
+            dtro.LastUpdated = dtro.LastUpdated?.ToDateTimeTruncated();
+        }
+
+        return dtros.Select(_dtroMappingService.MapToDtroResponse);
+    }
+
     public async Task<DtroResponse> GetDtroByIdAsync(Guid id)
     {
         Models.DataBase.DTRO dtro = await _dtroDal.GetDtroByIdAsync(id);
-        dtro.Created = dtro.Created.Value.ToDateTimeTruncated();
-        dtro.LastUpdated = dtro.LastUpdated.Value.ToDateTimeTruncated();
+        dtro.Created = dtro.Created?.ToDateTimeTruncated();
+        dtro.LastUpdated = dtro.LastUpdated?.ToDateTimeTruncated();
         if (dtro is null)
         {
             throw new NotFoundException();
@@ -119,7 +136,8 @@ public class DtroService : IDtroService
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
-        if (dtroHistories.Count() <= 0) {
+        if (dtroHistories.Any())
+        {
             throw new NotFoundException($"History for Dtro '{dtroId}' cannot be found.");
         }
 

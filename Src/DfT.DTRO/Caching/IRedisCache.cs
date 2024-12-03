@@ -6,6 +6,19 @@
 public interface IRedisCache
 {
     /// <summary>
+    /// Add D-TRO records to cache.
+    /// </summary>
+    /// <param name="dtros">List of D-TRO records to cache.</param>
+    /// <returns>A <see cref="Task"/> represending the asynchronous save operation.</returns>
+    Task CacheDtros(List<Models.DataBase.DTRO> dtros);
+
+    /// <summary>
+    /// Service method that will get existing D-TROs.
+    /// </summary>
+    /// <returns>A list of active D-TRO</returns>
+    Task<List<Models.DataBase.DTRO>> GetDtros();
+
+    /// <summary>
     /// Service method that will get existing D-TROs by its unique identifier.
     /// </summary>
     /// <param name="key">D-TRO ID.</param>
