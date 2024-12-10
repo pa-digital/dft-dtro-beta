@@ -138,4 +138,15 @@ public static class ObjectExtensions
             return item;
         }
     }
+
+    public static bool IsPascalCase(this string source)
+    {
+        if (string.IsNullOrEmpty(source))
+        {
+            return false;
+        }
+
+        var first = source.First();
+        return char.IsUpper(first);
+    }
 }

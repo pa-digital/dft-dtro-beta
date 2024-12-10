@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Models.Validation;
-using Newtonsoft.Json.Schema;
+﻿using Newtonsoft.Json.Schema;
 
 namespace DfT.DTRO.Extensions.Exceptions;
 
@@ -74,10 +73,10 @@ public static class ExceptionExtensions
             {
                 errors.Add($"RuleError_{index}", new Dictionary<string, object>
                 {
-                    { "Message", dictionary["Message"] },
-                    { "Path", dictionary["Path"] },
-                    { "Value", dictionary["Value"] },
-                    { "ErrorType", dictionary["ErrorType"] }
+                    { "Message", dictionary[$"{index}_Message"] },
+                    { "Path", dictionary[$"{index}_Path"] },
+                    { "Value", dictionary[$"{index}_Value"] },
+                    { "ErrorType", dictionary[$"{index}_ErrorType"] }
                 });
             }
         }

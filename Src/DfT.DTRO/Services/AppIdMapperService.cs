@@ -15,13 +15,7 @@ public class AppIdMapperService : IAppIdMapperService
         {
             throw new Exception("Middleware, access denied: x-App-Id (or x-App-Id-Override) not in header");
         }
-        if (xAppIdOverrideValue == Guid.Empty)
-        {
-            return xAppIdValue;
-        }
-        else
-        {
-            return xAppIdOverrideValue;
-        }
+
+        return xAppIdOverrideValue == Guid.Empty ? xAppIdValue : xAppIdOverrideValue;
     }
 }
