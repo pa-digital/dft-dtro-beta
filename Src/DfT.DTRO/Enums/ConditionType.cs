@@ -63,5 +63,11 @@ public enum ConditionType
     /// Conditions under the condition set
     /// </summary>
     [Display(Name = "conditions")]
-    Conditions = 10
+    Conditions = 10,
+
+    /// <summary>
+    /// Rate table condition
+    /// </summary>
+    [Display(Name = "RateTable")]
+    RateTable = 11
 }
