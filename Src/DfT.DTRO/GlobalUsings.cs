@@ -24,6 +24,7 @@ global using DfT.DTRO.Extensions.Configuration;
 global using DfT.DTRO.Extensions.DependencyInjection;
 global using DfT.DTRO.FeatureManagement;
 global using DfT.DTRO.Filters;
+global using DfT.DTRO.Helpers;
 global using DfT.DTRO.JsonLogic;
 global using DfT.DTRO.Models;
 global using DfT.DTRO.Models.DataBase;

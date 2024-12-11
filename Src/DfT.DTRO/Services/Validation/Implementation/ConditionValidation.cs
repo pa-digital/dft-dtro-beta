@@ -30,12 +30,12 @@ public class ConditionValidation : IConditionValidation
                 .ToList();
 
             var passedInOperator = conditionSets
-                .Select(conditionSet => conditionSet.GetValueOrDefault<string>("operator"))
+                .Select(conditionSet => conditionSet.GetValueOrDefault<string>(Constants.Operator))
                 .FirstOrDefault();
 
-            var operatorTypes = typeof(OperatorType).GetDisplayNames<OperatorType>().ToList();
+
             var hasValidOperator = passedInOperator != null &&
-                                   operatorTypes.Any(passedInOperator.Equals);
+                                   Constants.OperatorTypes.Any(passedInOperator.Equals);
 
             if (!hasValidOperator)
             {
@@ -44,42 +44,62 @@ public class ConditionValidation : IConditionValidation
                     Name = "Operator",
                     Message = "Operator is not present or incorrect",
                     Path = "Source -> Provision -> Regulation -> ConditionSet -> operator",
-                    Rule = $"One of '{string.Join(", ", operatorTypes)}' operators must be present",
+                    Rule = $"One of '{string.Join(", ", Constants.OperatorTypes)}' operators must be present",
                 };
                 errors.Add(error);
             }
 
             List<KeyValuePair<string, object>> passedInConditions = new();
 
-            foreach (var possibleCondition in PossibleConditions)
+            foreach (var possibleCondition in Constants.PossibleConditions
+                         .Select(possibleCondition => new
+                         {
+                             possibleCondition,
+                             hasCondition =
+                                 conditionSets
+                                     .Select(conditionSet => conditionSet.HasField(possibleCondition))
+                                     .FirstOrDefault()
+                         })
+                         .Where(both => both.hasCondition)
+                         .Select(both => both.possibleCondition))
             {
-                var hasCondition = conditionSets
-                    .Select(conditionSet => conditionSet.HasField(possibleCondition))
-                    .FirstOrDefault();
+                var conditions = conditionSets
+                     .Select(conditionSet =>
+                         conditionSet
+                             .GetValueOrDefault<IList<object>>(possibleCondition
+                                 .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                             .OfType<ExpandoObject>())
+                     .SelectMany(expandoObjects => expandoObjects)
+                     .SelectMany(expandoObject => expandoObject)
+                     .Select(kv => kv)
+                     .ToList();
 
-                if (!hasCondition)
+                passedInConditions.AddRange(conditions);
+            }
+
+            var areCorrectNegateValues = passedInConditions
+                .Where(passedInCondition => passedInCondition.Key == Constants.Negate)
+                .Select(passedInCondition => passedInCondition.Value);
+
+            if (areCorrectNegateValues.Any(it => it is not bool))
+            {
+                SemanticValidationError error = new()
                 {
-                    continue;
-                }
-                passedInConditions.AddRange(conditionSets
-                    .Select(conditionSet =>
-                        conditionSet
-                            .GetValueOrDefault<IList<object>>(possibleCondition
-                                .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                            .OfType<ExpandoObject>())
-                    .SelectMany(expandoObjects => expandoObjects)
-                    .SelectMany(expandoObject => expandoObject)
-                    .Select(kv => kv)
-                    .ToList());
+                    Name = "Negate",
+                    Message = "One or more 'negate' values are incorrect",
+                    Path = "Source -> Provision -> Regulation -> ConditionSet -> conditions -> negate",
+                    Rule = "Negate property must be boolean, 'true' or 'false'",
+                };
+                errors.Add(error);
             }
 
             passedInConditions = passedInConditions
-                .Where(passedInCondition => passedInCondition.Key != "operator")
+                .Where(passedInCondition => passedInCondition.Key != Constants.Operator)
+                .Where(passedInCondition => passedInCondition.Key != Constants.Negate)
                 .ToList();
 
 
-            var conditionTypes = typeof(ConditionType).GetDisplayNames<ConditionType>().ToList();
-            var areAllValidConditions = passedInConditions.All(passedInCondition => conditionTypes.Contains(passedInCondition.Key));
+            var areAllValidConditions = passedInConditions.All(passedInCondition => Constants.ConditionTypes.Contains(passedInCondition.Key));
 
             if (!areAllValidConditions)
             {
@@ -88,7 +108,7 @@ public class ConditionValidation : IConditionValidation
                     Name = "Invalid conditions",
                     Message = "One or more conditions are invalid",
                     Path = "Source -> Provision -> Regulation -> ConditionSet -> conditions",
-                    Rule = $"One or more types of '{string.Join(", ", conditionTypes)}' conditions must be present",
+                    Rule = $"One or more types of '{string.Join(", ", Constants.ConditionTypes)}' conditions must be present",
                 };
                 errors.Add(error);
             }
@@ -101,7 +121,27 @@ public class ConditionValidation : IConditionValidation
                 .OfType<ExpandoObject>())
                 .SelectMany(expandoObjects => expandoObjects)
                 .SelectMany(expandoObject => expandoObject)
-                .Where(kv => kv.Key.IsPascalCase())
+                .Select(kv => kv)
+                .ToList();
+
+            var areCorrectNegateValues = passedInConditions
+                .Where(passedInCondition => passedInCondition.Key == Constants.Negate)
+                .Select(passedInCondition => passedInCondition.Value);
+
+            if (areCorrectNegateValues.Any(it => it is not bool))
+            {
+                SemanticValidationError error = new()
+                {
+                    Name = "Negate",
+                    Message = "One or more 'negate' values are incorrect",
+                    Path = "Source -> Provision -> Regulation -> ConditionSet -> conditions -> negate",
+                    Rule = "Negate property must be boolean, 'true' or 'false'",
+                };
+                errors.Add(error);
+            }
+
+            passedInConditions = passedInConditions
+                .Where(passedInCondition => passedInCondition.Key != Constants.Negate)
                 .ToList();
 
             if (passedInConditions.Count > 1)
@@ -116,24 +156,25 @@ public class ConditionValidation : IConditionValidation
                 errors.Add(error);
             }
 
-            var conditionTypes = typeof(ConditionType).GetDisplayNames<ConditionType>().ToList();
-            var areAllValidConditions = passedInConditions.All(passedInCondition => conditionTypes.Contains(passedInCondition.Key));
+            var areAllValidConditions = passedInConditions
+                .All(passedInCondition => Constants.ConditionTypes
+                    .Contains(passedInCondition.Key));
 
-            if (!areAllValidConditions)
+            if (areAllValidConditions)
             {
-                SemanticValidationError error = new()
-                {
-                    Name = "Condition",
-                    Message = "Invalid condition",
-                    Path = "Source -> Provision -> Regulation -> Condition",
-                    Rule = $"One of '{string.Join(", ", conditionTypes)}' condition must be present",
-                };
-                errors.Add(error);
+                return errors;
             }
+
+            SemanticValidationError newError = new()
+            {
+                Name = "Condition",
+                Message = "Invalid condition",
+                Path = "Source -> Provision -> Regulation -> Condition",
+                Rule = $"One of '{string.Join(", ", Constants.ConditionTypes)}' condition must be present",
+            };
+            errors.Add(newError);
         }
 
         return errors;
     }
-
-    private static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
 }
