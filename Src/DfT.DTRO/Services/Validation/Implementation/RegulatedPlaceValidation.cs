@@ -22,9 +22,12 @@ public class RegulatedPlaceValidation : IRegulatedPlaceValidation
             return errors;
         }
 
-        var passedInType = regulatedPlaces.Select(it => it.GetValueOrDefault<string>("type"));
+        var passedInTypes = regulatedPlaces.Select(it => it.GetValueOrDefault<string>("type"));
         var regulatedPlaceTypes = typeof(RegulatedPlaceType).GetDisplayNames<RegulatedPlaceType>();
-        var areValidRegulationTypes = passedInType.All(it => regulatedPlaceTypes.Any(it.Equals));
+        var areValidRegulationTypes = passedInTypes
+            .All(passedInType => passedInType != null &&
+                                 regulatedPlaceTypes.Any(passedInType.Equals));
+
         if (areValidRegulationTypes)
         {
             return errors;

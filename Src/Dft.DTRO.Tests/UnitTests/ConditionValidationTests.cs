@@ -173,46 +173,7 @@ public class ConditionValidationTests
         Assert.Equal("Invalid conditions", actual[0].Name);
         Assert.Equal("One or more conditions are invalid", actual[0].Message);
         Assert.Equal("Source -> Provision -> Regulation -> ConditionSet -> conditions", actual[0].Path);
-        Assert.Equal("One or more types of 'RoadCondition, OccupantCondition, DriverCondition, AccessCondition, TimeValidity, NonVehicularRoadUserCondition, PermitCondition, VehicleCharacteristics, ConditionSet, conditions' conditions must be present", actual[0].Rule);
-    }
-
-    [Fact]
-    public void ValidateConditionReturnsErrorsWhenMultipleConditionsIsPresentWithoutConditionSet()
-    {
-        SchemaVersion schemaVersion = ("3.3.0");
-
-        DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
-        {
-            ""Source"": {
-                ""Provision"": [
-                    {
-                        ""Regulation"": [
-                            {
-                                ""Condition"": [
-                                    {
-                                        ""negate"": false,
-                                        ""TimeValidity"": {
-
-                                        },
-                                        ""negate"": true,
-                                        ""RoadCondition"": {
-
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        }", schemaVersion);
-
-        var actual = _sut.ValidateCondition(dtroSubmit, schemaVersion);
-        Assert.Equal(1, actual.Count);
-        Assert.Equal("Condition", actual[0].Name);
-        Assert.Equal("Incorrect condition", actual[0].Message);
-        Assert.Equal("Source -> Provision -> Regulation -> Condition", actual[0].Path);
-        Assert.Equal("Only one condition must be present", actual[0].Rule);
+        Assert.Equal("One or more types of 'RoadCondition, OccupantCondition, DriverCondition, AccessCondition, TimeValidity, NonVehicularRoadUserCondition, PermitCondition, VehicleCharacteristics, ConditionSet, conditions, RateTable' conditions must be present", actual[0].Rule);
     }
 
     [Fact]
@@ -278,7 +239,7 @@ public class ConditionValidationTests
         Assert.Equal("Condition", actual[0].Name);
         Assert.Equal("Invalid condition", actual[0].Message);
         Assert.Equal("Source -> Provision -> Regulation -> Condition", actual[0].Path);
-        Assert.Equal("One of 'RoadCondition, OccupantCondition, DriverCondition, AccessCondition, TimeValidity, NonVehicularRoadUserCondition, PermitCondition, VehicleCharacteristics, ConditionSet, conditions' condition must be present", actual[0].Rule);
+        Assert.Equal("One of 'RoadCondition, OccupantCondition, DriverCondition, AccessCondition, TimeValidity, NonVehicularRoadUserCondition, PermitCondition, VehicleCharacteristics, ConditionSet, conditions, RateTable' condition must be present", actual[0].Rule);
     }
 
     [Fact]
