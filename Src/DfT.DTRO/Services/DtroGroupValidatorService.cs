@@ -1,5 +1,4 @@
 ﻿using DfT.DTRO.Extensions.Exceptions;
-using DfT.DTRO.Services.Validation.Contracts;
 
 namespace DfT.DTRO.Services;
 public class DtroGroupValidatorService : IDtroGroupValidatorService

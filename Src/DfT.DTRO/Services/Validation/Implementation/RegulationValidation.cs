@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Services.Validation.Contracts;
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace DfT.DTRO.Services.Validation.Implementation;
 
@@ -61,17 +60,21 @@ public class RegulationValidation : IRegulationValidation
             .Any(passedInRegulation =>
                 regulationTypes.Any(passedInRegulation.Contains));
 
-        if (!areAnyAcceptedRegulations)
+        if (areAnyAcceptedRegulations)
         {
-            SemanticValidationError error = new()
-            {
-                Name = "Regulations",
-                Message = "You have to have only one accepted regulation.",
-                Path = "Source -> Provision -> Regulation",
-                Rule = $"One of '{string.Join(", ", regulationTypes)}' regulation must be present.",
-            };
-            errors.Add(error);
+            return errors;
         }
+
+        SemanticValidationError newError = new()
+        {
+            Name = "Regulations",
+            Message = "You have to have only one accepted regulation.",
+            Path = "Source -> Provision -> Regulation",
+            Rule = $"One of '{string.Join(", ", regulationTypes)}' regulation must be present.",
+        };
+
+        errors.Add(newError);
+
         return errors;
     }
 }

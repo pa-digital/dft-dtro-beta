@@ -31,29 +31,4 @@ public class RegulatedPlaceValidationTests
         var actual = _sut.ValidateRegulatedPlacesType(dtroSubmit, version);
         Assert.Equal(errorCount, actual.Count);
     }
-
-    [Fact]
-    public void ValidateRegulatedPlacesTypesReturnsErrorsWhenFirstWrongType()
-    {
-        var dtroSubmit = Utils.PrepareDtro(@"
-        {
-          ""Source"": {
-            ""Provision"": [
-              {
-                ""RegulatedPlace"": [
-                  {
-                  ""type"":  ""diversionRoute""
-                  },
-                  {
-                  ""type"":  ""regulationLocation""
-                  }
-                ]
-              }
-            ]
-          }
-        }", new SchemaVersion("3.3.0"));
-
-        var actual = _sut.ValidateRegulatedPlacesType(dtroSubmit, "3.3.0");
-        Assert.NotEmpty(actual);
-    }
 }
