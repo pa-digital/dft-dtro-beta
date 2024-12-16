@@ -9,6 +9,7 @@ global using System.Linq;
 global using System.Net;
 global using System.Text;
 global using System.Threading.Tasks;
+global using Dft.DTRO.Tests.Mocks;
 global using DfT.DTRO;
 global using DfT.DTRO.Controllers;
 global using DfT.DTRO.Converters;

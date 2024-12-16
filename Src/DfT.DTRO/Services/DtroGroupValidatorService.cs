@@ -7,7 +7,8 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly ISchemaTemplateService _schemaTemplateService;
     private readonly ISemanticValidationService _semanticValidationService;
     private readonly IRulesValidation _rulesValidation;
-    private readonly IRecordManagementService _recordManagementService;
+    private readonly ISourceValidationService _sourceValidationService;
+    private readonly IProvisionValidationService _provisionValidationService;
     private readonly IRegulatedPlaceValidation _regulatedPlaceValidation;
     private readonly IRegulationValidation _regulationValidation;
     private readonly IConditionValidation _conditionValidation;
@@ -17,7 +18,8 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         ISemanticValidationService semanticValidationService,
         ISchemaTemplateService schemaTemplateService,
         IRulesValidation rulesValidation,
-        IRecordManagementService recordManagementService,
+        ISourceValidationService sourceValidationService,
+        IProvisionValidationService provisionValidationService,
         IRegulatedPlaceValidation regulatedPlaceValidation,
         IRegulationValidation regulationValidation,
         IConditionValidation conditionValidation)
@@ -26,13 +28,15 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         _semanticValidationService = semanticValidationService;
         _schemaTemplateService = schemaTemplateService;
         _rulesValidation = rulesValidation;
-        _recordManagementService = recordManagementService;
+        _sourceValidationService = sourceValidationService;
+        _provisionValidationService = provisionValidationService;
         _regulatedPlaceValidation = regulatedPlaceValidation;
         _regulationValidation = regulationValidation;
         _conditionValidation = conditionValidation;
     }
 
-    public async Task<DtroValidationException> ValidateDtro(DtroSubmit dtroSubmit, int? headerTa)
+    /// <inheritdoc cref="IDtroGroupValidatorService"/>
+    public async Task<DtroValidationException> ValidateDtro(DtroSubmit dtroSubmit, int? traCode)
     {
         var schemaVersion = dtroSubmit.SchemaVersion;
         var schema = await _schemaTemplateService.GetSchemaTemplateAsync(schemaVersion);
@@ -57,10 +61,17 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
         }
 
-        var requests = _recordManagementService.ValidateRecordManagement(dtroSubmit, headerTa);
-        if (requests.Count > 0)
+        var sourceValidationErrors = _sourceValidationService.ValidateSource(dtroSubmit, traCode);
+        if (sourceValidationErrors.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = requests.MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = sourceValidationErrors.MapFrom() };
+        }
+
+        var provisionValidationErrors = _provisionValidationService.ValidateProvision(dtroSubmit);
+        if (provisionValidationErrors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = provisionValidationErrors.MapFrom() };
+
         }
 
         var requestComparedToRules = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());

@@ -26,7 +26,8 @@ public static class ObjectExtensions
         {
             "SourceActionType" => typeof(SourceActionType).GetDisplayNames<SourceActionType>().ToList(),
             "ProvisionActionType" => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>().ToList(),
-            _ => new List<string>()
+            "OrderReportingPointType" => Enum.GetNames<OrderReportingPointType>().ToList(),
+            var _ => []
         };
 
         return items.Contains(value);

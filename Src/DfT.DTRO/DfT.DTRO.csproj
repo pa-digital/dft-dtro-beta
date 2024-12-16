@@ -8,6 +8,7 @@
 	<AssemblyName>DfT.DTRO</AssemblyName>
 	<PackageId>DfT.DTRO</PackageId>
 	<CodeAnalysisRuleSet></CodeAnalysisRuleSet>
+	<LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
 	<Compile Remove="CustomErrors\**" />
