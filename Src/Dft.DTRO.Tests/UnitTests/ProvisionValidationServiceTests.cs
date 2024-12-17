@@ -114,7 +114,6 @@ public class ProvisionValidationServiceTests
                         ""reference"": ""{reference}""
                     }}
                 ]
-
             }}
         }}", new SchemaVersion("3.3.0"));
 

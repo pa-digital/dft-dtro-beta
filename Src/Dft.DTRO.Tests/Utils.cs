@@ -76,8 +76,7 @@ public static class Utils
         return sampleDtro;
     }
 
-    public static async Task<StringContent> CreateDtroJsonPayload(string dtroJsonPath, string schemaVersion,
-        bool inferIndexFields = true)
+    public static async Task<StringContent> CreateDtroJsonPayload(string dtroJsonPath, string schemaVersion, bool inferIndexFields = true)
     {
         string sampleDtroDataJson = await File.ReadAllTextAsync(dtroJsonPath);
 
@@ -124,7 +123,7 @@ public static class Utils
             .Select(item => item.GetValueOrDefault<IList<object>>("Source.provision"))
             .ToList();
 
-        List<DtroHistoryProvisionResponse> provisions = new();
+        List<DtroHistoryProvisionResponse> provisions = [];
 
         foreach (IList<object> obj in objects)
         {
@@ -160,16 +159,17 @@ public static class Utils
         }).ToList();
     }
 
-    public static List<DtroUserResponse> SwaCodesResponse => new()
-    {
-        new DtroUserResponse
+    public static List<DtroUserResponse> SwaCodesResponse =>
+    [
+        new()
         {
             TraId = 1002,
             UserGroup = UserGroup.Admin,
             xAppId = Guid.NewGuid(),
             Name = "Department for Transport",
             Prefix = "DfT"
-        }, new DtroUserResponse
+        },
+        new()
         {
             TraId = 1000,
             UserGroup = UserGroup.Tra,
@@ -177,7 +177,7 @@ public static class Utils
             Name = "Essex Council",
             Prefix = "GP"
         },
-        new DtroUserResponse
+        new()
         {
             TraId = 1001,
             UserGroup = UserGroup.Tra,
@@ -185,5 +185,5 @@ public static class Utils
             Name = "Cornwall Council",
             Prefix = "DP"
         }
-    };
+    ];
 }
