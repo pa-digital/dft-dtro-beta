@@ -26,7 +26,7 @@ public class SourceValidationService : ISourceValidationService
             {
                 Name = $"Invalid '{nameof(SourceActionType)}' error",
                 Message = "Indicates the nature of update between D-TRO records or their constituent parts",
-                Rule = $"Source '{actionType}' must contain one of the following accepted values: '{string.Join(",", Enum.GetNames<SourceActionType>())}'",
+                Rule = $"Source '{actionType}' must contain one of the following accepted values: '{string.Join(",", typeof(SourceActionType).GetDisplayNames<SourceActionType>())}'",
                 Path = "Source -> actionType"
             };
 
@@ -107,7 +107,7 @@ public class SourceValidationService : ISourceValidationService
         }
 
         var traCreator = source.GetValueOrDefault<int>("traCreator");
-        var isCreatorWithinSwaCodes = users.Select(response => response.TraId == traCreator).Any();
+        var isCreatorWithinSwaCodes = users.Any(response => response.TraId == traCreator);
         if (!isCreatorWithinSwaCodes)
         {
             var error = new SemanticValidationError
@@ -139,7 +139,7 @@ public class SourceValidationService : ISourceValidationService
             {
                 Name = "Traffic regulation authority code submitted is invalid",
                 Message = $"TRA '{submittedByTa}' cannot add/update a TRO for another TRA. (This D-TRO creator ID is '{traCreator}', owner ID is '{currentTraOwner}' )",
-                Rule = $"'{traCreator}' or '{currentTraOwner}' must be the same with '{submittedByTa}'",
+                Rule = $"'{submittedByTa}' must be '{traCreator}' or '{currentTraOwner}'",
                 Path = "Source -> traCreator and Source -> currentTraOwner"
             };
 

@@ -22,7 +22,7 @@ public class ProvisionValidationService : IProvisionValidationService
             {
                 Name = $"Invalid '{nameof(ProvisionActionType)}' error",
                 Message = "Indicates the nature of update between D-TRO records or their constituent parts",
-                Rule = $"Provision '{actionTypes}' must contain one of the following accepted values: '{string.Join(",", Enum.GetNames<ProvisionActionType>())}'",
+                Rule = $"Provision '{actionTypes}' must contain one of the following accepted values: '{string.Join(",", typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>())}'",
                 Path = "Source -> Provision -> actionType"
             };
 
@@ -43,8 +43,8 @@ public class ProvisionValidationService : IProvisionValidationService
             {
                 Name = "Invalid order reporting point",
                 Message = "Object identifying the characteristics of a traffic regulation measure (D-TRO & notice) specified Provision",
-                Rule = $"One or more provisions 'orderReportingPoint' must be of type '{string.Join(",", Enum.GetNames<OrderReportingPointType>())}'",
-                Path = "Source -> Provision -> orderReportingPoint"
+                Rule = $"One or more provisions 'orderReportingPoint' must be of type '{string.Join(",", typeof(OrderReportingPointType).GetDisplayNames<OrderReportingPointType>())}'",
+                Path = "Source->Provision->orderReportingPoint"
             };
 
             validationErrors.Add(error);
@@ -77,7 +77,7 @@ public class ProvisionValidationService : IProvisionValidationService
             {
                 Name = "Invalid reference",
                 Message = "Indicates the nature of update between D-TRO records or their constituent parts.",
-                Rule = $"Provision 'reference' must be of type '{typeof(string)}'",
+                Rule = "Provision 'reference' must be of type 'string'",
                 Path = "Source -> Provision -> reference"
             };
 
@@ -98,7 +98,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 {
                     Name = $"'{kv.Value}' duplication reference",
                     Message = $"Provision reference '{kv.Key}' is present {kv.Value} times.",
-                    Rule = $"Each provision 'reference' must be unique and of type 'string'",
+                    Rule = "Each provision 'reference' must be unique and of type 'string'",
                     Path = "Source -> Provision -> reference"
                 };
 

@@ -129,7 +129,7 @@ public class SourceValidationServiceTests
 
     [Theory]
     [InlineData(1050, 0)]
-    [InlineData(9999, 1)]
+    [InlineData(1000, 2)]
     public void ValidateSourceTraCreator(int traCode, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
@@ -146,6 +146,28 @@ public class SourceValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.ValidateSource(dtroSubmit, traCode);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData("D-TRO", 0)]
+    [InlineData("", 1)]
+    public void ValidateSourceTroName(string troName, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+          ""Source"": {{
+            ""actionType"": ""new"",
+            ""currentTraOwner"": 1050,
+            ""reference"": ""D5E7FBE5-5A7A-4A81-8E27-CDB008EC729D"",
+            ""section"": ""some free text"",
+            ""traAffected"": [ 1050, 4, 3300 ],
+            ""traCreator"": 1050,
+            ""troName"": ""{troName}""
+          }}
+        }}", new SchemaVersion("3.3.0"));
+
+        var actual = _sut.ValidateSource(dtroSubmit, 1050);
         Assert.Equal(errorCount, actual.Count);
     }
 }
