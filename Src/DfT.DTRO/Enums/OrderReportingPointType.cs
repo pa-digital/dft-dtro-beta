@@ -48,50 +48,56 @@ public enum OrderReportingPointType
     PermanentNoticeOfProposal = 7,
 
     /// <summary>
+    /// Permanent notice of proposal
+    /// </summary>
+    [Display(Name = "permanentRevocation")]
+    PermanentRevocation = 8,
+
+    /// <summary>
     /// Special event order notice of making
     /// </summary>
     [Display(Name = "specialEventOrderNoticeOfMaking")]
-    SpecialEventOrderNoticeOfMaking = 8,
+    SpecialEventOrderNoticeOfMaking = 9,
 
     /// <summary>
     /// Temporary traffic regulation order, temporary traffic movement order by notice
     /// </summary>
     [Display(Name = "ttroTtmoByNotice")]
-    TtroTtmoByNotice = 9,
+    TtroTtmoByNotice = 10,
 
     /// <summary>
     /// Temporary traffic regulation order, temporary traffic movement order extension
     /// </summary>
     [Display(Name = "ttroTtmoExtension")]
-    TtroTtmoExtension = 10,
+    TtroTtmoExtension = 11,
 
     /// <summary>
     /// Temporary traffic regulation order, temporary traffic movement order notice after making.
     /// </summary>
     [Display(Name = "ttroTtmoNoticeAfterMaking")]
-    TtroTtmoNoticeAfterMaking = 11,
+    TtroTtmoNoticeAfterMaking = 12,
 
     /// <summary>
     /// Temporary traffic regulation order, temporary traffic movement order notice of intention.
     /// </summary>
     [Display(Name = "ttroTtmoNoticeOfIntention")]
-    TtroTtmoNoticeOfIntention = 12,
+    TtroTtmoNoticeOfIntention = 13,
 
     /// <summary>
     /// Temporary traffic regulation order, temporary traffic movement order revocation
     /// </summary>
     [Display(Name = "ttroTtmoRevocation")]
-    TtroTtmoRevocation = 13,
+    TtroTtmoRevocation = 14,
 
     /// <summary>
     /// Variation by notice
     /// </summary>
     [Display(Name = "variationByNotice")]
-    VariationByNotice = 14,
+    VariationByNotice = 15,
 
     /// <summary>
     /// Traffic regulation order on road active status
     /// </summary>
     [Display(Name = "troOnRoadActiveStatus")]
-    TroOnRoadActiveStatus = 15
+    TroOnRoadActiveStatus = 16
 }

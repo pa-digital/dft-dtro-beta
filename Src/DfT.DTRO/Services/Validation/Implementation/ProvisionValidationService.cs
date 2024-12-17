@@ -15,7 +15,8 @@ public class ProvisionValidationService : IProvisionValidationService
             .ToList();
 
         var actionTypes = provisions.Select(provision => provision.GetValue<string>("actionType")).ToList();
-        if (!actionTypes.TrueForAll(actionType => actionType.IsEnum("ProvisionActionType")))
+        var areActionTypesValid = actionTypes.TrueForAll(actionType => actionType.IsEnum("ProvisionActionType"));
+        if (!areActionTypesValid)
         {
             var error = new SemanticValidationError
             {
@@ -33,9 +34,9 @@ public class ProvisionValidationService : IProvisionValidationService
             .ToList();
 
         var areValidOrderReportingPoints = orderReportingPoints
-            .Select(orderReportingPoint => orderReportingPoint
-                .IsEnum("OrderReportingPointType"))
-            .Any();
+            .TrueForAll(orderReportingPoint => orderReportingPoint
+                .IsEnum("OrderReportingPointType"));
+
         if (!areValidOrderReportingPoints)
         {
             var error = new SemanticValidationError
@@ -53,7 +54,7 @@ public class ProvisionValidationService : IProvisionValidationService
             .Select(it => it.GetValueOrDefault<string>("provisionDescription"))
             .ToList();
 
-        if (!descriptions.Any(string.IsNullOrEmpty))
+        if (descriptions.Any(string.IsNullOrEmpty))
         {
             var error = new SemanticValidationError
             {
@@ -97,7 +98,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 {
                     Name = $"'{kv.Value}' duplication reference",
                     Message = $"Provision reference '{kv.Key}' is present {kv.Value} times.",
-                    Rule = $"Each provision 'reference' must be unique and of type '{typeof(string)}'",
+                    Rule = $"Each provision 'reference' must be unique and of type 'string'",
                     Path = "Source -> Provision -> reference"
                 };
 

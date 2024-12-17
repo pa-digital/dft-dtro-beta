@@ -50,7 +50,7 @@ public static class Utils
         return schemaTemplate;
     }
 
-    public static async Task<DfT.DTRO.Models.DataBase.DTRO> CreateDtroObject(string dtroJsonPath, string schemaVersion = null)
+    public static async Task<DfT.DTRO.Models.DataBase.DTRO> CreateDtroObject(string dtroJsonPath, string schemaVersion)
     {
         var sampleDtroDataJson = await File.ReadAllTextAsync(dtroJsonPath);
 

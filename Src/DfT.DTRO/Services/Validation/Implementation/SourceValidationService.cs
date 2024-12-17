@@ -86,7 +86,7 @@ public class SourceValidationService : ISourceValidationService
             {
                 Name = $"Invalid or null '{nameof(traAffectedCodes)}'",
                 Message = "Traffic regulation authorities who roads are affected by this D-TRO",
-                Rule = $"Source '{nameof(traAffectedCodes)}' must not be null and of type '{typeof(long[])}'",
+                Rule = $"Source '{nameof(traAffectedCodes)}' must not be null and an array of integers",
                 Path = "Source -> traAffected"
             };
             validationErrors.Add(error);
