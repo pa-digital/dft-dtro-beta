@@ -4,14 +4,12 @@
         "Source": {
             "troName": "C0668",
             "reference": "BC-E08000003-C0668",
-            "section": [
-                "All Sections"
-            ],
+            "section": "All Sections",
             "actionType": "new",
-            "traCreator": 1002,
-            "currentTraOwner": 1002,
+            "traCreator": 1000,
+            "currentTraOwner": 1000,
             "traAffected": [
-                1002
+                1000
             ],
             "provision": [
                 {
@@ -90,8 +88,8 @@
                                     {
                                         "recurringTimePeriodOfDay": [
                                             {
-                                                "startTimeOfPeriod": "00:00:00.0Z",
-                                                "endTimeOfPeriod": "24:00:00.0Z"
+                                                "startTimeOfPeriod": "10:00:00.0Z",
+                                                "endTimeOfPeriod": "14:00:00.0Z"
                                             }
                                         ],
                                         "periodName": "At All Times",
