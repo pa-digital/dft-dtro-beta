@@ -23,7 +23,7 @@
                                     "ConditionSet": [
                                         {
                                             "operator": "or",
-                                            "Conditions": [
+                                            "conditions": [
                                                 {
                                                     "negate": false,
                                                     "VehicleCharacteristics": {
