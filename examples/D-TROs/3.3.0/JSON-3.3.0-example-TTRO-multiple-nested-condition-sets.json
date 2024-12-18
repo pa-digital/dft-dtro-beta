@@ -23,7 +23,7 @@
                                     "ConditionSet": [
                                         {
                                             "operator": "or",
-                                            "Condition": [
+                                            "Conditions": [
                                                 {
                                                     "negate": false,
                                                     "VehicleCharacteristics": {
@@ -40,7 +40,7 @@
                                                 },
                                                 {
                                                     "operator": "and",
-                                                    "Condition": [
+                                                    "conditions": [
                                                         {
                                                             "negate": false,
                                                             "VehicleCharacteristics": {
@@ -58,12 +58,14 @@
                                             ]
                                         }
                                     ],
-                                    "condition": {
-                                        "TimeValidity": {
-                                            "start": "2024-08-22T08:00:00",
-                                            "end": "2024-08-22T20:00:00"
+                                    "Condition": [
+                                        {
+                                            "TimeValidity": {
+                                                "start": "2024-08-22T08:00:00",
+                                                "end": "2024-08-22T20:00:00"
+                                            }
                                         }
-                                    }
+                                    ]
                                 }
                             ]
                         }
