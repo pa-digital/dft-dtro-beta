@@ -7,7 +7,7 @@ public static class MockTestObjects
     {
         get
         {
-            var bytes = "{ \"schemaVersion\": \"1.0.0\", \"data\": { \"item\": \"This is a test file\"}}"u8.ToArray();
+            var bytes = Encoding.UTF8.GetBytes("{ \"schemaVersion\": \"1.0.0\", \"data\": { \"item\": \"This is a test file\"}}");
             IFormFile file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, "Data", "dummy.txt");
             return file;
         }
@@ -19,8 +19,7 @@ public static class MockTestObjects
             Id = Guid.NewGuid()
         };
 
-    public static List<DtroUserResponse> UserResponses =>
-    [
+    public static List<DtroUserResponse> UserResponses => new List<DtroUserResponse> {
         new()
         {
             Id = Guid.NewGuid(),
@@ -48,5 +47,5 @@ public static class MockTestObjects
             UserGroup = UserGroup.Tra,
             xAppId = Guid.NewGuid()
         }
-    ];
+    };
 }

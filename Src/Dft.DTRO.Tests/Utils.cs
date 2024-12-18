@@ -123,7 +123,7 @@ public static class Utils
             .Select(item => item.GetValueOrDefault<IList<object>>("Source.provision"))
             .ToList();
 
-        List<DtroHistoryProvisionResponse> provisions = [];
+        List<DtroHistoryProvisionResponse> provisions = new List<DtroHistoryProvisionResponse>();
 
         foreach (IList<object> obj in objects)
         {
@@ -159,8 +159,8 @@ public static class Utils
         }).ToList();
     }
 
-    public static List<DtroUserResponse> SwaCodesResponse =>
-    [
+    public static List<DtroUserResponse> SwaCodesResponse => new List<DtroUserResponse> {
+
         new()
         {
             TraId = 1002,
@@ -185,5 +185,5 @@ public static class Utils
             Name = "Cornwall Council",
             Prefix = "DP"
         }
-    ];
+    };
 }

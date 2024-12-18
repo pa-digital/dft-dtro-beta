@@ -27,7 +27,7 @@ public static class ObjectExtensions
             "SourceActionType" => typeof(SourceActionType).GetDisplayNames<SourceActionType>().ToList(),
             "ProvisionActionType" => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>().ToList(),
             "OrderReportingPointType" => typeof(OrderReportingPointType).GetDisplayNames<OrderReportingPointType>().ToList(),
-            var _ => []
+            var _ => new List<string>()
         };
 
         return items.Contains(value);
