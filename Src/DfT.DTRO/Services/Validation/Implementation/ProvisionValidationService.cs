@@ -6,7 +6,7 @@ public class ProvisionValidationService : IProvisionValidationService
     /// <inheritdoc cref="IProvisionValidationService"/>
     public List<SemanticValidationError> ValidateProvision(DtroSubmit dtroSubmit)
     {
-        List<SemanticValidationError> validationErrors = [];
+        List<SemanticValidationError> validationErrors = new List<SemanticValidationError>();
 
         var provisions = dtroSubmit.Data
             .GetValueOrDefault<IList<object>>("Source.Provision"
