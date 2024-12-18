@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using DfT.DTRO.Services.Validation.Contracts;
 
 namespace Dft.DTRO.Tests.UnitTests;
 
@@ -11,7 +10,7 @@ public class JsonLogicValidationTests
 
     public JsonLogicValidationTests()
     {
-        JsonLogic.AddAllRules(typeof(IJsonLogicRuleSource).Assembly);
+        ValidationServiceRegistration.AddAllRules(typeof(IJsonLogicRuleSource).Assembly);
 
         _sut = new RulesValidation(_ruleDal.Object);
     }

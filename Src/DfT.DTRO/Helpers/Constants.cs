@@ -7,6 +7,11 @@ public static class Constants
 
     public static IEnumerable<string> ConditionTypes => typeof(ConditionType).GetDisplayNames<ConditionType>();
 
+    public static IEnumerable<string> PreviousConditionTypes =>
+        ConditionTypes
+            .Select(conditionType => conditionType
+                .ToBackwardCompatibility(new SchemaVersion("3.2.4")));
+
     public static IEnumerable<string> OperatorTypes => typeof(OperatorType).GetDisplayNames<OperatorType>().ToList();
 
     public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };

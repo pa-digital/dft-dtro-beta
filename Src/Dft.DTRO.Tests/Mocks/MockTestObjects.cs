@@ -18,4 +18,34 @@ public static class MockTestObjects
         {
             Id = Guid.NewGuid()
         };
+
+    public static List<DtroUserResponse> UserResponses => new List<DtroUserResponse> {
+        new()
+        {
+            Id = Guid.NewGuid(),
+            Name  = "Somerset Council",
+            TraId = 3300,
+            Prefix = "LG",
+            UserGroup = UserGroup.Tra,
+            xAppId = Guid.NewGuid()
+        },
+        new()
+        {
+            Id = Guid.NewGuid(),
+            Name  = "Derbyshire",
+            TraId = 1050,
+            Prefix = "DJ",
+            UserGroup = UserGroup.Tra,
+            xAppId = Guid.NewGuid()
+        },
+        new()
+        {
+            Id = Guid.NewGuid(),
+            Name  = "Appyway",
+            TraId = 4,
+            Prefix = "AP",
+            UserGroup = UserGroup.Tra,
+            xAppId = Guid.NewGuid()
+        }
+    };
 }

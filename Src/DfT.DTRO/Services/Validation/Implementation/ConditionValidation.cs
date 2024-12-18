@@ -143,9 +143,22 @@ public class ConditionValidation : IConditionValidation
                     .Where(passedInCondition => passedInCondition.Key != Constants.Negate)
                     .ToList();
 
-                var areAllValidConditions = passedInConditions
-                    .All(passedInCondition => Constants.ConditionTypes
-                        .Contains(passedInCondition.Key));
+                //TODO: This should be refactored once schema version 3.2.4 will be decommissioned.
+                bool areAllValidConditions;
+                if (dtroSubmit.SchemaVersion >= new SchemaVersion("3.3.0"))
+                {
+                    areAllValidConditions = passedInConditions
+                        .All(passedInCondition => Constants.ConditionTypes
+                            .Contains(passedInCondition.Key));
+
+                }
+                else
+                {
+                    areAllValidConditions = passedInConditions
+                        .All(passedInCondition => Constants.PreviousConditionTypes
+                            .Contains(passedInCondition.Key));
+                }
+
 
                 if (!areAllValidConditions)
                 {

@@ -1,5 +1,3 @@
-using DfT.DTRO.Services.Validation.Contracts;
-using DfT.DTRO.Services.Validation.Implementation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -74,7 +72,7 @@ public class Startup
         services.TryAddSingleton<ISystemClock, SystemClock>();
 
         services.AddStorage(Configuration);
-        services.AddJsonLogic();
+        services.AddValidationServices();
         services.AddRequestCorrelation();
         services.AddCache(Configuration);
     }

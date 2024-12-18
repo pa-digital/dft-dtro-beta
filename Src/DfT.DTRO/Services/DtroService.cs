@@ -79,12 +79,12 @@ public class DtroService : IDtroService
 
     public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
     {
-        var apiDtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
-        var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, apiDtroUser.TraId);
+        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var errors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, user.TraId);
 
-        if (validationErrors is not null)
+        if (errors is not null)
         {
-            throw validationErrors;
+            throw errors;
         }
 
         return await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
@@ -92,12 +92,12 @@ public class DtroService : IDtroService
 
     public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
     {
-        var apiDtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
-        var validationErrors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, apiDtroUser.TraId);
+        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var errors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, user.TraId);
 
-        if (validationErrors is not null)
+        if (errors is not null)
         {
-            throw validationErrors;
+            throw errors;
         }
 
         var dtroExists = await _dtroDal.DtroExistsAsync(id);
