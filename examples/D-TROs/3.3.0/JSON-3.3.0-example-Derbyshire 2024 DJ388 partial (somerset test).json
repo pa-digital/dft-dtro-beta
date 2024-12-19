@@ -6,6 +6,7 @@
                 {
                     "RegulatedPlace": [
                         {
+							"description": "some form of description",
 							"type": "regulationLocation",
                             "LinearGeometry": {
                                 "version": 1,

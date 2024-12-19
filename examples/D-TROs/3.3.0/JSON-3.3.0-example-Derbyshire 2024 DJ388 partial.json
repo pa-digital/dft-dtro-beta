@@ -13,6 +13,7 @@
                     "RegulatedPlace": [
                         {
                             "type": "regulationLocation",
+							"description": "some random description",
                             "LinearGeometry": {
                                 "direction": "bidirectional",
                                 "ExternalReference": [
