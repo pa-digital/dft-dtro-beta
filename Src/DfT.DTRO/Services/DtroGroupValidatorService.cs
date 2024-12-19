@@ -9,7 +9,8 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly IRulesValidation _rulesValidation;
     private readonly ISourceValidationService _sourceValidationService;
     private readonly IProvisionValidationService _provisionValidationService;
-    private readonly IRegulatedPlaceValidation _regulatedPlaceValidation;
+    private readonly IRegulatedPlaceValidationService _regulatedPlaceValidationService;
+    private readonly IGeometryValidationService _geometryValidationService;
     private readonly IRegulationValidation _regulationValidation;
     private readonly IConditionValidation _conditionValidation;
 
@@ -20,7 +21,8 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         IRulesValidation rulesValidation,
         ISourceValidationService sourceValidationService,
         IProvisionValidationService provisionValidationService,
-        IRegulatedPlaceValidation regulatedPlaceValidation,
+        IRegulatedPlaceValidationService regulatedPlaceValidationService,
+        IGeometryValidationService geometryValidationService,
         IRegulationValidation regulationValidation,
         IConditionValidation conditionValidation)
     {
@@ -30,7 +32,8 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         _rulesValidation = rulesValidation;
         _sourceValidationService = sourceValidationService;
         _provisionValidationService = provisionValidationService;
-        _regulatedPlaceValidation = regulatedPlaceValidation;
+        _regulatedPlaceValidationService = regulatedPlaceValidationService;
+        _geometryValidationService = geometryValidationService;
         _regulationValidation = regulationValidation;
         _conditionValidation = conditionValidation;
     }
@@ -74,16 +77,22 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
 
         }
 
+        var regulatedPlacesValidationErrors = _regulatedPlaceValidationService.ValidateRegulatedPlaces(dtroSubmit);
+        if (regulatedPlacesValidationErrors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = regulatedPlacesValidationErrors.MapFrom() };
+        }
+
+        var geometryValidationErrors = _geometryValidationService.ValidateGeometry(dtroSubmit);
+        if (geometryValidationErrors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = geometryValidationErrors.MapFrom() };
+        }
+
         var requestComparedToRules = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
         if (requestComparedToRules.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = requestComparedToRules.MapFrom() };
-        }
-
-        var requestComparedRegulatedPlaces = _regulatedPlaceValidation.ValidateRegulatedPlacesType(dtroSubmit, schemaVersion);
-        if (requestComparedRegulatedPlaces.Count > 0)
-        {
-            return new DtroValidationException { RequestComparedToRules = requestComparedRegulatedPlaces.MapFrom() };
         }
 
         var requestComparedToRegulations = _regulationValidation.ValidateRegulation(dtroSubmit, schemaVersion);

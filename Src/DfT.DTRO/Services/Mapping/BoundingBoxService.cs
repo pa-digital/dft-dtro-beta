@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Helpers;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json.Linq;
 using GeometryType = DfT.DTRO.Enums.GeometryType;
@@ -308,16 +307,9 @@ public class BoundingBoxService : IBoundingBoxService
                 LineString lineStringToValidate = wktReader.Read(toValidate) as LineString;
                 isWithinUk = ukBoundary != null && ukBoundary.Contains(lineStringToValidate);
                 break;
-            case GeometryType.Unknown:
-                errors.Add(Error.SetGeometryValidationError());
-                _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry type error", string.Join(",", errors));
-
-                break;
             default:
                 errors.Add(Error.SetGeometryValidationError());
-
                 _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry type error", string.Join(",", errors));
-
                 break;
         }
         return isWithinUk;
@@ -382,18 +374,6 @@ public class BoundingBoxService : IBoundingBoxService
 
                     _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
                 }
-                break;
-            case GeometryType.Unknown:
-                errors.Add(new SemanticValidationError
-                {
-                    Path = "Source.provision.regulatedPlace.geometry",
-                    Message = "Selected geometry",
-                    Name = "Unknown geometry",
-                    Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
-                });
-
-                _loggingExtension.LogError(nameof(ArePairsValid), "", "Geometry pair error", string.Join(",", errors));
-
                 break;
             default:
                 errors.Add(new SemanticValidationError

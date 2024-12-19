@@ -15,7 +15,7 @@ public class SourceValidationService : ISourceValidationService
     /// <inheritdoc cref="ISourceValidationService"/>
     public List<SemanticValidationError> ValidateSource(DtroSubmit dtroSubmit, int? submittedByTa)
     {
-        List<SemanticValidationError> validationErrors = new List<SemanticValidationError>();
+        List<SemanticValidationError> validationErrors = new();
 
         var source = dtroSubmit.Data.GetExpando("Source");
 

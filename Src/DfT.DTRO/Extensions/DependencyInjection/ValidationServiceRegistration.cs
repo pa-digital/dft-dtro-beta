@@ -19,7 +19,8 @@ public static class ValidationServiceRegistration
         services.AddScoped<IRulesValidation, RulesValidation>();
         services.AddScoped<ISourceValidationService, SourceValidationService>();
         services.AddScoped<IProvisionValidationService, ProvisionValidationService>();
-        services.AddScoped<IRegulatedPlaceValidation, RegulatedPlaceValidation>();
+        services.AddScoped<IRegulatedPlaceValidationService, RegulatedPlaceValidationService>();
+        services.AddScoped<IGeometryValidationService, GeometryValidationService>();
         services.AddScoped<IRegulationValidation, RegulationValidation>();
         services.AddScoped<IConditionValidation, ConditionValidation>();
 
