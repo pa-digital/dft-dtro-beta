@@ -19,7 +19,6 @@ public class GeometryValidationService : IGeometryValidationService
             .SelectMany(provisions => provisions
                 .GetValueOrDefault<IList<object>>("RegulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
-            .ToList()
             .Where(expandoObject => Constants.ConcreteGeometries.Any(expandoObject.HasField))
             .ToList();
 

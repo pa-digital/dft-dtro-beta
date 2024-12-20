@@ -11,6 +11,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly IProvisionValidationService _provisionValidationService;
     private readonly IRegulatedPlaceValidationService _regulatedPlaceValidationService;
     private readonly IGeometryValidationService _geometryValidationService;
+    private readonly IExternalReferenceValidationService _externalReferenceValidationService;
     private readonly IRegulationValidation _regulationValidation;
     private readonly IConditionValidation _conditionValidation;
 
@@ -23,6 +24,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         IProvisionValidationService provisionValidationService,
         IRegulatedPlaceValidationService regulatedPlaceValidationService,
         IGeometryValidationService geometryValidationService,
+        IExternalReferenceValidationService externalReferenceValidationService,
         IRegulationValidation regulationValidation,
         IConditionValidation conditionValidation)
     {
@@ -34,6 +36,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         _provisionValidationService = provisionValidationService;
         _regulatedPlaceValidationService = regulatedPlaceValidationService;
         _geometryValidationService = geometryValidationService;
+        _externalReferenceValidationService = externalReferenceValidationService;
         _regulationValidation = regulationValidation;
         _conditionValidation = conditionValidation;
     }
@@ -88,6 +91,13 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         {
             return new DtroValidationException { RequestComparedToRules = geometryValidationErrors.MapFrom() };
         }
+
+        var externalReferenceValidationErrors = _externalReferenceValidationService.Validate(dtroSubmit);
+        if (externalReferenceValidationErrors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = externalReferenceValidationErrors.MapFrom() };
+        }
+
 
         var requestComparedToRules = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
         if (requestComparedToRules.Count > 0)

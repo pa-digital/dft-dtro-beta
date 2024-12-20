@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-
-namespace DfT.DTRO.Services.Validation.Implementation;
+﻿namespace DfT.DTRO.Services.Validation.Implementation;
 
 /// <inheritdoc cref="IRegulatedPlaceValidationService"/>
 public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService

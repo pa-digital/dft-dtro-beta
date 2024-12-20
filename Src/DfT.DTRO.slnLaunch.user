@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Both",
+    "Projects": [
+      {
+        "Path": "DfT.DTRO\\DfT.DTRO.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "Dft.DTRO.Admin\\Dft.DTRO.Admin.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
