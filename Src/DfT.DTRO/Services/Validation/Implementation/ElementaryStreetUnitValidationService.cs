@@ -33,6 +33,11 @@ public class ElementaryStreetUnitValidationService : IElementaryStreetUnitValida
                     .OfType<ExpandoObject>()
                     .ToList();
 
+                if (!uniqueStreetReferenceNumbers.Any(it => it.HasField("ElementaryStreetUnit")))
+                {
+                    return errors;
+                }
+
                 var elementaryStreetUnits = uniqueStreetReferenceNumbers
                     .SelectMany(uniqueStreetReferenceNumber => uniqueStreetReferenceNumber.GetValueOrDefault<IList<object>>("ElementaryStreetUnit"))
                     .OfType<ExpandoObject>()
