@@ -11,5 +11,5 @@ public interface ISourceValidationService
     /// <param name="dtroSubmit">D-TRO record to validate</param>
     /// <param name="traCode">Traffic regulation authority code to check</param>
     /// <returns>List of validation errors.</returns>
-    List<SemanticValidationError> ValidateSource(DtroSubmit dtroSubmit, int? traCode);
+    List<SemanticValidationError> Validate(DtroSubmit dtroSubmit, int? traCode);
 }

@@ -10,5 +10,5 @@ public interface IGeometryValidationService
     /// </summary>
     /// <param name="dtroSubmit">D-TRO record payload to validate against.</param>
     /// <returns>List of validation errors</returns>
-    IList<SemanticValidationError> ValidateGeometry(DtroSubmit dtroSubmit);
+    List<SemanticValidationError> Validate(DtroSubmit dtroSubmit);
 }

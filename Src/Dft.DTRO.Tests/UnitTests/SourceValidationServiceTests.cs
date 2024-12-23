@@ -32,7 +32,7 @@ public class SourceValidationServiceTests
           }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateSource(dtroSubmit, traCode);
+        var actual = _sut.Validate(dtroSubmit, traCode);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -54,7 +54,7 @@ public class SourceValidationServiceTests
           }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateSource(dtroSubmit, traCode);
+        var actual = _sut.Validate(dtroSubmit, traCode);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -77,7 +77,7 @@ public class SourceValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         int? traCode = 1050;
-        var actual = _sut.ValidateSource(dtroSubmit, traCode);
+        var actual = _sut.Validate(dtroSubmit, traCode);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -100,7 +100,7 @@ public class SourceValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         int? traCode = 1050;
-        var actual = _sut.ValidateSource(dtroSubmit, traCode);
+        var actual = _sut.Validate(dtroSubmit, traCode);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -123,7 +123,7 @@ public class SourceValidationServiceTests
           }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateSource(dtroSubmit, 1050);
+        var actual = _sut.Validate(dtroSubmit, 1050);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -145,7 +145,7 @@ public class SourceValidationServiceTests
           }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateSource(dtroSubmit, traCode);
+        var actual = _sut.Validate(dtroSubmit, traCode);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -167,7 +167,7 @@ public class SourceValidationServiceTests
           }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateSource(dtroSubmit, 1050);
+        var actual = _sut.Validate(dtroSubmit, 1050);
         Assert.Equal(errorCount, actual.Count);
     }
 }

@@ -4,7 +4,7 @@
 public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
 {
     /// <inheritdoc cref="IRegulatedPlaceValidationService"/>
-    public IList<SemanticValidationError> ValidateRegulatedPlaces(DtroSubmit dtroSubmit)
+    public List<SemanticValidationError> Validate(DtroSubmit dtroSubmit)
     {
         var errors = new List<SemanticValidationError>();
 

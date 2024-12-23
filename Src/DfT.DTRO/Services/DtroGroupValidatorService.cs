@@ -1,6 +1,8 @@
 ﻿using DfT.DTRO.Extensions.Exceptions;
 
 namespace DfT.DTRO.Services;
+
+/// <inheritdoc cref="IDtroGroupValidatorService"/>
 public class DtroGroupValidatorService : IDtroGroupValidatorService
 {
     private readonly IJsonSchemaValidationService _jsonSchemaValidationService;
@@ -12,9 +14,11 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly IRegulatedPlaceValidationService _regulatedPlaceValidationService;
     private readonly IGeometryValidationService _geometryValidationService;
     private readonly IExternalReferenceValidationService _externalReferenceValidationService;
+    private readonly IUniqueStreetReferenceNumberValidationService _uniqueStreetReferenceNumberValidationService;
     private readonly IRegulationValidation _regulationValidation;
     private readonly IConditionValidation _conditionValidation;
 
+    /// <inheritdoc cref="IDtroGroupValidatorService"/>
     public DtroGroupValidatorService(
         IJsonSchemaValidationService jsonSchemaValidationService,
         ISemanticValidationService semanticValidationService,
@@ -25,6 +29,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         IRegulatedPlaceValidationService regulatedPlaceValidationService,
         IGeometryValidationService geometryValidationService,
         IExternalReferenceValidationService externalReferenceValidationService,
+        IUniqueStreetReferenceNumberValidationService uniqueStreetReferenceNumberValidationService,
         IRegulationValidation regulationValidation,
         IConditionValidation conditionValidation)
     {
@@ -61,60 +66,65 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         var jsonSchemaAsString = schema.Template.ToIndentedJsonString();
         var dtroSubmitJson = dtroSubmit.Data.ToIndentedJsonString();
 
+
         var requestComparedToSchema = _jsonSchemaValidationService.ValidateSchema(jsonSchemaAsString, dtroSubmitJson);
         if (requestComparedToSchema.Count > 0)
         {
             return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
         }
 
-        var sourceValidationErrors = _sourceValidationService.ValidateSource(dtroSubmit, traCode);
-        if (sourceValidationErrors.Count > 0)
+        var errors = _sourceValidationService.Validate(dtroSubmit, traCode);
+        if (errors.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = sourceValidationErrors.MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
-        var provisionValidationErrors = _provisionValidationService.ValidateProvision(dtroSubmit);
-        if (provisionValidationErrors.Count > 0)
+        errors = _provisionValidationService.Validate(dtroSubmit);
+        if (errors.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = provisionValidationErrors.MapFrom() };
-
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
-        var regulatedPlacesValidationErrors = _regulatedPlaceValidationService.ValidateRegulatedPlaces(dtroSubmit);
-        if (regulatedPlacesValidationErrors.Count > 0)
+        errors = _regulatedPlaceValidationService.Validate(dtroSubmit);
+        if (errors.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = regulatedPlacesValidationErrors.MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
-        var geometryValidationErrors = _geometryValidationService.ValidateGeometry(dtroSubmit);
-        if (geometryValidationErrors.Count > 0)
+        errors = _geometryValidationService.Validate(dtroSubmit);
+        if (errors.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = geometryValidationErrors.MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
-        var externalReferenceValidationErrors = _externalReferenceValidationService.Validate(dtroSubmit);
-        if (externalReferenceValidationErrors.Count > 0)
+        errors = _externalReferenceValidationService.Validate(dtroSubmit);
+        if (errors.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = externalReferenceValidationErrors.MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
-
-        var requestComparedToRules = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
-        if (requestComparedToRules.Count > 0)
+        errors = _uniqueStreetReferenceNumberValidationService.Validate(dtroSubmit);
+        if (errors.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = requestComparedToRules.MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
-        var requestComparedToRegulations = _regulationValidation.ValidateRegulation(dtroSubmit, schemaVersion);
-        if (requestComparedToRegulations.Count > 0)
+        errors = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
+        if (errors.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = requestComparedToRegulations.MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
-        var requestComparedToConditions = _conditionValidation.ValidateCondition(dtroSubmit, schemaVersion);
-        if (requestComparedToConditions.Count > 0)
+        errors = _regulationValidation.ValidateRegulation(dtroSubmit, schemaVersion);
+        if (errors.Count > 0)
         {
-            return new DtroValidationException { RequestComparedToRules = requestComparedToConditions.MapFrom() };
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
+        }
+
+        errors = _conditionValidation.ValidateCondition(dtroSubmit, schemaVersion);
+        if (errors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
         var tuple = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);

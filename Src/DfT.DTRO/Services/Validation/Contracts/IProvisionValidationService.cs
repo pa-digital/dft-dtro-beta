@@ -10,5 +10,5 @@ public interface IProvisionValidationService
     /// </summary>
     /// <param name="dtroSubmit">D-TRO record to validate</param>
     /// <returns>List of validation errors</returns>
-    List<SemanticValidationError> ValidateProvision(DtroSubmit dtroSubmit);
+    List<SemanticValidationError> Validate(DtroSubmit dtroSubmit);
 }

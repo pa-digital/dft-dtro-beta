@@ -28,7 +28,7 @@ public class RegulatedPlaceValidationServiceTests
             }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateRegulatedPlaces(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -58,7 +58,7 @@ public class RegulatedPlaceValidationServiceTests
             }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateRegulatedPlaces(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 }

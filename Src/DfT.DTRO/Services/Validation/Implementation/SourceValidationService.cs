@@ -13,7 +13,7 @@ public class SourceValidationService : ISourceValidationService
     public SourceValidationService(IDtroUserDal swaCodeDal) => _dtroUserDal = swaCodeDal;
 
     /// <inheritdoc cref="ISourceValidationService"/>
-    public List<SemanticValidationError> ValidateSource(DtroSubmit dtroSubmit, int? submittedByTa)
+    public List<SemanticValidationError> Validate(DtroSubmit dtroSubmit, int? submittedByTa)
     {
         List<SemanticValidationError> validationErrors = new();
 

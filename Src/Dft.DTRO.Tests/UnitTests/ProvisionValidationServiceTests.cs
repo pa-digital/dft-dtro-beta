@@ -31,7 +31,7 @@ public class ProvisionValidationServiceTests
             }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateProvision(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -70,7 +70,7 @@ public class ProvisionValidationServiceTests
             }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateProvision(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -94,7 +94,7 @@ public class ProvisionValidationServiceTests
             }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateProvision(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -117,7 +117,7 @@ public class ProvisionValidationServiceTests
             }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateProvision(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -147,7 +147,7 @@ public class ProvisionValidationServiceTests
             }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.ValidateProvision(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Nodes;
-using DfT.DTRO.Services.Validation.Contracts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -16,7 +15,7 @@ public class RulesValidation : IRulesValidation
         _ruleTemplateDal = ruleTemplateDal;
     }
 
-    public async Task<IList<SemanticValidationError>> ValidateRules(DtroSubmit request, string schemaVersion)
+    public async Task<List<SemanticValidationError>> ValidateRules(DtroSubmit request, string schemaVersion)
     {
         if (request.SchemaVersion < schemaVersion)
         {

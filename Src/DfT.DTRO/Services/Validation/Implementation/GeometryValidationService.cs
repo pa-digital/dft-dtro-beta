@@ -7,7 +7,7 @@ namespace DfT.DTRO.Services.Validation.Implementation;
 public class GeometryValidationService : IGeometryValidationService
 {
     /// <inheritdoc cref="IGeometryValidationService"/>
-    public IList<SemanticValidationError> ValidateGeometry(DtroSubmit dtroSubmit)
+    public List<SemanticValidationError> Validate(DtroSubmit dtroSubmit)
     {
         var errors = new List<SemanticValidationError>();
 

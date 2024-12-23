@@ -1,12 +1,12 @@
 ﻿namespace DfT.DTRO.Services.Validation.Contracts;
 
 /// <summary>
-/// Regulated place validation service
+/// Unique street reference number validation service 
 /// </summary>
-public interface IRegulatedPlaceValidationService
+public interface IUniqueStreetReferenceNumberValidationService
 {
     /// <summary>
-    /// Validate regulated place
+    /// Validate service
     /// </summary>
     /// <param name="dtroSubmit">D-TRO record to validate</param>
     /// <returns>List of validation errors</returns>

@@ -11,5 +11,5 @@ public interface IRegulationValidation
     /// <param name="dtroSubmit">D-TRO payload to check.</param>
     /// <param name="schemaVersion">Schema version passed in.</param>
     /// <returns>List of validation errors</returns>
-    IList<SemanticValidationError> ValidateRegulation(DtroSubmit dtroSubmit, SchemaVersion schemaVersion);
+    List<SemanticValidationError> ValidateRegulation(DtroSubmit dtroSubmit, SchemaVersion schemaVersion);
 }

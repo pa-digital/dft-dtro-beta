@@ -31,7 +31,7 @@ public class GeometryValidationServiceTests
         }}
         ", new SchemaVersion(schemaVersion));
 
-        var actual = _sut.ValidateGeometry(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -62,7 +62,7 @@ public class GeometryValidationServiceTests
         }}
         ", new SchemaVersion(schemaVersion));
 
-        var actual = _sut.ValidateGeometry(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -94,7 +94,7 @@ public class GeometryValidationServiceTests
         }}
         ", new SchemaVersion(schemaVersion));
 
-        var actual = _sut.ValidateGeometry(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -126,7 +126,7 @@ public class GeometryValidationServiceTests
         }}
         ", new SchemaVersion(schemaVersion));
 
-        var actual = _sut.ValidateGeometry(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -160,7 +160,7 @@ public class GeometryValidationServiceTests
         }}
         ", new SchemaVersion(schemaVersion));
 
-        var actual = _sut.ValidateGeometry(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -195,7 +195,7 @@ public class GeometryValidationServiceTests
         }}
         ", new SchemaVersion(schemaVersion));
 
-        var actual = _sut.ValidateGeometry(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -229,7 +229,7 @@ public class GeometryValidationServiceTests
         }}
         ", new SchemaVersion(schemaVersion));
 
-        var actual = _sut.ValidateGeometry(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -262,7 +262,7 @@ public class GeometryValidationServiceTests
         }}
         ", new SchemaVersion(schemaVersion));
 
-        var actual = _sut.ValidateGeometry(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -291,7 +291,7 @@ public class GeometryValidationServiceTests
         }}
         ", new SchemaVersion(schemaVersion));
 
-        var actual = _sut.ValidateGeometry(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -321,7 +321,7 @@ public class GeometryValidationServiceTests
         }}
         ", new SchemaVersion(schemaVersion));
 
-        var actual = _sut.ValidateGeometry(dtroSubmit);
+        var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 }

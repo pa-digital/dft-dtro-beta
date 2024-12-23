@@ -4,7 +4,7 @@ namespace DfT.DTRO.Services.Validation.Implementation;
 
 public class ConditionValidation : IConditionValidation
 {
-    public IList<SemanticValidationError> ValidateCondition(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
+    public List<SemanticValidationError> ValidateCondition(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
     {
         List<SemanticValidationError> errors = new();
 

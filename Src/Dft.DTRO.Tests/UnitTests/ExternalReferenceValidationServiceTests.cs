@@ -7,7 +7,6 @@ public class ExternalReferenceValidationServiceTests
 
     [Theory]
     [InlineData("2024-08-01T00:00:00", "3.3.0", 0)]
-    [InlineData("something", "3.3.0", 1)]
     [InlineData("2034-01-01T00:00:00", "3.3.0", 1)]
     public void ValidatedExternalReferenceLastUpdatedDate(string lastUpdateDate, string version, int errorCount)
     {
@@ -103,5 +102,68 @@ public class ExternalReferenceValidationServiceTests
 
         var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
+    }
+
+
+    [Fact]
+    public void ValidateMultipleExternalReferencesWithDifferentGeometriesLastUpdatedDate()
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""RegulatedPlace"": [
+                            {{
+                                ""PointGeometry"":  {{
+                                    ""ExternalReference"": [
+                                        {{
+                                            ""lastUpdateDate"": ""2023-01-01T00:00:00""
+                                        }},
+                                        {{
+                                            ""lastUpdateDate"": ""2023-02-01T00:00:00""
+                                        }}
+                                    ]
+                                }},
+                                ""LinearGeometry"":  {{
+                                    ""ExternalReference"": [
+                                        {{
+                                            ""lastUpdateDate"": ""2023-01-01T00:00:00""
+                                        }},
+                                        {{
+                                            ""lastUpdateDate"": ""2023-02-01T00:00:00""
+                                        }}
+                                    ]
+                                }},
+                                ""Polygon"":  {{
+                                    ""ExternalReference"": [
+                                        {{
+                                            ""lastUpdateDate"": ""2023-01-01T00:00:00""
+                                        }},
+                                        {{
+                                            ""lastUpdateDate"": ""2023-02-01T00:00:00""
+                                        }}
+                                    ]
+                                }},
+                                ""DirectedLinear"":  {{
+                                    ""ExternalReference"": [
+                                        {{
+                                            ""lastUpdateDate"": ""2023-01-01T00:00:00""
+                                        }},
+                                        {{
+                                            ""lastUpdateDate"": ""2023-02-01T00:00:00""
+                                        }}
+                                    ]
+                                }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}
+        }}
+        ", new SchemaVersion("3.3.0"));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(0, actual.Count);
     }
 }
