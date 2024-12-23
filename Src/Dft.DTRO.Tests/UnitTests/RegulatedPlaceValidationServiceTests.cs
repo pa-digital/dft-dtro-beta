@@ -26,7 +26,7 @@ public class RegulatedPlaceValidationServiceTests
                 ]
 
             }}
-        }}", new SchemaVersion("3.3.0"));
+        }}", new SchemaVersion(version));
 
         var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
@@ -56,7 +56,7 @@ public class RegulatedPlaceValidationServiceTests
                 ]
 
             }}
-        }}", new SchemaVersion("3.3.0"));
+        }}", new SchemaVersion(version));
 
         var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
