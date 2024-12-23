@@ -6,11 +6,11 @@ public class ElementaryStreetUnitTests
     private readonly IElementaryStreetUnitValidationService _sut = new ElementaryStreetUnitValidationService();
 
     [Theory]
-    [InlineData(39605715, "0")]
-    [InlineData(0, "1")]
-    [InlineData(null, "1")]
-    [InlineData(39605158, "0")]
-    public void ValidateElementaryStreetUnitEsu(long esu, string errorCount)
+    [InlineData(39605715, 0)]
+    [InlineData(0, 1)]
+    [InlineData(null, 1)]
+    [InlineData(39605158, 0)]
+    public void ValidateElementaryStreetUnitEsu(long esu, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -42,7 +42,7 @@ public class ElementaryStreetUnitTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(errorCount.AsInt(), actual.Count);
+        Assert.Equal(errorCount, actual.Count);
     }
 
     [Fact]

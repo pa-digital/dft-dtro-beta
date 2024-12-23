@@ -6,9 +6,9 @@ public class ExternalReferenceValidationServiceTests
     private readonly IExternalReferenceValidationService _sut = new ExternalReferenceValidationService();
 
     [Theory]
-    [InlineData("2024-08-01T00:00:00", "3.3.0", "0")]
-    [InlineData("2034-01-01T00:00:00", "3.3.0", "1")]
-    public void ValidatedExternalReferenceLastUpdatedDate(string lastUpdateDate, string version, string errorCount)
+    [InlineData("2024-08-01T00:00:00", "3.3.0", 0)]
+    [InlineData("2034-01-01T00:00:00", "3.3.0", 1)]
+    public void ValidatedExternalReferenceLastUpdatedDate(string lastUpdateDate, string version, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -33,7 +33,7 @@ public class ExternalReferenceValidationServiceTests
         ", new SchemaVersion(version));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(errorCount.AsInt(), actual.Count);
+        Assert.Equal(errorCount, actual.Count);
     }
 
     [Fact]

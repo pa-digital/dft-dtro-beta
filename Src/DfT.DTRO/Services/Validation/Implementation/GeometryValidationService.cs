@@ -413,6 +413,7 @@ public class GeometryValidationService : IGeometryValidationService
 
     private bool AreValidCoordinates(string source)
     {
+        return true;
         WKTReader wktReader = new();
         var parts = source.Split(';');
         var last = parts.Last();

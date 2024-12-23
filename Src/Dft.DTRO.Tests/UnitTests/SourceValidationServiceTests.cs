@@ -12,12 +12,12 @@ public class SourceValidationServiceTests
     }
 
     [Theory]
-    [InlineData("new", 1050, "0")]
-    [InlineData("amendment", 1050, "0")]
-    [InlineData("noChange", 1050, "0")]
-    [InlineData("errorFix", 1050, "0")]
-    [InlineData("something", 1050, "1")]
-    public void ValidateSourceActionType(string actionType, int? traCode, string errorCount)
+    [InlineData("new", 1050, 0)]
+    [InlineData("amendment", 1050, 0)]
+    [InlineData("noChange", 1050, 0)]
+    [InlineData("errorFix", 1050, 0)]
+    [InlineData("something", 1050, 1)]
+    public void ValidateSourceActionType(string actionType, int? traCode, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -33,13 +33,13 @@ public class SourceValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit, traCode);
-        Assert.Equal(errorCount.AsInt(), actual.Count);
+        Assert.Equal(errorCount, actual.Count);
     }
 
     [Theory]
-    [InlineData(1050, "0")]
-    [InlineData(9999, "2")]
-    public void ValidateSourceCurrentTraOwner(int? traCode, string errorCount)
+    [InlineData(1050, 0)]
+    [InlineData(9999, 2)]
+    public void ValidateSourceCurrentTraOwner(int? traCode, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -55,13 +55,13 @@ public class SourceValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit, traCode);
-        Assert.Equal(errorCount.AsInt(), actual.Count);
+        Assert.Equal(errorCount, actual.Count);
     }
 
     [Theory]
-    [InlineData("D5E7FBE5-5A7A-4A81-8E27-CDB008EC729D", "0")]
-    [InlineData("", "1")]
-    public void ValidateSourceReference(string reference, string errorCount)
+    [InlineData("D5E7FBE5-5A7A-4A81-8E27-CDB008EC729D", 0)]
+    [InlineData("", 1)]
+    public void ValidateSourceReference(string reference, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -78,13 +78,13 @@ public class SourceValidationServiceTests
 
         int? traCode = 1050;
         var actual = _sut.Validate(dtroSubmit, traCode);
-        Assert.Equal(errorCount.AsInt(), actual.Count);
+        Assert.Equal(errorCount, actual.Count);
     }
 
     [Theory]
-    [InlineData("some free text", "0")]
-    [InlineData("", "1")]
-    public void ValidateSourceSection(string section, string errorCount)
+    [InlineData("some free text", 0)]
+    [InlineData("", 1)]
+    public void ValidateSourceSection(string section, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -101,14 +101,14 @@ public class SourceValidationServiceTests
 
         int? traCode = 1050;
         var actual = _sut.Validate(dtroSubmit, traCode);
-        Assert.Equal(errorCount.AsInt(), actual.Count);
+        Assert.Equal(errorCount, actual.Count);
     }
 
     [Theory]
-    [InlineData("1050, 4, 3300", "0")]
-    [InlineData("", "1")]
-    [InlineData("9999, 0, 10000", "1")]
-    public void ValidateSourceTraAffected(string traAffected, string errorCount)
+    [InlineData("1050, 4, 3300", 0)]
+    [InlineData("", 1)]
+    [InlineData("9999, 0, 10000", 1)]
+    public void ValidateSourceTraAffected(string traAffected, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -124,13 +124,13 @@ public class SourceValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit, 1050);
-        Assert.Equal(errorCount.AsInt(), actual.Count);
+        Assert.Equal(errorCount, actual.Count);
     }
 
     [Theory]
-    [InlineData(1050, "0")]
-    [InlineData(1000, "2")]
-    public void ValidateSourceTraCreator(int traCode, string errorCount)
+    [InlineData(1050, 0)]
+    [InlineData(1000, 2)]
+    public void ValidateSourceTraCreator(int traCode, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -146,13 +146,13 @@ public class SourceValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit, traCode);
-        Assert.Equal(errorCount.AsInt(), actual.Count);
+        Assert.Equal(errorCount, actual.Count);
     }
 
     [Theory]
-    [InlineData("D-TRO", "0")]
-    [InlineData("", "1")]
-    public void ValidateSourceTroName(string troName, string errorCount)
+    [InlineData("D-TRO", 0)]
+    [InlineData("", 1)]
+    public void ValidateSourceTroName(string troName, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -168,6 +168,6 @@ public class SourceValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit, 1050);
-        Assert.Equal(errorCount.AsInt(), actual.Count);
+        Assert.Equal(errorCount, actual.Count);
     }
 }
