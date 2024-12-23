@@ -1,17 +1,16 @@
 ﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
-public class UniqueStreetReferenceNumberValidationServiceTests
+public class ElementaryStreetUnitTests
 {
-    private readonly IUniqueStreetReferenceNumberValidationService _sut =
-        new UniqueStreetReferenceNumberValidationService();
+    private readonly IElementaryStreetUnitValidationService _sut = new ElementaryStreetUnitValidationService();
 
     [Theory]
     [InlineData(39605715, 0)]
     [InlineData(0, 1)]
     [InlineData(null, 1)]
     [InlineData(39605158, 0)]
-    public void ValidateUniqueStreetReferenceNumberUsrn(long usrn, int errorCount)
+    public void ValidateElementaryStreetUnitEsu(long esu, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -25,7 +24,11 @@ public class UniqueStreetReferenceNumberValidationServiceTests
                                         {{
                                             ""UniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""usrn"": {usrn}
+                                                    ""ElementaryStreetUnit"": [
+                                                        {{
+                                                            ""esu"": {esu}
+                                                        }}
+                                                    ]
                                                 }}
                                             ]
                                         }}
@@ -43,7 +46,7 @@ public class UniqueStreetReferenceNumberValidationServiceTests
     }
 
     [Fact]
-    public void ValidateUniqueStreetReferenceNumberMultipleUsrn()
+    public void ValidateElementaryStreetUnitMultipleEsu()
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -52,19 +55,27 @@ public class UniqueStreetReferenceNumberValidationServiceTests
                     {{
                         ""RegulatedPlace"": [
                             {{
-                                ""PointGeometry"":  {{
+                                ""LinearGeometry"":  {{
                                     ""ExternalReference"": [
                                         {{
                                             ""UniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""usrn"": 39605715
+                                                    ""ElementaryStreetUnit"": [
+                                                        {{
+                                                            ""esu"": 39605715
+                                                        }}
+                                                    ]
                                                 }}
                                             ]
                                         }},
                                         {{
                                             ""UniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""usrn"": 39605158
+                                                    ""ElementaryStreetUnit"": [
+                                                        {{
+                                                            ""esu"": 39605158
+                                                        }}
+                                                    ]
                                                 }}
                                             ]
                                         }}
@@ -82,7 +93,7 @@ public class UniqueStreetReferenceNumberValidationServiceTests
     }
 
     [Fact]
-    public void ValidateUniqueStreetReferenceNumberMultipleIncorrectUsrn()
+    public void ValidateElementStreetUnitMultipleIncorrectEsu()
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -91,19 +102,27 @@ public class UniqueStreetReferenceNumberValidationServiceTests
                     {{
                         ""RegulatedPlace"": [
                             {{
-                                ""Polygon"":  {{
+                                ""DirectedLinear"":  {{
                                     ""ExternalReference"": [
                                         {{
                                             ""UniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""usrn"": 39605715
+                                                    ""ElementaryStreetUnit"": [
+                                                        {{
+                                                            ""esu"": 39605158
+                                                        }}
+                                                    ]
                                                 }}
                                             ]
                                         }},
                                         {{
                                             ""UniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""usrn"": ""39605158""
+                                                    ""ElementaryStreetUnit"": [
+                                                        {{
+                                                            ""esu"": ""39605158""
+                                                        }}
+                                                    ]
                                                 }}
                                             ]
                                         }}

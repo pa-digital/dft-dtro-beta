@@ -22,6 +22,7 @@ global using DfT.DTRO.Enums;
 global using DfT.DTRO.Extensions;
 global using DfT.DTRO.Extensions.Configuration;
 global using DfT.DTRO.Extensions.DependencyInjection;
+global using DfT.DTRO.Extensions.Exceptions;
 global using DfT.DTRO.FeatureManagement;
 global using DfT.DTRO.Filters;
 global using DfT.DTRO.Helpers;

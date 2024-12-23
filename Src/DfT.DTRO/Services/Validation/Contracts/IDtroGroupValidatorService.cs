@@ -1,4 +1,4 @@
-﻿namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services.Validation.Contracts;
 
 /// <summary>
 /// Main validation service

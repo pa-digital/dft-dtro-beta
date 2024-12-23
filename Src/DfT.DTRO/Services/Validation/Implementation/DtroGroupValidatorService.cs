@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Extensions.Exceptions;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services.Validation.Implementation;
 
 /// <inheritdoc cref="IDtroGroupValidatorService"/>
 public class DtroGroupValidatorService : IDtroGroupValidatorService
@@ -15,6 +13,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly IGeometryValidationService _geometryValidationService;
     private readonly IExternalReferenceValidationService _externalReferenceValidationService;
     private readonly IUniqueStreetReferenceNumberValidationService _uniqueStreetReferenceNumberValidationService;
+    private readonly IElementaryStreetUnitValidationService _elementaryStreetUnitValidationService;
     private readonly IRegulationValidation _regulationValidation;
     private readonly IConditionValidation _conditionValidation;
 
@@ -30,6 +29,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         IGeometryValidationService geometryValidationService,
         IExternalReferenceValidationService externalReferenceValidationService,
         IUniqueStreetReferenceNumberValidationService uniqueStreetReferenceNumberValidationService,
+        IElementaryStreetUnitValidationService elementaryStreetUnitValidationService,
         IRegulationValidation regulationValidation,
         IConditionValidation conditionValidation)
     {
@@ -42,6 +42,8 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         _regulatedPlaceValidationService = regulatedPlaceValidationService;
         _geometryValidationService = geometryValidationService;
         _externalReferenceValidationService = externalReferenceValidationService;
+        _uniqueStreetReferenceNumberValidationService = uniqueStreetReferenceNumberValidationService;
+        _elementaryStreetUnitValidationService = elementaryStreetUnitValidationService;
         _regulationValidation = regulationValidation;
         _conditionValidation = conditionValidation;
     }
@@ -104,6 +106,12 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         }
 
         errors = _uniqueStreetReferenceNumberValidationService.Validate(dtroSubmit);
+        if (errors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
+        }
+
+        errors = _elementaryStreetUnitValidationService.Validate(dtroSubmit);
         if (errors.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
