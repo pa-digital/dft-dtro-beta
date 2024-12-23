@@ -10,14 +10,17 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
 
         List<ExpandoObject> regulatedPlaces = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("Source.Provision"
+                .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("RegulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValue<IList<object>>("RegulatedPlace"
+                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 
-        var descriptions = regulatedPlaces.Select(it => it.GetValueOrDefault<string>("description"));
+        var descriptions = regulatedPlaces
+            .Select(regulatedPlace => regulatedPlace.GetValueOrDefault<string>("description"));
 
         if (descriptions.Any(string.IsNullOrEmpty))
         {
