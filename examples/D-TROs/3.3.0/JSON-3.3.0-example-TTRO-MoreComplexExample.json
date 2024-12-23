@@ -20,9 +20,11 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39608173
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39608173
+                                            }
+                                        ]
                                     }
                                 ],
                                 "version": 1
@@ -37,69 +39,91 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39609331
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39609331
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39605119
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39605119
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39609519
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39609519
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39609406
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39609406
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39605180
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39605180
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39609179
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39609179
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39605082
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39605082
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39605158
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39605158
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39607389
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39607389
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39605156
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39605156
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39606013
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39606013
+                                            }
+                                        ]
                                     }
                                 ],
                                 "lateralPosition": "centreline",
@@ -150,9 +174,11 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39608173
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39608173
+                                            }
+                                        ]
                                     }
                                 ],
                                 "version": 1
@@ -166,9 +192,11 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39608173
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39608173
+                                            }
+                                        ]
                                     }
                                 ],
                                 "geometry": "SRID=27700;POLYGON((323158 124529, 323156 124529, 323587 125149,323589 125149,323158 124529))",
@@ -184,11 +212,13 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "East Reach",
-                                            "nsgStreetNumber": "A38",
-                                            "usrn": 39608173
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "East Reach",
+                                                "nsgStreetNumber": "A38",
+                                                "usrn": 39608173
+                                            }
+                                        ]
                                     }
                                 ],
                                 "lateralPosition": "onKerb",
@@ -213,7 +243,7 @@
                                                 {
                                                     "applicableCurrency": "GBP",
                                                     "maxTime": 660,
-                                                    "maxValueCollection": 7.2,
+                                                    "maxValueCollection": 7.2000000000000002,
                                                     "minTime": 60,
                                                     "minValueCollection": 1,
                                                     "RateLine": [
@@ -221,7 +251,7 @@
                                                             "durationEnd": 59,
                                                             "durationStart": 1,
                                                             "incrementPeriod": 58,
-                                                            "maxValue": 7.2,
+                                                            "maxValue": 7.2000000000000002,
                                                             "minValue": 1,
                                                             "sequence": 1,
                                                             "type": "flatRateTier",
@@ -232,7 +262,7 @@
                                                             "durationEnd": 119,
                                                             "durationStart": 60,
                                                             "incrementPeriod": 59,
-                                                            "maxValue": 7.2,
+                                                            "maxValue": 7.2000000000000002,
                                                             "minValue": 2,
                                                             "sequence": 2,
                                                             "type": "flatRateTier",
@@ -243,12 +273,12 @@
                                                             "durationEnd": 660,
                                                             "durationStart": 120,
                                                             "incrementPeriod": 540,
-                                                            "maxValue": 7.2,
+                                                            "maxValue": 7.2000000000000002,
                                                             "minValue": 2,
                                                             "sequence": 3,
                                                             "type": "flatRateTier",
                                                             "usageCondition": "fixedDuration",
-                                                            "value": 5.2
+                                                            "value": 5.2000000000000002
                                                         }
                                                     ],
                                                     "resetTime": "20:00:00",
@@ -309,27 +339,33 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "Toneway",
-                                            "nsgStreetNumber": "A38",
-                                            "usrn": 39612030
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Toneway",
+                                                "nsgStreetNumber": "A38",
+                                                "usrn": 39612030
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "Hankridge Dual Carriageway",
-                                            "nsgStreetNumber": "A358",
-                                            "usrn": 39686520
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Hankridge Dual Carriageway",
+                                                "nsgStreetNumber": "A358",
+                                                "usrn": 39686520
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "Hankridge Roundabout",
-                                            "nsgStreetNumber": "A358",
-                                            "usrn": 39604745
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Hankridge Roundabout",
+                                                "nsgStreetNumber": "A358",
+                                                "usrn": 39604745
+                                            }
+                                        ]
                                     }
                                 ],
                                 "lateralPosition": "centreline",
@@ -347,27 +383,33 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "Toneway",
-                                            "nsgStreetNumber": "A38",
-                                            "usrn": 39612030
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Toneway",
+                                                "nsgStreetNumber": "A38",
+                                                "usrn": 39612030
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "Hankridge Dual Carriageway",
-                                            "nsgStreetNumber": "A358",
-                                            "usrn": 39686520
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Hankridge Dual Carriageway",
+                                                "nsgStreetNumber": "A358",
+                                                "usrn": 39686520
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "Hankridge Roundabout",
-                                            "nsgStreetNumber": "A358",
-                                            "usrn": 39604745
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Hankridge Roundabout",
+                                                "nsgStreetNumber": "A358",
+                                                "usrn": 39604745
+                                            }
+                                        ]
                                     }
                                 ],
                                 "lateralPosition": "centreline",
@@ -412,24 +454,30 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetNumber": "A38",
-                                            "usrn": 39604805
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetNumber": "A38",
+                                                "usrn": 39604805
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetNumber": "A38",
-                                            "usrn": 34004899
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetNumber": "A38",
+                                                "usrn": 34004899
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetNumber": "A38",
-                                            "usrn": 34000991
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetNumber": "A38",
+                                                "usrn": 34000991
+                                            }
+                                        ]
                                     }
                                 ],
                                 "lateralPosition": "centreline",
@@ -447,27 +495,33 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "Toneway",
-                                            "nsgStreetNumber": "A38",
-                                            "usrn": 39612030
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Toneway",
+                                                "nsgStreetNumber": "A38",
+                                                "usrn": 39612030
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "Hankridge Dual Carriageway",
-                                            "nsgStreetNumber": "A358",
-                                            "usrn": 39686520
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Hankridge Dual Carriageway",
+                                                "nsgStreetNumber": "A358",
+                                                "usrn": 39686520
+                                            }
+                                        ]
                                     },
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "Hankridge Roundabout",
-                                            "nsgStreetNumber": "A358",
-                                            "usrn": 39604745
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Hankridge Roundabout",
+                                                "nsgStreetNumber": "A358",
+                                                "usrn": 39604745
+                                            }
+                                        ]
                                     }
                                 ],
                                 "lateralPosition": "centreline",
@@ -511,10 +565,12 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "nsgStreetName": "Collett Road",
-                                            "usrn": 396092324
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Collett Road",
+                                                "usrn": 396092324
+                                            }
+                                        ]
                                     }
                                 ],
                                 "lateralPosition": "centreline",
@@ -531,9 +587,11 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 396092324
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 396092324
+                                            }
+                                        ]
                                     }
                                 ],
                                 "point": "SRID=27700;POINT(320329 126155)",
