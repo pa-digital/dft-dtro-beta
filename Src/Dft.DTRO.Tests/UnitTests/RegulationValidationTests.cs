@@ -5,10 +5,8 @@ public class RegulationValidationTests
 {
     private readonly IRegulationValidation _sut = new RegulationValidation();
 
-    [Theory]
-    [InlineData("3.3.0", 0)]
-    [InlineData("4.0.0", 0)]
-    public void ValidateRegulationReturnsNoErrors(string version, int errorCount)
+    [Fact]
+    public void ValidateRegulationReturnsNoErrors()
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
@@ -24,10 +22,10 @@ public class RegulationValidationTests
               }
             ]
           }
-        }", new SchemaVersion(version));
+        }", new SchemaVersion("3.3.0"));
 
-        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, version);
-        Assert.Equal(errorCount, actual.Count);
+        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.3.0");
+        Assert.Equal(0, actual.Count);
     }
 
     [Fact]

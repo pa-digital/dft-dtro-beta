@@ -6,9 +6,9 @@ public class ExternalReferenceValidationServiceTests
     private readonly IExternalReferenceValidationService _sut = new ExternalReferenceValidationService();
 
     [Theory]
-    [InlineData("2024-08-01T00:00:00", "3.3.0", 0)]
-    [InlineData("2034-01-01T00:00:00", "3.3.0", 1)]
-    public void ValidatedExternalReferenceLastUpdatedDate(string lastUpdateDate, string version, int errorCount)
+    [InlineData("2024-08-01T00:00:00", "3.3.0", "0")]
+    [InlineData("2034-01-01T00:00:00", "3.3.0", "1")]
+    public void ValidatedExternalReferenceLastUpdatedDate(string lastUpdateDate, string version, string errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -33,7 +33,7 @@ public class ExternalReferenceValidationServiceTests
         ", new SchemaVersion(version));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(errorCount, actual.Count);
+        Assert.Equal(errorCount.AsInt(), actual.Count);
     }
 
     [Fact]
@@ -69,11 +69,11 @@ public class ExternalReferenceValidationServiceTests
     }
 
     [Theory]
-    [InlineData("PointGeometry", 0)]
-    [InlineData("LinearGeometry", 0)]
-    [InlineData("Polygon", 0)]
-    [InlineData("DirectedLinear", 0)]
-    public void ValidateMultipleExternalReferencesWithinMultipleGeometriesLastUpdatedDate(string geometry, int errorCount)
+    [InlineData("PointGeometry")]
+    [InlineData("LinearGeometry")]
+    [InlineData("Polygon")]
+    [InlineData("DirectedLinear")]
+    public void ValidateMultipleExternalReferencesWithinMultipleGeometriesLastUpdatedDate(string geometry)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -101,7 +101,7 @@ public class ExternalReferenceValidationServiceTests
         ", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(errorCount, actual.Count);
+        Assert.Equal(0, actual.Count);
     }
 
 
