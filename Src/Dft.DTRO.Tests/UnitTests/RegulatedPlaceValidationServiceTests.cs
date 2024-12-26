@@ -6,11 +6,9 @@ public class RegulatedPlaceValidationServiceTests
     private readonly IRegulatedPlaceValidationService _sut = new RegulatedPlaceValidationService();
 
     [Theory]
-    [InlineData("3.2.4", "some free text", 0)]
-    [InlineData("3.2.4", "", 1)]
-    [InlineData("3.3.0", "some free text", 0)]
-    [InlineData("3.3.0", "", 1)]
-    public void ValidateRegulatedPlacesDescription(string version, string description, int errorCount)
+    [InlineData("some free text", 0)]
+    [InlineData("", 1)]
+    public void ValidateRegulatedPlacesDescriptionForSchema330(string description, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -27,22 +25,45 @@ public class RegulatedPlaceValidationServiceTests
                 ]
 
             }}
-        }}", new SchemaVersion(version));
+        }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
 
     [Theory]
-    [InlineData("3.2.4", "unknown", 1)]
-    [InlineData("3.2.4", "", 1)]
-    [InlineData("3.3.0", "regulationLocation", 0)]
-    [InlineData("3.3.0", "diversionRoute", 0)]
-    [InlineData("3.3.0", "regulationLocation", 0)]
-    [InlineData("3.3.0", "diversionRoute", 0)]
-    [InlineData("3.3.0", "unknown", 1)]
-    [InlineData("3.3.0", "", 1)]
-    public void ValidateRegulatedPlacesType(string version, string type, int errorCount)
+    [InlineData("some free text", 0)]
+    [InlineData("", 1)]
+
+    public void ValidateRegulatedPlacesDescriptionForSchema324(string description, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""provision"": [
+                    {{
+                        ""regulatedPlace"": [
+                            {{
+                                ""description"": ""{description}"",
+                                ""type"": ""regulationLocation""
+                            }}
+                        ]
+                    }}
+                ]
+
+            }}
+        }}", new SchemaVersion("3.2.4"));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData("regulationLocation", 0)]
+    [InlineData("diversionRoute", 0)]
+    [InlineData("unknown", 1)]
+    [InlineData("", 1)]
+    public void ValidateRegulatedPlacesType(string type, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -59,7 +80,38 @@ public class RegulatedPlaceValidationServiceTests
                 ]
 
             }}
-        }}", new SchemaVersion(version));
+        }}", new SchemaVersion("3.3.0"));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData(new[] { "regulationLocation", "diversionRoute" }, 0)]
+    [InlineData(new[] { "diversionRoute", "unknown" }, 1)]
+    [InlineData(new[] { "", "unknown" }, 1)]
+    public void ValidateMultipleRegulatedPlacesTypes(string[] types, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""RegulatedPlace"": [
+                            {{
+                                ""description"": ""some free text"",
+                                ""type"": ""{types.ElementAt(0)}""
+                            }},
+                            {{
+                                ""description"": ""some free text"",
+                                ""type"": ""{types.ElementAt(1)}""                                
+                            }}
+                        ]
+                    }}
+                ]
+
+            }}
+        }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
