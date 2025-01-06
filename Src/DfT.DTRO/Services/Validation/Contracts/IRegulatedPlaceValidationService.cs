@@ -1,12 +1,12 @@
 ﻿namespace DfT.DTRO.Services.Validation.Contracts;
 
 /// <summary>
-/// Provision validation service
+/// Regulated place validation service
 /// </summary>
-public interface IProvisionValidationService
+public interface IRegulatedPlaceValidationService
 {
     /// <summary>
-    /// Validate provision
+    /// Validate regulated place
     /// </summary>
     /// <param name="dtroSubmit">D-TRO record to validate</param>
     /// <returns>List of validation errors</returns>

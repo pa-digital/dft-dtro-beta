@@ -81,9 +81,11 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-08-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39608173
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39608173
+                                            }
+                                        ]
                                     }
                                 ]
                             }

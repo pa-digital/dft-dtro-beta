@@ -5,8 +5,8 @@
 /// </summary>
 public static class ValidationServiceRegistration
 {
-    private static readonly MethodInfo AddRuleMethod = typeof(RuleRegistry).GetMethods()
-            .Single(it => it.Name == "AddRule");
+    private static readonly MethodInfo AddRuleMethod = typeof(RuleRegistry)
+        .GetMethods().Single(methodInfo => methodInfo.Name == "AddRule");
 
     /// <summary>
     /// Register validation services
@@ -15,13 +15,18 @@ public static class ValidationServiceRegistration
     /// <param name="assembly">Assembly passed in</param>
     public static void AddValidationServices(this IServiceCollection services, Assembly assembly = null)
     {
-        services.AddScoped<IJsonLogicRuleSource, FileJsonLogicRuleSource>();
-        services.AddScoped<IRulesValidation, RulesValidation>();
-        services.AddScoped<ISourceValidationService, SourceValidationService>();
-        services.AddScoped<IProvisionValidationService, ProvisionValidationService>();
-        services.AddScoped<IRegulatedPlaceValidation, RegulatedPlaceValidation>();
-        services.AddScoped<IRegulationValidation, RegulationValidation>();
-        services.AddScoped<IConditionValidation, ConditionValidation>();
+        services
+            .AddScoped<IJsonLogicRuleSource, FileJsonLogicRuleSource>()
+            .AddScoped<IRulesValidation, RulesValidation>()
+            .AddScoped<ISourceValidationService, SourceValidationService>()
+            .AddScoped<IProvisionValidationService, ProvisionValidationService>()
+            .AddScoped<IRegulatedPlaceValidationService, RegulatedPlaceValidationService>()
+            .AddScoped<IGeometryValidationService, GeometryValidationService>()
+            .AddScoped<IExternalReferenceValidationService, ExternalReferenceValidationService>()
+            .AddScoped<IUniqueStreetReferenceNumberValidationService, UniqueStreetReferenceNumberValidationService>()
+            .AddScoped<IElementaryStreetUnitValidationService, ElementaryStreetUnitValidationService>()
+            .AddScoped<IRegulationValidation, RegulationValidation>()
+            .AddScoped<IConditionValidation, ConditionValidation>();
 
         AddAllRules(assembly ?? Assembly.GetExecutingAssembly());
     }

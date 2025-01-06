@@ -6,7 +6,8 @@
                 {
                     "RegulatedPlace": [
                         {
-							"type": "regulationLocation",
+                            "description": "some form of description",
+                            "type": "regulationLocation",
                             "LinearGeometry": {
                                 "version": 1,
                                 "direction": "bidirectional",
@@ -16,9 +17,11 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T08:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 1515737
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 1515737
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -64,21 +67,21 @@
                             ]
                         }
                     ],
-					"actionType": "new",
-					"orderReportingPoint": "permanentNoticeOfMaking",
-					"provisionDescription": "Schedule 1: No Waiting Monday to Saturday, 8am to 6pm",
-					"reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56"
-				}
+                    "actionType": "new",
+                    "orderReportingPoint": "permanentNoticeOfMaking",
+                    "provisionDescription": "Schedule 1: No Waiting Monday to Saturday, 8am to 6pm",
+                    "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56"
+                }
             ],
-			"actionType": "new",
-			"currentTraOwner": 3300,
-			"reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
-			"section": "Schedule 1",
-			"traAffected": [
-				3300
-			],
-			"traCreator": 3300,
-			"troName": "DfT Example - Oct. 2024 - partial extract of THE DERBYSHIRE COUNTY COUNCIL (MARKET STREET AND TOWN END ROAD, DRAYCOTT) (RESTRICTION AND LIMITED WAITING) TRAFFIC REGULATION ORDER 2024 (DfT mockup)"
+            "actionType": "new",
+            "currentTraOwner": 3300,
+            "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
+            "section": "Schedule 1",
+            "traAffected": [
+                3300
+            ],
+            "traCreator": 3300,
+            "troName": "DfT Example - Oct. 2024 - partial extract of THE DERBYSHIRE COUNTY COUNCIL (MARKET STREET AND TOWN END ROAD, DRAYCOTT) (RESTRICTION AND LIMITED WAITING) TRAFFIC REGULATION ORDER 2024 (DfT mockup)"
         }
     }
 }

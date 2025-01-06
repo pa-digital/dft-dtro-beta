@@ -1,14 +1,14 @@
 ﻿namespace DfT.DTRO.Services.Validation.Contracts;
 
 /// <summary>
-/// Provision validation service
+/// Geometry validation service
 /// </summary>
-public interface IProvisionValidationService
+public interface IGeometryValidationService
 {
     /// <summary>
-    /// Validate provision
+    /// Validate geometry
     /// </summary>
-    /// <param name="dtroSubmit">D-TRO record to validate</param>
+    /// <param name="dtroSubmit">D-TRO record payload to validate against.</param>
     /// <returns>List of validation errors</returns>
     List<SemanticValidationError> Validate(DtroSubmit dtroSubmit);
 }

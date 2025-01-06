@@ -4,7 +4,7 @@ namespace DfT.DTRO.Services.Validation.Implementation;
 
 public class RegulationValidation : IRegulationValidation
 {
-    public IList<SemanticValidationError> ValidateRegulation(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
+    public List<SemanticValidationError> ValidateRegulation(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
     {
         var errors = new List<SemanticValidationError>();
 

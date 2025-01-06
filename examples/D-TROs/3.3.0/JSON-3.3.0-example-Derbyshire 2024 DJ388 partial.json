@@ -13,14 +13,17 @@
                     "RegulatedPlace": [
                         {
                             "type": "regulationLocation",
+                            "description": "some random description",
                             "LinearGeometry": {
                                 "direction": "bidirectional",
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T08:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 1515737
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 1515737
+                                            }
+                                        ]
                                     }
                                 ],
                                 "lateralPosition": "onKerb",

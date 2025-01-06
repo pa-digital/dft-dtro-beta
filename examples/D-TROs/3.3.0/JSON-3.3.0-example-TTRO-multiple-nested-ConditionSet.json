@@ -21,15 +21,17 @@
                                 "ExternalReference": [
                                     {
                                         "lastUpdateDate": "2024-08-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 39608173
-                                        }
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39608173
+                                            }
+                                        ]
                                     }
                                 ]
                             }
                         }
                     ],
-					"Regulation": [
+                    "Regulation": [
                         {
                             "isDynamic": false,
                             "timeZone": "Europe/London",
@@ -41,13 +43,13 @@
                                     "Condition": [
                                         {
                                             "negate": false,
-											"TimeValidity": {
+                                            "TimeValidity": {
                                                 "start": "2024-08-22T08:00:00",
                                                 "end": "2024-08-22T20:00:00"
                                             }
                                         }
                                     ],
-									"ConditionSet": [
+                                    "ConditionSet": [
                                         {
                                             "conditions": [
                                                 {
@@ -81,19 +83,19 @@
                                                                     }
                                                                 }
                                                             ],
-															"operator": "and"                                                            
+                                                            "operator": "and"
                                                         }
                                                     ]
                                                 }
                                             ],
-											"operator": "or"                                            
+                                            "operator": "or"
                                         }
                                     ],
-									"operator": "and"
+                                    "operator": "and"
                                 }
                             ]
                         }
-                    ]                    
+                    ]
                 }
             ],
             "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",

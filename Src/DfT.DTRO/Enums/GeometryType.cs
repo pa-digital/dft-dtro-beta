@@ -6,12 +6,6 @@
 public enum GeometryType
 {
     /// <summary>
-    /// Unknown geometry
-    /// </summary>
-    [Display(Name = "Unknown")]
-    Unknown = 0,
-
-    /// <summary>
     /// Point geometry
     /// </summary>
     [Display(Name = "PointGeometry")]

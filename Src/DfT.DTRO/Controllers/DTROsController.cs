@@ -659,7 +659,6 @@ public class DTROsController : ControllerBase
         }
         catch (NotFoundException nfex)
         {
-            ;
             _logger.LogError(nfex.Message);
             _loggingExtension.LogError(
                 nameof(GetProvisionHistory),

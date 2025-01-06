@@ -10,6 +10,6 @@ public interface IConditionValidation
     /// </summary>
     /// <param name="dtroSubmit">D-TRO payload to check.</param>
     /// <param name="schemaVersion">Schema version passed in.</param>
-    /// <returns></returns>
-    IList<SemanticValidationError> ValidateCondition(DtroSubmit dtroSubmit, SchemaVersion schemaVersion);
+    /// <returns>List of validation errors</returns>
+    List<SemanticValidationError> ValidateCondition(DtroSubmit dtroSubmit, SchemaVersion schemaVersion);
 }
