@@ -7,6 +7,8 @@ public static class Constants
 
     public static IEnumerable<string> ConditionTypes => typeof(ConditionType).GetDisplayNames<ConditionType>();
 
+    public static IEnumerable<string> ExistingRegulations => typeof(RegulationType).GetDisplayNames<RegulationType>();
+
     public static IEnumerable<string> PreviousConditionTypes =>
         ConditionTypes
             .Select(conditionType => conditionType
@@ -14,7 +16,17 @@ public static class Constants
 
     public static IEnumerable<string> OperatorTypes => typeof(OperatorType).GetDisplayNames<OperatorType>().ToList();
 
+    public static IEnumerable<string> SpeedLimitValueType = typeof(SpeedLimitValueType).GetDisplayNames<SpeedLimitValueType>().ToList();
+
     public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
+
+    public static string MphValue => "mphValue";
+
+    public static string Type => "type";
+
+    public static string IsDynamic => "isDynamic";
+
+    public static string TimeZone => "timeZone";
 
     public static string Operator => "operator";
 

@@ -8,7 +8,7 @@ public class RegulationValidation : IRegulationValidation
     {
         var errors = new List<SemanticValidationError>();
 
-        List<ExpandoObject> regulations = dtroSubmit
+        var regulations = dtroSubmit
             .Data
             .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
@@ -17,63 +17,145 @@ public class RegulationValidation : IRegulationValidation
                 .OfType<ExpandoObject>())
             .ToList();
 
-        if (schemaVersion < new SchemaVersion("3.3.0"))
+        var areDynamics = regulations
+        .Select(regulation => regulation.GetValueOrDefault<bool>(Constants.IsDynamic));
+        if (areDynamics.All(it => it.GetType() != typeof(bool)))
         {
-            return errors;
+            SemanticValidationError newError = new()
+            {
+                Name = "Regulations",
+                Message = "Indicates if the regulation is dynamic in nature.",
+                Path = "Source -> Provision -> Regulation -> isDynamic",
+                Rule = "'isDynamic' must be present and has to be 'true' or 'false'.",
+            };
+
+            errors.Add(newError);
         }
 
-        var regulationTypes = typeof(RegulationType)
-            .GetDisplayNames<RegulationType>()
-            .ToList();
+        var timeZones = regulations.
+        Select(regulation => regulation.GetValueOrDefault<string>(Constants.TimeZone));
 
-        var passedInRegulations = regulations
-            .SelectMany(regulation => regulation.Select(kv => kv.Key))
-            .ToList();
-
-        var areMultipleRegulations = regulations.Count > 1;
-        if (areMultipleRegulations)
+        if (timeZones.Any(string.IsNullOrEmpty))
         {
-            var acceptedRegulations = passedInRegulations
-                .Where(passedInRegulation =>
-                    regulationTypes.Any(passedInRegulation.Contains));
-
-            var hasTemporaryRegulation = acceptedRegulations
-                .Any(acceptedRegulation =>
-                    acceptedRegulation
-                        .Equals(RegulationType.TemporaryRegulation.GetDisplayName()));
-
-            if (!hasTemporaryRegulation)
+            SemanticValidationError newError = new()
             {
-                SemanticValidationError error = new()
+                Name = "Regulations",
+                Message = "IANA time-zone (see http://www.iana.org/time-zones).",
+                Path = "Source -> Provision -> Regulation -> timeZone",
+                Rule = "'timeZone' must be present.",
+            };
+
+            errors.Add(newError);
+        }
+
+
+        var existingRegulations = regulations
+        .Where(regulation => Constants.ExistingRegulations.Any(regulation.HasField))
+        .ToList();
+
+        foreach (var existingRegulation in existingRegulations)
+        {
+            foreach (var regulationType in Constants.ExistingRegulations.Where(existingRegulation.HasField))
+            {
+                switch (regulationType)
                 {
-                    Name = "Regulations",
-                    Message = "If more than one regulation is present, the temporary regulation must be one of. " +
-                              "Otherwise, you have to have only one regulation in place.",
-                    Path = "Source -> Provision -> Regulation -> TemporaryRegulation",
-                    Rule = "One regulation must be present.",
-                };
-                errors.Add(error);
+                    case "SpeedLimitValueBased":
+                        var selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
+                        var mphValue = selectedRegulation.GetValueOrDefault<int>(Constants.MphValue);
+                        if (mphValue == 0)
+                        {
+                            SemanticValidationError newError = new()
+                            {
+                                Name = "Speed Limit Value Based Regulation",
+                                Message = "Speed limit value in miles per hour",
+                                Path = "Source -> Provision -> Regulation -> SpeedLimitValueBased -> mphValue",
+                                Rule = "'mphValue' cannot be zero",
+                            };
+
+                            errors.Add(newError);
+                        }
+
+                        var passedInType = selectedRegulation.GetValueOrDefault<string>(Constants.Type);
+                        var isValidType = Constants.SpeedLimitValueType.Any(passedInType.Equals);
+                        if (!isValidType)
+                        {
+                            SemanticValidationError newError = new()
+                            {
+                                Name = "Speed Limit Value Based Regulation",
+                                Message = "Speed limit type value indicated",
+                                Path = "Source -> Provision -> Regulation -> SpeedLimitValueBased -> type",
+                                Rule = $"'type' must be one of '{string.Join(",", Constants.SpeedLimitValueType)}'",
+                            };
+
+                            errors.Add(newError);
+                        }
+
+                        break;
+                    case "SpeedLimitProfileBased":
+                        break;
+                    case "GeneralRegulation":
+                        break;
+                    case "OffListRegulation":
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
-        var areAnyAcceptedRegulations = passedInRegulations
-            .Any(passedInRegulation =>
-                regulationTypes.Any(passedInRegulation.Contains));
 
-        if (areAnyAcceptedRegulations)
-        {
-            return errors;
-        }
+        //var regulationTypes = typeof(RegulationType)
+        //    .GetDisplayNames<RegulationType>()
+        //    .ToList();
 
-        SemanticValidationError newError = new()
-        {
-            Name = "Regulations",
-            Message = "You have to have only one accepted regulation.",
-            Path = "Source -> Provision -> Regulation",
-            Rule = $"One of '{string.Join(", ", regulationTypes)}' regulation must be present.",
-        };
+        //var passedInRegulations = regulations
+        //    .(regulation => regulation.Select(kv => kv.Key))
+        //    .ToList();
 
-        errors.Add(newError);
+        //var areMultipleRegulations = regulations.Count > 1;
+        //if (areMultipleRegulations)
+        //{
+        //    var acceptedRegulations = passedInRegulations
+        //        .Where(passedInRegulation =>
+        //            regulationTypes.Any(passedInRegulation.Contains));
+
+        //    var hasTemporaryRegulation = acceptedRegulations
+        //        .Any(acceptedRegulation =>
+        //            acceptedRegulation
+        //                .Equals(RegulationType.TemporaryRegulation.GetDisplayName()));
+
+        //    if (!hasTemporaryRegulation)
+        //    {
+        //        SemanticValidationError error = new()
+        //        {
+        //            Name = "Regulations",
+        //            Message = "If more than one regulation is present, the temporary regulation must be one of. " +
+        //                      "Otherwise, you have to have only one regulation in place.",
+        //            Path = "Source -> Provision -> Regulation -> TemporaryRegulation",
+        //            Rule = "One regulation must be present.",
+        //        };
+        //        errors.Add(error);
+        //    }
+        //}
+
+        //var areAnyAcceptedRegulations = passedInRegulations
+        //    .Any(passedInRegulation =>
+        //        regulationTypes.Any(passedInRegulation.Contains));
+
+        //if (areAnyAcceptedRegulations)
+        //{
+        //    return errors;
+        //}
+
+        //SemanticValidationError newError = new()
+        //{
+        //    Name = "Regulations",
+        //    Message = "You have to have only one accepted regulation.",
+        //    Path = "Source -> Provision -> Regulation",
+        //    Rule = $"One of '{string.Join(", ", regulationTypes)}' regulation must be present.",
+        //};
+
+        //errors.Add(newError);
 
         return errors;
     }
