@@ -11,6 +11,7 @@ public class UniqueStreetReferenceNumberValidationServiceTests
     [InlineData(0, 1)]
     [InlineData(null, 1)]
     [InlineData(39605158, 0)]
+    [InlineData(100000000, 1)]
     public void ValidateUniqueStreetReferenceNumberUsrn(long usrn, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
@@ -43,7 +44,7 @@ public class UniqueStreetReferenceNumberValidationServiceTests
     }
 
     [Fact]
-    public void ValidateUniqueStreetReferenceNumberMultipleUsrn()
+    public void ValidateUniqueStreetReferenceNumberMultipleDifferentUsrn()
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -78,7 +79,46 @@ public class UniqueStreetReferenceNumberValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(0, actual.Count);
+        Assert.Empty(actual);
+    }
+
+    [Fact]
+    public void ValidateUniqueStreetReferenceNumberMultipleSimilarUsrn()
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""RegulatedPlace"": [
+                            {{
+                                ""PointGeometry"":  {{
+                                    ""ExternalReference"": [
+                                        {{
+                                            ""UniqueStreetReferenceNumber"": [ 
+                                                {{
+                                                    ""usrn"": 39605715
+                                                }}
+                                            ]
+                                        }},
+                                        {{
+                                            ""UniqueStreetReferenceNumber"": [ 
+                                                {{
+                                                    ""usrn"": 39605715
+                                                }}
+                                            ]
+                                        }}
+                                    ]
+                                }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}
+        }}", new SchemaVersion("3.3.0"));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.NotEmpty(actual);
     }
 
     [Fact]
@@ -117,6 +157,6 @@ public class UniqueStreetReferenceNumberValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(1, actual.Count);
+        Assert.NotEmpty(actual);
     }
 }

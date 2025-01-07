@@ -130,6 +130,44 @@ public class GeometryValidationServiceTests
         Assert.Equal(errorCount, actual.Count);
     }
 
+    [Fact]
+    public void ValidateLinearGeometryMultipleVersionsReturnsErrors()
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""RegulatedPlace"": [
+                            {{
+                                ""LinearGeometry"": {{
+                                    ""version"": 1,
+                                    ""direction"": ""bidirectional"",
+                                    ""lateralPosition"": ""onKerb"",
+                                    ""linestring"": ""SRID=27700;LINESTRING(502151 221149,502130 221168,502091 221201,502065 221223,502054 221232,502029 221254,502026 221256,502000 221280,501981 221299,501956 221325,501930 221354,501865 221426)"",
+                                    ""representation"": ""representingZone""
+                                }}
+                            }},
+                            {{
+                                ""LinearGeometry"": {{
+                                    ""version"": 1,
+                                    ""direction"": ""bidirectional"",
+                                    ""lateralPosition"": ""onKerb"",
+                                    ""linestring"": ""SRID=27700;LINESTRING(502151 221149,502130 221168,502091 221201,502065 221223,502054 221232,502029 221254,502026 221256,502000 221280,501981 221299,501956 221325,501930 221354,501865 221426)"",
+                                    ""representation"": ""representingZone""
+                                }}
+                            }}
+                        ]
+                    }}
+                ]
+            }}
+        }}
+        ", new SchemaVersion("3.3.0"));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.NotEmpty(actual);
+    }
+
     [Theory]
     [InlineData("bidirectional", "3.3.0", 0)]
     [InlineData("startToEnd", "3.3.0", 0)]

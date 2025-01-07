@@ -44,7 +44,7 @@ public static class Constants
 
     public static string Version => "version";
 
-    public static string Srid27000 => "SRID=27700";
+    public static string Srid27700 => "SRID=27700";
 
     public static string Point => "point";
 
