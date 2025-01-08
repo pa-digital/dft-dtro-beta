@@ -136,6 +136,6 @@ public class ElementaryStreetUnitTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(1, actual.Count);
+        Assert.Single(actual);
     }
 }

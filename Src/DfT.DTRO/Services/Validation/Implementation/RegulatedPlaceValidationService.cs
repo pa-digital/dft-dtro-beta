@@ -37,7 +37,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
 
         var passedInTypes = regulatedPlaces.Select(it => it.GetValueOrDefault<string>("type")).ToList();
 
-        //TODO: This should be refactored once schema version 3.2.4 will be decommissioned.
+        //TODO: This should be re-factor once schema version 3.2.4 will be decommissioned.
         if (passedInTypes.Any(string.IsNullOrEmpty) && dtroSubmit.SchemaVersion < new SchemaVersion("3.3.0"))
         {
             return errors;

@@ -38,14 +38,33 @@ public class UniqueStreetReferenceNumberValidationService : IUniqueStreetReferen
                         .GetValueOrDefault<long>("usrn"))
                     .ToList();
 
-                if (usrns.Any(usrn => usrn == 0))
+                if (usrns.Any(usrn => usrn == 0) || usrns.Any(usrn => usrn > 99999999))
                 {
                     var error = new SemanticValidationError
                     {
                         Name = "Invalid usrn",
-                        Message = "",
+                        Message = "One or more 'usrn' are invalid",
                         Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> UniqueStreetReferenceNumber -> usrn",
-                        Rule = "One or more 'usrn' is invalid"
+                        Rule = "'usrn' value shoud be between 0 and 99999999"
+                    };
+
+                    errors.Add(error);
+                }
+
+                var duplicates = usrns
+                .GroupBy(usrn => usrn)
+                .Where(usrn => usrn.Count() > 1)
+                .Select(key => key)
+                .ToList();
+
+                if (duplicates.Any())
+                {
+                    var error = new SemanticValidationError
+                    {
+                        Name = "Duplicate unique street reference numbers",
+                        Message = "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer Unique Street Reference Number",
+                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> UniqueStreetReferenceNumber -> usrn",
+                        Rule = $"'usrn' number must be unique"
                     };
 
                     errors.Add(error);

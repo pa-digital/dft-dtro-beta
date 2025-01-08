@@ -11,7 +11,7 @@ public class GeometryValidationService : IGeometryValidationService
     {
         var errors = new List<SemanticValidationError>();
 
-
+        var versions = new List<long>();
         if (dtroSubmit.SchemaVersion < new SchemaVersion("3.3.0"))
         {
             var passedInOldGeometries = dtroSubmit
@@ -41,6 +41,8 @@ public class GeometryValidationService : IGeometryValidationService
                     errors.Add(error);
                 }
 
+                versions.Add(version);
+
                 foreach (var concreteGeometry in Constants.ConcreteGeometries.Where(oldGeometry.HasField))
                 {
                     var selectedGeometry = oldGeometry.GetExpando(concreteGeometry);
@@ -69,25 +71,11 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'PointGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
-                                    Rule = "The grid must be 'SRID=27700"
+                                    Rule = $"The grid must be '{Constants.Srid27700}'"
                                 };
 
                                 errors.Add(error);
                             }
-                            var areValidCoordinates = AreValidCoordinates(point);
-                            if (!areValidCoordinates)
-                            {
-                                var error = new SemanticValidationError
-                                {
-                                    Name = "Invalid coordinates pair",
-                                    Message = "Geometry grid linked to 'PointGeometry'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
-                                    Rule = $"Check the coordinates pairs '{point}'"
-                                };
-
-                                errors.Add(error);
-                            }
-
                             var isWithinBoundaries = IsWithinUkBoundaries(point, concreteGeometry);
                             if (!isWithinBoundaries)
                             {
@@ -224,20 +212,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'LinearGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> linestring",
-                                    Rule = "The grid must be 'SRID=27700"
-                                };
-
-                                errors.Add(error);
-                            }
-                            areValidCoordinates = AreValidCoordinates(lineString);
-                            if (!areValidCoordinates)
-                            {
-                                var error = new SemanticValidationError
-                                {
-                                    Name = "Invalid coordinates pair",
-                                    Message = "Geometry grid linked to 'LinearGeometry'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> linestring",
-                                    Rule = $"Check the coordinates pairs '{lineString}'"
+                                    Rule = $"The grid must be '{Constants.Srid27700}'"
                                 };
 
                                 errors.Add(error);
@@ -310,20 +285,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'Polygon'",
                                     Path = "Source -> Provision -> RegulatedPlace -> Polygon -> polygon",
-                                    Rule = "The grid must be 'SRID=27700"
-                                };
-
-                                errors.Add(error);
-                            }
-                            areValidCoordinates = AreValidCoordinates(polygon);
-                            if (!areValidCoordinates)
-                            {
-                                var error = new SemanticValidationError
-                                {
-                                    Name = "Invalid coordinates pair",
-                                    Message = "Geometry grid linked to 'Polygon'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> Polygon -> polygon",
-                                    Rule = $"Check the coordinates pairs '{polygon}'"
+                                    Rule = $"The grid must be '{Constants.Srid27700}'"
                                 };
 
                                 errors.Add(error);
@@ -366,20 +328,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'DirectedLinear'",
                                     Path = "Source -> Provision -> RegulatedPlace -> DirectedLinear -> directedLineString",
-                                    Rule = "The grid must be 'SRID=27700"
-                                };
-
-                                errors.Add(error);
-                            }
-                            areValidCoordinates = AreValidCoordinates(directedLineString);
-                            if (!areValidCoordinates)
-                            {
-                                var error = new SemanticValidationError
-                                {
-                                    Name = "Invalid coordinates pair",
-                                    Message = "Geometry grid linked to 'DirectedLinear'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> DirectedLinear -> directedLineString",
-                                    Rule = $"Check the coordinates pairs '{directedLineString}'"
+                                    Rule = $"The grid must be '{Constants.Srid27700}'"
                                 };
 
                                 errors.Add(error);
@@ -401,6 +350,25 @@ public class GeometryValidationService : IGeometryValidationService
                             break;
                     }
                 }
+            }
+
+            var duplicateVersions = versions
+            .GroupBy(it => it)
+            .Where(it => it.Count() > 1)
+            .Select(it => it.Key)
+            .ToList();
+
+            if (duplicateVersions.Any())
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = "Duplicate geometry versions",
+                    Message = "Version of geometry linked to a concrete forms of geometry",
+                    Path = "Source -> Provision -> RegulatedPlace -> Geometry -> version",
+                    Rule = $"Version number must be unique"
+                };
+
+                errors.Add(error);
             }
         }
         else
@@ -434,6 +402,9 @@ public class GeometryValidationService : IGeometryValidationService
                         errors.Add(error);
                     }
 
+                    versions.Add(version);
+
+
                     switch (concreteGeometry)
                     {
                         case "PointGeometry":
@@ -459,20 +430,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'PointGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
-                                    Rule = "The grid must be 'SRID=27700"
-                                };
-
-                                errors.Add(error);
-                            }
-                            var areValidCoordinates = AreValidCoordinates(point);
-                            if (!areValidCoordinates)
-                            {
-                                var error = new SemanticValidationError
-                                {
-                                    Name = "Invalid coordinates pair",
-                                    Message = "Geometry grid linked to 'PointGeometry'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
-                                    Rule = $"Check the coordinates pairs '{point}'"
+                                    Rule = $"The grid must be '{Constants.Srid27700}'"
                                 };
 
                                 errors.Add(error);
@@ -614,20 +572,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'LinearGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> linestring",
-                                    Rule = "The grid must be 'SRID=27700"
-                                };
-
-                                errors.Add(error);
-                            }
-                            areValidCoordinates = AreValidCoordinates(lineString);
-                            if (!areValidCoordinates)
-                            {
-                                var error = new SemanticValidationError
-                                {
-                                    Name = "Invalid coordinates pair",
-                                    Message = "Geometry grid linked to 'LinearGeometry'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> linestring",
-                                    Rule = $"Check the coordinates pairs '{lineString}'"
+                                    Rule = $"The grid must be '{Constants.Srid27700}'"
                                 };
 
                                 errors.Add(error);
@@ -700,20 +645,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'Polygon'",
                                     Path = "Source -> Provision -> RegulatedPlace -> Polygon -> polygon",
-                                    Rule = "The grid must be 'SRID=27700"
-                                };
-
-                                errors.Add(error);
-                            }
-                            areValidCoordinates = AreValidCoordinates(polygon);
-                            if (!areValidCoordinates)
-                            {
-                                var error = new SemanticValidationError
-                                {
-                                    Name = "Invalid coordinates pair",
-                                    Message = "Geometry grid linked to 'Polygon'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> Polygon -> polygon",
-                                    Rule = $"Check the coordinates pairs '{polygon}'"
+                                    Rule = $"The grid must be '{Constants.Srid27700}'"
                                 };
 
                                 errors.Add(error);
@@ -756,20 +688,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'DirectedLinear'",
                                     Path = "Source -> Provision -> RegulatedPlace -> DirectedLinear -> directedLineString",
-                                    Rule = "The grid must be 'SRID=27700"
-                                };
-
-                                errors.Add(error);
-                            }
-                            areValidCoordinates = AreValidCoordinates(directedLineString);
-                            if (!areValidCoordinates)
-                            {
-                                var error = new SemanticValidationError
-                                {
-                                    Name = "Invalid coordinates pair",
-                                    Message = "Geometry grid linked to 'DirectedLinear'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> DirectedLinear -> directedLineString",
-                                    Rule = $"Check the coordinates pairs '{directedLineString}'"
+                                    Rule = $"The grid must be '{Constants.Srid27700}'"
                                 };
 
                                 errors.Add(error);
@@ -792,6 +711,25 @@ public class GeometryValidationService : IGeometryValidationService
                     }
                 }
             }
+
+            var duplicateVersions = versions
+                .GroupBy(it => it)
+                .Where(it => it.Count() > 1)
+                .Select(it => it.Key)
+                .ToList();
+
+            if (duplicateVersions.Any())
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = "Duplicate geometry versions",
+                    Message = "Version of geometry linked to a concrete forms of geometry",
+                    Path = "Source -> Provision -> RegulatedPlace -> Geometry -> version",
+                    Rule = $"Version number must be unique"
+                };
+
+                errors.Add(error);
+            }
         }
         return errors;
     }
@@ -800,19 +738,8 @@ public class GeometryValidationService : IGeometryValidationService
     {
         var parts = source.Split(';');
         var first = parts.First();
-        return first == "SRID=27700";
+        return first == Constants.Srid27700;
     }
-
-    private bool AreValidCoordinates(string source)
-    {
-        return true;
-        WKTReader wktReader = new();
-        var parts = source.Split(';');
-        var last = parts.Last();
-        var read = wktReader.Read(last);
-        return read.IsValid;
-    }
-
 
     private bool IsWithinUkBoundaries(string source, string concreteGeometry)
     {
