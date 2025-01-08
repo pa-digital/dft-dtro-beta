@@ -156,8 +156,6 @@ public class RegulationValidation : IRegulationValidation
                             errors.Add(newError);
                         }
                         break;
-                    default:
-                        break;
                 }
             }
         }

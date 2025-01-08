@@ -7,7 +7,7 @@ namespace Dft.DTRO.Tests.UnitTests;
 public class SemanticValidationServiceTests
 {
     private readonly Mock<ISystemClock> _mockClock;
-    private readonly Mock<IConditionValidationService> _mockConditionValidationService;
+    private readonly Mock<IOldConditionValidationService> _mockConditionValidationService;
     private readonly Mock<IDtroDal> _mockDtroDal;
     private readonly IGeometryValidation _geometryValidation;
     private readonly LoggingExtension _loggingExtension;
@@ -17,7 +17,7 @@ public class SemanticValidationServiceTests
     {
         _mockClock = new Mock<ISystemClock>();
         _mockDtroDal = new Mock<IDtroDal>();
-        _mockConditionValidationService = new Mock<IConditionValidationService>();
+        _mockConditionValidationService = new Mock<IOldConditionValidationService>();
         _loggingExtension = new LoggingExtension();
         IBoundingBoxService boundingBoxService = new BoundingBoxService(_loggingExtension);
         _geometryValidation = new GeometryValidation(boundingBoxService, _loggingExtension);

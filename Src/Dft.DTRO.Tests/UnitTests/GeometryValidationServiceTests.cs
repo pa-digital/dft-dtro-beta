@@ -131,7 +131,7 @@ public class GeometryValidationServiceTests
     }
 
     [Fact]
-    public void ValidateLinearGeometryMultipleVersionsReturnsErrors()
+    public void ValidateLinearGeometryMultipleVersionsReturnsNoErrors()
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -165,7 +165,7 @@ public class GeometryValidationServiceTests
         ", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.NotEmpty(actual);
+        Assert.Empty(actual);
     }
 
     [Theory]

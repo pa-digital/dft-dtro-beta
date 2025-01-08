@@ -46,7 +46,7 @@ public class Startup
         services.AddScoped<ISemanticValidationService, SemanticValidationService>();
         services.AddScoped<IGeometryValidation, GeometryValidation>();
         services.AddSingleton<IBoundingBoxService, BoundingBoxService>();
-        services.AddScoped<IConditionValidationService, ConditionValidationService>();
+        services.AddScoped<IOldConditionValidationService, OldConditionValidationService>();
         services.AddSingleton<ISpatialProjectionService, Proj4SpatialProjectionService>();
         services.AddScoped<IDtroGroupValidatorService, DtroGroupValidatorService>();
         services.AddSingleton<IDtroMappingService, DtroMappingService>();

@@ -26,7 +26,8 @@ public static class ValidationServiceRegistration
             .AddScoped<IUniqueStreetReferenceNumberValidationService, UniqueStreetReferenceNumberValidationService>()
             .AddScoped<IElementaryStreetUnitValidationService, ElementaryStreetUnitValidationService>()
             .AddScoped<IRegulationValidation, RegulationValidation>()
-            .AddScoped<IConditionValidation, ConditionValidation>();
+            .AddScoped<IConditionValidationService, ConditionValidationService>()
+            .AddScoped<IRateTableValidationService, RateTableValidationService>();
 
         AddAllRules(assembly ?? Assembly.GetExecutingAssembly());
     }

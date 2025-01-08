@@ -11,7 +11,6 @@ public class GeometryValidationService : IGeometryValidationService
     {
         var errors = new List<SemanticValidationError>();
 
-        var versions = new List<long>();
         if (dtroSubmit.SchemaVersion < new SchemaVersion("3.3.0"))
         {
             var passedInOldGeometries = dtroSubmit
@@ -40,8 +39,6 @@ public class GeometryValidationService : IGeometryValidationService
 
                     errors.Add(error);
                 }
-
-                versions.Add(version);
 
                 foreach (var concreteGeometry in Constants.ConcreteGeometries.Where(oldGeometry.HasField))
                 {
@@ -351,25 +348,6 @@ public class GeometryValidationService : IGeometryValidationService
                     }
                 }
             }
-
-            var duplicateVersions = versions
-            .GroupBy(it => it)
-            .Where(it => it.Count() > 1)
-            .Select(it => it.Key)
-            .ToList();
-
-            if (duplicateVersions.Any())
-            {
-                var error = new SemanticValidationError
-                {
-                    Name = "Duplicate geometry versions",
-                    Message = "Version of geometry linked to a concrete forms of geometry",
-                    Path = "Source -> Provision -> RegulatedPlace -> Geometry -> version",
-                    Rule = $"Version number must be unique"
-                };
-
-                errors.Add(error);
-            }
         }
         else
         {
@@ -401,9 +379,6 @@ public class GeometryValidationService : IGeometryValidationService
 
                         errors.Add(error);
                     }
-
-                    versions.Add(version);
-
 
                     switch (concreteGeometry)
                     {
@@ -710,25 +685,6 @@ public class GeometryValidationService : IGeometryValidationService
                             break;
                     }
                 }
-            }
-
-            var duplicateVersions = versions
-                .GroupBy(it => it)
-                .Where(it => it.Count() > 1)
-                .Select(it => it.Key)
-                .ToList();
-
-            if (duplicateVersions.Any())
-            {
-                var error = new SemanticValidationError
-                {
-                    Name = "Duplicate geometry versions",
-                    Message = "Version of geometry linked to a concrete forms of geometry",
-                    Path = "Source -> Provision -> RegulatedPlace -> Geometry -> version",
-                    Rule = $"Version number must be unique"
-                };
-
-                errors.Add(error);
             }
         }
         return errors;

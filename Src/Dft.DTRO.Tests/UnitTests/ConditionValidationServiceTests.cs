@@ -1,9 +1,9 @@
 ﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
-public class ConditionValidationTests
+public class ConditionValidationServiceTests
 {
-    private readonly IConditionValidation _sut = new ConditionValidation();
+    private readonly IConditionValidationService _sut = new ConditionValidationService();
 
     [Fact]
     public void ValidateConditionReturnsNoErrorsWhenConditionSetIsPresent()

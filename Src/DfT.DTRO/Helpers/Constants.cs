@@ -18,11 +18,19 @@ public static class Constants
 
     public static IEnumerable<string> OperatorTypes => typeof(OperatorType).GetDisplayNames<OperatorType>().ToList();
 
-    public static IEnumerable<string> SpeedLimitValueTypes = typeof(SpeedLimitValueType).GetDisplayNames<SpeedLimitValueType>().ToList();
+    public static IEnumerable<string> SpeedLimitValueTypes => typeof(SpeedLimitValueType).GetDisplayNames<SpeedLimitValueType>().ToList();
 
-    public static IEnumerable<string> SpeedLimitProfileTypes = typeof(SpeedLimitBasedType).GetDisplayNames<SpeedLimitBasedType>().ToList();
+    public static IEnumerable<string> SpeedLimitProfileTypes => typeof(SpeedLimitBasedType).GetDisplayNames<SpeedLimitBasedType>().ToList();
+
+    public static IEnumerable<string> RateTypes => typeof(RateType).GetDisplayNames<RateType>().ToList();
+
+    public static IEnumerable<string> CurrencyTypes => typeof(CurrencyType).GetDisplayNames<CurrencyType>().ToList();
 
     public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
+
+    public static string ApplicableCurrency => "applicableCurrency";
+
+    public static string AdditionalInformation => "additionalInformation";
 
     public static string RegulationFullText => "regulationFullText";
 

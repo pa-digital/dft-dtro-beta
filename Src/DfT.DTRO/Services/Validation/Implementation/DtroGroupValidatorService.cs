@@ -15,7 +15,8 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly IUniqueStreetReferenceNumberValidationService _uniqueStreetReferenceNumberValidationService;
     private readonly IElementaryStreetUnitValidationService _elementaryStreetUnitValidationService;
     private readonly IRegulationValidation _regulationValidation;
-    private readonly IConditionValidation _conditionValidation;
+    private readonly IConditionValidationService _conditionValidationService;
+    private readonly IRateTableValidationService _rateTableValidationService;
 
     /// <inheritdoc cref="IDtroGroupValidatorService"/>
     public DtroGroupValidatorService(
@@ -31,7 +32,8 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         IUniqueStreetReferenceNumberValidationService uniqueStreetReferenceNumberValidationService,
         IElementaryStreetUnitValidationService elementaryStreetUnitValidationService,
         IRegulationValidation regulationValidation,
-        IConditionValidation conditionValidation)
+        IConditionValidationService conditionValidationService,
+        IRateTableValidationService rateTableValidationService)
     {
         _jsonSchemaValidationService = jsonSchemaValidationService;
         _semanticValidationService = semanticValidationService;
@@ -45,7 +47,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         _uniqueStreetReferenceNumberValidationService = uniqueStreetReferenceNumberValidationService;
         _elementaryStreetUnitValidationService = elementaryStreetUnitValidationService;
         _regulationValidation = regulationValidation;
-        _conditionValidation = conditionValidation;
+        _conditionValidationService = conditionValidationService;
     }
 
     /// <inheritdoc cref="IDtroGroupValidatorService"/>
@@ -129,7 +131,13 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
-        errors = _conditionValidation.ValidateCondition(dtroSubmit, schemaVersion);
+        errors = _conditionValidationService.ValidateCondition(dtroSubmit, schemaVersion);
+        if (errors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
+        }
+
+        errors = _rateTableValidationService.Validate(dtroSubmit);
         if (errors.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
