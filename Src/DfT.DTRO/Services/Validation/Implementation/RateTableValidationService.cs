@@ -66,34 +66,6 @@ public class RateTableValidationService : IRateTableValidationService
             errors.Add(error);
         }
 
-        //var rateLineCollections = rateTables
-        //    .SelectMany(expandoObject => expandoObject
-        //        .GetValueOrDefault<IList<object>>("RateLineCollection")
-        //        .OfType<ExpandoObject>())
-        //    .ToList();
-
-        //var passedInCurrencies = rateLineCollections
-        //    .Select(rateLineCollection => rateLineCollection.GetValueOrDefault<string>(Constants.ApplicableCurrency))
-        //    .ToList();
-
-        //var areValidCurrencies = passedInCurrencies
-        //    .Where(passedInCurrency => !string.IsNullOrEmpty(passedInCurrency))
-        //    .Select(passedInCurrency => Constants.CurrencyTypes.Any(passedInCurrency.Equals))
-        //    .ToList();
-
-        //if (areValidCurrencies.Any(isValidCurrency => isValidCurrency == false))
-        //{
-        //    SemanticValidationError error = new()
-        //    {
-        //        Name = "Applicable currency",
-        //        Message = "The monetary currency that rates are specified in this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
-        //        Path = "Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> applicableCurrency",
-        //        Rule = $"Applicable currency must be one of '{string.Join(",", Constants.CurrencyTypes)}'",
-        //    };
-
-        //    errors.Add(error);
-        //}
-
         return errors;
     }
 }

@@ -73,41 +73,4 @@ public class RateTableValidationServiceTests
         var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
-
-    //[Theory]
-    //[InlineData("EUR", 0)]
-    //[InlineData("GBP", 0)]
-    //[InlineData("USD", 1)]
-    //public void ValidateRateLineCollectionApplicableCurrency(string currencyType, int errorCount)
-    //{
-    //    SchemaVersion schemaVersion = new("3.3.0");
-
-    //    var dtroSubmit = Utils.PrepareDtro($@"
-    //    {{
-    //        ""Source"": {{
-    //            ""Provision"": [
-    //                {{
-    //                    ""Regulation"": [
-    //                        {{
-    //                            ""Condition"": [
-    //                                {{
-    //                                    ""RateTable"" : {{
-    //                                        ""RateLineCollection"": [
-    //                                            {{
-    //                                                ""applicableCurrency"": ""{currencyType}""
-    //                                            }}
-    //                                        ]
-    //                                    }}
-    //                                }}
-    //                            ]
-    //                        }}
-    //                    ]
-    //                }}
-    //            ]
-    //        }}
-    //    }}", schemaVersion);
-
-    //    var actual = _sut.Validate(dtroSubmit);
-    //    Assert.Equal(errorCount, actual.Count);
-    //}
 }

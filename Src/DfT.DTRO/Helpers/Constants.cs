@@ -28,6 +28,10 @@ public static class Constants
 
     public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
 
+    public static string MaxTime => "maxTime";
+
+    public static string EndValidUsagePeriod => "endValidUsagePeriod";
+
     public static string ApplicableCurrency => "applicableCurrency";
 
     public static string AdditionalInformation => "additionalInformation";
