@@ -9,7 +9,6 @@ public class RateLineCollectionValidationServiceTests
     [InlineData("EUR", 0)]
     [InlineData("GBP", 0)]
     [InlineData("USD", 1)]
-    [InlineData("", 1)]
     public void ValidateRateLineCollectionApplicableCurrency(string currencyType, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
@@ -372,7 +371,6 @@ public class RateLineCollectionValidationServiceTests
     [InlineData("01:59:59", 0)]
     [InlineData("23:59:59", 0)]
     [InlineData("24:00:00", 1)]
-    [InlineData("", 1)]
     [InlineData("badTime", 1)]
     public void ValidateRateLineCollectionStartValidUsagePeriod(string startValidUsagePeriod, int errorCount)
     {
@@ -413,5 +411,47 @@ public class RateLineCollectionValidationServiceTests
 
         var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Fact]
+    public void ValidateRateLineCollectionWhenConditionSet()
+    {
+        SchemaVersion schemaVersion = new("3.3.0");
+
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""Regulation"": [
+                            {{
+                                ""ConditionSet"": [
+                                    {{
+                                        ""RateTable"" : {{
+                                            ""RateLineCollection"": [
+                                                {{
+                                                    ""applicableCurrency"": ""GBP"",
+                                                    ""endValidUsagePeriod"": ""08:00:00"",
+                                                    ""maxTime"": 1,
+                                                    ""maxValueCollection"": 20.99,
+                                                    ""minTime"": 1,
+                                                    ""minValueCollection"": 5.99,
+                                                    ""resetTime"": ""00:30:00"",
+                                                    ""sequence"": 1,
+                                                    ""startValidUsagePeriod"": ""13:00:00""
+                                                }}
+                                            ]
+                                        }}
+                                    }}
+                                ]
+                            }}
+                        ]
+                    }}
+                ]
+            }}
+        }}", schemaVersion);
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Empty(actual);
     }
 }

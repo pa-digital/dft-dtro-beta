@@ -144,17 +144,19 @@
                                     "RateTable": {
                                         "additionalInformation": "https://loremipsum.co.uk",
                                         "type": "daily",
-                                        "RateLineCollection": {
-                                            "applicableCurrency": "GBP",
-                                            "endValidUsagePeriod": "23:59:59",
-                                            "maxTime": 1,
-                                            "maxValueCollection": 20.989999999999998,
-                                            "minTime": 30,
-                                            "minValueCollection": 5.9900000000000002,
-                                            "resetTime": "00:15:00",
-                                            "sequence": 1,
-                                            "startValidUsagePeriod": "13:00:00"
-                                        }
+                                        "RateLineCollection": [
+                                            {
+                                                "applicableCurrency": "GBP",
+                                                "endValidUsagePeriod": "23:59:59",
+                                                "maxTime": 1,
+                                                "maxValueCollection": 20.989999999999998,
+                                                "minTime": 30,
+                                                "minValueCollection": 5.9900000000000002,
+                                                "resetTime": "00:15:00",
+                                                "sequence": 1,
+                                                "startValidUsagePeriod": "13:00:00"
+                                            }
+                                        ]
                                     }
                                 }
                             ],
@@ -259,7 +261,7 @@
                                                 "maxTime": 660,
                                                 "maxValueCollection": 7.2000000000000002,
                                                 "minTime": 60,
-                                                "minValueCollection": 1,
+                                                "minValueCollection": 1.00,
                                                 "RateLine": [
                                                     {
                                                         "durationEnd": 59,

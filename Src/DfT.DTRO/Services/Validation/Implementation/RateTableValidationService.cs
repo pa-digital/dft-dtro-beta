@@ -8,18 +8,42 @@ public class RateTableValidationService : IRateTableValidationService
     {
         List<SemanticValidationError> errors = new();
 
-        var rateTables = dtroSubmit
+        var regulations = dtroSubmit
             .Data
             .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
-            .SelectMany(expandoObject => expandoObject
+            .SelectMany(provision => provision
                 .GetValueOrDefault<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
-            .SelectMany(expandoObject => expandoObject
-                .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                .OfType<ExpandoObject>())
-            .Select(expandoObject => expandoObject.GetValueOrDefault<ExpandoObject>("RateTable"))
             .ToList();
+
+        List<ExpandoObject> rateTables = new();
+        foreach (var regulation in regulations)
+        {
+            var hasConditionSet = regulation.HasField("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
+            if (hasConditionSet)
+            {
+                var conditionsSets = regulation
+                    .GetValueOrDefault<IList<object>>("ConditionSet")
+                    .Cast<ExpandoObject>()
+                    .ToList();
+
+                rateTables.AddRange(conditionsSets
+                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable")));
+            }
+            else
+            {
+                var conditions = regulation
+                    .GetValueOrDefault<IList<object>>("Condition")
+                    .Cast<ExpandoObject>()
+                    .ToList();
+
+                rateTables.AddRange(conditions
+                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable")));
+            }
+
+            rateTables = rateTables.Where(rateTable => rateTable != null).ToList();
+        }
 
         var multipleUris = rateTables
             .Where(rateTable => rateTable.HasField(Constants.AdditionalInformation))

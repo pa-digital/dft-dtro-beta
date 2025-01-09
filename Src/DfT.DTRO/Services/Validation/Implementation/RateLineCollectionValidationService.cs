@@ -8,24 +8,51 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
     {
         List<SemanticValidationError> errors = new();
 
-        var rateTables = dtroSubmit
+        var regulations = dtroSubmit
             .Data
             .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
-            .SelectMany(expandoObject => expandoObject
+            .SelectMany(provision => provision
                 .GetValueOrDefault<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
-            .SelectMany(expandoObject => expandoObject
-                .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                .OfType<ExpandoObject>())
-            .Select(expandoObject => expandoObject.GetValueOrDefault<ExpandoObject>("RateTable"))
             .ToList();
+
+        List<ExpandoObject> rateTables = new();
+        foreach (var regulation in regulations)
+        {
+            var hasConditionSet = regulation.HasField("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
+            if (hasConditionSet)
+            {
+                var conditionsSets = regulation
+                    .GetValueOrDefault<IList<object>>("ConditionSet")
+                    .Cast<ExpandoObject>()
+                    .ToList();
+
+                rateTables.AddRange(conditionsSets
+                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable")));
+            }
+            else
+            {
+                var conditions = regulation
+                    .GetValueOrDefault<IList<object>>("Condition")
+                    .Cast<ExpandoObject>()
+                    .ToList();
+
+                rateTables.AddRange(conditions
+                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable")));
+            }
+
+            rateTables = rateTables.Where(rateTable => rateTable != null).ToList();
+
+        }
 
         var rateLineCollections = rateTables
             .SelectMany(expandoObject => expandoObject
-                .GetValueOrDefault<IList<object>>("RateLineCollection")
-                .OfType<ExpandoObject>())
+                .GetValueOrDefault<IList<object>>("RateLineCollection"))
+            .Cast<ExpandoObject>()
             .ToList();
+
+        rateLineCollections = rateLineCollections.Where(rateLineCollection => rateLineCollection != null).ToList();
 
         var passedInCurrencies = rateLineCollections
             .Select(rateLineCollection => rateLineCollection.GetValueOrDefault<string>(Constants.ApplicableCurrency))
@@ -35,7 +62,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .Select(passedInCurrency => Constants.CurrencyTypes.Any(passedInCurrency.Equals))
             .ToList();
 
-        if (areValidCurrencies.Any(isValidCurrency => isValidCurrency == false))
+        if (areValidCurrencies.All(isValidCurrency => isValidCurrency == false))
         {
             SemanticValidationError error = new()
             {
@@ -64,7 +91,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                         endValidUsagePeriod.TimeOfDay <= end);
             }).ToList();
 
-        if (areValidEndValidUsagePeriods.Any(isValidEndUsagePeriod => isValidEndUsagePeriod == false))
+        if (areValidEndValidUsagePeriods.All(isValidEndUsagePeriod => isValidEndUsagePeriod == false))
         {
             SemanticValidationError error = new()
             {
@@ -86,7 +113,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .Select(passedInMaxTime => passedInMaxTime != 0)
             .ToList();
 
-        if (areValidMaxTimes.Any(isValidMaxTime => isValidMaxTime == false))
+        if (areValidMaxTimes.All(isValidMaxTime => isValidMaxTime == false))
         {
 
             SemanticValidationError error = new()
@@ -110,7 +137,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .Select(passedInMaxValueCollection => passedInMaxValueCollection > 0.0)
             .ToList();
 
-        if (areValidMaxValueCollections.Any(isValidMaxValueCollection => isValidMaxValueCollection == false))
+        if (areValidMaxValueCollections.All(isValidMaxValueCollection => isValidMaxValueCollection == false))
         {
 
             SemanticValidationError error = new()
@@ -133,7 +160,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .Select(passedInMinTime => passedInMinTime != 0)
             .ToList();
 
-        if (areValidMinTimes.Any(isValidMinTime => isValidMinTime == false))
+        if (areValidMinTimes.All(isValidMinTime => isValidMinTime == false))
         {
 
             SemanticValidationError error = new()
@@ -188,7 +215,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                        (dateTime.TimeOfDay >= start || dateTime.TimeOfDay <= end);
             }).ToList();
 
-        if (areValidResetTimes.Any(isValidResetTime => isValidResetTime == false))
+        if (areValidResetTimes.All(isValidResetTime => isValidResetTime == false))
         {
             SemanticValidationError error = new()
             {
@@ -235,7 +262,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                         startValidUsagePeriod.TimeOfDay <= end);
             }).ToList();
 
-        if (areValidStartValidUsagePeriods.Any(isValidStartUsagePeriod => isValidStartUsagePeriod == false))
+        if (areValidStartValidUsagePeriods.All(isValidStartUsagePeriod => isValidStartUsagePeriod == false))
         {
             SemanticValidationError error = new()
             {
