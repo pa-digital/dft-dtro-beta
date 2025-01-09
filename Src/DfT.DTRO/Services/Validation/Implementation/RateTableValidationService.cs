@@ -22,16 +22,17 @@ public class RateTableValidationService : IRateTableValidationService
             .ToList();
 
         var multipleUris = rateTables
+            .Where(rateTable => rateTable.HasField(Constants.AdditionalInformation))
             .Select(rateTable => rateTable.GetValueOrDefault<string>(Constants.AdditionalInformation))
             .ToList();
 
-        var isValidUri = multipleUris
+        var areValidUris = multipleUris
             .Where(multipleUri => !string.IsNullOrEmpty(multipleUri))
             .Select(multipleUri => Uri.TryCreate(multipleUri, UriKind.Absolute, out var uri) &&
                                    (uri.Scheme == Uri.UriSchemeHttps || uri.Scheme == Uri.UriSchemeHttp))
             .ToList();
 
-        if (isValidUri.Any(it => it == false))
+        if (areValidUris.Any(it => it == false))
         {
             SemanticValidationError error = new()
             {
@@ -45,6 +46,7 @@ public class RateTableValidationService : IRateTableValidationService
         }
 
         var passedInTypes = rateTables
+            .Where(rateTable => rateTable.HasField(Constants.Type))
             .Select(rateTable => rateTable.GetValueOrDefault<string>(Constants.Type))
             .ToList();
 

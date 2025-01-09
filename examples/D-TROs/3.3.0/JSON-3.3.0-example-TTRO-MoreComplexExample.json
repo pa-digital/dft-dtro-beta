@@ -140,6 +140,21 @@
                                     "TimeValidity": {
                                         "end": "2024-10-24T20:00:00",
                                         "start": "2024-10-22T06:00:00"
+                                    },
+                                    "RateTable": {
+                                        "additionalInformation": "https://loremipsum.co.uk",
+                                        "type": "daily",
+                                        "RateLineCollection": {
+                                            "applicableCurrency": "GBP",
+                                            "endValidUsagePeriod": "23:59:59",
+                                            "maxTime": 1,
+                                            "maxValueCollection": 20.989999999999998,
+                                            "minTime": 30,
+                                            "minValueCollection": 5.9900000000000002,
+                                            "resetTime": "00:15:00",
+                                            "sequence": 1,
+                                            "startValidUsagePeriod": "13:00:00"
+                                        }
                                     }
                                 }
                             ],
@@ -234,60 +249,58 @@
                             "Condition": [
                                 {
                                     "negate": false,
-                                    "RateTable": [
-                                        {
-                                            "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
-                                            "additionalInformation": "http://www.somewhere.something.gov.uk",
-                                            "type": "hourly",
-                                            "RateLineCollection": [
-                                                {
-                                                    "applicableCurrency": "GBP",
-                                                    "maxTime": 660,
-                                                    "maxValueCollection": 7.2000000000000002,
-                                                    "minTime": 60,
-                                                    "minValueCollection": 1,
-                                                    "RateLine": [
-                                                        {
-                                                            "durationEnd": 59,
-                                                            "durationStart": 1,
-                                                            "incrementPeriod": 58,
-                                                            "maxValue": 7.2000000000000002,
-                                                            "minValue": 1,
-                                                            "sequence": 1,
-                                                            "type": "flatRateTier",
-                                                            "usageCondition": "fixedDuration",
-                                                            "value": 1
-                                                        },
-                                                        {
-                                                            "durationEnd": 119,
-                                                            "durationStart": 60,
-                                                            "incrementPeriod": 59,
-                                                            "maxValue": 7.2000000000000002,
-                                                            "minValue": 2,
-                                                            "sequence": 2,
-                                                            "type": "flatRateTier",
-                                                            "usageCondition": "fixedDuration",
-                                                            "value": 1
-                                                        },
-                                                        {
-                                                            "durationEnd": 660,
-                                                            "durationStart": 120,
-                                                            "incrementPeriod": 540,
-                                                            "maxValue": 7.2000000000000002,
-                                                            "minValue": 2,
-                                                            "sequence": 3,
-                                                            "type": "flatRateTier",
-                                                            "usageCondition": "fixedDuration",
-                                                            "value": 5.2000000000000002
-                                                        }
-                                                    ],
-                                                    "resetTime": "20:00:00",
-                                                    "sequence": 1,
-                                                    "startValidUsagePeriod": "2024-12-10T09:00:00"
-                                                }
-                                            ]
-                                        }
-                                    ],
+                                    "RateTable": {
+                                        "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
+                                        "additionalInformation": "http://www.somewhere.something.gov.uk",
+                                        "type": "hourly",
+                                        "RateLineCollection": [
+                                            {
+                                                "applicableCurrency": "GBP",
+                                                "maxTime": 660,
+                                                "maxValueCollection": 7.2000000000000002,
+                                                "minTime": 60,
+                                                "minValueCollection": 1,
+                                                "RateLine": [
+                                                    {
+                                                        "durationEnd": 59,
+                                                        "durationStart": 1,
+                                                        "incrementPeriod": 58,
+                                                        "maxValue": 7.2000000000000002,
+                                                        "minValue": 1,
+                                                        "sequence": 1,
+                                                        "type": "flatRateTier",
+                                                        "usageCondition": "fixedDuration",
+                                                        "value": 1
+                                                    },
+                                                    {
+                                                        "durationEnd": 119,
+                                                        "durationStart": 60,
+                                                        "incrementPeriod": 59,
+                                                        "maxValue": 7.2000000000000002,
+                                                        "minValue": 2,
+                                                        "sequence": 2,
+                                                        "type": "flatRateTier",
+                                                        "usageCondition": "fixedDuration",
+                                                        "value": 1
+                                                    },
+                                                    {
+                                                        "durationEnd": 660,
+                                                        "durationStart": 120,
+                                                        "incrementPeriod": 540,
+                                                        "maxValue": 7.2000000000000002,
+                                                        "minValue": 2,
+                                                        "sequence": 3,
+                                                        "type": "flatRateTier",
+                                                        "usageCondition": "fixedDuration",
+                                                        "value": 5.2000000000000002
+                                                    }
+                                                ],
+                                                "resetTime": "20:00:00",
+                                                "sequence": 1,
+                                                "startValidUsagePeriod": "2024-12-10T09:00:00"
+                                            }
+                                        ]
+                                    },
                                     "TimeValidity": {
                                         "start": "2024-12-10T09:00:00",
                                         "validPeriod": [
@@ -568,7 +581,7 @@
                                         "UniqueStreetReferenceNumber": [
                                             {
                                                 "nsgStreetName": "Collett Road",
-                                                "usrn": 396092324
+                                                "usrn": 39609232
                                             }
                                         ]
                                     }
@@ -589,7 +602,7 @@
                                         "lastUpdateDate": "2024-10-01T00:00:00",
                                         "UniqueStreetReferenceNumber": [
                                             {
-                                                "usrn": 396092324
+                                                "usrn": 39609232
                                             }
                                         ]
                                     }

@@ -10,7 +10,6 @@ public class RateLineCollectionValidationServiceTests
     [InlineData("GBP", 0)]
     [InlineData("USD", 1)]
     [InlineData("", 1)]
-    [InlineData(null, 1)]
     public void ValidateRateLineCollectionApplicableCurrency(string currencyType, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
@@ -54,7 +53,8 @@ public class RateLineCollectionValidationServiceTests
 
     [Theory]
     [InlineData("00:00:00", 0)]
-    [InlineData("10:00:00", 0)]
+    [InlineData("00:10:00", 0)]
+    [InlineData("01:59:59", 0)]
     [InlineData("23:59:59", 0)]
     [InlineData("24:00:00", 1)]
     [InlineData("badTime", 1)]
@@ -119,6 +119,7 @@ public class RateLineCollectionValidationServiceTests
                                             ""RateLineCollection"": [
                                                 {{
                                                     ""applicableCurrency"": ""EUR"",
+                                                    ""endValidUsagePeriod"": ""23:59:59"",
                                                     ""maxTime"": {maxTime},
                                                     ""maxValueCollection"": 20.99,
                                                     ""minTime"": 1,
@@ -162,6 +163,7 @@ public class RateLineCollectionValidationServiceTests
                                             ""RateLineCollection"": [
                                                 {{
                                                     ""applicableCurrency"": ""EUR"",
+                                                    ""endValidUsagePeriod"": ""23:59:59"",
                                                     ""maxTime"": 1,
                                                     ""maxValueCollection"": {maxValueCollection},
                                                     ""minTime"": 1,
@@ -205,6 +207,7 @@ public class RateLineCollectionValidationServiceTests
                                             ""RateLineCollection"": [
                                                 {{
                                                     ""applicableCurrency"": ""EUR"",
+                                                    ""endValidUsagePeriod"": ""23:59:59"",
                                                     ""maxTime"": 1,
                                                     ""maxValueCollection"": 20.99,
                                                     ""minTime"": {minTime},
@@ -248,6 +251,7 @@ public class RateLineCollectionValidationServiceTests
                                             ""RateLineCollection"": [
                                                 {{
                                                     ""applicableCurrency"": ""EUR"",
+                                                    ""endValidUsagePeriod"": ""23:59:59"",
                                                     ""maxTime"": 1,
                                                     ""maxValueCollection"": 5.99,
                                                     ""minTime"": 1,
@@ -338,6 +342,7 @@ public class RateLineCollectionValidationServiceTests
                                             ""RateLineCollection"": [
                                                 {{
                                                     ""applicableCurrency"": ""EUR"",
+                                                    ""endValidUsagePeriod"": ""23:59:59"",
                                                     ""maxTime"": 1,
                                                     ""maxValueCollection"": 20.99,
                                                     ""minTime"": 1,
@@ -363,7 +368,8 @@ public class RateLineCollectionValidationServiceTests
 
     [Theory]
     [InlineData("00:00:00", 0)]
-    [InlineData("10:00:00", 0)]
+    [InlineData("00:10:00", 0)]
+    [InlineData("01:59:59", 0)]
     [InlineData("23:59:59", 0)]
     [InlineData("24:00:00", 1)]
     [InlineData("", 1)]
