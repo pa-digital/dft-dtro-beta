@@ -28,6 +28,17 @@ public static class Constants
 
     public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
 
+    public static string StartValidUsagePeriod => "startValidUsagePeriod";
+    public static string Sequence => "sequence";
+
+    public static string ResetTime => "resetTime";
+
+    public static string MinValueCollection => "minValueCollection";
+
+    public static string MinTime => "minTime";
+
+    public static string MaxValueCollection => "maxValueCollection";
+
     public static string MaxTime => "maxTime";
 
     public static string EndValidUsagePeriod => "endValidUsagePeriod";
