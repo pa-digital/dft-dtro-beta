@@ -86,7 +86,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                 var start = new DateTime(2024, 1, 1, 0, 0, 0).TimeOfDay;
                 var end = new DateTime(2024, 1, 1, 23, 59, 59).TimeOfDay;
                 return DateTime.TryParse(passedInEndValidUsagePeriod, out var endValidUsagePeriod) &&
-                       (endValidUsagePeriod.TimeOfDay >= start ||
+                       (endValidUsagePeriod.TimeOfDay > start &&
                         endValidUsagePeriod.TimeOfDay <= end);
             }).ToList();
 
@@ -202,7 +202,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                 var start = new DateTime(2024, 1, 1, 0, 0, 0).TimeOfDay;
                 var end = new DateTime(2024, 1, 1, 23, 59, 59).TimeOfDay;
                 return DateTime.TryParse(passedInResetTime, out var dateTime) &&
-                       (dateTime.TimeOfDay >= start || dateTime.TimeOfDay <= end);
+                       (dateTime.TimeOfDay >= start && dateTime.TimeOfDay <= end);
             }).ToList();
 
         if (areValidResetTimes.All(isValidResetTime => isValidResetTime == false))
@@ -247,7 +247,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                 var start = new DateTime(2024, 1, 1, 0, 0, 0).TimeOfDay;
                 var end = new DateTime(2024, 1, 1, 23, 59, 59).TimeOfDay;
                 return DateTime.TryParse(passedInStartValidUsagePeriod, out var startValidUsagePeriod) &&
-                       (startValidUsagePeriod.TimeOfDay >= start ||
+                       (startValidUsagePeriod.TimeOfDay >= start &&
                         startValidUsagePeriod.TimeOfDay <= end);
             }).ToList();
 

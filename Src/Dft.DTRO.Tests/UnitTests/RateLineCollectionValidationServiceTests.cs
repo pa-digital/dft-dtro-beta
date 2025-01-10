@@ -51,7 +51,7 @@ public class RateLineCollectionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("00:00:00", 0)]
+    [InlineData("00:00:00", 1)]
     [InlineData("00:10:00", 0)]
     [InlineData("01:59:59", 0)]
     [InlineData("23:59:59", 0)]

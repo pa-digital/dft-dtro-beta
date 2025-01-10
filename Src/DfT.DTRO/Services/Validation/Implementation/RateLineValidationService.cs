@@ -107,11 +107,11 @@ public class RateLineValidationService : IRateLineValidationService
                 var start = new DateTime(2024, 1, 1, 0, 0, 0).TimeOfDay;
                 var end = new DateTime(2024, 1, 1, 23, 59, 59).TimeOfDay;
                 return DateTime.TryParse(durationEnd, out var endValidUsagePeriod) &&
-                       (endValidUsagePeriod.TimeOfDay >= start ||
+                       (endValidUsagePeriod.TimeOfDay > start &&
                         endValidUsagePeriod.TimeOfDay <= end);
             }).ToList();
 
-        if (areValidDurationEnds.TrueForAll(it => it == false))
+        if (areValidDurationEnds.Any() && areValidDurationEnds.TrueForAll(it => it == false))
         {
             SemanticValidationError error = new()
             {
@@ -152,11 +152,11 @@ public class RateLineValidationService : IRateLineValidationService
                 var start = new DateTime(2024, 1, 1, 0, 0, 0).TimeOfDay;
                 var end = new DateTime(2024, 1, 1, 23, 59, 59).TimeOfDay;
                 return DateTime.TryParse(durationStart, out var endValidUsagePeriod) &&
-                       (endValidUsagePeriod.TimeOfDay >= start ||
+                       (endValidUsagePeriod.TimeOfDay > start &&
                         endValidUsagePeriod.TimeOfDay <= end);
             }).ToList();
 
-        if (areValidDurationStarts.All(it => it == false))
+        if (areValidDurationStarts.Any() && areValidDurationStarts.All(it => it == false))
         {
             SemanticValidationError error = new()
             {
@@ -175,7 +175,7 @@ public class RateLineValidationService : IRateLineValidationService
             .ToList();
 
         var areValidIncrementPeriods = passedInIncrementPeriods
-            .All(incrementPeriod => incrementPeriod is > 0);
+            .TrueForAll(incrementPeriod => incrementPeriod > 0);
 
         if (!areValidIncrementPeriods)
         {
@@ -239,7 +239,7 @@ public class RateLineValidationService : IRateLineValidationService
             .ToList();
 
         var areValidSequences = passedInSequences
-            .All(passedInSequence => passedInSequence >= 0);
+            .All(passedInSequence => passedInSequence > 0);
 
         if (!areValidSequences)
         {
