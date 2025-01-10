@@ -24,25 +24,30 @@ public class RateTableValidationService : IRateTableValidationService
             if (hasConditionSet)
             {
                 var conditionsSets = regulation
-                    .GetValueOrDefault<IList<object>>("ConditionSet")
+                    .GetValueOrDefault<IList<object>>("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .Cast<ExpandoObject>()
                     .ToList();
 
                 rateTables.AddRange(conditionsSets
-                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable")));
+                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
             }
             else
             {
                 var conditions = regulation
-                    .GetValueOrDefault<IList<object>>("Condition")
+                    .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .Cast<ExpandoObject>()
                     .ToList();
 
                 rateTables.AddRange(conditions
-                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable")));
+                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
             }
+        }
 
-            rateTables = rateTables.Where(rateTable => rateTable != null).ToList();
+        rateTables = rateTables.Where(rateTable => rateTable != null).ToList();
+
+        if (!rateTables.Any())
+        {
+            return errors;
         }
 
         var multipleUris = rateTables

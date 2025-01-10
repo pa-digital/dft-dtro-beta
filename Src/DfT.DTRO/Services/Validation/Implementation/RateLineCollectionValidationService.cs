@@ -24,31 +24,35 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             if (hasConditionSet)
             {
                 var conditionsSets = regulation
-                    .GetValueOrDefault<IList<object>>("ConditionSet")
+                    .GetValueOrDefault<IList<object>>("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .Cast<ExpandoObject>()
                     .ToList();
 
                 rateTables.AddRange(conditionsSets
-                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable")));
+                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
             }
             else
             {
                 var conditions = regulation
-                    .GetValueOrDefault<IList<object>>("Condition")
+                    .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .Cast<ExpandoObject>()
                     .ToList();
 
                 rateTables.AddRange(conditions
-                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable")));
+                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
             }
+        }
 
-            rateTables = rateTables.Where(rateTable => rateTable != null).ToList();
+        rateTables = rateTables.Where(rateTable => rateTable != null).ToList();
 
+        if (!rateTables.Any())
+        {
+            return errors;
         }
 
         var rateLineCollections = rateTables
             .SelectMany(expandoObject => expandoObject
-                .GetValueOrDefault<IList<object>>("RateLineCollection"))
+                .GetValueOrDefault<IList<object>>("RateLineCollection".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Cast<ExpandoObject>()
             .ToList();
 
@@ -90,7 +94,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                 Name = "End usage valid period",
                 Message = "The end time for the validity of this rate line collection.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.EndValidUsagePeriod}",
-                Rule = $"If present '{Constants.EndValidUsagePeriod}' must be between '00:00:00' and '23:59:59'",
+                Rule = $"If present '{Constants.EndValidUsagePeriod}' must be of type date-time",
             };
 
             errors.Add(error);
@@ -245,7 +249,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                 Name = "Start usage valid period",
                 Message = "The start time for the validity of this rate line collection.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.StartValidUsagePeriod}",
-                Rule = $"'{Constants.StartValidUsagePeriod}' must be between '00:00:00' and '23:59:59'",
+                Rule = $"'{Constants.StartValidUsagePeriod}' must be of type date-time",
             };
 
             errors.Add(error);
