@@ -1,4 +1,6 @@
-﻿namespace Dft.DTRO.Tests.UnitTests;
+﻿using System.Globalization;
+
+namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
 public class RateLineValidationServiceTests
@@ -248,7 +250,7 @@ public class RateLineValidationServiceTests
                                                             ""durationEnd"": 1,
                                                             ""durationStart"": 5,
                                                             ""incrementPeriod"": 548,
-                                                            ""maxValue"": {maxValue},
+                                                            ""maxValue"": {maxValue.ToString(CultureInfo.InvariantCulture)},
                                                             ""minValue"": 1.00,
                                                             ""sequence"": 1,
                                                             ""type"": ""flatRateTier"",
@@ -300,7 +302,7 @@ public class RateLineValidationServiceTests
                                                             ""durationStart"": 5,
                                                             ""incrementPeriod"": 548,
                                                             ""maxValue"": 1.01,
-                                                            ""minValue"": {minValue},
+                                                            ""minValue"": {minValue.ToString(CultureInfo.InvariantCulture)},
                                                             ""sequence"": 1,
                                                             ""type"": ""flatRateTier"",
                                                             ""usageCondition"": ""fixedDuration"",
