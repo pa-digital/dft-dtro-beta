@@ -225,9 +225,9 @@ public class RateLineValidationServiceTests
 
     [Theory]
     [InlineData("Condition", 1.01, 0)]
-    [InlineData("Condition", -1.01, 1)]
+    [InlineData("Condition", -1.01, 2)]
     [InlineData("ConditionSet", 1.01, 0)]
-    [InlineData("ConditionSet", -1.01, 1)]
+    [InlineData("ConditionSet", -1.01, 2)]
     public void ValidateRateLineMinAndMaxValue(string conditionType, double value, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
