@@ -76,10 +76,9 @@ public class RateTableValidationService : IRateTableValidationService
 
         var areValidTypes = passedInTypes
             .Where(passedInType => !string.IsNullOrEmpty(passedInType))
-            .Select(passedInType => Constants.RateTypes.Any(passedInType.Equals))
-            .ToList();
+            .All(passedInType => Constants.RateTypes.Any(passedInType.Equals));
 
-        if (areValidTypes.Any(isValidType => isValidType == false))
+        if (!areValidTypes)
         {
             SemanticValidationError error = new()
             {

@@ -59,15 +59,14 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .ToList();
 
         var areValidCurrencies = passedInCurrencies
-            .Select(passedInCurrency => Constants.CurrencyTypes.Any(passedInCurrency.Equals))
-            .ToList();
+            .TrueForAll(passedInCurrency => Constants.CurrencyTypes.Any(passedInCurrency.Equals));
 
-        if (areValidCurrencies.All(isValidCurrency => isValidCurrency == false))
+        if (!areValidCurrencies)
         {
             SemanticValidationError error = new()
             {
                 Name = "Applicable currency",
-                Message = "The monetary currency that rates are specified in this rate line collection. [Defined by APDS - ISO/TS 5206-1]",
+                Message = "The monetary currency that rates are specified in this rate line collection.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.ApplicableCurrency}",
                 Rule = $"'{Constants.ApplicableCurrency}' must be one of '{string.Join(",", Constants.CurrencyTypes)}'",
             };
@@ -134,12 +133,10 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .ToList();
 
         var areValidMaxValueCollections = passedInMaxValueCollections
-            .Select(passedInMaxValueCollection => passedInMaxValueCollection > 0.0)
-            .ToList();
+            .TrueForAll(passedInMaxValueCollection => passedInMaxValueCollection > 0.0);
 
-        if (areValidMaxValueCollections.All(isValidMaxValueCollection => isValidMaxValueCollection == false))
+        if (!areValidMaxValueCollections)
         {
-
             SemanticValidationError error = new()
             {
                 Name = "Max Value Collection",
@@ -156,13 +153,10 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .Select(rateLineCollection => rateLineCollection.GetValueOrDefault<int>(Constants.MinTime))
             .ToList();
 
-        var areValidMinTimes = passedInMinTimes
-            .Select(passedInMinTime => passedInMinTime != 0)
-            .ToList();
+        var areValidMinTimes = passedInMinTimes.TrueForAll(passedInMinTime => passedInMinTime != 0);
 
-        if (areValidMinTimes.All(isValidMinTime => isValidMinTime == false))
+        if (!areValidMinTimes)
         {
-
             SemanticValidationError error = new()
             {
                 Name = "Min time",
@@ -174,7 +168,6 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             errors.Add(error);
         }
 
-
         var passedInMinValueCollections = rateLineCollections
             .Where(rateLineCollection => rateLineCollection.HasField(Constants.MinValueCollection))
             .Select(minValueCollection => minValueCollection.GetValueOrDefault<object>(Constants.MinValueCollection))
@@ -182,12 +175,10 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .ToList();
 
         var areValidMinValueCollections = passedInMinValueCollections
-            .Select(passedInMinValueCollection => passedInMinValueCollection > 0.0)
-            .ToList();
+            .TrueForAll(passedInMinValueCollection => passedInMinValueCollection > 0.0);
 
-        if (areValidMinValueCollections.Any(isValidMinValueCollection => isValidMinValueCollection == false))
+        if (!areValidMinValueCollections)
         {
-
             SemanticValidationError error = new()
             {
                 Name = "Min Value Collection",
@@ -198,7 +189,6 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
 
             errors.Add(error);
         }
-
 
         var passedInResetTimes = rateLineCollections
             .Where(rateLineCollection => rateLineCollection.HasField(Constants.ResetTime))
@@ -232,8 +222,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .Select(rateLineCollection => rateLineCollection.GetValueOrDefault<int>(Constants.Sequence))
             .ToList();
 
-        var areValidSequences = passedInSequences
-            .All(passedInSequence => passedInSequence >= 0);
+        var areValidSequences = passedInSequences.TrueForAll(passedInSequence => passedInSequence >= 0);
 
         if (!areValidSequences)
         {

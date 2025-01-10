@@ -26,9 +26,30 @@ public static class Constants
 
     public static IEnumerable<string> CurrencyTypes => typeof(CurrencyType).GetDisplayNames<CurrencyType>().ToList();
 
+    public static IEnumerable<string> RateUsageConditionsTypes => typeof(RateUsageConditionsType).GetDisplayNames<RateUsageConditionsType>().ToList();
+
+    public static IEnumerable<string> RateLineTypes => typeof(RateLineType).GetDisplayNames<RateLineType>().ToList();
+
     public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
 
+    public static string Value => "value";
+
+    public static string UsageCondition => "usageCondition";
+
+    public static string MinValue => "minValue";
+
+    public static string MaxValue => "maxValue";
+
+    public static string IncrementPeriod => "incrementPeriod";
+
+    public static string DurationStart => "durationStart";
+
+    public static string DurationEnd => "durationEnd";
+
+    public static string Description => "description";
+
     public static string StartValidUsagePeriod => "startValidUsagePeriod";
+
     public static string Sequence => "sequence";
 
     public static string ResetTime => "resetTime";

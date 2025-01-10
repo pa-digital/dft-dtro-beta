@@ -28,7 +28,8 @@ public static class ValidationServiceRegistration
             .AddScoped<IRegulationValidation, RegulationValidation>()
             .AddScoped<IConditionValidationService, ConditionValidationService>()
             .AddScoped<IRateTableValidationService, RateTableValidationService>()
-            .AddScoped<IRateLineCollectionValidationService, RateLineCollectionValidationService>();
+            .AddScoped<IRateLineCollectionValidationService, RateLineCollectionValidationService>()
+            .AddScoped<IRateLineValidationService, RateLineValidationService>();
 
         AddAllRules(assembly ?? Assembly.GetExecutingAssembly());
     }
