@@ -184,60 +184,6 @@
                             "Condition": [
                                 {
                                     "negate": false,
-                                    "RateTable": [
-                                        {
-                                            "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
-                                            "additionalInformation": "http://www.somewhere.something.gov.uk",
-                                            "type": "hourly",
-                                            "RateLineCollection": [
-                                                {
-                                                    "applicableCurrency": "GBP",
-                                                    "maxTime": 660,
-                                                    "maxValueCollection": 7.20,
-                                                    "minTime": 60,
-                                                    "minValueCollection": 1,
-                                                    "RateLine": [
-                                                        {
-                                                            "durationEnd": 59,
-                                                            "durationStart": 1,
-                                                            "incrementPeriod": 58,
-                                                            "maxValue": 7.20,
-                                                            "minValue": 1,
-                                                            "sequence": 1,
-                                                            "type": "flatRateTier",
-                                                            "usageCondition": "fixedDuration",
-                                                            "value": 1
-                                                        },
-                                                        {
-                                                            "durationEnd": 119,
-                                                            "durationStart": 60,
-                                                            "incrementPeriod": 59,
-                                                            "maxValue": 7.20,
-                                                            "minValue": 2,
-                                                            "sequence": 2,
-                                                            "type": "flatRateTier",
-                                                            "usageCondition": "fixedDuration",
-                                                            "value": 1
-                                                        },
-                                                        {
-                                                            "durationEnd": 660,
-                                                            "durationStart": 120,
-                                                            "incrementPeriod": 540,
-                                                            "maxValue": 7.20,
-                                                            "minValue": 2,
-                                                            "sequence": 3,
-                                                            "type": "flatRateTier",
-                                                            "usageCondition": "fixedDuration",
-                                                            "value": 5.20
-                                                        }
-                                                    ],
-                                                    "resetTime": "20:00:00",
-                                                    "sequence": 1,
-                                                    "startValidUsagePeriod": "2024-12-10T09:00:00"
-                                                }
-                                            ]
-                                        }
-                                    ],
                                     "TimeValidity": {
                                         "start": "2024-12-10T09:00:00",
                                         "validPeriod": [
@@ -264,6 +210,60 @@
                                             }
                                         ]
                                     }
+                                }
+                            ],
+                            "RateTable": [
+                                {
+                                    "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
+                                    "additionalInformation": "http://www.somewhere.something.gov.uk",
+                                    "type": "hourly",
+                                    "RateLineCollection": [
+                                        {
+                                            "applicableCurrency": "GBP",
+                                            "maxTime": 660,
+                                            "maxValueCollection": 7.2000000000000002,
+                                            "minTime": 60,
+                                            "minValueCollection": 1,
+                                            "RateLine": [
+                                                {
+                                                    "durationEnd": 59,
+                                                    "durationStart": 1,
+                                                    "incrementPeriod": 58,
+                                                    "maxValue": 7.2000000000000002,
+                                                    "minValue": 1,
+                                                    "sequence": 1,
+                                                    "type": "flatRateTier",
+                                                    "usageCondition": "fixedDuration",
+                                                    "value": 1
+                                                },
+                                                {
+                                                    "durationEnd": 119,
+                                                    "durationStart": 60,
+                                                    "incrementPeriod": 59,
+                                                    "maxValue": 7.2000000000000002,
+                                                    "minValue": 2,
+                                                    "sequence": 2,
+                                                    "type": "flatRateTier",
+                                                    "usageCondition": "fixedDuration",
+                                                    "value": 1
+                                                },
+                                                {
+                                                    "durationEnd": 660,
+                                                    "durationStart": 120,
+                                                    "incrementPeriod": 540,
+                                                    "maxValue": 7.2000000000000002,
+                                                    "minValue": 2,
+                                                    "sequence": 3,
+                                                    "type": "flatRateTier",
+                                                    "usageCondition": "fixedDuration",
+                                                    "value": 5.2000000000000002
+                                                }
+                                            ],
+                                            "resetTime": "20:00:00",
+                                            "sequence": 1,
+                                            "startValidUsagePeriod": "2024-12-10T09:00:00"
+                                        }
+                                    ]
                                 }
                             ],
                             "GeneralRegulation": {
