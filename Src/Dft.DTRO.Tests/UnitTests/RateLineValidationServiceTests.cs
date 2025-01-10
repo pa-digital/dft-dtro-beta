@@ -6,10 +6,13 @@ public class RateLineValidationServiceTests
     private readonly IRateLineValidationService _sut = new RateLineValidationService();
 
     [Theory]
-    [InlineData("free text", 0)]
-    [InlineData("", 1)]
-    [InlineData(null, 1)]
-    public void ValidateRateLineDuration(string description, int errorCount)
+    [InlineData("Condition", "free text", 0)]
+    [InlineData("Condition", "", 1)]
+    [InlineData("Condition", null, 1)]
+    [InlineData("ConditionSet", "free text", 0)]
+    [InlineData("ConditionSet", "", 1)]
+    [InlineData("ConditionSet", null, 1)]
+    public void ValidateRateLineDuration(string conditionType, string description, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
@@ -20,7 +23,7 @@ public class RateLineValidationServiceTests
                     {{
                         ""Regulation"": [
                             {{
-                                ""Condition"": [
+                                ""{conditionType}"": [
                                     {{
                                         ""RateTable"" : {{
                                             ""RateLineCollection"": [
@@ -28,8 +31,8 @@ public class RateLineValidationServiceTests
                                                     ""RateLine"": [
                                                         {{
                                                             ""description"": ""{description}"",
-                                                            ""durationEnd"": ""00:00:59"",
-                                                            ""durationStart"": ""00:00:01"",
+                                                            ""durationEnd"": 1,
+                                                            ""durationStart"": 5,
                                                             ""incrementPeriod"": 58,
                                                             ""maxValue"": 7.20,
                                                             ""minValue"": 1.00,
@@ -56,12 +59,15 @@ public class RateLineValidationServiceTests
     }
 
     [Theory]
-    [InlineData("00:00:01", 0)]
-    [InlineData("23:59:59", 0)]
-    [InlineData("00:00:00", 1)]
-    [InlineData("24:00:00", 1)]
-    [InlineData("", 1)]
-    public void ValidateRateLineDurationEnd(string durationEnd, int errorCount)
+    [InlineData("Condition", 1, 0)]
+    [InlineData("Condition", 1000, 0)]
+    [InlineData("Condition", 0, 1)]
+    [InlineData("Condition", -10, 1)]
+    [InlineData("ConditionSet", 1, 0)]
+    [InlineData("ConditionSet", 1000, 0)]
+    [InlineData("ConditionSet", 0, 1)]
+    [InlineData("ConditionSet", -10, 1)]
+    public void ValidateRateLineDurationEnd(string conditionType, int durationEnd, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
@@ -72,7 +78,7 @@ public class RateLineValidationServiceTests
                     {{
                         ""Regulation"": [
                             {{
-                                ""Condition"": [
+                                ""{conditionType}"": [
                                     {{
                                         ""RateTable"" : {{
                                             ""RateLineCollection"": [
@@ -80,8 +86,8 @@ public class RateLineValidationServiceTests
                                                     ""RateLine"": [
                                                         {{
                                                             ""description"": ""freeText"",
-                                                            ""durationEnd"": ""{durationEnd}"",
-                                                            ""durationStart"": ""00:00:01"",
+                                                            ""durationEnd"": {durationEnd},
+                                                            ""durationStart"": 1,
                                                             ""incrementPeriod"": 58,
                                                             ""maxValue"": 7.20,
                                                             ""minValue"": 1.00,
@@ -108,12 +114,15 @@ public class RateLineValidationServiceTests
     }
 
     [Theory]
-    [InlineData("00:00:01", 0)]
-    [InlineData("23:59:59", 0)]
-    [InlineData("00:00:00", 1)]
-    [InlineData("24:00:00", 1)]
-    [InlineData("", 1)]
-    public void ValidateRateLineDurationStart(string durationStart, int errorCount)
+    [InlineData("Condition", 1, 0)]
+    [InlineData("Condition", 1000, 0)]
+    [InlineData("Condition", 0, 1)]
+    [InlineData("Condition", -10, 1)]
+    [InlineData("ConditionSet", 1, 0)]
+    [InlineData("ConditionSet", 1000, 0)]
+    [InlineData("ConditionSet", 0, 1)]
+    [InlineData("ConditionSet", -10, 1)]
+    public void ValidateRateLineDurationStart(string conditionType, int durationStart, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
@@ -124,7 +133,7 @@ public class RateLineValidationServiceTests
                     {{
                         ""Regulation"": [
                             {{
-                                ""Condition"": [
+                                ""{conditionType}"": [
                                     {{
                                         ""RateTable"" : {{
                                             ""RateLineCollection"": [
@@ -132,8 +141,8 @@ public class RateLineValidationServiceTests
                                                     ""RateLine"": [
                                                         {{
                                                             ""description"": ""freeText"",
-                                                            ""durationEnd"": ""05:00:00"",
-                                                            ""durationStart"": ""{durationStart}"",
+                                                            ""durationEnd"": 1,
+                                                            ""durationStart"": {durationStart},
                                                             ""incrementPeriod"": 58,
                                                             ""maxValue"": 7.20,
                                                             ""minValue"": 1.00,
@@ -160,10 +169,13 @@ public class RateLineValidationServiceTests
     }
 
     [Theory]
-    [InlineData(0, 1)]
-    [InlineData(1, 0)]
-    [InlineData(-1, 1)]
-    public void ValidateRateLineIncrementPeriod(int incrementPeriod, int errorCount)
+    [InlineData("Condition", 0, 1)]
+    [InlineData("Condition", 1, 0)]
+    [InlineData("Condition", -1, 1)]
+    [InlineData("ConditionSet", 0, 1)]
+    [InlineData("ConditionSet", 1, 0)]
+    [InlineData("ConditionSet", -1, 1)]
+    public void ValidateRateLineIncrementPeriod(string conditionType, int incrementPeriod, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
@@ -174,7 +186,7 @@ public class RateLineValidationServiceTests
                     {{
                         ""Regulation"": [
                             {{
-                                ""Condition"": [
+                                ""{conditionType}"": [
                                     {{
                                         ""RateTable"" : {{
                                             ""RateLineCollection"": [
@@ -182,8 +194,8 @@ public class RateLineValidationServiceTests
                                                     ""RateLine"": [
                                                         {{
                                                             ""description"": ""freeText"",
-                                                            ""durationEnd"": ""05:00:00"",
-                                                            ""durationStart"": ""06:00:00"",
+                                                            ""durationEnd"": 1,
+                                                            ""durationStart"": 5,
                                                             ""incrementPeriod"": {incrementPeriod},
                                                             ""maxValue"": 7.20,
                                                             ""minValue"": 1.00,
@@ -210,9 +222,11 @@ public class RateLineValidationServiceTests
     }
 
     [Theory]
-    [InlineData(1.01, 0)]
-    [InlineData(-1.01, 1)]
-    public void ValidateRateLineMaxValue(double maxValue, int errorCount)
+    [InlineData("Condition", 1.01, 0)]
+    [InlineData("Condition", -1.01, 1)]
+    [InlineData("ConditionSet", 1.01, 0)]
+    [InlineData("ConditionSet", -1.01, 1)]
+    public void ValidateRateLineMaxValue(string conditionType, double maxValue, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
@@ -223,7 +237,7 @@ public class RateLineValidationServiceTests
                     {{
                         ""Regulation"": [
                             {{
-                                ""Condition"": [
+                                ""{conditionType}"": [
                                     {{
                                         ""RateTable"" : {{
                                             ""RateLineCollection"": [
@@ -231,8 +245,8 @@ public class RateLineValidationServiceTests
                                                     ""RateLine"": [
                                                         {{
                                                             ""description"": ""freeText"",
-                                                            ""durationEnd"": ""05:00:00"",
-                                                            ""durationStart"": ""06:00:00"",
+                                                            ""durationEnd"": 1,
+                                                            ""durationStart"": 5,
                                                             ""incrementPeriod"": 548,
                                                             ""maxValue"": {maxValue},
                                                             ""minValue"": 1.00,
@@ -259,9 +273,11 @@ public class RateLineValidationServiceTests
     }
 
     [Theory]
-    [InlineData(1.01, 0)]
-    [InlineData(-1.01, 1)]
-    public void ValidateRateLineMinValue(double minValue, int errorCount)
+    [InlineData("Condition", 1.01, 0)]
+    [InlineData("Condition", -1.01, 1)]
+    [InlineData("ConditionSet", 1.01, 0)]
+    [InlineData("ConditionSet", -1.01, 1)]
+    public void ValidateRateLineMinValue(string conditionType, double minValue, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
@@ -280,8 +296,8 @@ public class RateLineValidationServiceTests
                                                     ""RateLine"": [
                                                         {{
                                                             ""description"": ""freeText"",
-                                                            ""durationEnd"": ""05:00:00"",
-                                                            ""durationStart"": ""06:00:00"",
+                                                            ""durationEnd"": 1,
+                                                            ""durationStart"": 5,
                                                             ""incrementPeriod"": 548,
                                                             ""maxValue"": 1.01,
                                                             ""minValue"": {minValue},
@@ -308,10 +324,13 @@ public class RateLineValidationServiceTests
     }
 
     [Theory]
-    [InlineData(0, 1)]
-    [InlineData(1, 0)]
-    [InlineData(-1, 1)]
-    public void ValidateRateLineSequence(int sequence, int errorCount)
+    [InlineData("Condition", 0, 1)]
+    [InlineData("Condition", 1, 0)]
+    [InlineData("Condition", -1, 1)]
+    [InlineData("ConditionSet", 0, 1)]
+    [InlineData("ConditionSet", 1, 0)]
+    [InlineData("ConditionSet", -1, 1)]
+    public void ValidateRateLineSequence(string conditionType, int sequence, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
@@ -322,7 +341,7 @@ public class RateLineValidationServiceTests
                     {{
                         ""Regulation"": [
                             {{
-                                ""Condition"": [
+                                ""{conditionType}"": [
                                     {{
                                         ""RateTable"" : {{
                                             ""RateLineCollection"": [
@@ -330,8 +349,8 @@ public class RateLineValidationServiceTests
                                                     ""RateLine"": [
                                                         {{
                                                             ""description"": ""freeText"",
-                                                            ""durationEnd"": ""05:00:00"",
-                                                            ""durationStart"": ""06:00:00"",
+                                                            ""durationEnd"": 1,
+                                                            ""durationStart"": 5,
                                                             ""incrementPeriod"": 56,
                                                             ""maxValue"": 7.20,
                                                             ""minValue"": 1.00,
@@ -358,13 +377,19 @@ public class RateLineValidationServiceTests
     }
 
     [Theory]
-    [InlineData("flatRate", 0)]
-    [InlineData("incrementingRate", 0)]
-    [InlineData("flatRateTier", 0)]
-    [InlineData("perUnit", 0)]
-    [InlineData("unknown", 1)]
-    [InlineData("", 1)]
-    public void ValidateRateLineRateLineType(string rateLineType, int errorCount)
+    [InlineData("Condition", "flatRate", 0)]
+    [InlineData("Condition", "incrementingRate", 0)]
+    [InlineData("Condition", "flatRateTier", 0)]
+    [InlineData("Condition", "perUnit", 0)]
+    [InlineData("Condition", "unknown", 1)]
+    [InlineData("Condition", "", 1)]
+    [InlineData("ConditionSet", "flatRate", 0)]
+    [InlineData("ConditionSet", "incrementingRate", 0)]
+    [InlineData("ConditionSet", "flatRateTier", 0)]
+    [InlineData("ConditionSet", "perUnit", 0)]
+    [InlineData("ConditionSet", "unknown", 1)]
+    [InlineData("ConditionSet", "", 1)]
+    public void ValidateRateLineRateLineType(string conditionType, string rateLineType, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
@@ -375,7 +400,7 @@ public class RateLineValidationServiceTests
                     {{
                         ""Regulation"": [
                             {{
-                                ""Condition"": [
+                                ""{conditionType}"": [
                                     {{
                                         ""RateTable"" : {{
                                             ""RateLineCollection"": [
@@ -383,8 +408,8 @@ public class RateLineValidationServiceTests
                                                     ""RateLine"": [
                                                         {{
                                                             ""description"": ""freeText"",
-                                                            ""durationEnd"": ""05:00:00"",
-                                                            ""durationStart"": ""06:00:00"",
+                                                            ""durationEnd"": 1,
+                                                            ""durationStart"": 5,
                                                             ""incrementPeriod"": 56,
                                                             ""maxValue"": 7.20,
                                                             ""minValue"": 1.00,
@@ -411,13 +436,19 @@ public class RateLineValidationServiceTests
     }
 
     [Theory]
-    [InlineData("fixedDuration", 0)]
-    [InlineData("fixedNumber", 0)]
-    [InlineData("once", 0)]
-    [InlineData("unlimited", 0)]
-    [InlineData("unknown", 1)]
-    [InlineData("", 1)]
-    public void ValidateRateLineRateUsageConditionType(string usageCondition, int errorCount)
+    [InlineData("Condition", "fixedDuration", 0)]
+    [InlineData("Condition", "fixedNumber", 0)]
+    [InlineData("Condition", "once", 0)]
+    [InlineData("Condition", "unlimited", 0)]
+    [InlineData("Condition", "unknown", 1)]
+    [InlineData("Condition", "", 1)]
+    [InlineData("ConditionSet", "fixedDuration", 0)]
+    [InlineData("ConditionSet", "fixedNumber", 0)]
+    [InlineData("ConditionSet", "once", 0)]
+    [InlineData("ConditionSet", "unlimited", 0)]
+    [InlineData("ConditionSet", "unknown", 1)]
+    [InlineData("ConditionSet", "", 1)]
+    public void ValidateRateLineRateUsageConditionType(string conditionType, string usageCondition, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
@@ -428,7 +459,7 @@ public class RateLineValidationServiceTests
                     {{
                         ""Regulation"": [
                             {{
-                                ""Condition"": [
+                                ""{conditionType}"": [
                                     {{
                                         ""RateTable"" : {{
                                             ""RateLineCollection"": [
@@ -436,8 +467,8 @@ public class RateLineValidationServiceTests
                                                     ""RateLine"": [
                                                         {{
                                                             ""description"": ""freeText"",
-                                                            ""durationEnd"": ""05:00:00"",
-                                                            ""durationStart"": ""06:00:00"",
+                                                            ""durationEnd"": 1,
+                                                            ""durationStart"": 5,
                                                             ""incrementPeriod"": 56,
                                                             ""maxValue"": 7.20,
                                                             ""minValue"": 1.00,
@@ -464,9 +495,11 @@ public class RateLineValidationServiceTests
     }
 
     [Theory]
-    [InlineData(1.01, 0)]
-    [InlineData(-1.01, 1)]
-    public void ValidateRateLineValue(double value, int errorCount)
+    [InlineData("Condition", 1.01, 0)]
+    [InlineData("Condition", -1.01, 1)]
+    [InlineData("ConditionSet", 1.01, 0)]
+    [InlineData("ConditionSet", -1.01, 1)]
+    public void ValidateRateLineValue(string conditionType, double value, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
@@ -477,7 +510,7 @@ public class RateLineValidationServiceTests
                     {{
                         ""Regulation"": [
                             {{
-                                ""Condition"": [
+                                ""{conditionType}"": [
                                     {{
                                         ""RateTable"" : {{
                                             ""RateLineCollection"": [
@@ -485,8 +518,8 @@ public class RateLineValidationServiceTests
                                                     ""RateLine"": [
                                                         {{
                                                             ""description"": ""freeText"",
-                                                            ""durationEnd"": ""05:00:00"",
-                                                            ""durationStart"": ""06:00:00"",
+                                                            ""durationEnd"": 1,
+                                                            ""durationStart"": 5,
                                                             ""incrementPeriod"": 548,
                                                             ""maxValue"": 1.01,
                                                             ""minValue"": 0.85,

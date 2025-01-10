@@ -80,14 +80,10 @@ public class RateLineValidationService : IRateLineValidationService
 
         var passedInDurationEnds = rateLines
             .Where(rateLine => rateLine.HasField(Constants.DurationEnd))
-            .Select(rateLine => rateLine.GetValueOrDefault<string>(Constants.DurationEnd))
+            .Select(rateLine => rateLine.GetValueOrDefault<int>(Constants.DurationEnd))
             .ToList();
 
-        var arePassedInDurationEnds = passedInDurationEnds
-            .Any(passedInDurationEnd => !string.IsNullOrEmpty(passedInDurationEnd));
-
-
-        if (!arePassedInDurationEnds)
+        if (passedInDurationEnds.Any(passedInDuration => passedInDuration <= 0))
         {
             SemanticValidationError error = new()
             {
@@ -100,39 +96,12 @@ public class RateLineValidationService : IRateLineValidationService
             errors.Add(error);
         }
 
-        var areValidDurationEnds = passedInDurationEnds
-            .Where(durationEnd => !string.IsNullOrEmpty(durationEnd))
-            .Select(durationEnd =>
-            {
-                var start = new DateTime(2024, 1, 1, 0, 0, 0).TimeOfDay;
-                var end = new DateTime(2024, 1, 1, 23, 59, 59).TimeOfDay;
-                return DateTime.TryParse(durationEnd, out var endValidUsagePeriod) &&
-                       (endValidUsagePeriod.TimeOfDay > start &&
-                        endValidUsagePeriod.TimeOfDay <= end);
-            }).ToList();
-
-        if (areValidDurationEnds.Any() && areValidDurationEnds.TrueForAll(it => it == false))
-        {
-            SemanticValidationError error = new()
-            {
-                Name = "Duration end",
-                Message = "If used, indicates the end time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.DurationEnd}",
-                Rule = $"If present, {Constants.DurationEnd} must be greater than 0 and less than 60"
-            };
-
-            errors.Add(error);
-        }
-
         var passedInDurationStarts = rateLines
             .Where(rateLine => rateLine.HasField(Constants.DurationStart))
-            .Select(rateLine => rateLine.GetValueOrDefault<string>(Constants.DurationStart))
+            .Select(rateLine => rateLine.GetValueOrDefault<int>(Constants.DurationStart))
             .ToList();
 
-        var arePassedInDurationStarts = passedInDurationStarts
-            .Any(passedInDurationStart => !string.IsNullOrEmpty(passedInDurationStart));
-
-        if (!arePassedInDurationStarts)
+        if (passedInDurationStarts.Any(passedInDurationStart => passedInDurationStart <= 0))
         {
             SemanticValidationError error = new()
             {
@@ -140,30 +109,6 @@ public class RateLineValidationService : IRateLineValidationService
                 Message = "Indicates the start time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.DurationStart}",
                 Rule = $"If present, {Constants.DurationStart} must not be empty"
-            };
-
-            errors.Add(error);
-        }
-
-        var areValidDurationStarts = passedInDurationStarts
-            .Where(durationStart => !string.IsNullOrEmpty(durationStart))
-            .Select(durationStart =>
-            {
-                var start = new DateTime(2024, 1, 1, 0, 0, 0).TimeOfDay;
-                var end = new DateTime(2024, 1, 1, 23, 59, 59).TimeOfDay;
-                return DateTime.TryParse(durationStart, out var endValidUsagePeriod) &&
-                       (endValidUsagePeriod.TimeOfDay > start &&
-                        endValidUsagePeriod.TimeOfDay <= end);
-            }).ToList();
-
-        if (areValidDurationStarts.Any() && areValidDurationStarts.All(it => it == false))
-        {
-            SemanticValidationError error = new()
-            {
-                Name = "Duration start",
-                Message = "Indicates the end time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.DurationStart}",
-                Rule = $"If present, {Constants.DurationStart} must be greater than 0 and less than 60"
             };
 
             errors.Add(error);

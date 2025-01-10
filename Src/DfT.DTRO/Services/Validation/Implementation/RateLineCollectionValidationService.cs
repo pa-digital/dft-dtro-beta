@@ -81,16 +81,9 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
 
         var areValidEndValidUsagePeriods = passedInEndValidUsagePeriods
             .Where(passedInEndValidUsagePeriod => !string.IsNullOrEmpty(passedInEndValidUsagePeriod))
-            .Select(passedInEndValidUsagePeriod =>
-            {
-                var start = new DateTime(2024, 1, 1, 0, 0, 0).TimeOfDay;
-                var end = new DateTime(2024, 1, 1, 23, 59, 59).TimeOfDay;
-                return DateTime.TryParse(passedInEndValidUsagePeriod, out var endValidUsagePeriod) &&
-                       (endValidUsagePeriod.TimeOfDay > start &&
-                        endValidUsagePeriod.TimeOfDay <= end);
-            }).ToList();
+            .Select(passedInEndValidUsagePeriod => DateTime.TryParse(passedInEndValidUsagePeriod, out var _)).ToList();
 
-        if (areValidEndValidUsagePeriods.All(isValidEndUsagePeriod => isValidEndUsagePeriod == false))
+        if (areValidEndValidUsagePeriods.Any() && areValidEndValidUsagePeriods.TrueForAll(isValidEndUsagePeriod => isValidEndUsagePeriod == false))
         {
             SemanticValidationError error = new()
             {
@@ -112,7 +105,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .Select(passedInMaxTime => passedInMaxTime != 0)
             .ToList();
 
-        if (areValidMaxTimes.All(isValidMaxTime => isValidMaxTime == false))
+        if (areValidMaxTimes.Any() && areValidMaxTimes.All(isValidMaxTime => isValidMaxTime == false))
         {
 
             SemanticValidationError error = new()
@@ -205,7 +198,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                        (dateTime.TimeOfDay >= start && dateTime.TimeOfDay <= end);
             }).ToList();
 
-        if (areValidResetTimes.All(isValidResetTime => isValidResetTime == false))
+        if (areValidResetTimes.Any() && areValidResetTimes.All(isValidResetTime => isValidResetTime == false))
         {
             SemanticValidationError error = new()
             {
@@ -242,14 +235,8 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .ToList();
 
         var areValidStartValidUsagePeriods = passedInStartValidUsagePeriods
-            .Select(passedInStartValidUsagePeriod =>
-            {
-                var start = new DateTime(2024, 1, 1, 0, 0, 0).TimeOfDay;
-                var end = new DateTime(2024, 1, 1, 23, 59, 59).TimeOfDay;
-                return DateTime.TryParse(passedInStartValidUsagePeriod, out var startValidUsagePeriod) &&
-                       (startValidUsagePeriod.TimeOfDay >= start &&
-                        startValidUsagePeriod.TimeOfDay <= end);
-            }).ToList();
+            .Select(passedInStartValidUsagePeriod => DateTime.TryParse(passedInStartValidUsagePeriod, out var _))
+            .ToList();
 
         if (areValidStartValidUsagePeriods.All(isValidStartUsagePeriod => isValidStartUsagePeriod == false))
         {

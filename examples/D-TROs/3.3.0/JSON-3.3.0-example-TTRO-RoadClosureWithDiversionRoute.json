@@ -21,10 +21,10 @@
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
                                         "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39608173
-                                            }
-                                        ]
+											{
+												"usrn": 39608173
+											}
+										]	
                                     }
                                 ]
                             }
@@ -33,7 +33,7 @@
                             "description": "Diversion Route - through traffic - Toneway Wickes roundabout (A38) - Priory Avenue (A3038) - Trenchard Way (A3087) - Staplegrove Road (A3027/A338) - Silk Mills Road (A3065) - Galmington Roundabout (A38) - bi-directional",
                             "type": "diversionRoute",
                             "LinearGeometry": {
-                                "version": 1,
+								"version": 1,
                                 "linestring": "SRID=27700;LINESTRING(323589 125149, 323340 125227, 321986 125569, 320737 126347, 320715 124191)",
                                 "representation": "linear",
                                 "direction": "bidirectional",
@@ -42,96 +42,46 @@
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
                                         "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39609331
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39605119
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39609519
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39609406
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39605180
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39609179
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39605082
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39605158
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39607389
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39605156
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39606013
-                                            }
-                                        ]
+											{
+												"usrn": 39609331
+											},
+											{
+												"usrn": 39605119
+									        },
+											{
+												"usrn": 39609519
+											},
+											{
+												"usrn": 39609406
+											},
+											{
+												"usrn": 39605180
+											},
+											{
+												"usrn": 39609179
+											},
+											{
+												"usrn": 39605082
+											},
+											{
+												"usrn": 39605158
+											},
+											{
+												"usrn": 39607389
+											},
+											{
+												"usrn": 39605156
+									        },
+											{
+												"usrn": 39606013
+											}
+										]	
                                     }
                                 ]
                             }
                         }
                     ],
-                    "Regulation": [
+					"Regulation": [
                         {
                             "Condition": [
                                 {
@@ -141,13 +91,13 @@
                                     }
                                 }
                             ],
-                            "GeneralRegulation": {
+							"GeneralRegulation": {
                                 "regulationType": "miscRoadClosure"
                             },
-                            "isDynamic": false,
-                            "timeZone": "Europe/London"
+							"isDynamic": false,
+                            "timeZone": "Europe/London"                            
                         }
-                    ]
+                    ]                    
                 }
             ],
             "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
@@ -156,7 +106,7 @@
                 3300
             ],
             "traCreator": 3300,
-            "troName": "DfT Example - TTRO road closure v1, Oct. 2024"
+            "troName": "DfT Example - TTRO road closure v2, Jan. 2025"
         }
     }
 }

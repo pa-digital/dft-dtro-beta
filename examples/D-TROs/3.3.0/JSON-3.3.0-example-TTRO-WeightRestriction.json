@@ -20,20 +20,20 @@
                                     {
                                         "lastUpdateDate": "2024-08-01T00:00:00",
                                         "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39605836
-                                            }
-                                        ]
+											{
+												"usrn": 39605836
+											}
+										]	
                                     }
                                 ],
-                                "lateralPosition": "centreline",
+								"lateralPosition": "centreline",
                                 "linestring": "SRID=27700;LINESTRING(320620 124993, 320621 124997, 320625 125007)",
                                 "representation": "representingZone",
-                                "version": 1
+								"version": 1                                
                             }
                         }
                     ],
-                    "Regulation": [
+					"Regulation": [
                         {
                             "ConditionSet": [
                                 {
@@ -58,10 +58,10 @@
                                     ]
                                 }
                             ],
-                            "GeneralRegulation": {
+							"GeneralRegulation": {
                                 "regulationType": "dimensionMaximumWeightStructural"
                             },
-                            "isDynamic": false,
+							"isDynamic": false,
                             "TemporaryRegulation": {
                                 "TemporaryOverriddenProvision": {
                                     "actionType": "new",
@@ -70,7 +70,7 @@
                                     "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A"
                                 }
                             },
-                            "timeZone": "Europe/London"
+							"timeZone": "Europe/London"                            
                         }
                     ]
                 }
@@ -81,7 +81,7 @@
                 3300
             ],
             "traCreator": 3300,
-            "troName": "DfT Example - TTRO weight restriction v1, Oct. 2024"
+            "troName": "DfT Example - TTRO weight restriction v2, Jan. 2025"
         }
     }
 }

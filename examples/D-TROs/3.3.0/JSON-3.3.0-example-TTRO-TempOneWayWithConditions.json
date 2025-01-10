@@ -20,10 +20,10 @@
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
                                         "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39605548
-                                            }
-                                        ]
+											{
+												"usrn": 39605548
+											}
+										]	
                                     }
                                 ]
                             },
@@ -54,7 +54,7 @@
                 3300
             ],
             "traCreator": 3300,
-            "troName": "DfT Example - TTRO temporary one way v1, Oct. 2024"
+            "troName": "DfT Example - TTRO temporary one way v2, Jan. 2025"
         }
     }
 }
