@@ -4,7 +4,7 @@
         "Source": {
             "_comment": "DfT example D-TRO, multiple provisions, multiple conditions, TemporaryRegulation, OffListRegulation, Permits, Rates",
             "actionType": "new",
-            "currentTraOwner": 3300,
+            "currentTraOwner": 9001,
             "Provision": [
                 {
                     "_comment": "Provision 1: TTRO with Diversion route, and use of temporily overridden regulation {Provision}",
@@ -42,84 +42,34 @@
                                         "UniqueStreetReferenceNumber": [
                                             {
                                                 "usrn": 39609331
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "usrn": 39605119
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "usrn": 39609519
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "usrn": 39609406
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "usrn": 39605180
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "usrn": 39609179
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "usrn": 39605082
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "usrn": 39605158
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "usrn": 39607389
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "usrn": 39605156
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "usrn": 39606013
                                             }
@@ -234,60 +184,6 @@
                             "Condition": [
                                 {
                                     "negate": false,
-                                    "RateTable": [
-                                        {
-                                            "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
-                                            "additionalInformation": "http://www.somewhere.something.gov.uk",
-                                            "type": "hourly",
-                                            "RateLineCollection": [
-                                                {
-                                                    "applicableCurrency": "GBP",
-                                                    "maxTime": 660,
-                                                    "maxValueCollection": 7.2000000000000002,
-                                                    "minTime": 60,
-                                                    "minValueCollection": 1,
-                                                    "RateLine": [
-                                                        {
-                                                            "durationEnd": 59,
-                                                            "durationStart": 1,
-                                                            "incrementPeriod": 58,
-                                                            "maxValue": 7.2000000000000002,
-                                                            "minValue": 1,
-                                                            "sequence": 1,
-                                                            "type": "flatRateTier",
-                                                            "usageCondition": "fixedDuration",
-                                                            "value": 1
-                                                        },
-                                                        {
-                                                            "durationEnd": 119,
-                                                            "durationStart": 60,
-                                                            "incrementPeriod": 59,
-                                                            "maxValue": 7.2000000000000002,
-                                                            "minValue": 2,
-                                                            "sequence": 2,
-                                                            "type": "flatRateTier",
-                                                            "usageCondition": "fixedDuration",
-                                                            "value": 1
-                                                        },
-                                                        {
-                                                            "durationEnd": 660,
-                                                            "durationStart": 120,
-                                                            "incrementPeriod": 540,
-                                                            "maxValue": 7.2000000000000002,
-                                                            "minValue": 2,
-                                                            "sequence": 3,
-                                                            "type": "flatRateTier",
-                                                            "usageCondition": "fixedDuration",
-                                                            "value": 5.2000000000000002
-                                                        }
-                                                    ],
-                                                    "resetTime": "20:00:00",
-                                                    "sequence": 1,
-                                                    "startValidUsagePeriod": "2024-12-10T09:00:00"
-                                                }
-                                            ]
-                                        }
-                                    ],
                                     "TimeValidity": {
                                         "start": "2024-12-10T09:00:00",
                                         "validPeriod": [
@@ -314,6 +210,60 @@
                                             }
                                         ]
                                     }
+                                }
+                            ],
+                            "RateTable": [
+                                {
+                                    "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
+                                    "additionalInformation": "http://www.somewhere.something.gov.uk",
+                                    "type": "hourly",
+                                    "RateLineCollection": [
+                                        {
+                                            "applicableCurrency": "GBP",
+                                            "maxTime": 660,
+                                            "maxValueCollection": 7.2000000000000002,
+                                            "minTime": 60,
+                                            "minValueCollection": 1,
+                                            "RateLine": [
+                                                {
+                                                    "durationEnd": 59,
+                                                    "durationStart": 1,
+                                                    "incrementPeriod": 58,
+                                                    "maxValue": 7.2000000000000002,
+                                                    "minValue": 1,
+                                                    "sequence": 1,
+                                                    "type": "flatRateTier",
+                                                    "usageCondition": "fixedDuration",
+                                                    "value": 1
+                                                },
+                                                {
+                                                    "durationEnd": 119,
+                                                    "durationStart": 60,
+                                                    "incrementPeriod": 59,
+                                                    "maxValue": 7.2000000000000002,
+                                                    "minValue": 2,
+                                                    "sequence": 2,
+                                                    "type": "flatRateTier",
+                                                    "usageCondition": "fixedDuration",
+                                                    "value": 1
+                                                },
+                                                {
+                                                    "durationEnd": 660,
+                                                    "durationStart": 120,
+                                                    "incrementPeriod": 540,
+                                                    "maxValue": 7.2000000000000002,
+                                                    "minValue": 2,
+                                                    "sequence": 3,
+                                                    "type": "flatRateTier",
+                                                    "usageCondition": "fixedDuration",
+                                                    "value": 5.2000000000000002
+                                                }
+                                            ],
+                                            "resetTime": "20:00:00",
+                                            "sequence": 1,
+                                            "startValidUsagePeriod": "2024-12-10T09:00:00"
+                                        }
+                                    ]
                                 }
                             ],
                             "GeneralRegulation": {
@@ -344,22 +294,12 @@
                                                 "nsgStreetName": "Toneway",
                                                 "nsgStreetNumber": "A38",
                                                 "usrn": 39612030
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "nsgStreetName": "Hankridge Dual Carriageway",
                                                 "nsgStreetNumber": "A358",
                                                 "usrn": 39686520
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "nsgStreetName": "Hankridge Roundabout",
                                                 "nsgStreetNumber": "A358",
@@ -388,22 +328,12 @@
                                                 "nsgStreetName": "Toneway",
                                                 "nsgStreetNumber": "A38",
                                                 "usrn": 39612030
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "nsgStreetName": "Hankridge Dual Carriageway",
                                                 "nsgStreetNumber": "A358",
                                                 "usrn": 39686520
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "nsgStreetName": "Hankridge Roundabout",
                                                 "nsgStreetNumber": "A358",
@@ -458,21 +388,11 @@
                                             {
                                                 "nsgStreetNumber": "A38",
                                                 "usrn": 39604805
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "nsgStreetNumber": "A38",
                                                 "usrn": 34004899
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "nsgStreetNumber": "A38",
                                                 "usrn": 34000991
@@ -500,22 +420,12 @@
                                                 "nsgStreetName": "Toneway",
                                                 "nsgStreetNumber": "A38",
                                                 "usrn": 39612030
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "nsgStreetName": "Hankridge Dual Carriageway",
                                                 "nsgStreetNumber": "A358",
                                                 "usrn": 39686520
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "lastUpdateDate": "2024-10-01T00:00:00",
-                                        "UniqueStreetReferenceNumber": [
+                                            },
                                             {
                                                 "nsgStreetName": "Hankridge Roundabout",
                                                 "nsgStreetNumber": "A358",
@@ -568,7 +478,7 @@
                                         "UniqueStreetReferenceNumber": [
                                             {
                                                 "nsgStreetName": "Collett Road",
-                                                "usrn": 396092324
+                                                "usrn": 39609232
                                             }
                                         ]
                                     }
@@ -589,7 +499,7 @@
                                         "lastUpdateDate": "2024-10-01T00:00:00",
                                         "UniqueStreetReferenceNumber": [
                                             {
-                                                "usrn": 396092324
+                                                "usrn": 39609234
                                             }
                                         ]
                                     }
@@ -705,7 +615,7 @@
                                                                 "startType": "external",
                                                                 "ChangeableTimePeriodSource": {
                                                                     "definition": "Source of start of non-school day periods, in 'Any' county",
-                                                                    "source": "http:\\www.schooldiaries.com"
+                                                                    "source": "http://www.schooldiaries.com"
                                                                 }
                                                             }
                                                         ]
@@ -739,10 +649,10 @@
             "reference": "abc",
             "section": "All sections",
             "traAffected": [
-                3300
+                9001
             ],
-            "traCreator": 3300,
-            "troName": "DfT Example - More complex v1, Dec. 2024"
+            "traCreator": 9001,
+            "troName": "DfT Example - More complex v2, Jan. 2025"
         }
     }
 }

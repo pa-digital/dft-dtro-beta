@@ -10,20 +10,20 @@ public class SemanticValidationService : ISemanticValidationService
 {
     private readonly ISystemClock _clock;
     private readonly IDtroDal _dtroDal;
-    private readonly IConditionValidationService _conditionValidationService;
+    private readonly IOldConditionValidationService _oldConditionValidationService;
     private readonly IGeometryValidation _geometryValidation;
     private readonly LoggingExtension _loggingExtension;
 
     public SemanticValidationService(
         ISystemClock clock,
         IDtroDal dtroDal,
-        IConditionValidationService conditionValidationService,
+        IOldConditionValidationService oldConditionValidationService,
         IGeometryValidation geometryValidation,
         LoggingExtension loggingExtension)
     {
         _clock = clock;
         _dtroDal = dtroDal;
-        _conditionValidationService = conditionValidationService;
+        _oldConditionValidationService = oldConditionValidationService;
         _geometryValidation = geometryValidation;
         _loggingExtension = loggingExtension;
     }
@@ -139,7 +139,7 @@ public class SemanticValidationService : ISemanticValidationService
 
         //    var conditionSet = ConditionSet.And(mappedConditionSet);
 
-        //    var conditionErrors = _conditionValidationService.Validate(conditionSet);
+        //    var conditionErrors = _oldConditionValidationService.Validate(conditionSet);
 
         //    foreach (var error in conditionErrors)
         //    {

@@ -20,9 +20,9 @@ public class ProvisionValidationService : IProvisionValidationService
         {
             var error = new SemanticValidationError
             {
-                Name = $"Invalid '{nameof(ProvisionActionType)}' error",
+                Name = "Invalid 'actionType'",
                 Message = "Indicates the nature of update between D-TRO records or their constituent parts",
-                Rule = $"Provision '{actionTypes}' must contain one of the following accepted values: '{string.Join(",", typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>())}'",
+                Rule = $"Provision 'actionType' must contain one of the following accepted values: '{string.Join(",", typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>())}'",
                 Path = "Source -> Provision -> actionType"
             };
 
@@ -44,7 +44,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 Name = "Invalid order reporting point",
                 Message = "Object identifying the characteristics of a traffic regulation measure (D-TRO & notice) specified Provision",
                 Rule = $"One or more provisions 'orderReportingPoint' must be of type '{string.Join(",", typeof(OrderReportingPointType).GetDisplayNames<OrderReportingPointType>())}'",
-                Path = "Source->Provision->orderReportingPoint"
+                Path = "Source -> Provision -> orderReportingPoint"
             };
 
             validationErrors.Add(error);
@@ -58,7 +58,7 @@ public class ProvisionValidationService : IProvisionValidationService
         {
             var error = new SemanticValidationError
             {
-                Name = "Invalid provision description",
+                Name = "Invalid description",
                 Message = "Free text description of the referenced provision",
                 Rule = "One or more provision descriptions are missing",
                 Path = "Source -> Provision -> provisionDescription"

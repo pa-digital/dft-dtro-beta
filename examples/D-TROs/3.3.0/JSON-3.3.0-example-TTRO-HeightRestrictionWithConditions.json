@@ -4,6 +4,7 @@
         "Source": {
             "actionType": "new",
             "currentTraOwner": 3300,
+            
             "Provision": [
                 {
                     "actionType": "new",
@@ -19,15 +20,15 @@
                                     {
                                         "lastUpdateDate": "2024-08-01T00:00:00",
                                         "UniqueStreetReferenceNumber": [
-                                            {
-                                                "usrn": 39608173
-                                            }
-                                        ]
+											{
+												"usrn": 39608173
+											}
+										]	
                                     }
                                 ],
-                                "point": "SRID=27700;POINT(323544 124622)",
+								"point": "SRID=27700;POINT(323544 124622)",
                                 "representation": "centreLinePoint",
-                                "version": 1
+								"version": 1
                             }
                         }
                     ],
@@ -55,17 +56,17 @@
                                     ]
                                 }
                             ],
-                            "GeneralRegulation": {
+							"GeneralRegulation": {
                                 "regulationType": "dimensionMaximumHeightWithTRO"
                             },
-                            "isDynamic": false,
-                            "timeZone": "Europe/London"
+							"isDynamic": false,
+                            "timeZone": "Europe/London"                            
                         }
                     ]
                 }
             ],
             "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
-            "section": "All sections",
+			"section": "All sections",
             "traAffected": [
                 3300
             ],

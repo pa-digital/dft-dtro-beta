@@ -23,10 +23,10 @@ public class RegulationValidation : IRegulationValidation
         {
             SemanticValidationError newError = new()
             {
-                Name = "Regulations",
+                Name = "Regulation 'isDynamic'",
                 Message = "Indicates if the regulation is dynamic in nature.",
                 Path = "Source -> Provision -> Regulation -> isDynamic",
-                Rule = "'isDynamic' must be present and has to be 'true' or 'false'.",
+                Rule = "Regulation 'isDynamic' must be present and has to be 'true' or 'false'.",
             };
 
             errors.Add(newError);
@@ -39,10 +39,10 @@ public class RegulationValidation : IRegulationValidation
         {
             SemanticValidationError newError = new()
             {
-                Name = "Regulations",
+                Name = "Regulation 'timeZone'",
                 Message = "IANA time-zone (see http://www.iana.org/time-zones).",
                 Path = "Source -> Provision -> Regulation -> timeZone",
-                Rule = "'timeZone' must be present.",
+                Rule = "Regulation 'timeZone' must be present.",
             };
 
             errors.Add(newError);
@@ -155,8 +155,6 @@ public class RegulationValidation : IRegulationValidation
 
                             errors.Add(newError);
                         }
-                        break;
-                    default:
                         break;
                 }
             }
