@@ -24,10 +24,10 @@ public class SourceValidationService : ISourceValidationService
         {
             var error = new SemanticValidationError
             {
-                Name = $"Invalid '{nameof(SourceActionType)}' error",
+                Name = "Invalid 'actionType'",
                 Message = "Indicates the nature of update between D-TRO records or their constituent parts",
-                Rule = $"Source '{actionType}' must contain one of the following accepted values: '{string.Join(",", typeof(SourceActionType).GetDisplayNames<SourceActionType>())}'",
-                Path = "Source -> actionType"
+                Path = "Source -> actionType",
+                Rule = $"Source 'actionType' must contain one of the following accepted values: '{string.Join(",", typeof(SourceActionType).GetDisplayNames<SourceActionType>())}'"
             };
 
             validationErrors.Add(error);
@@ -44,8 +44,8 @@ public class SourceValidationService : ISourceValidationService
             {
                 Name = "Invalid 'Current Traffic regulation authority current owner'",
                 Message = "Current Traffic regulation authority maintaining this D-TRO (SWA-like code)",
-                Rule = $"Source traffic regulation authority current owner has to be one of '{string.Join(",", traCodes)}'",
-                Path = "Source -> currentTraOwner"
+                Path = "Source -> currentTraOwner",
+                Rule = $"Source 'currentTraOwner' must contain one of these '{string.Join(",", traCodes)}' codes"
             };
 
             validationErrors.Add(error);
@@ -56,10 +56,10 @@ public class SourceValidationService : ISourceValidationService
         {
             var error = new SemanticValidationError
             {
-                Name = $"'Invalid {nameof(reference)}'",
+                Name = "Invalid 'reference'",
                 Message = "Indicates the nature of update between D-TRO records or their constituent parts.",
-                Rule = $"Source '{nameof(reference)}' must be of type '{typeof(string)}'",
-                Path = "Source -> reference"
+                Path = "Source -> reference",
+                Rule = $"Source 'reference' must be of type '{typeof(string)}'"
             };
 
             validationErrors.Add(error);
@@ -70,10 +70,10 @@ public class SourceValidationService : ISourceValidationService
         {
             var error = new SemanticValidationError
             {
-                Name = $"Invalid '{nameof(section)}'",
+                Name = "Invalid 'section'",
                 Message = "Reference to the section of the D-TRO",
-                Rule = $"Source '{nameof(section)}' need to be present.",
-                Path = "Source -> section"
+                Path = "Source -> section",
+                Rule = "Source 'section' need to be present."
             };
 
             validationErrors.Add(error);
@@ -84,10 +84,10 @@ public class SourceValidationService : ISourceValidationService
         {
             var error = new SemanticValidationError
             {
-                Name = $"Invalid or null '{nameof(traAffectedCodes)}'",
+                Name = "Invalid or null 'traAffected'",
                 Message = "Traffic regulation authorities who roads are affected by this D-TRO",
-                Rule = $"Source '{nameof(traAffectedCodes)}' must not be null and an array of integers",
-                Path = "Source -> traAffected"
+                Path = "Source -> traAffected",
+                Rule = "Source 'traAffected' must not be null and an array of integers"
             };
             validationErrors.Add(error);
         }
@@ -99,10 +99,10 @@ public class SourceValidationService : ISourceValidationService
         {
             validationErrors.Add(new SemanticValidationError
             {
-                Name = $"Invalid 'Traffic regulation authority codes'",
+                Name = "Invalid 'traAffected'",
                 Message = "Traffic regulation authorities who roads are affected by this D-TRO",
-                Rule = $"One of the source '{string.Join(",", traAffectedCodes)}' codes are not register",
-                Path = "Source -> traAffected"
+                Path = "Source -> traAffected",
+                Rule = $"One or more of the Source '{string.Join(",", traAffectedCodes)}' codes are not register"
             });
         }
 
@@ -112,10 +112,10 @@ public class SourceValidationService : ISourceValidationService
         {
             var error = new SemanticValidationError
             {
-                Name = "Invalid 'Current Traffic regulation authority creator'",
+                Name = "Invalid 'traCreator'",
                 Message = "Traffic regulation authority maintaining this D-TRO (SWA-like code)",
-                Rule = $"Traffic regulation authority creator has to be one of '{string.Join(",", traCodes)}'",
-                Path = "Source -> traCreator"
+                Path = "Source -> traCreator",
+                Rule = $"Source 'traCreator' has to be one of '{string.Join(",", traCodes)}'"
             };
 
             validationErrors.Add(error);
@@ -125,9 +125,9 @@ public class SourceValidationService : ISourceValidationService
         {
             var semanticValidationError = new SemanticValidationError
             {
-                Name = "Invalid 'traffic regulation authority' code",
-                Message = "Traffic regulation authority code submitting D-TRO record",
-                Rule = "Traffic regulation authority code cannot be null"
+                Name = "Invalid 'traCreator' code",
+                Message = "Traffic regulation authority code submitting D-TRO record (SWA-like code)",
+                Rule = "Source 'traCreator' code cannot be null"
             };
 
             validationErrors.Add(semanticValidationError);
@@ -139,8 +139,8 @@ public class SourceValidationService : ISourceValidationService
             {
                 Name = "Traffic regulation authority code submitted is invalid",
                 Message = $"TRA '{submittedByTa}' cannot add/update a TRO for another TRA. (This D-TRO creator ID is '{traCreator}', owner ID is '{currentTraOwner}' )",
+                Path = "Source -> traCreator and Source -> currentTraOwner",
                 Rule = $"'{submittedByTa}' must be '{traCreator}' or '{currentTraOwner}'",
-                Path = "Source -> traCreator and Source -> currentTraOwner"
             };
 
             validationErrors.Add(error);
@@ -151,9 +151,9 @@ public class SourceValidationService : ISourceValidationService
         {
             var error = new SemanticValidationError
             {
-                Name = $"Invalid '{nameof(troName)}'",
+                Name = $"Invalid 'troName'",
                 Message = "Traffic regulation order published title",
-                Rule = $"Source '{nameof(troName)}' need to be present",
+                Rule = $"Source 'troName' need to be present",
                 Path = "Source -> troName"
             };
 
