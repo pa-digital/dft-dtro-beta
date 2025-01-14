@@ -15,6 +15,9 @@ RUN dotnet publish -o out -c Release -r linux-musl-x64 \
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime
 WORKDIR /app
 
+#Copy the icons directory
+COPY wwwroot/images /app/wwwroot/images
+
 # Copy the published application from the build stage
 COPY --from=build /app/out .
 RUN chmod +x Dft.DTRO.Admin
