@@ -19,9 +19,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
                 .OfType<ExpandoObject>())
             .ToList();
 
-        var descriptions = regulatedPlaces
-            .Select(regulatedPlace => regulatedPlace.GetValueOrDefault<string>("description"));
-
+        var descriptions = regulatedPlaces.Select(regulatedPlace => regulatedPlace.GetValueOrDefault<string>("description"));
         if (descriptions.Any(string.IsNullOrEmpty))
         {
             var error = new SemanticValidationError
@@ -29,7 +27,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
                 Name = "Invalid regulated place description",
                 Message = "Free text description of the regulated place",
                 Path = "Source -> Provision -> RegulatedPlace -> description",
-                Rule = "One or more 'description(s)' are missing"
+                Rule = "Provision 'description' must be of type 'string'"
             };
 
             errors.Add(error);
@@ -43,10 +41,9 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
             return errors;
         }
 
-        var regulatedPlaceTypes = typeof(RegulatedPlaceType).GetDisplayNames<RegulatedPlaceType>();
         var areValidRegulationTypes = passedInTypes
             .All(passedInType => passedInType != null &&
-                                 regulatedPlaceTypes.Any(passedInType.Equals));
+                                 Constants.RegulatedPlaceTypes.Any(passedInType.Equals));
 
         if (!areValidRegulationTypes)
         {
@@ -55,7 +52,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
                 Name = "Regulate place type",
                 Message = "Regulated place type missing or incorrect.",
                 Path = "Source -> Provision -> RegulatedPlace -> type",
-                Rule = $"One of '{string.Join(",", typeof(RegulatedPlaceType).GetDisplayNames<RegulatedPlaceType>())}' type(s) must be present.",
+                Rule = $"One of '{string.Join(",", Constants.RegulatedPlaceTypes)}' type(s) must be present.",
             };
 
             errors.Add(error);

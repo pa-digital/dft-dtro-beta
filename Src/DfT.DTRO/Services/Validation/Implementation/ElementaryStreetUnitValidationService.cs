@@ -48,14 +48,15 @@ public class ElementaryStreetUnitValidationService : IElementaryStreetUnitValida
                         .GetValueOrDefault<long>("esu"))
                     .ToList();
 
-                if (esus.Any(usrn => usrn == 0))
+                if (esus.Any(usrn => usrn == 0) || esus.Any(esu => esu is > 10000000 and < 1000000000000000))
                 {
                     var error = new SemanticValidationError
                     {
-                        Name = "Invalid esu",
-                        Message = "",
+                        Name = "Invalid esu ID",
+                        Message = "One or more “esu” are invalid",
                         Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> UniqueStreetReferenceNumber -> ElementaryStreetUnit -> esu",
-                        Rule = "One or more 'esu' is invalid"
+                        Rule = "'esu' value should follow the NSG DEC convention and be between 10,000,001 (8 digits) and 99,999,999,999,999 (14 digits) and specified as an integer (no leading zeros). " +
+                               "This shall correspond to a value found in the National Street Gazetteer"
                     };
 
                     errors.Add(error);

@@ -18,8 +18,8 @@ public class RegulationValidation : IRegulationValidation
             .ToList();
 
         var areDynamics = regulations
-        .Select(regulation => regulation.GetValueOrDefault<bool>(Constants.IsDynamic));
-        if (areDynamics.All(it => it.GetType() != typeof(bool)))
+        .Select(regulation => regulation.GetField(Constants.IsDynamic));
+        if (areDynamics.Any(it => it.GetType() != typeof(bool)))
         {
             SemanticValidationError newError = new()
             {
@@ -42,7 +42,7 @@ public class RegulationValidation : IRegulationValidation
                 Name = "Regulation 'timeZone'",
                 Message = "IANA time-zone (see http://www.iana.org/time-zones).",
                 Path = "Source -> Provision -> Regulation -> timeZone",
-                Rule = "Regulation 'timeZone' must be present.",
+                Rule = "Regulation 'timeZone' must be of type 'string'.",
             };
 
             errors.Add(newError);
@@ -65,14 +65,14 @@ public class RegulationValidation : IRegulationValidation
                     case "SpeedLimitValueBased":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
                         var mphValue = selectedRegulation.GetValueOrDefault<int>(Constants.MphValue);
-                        if (mphValue == 0)
+                        if (mphValue.GetType() != typeof(int) || mphValue == 0)
                         {
                             SemanticValidationError newError = new()
                             {
-                                Name = "Speed Limit Value Based Regulation",
+                                Name = "Invalid 'mphValue'",
                                 Message = "Speed limit value in miles per hour",
                                 Path = "Source -> Provision -> Regulation -> SpeedLimitValueBased -> mphValue",
-                                Rule = "'mphValue' cannot be zero",
+                                Rule = "'mphValue' must be an integer and not '0'",
                             };
 
                             errors.Add(newError);
@@ -84,7 +84,7 @@ public class RegulationValidation : IRegulationValidation
                         {
                             SemanticValidationError newError = new()
                             {
-                                Name = "Speed Limit Value Type Regulation",
+                                Name = "Invalid 'type'",
                                 Message = "Speed limit value type value indicated",
                                 Path = "Source -> Provision -> Regulation -> SpeedLimitValueBased -> type",
                                 Rule = $"'type' must be one of '{string.Join(",", Constants.SpeedLimitValueTypes)}'",
@@ -101,7 +101,7 @@ public class RegulationValidation : IRegulationValidation
                         {
                             SemanticValidationError newError = new()
                             {
-                                Name = "Speed Limit Value Based Regulation",
+                                Name = "Invalid 'type'",
                                 Message = "Speed limit based value indicated",
                                 Path = "Source -> Provision -> Regulation -> SpeedLimitProfileBased -> type",
                                 Rule = $"'type' must be one of '{string.Join(",", Constants.SpeedLimitProfileTypes)}'",
@@ -117,7 +117,7 @@ public class RegulationValidation : IRegulationValidation
                         {
                             SemanticValidationError newError = new()
                             {
-                                Name = "General Regulation",
+                                Name = "Invalid 'type'",
                                 Message = "Object indicating a specific regulation (other than speed limit or user-defined off-list regulation)",
                                 Path = "Source -> Provision -> Regulation -> GeneralRegulation -> regulationType",
                                 Rule = $"'type' must be one of '{string.Join(",", Constants.RegulationTypes)}'",
@@ -127,30 +127,29 @@ public class RegulationValidation : IRegulationValidation
                         break;
                     case "OffListRegulation":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
-
-                        var regulationFullText = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationFullText);
+                        var regulationFullText = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationFullName);
                         if (string.IsNullOrEmpty(regulationFullText))
                         {
                             SemanticValidationError newError = new()
                             {
-                                Name = "Off List Regulation",
+                                Name = "Invalid 'regulationFullText'",
                                 Message = "Full description of the other type of regulation",
                                 Path = "Source -> Provision -> Regulation -> OffListRegulation -> regulationFullText",
-                                Rule = "'regulationFullText' must be present",
+                                Rule = "'regulationFullText' must be of type 'string' and cannot be null",
                             };
 
                             errors.Add(newError);
                         }
 
-                        var regulationShortName = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationShortName);
+                        var regulationShortName = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationShortText);
                         if (string.IsNullOrEmpty(regulationShortName))
                         {
                             SemanticValidationError newError = new()
                             {
-                                Name = "Off List Regulation",
+                                Name = "Invalid 'regulationShortName'",
                                 Message = "User-defined short name for other type of regulation",
                                 Path = "Source -> Provision -> Regulation -> OffListRegulation -> regulationShortName",
-                                Rule = "'regulationShortName' must be present",
+                                Rule = "'regulationShortName' must be of type 'string' and cannot be null",
                             };
 
                             errors.Add(newError);

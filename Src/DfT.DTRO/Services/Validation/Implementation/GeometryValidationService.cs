@@ -6,11 +6,11 @@ namespace DfT.DTRO.Services.Validation.Implementation;
 /// <inheritdoc cref="IGeometryValidationService"/>
 public class GeometryValidationService : IGeometryValidationService
 {
+    private readonly List<SemanticValidationError> _errors = new();
+
     /// <inheritdoc cref="IGeometryValidationService"/>
     public List<SemanticValidationError> Validate(DtroSubmit dtroSubmit)
     {
-        var errors = new List<SemanticValidationError>();
-
         if (dtroSubmit.SchemaVersion < new SchemaVersion("3.3.0"))
         {
             var passedInOldGeometries = dtroSubmit
@@ -32,12 +32,12 @@ public class GeometryValidationService : IGeometryValidationService
                     var error = new SemanticValidationError
                     {
                         Name = "Invalid geometry version",
-                        Message = "Version of geometry linked to a concrete forms of geometry",
+                        Message = "Version of geometry linked to a concrete instance of geometry",
                         Path = "Source -> Provision -> RegulatedPlace -> Geometry -> version",
                         Rule = $"Version number must be an integer and cannot be '{version}'"
                     };
 
-                    errors.Add(error);
+                    _errors.Add(error);
                 }
 
                 foreach (var concreteGeometry in Constants.ConcreteGeometries.Where(oldGeometry.HasField))
@@ -57,7 +57,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "The coordinates cannot be null"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             var isBritishGrid = IsBritishGrid(point);
@@ -68,10 +68,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'PointGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
-                                    Rule = $"The grid must be '{Constants.Srid27700}'"
+                                    Rule = $"The WKT string must start with '{Constants.Srid27700}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
                             var isWithinBoundaries = IsWithinUkBoundaries(point, concreteGeometry);
                             if (!isWithinBoundaries)
@@ -81,10 +81,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid coordinates",
                                     Message = "Geometry grid linked to 'PointGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
-                                    Rule = $"Coordinates '{point}' must be within Great Britain"
+                                    Rule = $"Coordinates '{point}' are incorrect or not within Great Britain"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             var representation = selectedGeometry.GetValueOrDefault<string>("representation");
@@ -98,15 +98,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "'representation' is missing"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
-                            var representationPointType = typeof(PointType)
-                                .GetDisplayNames<PointType>()
-                                .ToList();
-                            var isValidRepresentation = representationPointType
-                                .Any(it => representation != null && representation.Contains(it));
-
+                            var isValidRepresentation = Constants.PointTypes.Any(it => representation != null && representation.Equals(it));
                             if (!isValidRepresentation)
                             {
                                 var error = new SemanticValidationError
@@ -114,10 +109,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid representation",
                                     Message = "Indicates the nature of the point location for a point representation of a regulated place.",
                                     Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> representation",
-                                    Rule = $"'{representation}' must be one of '{string.Join(",", representationPointType)}'"
+                                    Rule = $"'representation' must be one of '{string.Join(",", Constants.PointTypes)}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             break;
@@ -133,14 +128,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "'direction' is missing"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
-
-                            var linearDirectionType = typeof(LinearDirectionType)
-                                .GetDisplayNames<LinearDirectionType>()
-                                .ToList();
                             var isValidLinearDirectionType =
-                                linearDirectionType.Any(it => direction != null && direction.Contains(it));
+                                Constants.LinearDirectionTypes.Any(it => direction != null && direction.Equals(it));
                             if (!isValidLinearDirectionType)
                             {
                                 var error = new SemanticValidationError
@@ -148,10 +139,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid direction",
                                     Message = "Indicates the direction of the applicability of the referenced regulation.",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> direction",
-                                    Rule = $"'{direction}' must be on of '{string.Join(",", linearDirectionType)}'"
+                                    Rule = $"'direction' must be on of '{string.Join(",", Constants.LinearDirectionTypes)}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             var lateralPosition = selectedGeometry.GetValueOrDefault<string>("lateralPosition");
@@ -165,15 +156,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "'lateralPosition' is missing"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
-                            var linearLateralPositionType = typeof(LinearLateralPositionType)
-                                .GetDisplayNames<LinearLateralPositionType>()
-                                .ToList();
-
-                            var isValidLateralPosition = linearLateralPositionType
-                                .Any(it => lateralPosition != null && lateralPosition.Contains(it));
+                            var isValidLateralPosition = Constants.LinearLateralPositionTypes.Any(it => lateralPosition != null && lateralPosition.Equals(it));
                             if (!isValidLateralPosition)
                             {
                                 var error = new SemanticValidationError
@@ -181,10 +167,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid lateral position",
                                     Message = "Indicates the lateral position across a road of the linear representation of a regulated place.",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> lateralPosition",
-                                    Rule = $"'{lateralPosition}' must be one of '{string.Join(",", linearLateralPositionType)}'"
+                                    Rule = $"'lateralPosition' must be one of '{string.Join(",", Constants.LinearLateralPositionTypes)}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             var lineString = selectedGeometry.GetValueOrDefault<string>("linestring");
@@ -198,7 +184,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "The coordinates cannot be null"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isBritishGrid = IsBritishGrid(lineString);
@@ -209,10 +195,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'LinearGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> linestring",
-                                    Rule = $"The grid must be '{Constants.Srid27700}'"
+                                    Rule = $"The WKT string must start with '{Constants.Srid27700}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isWithinBoundaries = IsWithinUkBoundaries(lineString, concreteGeometry);
@@ -223,10 +209,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid coordinates",
                                     Message = "Geometry grid linked to 'LinearGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> linestring",
-                                    Rule = $"Coordinates '{lineString}' must be within Great Britain"
+                                    Rule = $"Coordinates '{lineString}' are incorrect or not within Great Britain"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             representation = selectedGeometry.GetValueOrDefault<string>("representation");
@@ -240,12 +226,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "'representation' is missing"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
-                            var linearTypes = typeof(LinearType).GetDisplayNames<LinearType>().ToList();
-                            var isValidLinearType = linearTypes
-                                .Any(it => representation != null && representation.Contains(it));
+                            var isValidLinearType = Constants.LinearTypes.Any(it => representation != null && representation.Equals(it));
                             if (!isValidLinearType)
                             {
                                 var error = new SemanticValidationError
@@ -253,10 +237,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid representation",
                                     Message = "Indicates the nature of the point location for a linear representation of a regulated place.",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> representation",
-                                    Rule = $"'{representation}' must be one of '{string.Join(",", linearTypes)}'"
+                                    Rule = $"'representation' must be one of '{string.Join(",", Constants.LinearTypes)}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
                             break;
                         case "Polygon":
@@ -271,7 +255,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "The coordinates cannot be null"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isBritishGrid = IsBritishGrid(polygon);
@@ -282,10 +266,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'Polygon'",
                                     Path = "Source -> Provision -> RegulatedPlace -> Polygon -> polygon",
-                                    Rule = $"The grid must be '{Constants.Srid27700}'"
+                                    Rule = $"The WKT string must start with '{Constants.Srid27700}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isWithinBoundaries = IsWithinUkBoundaries(polygon, concreteGeometry);
@@ -296,10 +280,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid coordinates",
                                     Message = "Geometry grid linked to 'Polygon'",
                                     Path = "Source -> Provision -> RegulatedPlace -> Polygon -> polygon",
-                                    Rule = $"Coordinates '{polygon}' must be within Great Britain"
+                                    Rule = $"Coordinates '{polygon}' are incorrect or not within Great Britain"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
                             break;
                         case "DirectedLinear":
@@ -314,7 +298,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "The coordinates cannot be null"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isBritishGrid = IsBritishGrid(directedLineString);
@@ -325,10 +309,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'DirectedLinear'",
                                     Path = "Source -> Provision -> RegulatedPlace -> DirectedLinear -> directedLineString",
-                                    Rule = $"The grid must be '{Constants.Srid27700}'"
+                                    Rule = $"The WKT string must start with '{Constants.Srid27700}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isWithinBoundaries = IsWithinUkBoundaries(directedLineString, concreteGeometry);
@@ -339,10 +323,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid coordinates",
                                     Message = "Geometry grid linked to 'DirectedLinear'",
                                     Path = "Source -> Provision -> RegulatedPlace -> DirectedLinear -> directedLineString",
-                                    Rule = $"Coordinates '{directedLineString}' must be within Great Britain"
+                                    Rule = $"Coordinates '{directedLineString}' are incorrect or not within Great Britain"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
                             break;
                     }
@@ -372,12 +356,12 @@ public class GeometryValidationService : IGeometryValidationService
                         var error = new SemanticValidationError
                         {
                             Name = "Invalid geometry version",
-                            Message = "Version of geometry linked to a concrete forms of geometry",
+                            Message = "Version of geometry linked to a concrete instance of geometry",
                             Path = "Source -> Provision -> RegulatedPlace -> Geometry -> version",
                             Rule = $"Version number must be an integer and cannot be '{version}'"
                         };
 
-                        errors.Add(error);
+                        _errors.Add(error);
                     }
 
                     switch (concreteGeometry)
@@ -388,13 +372,13 @@ public class GeometryValidationService : IGeometryValidationService
                             {
                                 var error = new SemanticValidationError
                                 {
-                                    Name = "Invalid geometry coordinates",
+                                    Name = "Invalid coordinates",
                                     Message = "Geometry coordinates linked to 'PointGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
                                     Rule = "The coordinates cannot be null"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             var isBritishGrid = IsBritishGrid(point);
@@ -405,10 +389,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'PointGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
-                                    Rule = $"The grid must be '{Constants.Srid27700}'"
+                                    Rule = $"The WKT string must start with '{Constants.Srid27700}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             var isWithinBoundaries = IsWithinUkBoundaries(point, concreteGeometry);
@@ -419,10 +403,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid coordinates",
                                     Message = "Geometry grid linked to 'PointGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
-                                    Rule = $"Coordinates '{point}' must be within Great Britain"
+                                    Rule = $"Coordinates '{point}' are incorrect or not within Great Britain"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             var representation = selectedGeometry.GetValueOrDefault<string>("representation");
@@ -436,15 +420,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "'representation' is missing"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
-                            var representationPointType = typeof(PointType)
-                                .GetDisplayNames<PointType>()
-                                .ToList();
-                            var isValidRepresentation = representationPointType
-                                .Any(it => representation != null && representation.Contains(it));
-
+                            var isValidRepresentation = Constants.PointTypes.Any(it => representation != null && representation.Equals(it));
                             if (!isValidRepresentation)
                             {
                                 var error = new SemanticValidationError
@@ -452,10 +431,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid representation",
                                     Message = "Indicates the nature of the point location for a point representation of a regulated place.",
                                     Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> representation",
-                                    Rule = $"'{representation}' must be one of '{string.Join(",", representationPointType)}'"
+                                    Rule = $"'representation' must be one of '{string.Join(",", Constants.PointTypes)}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             break;
@@ -471,14 +450,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "'direction' is missing"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
-                            var linearDirectionType = typeof(LinearDirectionType)
-                                .GetDisplayNames<LinearDirectionType>()
-                                .ToList();
-                            var isValidLinearDirectionType =
-                                linearDirectionType.Any(it => direction != null && direction.Contains(it));
+                            var isValidLinearDirectionType = Constants.LinearDirectionTypes.Any(it => direction != null && direction.Equals(it));
                             if (!isValidLinearDirectionType)
                             {
                                 var error = new SemanticValidationError
@@ -486,10 +461,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid direction",
                                     Message = "Indicates the direction of the applicability of the referenced regulation.",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> direction",
-                                    Rule = $"'{direction}' must be on of '{string.Join(",", linearDirectionType)}'"
+                                    Rule = $"'direction' must be on of '{string.Join(",", Constants.LinearDirectionTypes)}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             var lateralPosition = selectedGeometry.GetValueOrDefault<string>("lateralPosition");
@@ -503,15 +478,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "'lateralPosition' is missing"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
-                            var linearLateralPositionType = typeof(LinearLateralPositionType)
-                                .GetDisplayNames<LinearLateralPositionType>()
-                                .ToList();
-
-                            var isValidLateralPosition = linearLateralPositionType
-                                .Any(it => lateralPosition != null && lateralPosition.Contains(it));
+                            var isValidLateralPosition = Constants.LinearLateralPositionTypes.Any(it => lateralPosition != null && lateralPosition.Equals(it));
                             if (!isValidLateralPosition)
                             {
                                 var error = new SemanticValidationError
@@ -519,10 +489,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid lateral position",
                                     Message = "Indicates the lateral position across a road of the linear representation of a regulated place.",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> lateralPosition",
-                                    Rule = $"'{lateralPosition}' must be one of '{string.Join(",", linearLateralPositionType)}'"
+                                    Rule = $"'lateralPosition' must be one of '{string.Join(",", Constants.LinearLateralPositionTypes)}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             var lineString = selectedGeometry.GetValueOrDefault<string>("linestring");
@@ -536,7 +506,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "The coordinates cannot be null"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isBritishGrid = IsBritishGrid(lineString);
@@ -547,10 +517,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'LinearGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> linestring",
-                                    Rule = $"The grid must be '{Constants.Srid27700}'"
+                                    Rule = $"The WKT string must start with '{Constants.Srid27700}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isWithinBoundaries = IsWithinUkBoundaries(lineString, concreteGeometry);
@@ -561,10 +531,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid coordinates",
                                     Message = "Geometry grid linked to 'LinearGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> linestring",
-                                    Rule = $"Coordinates '{lineString}' must be within Great Britain"
+                                    Rule = $"Coordinates '{lineString}' are incorrect or not within Great Britain"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             representation = selectedGeometry.GetValueOrDefault<string>("representation");
@@ -578,12 +548,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "'representation' is missing"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
-                            var linearTypes = typeof(LinearType).GetDisplayNames<LinearType>().ToList();
-                            var isValidLinearType = linearTypes
-                                .Any(it => representation != null && representation.Contains(it));
+                            var isValidLinearType = Constants.LinearTypes.Any(it => representation != null && representation.Equals(it));
                             if (!isValidLinearType)
                             {
                                 var error = new SemanticValidationError
@@ -591,10 +559,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid representation",
                                     Message = "Indicates the nature of the point location for a linear representation of a regulated place.",
                                     Path = "Source -> Provision -> RegulatedPlace -> LinearGeometry -> representation",
-                                    Rule = $"'{representation}' must be one of '{string.Join(",", linearTypes)}'"
+                                    Rule = $"'representation' must be one of '{string.Join(",", Constants.LinearTypes)}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
                             break;
                         case "Polygon":
@@ -609,7 +577,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "The coordinates cannot be null"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isBritishGrid = IsBritishGrid(polygon);
@@ -620,10 +588,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'Polygon'",
                                     Path = "Source -> Provision -> RegulatedPlace -> Polygon -> polygon",
-                                    Rule = $"The grid must be '{Constants.Srid27700}'"
+                                    Rule = $"The WKT string must start with '{Constants.Srid27700}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isWithinBoundaries = IsWithinUkBoundaries(polygon, concreteGeometry);
@@ -634,10 +602,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid coordinates",
                                     Message = "Geometry grid linked to 'Polygon'",
                                     Path = "Source -> Provision -> RegulatedPlace -> Polygon -> polygon",
-                                    Rule = $"Coordinates '{polygon}' must be within Great Britain"
+                                    Rule = $"Coordinates '{polygon}' are incorrect or not within Great Britain"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
                             break;
                         case "DirectedLinear":
@@ -652,7 +620,7 @@ public class GeometryValidationService : IGeometryValidationService
                                     Rule = "The coordinates cannot be null"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isBritishGrid = IsBritishGrid(directedLineString);
@@ -663,10 +631,10 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid geometry grid",
                                     Message = "Geometry grid linked to 'DirectedLinear'",
                                     Path = "Source -> Provision -> RegulatedPlace -> DirectedLinear -> directedLineString",
-                                    Rule = $"The grid must be '{Constants.Srid27700}'"
+                                    Rule = $"The WKT string must start with '{Constants.Srid27700}'"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
 
                             isWithinBoundaries = IsWithinUkBoundaries(directedLineString, concreteGeometry);
@@ -677,52 +645,60 @@ public class GeometryValidationService : IGeometryValidationService
                                     Name = "Invalid coordinates",
                                     Message = "Geometry grid linked to 'DirectedLinear'",
                                     Path = "Source -> Provision -> RegulatedPlace -> DirectedLinear -> directedLineString",
-                                    Rule = $"Coordinates '{directedLineString}' must be within Great Britain"
+                                    Rule = $"Coordinates '{directedLineString}' are incorrect or not within Great Britain"
                                 };
 
-                                errors.Add(error);
+                                _errors.Add(error);
                             }
                             break;
                     }
                 }
             }
         }
-        return errors;
+
+        return _errors;
     }
 
-    private bool IsBritishGrid(string source)
+    private static bool IsBritishGrid(string source)
     {
         var parts = source.Split(';');
         var first = parts.First();
         return first == Constants.Srid27700;
     }
 
-    private bool IsWithinUkBoundaries(string source, string concreteGeometry)
+    private static bool IsWithinUkBoundaries(string source, string concreteGeometry)
     {
         const string ukBoundaryWkt = "POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))";
         WKTReader wktReader = new();
         Polygon ukBoundary = wktReader.Read(ukBoundaryWkt) as Polygon;
         var coordinates = source.Split(';').Last();
         bool isWithinUk = false;
-        switch (concreteGeometry)
+        try
         {
-            case "PointGeometry":
-                Point pointToValidate = wktReader.Read(coordinates) as Point;
-                isWithinUk = ukBoundary != null && ukBoundary.Contains(pointToValidate);
-                break;
-            case "LinearGeometry":
-                LineString lineStringToValidate = wktReader.Read(coordinates) as LineString;
-                isWithinUk = ukBoundary != null && ukBoundary.Contains(lineStringToValidate);
-                break;
-            case "Polygon":
-                Polygon polygonToValidate = wktReader.Read(coordinates) as Polygon;
-                isWithinUk = ukBoundary != null && ukBoundary.Contains(polygonToValidate);
-                break;
-            case "DirectedLinear":
-                LineString directedLinearToValidate = wktReader.Read(coordinates) as LineString;
-                isWithinUk = ukBoundary != null && ukBoundary.Contains(directedLinearToValidate);
-                break;
+            switch (concreteGeometry)
+            {
+                case "PointGeometry":
+                    Point pointToValidate = wktReader.Read(coordinates) as Point;
+                    isWithinUk = ukBoundary != null && ukBoundary.Contains(pointToValidate);
+                    break;
+                case "LinearGeometry":
+                    LineString lineStringToValidate = wktReader.Read(coordinates) as LineString;
+                    isWithinUk = ukBoundary != null && ukBoundary.Contains(lineStringToValidate);
+                    break;
+                case "Polygon":
+                    Polygon polygonToValidate = wktReader.Read(coordinates) as Polygon;
+                    isWithinUk = ukBoundary != null && ukBoundary.Contains(polygonToValidate);
+                    break;
+                case "DirectedLinear":
+                    LineString directedLinearToValidate = wktReader.Read(coordinates) as LineString;
+                    isWithinUk = ukBoundary != null && ukBoundary.Contains(directedLinearToValidate);
+                    break;
+            }
+            return isWithinUk;
         }
-        return isWithinUk;
+        catch
+        {
+            return false;
+        }
     }
 }
