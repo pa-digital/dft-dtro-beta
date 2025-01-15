@@ -53,8 +53,27 @@ public class RegulationValidation : IRegulationValidation
         .Where(regulation => Constants.RegulationInstances.Any(regulation.HasField))
         .ToList();
 
+        existingRegulations = existingRegulations
+            .Where(existingRegulation => !existingRegulation.HasField("TemporaryRegulation"))
+            .ToList();
+
         foreach (var existingRegulation in existingRegulations)
         {
+            var multipleRegulations = Constants.RegulationInstances.Where(existingRegulation.HasField).ToList();
+            if (multipleRegulations.Count > 1)
+            {
+                SemanticValidationError newError = new()
+                {
+                    Name = "Invalid number of regulations",
+                    Message = "Object indicating the characteristics of a regulation",
+                    Path = "Source -> Provision -> Regulation -> oneOf",
+                    Rule = "Only one sub-type of Regulation can be associated with each Regulation instance",
+                };
+
+                errors.Add(newError);
+                return errors;
+            }
+
             foreach (var regulationType in Constants.RegulationInstances.Where(existingRegulation.HasField))
             {
                 ExpandoObject selectedRegulation;

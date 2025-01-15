@@ -28,10 +28,7 @@ public static class Constants
 
     public static IEnumerable<string> RegulationTypes => typeof(RegulationType).GetDisplayNames<RegulationType>().ToList();
 
-    public static IEnumerable<string> PreviousConditionTypes =>
-        ConditionTypes
-            .Select(conditionType => conditionType
-                .ToBackwardCompatibility(new SchemaVersion("3.2.4")));
+    public static IEnumerable<string> PreviousConditionTypes => ConditionTypes.Select(conditionType => conditionType.ToBackwardCompatibility(new SchemaVersion("3.2.4")));
 
     public static IEnumerable<string> OperatorTypes => typeof(OperatorType).GetDisplayNames<OperatorType>().ToList();
 
