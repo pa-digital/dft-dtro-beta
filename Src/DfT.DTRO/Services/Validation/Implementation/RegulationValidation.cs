@@ -146,7 +146,7 @@ public class RegulationValidation : IRegulationValidation
                         break;
                     case "OffListRegulation":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
-                        var regulationFullText = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationFullName);
+                        var regulationFullText = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationFullText);
                         if (string.IsNullOrEmpty(regulationFullText))
                         {
                             SemanticValidationError newError = new()
@@ -160,7 +160,7 @@ public class RegulationValidation : IRegulationValidation
                             errors.Add(newError);
                         }
 
-                        var regulationShortName = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationShortText);
+                        var regulationShortName = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationShortName);
                         if (string.IsNullOrEmpty(regulationShortName))
                         {
                             SemanticValidationError newError = new()

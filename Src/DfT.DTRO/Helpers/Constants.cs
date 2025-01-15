@@ -82,9 +82,9 @@ public static class Constants
 
     public static string AdditionalInformation => "additionalInformation";
 
-    public static string RegulationFullName => "regulationFullName";
+    public static string RegulationFullText => "regulationFullText";
 
-    public static string RegulationShortText => "regulationShortText";
+    public static string RegulationShortName => "regulationShortName";
 
     public static string RegulationType => "regulationType";
 

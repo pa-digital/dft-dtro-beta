@@ -21,26 +21,19 @@ public class RateTableValidationService : IRateTableValidationService
         foreach (var regulation in regulations)
         {
             var hasConditionSet = regulation.HasField("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
-            if (hasConditionSet)
-            {
-                var conditionsSets = regulation
+            var conditions = hasConditionSet
+                ? regulation
                     .GetValueOrDefault<IList<object>>("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .Cast<ExpandoObject>()
-                    .ToList();
-
-                rateTables.AddRange(conditionsSets
-                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
-            }
-            else
-            {
-                var conditions = regulation
+                    .ToList()
+                : regulation
                     .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .Cast<ExpandoObject>()
                     .ToList();
-
-                rateTables.AddRange(conditions
-                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
-            }
+            rateTables.AddRange(conditions
+                .Select(conditionSet => conditionSet
+                    .GetValueOrDefault<ExpandoObject>("RateTable"
+                        .ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
         }
 
         rateTables = rateTables.Where(rateTable => rateTable != null).ToList();

@@ -48,7 +48,7 @@ public class ElementaryStreetUnitValidationService : IElementaryStreetUnitValida
                         .GetValueOrDefault<long>("esu"))
                     .ToList();
 
-                if (esus.Any(usrn => usrn == 0) || esus.Any(esu => esu is > 10000000 and < 1000000000000000))
+                if (!esus.TrueForAll(esu => esu is > 10000000 and < 100000000000000))
                 {
                     var error = new SemanticValidationError
                     {
