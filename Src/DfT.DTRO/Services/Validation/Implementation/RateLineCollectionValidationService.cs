@@ -17,33 +17,15 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                 .OfType<ExpandoObject>())
             .ToList();
 
-        List<ExpandoObject> rateTables = new();
-        foreach (var regulation in regulations)
+        if (regulations.Any(it => !it.HasField("Condition") && !it.HasField("ConditionSet")))
         {
-            var hasConditionSet = regulation.HasField("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
-            if (hasConditionSet)
-            {
-                var conditionsSets = regulation
-                    .GetValueOrDefault<IList<object>>("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                    .Cast<ExpandoObject>()
-                    .ToList();
-
-                rateTables.AddRange(conditionsSets
-                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
-            }
-            else
-            {
-                var conditions = regulation
-                    .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                    .Cast<ExpandoObject>()
-                    .ToList();
-
-                rateTables.AddRange(conditions
-                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
-            }
+            return errors;
         }
 
-        rateTables = rateTables.Where(rateTable => rateTable != null).ToList();
+        var rateTables = regulations
+            .Select(regulation => regulation.GetValueOrDefault<ExpandoObject>("RateTable"))
+            .Where(rateTable => rateTable != null)
+            .ToList();
 
         if (!rateTables.Any())
         {
@@ -54,9 +36,8 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .SelectMany(expandoObject => expandoObject
                 .GetValueOrDefault<IList<object>>("RateLineCollection".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Cast<ExpandoObject>()
+            .Where(rateLineCollection => rateLineCollection != null)
             .ToList();
-
-        rateLineCollections = rateLineCollections.Where(rateLineCollection => rateLineCollection != null).ToList();
 
         var passedInCurrencies = rateLineCollections
             .Select(rateLineCollection => rateLineCollection.GetValueOrDefault<string>(Constants.ApplicableCurrency))

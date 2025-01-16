@@ -27,7 +27,7 @@ public class RateLineCollectionValidationServiceTests
                                     {{
                                         
                                     }}
-                                ]
+                                ],
                                 ""RateTable"" : {{
                                     ""RateLineCollection"": [
                                         {{
@@ -76,7 +76,7 @@ public class RateLineCollectionValidationServiceTests
                                     {{
 
                                     }}
-                                ]
+                                ],
                                 ""RateTable"" : {{
                                     ""RateLineCollection"": [
                                         {{
@@ -123,7 +123,7 @@ public class RateLineCollectionValidationServiceTests
                                     {{
 
                                     }}
-                                ]
+                                ],
                                 ""RateTable"" : {{
                                     ""RateLineCollection"": [
                                         {{
@@ -170,7 +170,7 @@ public class RateLineCollectionValidationServiceTests
                                     {{
 
                                     }}
-                                ]
+                                ],
                                 ""RateTable"" : {{
                                     ""RateLineCollection"": [
                                         {{
@@ -217,7 +217,7 @@ public class RateLineCollectionValidationServiceTests
                                     {{
 
                                     }}
-                                ]
+                                ],
                                 ""RateTable"" : {{
                                     ""RateLineCollection"": [
                                         {{
@@ -264,7 +264,7 @@ public class RateLineCollectionValidationServiceTests
                                     {{
 
                                     }}
-                                ]
+                                ],
                                 ""RateTable"" : {{
                                     ""RateLineCollection"": [
                                         {{
@@ -317,7 +317,7 @@ public class RateLineCollectionValidationServiceTests
                                     {{
 
                                     }}
-                                ]
+                                ],
                                 ""RateTable"" : {{
                                     ""RateLineCollection"": [
                                         {{
@@ -364,7 +364,7 @@ public class RateLineCollectionValidationServiceTests
                                     {{
 
                                     }}
-                                ]
+                                ],
                                 ""RateTable"" : {{
                                     ""RateLineCollection"": [
                                         {{
@@ -419,7 +419,7 @@ public class RateLineCollectionValidationServiceTests
                                     {{
 
                                     }}
-                                ]
+                                ],
                                 ""RateTable"" : {{
                                     ""RateLineCollection"": [
                                         {{
