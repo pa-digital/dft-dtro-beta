@@ -38,7 +38,4 @@ public class SearchQuery
     public ValueCondition<DateTime> RegulationStart { get; set; }
 
     public ValueCondition<DateTime> RegulationEnd { get; set; }
-
-    public string SearchTerm { get; set; } // Text search
-    public string SelectedRegulation { get; set; } // Regulation filtering    
 }

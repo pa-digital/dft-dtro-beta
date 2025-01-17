@@ -100,7 +100,7 @@
                     @for (int i = 1; i <= totalPages; i++)
                     {
                         <li class="page-item @(i == Model.Dtros.Page ? "active" : "")">
-                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@i" asp-route-searchTerm="@Model.DtroUserSearch.SearchTerm" asp-route-dtroUserIdSelect="@Model.DtroUserSearch.DtroUserIdSelect">@i</a>
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@i" asp-route-dtroUserIdSelect="@Model.DtroUserSearch.DtroUserIdSelect">@i</a>
                         </li>
                     }
 

@@ -37,7 +37,7 @@ public class SearchModel : PageModel
                 var user = await _dtroUserService.GetDtroUserAsync(DtroUserSearch.DtroUserIdSelect.Value);
                 useTraId = user.TraId;
             }
-            Dtros = await _dtroService.SearchDtros(useTraId, pageNumber, DtroUserSearch);
+            Dtros = await _dtroService.SearchDtros(useTraId, pageNumber);
             DtroUserSearch.AlwaysButtonHidden = true;
             DtroUserSearch.UpdateButtonText = "Search";
             DtroUserSearch.DtroUsers = await _dtroUserService.GetDtroUsersAsync();

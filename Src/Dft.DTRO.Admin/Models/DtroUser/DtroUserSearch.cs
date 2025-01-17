@@ -18,9 +18,5 @@ public class DtroUserSearch
 
     public string PreviousSearch { get; set; } = string.Empty;
     
-    public string SearchTerm { get; set; }
-    public string SelectedRegulation { get; set; }
-    public string VehicleType { get; set; }
-    
 }
 
