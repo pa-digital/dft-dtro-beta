@@ -105,20 +105,16 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
         var passedInMaxValueCollections = rateLineCollections
             .Where(rateLineCollection => rateLineCollection.HasField(Constants.MaxValueCollection))
             .Select(maxValueCollection => maxValueCollection.GetValueOrDefault<object>(Constants.MaxValueCollection))
-            .Cast<double>()
             .ToList();
 
-        var areValidMaxValueCollections = passedInMaxValueCollections
-            .TrueForAll(passedInMaxValueCollection => passedInMaxValueCollection > 0.0);
-
-        if (!areValidMaxValueCollections)
+        if (passedInMaxValueCollections.Any(it => it is string))
         {
             SemanticValidationError error = new()
             {
                 Name = "Max Value Collection",
                 Message = "The maximum monetary amount to be applied in conjunction with use of this rate line collection. Defined in applicable currency with 2 decimal places.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.MaxValueCollection}",
-                Rule = $"If present '{Constants.MaxValueCollection}' must be of type decimal and not 0.0 or negative"
+                Rule = $"If present '{Constants.MaxValueCollection}' must be defined in applicable currency with 2 decimal places and not 0.0"
             };
 
             errors.Add(error);
@@ -147,20 +143,16 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
         var passedInMinValueCollections = rateLineCollections
             .Where(rateLineCollection => rateLineCollection.HasField(Constants.MinValueCollection))
             .Select(minValueCollection => minValueCollection.GetValueOrDefault<object>(Constants.MinValueCollection))
-            .Cast<double>()
             .ToList();
 
-        var areValidMinValueCollections = passedInMinValueCollections
-            .TrueForAll(passedInMinValueCollection => passedInMinValueCollection > 0.0);
-
-        if (!areValidMinValueCollections)
+        if (passedInMinValueCollections.Any(it => it is string))
         {
             SemanticValidationError error = new()
             {
                 Name = "Min Value Collection",
                 Message = "The minimum monetary amount to be applied in conjunction with use of this rate line collection. Defined in applicable currency with 2 decimal places.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.MinValueCollection}",
-                Rule = $"If present '{Constants.MinValueCollection}' must be of type decimal and not 0.0 or negative"
+                Rule = $"If present '{Constants.MinValueCollection}' must be defined in applicable currency with 2 decimal places and not 0.0"
             };
 
             errors.Add(error);

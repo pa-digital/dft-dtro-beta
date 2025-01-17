@@ -193,6 +193,19 @@ public static class ExpandoObjectExtensions
             }
         }
 
+        if (field is double d)
+        {
+            if (typeof(T) == typeof(double))
+            {
+                return (double)d is T db ? db : default;
+            }
+
+            if (typeof(T) == typeof(decimal))
+            {
+                return (decimal)d is T dc ? dc : default;
+            }
+        }
+
         if (field is not T result)
         {
             return default;
