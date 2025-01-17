@@ -42,6 +42,4 @@ jobs:
         run: dotnet tool install -g dotnet-format
 
       - name: Run .NET analyzers
-        run: |
-          dotnet tool install --global dotnet-format
-          dotnet build --no-restore --configuration Release
+        run: dotnet build --no-restore --configuration Release
