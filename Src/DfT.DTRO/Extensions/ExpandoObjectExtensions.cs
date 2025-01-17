@@ -124,7 +124,7 @@ public static class ExpandoObjectExtensions
 
         if (source.GetField(key) is not DateTime result)
         {
-            throw new InvalidOperationException($"The field under '{key}' was not {typeof(DateTime).FullName}");
+            return null;
         }
 
         return result;

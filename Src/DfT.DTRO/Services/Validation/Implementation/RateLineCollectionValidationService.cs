@@ -23,7 +23,9 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
         }
 
         var rateTables = regulations
-            .Select(regulation => regulation.GetValueOrDefault<ExpandoObject>("RateTable"))
+            .Select(regulation => regulation
+                .GetExpandoOrDefault("RateTable"
+                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Where(rateTable => rateTable != null)
             .ToList();
 
@@ -61,14 +63,10 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
 
         var passedInEndValidUsagePeriods = rateLineCollections
             .Where(rateLineCollection => rateLineCollection.HasField(Constants.EndValidUsagePeriod))
-            .Select(rateLineCollection => rateLineCollection.GetValueOrDefault<string>(Constants.EndValidUsagePeriod))
+            .Select(rateLineCollection => rateLineCollection.GetDateTimeOrNull(Constants.EndValidUsagePeriod))
             .ToList();
 
-        var areValidEndValidUsagePeriods = passedInEndValidUsagePeriods
-            .Where(passedInEndValidUsagePeriod => !string.IsNullOrEmpty(passedInEndValidUsagePeriod))
-            .Select(passedInEndValidUsagePeriod => DateTime.TryParse(passedInEndValidUsagePeriod, out var _)).ToList();
-
-        if (areValidEndValidUsagePeriods.Any() && areValidEndValidUsagePeriods.TrueForAll(isValidEndUsagePeriod => isValidEndUsagePeriod == false))
+        if (passedInEndValidUsagePeriods.Any() && passedInEndValidUsagePeriods.Any(isValidEndUsagePeriod => isValidEndUsagePeriod == null))
         {
             SemanticValidationError error = new()
             {
@@ -216,14 +214,11 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
         }
 
         var passedInStartValidUsagePeriods = rateLineCollections
-            .Select(rateLineCollection => rateLineCollection.GetValueOrDefault<string>(Constants.StartValidUsagePeriod))
+            .Where(rateLineCollection => rateLineCollection.HasField(Constants.StartValidUsagePeriod))
+            .Select(rateLineCollection => rateLineCollection.GetDateTimeOrNull(Constants.StartValidUsagePeriod))
             .ToList();
 
-        var areValidStartValidUsagePeriods = passedInStartValidUsagePeriods
-            .Select(passedInStartValidUsagePeriod => DateTime.TryParse(passedInStartValidUsagePeriod, out var _))
-            .ToList();
-
-        if (areValidStartValidUsagePeriods.All(isValidStartUsagePeriod => isValidStartUsagePeriod == false))
+        if (passedInStartValidUsagePeriods.Any(it => it == null))
         {
             SemanticValidationError error = new()
             {
@@ -234,6 +229,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             };
 
             errors.Add(error);
+
         }
 
         return errors;

@@ -23,7 +23,9 @@ public class RateLineValidationService : IRateLineValidationService
         }
 
         var rateTables = regulations
-            .Select(regulation => regulation.GetValueOrDefault<ExpandoObject>("RateTable"))
+            .Select(regulation => regulation
+                .GetExpandoOrDefault("RateTable"
+                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Where(rateTable => rateTable != null)
             .ToList();
 

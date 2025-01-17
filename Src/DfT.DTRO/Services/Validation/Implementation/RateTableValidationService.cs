@@ -23,7 +23,9 @@ public class RateTableValidationService : IRateTableValidationService
         }
 
         var rateTables = regulations
-            .Select(regulation => regulation.GetValueOrDefault<ExpandoObject>("RateTable"))
+            .Select(regulation => regulation
+                .GetExpandoOrDefault("RateTable"
+                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Where(rateTable => rateTable != null)
             .ToList();
 
@@ -31,6 +33,7 @@ public class RateTableValidationService : IRateTableValidationService
         {
             return errors;
         }
+
 
         var multipleUris = rateTables
             .Where(rateTable => rateTable.HasField(Constants.AdditionalInformation))

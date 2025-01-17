@@ -27,7 +27,7 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-
+                                        ""negate"": false
                                     }}
                                 ],
                                 ""RateTable"" : {{
@@ -83,7 +83,7 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-
+                                        ""negate"": false
                                     }}
                                 ],
                                 ""RateTable"" : {{
@@ -139,7 +139,7 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-
+                                        ""negate"": false
                                     }}
                                 ],
                                 ""RateTable"" : {{
@@ -193,7 +193,7 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-
+                                        ""negate"": false
                                     }}
                                 ],
                                 ""RateTable"" : {{
@@ -245,7 +245,7 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-
+                                        ""negate"": false
                                     }}
                                 ],
                                 ""RateTable"" : {{
@@ -299,7 +299,7 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-
+                                        ""negate"": false
                                     }}
                                 ],
                                 ""RateTable"" : {{
@@ -359,7 +359,7 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-
+                                        ""negate"": false
                                     }}
                                 ],
                                 ""RateTable"" : {{
@@ -419,7 +419,7 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-
+                                        ""negate"": false
                                     }}
                                 ],
                                 ""RateTable"" : {{
@@ -471,7 +471,7 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-
+                                        ""negate"": false
                                     }}
                                 ],
                                 ""RateTable"" : {{

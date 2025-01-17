@@ -23,7 +23,7 @@ public class RateTableValidationServiceTests
                             {{
                                 ""Condition"": [
                                     {{
-                                        ""negate"": false,
+                                        ""negate"": false
                                     }}
                                 ],
                                 ""RateTable"" : {{
@@ -62,8 +62,8 @@ public class RateTableValidationServiceTests
                                     }}
                                 ],
                                 ""RateTable"" : {{
-                                        ""additionalInformation"": ""https://loremipsum.co.uk"",
-                                        ""type"": ""{rateType}""
+                                    ""additionalInformation"": ""https://loremipsum.co.uk"",
+                                    ""type"": ""{rateType}""
                                 }}
                             }}
                         ]
