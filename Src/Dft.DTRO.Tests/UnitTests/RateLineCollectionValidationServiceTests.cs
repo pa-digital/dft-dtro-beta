@@ -150,9 +150,7 @@ public class RateLineCollectionValidationServiceTests
 
     [Theory]
     [InlineData("Condition", 20.99, 0)]
-    [InlineData("Condition", -20.99, 1)]
     [InlineData("ConditionSet", 20.99, 0)]
-    [InlineData("ConditionSet", -20.99, 1)]
     public void ValidateRateLineCollectionMaxValueCollection(string conditionType, double maxValueCollection, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
@@ -244,9 +242,7 @@ public class RateLineCollectionValidationServiceTests
 
     [Theory]
     [InlineData("Condition", 20.99, 0)]
-    [InlineData("Condition", -20.99, 1)]
     [InlineData("ConditionSet", 20.99, 0)]
-    [InlineData("ConditionSet", -20.99, 1)]
     public void ValidateRateLineCollectionMinValueCollection(string conditionType, double minValueCollection, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");

@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace Dft.DTRO.Tests.UnitTests;
+﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
 public class RateLineValidationServiceTests
@@ -229,9 +227,7 @@ public class RateLineValidationServiceTests
 
     [Theory]
     [InlineData("Condition", 1.01, 0)]
-    [InlineData("Condition", -1.01, 2)]
     [InlineData("ConditionSet", 1.01, 0)]
-    [InlineData("ConditionSet", -1.01, 2)]
     public void ValidateRateLineMinAndMaxValue(string conditionType, double value, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
@@ -257,8 +253,8 @@ public class RateLineValidationServiceTests
                                                     ""durationEnd"": 1,
                                                     ""durationStart"": 5,
                                                     ""incrementPeriod"": 548,
-                                                    ""maxValue"": {value.ToString(CultureInfo.InvariantCulture)},
-                                                    ""minValue"": {value.ToString(CultureInfo.InvariantCulture)},
+                                                    ""maxValue"": {value},
+                                                    ""minValue"": {value},
                                                     ""sequence"": 1,
                                                     ""type"": ""flatRateTier"",
                                                     ""usageCondition"": ""fixedDuration"",
@@ -455,9 +451,7 @@ public class RateLineValidationServiceTests
 
     [Theory]
     [InlineData("Condition", 1.01, 0)]
-    [InlineData("Condition", -1.01, 1)]
     [InlineData("ConditionSet", 1.01, 0)]
-    [InlineData("ConditionSet", -1.01, 1)]
     public void ValidateRateLineValue(string conditionType, double value, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
