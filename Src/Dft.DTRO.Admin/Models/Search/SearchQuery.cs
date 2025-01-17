@@ -38,4 +38,5 @@ public class SearchQuery
     public ValueCondition<DateTime> RegulationStart { get; set; }
 
     public ValueCondition<DateTime> RegulationEnd { get; set; }
+
 }

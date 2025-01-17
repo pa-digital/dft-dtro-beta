@@ -17,6 +17,5 @@ public class DtroUserSearch
     public Guid? PreviousDtroUserIdSelect { get; set; }
 
     public string PreviousSearch { get; set; } = string.Empty;
-    
 }
 
