@@ -70,14 +70,12 @@
 </table>
 
 @{
-    var maxPageSize = 50;
-    int totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / maxPageSize);
-    int currentPage = Model.Dtros.Page;
-    int displayPages = 2; // Number of pages to display before and after the current page
+    const int maxPageSize = 50;
+    var totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / maxPageSize);
+    const int displayPages = 2;
 }
 
 <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-    <!-- Record Count Display -->
     <div>
         @if (Model.Dtros.TotalCount > 0)
         { 
@@ -92,14 +90,14 @@
         {
             <nav aria-label="tro navigation">
                 <ul class="pagination justify-content-end">
-                    @if (currentPage > 1)
+                    @if (Model.Dtros.Page > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(currentPage - 1)">Previous</a>
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page - 1)">Previous</a>
                         </li>
                     }
 
-                    @if (currentPage > displayPages + 1)
+                    @if (Model.Dtros.Page > displayPages + 1)
                     {
                         <li class="page-item">
                             <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="1">1</a>
@@ -107,14 +105,14 @@
                         <li class="page-item disabled"><span class="page-link">...</span></li>
                     }
 
-                    @for (int i = Math.Max(1, currentPage - displayPages); i <= Math.Min(totalPages, currentPage + displayPages); i++)
+                    @for (int i = Math.Max(1, Model.Dtros.Page - displayPages); i <= Math.Min(totalPages, Model.Dtros.Page + displayPages); i++)
                     {
-                        <li class="page-item @(i == currentPage ? "active" : "")">
+                        <li class="page-item @(i == Model.Dtros.Page ? "active" : "")">
                             <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@i">@i</a>
                         </li>
                     }
 
-                    @if (currentPage < totalPages - displayPages)
+                    @if (Model.Dtros.Page < totalPages - displayPages)
                     {
                         <li class="page-item disabled"><span class="page-link">...</span></li>
                         <li class="page-item">
@@ -122,10 +120,10 @@
                         </li>
                     }
 
-                    @if (currentPage < totalPages)
+                    @if (Model.Dtros.Page < totalPages)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(currentPage + 1)">Next</a>
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page + 1)">Next</a>
                         </li>
                     }
                 </ul>
