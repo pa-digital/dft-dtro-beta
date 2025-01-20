@@ -41,7 +41,7 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                     var error = new SemanticValidationError
                     {
                         Name = "Missing last update date",
-                        Message = "",
+                        Message = "Indicates the date the USRN reference was last updated",
                         Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> lastUpdateDate",
                         Rule = "One or more 'lastUpdateDate' is missing"
                     };
@@ -55,7 +55,7 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                     var error = new SemanticValidationError
                     {
                         Name = "Invalid last update date",
-                        Message = "",
+                        Message = "Indicates the date the USRN reference was last updated",
                         Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> lastUpdateDate",
                         Rule = $"'lastUpdateDate' cannot be in the future"
                     };

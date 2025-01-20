@@ -17,38 +17,23 @@ public class RateTableValidationService : IRateTableValidationService
                 .OfType<ExpandoObject>())
             .ToList();
 
-        List<ExpandoObject> rateTables = new();
-        foreach (var regulation in regulations)
+        if (regulations.Any(it => !it.HasField("Condition") && !it.HasField("ConditionSet")))
         {
-            var hasConditionSet = regulation.HasField("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
-            if (hasConditionSet)
-            {
-                var conditionsSets = regulation
-                    .GetValueOrDefault<IList<object>>("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                    .Cast<ExpandoObject>()
-                    .ToList();
-
-                rateTables.AddRange(conditionsSets
-                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
-            }
-            else
-            {
-                var conditions = regulation
-                    .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                    .Cast<ExpandoObject>()
-                    .ToList();
-
-                rateTables.AddRange(conditions
-                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
-            }
+            return errors;
         }
 
-        rateTables = rateTables.Where(rateTable => rateTable != null).ToList();
+        var rateTables = regulations
+            .Select(regulation => regulation
+                .GetExpandoOrDefault("RateTable"
+                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
+            .Where(rateTable => rateTable != null)
+            .ToList();
 
         if (!rateTables.Any())
         {
             return errors;
         }
+
 
         var multipleUris = rateTables
             .Where(rateTable => rateTable.HasField(Constants.AdditionalInformation))

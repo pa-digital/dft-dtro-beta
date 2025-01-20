@@ -3,6 +3,23 @@ namespace DfT.DTRO.Helpers;
 
 public static class Constants
 {
+
+    public static IEnumerable<string> SourceActionTypes => typeof(SourceActionType).GetDisplayNames<SourceActionType>().ToList();
+
+    public static IEnumerable<string> ProvisionActionTypes => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>().ToList();
+
+    public static IEnumerable<string> OrderReportingPointTypes => typeof(OrderReportingPointType).GetDisplayNames<OrderReportingPointType>().ToList();
+
+    public static IEnumerable<string> RegulatedPlaceTypes => typeof(RegulatedPlaceType).GetDisplayNames<RegulatedPlaceType>();
+
+    public static IEnumerable<string> PointTypes => typeof(PointType).GetDisplayNames<PointType>().ToList();
+
+    public static IEnumerable<string> LinearDirectionTypes => typeof(LinearDirectionType).GetDisplayNames<LinearDirectionType>().ToList();
+
+    public static IEnumerable<string> LinearLateralPositionTypes => typeof(LinearLateralPositionType).GetDisplayNames<LinearLateralPositionType>().ToList();
+
+    public static IEnumerable<string> LinearTypes => typeof(LinearType).GetDisplayNames<LinearType>().ToList();
+
     public static IEnumerable<string> ConcreteGeometries => typeof(GeometryType).GetDisplayNames<GeometryType>();
 
     public static IEnumerable<string> ConditionTypes => typeof(ConditionType).GetDisplayNames<ConditionType>();
@@ -11,10 +28,7 @@ public static class Constants
 
     public static IEnumerable<string> RegulationTypes => typeof(RegulationType).GetDisplayNames<RegulationType>().ToList();
 
-    public static IEnumerable<string> PreviousConditionTypes =>
-        ConditionTypes
-            .Select(conditionType => conditionType
-                .ToBackwardCompatibility(new SchemaVersion("3.2.4")));
+    public static IEnumerable<string> PreviousConditionTypes => ConditionTypes.Select(conditionType => conditionType.ToBackwardCompatibility(new SchemaVersion("3.2.4")));
 
     public static IEnumerable<string> OperatorTypes => typeof(OperatorType).GetDisplayNames<OperatorType>().ToList();
 

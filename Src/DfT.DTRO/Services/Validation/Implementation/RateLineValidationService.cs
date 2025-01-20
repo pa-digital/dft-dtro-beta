@@ -17,33 +17,17 @@ public class RateLineValidationService : IRateLineValidationService
                 .OfType<ExpandoObject>())
             .ToList();
 
-        List<ExpandoObject> rateTables = new();
-        foreach (var regulation in regulations)
+        if (regulations.Any(it => !it.HasField("Condition") && !it.HasField("ConditionSet")))
         {
-            var hasConditionSet = regulation.HasField("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
-            if (hasConditionSet)
-            {
-                var conditionsSets = regulation
-                    .GetValueOrDefault<IList<object>>("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                    .Cast<ExpandoObject>()
-                    .ToList();
-
-                rateTables.AddRange(conditionsSets
-                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
-            }
-            else
-            {
-                var conditions = regulation
-                    .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                    .Cast<ExpandoObject>()
-                    .ToList();
-
-                rateTables.AddRange(conditions
-                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
-            }
+            return errors;
         }
 
-        rateTables = rateTables.Where(rateTable => rateTable != null).ToList();
+        var rateTables = regulations
+            .Select(regulation => regulation
+                .GetExpandoOrDefault("RateTable"
+                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
+            .Where(rateTable => rateTable != null)
+            .ToList();
 
         if (!rateTables.Any())
         {
@@ -52,11 +36,10 @@ public class RateLineValidationService : IRateLineValidationService
 
         var rateLineCollections = rateTables
             .SelectMany(expandoObject => expandoObject
-                .GetValueOrDefault<IList<object>>("RateLineCollection"))
+                .GetValueOrDefault<IList<object>>("RateLineCollection".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Cast<ExpandoObject>()
+            .Where(rateLineCollection => rateLineCollection != null)
             .ToList();
-
-        rateLineCollections = rateLineCollections.Where(rateLineCollection => rateLineCollection != null).ToList();
 
         var rateLines = rateLineCollections
             .SelectMany(expandoObject => expandoObject
@@ -73,7 +56,7 @@ public class RateLineValidationService : IRateLineValidationService
         {
             SemanticValidationError error = new()
             {
-                Name = "Description",
+                Name = "Invalid 'Description'",
                 Message = "Free-text description associated with this rate line.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.Description}",
                 Rule = $"If present, {Constants.Description} must not be empty"
@@ -91,10 +74,10 @@ public class RateLineValidationService : IRateLineValidationService
         {
             SemanticValidationError error = new()
             {
-                Name = "Duration end",
+                Name = "Invalid 'Duration end'",
                 Message = "If used, indicates the end time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.DurationEnd}",
-                Rule = $"If present, {Constants.DurationEnd} must not be empty"
+                Rule = $"If present, {Constants.DurationEnd} must be of type 'integer' and not 0"
             };
 
             errors.Add(error);
@@ -109,10 +92,10 @@ public class RateLineValidationService : IRateLineValidationService
         {
             SemanticValidationError error = new()
             {
-                Name = "Duration start",
+                Name = "Invalid 'Duration start'",
                 Message = "Indicates the start time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.DurationStart}",
-                Rule = $"If present, {Constants.DurationStart} must not be empty"
+                Rule = $"If present, {Constants.DurationStart} must be of type 'integer' and not 0"
             };
 
             errors.Add(error);
@@ -130,10 +113,10 @@ public class RateLineValidationService : IRateLineValidationService
         {
             SemanticValidationError error = new()
             {
-                Name = "Increment period",
+                Name = "Invalid 'Increment period'",
                 Message = $"The time period for incrementing the rate line charge. If set to the same as the duration of the period between the '{Constants.DurationStart}' and '{Constants.DurationEnd}' the increment will occur once per period.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.IncrementPeriod}",
-                Rule = $"If present, {Constants.IncrementPeriod} must be in integer."
+                Rule = $"If present, {Constants.IncrementPeriod} must be in integer and not 0."
             };
 
             errors.Add(error);
@@ -142,20 +125,16 @@ public class RateLineValidationService : IRateLineValidationService
         var passedInMaxValues = rateLines
             .Where(rateLine => rateLine.HasField(Constants.MaxValue))
             .Select(rateLine => rateLine.GetValueOrDefault<object>(Constants.MaxValue))
-            .Cast<double>()
             .ToList();
 
-        var areValidMaxValues = passedInMaxValues
-            .All(maxValue => maxValue > 0.0);
-
-        if (!areValidMaxValues)
+        if (passedInMaxValues.Any(it => it is string))
         {
             SemanticValidationError error = new()
             {
-                Name = "Max value",
+                Name = "Invalid 'Max value'",
                 Message = "The maximum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.MaxValue}",
-                Rule = $"If present, {Constants.MaxValue} must be defined in applicable currency with 2 decimal places"
+                Rule = $"If present, {Constants.MaxValue} must be defined in applicable currency with 2 decimal places and not 0.0"
             };
 
             errors.Add(error);
@@ -164,20 +143,16 @@ public class RateLineValidationService : IRateLineValidationService
         var passedInMinValues = rateLines
             .Where(rateLine => rateLine.HasField(Constants.MinValue))
             .Select(rateLine => rateLine.GetValueOrDefault<object>(Constants.MinValue))
-            .Cast<double>()
             .ToList();
 
-        var areValidMinValues = passedInMinValues
-            .All(maxValue => maxValue > 0.0);
-
-        if (!areValidMinValues)
+        if (passedInMinValues.Any(it => it is string))
         {
             SemanticValidationError error = new()
             {
-                Name = "Min value",
+                Name = "Invalid 'Min value'",
                 Message = "The minimum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.MinValue}",
-                Rule = $"If present, {Constants.MinValue} must be defined in applicable currency with 2 decimal places"
+                Rule = $"If present, {Constants.MinValue} must be defined in applicable currency with 2 decimal places and not 0.0"
             };
 
             errors.Add(error);
@@ -194,10 +169,10 @@ public class RateLineValidationService : IRateLineValidationService
         {
             SemanticValidationError error = new()
             {
-                Name = "Sequence",
+                Name = "Invalid 'Sequence'",
                 Message = "An indicator giving the place in sequence of this rate line collection.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.Sequence}",
-                Rule = $"'{Constants.Sequence}' must be of type integer and not a negative number",
+                Rule = $"'{Constants.Sequence}' must be of type integer and not zero",
             };
 
             errors.Add(error);
@@ -214,7 +189,7 @@ public class RateLineValidationService : IRateLineValidationService
         {
             SemanticValidationError error = new()
             {
-                Name = "Rate line type",
+                Name = "Invalid 'Rate line type'",
                 Message = "Indicates the nature of the rate line",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.Type}",
                 Rule = $"'{Constants.Type}' must be one of '{string.Join(",", Constants.RateLineTypes)}'",
@@ -235,7 +210,7 @@ public class RateLineValidationService : IRateLineValidationService
         {
             SemanticValidationError error = new()
             {
-                Name = "Rate usage condition type",
+                Name = "Invalid 'Rate usage condition type'",
                 Message = "Indicates conditions on the use of this rate line.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.UsageCondition}",
                 Rule = $"'{Constants.UsageCondition}' must be one of '{string.Join(",", Constants.RateUsageConditionsTypes)}'",
@@ -247,18 +222,16 @@ public class RateLineValidationService : IRateLineValidationService
         var values = rateLines
             .Where(rateLine => rateLine.HasField(Constants.Value))
             .Select(rateLine => rateLine.GetValueOrDefault<object>(Constants.Value))
-            .Cast<double>()
             .ToList();
 
-        var areValidValues = values.TrueForAll(value => value > 0.0);
-        if (!areValidValues)
+        if (values.Any(it => it is string))
         {
             SemanticValidationError error = new()
             {
-                Name = "Value",
+                Name = "Invalid 'Value'",
                 Message = "The value of the fee to be charged in respect of this rate line.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.Value}",
-                Rule = $"'{Constants.Value}' must be defined in applicable currency with 2 decimal places.",
+                Rule = $"'{Constants.Value}' must be defined in applicable currency with 2 decimal places and not 0.0",
             };
 
             errors.Add(error);
