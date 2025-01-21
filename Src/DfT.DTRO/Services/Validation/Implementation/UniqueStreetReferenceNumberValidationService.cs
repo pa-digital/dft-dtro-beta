@@ -45,7 +45,7 @@ public class UniqueStreetReferenceNumberValidationService : IUniqueStreetReferen
                         Name = "Invalid usrn",
                         Message = "One or more 'usrn' are invalid",
                         Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> UniqueStreetReferenceNumber -> usrn",
-                        Rule = "'usrn' value shoud be between 0 and 99999999"
+                        Rule = "'usrn' value should be between 0 and 99999999"
                     };
 
                     errors.Add(error);
