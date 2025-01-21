@@ -73,7 +73,7 @@ public class RateTableValidationService : IRateTableValidationService
             SemanticValidationError error = new()
             {
                 Name = "Rate type",
-                Message = "Defines the type of rate in use. [Defined by APDS - ISO/TS 5206-1]",
+                Message = "Defines the type of rate in use.",
                 Path = "Source -> Provision -> Regulation -> Condition -> RateTable -> type",
                 Rule = $"Rate type must be one of '{string.Join(",", Constants.RateTypes)}'",
             };
