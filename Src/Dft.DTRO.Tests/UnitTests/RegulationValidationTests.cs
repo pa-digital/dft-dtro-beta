@@ -81,7 +81,14 @@ public class RegulationValidationTests
 
     [Theory]
     [InlineData(10, 0)]
-    [InlineData(100, 0)]
+    [InlineData(20, 0)]
+    [InlineData(30, 0)]
+    [InlineData(40, 0)]
+    [InlineData(50, 0)]
+    [InlineData(60, 0)]
+    [InlineData(70, 0)]
+    [InlineData(80, 1)]
+    [InlineData(55, 1)]
     [InlineData(0, 1)]
     public void ValidateSpeedLimitValueBasedSpeedValue(int mphValue, int errorCount)
     {
@@ -126,7 +133,7 @@ public class RegulationValidationTests
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London"",
                     ""SpeedLimitValueBased"": {{
-                        ""mphValue"": 100,
+                        ""mphValue"": 70,
                         ""type"": ""{type}""
                     }}
                   }}

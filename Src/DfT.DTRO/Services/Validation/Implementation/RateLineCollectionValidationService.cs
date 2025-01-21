@@ -173,7 +173,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                        (dateTime.TimeOfDay >= start && dateTime.TimeOfDay <= end);
             }).ToList();
 
-        if (areValidResetTimes.Any() && areValidResetTimes.All(isValidResetTime => isValidResetTime == false))
+        if (areValidResetTimes.Any(isValidResetTime => isValidResetTime == false))
         {
             SemanticValidationError error = new()
             {
