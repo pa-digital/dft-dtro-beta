@@ -446,6 +446,7 @@ public class DTROsController : ControllerBase
     /// <summary>
     /// Get D-TRO records
     /// </summary>
+    /// <param name="queryParameters">Properties passed to query by</param>
     /// <returns>A list of D-TRO active records</returns>
     [HttpGet]
     [Route("/dtros")]
@@ -453,13 +454,11 @@ public class DTROsController : ControllerBase
     [SwaggerResponse(statusCode: 404, description: "Could not found any D-TRO records.")]
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 200, description: "Ok")]
-    public async Task<IActionResult> GetAll([FromQuery] List<int> traIds, [FromQuery] DateTime? fromDate, [FromQuery] DateTime? toDate)
+    public async Task<IActionResult> GetAll([FromQuery] QueryParameters queryParameters)
     {
-        //TODO if forget fromDate set it to datetime.minvalue if forget toDate set to current days date datetime.today
-        
         try
         {
-            IEnumerable<DtroResponse> dtroResponses = await _dtroService.GetDtrosAsync(traIds, fromDate, toDate);
+            IEnumerable<DtroResponse> dtroResponses = await _dtroService.GetDtrosAsync(queryParameters);
             _logger.LogInformation($"'{nameof(GetAll)}' method called ");
             _loggingExtension.LogInformation(
                 nameof(GetAll),

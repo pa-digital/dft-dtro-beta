@@ -8,7 +8,7 @@ public interface IDtroService
 
     Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId);
 
-    Task<IEnumerable<DtroResponse>> GetDtrosAsync(List<int> traIds, DateTime? startDate, DateTime? endDate);
+    Task<IEnumerable<DtroResponse>> GetDtrosAsync(QueryParameters queryParameters);
 
     Task<DtroResponse> GetDtroByIdAsync(Guid id);
 

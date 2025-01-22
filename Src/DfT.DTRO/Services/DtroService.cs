@@ -47,9 +47,9 @@ public class DtroService : IDtroService
         return await _dtroDal.DtroCountForSchemaAsync(schemaVersion);
     }
 
-    public async Task<IEnumerable<DtroResponse>> GetDtrosAsync(List<int> traIds, DateTime? fromDate, DateTime? toDate)
+    public async Task<IEnumerable<DtroResponse>> GetDtrosAsync(QueryParameters queryParameters)
     {
-        List<Models.DataBase.DTRO> dtros = (await _dtroDal.GetDtrosAsync(traIds, fromDate, toDate)).ToList();
+        List<Models.DataBase.DTRO> dtros = (await _dtroDal.GetDtrosAsync(queryParameters)).ToList();
         if (!dtros.Any())
         {
             throw new NotFoundException();

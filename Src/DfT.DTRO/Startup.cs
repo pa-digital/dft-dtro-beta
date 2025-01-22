@@ -67,7 +67,6 @@ public class Startup
         services.AddScoped<IDtroUserService, DtroUserService>();
         services.AddScoped<ISystemConfigDal, SystemConfigDal>();
         services.AddScoped<ISystemConfigService, SystemConfigService>();
-        services.AddScoped<IDtroQueryParamValidationService, DtroQueryParamValidationService>();
         services.AddSingleton<LoggingExtension>();
 
         services.TryAddSingleton<ISystemClock, SystemClock>();
