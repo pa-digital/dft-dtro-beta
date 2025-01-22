@@ -4,7 +4,7 @@
         "Source": {
             "_comment": "DfT example D-TRO, multiple provisions, multiple conditions, TemporaryRegulation, OffListRegulation, Permits, Rates",
             "actionType": "new",
-            "currentTraOwner": 9001,
+            "currentTraOwner": 3300,
             "Provision": [
                 {
                     "_comment": "Provision 1: TTRO with Diversion route, and use of temporily overridden regulation {Provision}",
@@ -649,9 +649,9 @@
             "reference": "abc",
             "section": "All sections",
             "traAffected": [
-                9001
+                3300
             ],
-            "traCreator": 9001,
+            "traCreator": 3300,
             "troName": "DfT Example - More complex v2, Jan. 2025"
         }
     }
