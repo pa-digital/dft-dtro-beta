@@ -77,6 +77,50 @@ public class DtroDal : IDtroDal
         await _dtroCache.CacheDtros(dtros);
         return dtros;
     }
+    
+    public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync(List<int> traIds, DateTime? startDate, DateTime? endDate)
+    {
+        // Check cache first
+        var cachedDtros = await _dtroCache.GetDtros();
+        if (cachedDtros.Any())
+        {
+            return cachedDtros;
+        }
+        
+        var dtrosQuery = _dtroContext.Dtros.Where(d => !d.Deleted);
+        
+        if (traIds != null && traIds.Any())
+        {
+            dtrosQuery = dtrosQuery.Where(d =>
+                traIds.Contains(d.TrafficAuthorityOwnerId) || // Use OR to broaden the scope
+                traIds.Contains(d.TrafficAuthorityCreatorId));
+        }
+        
+        if (startDate.HasValue)
+        {
+            dtrosQuery = dtrosQuery.Where(d => d.Created >= startDate.Value);
+        }
+
+        if (endDate.HasValue)
+        {
+            dtrosQuery = dtrosQuery.Where(d => d.Created <= endDate.Value);
+        }
+
+       
+        var dtros = await dtrosQuery.ToListAsync();
+
+     
+        if (!dtros.Any())
+        {
+            return Enumerable.Empty<Models.DataBase.DTRO>();
+        }
+
+  
+        await _dtroCache.CacheDtros(dtros);
+
+        return dtros;
+    }
+
 
     ///<inheritdoc cref="IDtroDal"/>
     public async Task<Models.DataBase.DTRO> GetDtroByIdAsync(Guid id)

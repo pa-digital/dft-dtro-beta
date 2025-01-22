@@ -35,7 +35,7 @@ public interface IDtroDal
     /// Gets D-TRO records.
     /// </summary>
     /// <returns>All active D-TRO records</returns>
-    Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync();
+    Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync(List<int> traIds, DateTime? fromDate, DateTime? toDate);
 
     /// <summary>
     /// Gets a D-TRO by <paramref name="id"/>.
