@@ -164,6 +164,14 @@
                                         "lastUpdateDate": "2024-10-01T00:00:00",
                                         "UniqueStreetReferenceNumber": [
                                             {
+                                                "ElementaryStreetUnit": [
+                                                    {
+                                                        "esu": 3235350124617
+                                                    },
+                                                    {
+                                                        "esu": 3235700124630
+                                                    }
+                                                ],
                                                 "nsgStreetName": "East Reach",
                                                 "nsgStreetNumber": "A38",
                                                 "usrn": 39608173
@@ -212,60 +220,104 @@
                                     }
                                 }
                             ],
-                            "RateTable": [
-                                {
-                                    "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
-                                    "additionalInformation": "http://www.somewhere.something.gov.uk",
-                                    "type": "hourly",
-                                    "RateLineCollection": [
-                                        {
-                                            "applicableCurrency": "GBP",
-                                            "maxTime": 660,
-                                            "maxValueCollection": 7.2000000000000002,
-                                            "minTime": 60,
-                                            "minValueCollection": 1,
-                                            "RateLine": [
-                                                {
-                                                    "durationEnd": 59,
-                                                    "durationStart": 1,
-                                                    "incrementPeriod": 58,
-                                                    "maxValue": 7.2000000000000002,
-                                                    "minValue": 1,
-                                                    "sequence": 1,
-                                                    "type": "flatRateTier",
-                                                    "usageCondition": "fixedDuration",
-                                                    "value": 1
-                                                },
-                                                {
-                                                    "durationEnd": 119,
-                                                    "durationStart": 60,
-                                                    "incrementPeriod": 59,
-                                                    "maxValue": 7.2000000000000002,
-                                                    "minValue": 2,
-                                                    "sequence": 2,
-                                                    "type": "flatRateTier",
-                                                    "usageCondition": "fixedDuration",
-                                                    "value": 1
-                                                },
-                                                {
-                                                    "durationEnd": 660,
-                                                    "durationStart": 120,
-                                                    "incrementPeriod": 540,
-                                                    "maxValue": 7.2000000000000002,
-                                                    "minValue": 2,
-                                                    "sequence": 3,
-                                                    "type": "flatRateTier",
-                                                    "usageCondition": "fixedDuration",
-                                                    "value": 5.2000000000000002
-                                                }
-                                            ],
-                                            "resetTime": "20:00:00",
-                                            "sequence": 1,
-                                            "startValidUsagePeriod": "2024-12-10T09:00:00"
-                                        }
-                                    ]
-                                }
-                            ],
+                            "RateTable": {
+                                "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
+                                "additionalInformation": "http://www.somewhere.something.gov.uk",
+                                "type": "hourly",
+                                "RateLineCollection": [
+                                    {
+                                        "applicableCurrency": "GBP",
+                                        "maxTime": 660,
+                                        "maxValueCollection": 7.20,
+                                        "minTime": 60,
+                                        "minValueCollection": 1.00,
+                                        "RateLine": [
+                                            {
+                                                "durationEnd": 59,
+                                                "durationStart": 1,
+                                                "incrementPeriod": 58,
+                                                "maxValue": 7.20,
+                                                "minValue": 1.00,
+                                                "sequence": 1,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 1.00
+                                            },
+                                            {
+                                                "durationEnd": 119,
+                                                "durationStart": 60,
+                                                "incrementPeriod": 59,
+                                                "maxValue": 7.20,
+                                                "minValue": 2.00,
+                                                "sequence": 2,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 1.00
+                                            },
+                                            {
+                                                "durationEnd": 660,
+                                                "durationStart": 120,
+                                                "incrementPeriod": 540,
+                                                "maxValue": 7.20,
+                                                "minValue": 2.02,
+                                                "sequence": 3,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 5.20
+                                            }
+                                        ],
+                                        "resetTime": "23:59:59",
+                                        "sequence": 1,
+                                        "startValidUsagePeriod": "2024-08-10T09:00:00",
+										"endValidUsagePeriod": "2024-12-31T20:00:00"
+                                    },
+									{
+                                        "applicableCurrency": "GBP",
+                                        "maxTime": 660,
+                                        "maxValueCollection": 7.20,
+                                        "minTime": 60,
+                                        "minValueCollection": 1.00,
+                                        "RateLine": [
+                                            {
+                                                "durationEnd": 59,
+                                                "durationStart": 1,
+                                                "incrementPeriod": 58,
+                                                "maxValue": 7.30,
+                                                "minValue": 1.00,
+                                                "sequence": 1,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 1.00
+                                            },
+                                            {
+                                                "durationEnd": 119,
+                                                "durationStart": 60,
+                                                "incrementPeriod": 59,
+                                                "maxValue": 7.30,
+                                                "minValue": 2.00,
+                                                "sequence": 2,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 1.00
+                                            },
+                                            {
+                                                "durationEnd": 660,
+                                                "durationStart": 120,
+                                                "incrementPeriod": 540,
+                                                "maxValue": 7.30,
+                                                "minValue": 2.00,
+                                                "sequence": 3,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 5.30
+                                            }
+                                        ],
+                                        "resetTime": "23:59:59",
+                                        "sequence": 2,
+                                        "startValidUsagePeriod": "2025-01-01T09:00:00"
+                                    }
+                                ]
+                            },
                             "GeneralRegulation": {
                                 "regulationType": "kerbsidePaymentParkingPlace"
                             },
@@ -639,6 +691,174 @@
                             ],
                             "GeneralRegulation": {
                                 "regulationType": "miscBusGate"
+                            },
+                            "isDynamic": false,
+                            "timeZone": "Europe/London"
+                        }
+                    ]
+                },
+                {
+                    "_comment": "Provision 6: Off List regulation - escooter restriction",
+                    "actionType": "new",
+                    "orderReportingPoint": "permanentNoticeOfMaking",
+                    "provisionDescription": "Use of e-scooter restriction, Collett Road, Norton Fitzwarren",
+                    "reference": "c962b51f-e1aa-416e-8f0b-bcfd09a4d060",
+                    "RegulatedPlace": [
+                        {
+                            "_comment": "Only location in Provision - Collett Road - version 1 {linear}",
+                            "description": "Collett Road, from 125 metres to 158 metres from the junction with Great Western Way Roundabout {approximate - linear}",
+                            "LinearGeometry": {
+                                "direction": "startToEnd",
+                                "ExternalReference": [
+                                    {
+                                        "lastUpdateDate": "2024-10-01T00:00:00",
+                                        "UniqueStreetReferenceNumber": [
+                                            {
+                                                "nsgStreetName": "Collett Road",
+                                                "usrn": 39609232
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "lateralPosition": "centreline",
+                                "linestring": "SRID=27700;LINESTRING(320336 126142,320315 126172)",
+                                "representation": "linear",
+                                "version": 1
+                            },
+                            "type": "regulationLocation"
+                        }
+                    ],
+                    "Regulation": [
+                        {
+                            "ConditionSet": [
+                                {
+                                    "operator": "and",
+                                    "ConditionSet": [
+                                        {
+                                            "operator": "or",
+                                            "conditions": [
+                                                {
+                                                    "negate": true,
+                                                    "VehicleCharacteristics": {
+                                                        "MaximumWidthCharacteristic": {
+                                                            "vehicleWidth": 12.1
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "negate": true,
+                                                    "VehicleCharacteristics": {
+                                                        "MaximumHeightCharacteristic": {
+                                                            "vehicleHeight": 15.19
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "negate": true,
+                                                    "VehicleCharacteristics": {
+                                                        "MaximumLengthCharacteristic": {
+                                                            "vehicleLength": 55.20
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "negate": true,
+                                                    "VehicleCharacteristics": {
+                                                        "MaximumGrossWeightCharacteristic": {
+                                                            "grossVehicleWeight": 78.0
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "negate": true,
+                                                    "VehicleCharacteristics": {
+                                                        "HeaviestAxleWeightCharacteristic": {
+                                                            "heaviestAxleWeight": 72.5
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "Condition": [
+                                        {
+                                            "negate": false,
+                                            "TimeValidity": {
+                                                "end": "2024-10-30T20:00:00",
+                                                "start": "2024-09-22T08:00:00",
+                                                "validPeriod": [
+                                                    {
+                                                        "recurringDayWeekMonthPeriod": [
+                                                            {
+                                                                "applicableDay": [
+                                                                    "monday",
+                                                                    "tuesday",
+                                                                    "wednesday",
+                                                                    "thursday",
+                                                                    "friday"
+                                                                ]
+                                                            }
+                                                        ],
+                                                        "recurringTimePeriodOfDay": [
+                                                            {
+                                                                "startTimeOfPeriod": "08:00:00",
+                                                                "endTimeOfPeriod": "09:30:00"
+                                                            },
+                                                            {
+                                                                "startTimeOfPeriod": "16:30:00:00",
+                                                                "endTimeOfPeriod": "18:30:00"
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "exceptionPeriod": [
+                                                    {
+                                                        "recurringSpecialDay": [
+                                                            {
+                                                                "intersectWithApplicableDays": true,
+                                                                "specialDayType": "publicHoliday"
+                                                            },
+                                                            {
+                                                                "intersectWithApplicableDays": true,
+                                                                "specialDayType": "matchDay"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "ChangeableTimePeriodStart": [
+                                                            {
+                                                                "startType": "external",
+                                                                "ChangeableTimePeriodSource": {
+                                                                    "definition": "Source of start of non-school day periods, in 'Any' county",
+                                                                    "source": "http://www.schooldiaries.com"
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "ChangeableTimePeriodEnd": [
+                                                            {
+                                                                "startType": "external",
+                                                                "ChangeableTimePeriodSource": {
+                                                                    "definition": "Source of end of non-school day periods, in 'Any' county",
+                                                                    "source": "http:\\www.schooldiaries.com"
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ],
+                            "OffListRegulation": {
+                                "legislationCrossReference": [
+                                    "regulation no.1",
+                                    "regulation no.2"
+                                ],
+                                "regulationFullText": "e-scooter regs",
+                                "regulationShortName": "Regulations for the use of e-scooters in Anytown"
                             },
                             "isDynamic": false,
                             "timeZone": "Europe/London"
