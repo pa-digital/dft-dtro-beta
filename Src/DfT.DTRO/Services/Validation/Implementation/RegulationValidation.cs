@@ -84,14 +84,14 @@ public class RegulationValidation : IRegulationValidation
                     case "SpeedLimitValueBased":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
                         var mphValue = selectedRegulation.GetValueOrDefault<int>(Constants.MphValue);
-                        if (mphValue.GetType() != typeof(int) || mphValue == 0)
+                        if (mphValue.GetType() != typeof(int) || !Constants.MphValues.Any(mphValue.Equals))
                         {
                             SemanticValidationError newError = new()
                             {
                                 Name = "Invalid 'mphValue'",
                                 Message = "Speed limit value in miles per hour",
                                 Path = "Source -> Provision -> Regulation -> SpeedLimitValueBased -> mphValue",
-                                Rule = "'mphValue' must be an integer and not '0'",
+                                Rule = "'mphValue' must be an integer and one of these values: 10, 20, 30, 40, 50, 60, 70",
                             };
 
                             errors.Add(newError);

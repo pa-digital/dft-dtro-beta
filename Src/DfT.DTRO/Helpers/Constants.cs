@@ -46,6 +46,8 @@ public static class Constants
 
     public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
 
+    public static List<int> MphValues => new() { 10, 20, 30, 40, 50, 60, 70 };
+
     public static string Value => "value";
 
     public static string UsageCondition => "usageCondition";

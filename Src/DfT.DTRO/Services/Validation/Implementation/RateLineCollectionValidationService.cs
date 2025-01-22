@@ -107,7 +107,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .Select(maxValueCollection => maxValueCollection.GetValueOrDefault<object>(Constants.MaxValueCollection))
             .ToList();
 
-        if (passedInMaxValueCollections.Any(it => it is string))
+        if (passedInMaxValueCollections.TrueForAll(it => it is not double or <= 0.0))
         {
             SemanticValidationError error = new()
             {
@@ -145,7 +145,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .Select(minValueCollection => minValueCollection.GetValueOrDefault<object>(Constants.MinValueCollection))
             .ToList();
 
-        if (passedInMinValueCollections.Any(it => it is string))
+        if (passedInMinValueCollections.TrueForAll(it => it is not double or <= 0.0))
         {
             SemanticValidationError error = new()
             {
@@ -173,7 +173,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                        (dateTime.TimeOfDay >= start && dateTime.TimeOfDay <= end);
             }).ToList();
 
-        if (areValidResetTimes.Any() && areValidResetTimes.All(isValidResetTime => isValidResetTime == false))
+        if (areValidResetTimes.Any(isValidResetTime => isValidResetTime == false))
         {
             SemanticValidationError error = new()
             {

@@ -79,7 +79,7 @@ public class GeometryValidationService : IGeometryValidationService
                                 var error = new SemanticValidationError
                                 {
                                     Name = "Invalid coordinates",
-                                    Message = "Geometry grid linked to 'PointGeometry'",
+                                    Message = "Geometry coordinates linked to 'PointGeometry'",
                                     Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
                                     Rule = $"Coordinates '{point}' are incorrect or not within Great Britain"
                                 };
@@ -278,7 +278,7 @@ public class GeometryValidationService : IGeometryValidationService
                                 var error = new SemanticValidationError
                                 {
                                     Name = "Invalid coordinates",
-                                    Message = "Geometry grid linked to 'Polygon'",
+                                    Message = "Indicates that the given coordinates are broadly appropriate",
                                     Path = "Source -> Provision -> RegulatedPlace -> Polygon -> polygon",
                                     Rule = $"Coordinates '{polygon}' are incorrect or not within Great Britain"
                                 };
@@ -321,7 +321,7 @@ public class GeometryValidationService : IGeometryValidationService
                                 var error = new SemanticValidationError
                                 {
                                     Name = "Invalid coordinates",
-                                    Message = "Geometry grid linked to 'DirectedLinear'",
+                                    Message = "Indicates that the given coordinates are broadly appropriate",
                                     Path = "Source -> Provision -> RegulatedPlace -> DirectedLinear -> directedLineString",
                                     Rule = $"Coordinates '{directedLineString}' are incorrect or not within Great Britain"
                                 };
@@ -600,7 +600,7 @@ public class GeometryValidationService : IGeometryValidationService
                                 var error = new SemanticValidationError
                                 {
                                     Name = "Invalid coordinates",
-                                    Message = "Geometry grid linked to 'Polygon'",
+                                    Message = "Indicates that the given coordinates are broadly appropriate",
                                     Path = "Source -> Provision -> RegulatedPlace -> Polygon -> polygon",
                                     Rule = $"Coordinates '{polygon}' are incorrect or not within Great Britain"
                                 };
@@ -643,7 +643,7 @@ public class GeometryValidationService : IGeometryValidationService
                                 var error = new SemanticValidationError
                                 {
                                     Name = "Invalid coordinates",
-                                    Message = "Geometry grid linked to 'DirectedLinear'",
+                                    Message = "Indicates that the given coordinates are broadly appropriate",
                                     Path = "Source -> Provision -> RegulatedPlace -> DirectedLinear -> directedLineString",
                                     Rule = $"Coordinates '{directedLineString}' are incorrect or not within Great Britain"
                                 };
