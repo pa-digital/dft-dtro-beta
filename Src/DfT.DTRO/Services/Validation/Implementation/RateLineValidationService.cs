@@ -77,7 +77,7 @@ public class RateLineValidationService : IRateLineValidationService
                 Name = "Invalid 'Duration end'",
                 Message = "If used, indicates the end time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.DurationEnd}",
-                Rule = $"If present, {Constants.DurationEnd} must be of type 'integer' and not 0"
+                Rule = $"If present, {Constants.DurationEnd} must be of type 'integer' and greater than 0"
             };
 
             errors.Add(error);
@@ -95,7 +95,7 @@ public class RateLineValidationService : IRateLineValidationService
                 Name = "Invalid 'Duration start'",
                 Message = "Indicates the start time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.DurationStart}",
-                Rule = $"If present, {Constants.DurationStart} must be of type 'integer' and not 0"
+                Rule = $"If present, {Constants.DurationStart} must be of type 'integer' and greater than 0"
             };
 
             errors.Add(error);
