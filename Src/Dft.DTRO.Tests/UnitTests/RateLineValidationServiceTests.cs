@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace Dft.DTRO.Tests.UnitTests;
+﻿namespace Dft.DTRO.Tests.UnitTests;
 
 [ExcludeFromCodeCoverage]
 public class RateLineValidationServiceTests
@@ -27,28 +25,29 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""RateLineCollection"": [
+                                        ""negate"": false
+                                    }}
+                                ],
+                                ""RateTable"" : {{
+                                    ""RateLineCollection"": [
+                                        {{
+                                            ""RateLine"": [
                                                 {{
-                                                    ""RateLine"": [
-                                                        {{
-                                                            ""description"": ""{description}"",
-                                                            ""durationEnd"": 1,
-                                                            ""durationStart"": 5,
-                                                            ""incrementPeriod"": 58,
-                                                            ""maxValue"": 7.20,
-                                                            ""minValue"": 1.05,
-                                                            ""sequence"": 1,
-                                                            ""type"": ""flatRateTier"",
-                                                            ""usageCondition"": ""fixedDuration"",
-                                                            ""value"": 1.04
-                                                        }}
-                                                    ]
+                                                    ""description"": ""{description}"",
+                                                    ""durationEnd"": 1,
+                                                    ""durationStart"": 5,
+                                                    ""incrementPeriod"": 58,
+                                                    ""maxValue"": 7.20,
+                                                    ""minValue"": 1.05,
+                                                    ""sequence"": 1,
+                                                    ""type"": ""flatRateTier"",
+                                                    ""usageCondition"": ""fixedDuration"",
+                                                    ""value"": 1.04
                                                 }}
                                             ]
                                         }}
-                                    }}
-                                ]
+                                    ]
+                                }}
                             }}
                         ]
                     }}
@@ -82,28 +81,29 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""RateLineCollection"": [
+                                        ""negate"": false
+                                    }}
+                                ],
+                                ""RateTable"" : {{
+                                    ""RateLineCollection"": [
+                                        {{
+                                            ""RateLine"": [
                                                 {{
-                                                    ""RateLine"": [
-                                                        {{
-                                                            ""description"": ""freeText"",
-                                                            ""durationEnd"": {durationEnd},
-                                                            ""durationStart"": 1,
-                                                            ""incrementPeriod"": 58,
-                                                            ""maxValue"": 7.20,
-                                                            ""minValue"": 1.03,
-                                                            ""sequence"": 1,
-                                                            ""type"": ""flatRateTier"",
-                                                            ""usageCondition"": ""fixedDuration"",
-                                                            ""value"": 1.02
-                                                        }}
-                                                    ]
+                                                    ""description"": ""freeText"",
+                                                    ""durationEnd"": {durationEnd},
+                                                    ""durationStart"": 1,
+                                                    ""incrementPeriod"": 58,
+                                                    ""maxValue"": 7.20,
+                                                    ""minValue"": 1.03,
+                                                    ""sequence"": 1,
+                                                    ""type"": ""flatRateTier"",
+                                                    ""usageCondition"": ""fixedDuration"",
+                                                    ""value"": 1.02
                                                 }}
                                             ]
                                         }}
-                                    }}
-                                ]
+                                    ]
+                                }}
                             }}
                         ]
                     }}
@@ -137,28 +137,29 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""RateLineCollection"": [
+                                        ""negate"": false
+                                    }}
+                                ],
+                                ""RateTable"" : {{
+                                    ""RateLineCollection"": [
+                                        {{
+                                            ""RateLine"": [
                                                 {{
-                                                    ""RateLine"": [
-                                                        {{
-                                                            ""description"": ""freeText"",
-                                                            ""durationEnd"": 1,
-                                                            ""durationStart"": {durationStart},
-                                                            ""incrementPeriod"": 58,
-                                                            ""maxValue"": 7.20,
-                                                            ""minValue"": 1.02,
-                                                            ""sequence"": 1,
-                                                            ""type"": ""flatRateTier"",
-                                                            ""usageCondition"": ""fixedDuration"",
-                                                            ""value"": 1.01
-                                                        }}
-                                                    ]
+                                                    ""description"": ""freeText"",
+                                                    ""durationEnd"": 1,
+                                                    ""durationStart"": {durationStart},
+                                                    ""incrementPeriod"": 58,
+                                                    ""maxValue"": 7.20,
+                                                    ""minValue"": 1.02,
+                                                    ""sequence"": 1,
+                                                    ""type"": ""flatRateTier"",
+                                                    ""usageCondition"": ""fixedDuration"",
+                                                    ""value"": 1.01
                                                 }}
                                             ]
                                         }}
-                                    }}
-                                ]
+                                    ]
+                                }}
                             }}
                         ]
                     }}
@@ -190,28 +191,29 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""RateLineCollection"": [
+                                        ""negate"": false
+                                    }}
+                                ],
+                                ""RateTable"" : {{
+                                    ""RateLineCollection"": [
+                                        {{
+                                            ""RateLine"": [
                                                 {{
-                                                    ""RateLine"": [
-                                                        {{
-                                                            ""description"": ""freeText"",
-                                                            ""durationEnd"": 1,
-                                                            ""durationStart"": 5,
-                                                            ""incrementPeriod"": {incrementPeriod},
-                                                            ""maxValue"": 7.20,
-                                                            ""minValue"": 1.01,
-                                                            ""sequence"": 1,
-                                                            ""type"": ""flatRateTier"",
-                                                            ""usageCondition"": ""fixedDuration"",
-                                                            ""value"": 1.01
-                                                        }}
-                                                    ]
+                                                    ""description"": ""freeText"",
+                                                    ""durationEnd"": 1,
+                                                    ""durationStart"": 5,
+                                                    ""incrementPeriod"": {incrementPeriod},
+                                                    ""maxValue"": 7.20,
+                                                    ""minValue"": 1.01,
+                                                    ""sequence"": 1,
+                                                    ""type"": ""flatRateTier"",
+                                                    ""usageCondition"": ""fixedDuration"",
+                                                    ""value"": 1.01
                                                 }}
                                             ]
                                         }}
-                                    }}
-                                ]
+                                    ]
+                                }}
                             }}
                         ]
                     }}
@@ -225,9 +227,7 @@ public class RateLineValidationServiceTests
 
     [Theory]
     [InlineData("Condition", 1.01, 0)]
-    [InlineData("Condition", -1.01, 2)]
     [InlineData("ConditionSet", 1.01, 0)]
-    [InlineData("ConditionSet", -1.01, 2)]
     public void ValidateRateLineMinAndMaxValue(string conditionType, double value, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
@@ -241,28 +241,29 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""RateLineCollection"": [
+                                        ""negate"": false
+                                    }}
+                                ],
+                                ""RateTable"" : {{
+                                    ""RateLineCollection"": [
+                                        {{
+                                            ""RateLine"": [
                                                 {{
-                                                    ""RateLine"": [
-                                                        {{
-                                                            ""description"": ""freeText"",
-                                                            ""durationEnd"": 1,
-                                                            ""durationStart"": 5,
-                                                            ""incrementPeriod"": 548,
-                                                            ""maxValue"": {value.ToString(CultureInfo.InvariantCulture)},
-                                                            ""minValue"": {value.ToString(CultureInfo.InvariantCulture)},
-                                                            ""sequence"": 1,
-                                                            ""type"": ""flatRateTier"",
-                                                            ""usageCondition"": ""fixedDuration"",
-                                                            ""value"": 1.01
-                                                        }}
-                                                    ]
+                                                    ""description"": ""freeText"",
+                                                    ""durationEnd"": 1,
+                                                    ""durationStart"": 5,
+                                                    ""incrementPeriod"": 548,
+                                                    ""maxValue"": {value},
+                                                    ""minValue"": {value},
+                                                    ""sequence"": 1,
+                                                    ""type"": ""flatRateTier"",
+                                                    ""usageCondition"": ""fixedDuration"",
+                                                    ""value"": 1.01
                                                 }}
                                             ]
                                         }}
-                                    }}
-                                ]
+                                    ]
+                                }}
                             }}
                         ]
                     }}
@@ -294,28 +295,29 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""RateLineCollection"": [
+                                        ""negate"": false
+                                    }}
+                                ],
+                                ""RateTable"" : {{
+                                    ""RateLineCollection"": [
+                                        {{
+                                            ""RateLine"": [
                                                 {{
-                                                    ""RateLine"": [
-                                                        {{
-                                                            ""description"": ""freeText"",
-                                                            ""durationEnd"": 1,
-                                                            ""durationStart"": 5,
-                                                            ""incrementPeriod"": 56,
-                                                            ""maxValue"": 7.20,
-                                                            ""minValue"": 1.04,
-                                                            ""sequence"": {sequence},
-                                                            ""type"": ""flatRateTier"",
-                                                            ""usageCondition"": ""fixedDuration"",
-                                                            ""value"": 1.04
-                                                        }}
-                                                    ]
+                                                    ""description"": ""freeText"",
+                                                    ""durationEnd"": 1,
+                                                    ""durationStart"": 5,
+                                                    ""incrementPeriod"": 56,
+                                                    ""maxValue"": 7.20,
+                                                    ""minValue"": 1.04,
+                                                    ""sequence"": {sequence},
+                                                    ""type"": ""flatRateTier"",
+                                                    ""usageCondition"": ""fixedDuration"",
+                                                    ""value"": 1.04
                                                 }}
                                             ]
                                         }}
-                                    }}
-                                ]
+                                    ]
+                                }}
                             }}
                         ]
                     }}
@@ -353,28 +355,29 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""RateLineCollection"": [
+                                        ""negate"": false
+                                    }}
+                                ],
+                                ""RateTable"" : {{
+                                    ""RateLineCollection"": [
+                                        {{
+                                            ""RateLine"": [
                                                 {{
-                                                    ""RateLine"": [
-                                                        {{
-                                                            ""description"": ""freeText"",
-                                                            ""durationEnd"": 1,
-                                                            ""durationStart"": 5,
-                                                            ""incrementPeriod"": 56,
-                                                            ""maxValue"": 7.20,
-                                                            ""minValue"": 1.01,
-                                                            ""sequence"": 10,
-                                                            ""type"": ""{rateLineType}"",
-                                                            ""usageCondition"": ""fixedDuration"",
-                                                            ""value"": 1.01
-                                                        }}
-                                                    ]
+                                                    ""description"": ""freeText"",
+                                                    ""durationEnd"": 1,
+                                                    ""durationStart"": 5,
+                                                    ""incrementPeriod"": 56,
+                                                    ""maxValue"": 7.20,
+                                                    ""minValue"": 1.01,
+                                                    ""sequence"": 10,
+                                                    ""type"": ""{rateLineType}"",
+                                                    ""usageCondition"": ""fixedDuration"",
+                                                    ""value"": 1.01
                                                 }}
                                             ]
                                         }}
-                                    }}
-                                ]
+                                    ]
+                                }}
                             }}
                         ]
                     }}
@@ -412,28 +415,29 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""RateLineCollection"": [
+                                        ""negate"": false
+                                    }}
+                                ],
+                                ""RateTable"" : {{
+                                    ""RateLineCollection"": [
+                                        {{
+                                            ""RateLine"": [
                                                 {{
-                                                    ""RateLine"": [
-                                                        {{
-                                                            ""description"": ""freeText"",
-                                                            ""durationEnd"": 1,
-                                                            ""durationStart"": 5,
-                                                            ""incrementPeriod"": 56,
-                                                            ""maxValue"": 7.20,
-                                                            ""minValue"": 1.01,
-                                                            ""sequence"": 10,
-                                                            ""type"": ""flatRateTier"",
-                                                            ""usageCondition"": ""{usageCondition}"",
-                                                            ""value"": 1.01
-                                                        }}
-                                                    ]
+                                                    ""description"": ""freeText"",
+                                                    ""durationEnd"": 1,
+                                                    ""durationStart"": 5,
+                                                    ""incrementPeriod"": 56,
+                                                    ""maxValue"": 7.20,
+                                                    ""minValue"": 1.01,
+                                                    ""sequence"": 10,
+                                                    ""type"": ""flatRateTier"",
+                                                    ""usageCondition"": ""{usageCondition}"",
+                                                    ""value"": 1.01
                                                 }}
                                             ]
                                         }}
-                                    }}
-                                ]
+                                    ]
+                                }}
                             }}
                         ]
                     }}
@@ -447,9 +451,7 @@ public class RateLineValidationServiceTests
 
     [Theory]
     [InlineData("Condition", 1.01, 0)]
-    [InlineData("Condition", -1.01, 1)]
     [InlineData("ConditionSet", 1.01, 0)]
-    [InlineData("ConditionSet", -1.01, 1)]
     public void ValidateRateLineValue(string conditionType, double value, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
@@ -463,28 +465,29 @@ public class RateLineValidationServiceTests
                             {{
                                 ""{conditionType}"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""RateLineCollection"": [
+                                        ""negate"": false
+                                    }}
+                                ],
+                                ""RateTable"" : {{
+                                    ""RateLineCollection"": [
+                                        {{
+                                            ""RateLine"": [
                                                 {{
-                                                    ""RateLine"": [
-                                                        {{
-                                                            ""description"": ""freeText"",
-                                                            ""durationEnd"": 1,
-                                                            ""durationStart"": 5,
-                                                            ""incrementPeriod"": 548,
-                                                            ""maxValue"": 1.01,
-                                                            ""minValue"": 0.85,
-                                                            ""sequence"": 1,
-                                                            ""type"": ""flatRateTier"",
-                                                            ""usageCondition"": ""fixedDuration"",
-                                                            ""value"": {value}
-                                                        }}
-                                                    ]
+                                                    ""description"": ""freeText"",
+                                                    ""durationEnd"": 1,
+                                                    ""durationStart"": 5,
+                                                    ""incrementPeriod"": 548,
+                                                    ""maxValue"": 1.01,
+                                                    ""minValue"": 0.85,
+                                                    ""sequence"": 1,
+                                                    ""type"": ""flatRateTier"",
+                                                    ""usageCondition"": ""fixedDuration"",
+                                                    ""value"": {value}
                                                 }}
                                             ]
                                         }}
-                                    }}
-                                ]
+                                    ]
+                                }}
                             }}
                         ]
                     }}

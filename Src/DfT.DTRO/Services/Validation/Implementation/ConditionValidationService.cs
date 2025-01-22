@@ -1,9 +1,9 @@
-﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+﻿namespace DfT.DTRO.Services.Validation.Implementation;
 
-namespace DfT.DTRO.Services.Validation.Implementation;
-
+/// <inheritdoc cref="IConditionValidationService"/>
 public class ConditionValidationService : IConditionValidationService
 {
+    /// <inheritdoc cref="IConditionValidationService"/>
     public List<SemanticValidationError> ValidateCondition(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
     {
         List<SemanticValidationError> errors = new();
@@ -33,9 +33,7 @@ public class ConditionValidationService : IConditionValidationService
                     .FirstOrDefault();
 
 
-                var hasValidOperator = passedInOperator != null &&
-                                       Constants.OperatorTypes.Any(passedInOperator.Equals);
-
+                var hasValidOperator = passedInOperator != null && Constants.OperatorTypes.Any(passedInOperator.Equals);
                 if (!hasValidOperator)
                 {
                     SemanticValidationError error = new()
@@ -98,9 +96,7 @@ public class ConditionValidationService : IConditionValidationService
                     .ToList();
 
 
-                var areAllValidConditions = passedInConditions.All(passedInCondition =>
-                    Constants.ConditionTypes.Contains(passedInCondition.Key));
-
+                var areAllValidConditions = passedInConditions.All(passedInCondition => Constants.ConditionTypes.Contains(passedInCondition.Key));
                 if (!areAllValidConditions)
                 {
                     SemanticValidationError error = new()

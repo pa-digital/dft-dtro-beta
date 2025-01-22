@@ -124,7 +124,7 @@ public static class ExpandoObjectExtensions
 
         if (source.GetField(key) is not DateTime result)
         {
-            throw new InvalidOperationException($"The field under '{key}' was not {typeof(DateTime).FullName}");
+            return null;
         }
 
         return result;
@@ -190,6 +190,19 @@ public static class ExpandoObjectExtensions
             if (typeof(T) == typeof(short))
             {
                 return (short)l is T s ? s : default;
+            }
+        }
+
+        if (field is double d)
+        {
+            if (typeof(T) == typeof(double))
+            {
+                return (double)d is T db ? db : default;
+            }
+
+            if (typeof(T) == typeof(decimal))
+            {
+                return (decimal)d is T dc ? dc : default;
             }
         }
 

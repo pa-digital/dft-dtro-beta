@@ -5,20 +5,13 @@
             "_comment": "DfT example D-TRO, multiple provisions, multiple conditions, TemporaryRegulation, OffListRegulation, Permits, Rates",
             "actionType": "new",
             "currentTraOwner": 9001,
-			"reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c0aa",
-			"section": "free text",
-			"traAffected": [ 
-				9001
-			],
-			"traCreator": 9001,
-			"troName": "Name of TRO",
             "Provision": [
                 {
                     "_comment": "Provision 1: Permanent TRO - parking controls, with day - time restrictions, rate table",
                     "actionType": "new",
                     "orderReportingPoint": "permanentNoticeOfMaking",
                     "provisionDescription": "Parking restrictions, East Reach, Pay & Display Parking Places - Monday to Sunday 9.00 am to 8.00 pm",
-                    "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c098",
+                    "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
                     "RegulatedPlace": [
                         {
                             "description": "East Reach, Taunton, northside / eastbound, between 10 metres east from the junction with Tancred Street to 15 metres west of the junction with South Street {approximate - linear}",
@@ -112,60 +105,58 @@
                                     ]
                                 }
                             ],
-                            "RateTable": [
-                                {
-                                    "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
-                                    "additionalInformation": "http://www.somewhere.something.gov.uk",
-                                    "type": "hourly",
-                                    "RateLineCollection": [
-                                        {
-                                            "applicableCurrency": "GBP",
-                                            "maxTime": 660,
-                                            "maxValueCollection": 7.20,
-                                            "minTime": 60,
-                                            "minValueCollection": 1,
-                                            "RateLine": [
-                                                {
-                                                    "durationEnd": 59,
-                                                    "durationStart": 1,
-                                                    "incrementPeriod": 58,
-                                                    "maxValue": 7.20,
-                                                    "minValue": 1,
-                                                    "sequence": 1,
-                                                    "type": "flatRateTier",
-                                                    "usageCondition": "fixedDuration",
-                                                    "value": 1
-                                                },
-                                                {
-                                                    "durationEnd": 119,
-                                                    "durationStart": 60,
-                                                    "incrementPeriod": 59,
-                                                    "maxValue": 7.20,
-                                                    "minValue": 2,
-                                                    "sequence": 2,
-                                                    "type": "flatRateTier",
-                                                    "usageCondition": "fixedDuration",
-                                                    "value": 1
-                                                },
-                                                {
-                                                    "durationEnd": 660,
-                                                    "durationStart": 120,
-                                                    "incrementPeriod": 540,
-                                                    "maxValue": 7.20,
-                                                    "minValue": 2,
-                                                    "sequence": 3,
-                                                    "type": "flatRateTier",
-                                                    "usageCondition": "fixedDuration",
-                                                    "value": 5.20
-                                                }
-                                            ],
-                                            "resetTime": "20:00:00",
-                                            "sequence": 1,
-                                            "startValidUsagePeriod": "2024-12-10T09:00:00"
-                                        }
-                                    ]
-                                }
-                            ],
+                            "RateTable": {
+                                "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
+                                "additionalInformation": "http://www.somewhere.something.gov.uk",
+                                "type": "hourly",
+                                "RateLineCollection": [
+                                    {
+                                        "applicableCurrency": "GBP",
+                                        "maxTime": 660,
+                                        "maxValueCollection": 7.2,
+                                        "minTime": 60,
+                                        "minValueCollection": 1.00,
+                                        "RateLine": [
+                                            {
+                                                "durationEnd": 59,
+                                                "durationStart": 1,
+                                                "incrementPeriod": 58,
+                                                "maxValue": 7.2,
+                                                "minValue": 1,
+                                                "sequence": 1,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 1
+                                            },
+                                            {
+                                                "durationEnd": 119,
+                                                "durationStart": 60,
+                                                "incrementPeriod": 59,
+                                                "maxValue": 7.2,
+                                                "minValue": 2,
+                                                "sequence": 2,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 1
+                                            },
+                                            {
+                                                "durationEnd": 660,
+                                                "durationStart": 120,
+                                                "incrementPeriod": 540,
+                                                "maxValue": 7.2,
+                                                "minValue": 2,
+                                                "sequence": 3,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 5.2
+                                            }
+                                        ],
+                                        "resetTime": "20:00:00",
+                                        "sequence": 1,
+                                        "startValidUsagePeriod": "2024-12-10T09:00:00"
+                                    }
+                                ]
+                            },
                             "GeneralRegulation": {
                                 "regulationType": "kerbsidePaymentParkingPlace"
                             },
@@ -179,7 +170,7 @@
                     "actionType": "new",
                     "orderReportingPoint": "permanentNoticeOfMaking",
                     "provisionDescription": "Parking restrictions, East Reach, southside / westbound, Pay & Display Parking Places - Monday to Friday 8.00 am to 6.00 pm",
-                    "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
+                    "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c098",
                     "RegulatedPlace": [
                         {
                             "description": "East Reach, Taunton, southside / westbound, between 15 metres west from the junction with Victoria Street to 23 metres east of the junction with Haydon Road {approximate - linear}",
@@ -246,60 +237,58 @@
                                     }
                                 }
                             ],
-                            "RateTable": [
-                                {
-                                    "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
-                                    "additionalInformation": "http://www.somewhere.something.gov.uk",
-                                    "type": "hourly",
-                                    "RateLineCollection": [
-                                        {
-                                            "applicableCurrency": "GBP",
-                                            "maxTime": 660,
-                                            "maxValueCollection": 7.20,
-                                            "minTime": 60,
-                                            "minValueCollection": 1,
-                                            "RateLine": [
-                                                {
-                                                    "durationEnd": 59,
-                                                    "durationStart": 1,
-                                                    "incrementPeriod": 58,
-                                                    "maxValue": 7.20,
-                                                    "minValue": 1,
-                                                    "sequence": 1,
-                                                    "type": "flatRateTier",
-                                                    "usageCondition": "fixedDuration",
-                                                    "value": 1
-                                                },
-                                                {
-                                                    "durationEnd": 119,
-                                                    "durationStart": 60,
-                                                    "incrementPeriod": 59,
-                                                    "maxValue": 7.20,
-                                                    "minValue": 2,
-                                                    "sequence": 2,
-                                                    "type": "flatRateTier",
-                                                    "usageCondition": "fixedDuration",
-                                                    "value": 1
-                                                },
-                                                {
-                                                    "durationEnd": 660,
-                                                    "durationStart": 120,
-                                                    "incrementPeriod": 540,
-                                                    "maxValue": 7.20,
-                                                    "minValue": 2,
-                                                    "sequence": 3,
-                                                    "type": "flatRateTier",
-                                                    "usageCondition": "fixedDuration",
-                                                    "value": 5.20
-                                                }
-                                            ],
-                                            "resetTime": "18:00:00",
-                                            "sequence": 1,
-                                            "startValidUsagePeriod": "2024-12-10T08:00:00"
-                                        }
-                                    ]
-                                }
-                            ],
+                            "RateTable": {
+                                "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
+                                "additionalInformation": "http://www.somewhere.something.gov.uk",
+                                "type": "hourly",
+                                "RateLineCollection": [
+                                    {
+                                        "applicableCurrency": "GBP",
+                                        "maxTime": 660,
+                                        "maxValueCollection": 7.2,
+                                        "minTime": 60,
+                                        "minValueCollection": 1.00,
+                                        "RateLine": [
+                                            {
+                                                "durationEnd": 59,
+                                                "durationStart": 1,
+                                                "incrementPeriod": 58,
+                                                "maxValue": 7.2,
+                                                "minValue": 1,
+                                                "sequence": 1,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 1
+                                            },
+                                            {
+                                                "durationEnd": 119,
+                                                "durationStart": 60,
+                                                "incrementPeriod": 59,
+                                                "maxValue": 7.2,
+                                                "minValue": 2,
+                                                "sequence": 2,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 1
+                                            },
+                                            {
+                                                "durationEnd": 660,
+                                                "durationStart": 120,
+                                                "incrementPeriod": 540,
+                                                "maxValue": 7.2,
+                                                "minValue": 2,
+                                                "sequence": 3,
+                                                "type": "flatRateTier",
+                                                "usageCondition": "fixedDuration",
+                                                "value": 5.2
+                                            }
+                                        ],
+                                        "resetTime": "18:00:00",
+                                        "sequence": 1,
+                                        "startValidUsagePeriod": "2024-12-10T08:00:00"
+                                    }
+                                ]
+                            },
                             "GeneralRegulation": {
                                 "regulationType": "kerbsidePaymentParkingPlace"
                             },
@@ -308,7 +297,14 @@
                         }
                     ]
                 }
-            ]
+            ],
+            "reference": "abc",
+            "section": "All sections",
+            "traAffected": [
+                9001
+            ],
+            "traCreator": 9001,
+            "troName": "DfT Example - Rates example v1, Jan. 2025"
         }
     }
 }

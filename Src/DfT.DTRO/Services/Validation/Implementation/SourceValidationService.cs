@@ -20,14 +20,16 @@ public class SourceValidationService : ISourceValidationService
         var source = dtroSubmit.Data.GetExpando("Source");
 
         var actionType = source.GetValueOrDefault<string>("actionType");
-        if (!actionType.IsEnum("SourceActionType"))
+        var isActionTypesValid = Constants.SourceActionTypes.Any(sourceActionType => actionType.Equals(sourceActionType));
+
+        if (!isActionTypesValid)
         {
             var error = new SemanticValidationError
             {
                 Name = "Invalid 'actionType'",
                 Message = "Indicates the nature of update between D-TRO records or their constituent parts",
                 Path = "Source -> actionType",
-                Rule = $"Source 'actionType' must contain one of the following accepted values: '{string.Join(",", typeof(SourceActionType).GetDisplayNames<SourceActionType>())}'"
+                Rule = $"Source 'actionType' must contain one of the following accepted values: '{string.Join(",", Constants.SourceActionTypes)}'"
             };
 
             validationErrors.Add(error);
@@ -45,7 +47,8 @@ public class SourceValidationService : ISourceValidationService
                 Name = "Invalid 'Current Traffic regulation authority current owner'",
                 Message = "Current Traffic regulation authority maintaining this D-TRO (SWA-like code)",
                 Path = "Source -> currentTraOwner",
-                Rule = $"Source 'currentTraOwner' must contain one of these '{string.Join(",", traCodes)}' codes"
+                Rule = "Current TRA must be a valid SWA-like code and known to the D-TRO Service; " +
+                       "TRA code must correspond to the appropriate APP-ID."
             };
 
             validationErrors.Add(error);
@@ -57,9 +60,9 @@ public class SourceValidationService : ISourceValidationService
             var error = new SemanticValidationError
             {
                 Name = "Invalid 'reference'",
-                Message = "Indicates the nature of update between D-TRO records or their constituent parts.",
+                Message = "Indicates a reference to the relevant part of section of the TRO",
                 Path = "Source -> reference",
-                Rule = $"Source 'reference' must be of type '{typeof(string)}'"
+                Rule = "Source 'reference' must be of type 'string'"
             };
 
             validationErrors.Add(error);
@@ -73,7 +76,7 @@ public class SourceValidationService : ISourceValidationService
                 Name = "Invalid 'section'",
                 Message = "Reference to the section of the D-TRO",
                 Path = "Source -> section",
-                Rule = "Source 'section' need to be present."
+                Rule = "Source 'section' must be of type 'string'"
             };
 
             validationErrors.Add(error);
@@ -92,9 +95,7 @@ public class SourceValidationService : ISourceValidationService
             validationErrors.Add(error);
         }
 
-        var isTraAffectedWithinSwaCodes = traAffectedCodes
-            .TrueForAll(traAffectedCode => traCodes.Contains((int)traAffectedCode));
-
+        var isTraAffectedWithinSwaCodes = traAffectedCodes.TrueForAll(traAffectedCode => traCodes.Contains((int)traAffectedCode));
         if (!isTraAffectedWithinSwaCodes)
         {
             validationErrors.Add(new SemanticValidationError
@@ -102,7 +103,8 @@ public class SourceValidationService : ISourceValidationService
                 Name = "Invalid 'traAffected'",
                 Message = "Traffic regulation authorities who roads are affected by this D-TRO",
                 Path = "Source -> traAffected",
-                Rule = $"One or more of the Source '{string.Join(",", traAffectedCodes)}' codes are not register"
+                Rule = "Current TRA affected must be a valid SWA-like code and known to the D-TRO Service; " +
+                       "TRA affected must correspond with the appropriate App-ID"
             });
         }
 
@@ -115,7 +117,7 @@ public class SourceValidationService : ISourceValidationService
                 Name = "Invalid 'traCreator'",
                 Message = "Traffic regulation authority maintaining this D-TRO (SWA-like code)",
                 Path = "Source -> traCreator",
-                Rule = $"Source 'traCreator' has to be one of '{string.Join(",", traCodes)}'"
+                Rule = "TRA creator must be a valid SWA-like code and known to the D-TRO Service; the TRA"
             };
 
             validationErrors.Add(error);
@@ -151,9 +153,9 @@ public class SourceValidationService : ISourceValidationService
         {
             var error = new SemanticValidationError
             {
-                Name = $"Invalid 'troName'",
+                Name = "Invalid 'troName'",
                 Message = "Traffic regulation order published title",
-                Rule = $"Source 'troName' need to be present",
+                Rule = "'troName' need to be meaningful",
                 Path = "Source -> troName"
             };
 

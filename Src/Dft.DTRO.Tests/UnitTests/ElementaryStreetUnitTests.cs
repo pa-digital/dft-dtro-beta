@@ -6,10 +6,12 @@ public class ElementaryStreetUnitTests
     private readonly IElementaryStreetUnitValidationService _sut = new ElementaryStreetUnitValidationService();
 
     [Theory]
-    [InlineData(39605715, 0)]
+    [InlineData(10000000, 1)]
+    [InlineData(10000001, 0)]
     [InlineData(0, 1)]
     [InlineData(null, 1)]
-    [InlineData(39605158, 0)]
+    [InlineData(99999999999, 0)]
+    [InlineData(100000000000000, 1)]
     public void ValidateElementaryStreetUnitEsu(long esu, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"

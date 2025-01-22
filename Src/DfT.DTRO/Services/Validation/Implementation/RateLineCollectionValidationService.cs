@@ -17,33 +17,17 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                 .OfType<ExpandoObject>())
             .ToList();
 
-        List<ExpandoObject> rateTables = new();
-        foreach (var regulation in regulations)
+        if (regulations.Any(it => !it.HasField("Condition") && !it.HasField("ConditionSet")))
         {
-            var hasConditionSet = regulation.HasField("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
-            if (hasConditionSet)
-            {
-                var conditionsSets = regulation
-                    .GetValueOrDefault<IList<object>>("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                    .Cast<ExpandoObject>()
-                    .ToList();
-
-                rateTables.AddRange(conditionsSets
-                    .Select(conditionSet => conditionSet.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
-            }
-            else
-            {
-                var conditions = regulation
-                    .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                    .Cast<ExpandoObject>()
-                    .ToList();
-
-                rateTables.AddRange(conditions
-                    .Select(condition => condition.GetValueOrDefault<ExpandoObject>("RateTable".ToBackwardCompatibility(dtroSubmit.SchemaVersion))));
-            }
+            return errors;
         }
 
-        rateTables = rateTables.Where(rateTable => rateTable != null).ToList();
+        var rateTables = regulations
+            .Select(regulation => regulation
+                .GetExpandoOrDefault("RateTable"
+                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
+            .Where(rateTable => rateTable != null)
+            .ToList();
 
         if (!rateTables.Any())
         {
@@ -54,9 +38,8 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             .SelectMany(expandoObject => expandoObject
                 .GetValueOrDefault<IList<object>>("RateLineCollection".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Cast<ExpandoObject>()
+            .Where(rateLineCollection => rateLineCollection != null)
             .ToList();
-
-        rateLineCollections = rateLineCollections.Where(rateLineCollection => rateLineCollection != null).ToList();
 
         var passedInCurrencies = rateLineCollections
             .Select(rateLineCollection => rateLineCollection.GetValueOrDefault<string>(Constants.ApplicableCurrency))
@@ -80,14 +63,10 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
 
         var passedInEndValidUsagePeriods = rateLineCollections
             .Where(rateLineCollection => rateLineCollection.HasField(Constants.EndValidUsagePeriod))
-            .Select(rateLineCollection => rateLineCollection.GetValueOrDefault<string>(Constants.EndValidUsagePeriod))
+            .Select(rateLineCollection => rateLineCollection.GetDateTimeOrNull(Constants.EndValidUsagePeriod))
             .ToList();
 
-        var areValidEndValidUsagePeriods = passedInEndValidUsagePeriods
-            .Where(passedInEndValidUsagePeriod => !string.IsNullOrEmpty(passedInEndValidUsagePeriod))
-            .Select(passedInEndValidUsagePeriod => DateTime.TryParse(passedInEndValidUsagePeriod, out var _)).ToList();
-
-        if (areValidEndValidUsagePeriods.Any() && areValidEndValidUsagePeriods.TrueForAll(isValidEndUsagePeriod => isValidEndUsagePeriod == false))
+        if (passedInEndValidUsagePeriods.Any() && passedInEndValidUsagePeriods.Any(isValidEndUsagePeriod => isValidEndUsagePeriod == null))
         {
             SemanticValidationError error = new()
             {
@@ -126,20 +105,16 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
         var passedInMaxValueCollections = rateLineCollections
             .Where(rateLineCollection => rateLineCollection.HasField(Constants.MaxValueCollection))
             .Select(maxValueCollection => maxValueCollection.GetValueOrDefault<object>(Constants.MaxValueCollection))
-            .Cast<double>()
             .ToList();
 
-        var areValidMaxValueCollections = passedInMaxValueCollections
-            .TrueForAll(passedInMaxValueCollection => passedInMaxValueCollection > 0.0);
-
-        if (!areValidMaxValueCollections)
+        if (passedInMaxValueCollections.TrueForAll(it => it is not double or <= 0.0))
         {
             SemanticValidationError error = new()
             {
                 Name = "Max Value Collection",
                 Message = "The maximum monetary amount to be applied in conjunction with use of this rate line collection. Defined in applicable currency with 2 decimal places.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.MaxValueCollection}",
-                Rule = $"If present '{Constants.MaxValueCollection}' must be of type decimal and not 0.0 or negative"
+                Rule = $"If present '{Constants.MaxValueCollection}' must be defined in applicable currency with 2 decimal places and not 0.0"
             };
 
             errors.Add(error);
@@ -168,20 +143,16 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
         var passedInMinValueCollections = rateLineCollections
             .Where(rateLineCollection => rateLineCollection.HasField(Constants.MinValueCollection))
             .Select(minValueCollection => minValueCollection.GetValueOrDefault<object>(Constants.MinValueCollection))
-            .Cast<double>()
             .ToList();
 
-        var areValidMinValueCollections = passedInMinValueCollections
-            .TrueForAll(passedInMinValueCollection => passedInMinValueCollection > 0.0);
-
-        if (!areValidMinValueCollections)
+        if (passedInMinValueCollections.TrueForAll(it => it is not double or <= 0.0))
         {
             SemanticValidationError error = new()
             {
                 Name = "Min Value Collection",
                 Message = "The minimum monetary amount to be applied in conjunction with use of this rate line collection. Defined in applicable currency with 2 decimal places.",
                 Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.MinValueCollection}",
-                Rule = $"If present '{Constants.MinValueCollection}' must be of type decimal and not 0.0 or negative"
+                Rule = $"If present '{Constants.MinValueCollection}' must be defined in applicable currency with 2 decimal places and not 0.0"
             };
 
             errors.Add(error);
@@ -202,7 +173,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
                        (dateTime.TimeOfDay >= start && dateTime.TimeOfDay <= end);
             }).ToList();
 
-        if (areValidResetTimes.Any() && areValidResetTimes.All(isValidResetTime => isValidResetTime == false))
+        if (areValidResetTimes.Any(isValidResetTime => isValidResetTime == false))
         {
             SemanticValidationError error = new()
             {
@@ -235,14 +206,11 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
         }
 
         var passedInStartValidUsagePeriods = rateLineCollections
-            .Select(rateLineCollection => rateLineCollection.GetValueOrDefault<string>(Constants.StartValidUsagePeriod))
+            .Where(rateLineCollection => rateLineCollection.HasField(Constants.StartValidUsagePeriod))
+            .Select(rateLineCollection => rateLineCollection.GetDateTimeOrNull(Constants.StartValidUsagePeriod))
             .ToList();
 
-        var areValidStartValidUsagePeriods = passedInStartValidUsagePeriods
-            .Select(passedInStartValidUsagePeriod => DateTime.TryParse(passedInStartValidUsagePeriod, out var _))
-            .ToList();
-
-        if (areValidStartValidUsagePeriods.All(isValidStartUsagePeriod => isValidStartUsagePeriod == false))
+        if (passedInStartValidUsagePeriods.Any(it => it == null))
         {
             SemanticValidationError error = new()
             {
@@ -253,6 +221,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             };
 
             errors.Add(error);
+
         }
 
         return errors;

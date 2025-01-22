@@ -23,12 +23,13 @@ public class RateTableValidationServiceTests
                             {{
                                 ""Condition"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""additionalInformation"": ""{additionalInformation}"",
-                                            ""type"": ""daily""
-                                        }}
+                                        ""negate"": false
                                     }}
-                                ]
+                                ],
+                                ""RateTable"" : {{
+                                    ""additionalInformation"": ""{additionalInformation}"",
+                                    ""type"": ""daily""
+                                }}
                             }}
                         ]
                     }}
@@ -57,12 +58,13 @@ public class RateTableValidationServiceTests
                             {{
                                 ""Condition"": [
                                     {{
-                                        ""RateTable"" : {{
-                                            ""additionalInformation"": ""https://loremipsum.co.uk"",
-                                            ""type"": ""{rateType}""
-                                        }}
+                                        ""negate"": false
                                     }}
-                                ]
+                                ],
+                                ""RateTable"" : {{
+                                    ""additionalInformation"": ""https://loremipsum.co.uk"",
+                                    ""type"": ""{rateType}""
+                                }}
                             }}
                         ]
                     }}

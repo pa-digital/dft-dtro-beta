@@ -15,14 +15,14 @@ public class ProvisionValidationService : IProvisionValidationService
             .ToList();
 
         var actionTypes = provisions.Select(provision => provision.GetValue<string>("actionType")).ToList();
-        var areActionTypesValid = actionTypes.TrueForAll(actionType => actionType.IsEnum("ProvisionActionType"));
+        var areActionTypesValid = actionTypes.TrueForAll(actionType => Constants.ProvisionActionTypes.Any(actionType.Equals));
         if (!areActionTypesValid)
         {
             var error = new SemanticValidationError
             {
                 Name = "Invalid 'actionType'",
-                Message = "Indicates the nature of update between D-TRO records or their constituent parts",
-                Rule = $"Provision 'actionType' must contain one of the following accepted values: '{string.Join(",", typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>())}'",
+                Message = "Indicates the nature of update",
+                Rule = $"Provision 'actionType' must contain one of the following accepted values: '{string.Join(",", Constants.ProvisionActionTypes)}'",
                 Path = "Source -> Provision -> actionType"
             };
 
@@ -34,49 +34,45 @@ public class ProvisionValidationService : IProvisionValidationService
             .ToList();
 
         var areValidOrderReportingPoints = orderReportingPoints
-            .TrueForAll(orderReportingPoint => orderReportingPoint
-                .IsEnum("OrderReportingPointType"));
+            .TrueForAll(orderReportingPoint => Constants.OrderReportingPointTypes.Any(orderReportingPoint.Equals));
 
         if (!areValidOrderReportingPoints)
         {
             var error = new SemanticValidationError
             {
                 Name = "Invalid order reporting point",
-                Message = "Object identifying the characteristics of a traffic regulation measure (D-TRO & notice) specified Provision",
-                Rule = $"One or more provisions 'orderReportingPoint' must be of type '{string.Join(",", typeof(OrderReportingPointType).GetDisplayNames<OrderReportingPointType>())}'",
+                Message = "Attribute identifying the lifecycle point and nature of a Provision",
+                Rule = $"'orderReportingPoint' must be one of '{string.Join(",", Constants.OrderReportingPointTypes)}'",
                 Path = "Source -> Provision -> orderReportingPoint"
             };
 
             validationErrors.Add(error);
         }
 
-        var descriptions = provisions
+        var provisionDescription = provisions
             .Select(it => it.GetValueOrDefault<string>("provisionDescription"))
             .ToList();
 
-        if (descriptions.Any(string.IsNullOrEmpty))
+        if (provisionDescription.Any(string.IsNullOrEmpty))
         {
             var error = new SemanticValidationError
             {
                 Name = "Invalid description",
                 Message = "Free text description of the referenced provision",
-                Rule = "One or more provision descriptions are missing",
+                Rule = "Provision 'provisionDescription' must be of type 'string'",
                 Path = "Source -> Provision -> provisionDescription"
             };
 
             validationErrors.Add(error);
         }
 
-        var references = provisions
-            .Select(it => it.GetValueOrDefault<string>("reference"))
-            .ToList();
-
+        var references = provisions.Select(provision => provision.GetValueOrDefault<string>("reference")).ToList();
         if (references.Any(string.IsNullOrWhiteSpace))
         {
             var error = new SemanticValidationError
             {
                 Name = "Invalid reference",
-                Message = "Indicates the nature of update between D-TRO records or their constituent parts.",
+                Message = "Indicates a system reference to the relevant Provision of the TRO",
                 Rule = "Provision 'reference' must be of type 'string'",
                 Path = "Source -> Provision -> reference"
             };
