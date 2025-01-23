@@ -24,7 +24,7 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    public IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros)
+    public IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros, DateTime? searchSince)
     {
         var events = new List<DtroEvent>();
 
@@ -69,17 +69,20 @@ public class DtroMappingService : IDtroMappingService
                 .Where(it => it is not null)
                 .Select(it => it.Value.ToLocalTime())
                 .ToList();
+            
+            if (dtro.Created >= searchSince)
+            {
+                DtroEvent fromCreation = DtroEvent.FromCreation(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
+                events.Add(fromCreation);
+            }
 
-            DtroEvent fromCreation = DtroEvent.FromCreation(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
-            events.Add(fromCreation);
-
-            if (dtro.Created != dtro.LastUpdated)
+            if (dtro.Created != dtro.LastUpdated && dtro.LastUpdated >= searchSince)
             {
                 DtroEvent fromUpdate = DtroEvent.FromUpdate(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
                 events.Add(fromUpdate);
             }
 
-            if (dtro.Deleted)
+            if (dtro.Deleted && dtro.DeletionTime >= searchSince)
             {
                 DtroEvent fromDeletion = DtroEvent.FromDeletion(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
                 events.Add(fromDeletion);
