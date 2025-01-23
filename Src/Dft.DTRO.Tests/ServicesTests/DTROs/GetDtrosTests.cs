@@ -25,19 +25,24 @@ public class GetDtrosTests
             );
     }
 
-    [Fact]
-    public async Task GetDtrosAsyncReturnsRecords()
+    [Theory]
+    [InlineData(1000, "2025-01-21 16:21:26", "2025-01-23 11:02:41", 3)]
+    [InlineData(3300, "2025-01-21 16:21:26", "2025-01-23 11:02:41", 2)]
+    [InlineData(3300, "2025-01-21 16:21:26", "2025-01-22 16:21:26", 2)]
+    [InlineData(5000, "2025-01-21 16:21:26", "2025-01-24 11:02:41", 4)]
+    [InlineData(0, null, null, 12)]
+    public async Task GetDtrosAsyncReturnsRecords(int? traCode, string? startDate, string? endDate, int records)
     {
         var queryParameters = new QueryParameters
         {
-            TraCode = 1000,
-            StartDate = new DateTime(),
-            EndDate = new DateTime()
+            TraCode = traCode,
+            StartDate = startDate != null ? DateTime.Parse(startDate) : null,
+            EndDate = endDate != null ? DateTime.Parse(endDate) : null
         };
 
         _mockDtroDal
             .Setup(it => it.GetDtrosAsync(queryParameters))
-            .ReturnsAsync(() => MockTestObjects.Dtros);
+            .ReturnsAsync(() => MockTestObjects.GetDtros(queryParameters));
 
         _mockDtroMappingService
             .Setup(it => it.MapToDtroResponse(It.IsAny<DfT.DTRO.Models.DataBase.DTRO>()))
@@ -45,7 +50,7 @@ public class GetDtrosTests
 
         var actual = await _sut.GetDtrosAsync(queryParameters);
 
-        Assert.NotEmpty(actual);
+        Assert.Equal(records, actual.Count());
     }
 
     [Fact]

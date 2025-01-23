@@ -96,7 +96,7 @@ public static class MockTestObjects
         new DfT.DTRO.Models.DataBase.DTRO
         {
             Id = Guid.NewGuid(),
-            Created = new DateTime(2025, 1, 21, 16, 21, 26),
+            Created = new DateTime(2025, 1, 23, 16, 21, 26),
             TrafficAuthorityCreatorId = 3300,
             TrafficAuthorityOwnerId = 3300
         },
@@ -104,7 +104,7 @@ public static class MockTestObjects
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 24, 11, 2, 41),
-            TrafficAuthorityCreatorId = 1000,
+            TrafficAuthorityCreatorId = 3300,
             TrafficAuthorityOwnerId = 3300
         },
         new DfT.DTRO.Models.DataBase.DTRO
@@ -124,18 +124,45 @@ public static class MockTestObjects
         new DfT.DTRO.Models.DataBase.DTRO
         {
             Id = Guid.NewGuid(),
-            Created = new DateTime(2025, 1, 21, 16, 21, 26),
+            Created = new DateTime(2025, 1, 23, 16, 21, 26),
             TrafficAuthorityCreatorId = 5000,
             TrafficAuthorityOwnerId = 5000
         },
         new DfT.DTRO.Models.DataBase.DTRO
         {
             Id = Guid.NewGuid(),
-            Created = new DateTime(2025, 1, 23, 11, 2, 41),
+            Created = new DateTime(2025, 1, 24, 11, 2, 41),
             TrafficAuthorityCreatorId = 5000,
             TrafficAuthorityOwnerId = 5000
         }
     };
+
+    public static List<DfT.DTRO.Models.DataBase.DTRO> GetDtros(QueryParameters queryParameters)
+    {
+        var dtros = Dtros.Where(it => !it.Deleted);
+
+        if (queryParameters.TraCode != null && queryParameters.TraCode != 0)
+        {
+            dtros = dtros
+                .Where(it => it.TrafficAuthorityCreatorId.Equals(queryParameters.TraCode) ||
+                             it.TrafficAuthorityOwnerId.Equals(queryParameters.TraCode))
+                .ToList();
+        }
+
+        if (queryParameters.StartDate.HasValue)
+        {
+            dtros = dtros
+                .Where(it => it.Created >= queryParameters.StartDate.Value.ToDateTimeTruncated());
+        }
+
+        if (queryParameters.EndDate.HasValue)
+        {
+            dtros = dtros
+                .Where(it => it.Created <= queryParameters.EndDate.Value.ToDateTimeTruncated());
+        }
+
+        return dtros.ToList();
+    }
 
     public static List<DtroResponse> DtroResponses => new()
     {
