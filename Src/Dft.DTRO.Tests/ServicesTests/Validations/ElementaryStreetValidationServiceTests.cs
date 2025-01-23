@@ -1,7 +1,7 @@
-﻿namespace Dft.DTRO.Tests.UnitTests;
+﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
 [ExcludeFromCodeCoverage]
-public class ElementaryStreetUnitTests
+public class ElementaryStreetValidationServiceTests
 {
     private readonly IElementaryStreetUnitValidationService _sut = new ElementaryStreetUnitValidationService();
 

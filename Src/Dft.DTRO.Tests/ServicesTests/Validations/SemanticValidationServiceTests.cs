@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Dft.DTRO.Tests.UnitTests;
+namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
 [ExcludeFromCodeCoverage]
 public class SemanticValidationServiceTests

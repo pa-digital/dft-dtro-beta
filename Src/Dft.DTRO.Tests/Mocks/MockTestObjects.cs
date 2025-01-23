@@ -19,8 +19,8 @@ public static class MockTestObjects
             Id = Guid.NewGuid()
         };
 
-    public static List<DtroUserResponse> UserResponses => new List<DtroUserResponse> {
-        new()
+    public static List<DtroUserResponse> UserResponses => new() {
+        new DtroUserResponse
         {
             Id = Guid.NewGuid(),
             Name  = "Somerset Council",
@@ -29,7 +29,7 @@ public static class MockTestObjects
             UserGroup = UserGroup.Tra,
             xAppId = Guid.NewGuid()
         },
-        new()
+        new DtroUserResponse
         {
             Id = Guid.NewGuid(),
             Name  = "Derbyshire",
@@ -38,7 +38,7 @@ public static class MockTestObjects
             UserGroup = UserGroup.Tra,
             xAppId = Guid.NewGuid()
         },
-        new()
+        new DtroUserResponse
         {
             Id = Guid.NewGuid(),
             Name  = "Appyway",
@@ -46,6 +46,116 @@ public static class MockTestObjects
             Prefix = "AP",
             UserGroup = UserGroup.Tra,
             xAppId = Guid.NewGuid()
+        }
+    };
+
+    public static List<DfT.DTRO.Models.DataBase.DTRO> Dtros => new()
+    {
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 21, 16, 21, 26),
+            TrafficAuthorityCreatorId = 1000,
+            TrafficAuthorityOwnerId = 1000
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 22, 16, 21, 26),
+            TrafficAuthorityCreatorId = 1000,
+            TrafficAuthorityOwnerId = 1000
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 21, 16, 21, 26),
+            TrafficAuthorityCreatorId = 1000,
+            TrafficAuthorityOwnerId = 1000
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 23, 11, 2, 44),
+            TrafficAuthorityCreatorId = 1000,
+            TrafficAuthorityOwnerId = 1000
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 21, 16, 21, 26),
+            TrafficAuthorityCreatorId = 3300,
+            TrafficAuthorityOwnerId = 3300
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 22, 16, 21, 26),
+            TrafficAuthorityCreatorId = 3300,
+            TrafficAuthorityOwnerId = 3300
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 21, 16, 21, 26),
+            TrafficAuthorityCreatorId = 3300,
+            TrafficAuthorityOwnerId = 3300
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 24, 11, 2, 41),
+            TrafficAuthorityCreatorId = 1000,
+            TrafficAuthorityOwnerId = 3300
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 21, 16, 21, 26),
+            TrafficAuthorityCreatorId = 5000,
+            TrafficAuthorityOwnerId = 5000
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 22, 16, 21, 26),
+            TrafficAuthorityCreatorId = 5000,
+            TrafficAuthorityOwnerId = 5000
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 21, 16, 21, 26),
+            TrafficAuthorityCreatorId = 5000,
+            TrafficAuthorityOwnerId = 5000
+        },
+        new DfT.DTRO.Models.DataBase.DTRO
+        {
+            Id = Guid.NewGuid(),
+            Created = new DateTime(2025, 1, 23, 11, 2, 41),
+            TrafficAuthorityCreatorId = 5000,
+            TrafficAuthorityOwnerId = 5000
+        }
+    };
+
+    public static List<DtroResponse> DtroResponses => new()
+    {
+        new DtroResponse
+        {
+            Id = Guid.NewGuid(),
+            SchemaVersion = new SchemaVersion("3.3.1"),
+            Data = new ExpandoObject()
+        },
+        new DtroResponse
+        {
+            Id = Guid.NewGuid(),
+            SchemaVersion = new SchemaVersion("3.3.1"),
+            Data = new ExpandoObject()
+        },
+        new DtroResponse
+        {
+            Id = Guid.NewGuid(),
+            SchemaVersion = new SchemaVersion("3.3.1"),
+            Data = new ExpandoObject()
         }
     };
 }

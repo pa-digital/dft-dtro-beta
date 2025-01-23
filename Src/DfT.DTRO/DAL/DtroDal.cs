@@ -58,26 +58,6 @@ public class DtroDal : IDtroDal
         return await _dtroContext.Dtros.CountAsync(it => it.SchemaVersion == schemaVersion);
     }
 
-    /// <inheritdoc cref="IDtroDal"/>
-    public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync()
-    {
-        var cachedDtros = await _dtroCache.GetDtros();
-        if (cachedDtros.Any())
-        {
-            return cachedDtros;
-        }
-
-        var dtros = await _dtroContext.Dtros.Where(dtro => !dtro.Deleted).ToListAsync();
-
-        if (!dtros.Any())
-        {
-            throw new NotFoundException("Active D-TRO records are not found.");
-        }
-
-        await _dtroCache.CacheDtros(dtros);
-        return dtros;
-    }
-
     ///<inheritdoc cref="IDtroDal"/>
     public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync(QueryParameters queryParameters)
     {
@@ -215,7 +195,7 @@ public class DtroDal : IDtroDal
         }
 
         _dtroMappingService.SetOwnership(ref existing, assignToTraId);
-        _dtroMappingService.SetSourceActionType(ref existing, Enums.SourceActionType.Amendment);
+        _dtroMappingService.SetSourceActionType(ref existing, SourceActionType.Amendment);
 
         var lastUpdated = DateTime.UtcNow.ToDateTimeTruncated();
         existing.LastUpdated = lastUpdated;
@@ -237,7 +217,6 @@ public class DtroDal : IDtroDal
 
         foreach (var query in search.Queries)
         {
-            var properties = query.GetType().GetProperties();
             var expressionsToConjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
 
             if (query.DeletionTime is { } deletionTime)

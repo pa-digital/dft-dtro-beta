@@ -10,11 +10,13 @@ public class DtroService : IDtroService
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
 
-    public DtroService(IDtroDal dtroDal, IDtroHistoryDal dtroHistoryDal,
+    public DtroService(
+        IDtroUserDal swaCodeDal,
+        IDtroDal dtroDal,
+        IDtroHistoryDal dtroHistoryDal,
         ISchemaTemplateDal schemaTemplateDal,
         IDtroMappingService dtroMappingService,
-        IDtroGroupValidatorService dtroGroupValidatorService,
-        IDtroUserDal swaCodeDal)
+        IDtroGroupValidatorService dtroGroupValidatorService)
     {
         _dtroUserDal = swaCodeDal;
         _dtroDal = dtroDal;
