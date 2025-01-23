@@ -6,17 +6,17 @@
 public class QueryParameters
 {
     /// <summary>
-    /// SWA-like codes that representing D-TRO record creator, owner and affected
+    /// SWA-like code that representing D-TRO record creator and owner
     /// </summary>
-    public int[]? TraCodes { get; set; }
+    public int? TraCode { get; set; }
 
     /// <summary>
-    /// Query start date
+    /// Query D-TRO records starting date
     /// </summary>
     public DateTime? StartDate { get; set; }
 
     /// <summary>
-    /// Query end date
+    /// Query D-TRO records ending date
     /// </summary>
     public DateTime? EndDate { get; set; }
 }

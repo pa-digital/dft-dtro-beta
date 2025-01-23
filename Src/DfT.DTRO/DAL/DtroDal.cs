@@ -89,21 +89,25 @@ public class DtroDal : IDtroDal
 
         var dtrosQuery = _dtroContext.Dtros.Where(d => !d.Deleted);
 
-        dtrosQuery = queryParameters.TraCodes != null &&
-                     queryParameters.TraCodes.Any()
+        dtrosQuery = queryParameters.TraCode != null &&
+                     queryParameters.TraCode != 0
             ? dtrosQuery
                 .Where(dtro => !dtro.Deleted)
-                .Where(dtro => queryParameters.TraCodes.Contains(dtro.TrafficAuthorityOwnerId) ||
-                               queryParameters.TraCodes.Contains(dtro.TrafficAuthorityCreatorId))
+                .Where(dtro => queryParameters.TraCode.Equals(dtro.TrafficAuthorityOwnerId) ||
+                               queryParameters.TraCode.Equals(dtro.TrafficAuthorityCreatorId))
             : dtrosQuery.Where(dtro => !dtro.Deleted);
 
-        dtrosQuery = queryParameters.StartDate.HasValue
-            ? dtrosQuery.Where(dtro => dtro.Created >= queryParameters.StartDate.Value)
-            : dtrosQuery.Where(dtro => dtro.Created >= DateTime.MinValue);
+        if (queryParameters.StartDate.HasValue)
+        {
+            dtrosQuery = dtrosQuery
+                .Where(dtro => dtro.Created >= queryParameters.StartDate.Value.ToDateTimeTruncated());
+        }
 
-        dtrosQuery = queryParameters.EndDate.HasValue
-            ? dtrosQuery.Where(dtro => dtro.Created <= queryParameters.EndDate.Value)
-            : dtrosQuery.Where(dtro => dtro.Created <= DateTime.Today);
+        if (queryParameters.EndDate.HasValue)
+        {
+            dtrosQuery = dtrosQuery
+                .Where(dtro => dtro.Created <= queryParameters.EndDate.Value.ToDateTimeTruncated());
+        }
 
         var dtros = await dtrosQuery.ToListAsync();
 
