@@ -366,7 +366,10 @@ public class DtroDal : IDtroDal
         {
             publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc);
 
-            expressionsToConjunct.Add(it => it.Created >= publicationTime);
+            expressionsToConjunct.Add(it => 
+                it.Created >= publicationTime ||  
+                it.LastUpdated >= publicationTime ||
+                (it.DeletionTime != null && it.DeletionTime >= publicationTime));
         }
 
         if (search.ModificationTime is { } modificationTime)
