@@ -20,7 +20,7 @@ public class EventSearchService : IEventSearchService
 
         var searchRes = await _dtroService.FindDtrosAsync(search);
 
-        var events = _dtroMappingService.MapToEvents(searchRes);
+        var events = _dtroMappingService.MapToEvents(searchRes, search.Since);
 
         if (!events.Any())
         {

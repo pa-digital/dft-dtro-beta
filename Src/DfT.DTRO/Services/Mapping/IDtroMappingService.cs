@@ -11,7 +11,7 @@ public interface IDtroMappingService
 
     DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro);
 
-    IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros);
+    IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros, DateTime? searchSince);
 
     IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros);
 
