@@ -23,6 +23,14 @@ public class ElementaryStreetUnitValidationService : IElementaryStreetUnitValida
         {
             foreach (var concreteGeometry in Constants.ConcreteGeometries.Where(geometry.HasField))
             {
+                var hasExternalReference = geometry
+                    .GetExpandoOrDefault(concreteGeometry)
+                    .HasField("ExternalReference");
+                if (!hasExternalReference)
+                {
+                    continue;
+                }
+
                 var externalReferences = geometry
                     .GetValueOrDefault<IList<object>>($"{concreteGeometry}.ExternalReference")
                     .OfType<ExpandoObject>()
@@ -33,12 +41,8 @@ public class ElementaryStreetUnitValidationService : IElementaryStreetUnitValida
                     .OfType<ExpandoObject>()
                     .ToList();
 
-                if (!uniqueStreetReferenceNumbers.Any(it => it.HasField("ElementaryStreetUnit")))
-                {
-                    return errors;
-                }
-
                 var elementaryStreetUnits = uniqueStreetReferenceNumbers
+                    .Where(it => it.HasField("ElementaryStreetUnit"))
                     .SelectMany(uniqueStreetReferenceNumber => uniqueStreetReferenceNumber.GetValueOrDefault<IList<object>>("ElementaryStreetUnit"))
                     .OfType<ExpandoObject>()
                     .ToList();
