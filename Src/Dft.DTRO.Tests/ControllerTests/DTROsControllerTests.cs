@@ -1,5 +1,3 @@
-using DfT.DTRO.Models.Parameters;
-
 namespace Dft.DTRO.Tests.ControllerTests;
 
 [ExcludeFromCodeCoverage]
@@ -187,7 +185,7 @@ public class DTROsControllerTests
     [Fact]
     public async Task GetAllReturnsRecords()
     {
-        var queryParameters = new QueryParameters
+        var queryParameters = new GetAllQueryParameters
         {
             TraCode = 1000,
             StartDate = new DateTime(2025, 1, 21, 16, 21, 26),

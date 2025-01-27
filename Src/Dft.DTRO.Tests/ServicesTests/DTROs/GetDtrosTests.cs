@@ -33,7 +33,7 @@ public class GetDtrosTests
     [InlineData(0, null, null, 12)]
     public async Task GetDtrosAsyncReturnsRecords(int? traCode, string? startDate, string? endDate, int records)
     {
-        var queryParameters = new QueryParameters
+        var queryParameters = new GetAllQueryParameters
         {
             TraCode = traCode,
             StartDate = startDate != null ? DateTime.Parse(startDate) : null,
@@ -57,14 +57,14 @@ public class GetDtrosTests
     public async Task GetDtrosAsyncReturnsNoRecords()
     {
         _mockDtroDal
-            .Setup(it => it.GetDtrosAsync(new QueryParameters()))
+            .Setup(it => it.GetDtrosAsync(new GetAllQueryParameters()))
             .ReturnsAsync(() => new List<DfT.DTRO.Models.DataBase.DTRO>());
 
         _mockDtroMappingService
             .Setup(it => it.MapToDtroResponse(It.IsAny<DfT.DTRO.Models.DataBase.DTRO>()))
             .Returns(MockTestObjects.DtroResponses.First);
 
-        await Assert.ThrowsAnyAsync<NotFoundException>(async () => await _sut.GetDtrosAsync(new QueryParameters()));
+        await Assert.ThrowsAnyAsync<NotFoundException>(async () => await _sut.GetDtrosAsync(new GetAllQueryParameters()));
 
     }
 }

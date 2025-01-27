@@ -137,7 +137,7 @@ public static class MockTestObjects
         }
     };
 
-    public static List<DfT.DTRO.Models.DataBase.DTRO> GetDtros(QueryParameters queryParameters)
+    public static List<DfT.DTRO.Models.DataBase.DTRO> GetDtros(GetAllQueryParameters queryParameters)
     {
         var dtros = Dtros.Where(it => !it.Deleted);
 

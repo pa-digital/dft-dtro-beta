@@ -59,7 +59,7 @@ public class DtroDal : IDtroDal
     }
 
     ///<inheritdoc cref="IDtroDal"/>
-    public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync(QueryParameters queryParameters)
+    public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync(GetAllQueryParameters parameters)
     {
         var cachedDtros = await _dtroCache.GetDtros();
         if (cachedDtros.Any())
@@ -69,24 +69,24 @@ public class DtroDal : IDtroDal
 
         var dtrosQuery = _dtroContext.Dtros.Where(d => !d.Deleted);
 
-        dtrosQuery = queryParameters.TraCode != null &&
-                     queryParameters.TraCode != 0
+        dtrosQuery = parameters.TraCode != null &&
+                     parameters.TraCode != 0
             ? dtrosQuery
                 .Where(dtro => !dtro.Deleted)
-                .Where(dtro => queryParameters.TraCode.Equals(dtro.TrafficAuthorityOwnerId) ||
-                               queryParameters.TraCode.Equals(dtro.TrafficAuthorityCreatorId))
+                .Where(dtro => parameters.TraCode.Equals(dtro.TrafficAuthorityOwnerId) ||
+                               parameters.TraCode.Equals(dtro.TrafficAuthorityCreatorId))
             : dtrosQuery.Where(dtro => !dtro.Deleted);
 
-        if (queryParameters.StartDate.HasValue)
+        if (parameters.StartDate.HasValue)
         {
             dtrosQuery = dtrosQuery
-                .Where(dtro => dtro.Created >= queryParameters.StartDate.Value.ToDateTimeTruncated());
+                .Where(dtro => dtro.Created >= parameters.StartDate.Value.ToDateTimeTruncated());
         }
 
-        if (queryParameters.EndDate.HasValue)
+        if (parameters.EndDate.HasValue)
         {
             dtrosQuery = dtrosQuery
-                .Where(dtro => dtro.Created <= queryParameters.EndDate.Value.ToDateTimeTruncated());
+                .Where(dtro => dtro.Created <= parameters.EndDate.Value.ToDateTimeTruncated());
         }
 
         var dtros = await dtrosQuery.ToListAsync();
@@ -366,8 +366,8 @@ public class DtroDal : IDtroDal
         {
             publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc);
 
-            expressionsToConjunct.Add(it => 
-                it.Created >= publicationTime ||  
+            expressionsToConjunct.Add(it =>
+                it.Created >= publicationTime ||
                 it.LastUpdated >= publicationTime ||
                 (it.DeletionTime != null && it.DeletionTime >= publicationTime));
         }
