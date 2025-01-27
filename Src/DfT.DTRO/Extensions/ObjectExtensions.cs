@@ -81,6 +81,11 @@ public static class ObjectExtensions
         return end <= adjStart ? "" : source.Substring(adjStart, end - adjStart);
     }
 
+    /// <summary>
+    /// Truncate date time
+    /// </summary>
+    /// <param name="dateTime">Date time to be truncated</param>
+    /// <returns>Truncated date time</returns>
     public static DateTime ToDateTimeTruncated(this DateTime dateTime)
     {
         return new DateTime(
@@ -94,6 +99,12 @@ public static class ObjectExtensions
         );
     }
 
+    /// <summary>
+    /// Keep backward compatibility for previous versions
+    /// </summary>
+    /// <param name="source">Source to check</param>
+    /// <param name="schemaVersion">Schema version</param>
+    /// <returns>Source</returns>
     public static string ToBackwardCompatibility(this string source, SchemaVersion schemaVersion)
     {
         if (schemaVersion >= new SchemaVersion("3.3.0"))
@@ -119,16 +130,5 @@ public static class ObjectExtensions
             var item = $"{toLower + string.Join("", chars.Skip(1))}";
             return item;
         }
-    }
-
-    public static bool IsPascalCase(this string source)
-    {
-        if (string.IsNullOrEmpty(source))
-        {
-            return false;
-        }
-
-        var first = source.First();
-        return char.IsUpper(first);
     }
 }

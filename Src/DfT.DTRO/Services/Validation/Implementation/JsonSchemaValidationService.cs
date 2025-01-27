@@ -1,12 +1,12 @@
-using DfT.DTRO.Extensions.Exceptions;
-using DfT.DTRO.Services.Validation.Contracts;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 
 namespace DfT.DTRO.Services.Validation.Implementation;
 
+/// <inheritdoc cref="IJsonSchemaValidationService"/>
 public class JsonSchemaValidationService : IJsonSchemaValidationService
 {
+    /// <inheritdoc cref="IJsonSchemaValidationService"/>
     public IList<DtroJsonValidationErrorResponse> ValidateSchema(string jsonSchemaAsString, string inputJson)
     {
         var parsedSchema = JSchema.Parse(jsonSchemaAsString);

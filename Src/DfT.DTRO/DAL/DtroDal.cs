@@ -58,8 +58,8 @@ public class DtroDal : IDtroDal
         return await _dtroContext.Dtros.CountAsync(it => it.SchemaVersion == schemaVersion);
     }
 
-    /// <inheritdoc cref="IDtroDal"/>
-    public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync()
+    ///<inheritdoc cref="IDtroDal"/>
+    public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync(GetAllQueryParameters parameters)
     {
         var cachedDtros = await _dtroCache.GetDtros();
         if (cachedDtros.Any())
@@ -67,14 +67,32 @@ public class DtroDal : IDtroDal
             return cachedDtros;
         }
 
-        var dtros = await _dtroContext.Dtros.Where(dtro => !dtro.Deleted).ToListAsync();
+        var dtrosQuery = _dtroContext.Dtros.Where(d => !d.Deleted);
 
-        if (!dtros.Any())
+        dtrosQuery = parameters.TraCode != null &&
+                     parameters.TraCode != 0
+            ? dtrosQuery
+                .Where(dtro => !dtro.Deleted)
+                .Where(dtro => parameters.TraCode.Equals(dtro.TrafficAuthorityOwnerId) ||
+                               parameters.TraCode.Equals(dtro.TrafficAuthorityCreatorId))
+            : dtrosQuery.Where(dtro => !dtro.Deleted);
+
+        if (parameters.StartDate.HasValue)
         {
-            throw new NotFoundException("Active D-TRO records are not found.");
+            dtrosQuery = dtrosQuery
+                .Where(dtro => dtro.Created >= parameters.StartDate.Value.ToDateTimeTruncated());
         }
 
+        if (parameters.EndDate.HasValue)
+        {
+            dtrosQuery = dtrosQuery
+                .Where(dtro => dtro.Created <= parameters.EndDate.Value.ToDateTimeTruncated());
+        }
+
+        var dtros = await dtrosQuery.ToListAsync();
+
         await _dtroCache.CacheDtros(dtros);
+
         return dtros;
     }
 
@@ -177,7 +195,7 @@ public class DtroDal : IDtroDal
         }
 
         _dtroMappingService.SetOwnership(ref existing, assignToTraId);
-        _dtroMappingService.SetSourceActionType(ref existing, Enums.SourceActionType.Amendment);
+        _dtroMappingService.SetSourceActionType(ref existing, SourceActionType.Amendment);
 
         var lastUpdated = DateTime.UtcNow.ToDateTimeTruncated();
         existing.LastUpdated = lastUpdated;
@@ -199,7 +217,6 @@ public class DtroDal : IDtroDal
 
         foreach (var query in search.Queries)
         {
-            var properties = query.GetType().GetProperties();
             var expressionsToConjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
 
             if (query.DeletionTime is { } deletionTime)
@@ -349,8 +366,8 @@ public class DtroDal : IDtroDal
         {
             publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc);
 
-            expressionsToConjunct.Add(it => 
-                it.Created >= publicationTime ||  
+            expressionsToConjunct.Add(it =>
+                it.Created >= publicationTime ||
                 it.LastUpdated >= publicationTime ||
                 (it.DeletionTime != null && it.DeletionTime >= publicationTime));
         }

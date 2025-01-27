@@ -10,11 +10,13 @@ public class DtroService : IDtroService
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
 
-    public DtroService(IDtroDal dtroDal, IDtroHistoryDal dtroHistoryDal,
+    public DtroService(
+        IDtroUserDal swaCodeDal,
+        IDtroDal dtroDal,
+        IDtroHistoryDal dtroHistoryDal,
         ISchemaTemplateDal schemaTemplateDal,
         IDtroMappingService dtroMappingService,
-        IDtroGroupValidatorService dtroGroupValidatorService,
-        IDtroUserDal swaCodeDal)
+        IDtroGroupValidatorService dtroGroupValidatorService)
     {
         _dtroUserDal = swaCodeDal;
         _dtroDal = dtroDal;
@@ -47,9 +49,9 @@ public class DtroService : IDtroService
         return await _dtroDal.DtroCountForSchemaAsync(schemaVersion);
     }
 
-    public async Task<IEnumerable<DtroResponse>> GetDtrosAsync()
+    public async Task<IEnumerable<DtroResponse>> GetDtrosAsync(GetAllQueryParameters parameters)
     {
-        List<Models.DataBase.DTRO> dtros = (await _dtroDal.GetDtrosAsync()).ToList();
+        List<Models.DataBase.DTRO> dtros = (await _dtroDal.GetDtrosAsync(parameters)).ToList();
         if (!dtros.Any())
         {
             throw new NotFoundException();

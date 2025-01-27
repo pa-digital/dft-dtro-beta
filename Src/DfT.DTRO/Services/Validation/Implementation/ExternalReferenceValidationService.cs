@@ -30,6 +30,14 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                     continue;
                 }
 
+                var hasExternalReference = geometry
+                    .GetExpandoOrDefault(concreteGeometry)
+                    .HasField("ExternalReference");
+                if (!hasExternalReference)
+                {
+                    continue;
+                }
+
                 var lastDateUpdates = geometry
                     .GetValueOrDefault<IList<object>>($"{concreteGeometry}.ExternalReference")
                     .OfType<ExpandoObject>()

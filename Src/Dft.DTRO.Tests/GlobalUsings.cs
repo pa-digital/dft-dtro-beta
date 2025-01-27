@@ -1,14 +1,9 @@
 // Global using directives
 
-global using System;
-global using System.Collections.Generic;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Dynamic;
-global using System.IO;
-global using System.Linq;
 global using System.Net;
 global using System.Text;
-global using System.Threading.Tasks;
 global using Dft.DTRO.Tests.Mocks;
 global using DfT.DTRO;
 global using DfT.DTRO.Controllers;
@@ -24,6 +19,7 @@ global using DfT.DTRO.Models.DtroHistory;
 global using DfT.DTRO.Models.DtroJson;
 global using DfT.DTRO.Models.Errors;
 global using DfT.DTRO.Models.Metrics;
+global using DfT.DTRO.Models.Parameters;
 global using DfT.DTRO.Models.RuleTemplate;
 global using DfT.DTRO.Models.SchemaTemplate;
 global using DfT.DTRO.Models.SharedResponse;
@@ -40,7 +36,6 @@ global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Testing;
 global using Microsoft.AspNetCore.TestHost;
-global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Internal;
