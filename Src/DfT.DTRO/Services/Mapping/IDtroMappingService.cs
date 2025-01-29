@@ -1,9 +1,4 @@
-﻿using DfT.DTRO.Enums;
-using DfT.DTRO.Models.DtroEvent;
-using DfT.DTRO.Models.DtroHistory;
-using DfT.DTRO.Models.Search;
-
-namespace DfT.DTRO.Services.Mapping;
+﻿namespace DfT.DTRO.Services.Mapping;
 
 public interface IDtroMappingService
 {

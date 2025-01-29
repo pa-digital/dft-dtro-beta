@@ -1,5 +1,3 @@
-using DfT.DTRO.Models.DataBase;
-
 namespace DfT.DTRO.Controllers;
 
 /// <summary>
@@ -58,7 +56,7 @@ public class SearchController : ControllerBase
         try
         {
             appId = await _appIdMapperService.GetAppId(HttpContext);
-            PaginatedResponse<DtroSearchResult> response = await _searchService.SearchAsync(body);
+            var response = await _searchService.SearchAsync(body);
             await _metricsService.IncrementMetric(MetricType.Search, appId);
             _logger.LogInformation($"'{nameof(SearchDtros)}' method called and body '{body}'");
             _loggingExtension.LogInformation(
