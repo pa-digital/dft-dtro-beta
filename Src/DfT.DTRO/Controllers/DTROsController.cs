@@ -479,6 +479,43 @@ public class DTROsController : ControllerBase
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
+    
+    /// <summary>
+    /// Save D-TRO records to a zip file of JSON files partitioned by record number
+    /// </summary>
+    /// <returns>Task</returns>
+    [HttpGet]
+    [IpWhitelist("127.0.0.1", "::1")]
+    [Route("/dtros/zip")]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
+    [SwaggerResponse(statusCode: 404, description: "Could not found any D-TRO records.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
+    [SwaggerResponse(statusCode: 200, description: "Ok")]
+    public async Task<IActionResult> GenerateDtrosZip()
+    {
+        try
+        {
+            var zipSuccesfullyGenerated =  await _dtroService.GenerateDtrosAsZipAsync();
+            _logger.LogInformation($"'{nameof(GenerateDtrosZip)}' method called.");
+            _loggingExtension.LogInformation(
+                nameof(GenerateDtrosZip),
+                "/dtros/zip",
+                $"'{nameof(GenerateDtrosZip)}' method called.");
+            return Ok(new {Success = zipSuccesfullyGenerated});
+        }
+        catch (NotFoundException ex)
+        {
+            _logger.LogError(ex.Message);
+            _loggingExtension.LogError(nameof(GenerateDtrosZip), "/dtros/zip", "D-TRO records not found", ex.Message);
+            return NotFound(new ApiErrorResponse("D-TRO records not found", ex.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            _loggingExtension.LogError(nameof(GenerateDtrosZip), "/dtros/zip", "", ex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
+        }
+    }
 
 
     /// <summary>
