@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Helpers;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace DfT.DTRO.Services.Mapping;
 
@@ -69,7 +68,7 @@ public class DtroMappingService : IDtroMappingService
                 .Where(it => it is not null)
                 .Select(it => it.Value.ToLocalTime())
                 .ToList();
-            
+
             if (dtro.Created >= searchSince)
             {
                 DtroEvent fromCreation = DtroEvent.FromCreation(dtro, baseUrl, regulationStartTimes, regulationEndTimes);
@@ -119,7 +118,7 @@ public class DtroMappingService : IDtroMappingService
                     continue;
                 }
 
-                var expandoProvisions = provisions.OfType<ExpandoObject>();
+                var expandoProvisions = provisions.OfType<ExpandoObject>().ToList();
 
                 foreach (var provision in expandoProvisions)
                 {
@@ -133,16 +132,26 @@ public class DtroMappingService : IDtroMappingService
                     var expandoRegulations = regulationList.OfType<ExpandoObject>();
                     regulations.AddRange(expandoRegulations);
                 }
+
+                foreach (var expandoProvision in expandoProvisions)
+                {
+                    var regulatedPlaceList =
+                        expandoProvision.GetValueOrDefault<IList<object>>(
+                            "RegulatedPlace".ToBackwardCompatibility(dtro.SchemaVersion));
+                    if (regulatedPlaceList == null)
+                    {
+                        _loggingExtension.LogError(nameof(MapToSearchResult), "", "Error: 'regulatedPlace' not found in one of the provisions.", "");
+                        continue;
+                    }
+
+                    var expandoRegulatedPlaces = regulatedPlaceList.OfType<ExpandoObject>();
+                    regulations.AddRange(expandoRegulatedPlaces);
+                }
             }
             catch (Exception ex)
             {
                 _loggingExtension.LogError(nameof(MapToSearchResult), "", "An error occurred", ex.Message);
                 throw new NotFoundException(ex.Message);
-            }
-
-            foreach (ExpandoObject item in regulations)
-            {
-                var properties = item.GetType().GetProperties();
             }
 
             List<ExpandoObject> timeValidity;
@@ -299,13 +308,27 @@ public class DtroMappingService : IDtroMappingService
     public void InferIndexFields(ref Models.DataBase.DTRO dtro)
     {
         var schemaVersion = dtro.SchemaVersion;
-        List<ExpandoObject> regulations = dtro
+        var regulations = dtro
             .Data
             .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(schemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(expandoObject => expandoObject
                 .GetValue<IList<object>>("Regulation".ToBackwardCompatibility(schemaVersion))
                 .OfType<ExpandoObject>())
+            .ToList();
+
+
+        var regulatedPlaces = dtro
+            .Data
+            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(schemaVersion))
+            .OfType<ExpandoObject>()
+            .SelectMany(expandoObject => expandoObject
+                .GetValue<IList<object>>("RegulatedPlace".ToBackwardCompatibility(schemaVersion))
+                .OfType<ExpandoObject>())
+            .ToList();
+
+        dtro.RegulatedPlaceTypes = regulatedPlaces
+            .Select(it => it.GetValueOrDefault<string>("type"))
             .ToList();
 
         dtro.TrafficAuthorityCreatorId = dtro.Data.GetValueOrDefault<int>("Source.traCreator");
@@ -316,7 +339,6 @@ public class DtroMappingService : IDtroMappingService
 
         dtro.RegulationTypes = regulations.Select(reg => reg.GetExpandoOrDefault("GeneralRegulation"))
             .Where(generalReg => generalReg is not null)
-            .OfType<ExpandoObject>()
             .Select(generalReg => generalReg.GetValueOrDefault<string>("regulationType"))
             .Where(regType => regType is not null)
         .Distinct()
@@ -403,6 +425,7 @@ public class DtroMappingService : IDtroMappingService
             TrafficAuthorityOwnerId = dtro.Data.GetValueOrDefault<int>("Source.currentTraOwner"),
             PublicationTime = dtro.Created.Value.ToDateTimeTruncated(),
             RegulationType = dtro.RegulationTypes,
+            RegulatedPlaceType = dtro.RegulatedPlaceTypes,
             VehicleType = dtro.VehicleTypes,
             OrderReportingPoint = dtro.OrderReportingPoints,
             RegulationStart = regulationStartDates,

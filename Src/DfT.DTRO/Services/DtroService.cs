@@ -122,17 +122,11 @@ public class DtroService : IDtroService
         return new GuidResponse { Id = id };
     }
 
-    public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
-    {
-        var result = await _dtroDal.FindDtrosAsync(search);
+    public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search) =>
+        await _dtroDal.FindDtrosAsync(search);
 
-        return result;
-    }
-
-    public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search)
-    {
-        return await _dtroDal.FindDtrosAsync(search);
-    }
+    public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search) =>
+        await _dtroDal.FindDtrosAsync(search);
 
     public async Task<List<DtroHistorySourceResponse>> GetDtroSourceHistoryAsync(Guid dtroId)
     {

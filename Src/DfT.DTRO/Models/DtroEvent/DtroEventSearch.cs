@@ -33,6 +33,9 @@ public class DtroEventSearch
     [DataMember(Name = "regulationType")]
     public string RegulationType { get; set; }
 
+    [DataMember(Name = "regulatedPlaceType")]
+    public string RegulatedPlaceType { get; set; }
+
     [DataMember(Name = "vehicleType")]
     public string VehicleType { get; set; }
 
