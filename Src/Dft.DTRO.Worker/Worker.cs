@@ -16,8 +16,8 @@ namespace Dft.DTRO.Worker
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // TODO makes the run time come from an external config value to avoid redeployment of code
-            const int MINUTE = 32;
-            const int HOUR = 22;
+            const int MINUTE = 44;
+            const int HOUR = 14;
             var cronExpression = $"{MINUTE} {HOUR} * * *";
             var cronSchedule = CronExpression.Parse(cronExpression);
 
@@ -50,6 +50,8 @@ namespace Dft.DTRO.Worker
                     // TODO don't use string literals here - figure out where these headers can be accessed implicitly
                     client.DefaultRequestHeaders.Add("X-Correlation-ID", "41ae0471-d7de-4737-907f-cab2f0089796");
                     client.DefaultRequestHeaders.Add("x-app-id", "0cf72745-a8cb-4224-ad48-73eeabafc8ab");
+                    client.DefaultRequestHeaders.Add("X-DtroZipper-Key", "d24b0298d286cdd2f61e9f8cc803f8f4");
+
 
                     var response = await client.GetAsync("/dtros/zip", stoppingToken);
 

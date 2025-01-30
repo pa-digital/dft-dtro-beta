@@ -486,7 +486,9 @@ public class DTROsController : ControllerBase
     /// <returns>Task</returns>
     [HttpGet]
     [IpWhitelist("127.0.0.1", "::1")]
+    [ApiKeyAuth]
     [Route("/dtros/zip")]
+    // TODO can some of these feature names be removed?
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
     [SwaggerResponse(statusCode: 404, description: "Could not found any D-TRO records.")]
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
