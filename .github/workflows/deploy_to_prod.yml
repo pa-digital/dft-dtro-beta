@@ -19,6 +19,7 @@ jobs:
         id: releasev
         run: |
           echo "Extracting release version..."
+#         original_string=${{github.ref}}
           original_string=refs/tags/release-v1.4.2
           substring="${original_string#refs/tags/}"
           release="${substring##*release-}"
