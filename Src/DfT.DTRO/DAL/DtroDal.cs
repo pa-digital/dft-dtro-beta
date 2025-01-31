@@ -286,6 +286,11 @@ public class DtroDal : IDtroDal
                 expressionsToConjunct.Add(it => it.RegulationTypes.Contains(query.RegulationType));
             }
 
+            if (query.RegulatedPlaceType is not null)
+            {
+                expressionsToConjunct.Add(it => it.RegulatedPlaceTypes.Contains(query.RegulatedPlaceType));
+            }
+
             if (query.OrderReportingPoint is not null)
             {
                 expressionsToConjunct.Add(it => it.OrderReportingPoints.Contains(query.OrderReportingPoint));
@@ -414,6 +419,11 @@ public class DtroDal : IDtroDal
             expressionsToConjunct.Add(it => it.RegulationTypes.Contains(search.RegulationType));
         }
 
+        if (search.RegulatedPlaceType is not null)
+        {
+            expressionsToConjunct.Add(it => it.RegulatedPlaceTypes.Contains(search.RegulatedPlaceType));
+        }
+
         if (search.OrderReportingPoint is not null)
         {
             expressionsToConjunct.Add(it => it.OrderReportingPoints.Contains(search.OrderReportingPoint));
@@ -440,7 +450,7 @@ public class DtroDal : IDtroDal
                 ComparisonOperator.LessThanOrEqual => it => it.RegulationStart <= value,
                 ComparisonOperator.GreaterThan => it => it.RegulationStart > value,
                 ComparisonOperator.GreaterThanOrEqual => it => it.RegulationStart >= value,
-                _ => throw new InvalidOperationException("Unsupported comparison operator.")
+                var _ => throw new InvalidOperationException("Unsupported comparison operator.")
             };
 
             expressionsToConjunct.Add(expr);
@@ -457,7 +467,7 @@ public class DtroDal : IDtroDal
                 ComparisonOperator.LessThanOrEqual => (it) => it.RegulationEnd <= value,
                 ComparisonOperator.GreaterThan => (it) => it.RegulationEnd > value,
                 ComparisonOperator.GreaterThanOrEqual => (it) => it.RegulationEnd >= value,
-                _ => throw new InvalidOperationException("Unsupported comparison operator.")
+                var _ => throw new InvalidOperationException("Unsupported comparison operator.")
             };
 
             expressionsToConjunct.Add(expr);
