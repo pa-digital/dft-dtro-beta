@@ -48,11 +48,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Output Workflow Inputs
-        run: echo "${{ toJSON(github.event.inputs) }}"
-
       - name:  Make scripts executable
         run: chmod +x *.sh
+
+      - name: Mask variables
+        run: |
+          echo "::add-mask::${DEV_EMAIL}"
+          echo "::add-mask::${APP_NAME}"
+          echo "::add-mask::${APP_ID}"
+          echo "::add-mask::${IS_PUBLISHER}"
+          echo "::add-mask::${SWA_CODE}"
+        env:
+          DEV_EMAIL: ${{ inputs.dev-email }}
+          APP_ID: ${{ inputs.app-id }}
+          APP_NAME: ${{ inputs.app-name }}
+          IS_PUBLISHER: ${{ inputs.is-publisher }}
+          SWA_CODE: ${{ inputs.swa-code }}
 
       - name: Load Env Vars for Apigee script
         run: |
@@ -60,11 +71,6 @@ jobs:
           echo "apigee_organisation=${{ vars.GCP_PROJECT_ID_TEST }}" >> $GITHUB_ENV
           echo "CLIENT_ID=${{ secrets.CSO_CLIENT_ID_INT }}" >> $GITHUB_ENV
           echo "CLIENT_SECRET=${{ secrets.CSO_CLIENT_SECRET_INT }}" >> $GITHUB_ENV
-          echo "DEV_EMAIL=${{ inputs.dev-email }}" >> $GITHUB_ENV 
-          echo "APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV 
-          echo "APP_ID=${{ inputs.app-id }}" >> $GITHUB_ENV
-          echo "IS_PUBLISHER=${{ inputs.is-publisher }}" >> $GITHUB_ENV
-          echo "SWA_CODE=${{ inputs.swa-code }}" >> $GITHUB_ENV
           echo "DOMAIN=dtro-integration" >> $GITHUB_ENV
 
       - name: Authenticate to Google Cloud
@@ -82,7 +88,18 @@ jobs:
           echo "APIGEECLI_DEBUG=true" >> $GITHUB_ENV
 
       - name: Activate User's Application
-        run: ./activate_user_app.sh ${{ steps.google-auth.outputs.access_token }}
+        env:
+          DEV_EMAIL: ${{ inputs.dev-email }}
+          APP_NAME: ${{ inputs.app_name }}
+        run: |
+          export DEV_EMAIL="$DEV_EMAIL" APP_NAME="$APP_NAME"
+          ./activate_user_app.sh ${{ steps.google-auth.outputs.access_token }}
 
       - name: Register User into D-TRO
-        run: ./register_user_in_dtro.sh
+        env:
+          SWA_CODE: ${{ inputs.swa-code }}
+          APP_ID: ${{ inputs.app-id }}
+          Is_PUBLISHER: ${{ inputs.is-publisher }}
+        run: |
+          export SWA_CODE="$SWA_CODE" APP_ID="$APP_ID" IS_PUBLISHER="$IS_PUBLISHER"
+          ./register_user_in_dtro.sh

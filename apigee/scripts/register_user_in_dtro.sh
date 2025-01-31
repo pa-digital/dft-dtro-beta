@@ -3,7 +3,7 @@
 # Script Variables
 ORG=$apigee_organisation
 uuid=$(uuidgen)
-TRA_ID=$SWA_CODE
+TRA_ID="${SWA_CODE}"
 
 echo "uuid: ${uuid}"
 # Get OAuth access token
