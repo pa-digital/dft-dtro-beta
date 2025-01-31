@@ -1,6 +1,11 @@
 name: Deploy to Production
 
 on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'tag_to_deploy'
+        required: true
   push:
     tags:
       - release-*
