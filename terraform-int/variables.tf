@@ -45,31 +45,13 @@ variable "artifact_registry_dtro_image_path" {
   default     = "europe-west1-docker.pkg.dev/dft-dtro-test/dft-dtro-test-int-repository/dft-dtro-beta"
 }
 
-variable "artifact_registry_service_ui_image_path" {
-  type        = string
-  description = "Path of the image in Artifact Registry"
-  default     = "europe-west1-docker.pkg.dev/dft-dtro-test/dft-dtro-test-ui-int-repository/dft-dtro-ui"
-}
-
 variable "dtro_service_image" {
   type        = string
   description = "The name of an image being pushed for publish service."
   default     = "dft-dtro-beta"
 }
 
-variable "service_ui_image" {
-  type        = string
-  description = "The name of an image being pushed for publish service."
-  default     = "dft-dtro-ui"
-}
-
 variable "dtro_tag" {
-  type        = string
-  description = "The tag of the image to run."
-  default     = "latest"
-}
-
-variable "service_ui_tag" {
   type        = string
   description = "The tag of the image to run."
   default     = "latest"
@@ -107,14 +89,6 @@ variable "cloud_run_min_instance_count" {
   type        = string
   description = "Minimum number of serving instances DTRO application should have."
   default     = "1"
-}
-
-variable "cloud_run_service_ui_client_id" {
-  type        = string
-}
-
-variable "cloud_run_service_ui_client_secret" {
-  type        = string
 }
 
 variable "database_max_connections" {

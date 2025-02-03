@@ -39,8 +39,6 @@ jobs:
       workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_PROD }}
       wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_PROD }}
       execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_PROD }}
-      service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_PROD }}
-      service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_PROD }}
       gcp_project_number: ${{ secrets.GCP_PROJECT_NUMBER_PROD }}
     with:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_PROD }}
@@ -49,8 +47,6 @@ jobs:
       environment: prod
       dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
       dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
-      service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
-      service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
       run-build-push: true
       run-deploy-CR-job: true
 #      run-apigee: false #TODO: Default value when no major endpoint or OAuth changes have been made

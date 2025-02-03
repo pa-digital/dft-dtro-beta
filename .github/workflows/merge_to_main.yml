@@ -13,8 +13,6 @@ jobs:
       workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
       wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT }}
       execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT }}
-      service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_DEV }}
-      service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_DEV }}
       gcp_project_number: ${{ secrets.GCP_PROJECT_NUMBER_DEV }}
     with:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_DEV }}
@@ -23,8 +21,6 @@ jobs:
       environment: dev
       dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
       dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
-      service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
-      service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
       run-build-push: true
       run-deploy-CR-job: true
 #      run-apigee: false #TODO: Default value when no major endpoint or OAuth changes have been made
@@ -39,8 +35,6 @@ jobs:
       workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER_TEST }}
       wip_service_account: ${{ secrets.WIP_SERVICE_ACCOUNT_TEST }}
       execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_TEST }}
-      service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_TEST }}
-      service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_TEST }}
       gcp_project_number: ${{ secrets.GCP_PROJECT_NUMBER_TEST }}
     with:
       gcp-project-id: ${{ vars.GCP_PROJECT_ID_TEST }}
@@ -49,8 +43,6 @@ jobs:
       environment: test
       dtro-image-name: ${{ vars.DTRO_IMAGE_NAME }}
       dtro-image-tag: ${{ vars.DTRO_IMAGE_TAG }}
-      service-ui-image-name: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
-      service-ui-image-tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
       run-build-push: true
       run-deploy-CR-job: true
 #      run-apigee: false #TODO: Default value when no major endpoint or OAuth changes have been made
