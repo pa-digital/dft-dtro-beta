@@ -25,4 +25,10 @@
     <ProjectReference Include="../DfT.DTRO/DfT.DTRO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestData\D-TROs\" />
+    <Folder Include="TestData\Rules\" />
+    <Folder Include="TestData\Schemas\" />
+  </ItemGroup>
+
 </Project>
