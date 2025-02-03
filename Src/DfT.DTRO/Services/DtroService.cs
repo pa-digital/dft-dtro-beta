@@ -131,6 +131,15 @@ public class DtroService : IDtroService
             await writer.WriteAsync(json);
         }
     }
+    
+    public async Task<string> GetDtroZipFilePathAsync()
+    {
+        return await Task.Run(() =>
+        {
+            var zipFiles = Directory.GetFiles(_fileDirectory, "dtro_export_*.zip");
+            return zipFiles.Length > 0 ? zipFiles.First() : null;
+        });
+    }
 
     public async Task<DtroResponse> GetDtroByIdAsync(Guid id)
     {

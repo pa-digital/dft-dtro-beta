@@ -518,7 +518,48 @@ public class DTROsController : ControllerBase
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
+    
+    /// <summary>
+    /// Download the pre-zipped DTRO records
+    /// </summary>
+    /// <returns>A list of D-TRO active records</returns>
+    [HttpGet]
+    [Route("/dtros/download")]
+    [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
+    [SwaggerResponse(statusCode: 404, description: "Zip file not found.")]
+    [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
+    [SwaggerResponse(statusCode: 200, description: "Ok")]
+    public async Task<IActionResult> DownloadDtros()
+    {
+        try
+        {
+            var zipFilePath = await _dtroService.GetDtroZipFilePathAsync();
 
+            if (!System.IO.File.Exists(zipFilePath))
+            {
+                throw new FileNotFoundException("The D-TRO's zip file could not be found.");
+            }
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(zipFilePath);
+            var fileName = Path.GetFileName(zipFilePath);
+
+            _logger.LogInformation("Returning zip file to client.");
+            return File(fileBytes, "application/zip", fileName);
+        }
+        catch (FileNotFoundException ex)
+        {
+            _logger.LogError(ex.Message);
+            _loggingExtension.LogError(nameof(DownloadDtros), "/dtros/download", "D-TRO's zip file not found", ex.Message);
+            return NotFound(new ApiErrorResponse("D-TRO's zip file not found", ex.Message));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            _loggingExtension.LogError(nameof(DownloadDtros), "/dtros/download", "", ex.Message);
+            return StatusCode(500,
+                new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
+        }
+    }
 
     /// <summary>
     /// Gets a D-TRO by its ID
