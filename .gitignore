@@ -39,3 +39,5 @@
 /Src/.idea/.idea.DfT.DTRO/.idea/workspace.xml
 
 .env
+/Src/Dft.DTRO.Admin/bin/Debug/net6.0
+/Src/Dft.DTRO.Admin/obj

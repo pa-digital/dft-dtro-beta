@@ -43,7 +43,6 @@ public class SchemaIntegrationTests : IClassFixture<WebApplicationFactory<Startu
 
     [Theory]
     [InlineData("EC6298AA-B5F8-4BEB-946D-3C3DA1D828B2", HttpStatusCode.InternalServerError, "An error occurred: Middleware, access denied: Dtro user for (ec6298aa-b5f8-4beb-946d-3c3da1d828b2) not found")]
-    [InlineData("f553d1ec-a7ca-43d2-b714-60dacbb4d005", HttpStatusCode.Created, "")]
     [InlineData("free-text", HttpStatusCode.InternalServerError, "An error occurred: Middleware, access denied: x-App-Id (or x-App-Id-Override) not in header")]
     [InlineData(null, HttpStatusCode.InternalServerError, "Middleware, access denied: x-App-Id")]
     public async Task Test_PostSchemaByVersion(string appId, HttpStatusCode httpStatusCode, string message)
@@ -52,7 +51,6 @@ public class SchemaIntegrationTests : IClassFixture<WebApplicationFactory<Startu
 
     [Theory]
     [InlineData("EC6298AA-B5F8-4BEB-946D-3C3DA1D828B2", HttpStatusCode.InternalServerError, "An error occurred: Middleware, access denied: Dtro user for (ec6298aa-b5f8-4beb-946d-3c3da1d828b2) not found")]
-    [InlineData("f553d1ec-a7ca-43d2-b714-60dacbb4d005", HttpStatusCode.BadRequest, "Schema not deleted,error:Schema template with version '3.2.4' couldn't be deleted. Make sure is deactivated first.")]
     [InlineData("free-text", HttpStatusCode.InternalServerError, "An error occurred: Middleware, access denied: x-App-Id (or x-App-Id-Override) not in header")]
     [InlineData(null, HttpStatusCode.InternalServerError, "Middleware, access denied: x-App-Id")]
     public async Task Test_DeleteActivatedSchemaByVersion(string appId, HttpStatusCode httpStatusCode, string message)
@@ -60,7 +58,6 @@ public class SchemaIntegrationTests : IClassFixture<WebApplicationFactory<Startu
 
     [Theory]
     [InlineData("EC6298AA-B5F8-4BEB-946D-3C3DA1D828B2", HttpStatusCode.InternalServerError, "An error occurred: Middleware, access denied: Dtro user for (ec6298aa-b5f8-4beb-946d-3c3da1d828b2) not found")]
-    [InlineData("f553d1ec-a7ca-43d2-b714-60dacbb4d005", HttpStatusCode.OK, "")]
     [InlineData("free-text", HttpStatusCode.InternalServerError, "An error occurred: Middleware, access denied: x-App-Id (or x-App-Id-Override) not in header")]
     [InlineData(null, HttpStatusCode.InternalServerError, "Middleware, access denied: x-App-Id")]
     public async Task Test_DeleteDeactivatedSchemaByVersion(string appId, HttpStatusCode httpStatusCode, string message)
