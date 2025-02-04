@@ -163,6 +163,18 @@ public static class MockTestObjects
 
         return dtros.ToList();
     }
+    
+    public static List<DfT.DTRO.Models.DataBase.DTRO> GetDtros()
+    {
+        var dtros = Dtros.Where(dtro => !dtro.Deleted);
+
+        if (!dtros.Any())
+        {
+            throw new NotFoundException("Active D-TRO records are not found.");
+        }
+
+        return dtros.ToList();
+    }
 
     public static List<DtroResponse> DtroResponses => new()
     {
