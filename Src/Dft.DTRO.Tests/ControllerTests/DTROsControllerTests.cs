@@ -201,4 +201,64 @@ public class DTROsControllerTests
 
         Assert.Equal(200, ((ObjectResult)actual).StatusCode);
     }
+    
+    [Fact]
+    public async Task DownloadDtrosReturnsFileContentResultWhenZipFileExists()
+    {
+       
+        var baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Exported_Files");
+        Directory.CreateDirectory(baseDirectory); // Ensure the directory exists
+        var zipFilePath = Path.Combine(baseDirectory, "zipfile.zip");
+        var fileBytes = new byte[] { 1, 2, 3, 4 };
+        await System.IO.File.WriteAllBytesAsync(zipFilePath, fileBytes); // Create a temporary file for the test
+
+        _mockDtroService.Setup(service => service.GetDtroZipFilePathAsync()).ReturnsAsync(zipFilePath);
+
+        
+        var result = await _sut.DownloadDtros();
+
+       
+        var fileResult = Assert.IsType<FileContentResult>(result);
+        Assert.Equal("application/zip", fileResult.ContentType);
+        Assert.Equal(fileBytes, fileResult.FileContents);
+        Assert.Equal(Path.GetFileName(zipFilePath), fileResult.FileDownloadName);
+
+        // Clean up
+        System.IO.File.Delete(zipFilePath);
+        Directory.Delete(baseDirectory, true);
+    }
+    
+    [Fact]
+    public async Task DownloadDtros_ReturnsNotFound_WhenZipFileDoesNotExist()
+    {
+        var baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Exported_Files");
+        Directory.CreateDirectory(baseDirectory); // Ensure the directory exists
+        var zipFilePath = Path.Combine(baseDirectory, "nonexistent.zip");
+
+        _mockDtroService.Setup(service => service.GetDtroZipFilePathAsync()).ReturnsAsync(zipFilePath);
+
+       
+        var result = await _sut.DownloadDtros();
+
+        
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal(404, notFoundResult.StatusCode);
+
+        
+        Directory.Delete(baseDirectory, true); // Clean up the directory
+    }
+    
+    [Fact]
+    public async Task DownloadDtrosReturnsInternalServerErrorWhenExceptionThrown()
+    {
+        // Arrange
+        _mockDtroService.Setup(service => service.GetDtroZipFilePathAsync()).ThrowsAsync(new Exception("Unexpected error"));
+
+        // Act
+        var result = await _sut.DownloadDtros();
+
+        // Assert
+        var internalServerErrorResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, internalServerErrorResult.StatusCode);
+    }
 }

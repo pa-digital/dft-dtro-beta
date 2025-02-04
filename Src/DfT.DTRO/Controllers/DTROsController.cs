@@ -522,7 +522,7 @@ public class DTROsController : ControllerBase
     /// <summary>
     /// Download the pre-zipped DTRO records
     /// </summary>
-    /// <returns>A list of D-TRO active records</returns>
+    /// <returns>A zipped collection of D-TRO active records</returns>
     [HttpGet]
     [Route("/dtros/download")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
