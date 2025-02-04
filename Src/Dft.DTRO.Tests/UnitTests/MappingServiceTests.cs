@@ -46,7 +46,7 @@ public class MappingServiceTests
     [Fact]
     public void GetSource_Returns_DtroHistoryResponse()
     {
-        List<DTROHistory> histories = Utils.CreateRequestDtroHistoryObject(ValidDtroHistoriesFor323);
+        List<DigitalTrafficRegulationOrderHistory> histories = Utils.CreateRequestDtroHistoryObject(ValidDtroHistoriesFor323);
         List<DtroHistorySourceResponse> actual = histories
             .Select(_sut.GetSource)
             .Where(response => response != null)
@@ -64,7 +64,7 @@ public class MappingServiceTests
     [Fact]
     public void GetProvision_Returns_DtroHistoryProvision()
     {
-        List<DTROHistory> histories = Utils.CreateRequestDtroHistoryObject(ValidDtroHistoriesFor323);
+        List<DigitalTrafficRegulationOrderHistory> histories = Utils.CreateRequestDtroHistoryObject(ValidDtroHistoriesFor323);
         List<DtroHistoryProvisionResponse> actual = histories
             .SelectMany(_sut.GetProvision)
             .Where(response => response != null)

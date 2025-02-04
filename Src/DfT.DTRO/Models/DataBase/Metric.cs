@@ -74,7 +74,7 @@ public class Metric
     public string CreatedCorrelationId { get; set; }
 
     /// <summary>
-    /// Correlation ID of the request witch which this metric document was updated.
+    /// Correlation ID of the request, which this metric document was updated.
     /// </summary>
     [DataMember(Name = "lastUpdatedCorrelationId")]
     [SwaggerSchema(ReadOnly = true)]

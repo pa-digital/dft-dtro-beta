@@ -87,7 +87,7 @@ public class RuleTemplateDal : IRuleTemplateDal
         ruleTemplate.Template = rule;
         ruleTemplate.SchemaVersion = version;
         ruleTemplate.LastUpdated = DateTime.UtcNow;
-        ruleTemplate.Created = ruleTemplate.LastUpdated;
+        ruleTemplate.Created = ruleTemplate.LastUpdated ?? DateTime.UtcNow;
 
         ruleTemplate.LastUpdatedCorrelationId = correlationId;
         ruleTemplate.CreatedCorrelationId = ruleTemplate.LastUpdatedCorrelationId;

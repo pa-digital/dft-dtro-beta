@@ -36,14 +36,14 @@ public interface IDtroDal
     /// </summary>
     /// <param name="parameters">Parameters passed</param>
     /// <returns>All active D-TRO records</returns>
-    Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync(GetAllQueryParameters parameters);
+    Task<IEnumerable<Models.DataBase.DigitalTrafficRegulationOrder>> GetDtrosAsync(GetAllQueryParameters parameters);
 
     /// <summary>
     /// Gets a D-TRO by <paramref name="id"/>.
     /// </summary>
     /// <param name="id">D-TRO ID</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous get operation.</returns>
-    Task<Models.DataBase.DTRO> GetDtroByIdAsync(Guid id);
+    Task<Models.DataBase.DigitalTrafficRegulationOrder> GetDtroByIdAsync(Guid id);
 
     /// <summary>
     /// Update an existing D-TRO by its <paramref name="guid"/>.
@@ -76,14 +76,14 @@ public interface IDtroDal
     /// </summary>
     /// <param name="search">Search criteria object.</param>
     /// <returns>A <see cref="Task"/> representing paginated search operation.</returns>
-    Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search);
+    Task<PaginatedResult<Models.DataBase.DigitalTrafficRegulationOrder>> FindDtrosAsync(DtroSearch search);
 
     /// <summary>
     /// Find D-TRO details by its <paramref name="search"/>
     /// </summary>
     /// <param name="search">Search criteria object.</param>
     /// <returns>A <see cref="Task"/> representing the search operation.</returns>
-    Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search);
+    Task<List<Models.DataBase.DigitalTrafficRegulationOrder>> FindDtrosAsync(DtroEventSearch search);
 
     /// <summary>
     /// Delete D-TRO by its <paramref name="id"/>

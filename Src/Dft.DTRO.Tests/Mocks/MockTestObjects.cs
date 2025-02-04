@@ -49,86 +49,86 @@ public static class MockTestObjects
         }
     };
 
-    public static List<DfT.DTRO.Models.DataBase.DTRO> Dtros => new()
+    public static List<DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder> Dtros => new()
     {
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 21, 16, 21, 26),
             TrafficAuthorityCreatorId = 1000,
             TrafficAuthorityOwnerId = 1000
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 22, 16, 21, 26),
             TrafficAuthorityCreatorId = 1000,
             TrafficAuthorityOwnerId = 1000
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 21, 16, 21, 26),
             TrafficAuthorityCreatorId = 1000,
             TrafficAuthorityOwnerId = 1000
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 23, 11, 2, 44),
             TrafficAuthorityCreatorId = 1000,
             TrafficAuthorityOwnerId = 1000
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 21, 16, 21, 26),
             TrafficAuthorityCreatorId = 3300,
             TrafficAuthorityOwnerId = 3300
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 22, 16, 21, 26),
             TrafficAuthorityCreatorId = 3300,
             TrafficAuthorityOwnerId = 3300
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 23, 16, 21, 26),
             TrafficAuthorityCreatorId = 3300,
             TrafficAuthorityOwnerId = 3300
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 24, 11, 2, 41),
             TrafficAuthorityCreatorId = 3300,
             TrafficAuthorityOwnerId = 3300
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 21, 16, 21, 26),
             TrafficAuthorityCreatorId = 5000,
             TrafficAuthorityOwnerId = 5000
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 22, 16, 21, 26),
             TrafficAuthorityCreatorId = 5000,
             TrafficAuthorityOwnerId = 5000
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 23, 16, 21, 26),
             TrafficAuthorityCreatorId = 5000,
             TrafficAuthorityOwnerId = 5000
         },
-        new DfT.DTRO.Models.DataBase.DTRO
+        new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder
         {
             Id = Guid.NewGuid(),
             Created = new DateTime(2025, 1, 24, 11, 2, 41),
@@ -137,7 +137,7 @@ public static class MockTestObjects
         }
     };
 
-    public static List<DfT.DTRO.Models.DataBase.DTRO> GetDtros(GetAllQueryParameters queryParameters)
+    public static List<DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder> GetDtros(GetAllQueryParameters queryParameters)
     {
         var dtros = Dtros.Where(it => !it.Deleted);
 

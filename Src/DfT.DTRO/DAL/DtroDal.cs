@@ -29,7 +29,7 @@ public class DtroDal : IDtroDal
     ///<inheritdoc cref="IDtroService"/>
     public async Task<bool> SoftDeleteDtroAsync(Guid id, DateTime? deletionTime)
     {
-        var existing = await _dtroContext.Dtros.FindAsync(id);
+        var existing = await _dtroContext.DigitalTrafficRegulationOrders.FindAsync(id);
 
         if (existing is null || existing.Deleted)
         {
@@ -49,17 +49,17 @@ public class DtroDal : IDtroDal
     ///<inheritdoc cref="IDtroDal"/>
     public async Task<bool> DtroExistsAsync(Guid id)
     {
-        return await _dtroContext.Dtros.AnyAsync(it => it.Id == id && !it.Deleted);
+        return await _dtroContext.DigitalTrafficRegulationOrders.AnyAsync(it => it.Id == id && !it.Deleted);
     }
 
     ///<inheritdoc cref="IDtroDal"/>
     public async Task<int> DtroCountForSchemaAsync(SchemaVersion schemaVersion)
     {
-        return await _dtroContext.Dtros.CountAsync(it => it.SchemaVersion == schemaVersion);
+        return await _dtroContext.DigitalTrafficRegulationOrders.CountAsync(it => it.SchemaVersion == schemaVersion);
     }
 
     ///<inheritdoc cref="IDtroDal"/>
-    public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync(GetAllQueryParameters parameters)
+    public async Task<IEnumerable<DigitalTrafficRegulationOrder>> GetDtrosAsync(GetAllQueryParameters parameters)
     {
         var cachedDtros = await _dtroCache.GetDtros();
         if (cachedDtros.Any())
@@ -67,7 +67,7 @@ public class DtroDal : IDtroDal
             return cachedDtros;
         }
 
-        var dtrosQuery = _dtroContext.Dtros.Where(d => !d.Deleted);
+        var dtrosQuery = _dtroContext.DigitalTrafficRegulationOrders.Where(d => !d.Deleted);
 
         dtrosQuery = parameters.TraCode != null &&
                      parameters.TraCode != 0
@@ -97,7 +97,7 @@ public class DtroDal : IDtroDal
     }
 
     ///<inheritdoc cref="IDtroDal"/>
-    public async Task<Models.DataBase.DTRO> GetDtroByIdAsync(Guid id)
+    public async Task<DigitalTrafficRegulationOrder> GetDtroByIdAsync(Guid id)
     {
         var cachedDtro = await _dtroCache.GetDtro(id);
         if (cachedDtro is not null)
@@ -105,7 +105,7 @@ public class DtroDal : IDtroDal
             return cachedDtro;
         }
 
-        var dtro = await _dtroContext.Dtros.FindAsync(id);
+        var dtro = await _dtroContext.DigitalTrafficRegulationOrders.FindAsync(id);
 
         if (dtro is null || dtro.Deleted)
         {
@@ -119,7 +119,7 @@ public class DtroDal : IDtroDal
     ///<inheritdoc cref="IDtroDal"/>
     public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId)
     {
-        var dtro = new Models.DataBase.DTRO();
+        var dtro = new DigitalTrafficRegulationOrder();
         var response = new GuidResponse();
         dtro.Id = response.Id;
 
@@ -138,7 +138,7 @@ public class DtroDal : IDtroDal
         {
             _dtroMappingService.InferIndexFields(ref dtro);
 
-            await _dtroContext.Dtros.AddAsync(dtro);
+            await _dtroContext.DigitalTrafficRegulationOrders.AddAsync(dtro);
 
             await _dtroContext.SaveChangesAsync();
         }
@@ -167,9 +167,9 @@ public class DtroDal : IDtroDal
     ///<inheritdoc cref="IDtroDal"/>
     public async Task UpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId)
     {
-        if (await _dtroContext.Dtros.FindAsync(id) is not { } existing || existing.Deleted)
+        if (await _dtroContext.DigitalTrafficRegulationOrders.FindAsync(id) is not { } existing || existing.Deleted)
         {
-            throw new InvalidOperationException($"There is no DTRO with Id {id}");
+            throw new InvalidOperationException($"There is no DigitalTrafficRegulationOrder with Id {id}");
         }
 
         existing.SchemaVersion = dtroSubmit.SchemaVersion;
@@ -189,9 +189,9 @@ public class DtroDal : IDtroDal
     ///<inheritdoc cref="IDtroDal"/>
     public async Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId)
     {
-        if (await _dtroContext.Dtros.FindAsync(id) is not { } existing || existing.Deleted)
+        if (await _dtroContext.DigitalTrafficRegulationOrders.FindAsync(id) is not { } existing || existing.Deleted)
         {
-            throw new InvalidOperationException($"There is no DTRO with Id {id}");
+            throw new InvalidOperationException($"There is no DigitalTrafficRegulationOrder with Id {id}");
         }
 
         _dtroMappingService.SetOwnership(ref existing, assignToTraId);
@@ -210,14 +210,14 @@ public class DtroDal : IDtroDal
     }
 
     ///<inheritdoc cref="IDtroDal"/>
-    public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
+    public async Task<PaginatedResult<DigitalTrafficRegulationOrder>> FindDtrosAsync(DtroSearch search)
     {
-        IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
-        var expressionsToDisjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
+        IQueryable<DigitalTrafficRegulationOrder> result = _dtroContext.DigitalTrafficRegulationOrders;
+        var expressionsToDisjunct = new List<Expression<Func<DigitalTrafficRegulationOrder, bool>>>();
 
         foreach (var query in search.Queries)
         {
-            var expressionsToConjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
+            var expressionsToConjunct = new List<Expression<Func<DigitalTrafficRegulationOrder, bool>>>();
 
             if (query.DeletionTime is { } deletionTime)
             {
@@ -292,7 +292,7 @@ public class DtroDal : IDtroDal
             {
                 var value = query.RegulationStart.Value;
 
-                Expression<Func<Models.DataBase.DTRO, bool>> expr = query.RegulationStart.Operator switch
+                Expression<Func<DigitalTrafficRegulationOrder, bool>> expr = query.RegulationStart.Operator switch
                 {
                     ComparisonOperator.Equal => (it) => it.RegulationStart == value,
                     ComparisonOperator.LessThan => (it) => it.RegulationStart < value,
@@ -309,7 +309,7 @@ public class DtroDal : IDtroDal
             {
                 var value = query.RegulationEnd.Value;
 
-                Expression<Func<Models.DataBase.DTRO, bool>> expr = query.RegulationEnd.Operator switch
+                Expression<Func<DigitalTrafficRegulationOrder, bool>> expr = query.RegulationEnd.Operator switch
                 {
                     ComparisonOperator.Equal => (it) => it.RegulationEnd == value,
                     ComparisonOperator.LessThan => (it) => it.RegulationEnd < value,
@@ -330,25 +330,25 @@ public class DtroDal : IDtroDal
             expressionsToDisjunct.Add(expressionsToConjunct.AllOf());
         }
 
-        IQueryable<Models.DataBase.DTRO> dataQuery = expressionsToDisjunct.Any()
+        IQueryable<DigitalTrafficRegulationOrder> dataQuery = expressionsToDisjunct.Any()
             ? result
                 .Where(expressionsToDisjunct.AnyOf())
             : result;
 
-        IQueryable<Models.DataBase.DTRO> paginatedQuery = dataQuery
+        IQueryable<DigitalTrafficRegulationOrder> paginatedQuery = dataQuery
             .OrderBy(it => it.Created)
             .Skip((search.Page - 1) * search.PageSize)
             .Take(search.PageSize);
 
-        return new PaginatedResult<Models.DataBase.DTRO>(await paginatedQuery.ToListAsync(), await dataQuery.CountAsync());
+        return new PaginatedResult<DigitalTrafficRegulationOrder>(await paginatedQuery.ToListAsync(), await dataQuery.CountAsync());
     }
 
     ///<inheritdoc cref="IDtroDal"/>
-    public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search)
+    public async Task<List<DigitalTrafficRegulationOrder>> FindDtrosAsync(DtroEventSearch search)
     {
-        IQueryable<Models.DataBase.DTRO> result = _dtroContext.Dtros;
+        IQueryable<DigitalTrafficRegulationOrder> result = _dtroContext.DigitalTrafficRegulationOrders;
 
-        var expressionsToConjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
+        var expressionsToConjunct = new List<Expression<Func<DigitalTrafficRegulationOrder, bool>>>();
 
         if (search.DeletionTime is { } deletionTime)
         {
@@ -423,7 +423,7 @@ public class DtroDal : IDtroDal
         {
             var value = search.RegulationStart.Value;
 
-            Expression<Func<Models.DataBase.DTRO, bool>> expr = search.RegulationStart.Operator switch
+            Expression<Func<DigitalTrafficRegulationOrder, bool>> expr = search.RegulationStart.Operator switch
             {
                 ComparisonOperator.Equal => it => it.RegulationStart == value,
                 ComparisonOperator.LessThan => it => it.RegulationStart < value,
@@ -440,7 +440,7 @@ public class DtroDal : IDtroDal
         {
             var value = search.RegulationEnd.Value;
 
-            Expression<Func<Models.DataBase.DTRO, bool>> expr = search.RegulationEnd.Operator switch
+            Expression<Func<DigitalTrafficRegulationOrder, bool>> expr = search.RegulationEnd.Operator switch
             {
                 ComparisonOperator.Equal => (it) => it.RegulationEnd == value,
                 ComparisonOperator.LessThan => (it) => it.RegulationEnd < value,
@@ -468,14 +468,14 @@ public class DtroDal : IDtroDal
     ///<inheritdoc cref="IDtroDal"/>
     public async Task<bool> DeleteDtroAsync(Guid id, DateTime? deletionTime = null)
     {
-        var dtro = await _dtroContext.Dtros.FindAsync(id);
+        var dtro = await _dtroContext.DigitalTrafficRegulationOrders.FindAsync(id);
 
         if (dtro is null)
         {
             return false;
         }
 
-        _dtroContext.Dtros.Remove(dtro);
+        _dtroContext.DigitalTrafficRegulationOrders.Remove(dtro);
         await _dtroContext.SaveChangesAsync();
         return true;
     }

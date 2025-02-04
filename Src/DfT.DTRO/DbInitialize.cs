@@ -1,10 +1,16 @@
-﻿using DfT.DTRO.Migrations;
+﻿namespace DfT.DTRO;
 
-namespace DfT.DTRO;
-
-public class DbInitialize
+/// <summary>
+/// Database initialize
+/// </summary>
+[ExcludeFromCodeCoverage]
+public static class DbInitialize
 {
-    //public static void EmptyDtroUsersTable(IApplicationBuilder app)
+    ///// <summary>
+    ///// Empty Digital Traffic Regulation Order User table
+    ///// </summary>
+    ///// <param name="app">Application used</param>
+    //public static void EmptyDtroUsersTable(this IApplicationBuilder app)
     //{
     //    using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
     //    {
@@ -17,13 +23,33 @@ public class DbInitialize
     //    }
     //}
 
-    public static void SeedAppData(IApplicationBuilder app)
+    ///// <summary>
+    ///// Seed application data
+    ///// </summary>
+    ///// <param name="app">Application used</param>
+    //public static void SeedAppData(this IApplicationBuilder app)
+    //{
+    //    app.SeedDtroUsers();
+    //    app.SeedConfig();
+    //}
+
+    /// <summary>
+    /// Seed table
+    /// </summary>
+    /// <typeparam name="T">Entity type</typeparam>
+    /// <param name="app">Application used</param>
+    /// <param name="entities">Entities to add</param>
+    public static void Seed<T>(this IApplicationBuilder app, List<T> entities) where T : BaseEntity
     {
-        SeedDtroUsers(app);
-        SeedConfig(app);
+        using (var serviceScope = app.ApplicationServices.CreateScope())
+        {
+            DtroContext context = serviceScope.ServiceProvider.GetService<DtroContext>();
+            context.Set<T>().AddRange(entities);
+            context.SaveChanges();
+        }
     }
 
-    private static void SeedDtroUsers(IApplicationBuilder app)
+    private static void SeedDtroUsers(this IApplicationBuilder app)
     {
         using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
         {
@@ -38,7 +64,8 @@ public class DbInitialize
             }
         }
     }
-    private static void SeedConfig(IApplicationBuilder app)
+
+    private static void SeedConfig(this IApplicationBuilder app)
     {
         using (IServiceScope serviceScope = app.ApplicationServices.CreateScope())
         {

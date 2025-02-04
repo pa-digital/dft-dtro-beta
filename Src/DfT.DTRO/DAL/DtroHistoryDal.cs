@@ -17,9 +17,9 @@ public class DtroHistoryDal : IDtroHistoryDal
     }
 
     ///<inheritdoc cref="IDtroHistoryDal" />
-    public async Task<bool> SaveDtroInHistoryTable(DTROHistory dtroHistory)
+    public async Task<bool> SaveDtroInHistoryTable(DigitalTrafficRegulationOrderHistory digitalTrafficRegulationOrderHistory)
     {
-        EntityEntry<DTROHistory> entry = await _dtroContext.DtroHistories.AddAsync(dtroHistory);
+        EntityEntry<DigitalTrafficRegulationOrderHistory> entry = await _dtroContext.DigitalTrafficRegulationOrderHistories.AddAsync(digitalTrafficRegulationOrderHistory);
         if (entry.Entity.Id == Guid.Empty)
         {
             return false;
@@ -30,18 +30,19 @@ public class DtroHistoryDal : IDtroHistoryDal
     }
 
     ///<inheritdoc cref="IDtroHistoryDal" />
-    public async Task<List<DTROHistory>> GetDtroHistory(Guid dtroId)
+    public async Task<List<DigitalTrafficRegulationOrderHistory>> GetDtroHistory(Guid dtroId)
     {
         try
         {
-            var result = await _dtroContext.DtroHistories
-                .Where(history => history.DtroId == dtroId)
+            var result = await _dtroContext.DigitalTrafficRegulationOrderHistories
+                .Where(history => history.DigitalTrafficRegulationOrderId == dtroId)
                 .OrderByDescending(history => history.LastUpdated)
                 .ToListAsync();
 
             return result;
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             throw new Exception($"Error: Unable to get retrieving history for '{dtroId}'", ex);
         }
     }

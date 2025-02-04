@@ -20,7 +20,7 @@ public class JsonSchemaValidationTests
         JsonSchemaValidationService sut = new();
 
         string jsonSchema =
-            GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
+            GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder { SchemaVersion = schemaVersion });
         string inputJson = File.ReadAllText(Path.Join(ExampleFilesForSchema311, $"{sourceJson}.json"));
 
         bool result = !sut.ValidateSchema(jsonSchema, inputJson).Any();
@@ -38,7 +38,7 @@ public class JsonSchemaValidationTests
     {
         JsonSchemaValidationService sut = new();
         string jsonSchema =
-            GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
+            GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder { SchemaVersion = schemaVersion });
         string inputJson = File.ReadAllText(Path.Join(ExampleFilesForSchema320, $"{sourceJson}.json"));
 
         bool actual = sut.ValidateSchema(jsonSchema, inputJson).Any();
@@ -55,14 +55,14 @@ public class JsonSchemaValidationTests
     {
         JsonSchemaValidationService sut = new();
         string jsonSchema =
-            GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DTRO { SchemaVersion = schemaVersion });
+            GetJsonSchemaForRequestAsString(new DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder { SchemaVersion = schemaVersion });
         string inputJson = File.ReadAllText(Path.Join(ExampleFilesForSchema330, $"{sourceJson}.json"));
 
         bool actual = sut.ValidateSchema(jsonSchema, inputJson).Any();
         Assert.Equal(expectedResult, actual);
     }
 
-    private string GetJsonSchemaForRequestAsString(DfT.DTRO.Models.DataBase.DTRO request)
+    private string GetJsonSchemaForRequestAsString(DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder request)
     {
         return File.ReadAllText($"{SchemaFolder}/{request.SchemaVersion}.json");
     }

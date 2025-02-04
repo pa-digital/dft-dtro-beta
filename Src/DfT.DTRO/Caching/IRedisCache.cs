@@ -10,27 +10,27 @@ public interface IRedisCache
     /// </summary>
     /// <param name="dtros">List of D-TRO records to cache.</param>
     /// <returns>A <see cref="Task"/> represending the asynchronous save operation.</returns>
-    Task CacheDtros(List<Models.DataBase.DTRO> dtros);
+    Task CacheDtros(List<Models.DataBase.DigitalTrafficRegulationOrder> dtros);
 
     /// <summary>
     /// Service method that will get existing D-TROs.
     /// </summary>
     /// <returns>A list of active D-TRO</returns>
-    Task<List<Models.DataBase.DTRO>> GetDtros();
+    Task<List<Models.DataBase.DigitalTrafficRegulationOrder>> GetDtros();
 
     /// <summary>
     /// Service method that will get existing D-TROs by its unique identifier.
     /// </summary>
     /// <param name="key">D-TRO ID.</param>
     /// <returns>A D-TRO</returns>
-    Task<Models.DataBase.DTRO> GetDtro(Guid key);
+    Task<Models.DataBase.DigitalTrafficRegulationOrder> GetDtro(Guid key);
 
     /// <summary>
     /// Add D-TRO to cache.
     /// </summary>
-    /// <param name="dtro">D-TRO object to cache.</param>
+    /// <param name="digitalTrafficRegulationOrder">D-TRO object to cache.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
-    Task CacheDtro(Models.DataBase.DTRO dtro);
+    Task CacheDtro(Models.DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder);
 
     /// <summary>
     /// Check if the D-TRO exists.

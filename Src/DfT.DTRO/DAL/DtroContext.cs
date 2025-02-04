@@ -6,40 +6,89 @@
 public class DtroContext : DbContext
 {
     /// <summary>
-    /// D-TRO table for create, read, update and delete operations.
+    /// D-TROs table for create, read, update and delete operations.
     /// </summary>
-    public virtual DbSet<Models.DataBase.DTRO> Dtros { get; set; }
+    public virtual DbSet<DigitalTrafficRegulationOrder> DigitalTrafficRegulationOrders { get; set; }
 
     /// <summary>
-    /// D-TRO history table for read operations.
+    /// D-TRO Histories table for create, read, update and delete operations.
     /// </summary>
-    public virtual DbSet<DTROHistory> DtroHistories { get; set; }
+    public virtual DbSet<DigitalTrafficRegulationOrderHistory> DigitalTrafficRegulationOrderHistories { get; set; }
 
     /// <summary>
-    /// Schema Template table for create, read and update operations.
+    /// Schema Templates table for create, read, update and delete operations.
     /// </summary>
     public virtual DbSet<SchemaTemplate> SchemaTemplate { get; set; }
 
     /// <summary>
-    /// Rule Template table for create, read and update operations.
+    /// Rule Templates table for create, read, update and delete operations.
     /// </summary>
     public virtual DbSet<RuleTemplate> RuleTemplate { get; set; }
 
     /// <summary>
-    /// Metric table for read operations.
+    /// Metrics table
     /// </summary>
     public virtual DbSet<Metric> Metrics { get; set; }
 
     /// <summary>
-    /// SWA Codes table for create, read and update operations.
+    /// D-TRO Users table for create, read, update and delete operations.
     /// </summary>
     public virtual DbSet<DtroUser> DtroUsers { get; set; }
+
+    /// <summary>
+    /// System Configuration table
+    /// </summary>
+    public virtual DbSet<SystemConfig> SystemConfig { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authorities table for create, read, update and delete operations.
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthority> TrafficRegulationAuthorities { get; set; }
+
+    /// <summary>
+    /// Digital Service Providers table for create, read, update and delete operations.
+    /// </summary>
+    public virtual DbSet<DigitalServiceProvider> DigitalServiceProviders { get; set; }
+
+    /// <summary>
+    /// Users table for create, read, update and delete operations.
+    /// </summary>
+    public virtual DbSet<User> Users { get; set; }
+
+    /// <summary>
+    /// User statuses table for create, read, update and delete operations.
+    /// </summary>
+    public virtual DbSet<UserStatus> UserStatuses { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authority Digital Service Provider liaison table for create, read, update and delete operations.
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthorityDigitalServiceProvider> TrafficRegulationAuthorityDigitalServiceProviders { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authority Digital Service Provider Statuses table for create, read, update and delete operations.
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthorityDigitalServiceProviderStatus> TrafficRegulationAuthorityDigitalServiceProviderStatuses { get; set; }
+
+    /// <summary>
+    /// Applications table for create, read, update and delete operations.
+    /// </summary>
+    public virtual DbSet<Application> Applications { get; set; }
+
+    /// <summary>
+    /// Application Purposes table for create, read, update and delete operations.
+    /// </summary>
+    public virtual DbSet<ApplicationPurpose> ApplicationPurposes { get; set; }
+
+    /// <summary>
+    /// Application Types table for create, read, update and delete operations.
+    /// </summary>
+    public virtual DbSet<ApplicationType> ApplicationTypes { get; set; }
 
     /// <summary>
     /// Default constructor.
     /// </summary>
     /// <param name="options">Base context options.</param>
-    public virtual DbSet<SystemConfig> SystemConfig { get; set; }
 
     public DtroContext(DbContextOptions<DtroContext> options)
         : base(options)
@@ -55,10 +104,7 @@ public class DtroContext : DbContext
     {
         modelBuilder.HasDbFunction(typeof(DatabaseMethods).GetMethod(nameof(DatabaseMethods.Overlaps), new[] { typeof(NpgsqlBox), typeof(NpgsqlBox) }))
             .HasTranslation(args =>
-            {
-                return new PostgresBinaryExpression(
-                    PostgresExpressionType.Overlaps, args[0], args[1], args[0].Type, args[0].TypeMapping);
-            });
+                new PostgresBinaryExpression(PostgresExpressionType.Overlaps, args[0], args[1], args[0].Type, args[0].TypeMapping));
     }
 
     ///<inheritdoc />

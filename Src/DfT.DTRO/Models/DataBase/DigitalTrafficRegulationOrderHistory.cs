@@ -4,28 +4,19 @@ using Newtonsoft.Json.Converters;
 namespace DfT.DTRO.Models.DataBase;
 
 /// <summary>
-/// Wrapper for D-TRO history.
+/// Wrapper for digital traffic regulation order history.
 /// </summary>
 [DataContract]
-public class DTROHistory
+public class DigitalTrafficRegulationOrderHistory : BaseEntity
 {
     /// <summary>
-    /// ID of the D-TRO history.
-    /// </summary>
-    [Key]
-    [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    [Column(TypeName = "uuid")]
-    public Guid Id { get; set; }
-
-    /// <summary>
-    /// ID of the linked D-TRO
+    /// ID of the linked digital traffic regulation order
     /// </summary>
     [Column(TypeName = "uuid")]
-    public Guid DtroId { get; set; }
+    public Guid DigitalTrafficRegulationOrderId { get; set; }
 
     /// <summary>
-    /// Schema identifier of the D-TRO history.
+    /// Schema identifier of the digital traffic regulation order history.
     /// </summary>
     [Required(ErrorMessage = "schemaVersion field must be included")]
     [DataMember(Name = "schemaVersion")]
@@ -33,36 +24,21 @@ public class DTROHistory
     public SchemaVersion SchemaVersion { get; set; }
 
     /// <summary>
-    /// Timestamp that represents the date and time this document was created.
-    /// </summary>
-    [DataMember(Name = "created")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public DateTime? Created { get; set; }
-
-    /// <summary>
-    /// Timestamp that represents the last date and time this document was updated. 
-    /// </summary>
-    [DataMember(Name = "lastUpdated")]
-    [SwaggerSchema(ReadOnly = true)]
-    public DateTime? LastUpdated { get; set; }
-
-    /// <summary>
-    /// Flag representing a deletion of the D-TRO history.
+    /// Flag representing a deletion of the digital traffic regulation order history.
     /// </summary>
     [DataMember(Name = "deleted")]
     [SwaggerSchema(ReadOnly = true)]
     public bool Deleted { get; set; }
 
     /// <summary>
-    /// Timestamp representing the date and time when the D-TRO history was deleted.
+    /// Timestamp representing the date and time when the digital traffic regulation order history was deleted.
     /// </summary>
     [DataMember(Name = "deletionTime")]
     [SwaggerSchema(ReadOnly = true)]
     public DateTime? DeletionTime { get; set; }
 
     /// <summary>
-    /// D-TRO history data model being submitted.
+    /// Digital traffic regulation order history data model being submitted.
     /// </summary>
     [Required(ErrorMessage = "data field must be included")]
     [DataMember(Name = "data")]

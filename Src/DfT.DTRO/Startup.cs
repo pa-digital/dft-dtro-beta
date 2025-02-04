@@ -4,6 +4,9 @@ using Newtonsoft.Json.Serialization;
 
 namespace DfT.DTRO;
 
+/// <summary>
+/// Startup class
+/// </summary>
 [ExcludeFromCodeCoverage]
 public class Startup
 {
@@ -11,12 +14,21 @@ public class Startup
 
     private IConfiguration Configuration { get; }
 
+    /// <summary>
+    /// Application startup
+    /// </summary>
+    /// <param name="env">Environment passed in</param>
+    /// <param name="configuration">Configuration passed in</param>
     public Startup(IWebHostEnvironment env, IConfiguration configuration)
     {
         Environment = env;
         Configuration = configuration;
     }
 
+    /// <summary>
+    /// Service configuration
+    /// </summary>
+    /// <param name="services">The service collection</param>
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
@@ -35,6 +47,8 @@ public class Startup
                 opts.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             })
             .AddXmlSerializerFormatters();
+
+        services.AddRepositories();
 
         services.AddSwagger(Configuration, Environment);
         services.AddHealthChecks();
@@ -58,14 +72,7 @@ public class Startup
         services.AddScoped<IDtroService, DtroService>();
         services.AddScoped<ISearchService, SearchService>();
         services.AddScoped<IMetricsService, MetricsService>();
-        services.AddScoped<IDtroDal, DtroDal>();
-        services.AddScoped<IDtroHistoryDal, DtroHistoryDal>();
-        services.AddScoped<ISchemaTemplateDal, SchemaTemplateDal>();
-        services.AddScoped<IRuleTemplateDal, RuleTemplateDal>();
-        services.AddScoped<IMetricDal, MetricDal>();
-        services.AddScoped<IDtroUserDal, DtroUserDal>();
         services.AddScoped<IDtroUserService, DtroUserService>();
-        services.AddScoped<ISystemConfigDal, SystemConfigDal>();
         services.AddScoped<ISystemConfigService, SystemConfigService>();
         services.AddSingleton<LoggingExtension>();
 
@@ -77,6 +84,12 @@ public class Startup
         services.AddCache(Configuration);
     }
 
+    /// <summary>
+    /// Configure application
+    /// </summary>
+    /// <param name="app">Application to configure</param>
+    /// <param name="env">Environment in which application is configured</param>
+    /// <param name="loggerFactory">Factory logger</param>
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
         app.UseRouting();
@@ -103,8 +116,24 @@ public class Startup
         });
 
         app.UseHealthChecks("/health");
-        //DbInitialize.EmptyDtroUsersTable(app);
-        DbInitialize.SeedAppData(app);
+
+        //app.EmptyDtroUsersTable();
+        //app.SeedAppData();
+
+        app.Seed(SeedData.Users);
+        app.Seed(SeedData.UserStatuses);
+        app.Seed(SeedData.TrafficRegulationAuthorities);
+        app.Seed(SeedData.DigitalServiceProviders);
+        app.Seed(SeedData.TrafficRegulationAuthorityDigitalServiceProviders);
+        app.Seed(SeedData.TrafficRegulationAuthorityDigitalServiceProviderStatuses);
+        app.Seed(SeedData.Applications);
+        app.Seed(SeedData.ApplicationTypes);
+        app.Seed(SeedData.ApplicationPurposes);
+        app.Seed(SeedData.SchemaTemplates);
+        app.Seed(SeedData.RuleTemplates);
+        app.Seed(SeedData.DigitalTrafficRegulationOrders);
+        app.Seed(SeedData.DigitalTrafficRegulationOrderHistories);
+
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

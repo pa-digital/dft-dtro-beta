@@ -66,63 +66,63 @@ public class DtroEvent
     [DataMember(Name = "_links")]
     public Links Links { get; set; }
 
-    public static DtroEvent FromDeletion(DataBase.DTRO dtro, string baseUrl, List<DateTime> regulationStartTimes, List<DateTime> regulationEndTimes)
+    public static DtroEvent FromDeletion(DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder, string baseUrl, List<DateTime> regulationStartTimes, List<DateTime> regulationEndTimes)
     {
         return new DtroEvent
         {
             EventType = DtroEventType.Delete,
-            EventTime = dtro.DeletionTime.Value.ToDateTimeTruncated(),
-            PublicationTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
-            OrderReportingPoint = dtro.OrderReportingPoints,
-            VehicleType = dtro.VehicleTypes,
-            DtroId = dtro.Id,
-            TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
-            TrafficAuthorityOwnerId = dtro.TrafficAuthorityOwnerId,
-            RegulationType = dtro.RegulationTypes,
-            TroName = dtro.TroName,
+            EventTime = digitalTrafficRegulationOrder.DeletionTime.Value.ToDateTimeTruncated(),
+            PublicationTime = digitalTrafficRegulationOrder.LastUpdated.Value.ToDateTimeTruncated(),
+            OrderReportingPoint = digitalTrafficRegulationOrder.OrderReportingPoints,
+            VehicleType = digitalTrafficRegulationOrder.VehicleTypes,
+            DtroId = digitalTrafficRegulationOrder.Id,
+            TrafficAuthorityCreatorId = digitalTrafficRegulationOrder.TrafficAuthorityCreatorId,
+            TrafficAuthorityOwnerId = digitalTrafficRegulationOrder.TrafficAuthorityOwnerId,
+            RegulationType = digitalTrafficRegulationOrder.RegulationTypes,
+            TroName = digitalTrafficRegulationOrder.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{digitalTrafficRegulationOrder.Id}" }
         };
     }
 
-    public static DtroEvent FromCreation(DataBase.DTRO dtro, string baseUrl, List<DateTime> regulationStartTimes, List<DateTime> regulationEndTimes)
+    public static DtroEvent FromCreation(DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder, string baseUrl, List<DateTime> regulationStartTimes, List<DateTime> regulationEndTimes)
     {
         return new DtroEvent
         {
             EventType = DtroEventType.Create,
-            EventTime = dtro.Created.Value.ToDateTimeTruncated(),
-            PublicationTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
-            OrderReportingPoint = dtro.OrderReportingPoints,
-            VehicleType = dtro.VehicleTypes,
-            DtroId = dtro.Id,
-            TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
-            TrafficAuthorityOwnerId = dtro.TrafficAuthorityOwnerId,
-            RegulationType = dtro.RegulationTypes,
-            TroName = dtro.TroName,
+            EventTime = digitalTrafficRegulationOrder.Created.Value.ToDateTimeTruncated(),
+            PublicationTime = digitalTrafficRegulationOrder.LastUpdated.Value.ToDateTimeTruncated(),
+            OrderReportingPoint = digitalTrafficRegulationOrder.OrderReportingPoints,
+            VehicleType = digitalTrafficRegulationOrder.VehicleTypes,
+            DtroId = digitalTrafficRegulationOrder.Id,
+            TrafficAuthorityCreatorId = digitalTrafficRegulationOrder.TrafficAuthorityCreatorId,
+            TrafficAuthorityOwnerId = digitalTrafficRegulationOrder.TrafficAuthorityOwnerId,
+            RegulationType = digitalTrafficRegulationOrder.RegulationTypes,
+            TroName = digitalTrafficRegulationOrder.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{digitalTrafficRegulationOrder.Id}" }
         };
     }
 
-    public static DtroEvent FromUpdate(DataBase.DTRO dtro, string baseUrl, List<DateTime> regulationStartTimes, List<DateTime> regulationEndTimes)
+    public static DtroEvent FromUpdate(DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder, string baseUrl, List<DateTime> regulationStartTimes, List<DateTime> regulationEndTimes)
     {
         return new DtroEvent
         {
             EventType = DtroEventType.Update,
-            EventTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
-            PublicationTime = dtro.LastUpdated.Value.ToDateTimeTruncated(),
-            OrderReportingPoint = dtro.OrderReportingPoints,
-            VehicleType = dtro.VehicleTypes,
-            DtroId = dtro.Id,
-            TrafficAuthorityCreatorId = dtro.TrafficAuthorityCreatorId,
-            TrafficAuthorityOwnerId = dtro.TrafficAuthorityOwnerId,
-            RegulationType = dtro.RegulationTypes,
-            TroName = dtro.TroName,
+            EventTime = digitalTrafficRegulationOrder.LastUpdated.Value.ToDateTimeTruncated(),
+            PublicationTime = digitalTrafficRegulationOrder.LastUpdated.Value.ToDateTimeTruncated(),
+            OrderReportingPoint = digitalTrafficRegulationOrder.OrderReportingPoints,
+            VehicleType = digitalTrafficRegulationOrder.VehicleTypes,
+            DtroId = digitalTrafficRegulationOrder.Id,
+            TrafficAuthorityCreatorId = digitalTrafficRegulationOrder.TrafficAuthorityCreatorId,
+            TrafficAuthorityOwnerId = digitalTrafficRegulationOrder.TrafficAuthorityOwnerId,
+            RegulationType = digitalTrafficRegulationOrder.RegulationTypes,
+            TroName = digitalTrafficRegulationOrder.TroName,
             RegulationStart = regulationStartTimes,
             RegulationEnd = regulationEndTimes,
-            Links = new Links { Self = $"{baseUrl}/dtros/{dtro.Id}" }
+            Links = new Links { Self = $"{baseUrl}/dtros/{digitalTrafficRegulationOrder.Id}" }
         };
     }
 }

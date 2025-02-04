@@ -23,7 +23,7 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    public IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros, DateTime? searchSince)
+    public IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DigitalTrafficRegulationOrder> dtros, DateTime? searchSince)
     {
         var events = new List<DtroEvent>();
 
@@ -94,19 +94,19 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    public DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro) =>
+    public DtroResponse MapToDtroResponse(Models.DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder) =>
         new()
         {
-            Id = dtro.Id,
-            SchemaVersion = dtro.SchemaVersion,
-            Data = dtro.Data
+            Id = digitalTrafficRegulationOrder.Id,
+            SchemaVersion = digitalTrafficRegulationOrder.SchemaVersion,
+            Data = digitalTrafficRegulationOrder.Data
         };
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    public IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DTRO> dtros)
+    public IEnumerable<DtroSearchResult> MapToSearchResult(IEnumerable<Models.DataBase.DigitalTrafficRegulationOrder> dtros)
     {
         List<DtroSearchResult> results = new();
-        foreach (Models.DataBase.DTRO dtro in dtros)
+        foreach (Models.DataBase.DigitalTrafficRegulationOrder dtro in dtros)
         {
             var regulations = new List<ExpandoObject>();
             try
@@ -191,27 +191,27 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    public DTROHistory MapToDtroHistory(Models.DataBase.DTRO currentDtro) =>
+    public DigitalTrafficRegulationOrderHistory MapToDtroHistory(Models.DataBase.DigitalTrafficRegulationOrder currentDigitalTrafficRegulationOrder) =>
         new()
         {
             Id = Guid.NewGuid(),
-            DtroId = currentDtro.Id,
-            Created = currentDtro.Created,
-            Data = currentDtro.Data,
-            Deleted = currentDtro.Deleted,
-            DeletionTime = currentDtro.DeletionTime,
+            DigitalTrafficRegulationOrderId = currentDigitalTrafficRegulationOrder.Id,
+            Created = currentDigitalTrafficRegulationOrder.Created,
+            Data = currentDigitalTrafficRegulationOrder.Data,
+            Deleted = currentDigitalTrafficRegulationOrder.Deleted,
+            DeletionTime = currentDigitalTrafficRegulationOrder.DeletionTime,
             LastUpdated = DateTime.UtcNow,
-            SchemaVersion = currentDtro.SchemaVersion,
-            TrafficAuthorityCreatorId = currentDtro.TrafficAuthorityCreatorId,
-            TrafficAuthorityOwnerId = currentDtro.TrafficAuthorityOwnerId
+            SchemaVersion = currentDigitalTrafficRegulationOrder.SchemaVersion,
+            TrafficAuthorityCreatorId = currentDigitalTrafficRegulationOrder.TrafficAuthorityCreatorId,
+            TrafficAuthorityOwnerId = currentDigitalTrafficRegulationOrder.TrafficAuthorityOwnerId
         };
 
-    public DtroHistorySourceResponse GetSource(DTROHistory dtroHistory)
+    public DtroHistorySourceResponse GetSource(DigitalTrafficRegulationOrderHistory digitalTrafficRegulationOrderHistory)
     {
-        var sourceActionType = Get(dtroHistory, "Source.actionType");
-        var sourceReference = Get(dtroHistory, "Source.reference");
-        var sourceSection = Get(dtroHistory, "Source.section");
-        var sourceTroName = Get(dtroHistory, "Source.troName");
+        var sourceActionType = Get(digitalTrafficRegulationOrderHistory, "Source.actionType");
+        var sourceReference = Get(digitalTrafficRegulationOrderHistory, "Source.reference");
+        var sourceSection = Get(digitalTrafficRegulationOrderHistory, "Source.section");
+        var sourceTroName = Get(digitalTrafficRegulationOrderHistory, "Source.troName");
 
         if (sourceActionType == SourceActionType.NoChange.GetDisplayName())
         {
@@ -221,22 +221,22 @@ public class DtroMappingService : IDtroMappingService
         return new DtroHistorySourceResponse
         {
             ActionType = sourceActionType,
-            Created = dtroHistory.Created,
-            LastUpdated = dtroHistory.LastUpdated,
+            Created = digitalTrafficRegulationOrderHistory.Created,
+            LastUpdated = digitalTrafficRegulationOrderHistory.LastUpdated,
             Reference = sourceReference,
-            SchemaVersion = dtroHistory.SchemaVersion.ToString(),
+            SchemaVersion = digitalTrafficRegulationOrderHistory.SchemaVersion.ToString(),
             Section = sourceSection,
-            TrafficAuthorityCreatorId = dtroHistory.TrafficAuthorityCreatorId,
-            TrafficAuthorityOwnerId = dtroHistory.TrafficAuthorityOwnerId,
+            TrafficAuthorityCreatorId = digitalTrafficRegulationOrderHistory.TrafficAuthorityCreatorId,
+            TrafficAuthorityOwnerId = digitalTrafficRegulationOrderHistory.TrafficAuthorityOwnerId,
             TroName = sourceTroName,
         };
     }
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    public DtroOwner GetOwnership(Models.DataBase.DTRO dtro)
+    public DtroOwner GetOwnership(Models.DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder)
     {
-        var traCreator = dtro.Data.GetValueOrDefault<int>("Source.traCreator");
-        var currentTraOwner = dtro.Data.GetValueOrDefault<int>("Source.currentTraOwner");
+        var traCreator = digitalTrafficRegulationOrder.Data.GetValueOrDefault<int>("Source.traCreator");
+        var currentTraOwner = digitalTrafficRegulationOrder.Data.GetValueOrDefault<int>("Source.currentTraOwner");
 
         return new DtroOwner
         {
@@ -246,15 +246,15 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    public void SetOwnership(ref Models.DataBase.DTRO dtro, int currentTraOwner)
+    public void SetOwnership(ref Models.DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder, int currentTraOwner)
     {
-        dtro.Data.PutValue("Source.currentTraOwner", currentTraOwner);
+        digitalTrafficRegulationOrder.Data.PutValue("Source.currentTraOwner", currentTraOwner);
     }
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    public void SetSourceActionType(ref Models.DataBase.DTRO dtro, SourceActionType sourceActionType)
+    public void SetSourceActionType(ref Models.DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder, SourceActionType sourceActionType)
     {
-        ExpandoObject source = dtro.Data;
+        ExpandoObject source = digitalTrafficRegulationOrder.Data;
         var sourceDict = source as IDictionary<string, object>;
         if (sourceDict == null)
         {
@@ -279,22 +279,22 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    public List<DtroHistoryProvisionResponse> GetProvision(DTROHistory dtroHistory)
+    public List<DtroHistoryProvisionResponse> GetProvision(DigitalTrafficRegulationOrderHistory digitalTrafficRegulationOrderHistory)
     {
-        IList<object> provisions = GetProvision(dtroHistory, "Source.Provision".ToBackwardCompatibility(dtroHistory.SchemaVersion));
+        IList<object> provisions = GetProvision(digitalTrafficRegulationOrderHistory, "Source.Provision".ToBackwardCompatibility(digitalTrafficRegulationOrderHistory.SchemaVersion));
         var ret = new List<DtroHistoryProvisionResponse>();
         foreach (var provision in provisions)
         {
 
             DtroHistoryProvisionResponse provisionResponse = new()
             {
-                Created = dtroHistory.Created,
+                Created = digitalTrafficRegulationOrderHistory.Created,
                 Data = provision as ExpandoObject,
-                LastUpdated = dtroHistory.LastUpdated,
+                LastUpdated = digitalTrafficRegulationOrderHistory.LastUpdated,
             };
             provisionResponse.Reference = provisionResponse.Data?.GetValueOrDefault<string>("reference");
             provisionResponse.ActionType = provisionResponse.Data?.GetValueOrDefault<string>("actionType");
-            provisionResponse.SchemaVersion = dtroHistory.SchemaVersion.ToString();
+            provisionResponse.SchemaVersion = digitalTrafficRegulationOrderHistory.SchemaVersion.ToString();
             if (provisionResponse.ActionType != ProvisionActionType.NoChange.GetDisplayName())
             {
                 ret.Add(provisionResponse);
@@ -305,10 +305,10 @@ public class DtroMappingService : IDtroMappingService
     }
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    public void InferIndexFields(ref Models.DataBase.DTRO dtro)
+    public void InferIndexFields(ref Models.DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder)
     {
-        var schemaVersion = dtro.SchemaVersion;
-        var regulations = dtro
+        var schemaVersion = digitalTrafficRegulationOrder.SchemaVersion;
+        var regulations = digitalTrafficRegulationOrder
             .Data
             .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(schemaVersion))
             .OfType<ExpandoObject>()
@@ -318,7 +318,7 @@ public class DtroMappingService : IDtroMappingService
             .ToList();
 
 
-        var regulatedPlaces = dtro
+        var regulatedPlaces = digitalTrafficRegulationOrder
             .Data
             .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(schemaVersion))
             .OfType<ExpandoObject>()
@@ -327,24 +327,24 @@ public class DtroMappingService : IDtroMappingService
                 .OfType<ExpandoObject>())
             .ToList();
 
-        dtro.RegulatedPlaceTypes = regulatedPlaces
+        digitalTrafficRegulationOrder.RegulatedPlaceTypes = regulatedPlaces
             .Select(it => it.GetValueOrDefault<string>("type"))
             .ToList();
 
-        dtro.TrafficAuthorityCreatorId = dtro.Data.GetValueOrDefault<int>("Source.traCreator");
+        digitalTrafficRegulationOrder.TrafficAuthorityCreatorId = digitalTrafficRegulationOrder.Data.GetValueOrDefault<int>("Source.traCreator");
 
-        dtro.TrafficAuthorityOwnerId = dtro.Data.GetValueOrDefault<int>("Source.currentTraOwner");
+        digitalTrafficRegulationOrder.TrafficAuthorityOwnerId = digitalTrafficRegulationOrder.Data.GetValueOrDefault<int>("Source.currentTraOwner");
 
-        dtro.TroName = dtro.Data.GetValueOrDefault<string>("Source.troName");
+        digitalTrafficRegulationOrder.TroName = digitalTrafficRegulationOrder.Data.GetValueOrDefault<string>("Source.troName");
 
-        dtro.RegulationTypes = regulations.Select(reg => reg.GetExpandoOrDefault("GeneralRegulation"))
+        digitalTrafficRegulationOrder.RegulationTypes = regulations.Select(reg => reg.GetExpandoOrDefault("GeneralRegulation"))
             .Where(generalReg => generalReg is not null)
             .Select(generalReg => generalReg.GetValueOrDefault<string>("regulationType"))
             .Where(regType => regType is not null)
         .Distinct()
             .ToList();
 
-        dtro.VehicleTypes = regulations.SelectMany(it => it.GetListOrDefault("Condition".ToBackwardCompatibility(schemaVersion)) ?? Enumerable.Empty<object>())
+        digitalTrafficRegulationOrder.VehicleTypes = regulations.SelectMany(it => it.GetListOrDefault("Condition".ToBackwardCompatibility(schemaVersion)) ?? Enumerable.Empty<object>())
             .Where(it => it is not null)
             .OfType<ExpandoObject>()
             .Select(it => it.GetExpandoOrDefault("VehicleCharacteristics".ToBackwardCompatibility(schemaVersion)))
@@ -354,7 +354,7 @@ public class DtroMappingService : IDtroMappingService
         .Distinct()
         .ToList();
 
-        dtro.OrderReportingPoints = dtro.Data.GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(schemaVersion))
+        digitalTrafficRegulationOrder.OrderReportingPoints = digitalTrafficRegulationOrder.Data.GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(schemaVersion))
             .OfType<ExpandoObject>()
             .Select(it => it.GetValue<string>("orderReportingPoint"))
             .Distinct()
@@ -377,22 +377,22 @@ public class DtroMappingService : IDtroMappingService
             timeValidity = new List<ExpandoObject>();
         }
 
-        dtro.RegulationStart = timeValidity
+        digitalTrafficRegulationOrder.RegulationStart = timeValidity
             .Select(it => it.GetValueOrDefault<string>("start"))
             .Where(it => it is not null)
             .Select(it => DateTime.Parse(it).ToDateTimeTruncated())
             .FirstOrDefault();
 
-        dtro.RegulationEnd = timeValidity
+        digitalTrafficRegulationOrder.RegulationEnd = timeValidity
             .Select(it => it.GetValueOrDefault<string>("end"))
             .Where(it => it is not null)
             .Select(it => DateTime.Parse(it).ToDateTimeTruncated())
             .FirstOrDefault();
 
-        string json = dtro.Data.ToIndentedJsonString();
+        string json = digitalTrafficRegulationOrder.Data.ToIndentedJsonString();
         JObject obj = JObject.Parse(json);
 
-        if (dtro.SchemaVersion >= new SchemaVersion("3.3.0"))
+        if (digitalTrafficRegulationOrder.SchemaVersion >= new SchemaVersion("3.3.0"))
         {
             var geometries = obj
                 .Descendants()
@@ -401,7 +401,7 @@ public class DtroMappingService : IDtroMappingService
                 .ToList();
             JProperty geometry = geometries.FirstOrDefault();
 
-            dtro.Location =
+            digitalTrafficRegulationOrder.Location =
                 _service.SetBoundingBoxForMultipleGeometries(new List<SemanticValidationError>(), geometry,
                     new BoundingBox());
         }
@@ -411,34 +411,34 @@ public class DtroMappingService : IDtroMappingService
                 .DescendantsAndSelf()
                 .OfType<JProperty>()
                 .FirstOrDefault(property => property.Name == "Geometry".ToBackwardCompatibility(schemaVersion));
-            dtro.Location = _service.SetBoundingBoxForSingleGeometry(new List<SemanticValidationError>(), geometry, new BoundingBox());
+            digitalTrafficRegulationOrder.Location = _service.SetBoundingBoxForSingleGeometry(new List<SemanticValidationError>(), geometry, new BoundingBox());
         }
     }
 
     /// <inheritdoc cref="IDtroMappingService"/>
-    private DtroSearchResult CopyDtroToSearchResult(Models.DataBase.DTRO dtro, List<DateTime> regulationStartDates, List<DateTime> regulationEndDates)
+    private DtroSearchResult CopyDtroToSearchResult(Models.DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder, List<DateTime> regulationStartDates, List<DateTime> regulationEndDates)
     {
         DtroSearchResult result = new()
         {
-            TroName = dtro.Data.GetValueOrDefault<string>("Source.troName"),
-            TrafficAuthorityCreatorId = dtro.Data.GetValueOrDefault<int>("Source.traCreator"),
-            TrafficAuthorityOwnerId = dtro.Data.GetValueOrDefault<int>("Source.currentTraOwner"),
-            PublicationTime = dtro.Created.Value.ToDateTimeTruncated(),
-            RegulationType = dtro.RegulationTypes,
-            RegulatedPlaceType = dtro.RegulatedPlaceTypes,
-            VehicleType = dtro.VehicleTypes,
-            OrderReportingPoint = dtro.OrderReportingPoints,
+            TroName = digitalTrafficRegulationOrder.Data.GetValueOrDefault<string>("Source.troName"),
+            TrafficAuthorityCreatorId = digitalTrafficRegulationOrder.Data.GetValueOrDefault<int>("Source.traCreator"),
+            TrafficAuthorityOwnerId = digitalTrafficRegulationOrder.Data.GetValueOrDefault<int>("Source.currentTraOwner"),
+            PublicationTime = digitalTrafficRegulationOrder.Created.Value.ToDateTimeTruncated(),
+            RegulationType = digitalTrafficRegulationOrder.RegulationTypes,
+            RegulatedPlaceType = digitalTrafficRegulationOrder.RegulatedPlaceTypes,
+            VehicleType = digitalTrafficRegulationOrder.VehicleTypes,
+            OrderReportingPoint = digitalTrafficRegulationOrder.OrderReportingPoints,
             RegulationStart = regulationStartDates,
             RegulationEnd = regulationEndDates,
-            Id = dtro.Id
+            Id = digitalTrafficRegulationOrder.Id
         };
         return result;
     }
 
-    private string Get(DTROHistory request, string key) =>
+    private string Get(DigitalTrafficRegulationOrderHistory request, string key) =>
         request.Data.GetValueOrDefault<string>(key);
 
-    private IList<object> GetProvision(DTROHistory request, string key) =>
+    private IList<object> GetProvision(DigitalTrafficRegulationOrderHistory request, string key) =>
         request.Data.GetValueOrDefault<IList<object>>(key);
 
     private static void Debug_PrintdDtroData(ExpandoObject dtroData, string indent = "")

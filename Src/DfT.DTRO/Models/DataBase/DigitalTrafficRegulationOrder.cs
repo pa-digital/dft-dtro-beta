@@ -4,43 +4,20 @@ using Newtonsoft.Json.Converters;
 namespace DfT.DTRO.Models.DataBase;
 
 /// <summary>
-/// Wrapper for D-TRO submission.
+/// Wrapper for digital traffic regulation order submission.
 /// </summary>
 [DataContract]
-public class DTRO
+public class DigitalTrafficRegulationOrder : BaseEntity
 {
-    /// <summary>
-    /// ID of the D-TRO
-    /// </summary>
-    [Key]
-    [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    [Column(TypeName = "uuid")]
-    public Guid Id { get; set; }
 
     /// <summary>
-    /// Schema identifier of the D-TRO data payload being submitted.
+    /// Schema identifier of the digital traffic regulation order data payload being submitted.
     /// </summary>
     /// <example>3.2.1</example>
     [Required(ErrorMessage = "schemaVersion field must be included")]
     [DataMember(Name = "schemaVersion")]
     [JsonConverter(typeof(SchemaVersionJsonConverter))]
     public SchemaVersion SchemaVersion { get; set; }
-
-    /// <summary>
-    /// Timestamp representing the date and time this document was created.
-    /// </summary>
-    [DataMember(Name = "created")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public DateTime? Created { get; set; }
-
-    /// <summary>
-    /// Timestamp representing the last date and time this document was updated.
-    /// </summary>
-    [DataMember(Name = "lastUpdated")]
-    [SwaggerSchema(ReadOnly = true)]
-    public DateTime? LastUpdated { get; set; }
 
     /// <summary>
     /// Earliest of regulation start date and time.
@@ -67,12 +44,12 @@ public class DTRO
     public int TrafficAuthorityOwnerId { get; set; }
 
     /// <summary>
-    /// Descriptive name of the D-TRO document.
+    /// Descriptive name of the digital traffic regulation order document.
     /// </summary>
     public string TroName { get; set; }
 
     /// <summary>
-    /// Correlation ID of the request with which this D-TRO document was created.
+    /// Create correlation unique identifier of the request with which this digital traffic regulation order document was created.
     /// </summary>
     [DataMember(Name = "createdCorrelationId")]
     [SaveOnce]
@@ -80,28 +57,28 @@ public class DTRO
     public string CreatedCorrelationId { get; set; }
 
     /// <summary>
-    /// Request Correlation ID which D-TRO document was updated by.
+    /// Last updated correlation unique identifier, which digital traffic regulation order document was updated by.
     /// </summary>
     [DataMember(Name = "lastUpdatedCorrelationId")]
     [SwaggerSchema(ReadOnly = true)]
     public string LastUpdatedCorrelationId { get; set; }
 
     /// <summary>
-    /// Flag representing a deletion of the D-TRO.
+    /// Flag representing a deletion of the digital traffic regulation order.
     /// </summary>
     [DataMember(Name = "deleted")]
     [SwaggerSchema(ReadOnly = true)]
-    public bool Deleted { get; set; } = false;
+    public bool Deleted { get; set; }
 
     /// <summary>
-    /// Timestamp representing the date and time when the D-TRO was deleted.
+    /// Timestamp representing the date and time when the digital traffic regulation order was deleted.
     /// </summary>
     [DataMember(Name = "deletionTime")]
     [SwaggerSchema(ReadOnly = true)]
     public DateTime? DeletionTime { get; set; }
 
     /// <summary>
-    /// D-TRO data model being submitted.
+    /// Digital traffic regulation order data model being submitted.
     /// </summary>
     [Required(ErrorMessage = "data field must be included")]
     [DataMember(Name = "data")]
@@ -109,27 +86,32 @@ public class DTRO
     public ExpandoObject Data { get; set; }
 
     /// <summary>
-    /// Unique regulation types that this D-TRO applies to.
+    /// Unique regulation types that this digital traffic regulation order applies to.
     /// </summary>
     public List<string> RegulationTypes { get; set; }
 
     /// <summary>
-    /// Unique vehicle types that this D-TRO applies to.
+    /// Unique vehicle types that this digital traffic regulation order applies to.
     /// </summary>
     public List<string> VehicleTypes { get; set; }
 
     /// <summary>
-    /// Unique order reporting points that this D-TRO applies to.
+    /// Unique order reporting points that this digital traffic regulation order applies to.
     /// </summary>
     public List<string> OrderReportingPoints { get; set; }
 
     /// <summary>
-    /// Unique regulated place types this D-TRO applies to.
+    /// Unique regulated place types this digital traffic regulation order applies to.
     /// </summary>
     public List<string> RegulatedPlaceTypes { get; set; }
 
     /// <summary>
-    /// The bounding box containing all points for this D-TRO regulated places.
+    /// The bounding box containing all points for this digital traffic regulation order regulated places.
     /// </summary>
     public BoundingBox Location { get; set; }
+
+    /// <summary>
+    /// Application related to the digital traffic regulation order
+    /// </summary>
+    public Application Application { get; set; }
 }

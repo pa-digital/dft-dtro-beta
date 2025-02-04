@@ -58,5 +58,6 @@
 	<Folder Include="Extensions\Exceptions\" />
 	<Folder Include="Logs\" />
 	<Folder Include="Models\Parameters\" />
+	<Folder Include="Repositories\Contracts\" />
   </ItemGroup>
 </Project>

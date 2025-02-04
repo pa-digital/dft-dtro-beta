@@ -6,17 +6,8 @@ namespace DfT.DTRO.Models.DataBase;
 /// Wrapper for a Rule.
 /// </summary>
 [DataContract]
-public class RuleTemplate
+public class RuleTemplate : BaseEntity
 {
-    /// <summary>
-    /// ID of the Rule.
-    /// </summary>
-    [Key]
-    [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    [Column(TypeName = "uuid")]
-    public Guid Id { get; set; }
-
     /// <summary>
     /// The schema identifier of the rule data payload being submitted.
     /// </summary>
@@ -27,22 +18,7 @@ public class RuleTemplate
     public SchemaVersion SchemaVersion { get; set; }
 
     /// <summary>
-    /// Timestamp that represents the creation time of this document.
-    /// </summary>
-    [DataMember(Name = "created")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public DateTime? Created { get; set; }
-
-    /// <summary>
-    /// Timestamp that represents the last time this document was updated.
-    /// </summary>
-    [DataMember(Name = "lastUpdated")]
-    [SwaggerSchema(ReadOnly = true)]
-    public DateTime? LastUpdated { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request with which this DTRO was created.
+    /// Correlation ID of the request with which this DigitalTrafficRegulationOrder was created.
     /// </summary>
     [DataMember(Name = "createdCorrelationId")]
     [SaveOnce]
@@ -50,7 +26,7 @@ public class RuleTemplate
     public string CreatedCorrelationId { get; set; }
 
     /// <summary>
-    /// Correlation ID of the request with which this DTRO was last updated.
+    /// Correlation ID of the request with which this DigitalTrafficRegulationOrder was last updated.
     /// </summary>
     [DataMember(Name = "lastUpdatedCorrelationId")]
     [SwaggerSchema(ReadOnly = true)]
@@ -62,4 +38,9 @@ public class RuleTemplate
     [Required(ErrorMessage = "Template field must be included")]
     [DataMember(Name = "template")]
     public string Template { get; set; }
+
+    /// <summary>
+    /// Application related to the Rule Template
+    /// </summary>
+    public Application Application { get; set; }
 }

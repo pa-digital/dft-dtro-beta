@@ -50,7 +50,7 @@ public static class Utils
         return schemaTemplate;
     }
 
-    public static async Task<DfT.DTRO.Models.DataBase.DTRO> CreateDtroObject(string dtroJsonPath, string schemaVersion)
+    public static async Task<DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder> CreateDtroObject(string dtroJsonPath, string schemaVersion)
     {
         var sampleDtroDataJson = await File.ReadAllTextAsync(dtroJsonPath);
 
@@ -58,7 +58,7 @@ public static class Utils
 
         ExpandoObject? dtroData =
             JsonConvert.DeserializeObject<ExpandoObject>(sampleDtroDataJson, new ExpandoObjectConverter());
-        DfT.DTRO.Models.DataBase.DTRO sampleDtro = new()
+        DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder sampleDigitalTrafficRegulationOrder = new()
         {
             Id = Guid.NewGuid(),
             SchemaVersion = new SchemaVersion(schemaVersion),
@@ -71,9 +71,9 @@ public static class Utils
         var configuration = builder.Build();
         var loggingExtensions = new LoggingExtension();
         var mappingService = new DtroMappingService(configuration, new BoundingBoxService(loggingExtensions), loggingExtensions);
-        mappingService.InferIndexFields(ref sampleDtro);
+        mappingService.InferIndexFields(ref sampleDigitalTrafficRegulationOrder);
 
-        return sampleDtro;
+        return sampleDigitalTrafficRegulationOrder;
     }
 
     public static async Task<StringContent> CreateDtroJsonPayload(string dtroJsonPath, string schemaVersion, bool inferIndexFields = true)
@@ -82,17 +82,17 @@ public static class Utils
 
         ExpandoObject? dtroData =
             JsonConvert.DeserializeObject<ExpandoObject>(sampleDtroDataJson, new ExpandoObjectConverter());
-        DfT.DTRO.Models.DataBase.DTRO dtro = new() { SchemaVersion = schemaVersion, Data = dtroData };
+        DfT.DTRO.Models.DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder = new() { SchemaVersion = schemaVersion, Data = dtroData };
         if (inferIndexFields)
         {
             var builder = new ConfigurationBuilder();
             var configuration = builder.Build();
             var loggingExtension = new LoggingExtension.Builder().Build();
             var mappingService = new DtroMappingService(configuration, new BoundingBoxService(new LoggingExtension.Builder().Build()), loggingExtension);
-            mappingService.InferIndexFields(ref dtro);
+            mappingService.InferIndexFields(ref digitalTrafficRegulationOrder);
         }
 
-        string payload = JsonConvert.SerializeObject(dtro);
+        string payload = JsonConvert.SerializeObject(digitalTrafficRegulationOrder);
 
         return new StringContent(payload, Encoding.UTF8, "application/json");
     }
@@ -137,7 +137,7 @@ public static class Utils
         return provisions;
     }
 
-    public static List<DTROHistory> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
+    public static List<DigitalTrafficRegulationOrderHistory> CreateRequestDtroHistoryObject(string[] dtroJsonPath)
     {
         List<string> items = dtroJsonPath.Select(File.ReadAllText).ToList();
 
@@ -146,10 +146,10 @@ public static class Utils
             .ToList();
 
 
-        return data.Select(expando => new DTROHistory
+        return data.Select(expando => new DigitalTrafficRegulationOrderHistory
         {
             Id = Guid.NewGuid(),
-            DtroId = Guid.Parse("C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4"),
+            DigitalTrafficRegulationOrderId = Guid.Parse("C3B3BB0C-E3A6-47EF-83ED-4C48E56F9DD4"),
             Created = new DateTime(2024, 6, 19, 16, 44, 00),
             LastUpdated = DateTime.Now,
             Data = expando,

@@ -1,31 +1,38 @@
 ﻿using System.Data;
 namespace DfT.DTRO.Services;
 
+/// <inheritdoc cref="IDtroService"/>
 public class DtroService : IDtroService
 {
     private readonly IDtroUserDal _dtroUserDal;
     private readonly IDtroDal _dtroDal;
     private readonly IDtroHistoryDal _dtroHistoryDal;
-    private readonly ISchemaTemplateDal _schemaTemplateDal;
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="dtroUserDal">Digital Traffic Regulation Order User data access layer</param>
+    /// <param name="dtroDal">Digital Traffic Regulation Order data access layer</param>
+    /// <param name="dtroHistoryDal">Digital Traffic Regulation Order History data access layer</param>
+    /// <param name="dtroMappingService">Digital Traffic Regulation Order mapping service</param>
+    /// <param name="dtroGroupValidatorService">Digital Traffic Regulation Order validator service</param>
     public DtroService(
-        IDtroUserDal swaCodeDal,
+        IDtroUserDal dtroUserDal,
         IDtroDal dtroDal,
         IDtroHistoryDal dtroHistoryDal,
-        ISchemaTemplateDal schemaTemplateDal,
         IDtroMappingService dtroMappingService,
         IDtroGroupValidatorService dtroGroupValidatorService)
     {
-        _dtroUserDal = swaCodeDal;
+        _dtroUserDal = dtroUserDal;
         _dtroDal = dtroDal;
         _dtroHistoryDal = dtroHistoryDal;
-        _schemaTemplateDal = schemaTemplateDal;
         _dtroMappingService = dtroMappingService;
         _dtroGroupValidatorService = dtroGroupValidatorService;
     }
 
+    /// <inheritdoc cref="IDtroService"/>
     public async Task<bool> DeleteDtroAsync(Guid dtroId, DateTime? deletionTime = null)
     {
         deletionTime ??= DateTime.UtcNow;
@@ -39,46 +46,46 @@ public class DtroService : IDtroService
         return true;
     }
 
-    public async Task<bool> DtroExistsAsync(Guid id)
-    {
-        return await _dtroDal.DtroExistsAsync(id);
-    }
+    /// <inheritdoc cref="IDtroService"/>
+    public async Task<bool> DtroExistsAsync(Guid id) => await _dtroDal.DtroExistsAsync(id);
 
-    public async Task<int> DtroCountForSchemaAsync(SchemaVersion schemaVersion)
-    {
-        return await _dtroDal.DtroCountForSchemaAsync(schemaVersion);
-    }
+    /// <inheritdoc cref="IDtroService"/>
+    public async Task<int> DtroCountForSchemaAsync(SchemaVersion schemaVersion) =>
+        await _dtroDal.DtroCountForSchemaAsync(schemaVersion);
 
+    /// <inheritdoc cref="IDtroService"/>
     public async Task<IEnumerable<DtroResponse>> GetDtrosAsync(GetAllQueryParameters parameters)
     {
-        List<Models.DataBase.DTRO> dtros = (await _dtroDal.GetDtrosAsync(parameters)).ToList();
+        var dtros = (await _dtroDal.GetDtrosAsync(parameters)).ToList();
         if (!dtros.Any())
         {
             throw new NotFoundException();
         }
 
-        foreach (Models.DataBase.DTRO dtro in dtros)
+        foreach (DigitalTrafficRegulationOrder dtro in dtros)
         {
-            dtro.Created = dtro.Created?.ToDateTimeTruncated();
+            dtro.Created = (dtro.Created ?? DateTime.UtcNow).ToDateTimeTruncated();
             dtro.LastUpdated = dtro.LastUpdated?.ToDateTimeTruncated();
         }
 
         return dtros.Select(_dtroMappingService.MapToDtroResponse);
     }
 
+    /// <inheritdoc cref="IDtroService"/>
     public async Task<DtroResponse> GetDtroByIdAsync(Guid id)
     {
-        Models.DataBase.DTRO dtro = await _dtroDal.GetDtroByIdAsync(id);
-        dtro.Created = dtro.Created?.ToDateTimeTruncated();
-        dtro.LastUpdated = dtro.LastUpdated?.ToDateTimeTruncated();
-        if (dtro is null)
+        var digitalTrafficRegulationOrder = await _dtroDal.GetDtroByIdAsync(id);
+        digitalTrafficRegulationOrder.Created = (digitalTrafficRegulationOrder.Created ?? DateTime.UtcNow).ToDateTimeTruncated();
+        digitalTrafficRegulationOrder.LastUpdated = digitalTrafficRegulationOrder.LastUpdated?.ToDateTimeTruncated();
+        if (digitalTrafficRegulationOrder is null)
         {
             throw new NotFoundException();
         }
 
-        return _dtroMappingService.MapToDtroResponse(dtro);
+        return _dtroMappingService.MapToDtroResponse(digitalTrafficRegulationOrder);
     }
 
+    /// <inheritdoc cref="IDtroService"/>
     public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
     {
         var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
@@ -92,6 +99,7 @@ public class DtroService : IDtroService
         return await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
     }
 
+    /// <inheritdoc cref="IDtroService"/>
     public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
     {
         var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
@@ -108,11 +116,11 @@ public class DtroService : IDtroService
             throw new NotFoundException();
         }
 
-        Models.DataBase.DTRO currentDtro = await _dtroDal.GetDtroByIdAsync(id);
+        var currentDigitalTrafficRegulationOrder = await _dtroDal.GetDtroByIdAsync(id);
 
-        DTROHistory historyDtro = _dtroMappingService.MapToDtroHistory(currentDtro);
+        var historyDigitalTrafficRegulationOrder = _dtroMappingService.MapToDtroHistory(currentDigitalTrafficRegulationOrder);
 
-        var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
+        var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDigitalTrafficRegulationOrder);
         if (!isSaved)
         {
             throw new DataException("Failed to write update to history table");
@@ -122,15 +130,18 @@ public class DtroService : IDtroService
         return new GuidResponse { Id = id };
     }
 
-    public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search) =>
-        await _dtroDal.FindDtrosAsync(search);
+    /// <inheritdoc cref="IDtroService"/>
+    public async Task<PaginatedResult<DigitalTrafficRegulationOrder>> FindDtrosAsync(DtroSearch search)
+        => await _dtroDal.FindDtrosAsync(search);
 
-    public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search) =>
-        await _dtroDal.FindDtrosAsync(search);
+    /// <inheritdoc cref="IDtroService"/>
+    public async Task<List<DigitalTrafficRegulationOrder>> FindDtrosAsync(DtroEventSearch search)
+        => await _dtroDal.FindDtrosAsync(search);
 
+    /// <inheritdoc cref="IDtroService"/>
     public async Task<List<DtroHistorySourceResponse>> GetDtroSourceHistoryAsync(Guid dtroId)
     {
-        List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
+        var dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
         if (dtroHistories.Any())
         {
@@ -163,9 +174,10 @@ public class DtroService : IDtroService
         return completeList;
     }
 
+    /// <inheritdoc cref="IDtroService"/>
     public async Task<List<DtroHistoryProvisionResponse>> GetDtroProvisionHistoryAsync(Guid dtroId)
     {
-        List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
+        var dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
         var histories = dtroHistories
             .SelectMany(history => _dtroMappingService.GetProvision(history))
@@ -204,7 +216,7 @@ public class DtroService : IDtroService
         return completeList;
     }
 
-
+    /// <inheritdoc cref="IDtroService"/>
     public async Task<bool> AssignOwnershipAsync(Guid dtroId, Guid appId, Guid assignToUser, string correlationId)
     {
         var dtroUserList = await _dtroUserDal.GetAllDtroUsersAsync();
@@ -224,12 +236,12 @@ public class DtroService : IDtroService
             var isCreatorOrOwner = ownership.TrafficAuthorityCreatorId == apiTraId | ownership.TrafficAuthorityOwnerId == apiTraId;
             if (!isCreatorOrOwner)
             {
-                throw new DtroValidationException($"Traffic authority {apiTraId} is not the creator or owner in the DTRO data submitted");
+                throw new DtroValidationException($"Traffic authority {apiTraId} is not the creator or owner in the DigitalTrafficRegulationOrder data submitted");
             }
         }
 
-        DTROHistory historyDtro = _dtroMappingService.MapToDtroHistory(currentDtro);
-        var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDtro);
+        var historyDigitalTrafficRegulationOrder = _dtroMappingService.MapToDtroHistory(currentDtro);
+        var isSaved = await _dtroHistoryDal.SaveDtroInHistoryTable(historyDigitalTrafficRegulationOrder);
         if (!isSaved)
         {
             throw new Exception("Failed to write to history table");

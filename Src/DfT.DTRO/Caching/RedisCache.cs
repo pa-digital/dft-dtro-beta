@@ -7,7 +7,7 @@ public class RedisCache : IRedisCache
 {
     private readonly IDistributedCache _cache;
 
-    private readonly List<Models.DataBase.DTRO> _cachedDtros = new();
+    private readonly List<Models.DataBase.DigitalTrafficRegulationOrder> _cachedDtros = new();
 
     /// <summary>
     /// Default constructor.
@@ -16,15 +16,15 @@ public class RedisCache : IRedisCache
     public RedisCache(IDistributedCache cache) => _cache = cache;
 
     /// <inheritdoc cref="IRedisCache"/>
-    public Task CacheDtro(Models.DataBase.DTRO dtro)
-        => _cache.SetValueAsync(dtro.Id.ToString(), dtro);
+    public Task CacheDtro(Models.DataBase.DigitalTrafficRegulationOrder digitalTrafficRegulationOrder)
+        => _cache.SetValueAsync(digitalTrafficRegulationOrder.Id.ToString(), digitalTrafficRegulationOrder);
 
     /// <inheritdoc cref="IRedisCache"/>
     public Task CacheDtroExists(Guid key, bool value)
         => _cache.SetBoolAsync(DtroExistsCacheKey(key), value);
 
     /// <inheritdoc cref="IRedisCache"/>
-    public Task CacheDtros(List<Models.DataBase.DTRO> dtros)
+    public Task CacheDtros(List<Models.DataBase.DigitalTrafficRegulationOrder> dtros)
     {
         foreach (var dtro in dtros)
         {
@@ -36,11 +36,11 @@ public class RedisCache : IRedisCache
     }
 
     /// <inheritdoc cref="IRedisCache"/>
-    public Task<List<Models.DataBase.DTRO>> GetDtros()
+    public Task<List<Models.DataBase.DigitalTrafficRegulationOrder>> GetDtros()
     {
         foreach (var cachedDtro in _cachedDtros)
         {
-            _ = _cache.GetValueAsync<Models.DataBase.DTRO>(cachedDtro.Id.ToString());
+            _ = _cache.GetValueAsync<Models.DataBase.DigitalTrafficRegulationOrder>(cachedDtro.Id.ToString());
         }
 
         return Task.FromResult(_cachedDtros);
@@ -48,8 +48,8 @@ public class RedisCache : IRedisCache
     }
 
     /// <inheritdoc cref="IRedisCache"/>
-    public Task<Models.DataBase.DTRO> GetDtro(Guid key)
-        => _cache.GetValueAsync<Models.DataBase.DTRO>(key.ToString());
+    public Task<Models.DataBase.DigitalTrafficRegulationOrder> GetDtro(Guid key)
+        => _cache.GetValueAsync<Models.DataBase.DigitalTrafficRegulationOrder>(key.ToString());
 
     /// <inheritdoc cref="IRedisCache"/>
     public Task<bool?> GetDtroExists(Guid key)

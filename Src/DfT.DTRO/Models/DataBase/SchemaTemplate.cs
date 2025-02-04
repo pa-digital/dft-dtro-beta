@@ -7,17 +7,8 @@ namespace DfT.DTRO.Models.DataBase;
 /// Wrapper for a Schema.
 /// </summary>
 [DataContract]
-public class SchemaTemplate
+public class SchemaTemplate : BaseEntity
 {
-    /// <summary>
-    /// ID of a schema.
-    /// </summary>
-    [Key]
-    [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    [Column(TypeName = "uuid")]
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Schema identifier of the schema data payload being submitted.
     /// </summary>
@@ -25,21 +16,6 @@ public class SchemaTemplate
     [DataMember(Name = "schemaVersion")]
     [JsonConverter(typeof(SchemaVersionJsonConverter))]
     public SchemaVersion SchemaVersion { get; set; }
-
-    /// <summary>
-    /// Timestamp representing the date and time of this document creation.
-    /// </summary>
-    [DataMember(Name = "created")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public DateTime? Created { get; set; }
-
-    /// <summary>
-    /// Timestamp representing the date and time when this document was last updated.
-    /// </summary>
-    [DataMember(Name = "lastUpdated")]
-    [SwaggerSchema(ReadOnly = true)]
-    public DateTime? LastUpdated { get; set; }
 
     /// <summary>
     /// Correlation ID of the request with which this Schema document was created.
@@ -50,18 +26,11 @@ public class SchemaTemplate
     public string CreatedCorrelationId { get; set; }
 
     /// <summary>
-    /// Correlation ID of the request witch which Schema document was updated.
+    /// Correlation ID of the request witch Schema document was updated.
     /// </summary>
     [DataMember(Name = "lastUpdatedCorrelationId")]
     [SwaggerSchema(ReadOnly = true)]
     public string LastUpdatedCorrelationId { get; set; }
-
-    /// <summary>
-    /// Flag representing whether the Schema is available.
-    /// </summary>
-    [DataMember(Name = "isActive")]
-    [SwaggerSchema(ReadOnly = true)]
-    public bool IsActive { get; set; }
 
     /// <summary>
     /// The schema data model being submitted;
@@ -70,4 +39,16 @@ public class SchemaTemplate
     [DataMember(Name = "template")]
     [JsonConverter(typeof(ExpandoObjectConverter))]
     public ExpandoObject Template { get; set; }
+
+    /// <summary>
+    /// Status of this document
+    /// </summary>
+    [DataMember(Name = "isActive")]
+    [SwaggerSchema(ReadOnly = true)]
+    public bool IsActive { get; set; }
+
+    /// <summary>
+    /// Application related to the Schema Template
+    /// </summary>
+    public Application Application { get; set; }
 }

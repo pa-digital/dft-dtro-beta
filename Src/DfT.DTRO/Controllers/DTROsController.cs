@@ -529,8 +529,8 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     [HttpDelete("/dtros/{dtroId:guid}")]
     [FeatureGate(FeatureNames.Publish)]
-    [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
-    [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
+    [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DigitalTrafficRegulationOrder.")]
+    [SwaggerResponse(statusCode: 404, description: "Could not find a DigitalTrafficRegulationOrder with the specified id.")]
     public async Task<IActionResult> Delete([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId)
     {
         try
@@ -621,9 +621,9 @@ public class DTROsController : ControllerBase
             _loggingExtension.LogError(
                 nameof(GetSourceHistory),
                 $"/dtros/sourceHistory/{dtroId}",
-                "History for DTRO not found",
+                "History for DigitalTrafficRegulationOrder not found",
                 nfex.StackTrace);
-            return NotFound(new ApiErrorResponse("History for DTRO not found.", nfex.Message));
+            return NotFound(new ApiErrorResponse("History for DigitalTrafficRegulationOrder not found.", nfex.Message));
         }
         catch (Exception ex)
         {
@@ -663,9 +663,9 @@ public class DTROsController : ControllerBase
             _loggingExtension.LogError(
                 nameof(GetProvisionHistory),
                 $"/dtros/provisionHistory/{dtroId}",
-                "History for DTRO not found",
+                "History for DigitalTrafficRegulationOrder not found",
                 nfex.Message);
-            return NotFound(new ApiErrorResponse("History for DTRO not found.", nfex.Message));
+            return NotFound(new ApiErrorResponse("History for DigitalTrafficRegulationOrder not found.", nfex.Message));
         }
         catch (Exception ex)
         {
@@ -687,8 +687,8 @@ public class DTROsController : ControllerBase
     /// <response code="500">Internal Server Error.</response>
     [HttpPost("/dtros/ownership/{dtroId:guid}/{assignToTraId:guid}")]
     [FeatureGate(FeatureNames.Publish)]
-    [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
-    [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
+    [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DigitalTrafficRegulationOrder.")]
+    [SwaggerResponse(statusCode: 404, description: "Could not find a DigitalTrafficRegulationOrder with the specified id.")]
     public async Task<IActionResult> AssignOwnership([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId, Guid assignToTraId)
     {
         try

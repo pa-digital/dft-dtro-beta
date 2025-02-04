@@ -111,7 +111,7 @@ public class SchemaTemplateDal : ISchemaTemplateDal
         schemaTemplate.Template = expandoObject;
         schemaTemplate.SchemaVersion = version;
         schemaTemplate.LastUpdated = DateTime.UtcNow;
-        schemaTemplate.Created = schemaTemplate.LastUpdated;
+        schemaTemplate.Created = schemaTemplate.LastUpdated ?? DateTime.UtcNow;
 
         schemaTemplate.LastUpdatedCorrelationId = correlationId;
         schemaTemplate.CreatedCorrelationId = schemaTemplate.LastUpdatedCorrelationId;

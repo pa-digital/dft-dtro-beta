@@ -1,21 +1,15 @@
 ﻿namespace DfT.DTRO.Models.DataBase;
 
+//TODO: This will become obsolete and should be removed once the new structure is on-line.
 /// <summary>
 /// Wrapper for Street Work Manager codes.
 /// </summary>
 [DataContract]
-public class DtroUser
+public class DtroUser : BaseEntity
 {
     /// <summary>
-    /// ID of the SWA document.
+    /// The unique identifier of the application used
     /// </summary>
-    [Key]
-    [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
-    [Column(TypeName = "uuid")]
-    public Guid Id { get; set; }
-
-
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     [Column(TypeName = "uuid")]
     public Guid xAppId { get; set; }
@@ -25,14 +19,6 @@ public class DtroUser
     /// </summary>
     [DataMember(Name = "traId")]
     public int? TraId { get; set; }
-
-    /// <summary>
-    /// The name of the traffic regulation authority
-    /// </summary>
-    [Required(ErrorMessage = "TRA name field must be included")]
-    [DataMember(Name = "name")]
-    [StringLength(int.MaxValue)]
-    public string Name { get; set; }
 
     /// <summary>
     /// The prefix of the traffic regulation authority

@@ -13,7 +13,7 @@ public class SearchService : ISearchService
 
     public async Task<PaginatedResponse<DtroSearchResult>> SearchAsync(DtroSearch search)
     {
-        PaginatedResult<Models.DataBase.DTRO> result = await _dtroService.FindDtrosAsync(search);
+        PaginatedResult<Models.DataBase.DigitalTrafficRegulationOrder> result = await _dtroService.FindDtrosAsync(search);
         IEnumerable<DtroSearchResult> mappedResult = _dtroMappingService.MapToSearchResult(result.Results);
         PaginatedResponse<DtroSearchResult> paginatedResult =
             new(mappedResult.ToList().AsReadOnly(),
