@@ -21,13 +21,8 @@ env:
   TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID_TEST }}
   TF_VAR_execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_TEST }}
   TF_VAR_artifact_registry_dtro_image_path: ${{ vars.DEFAULT_GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID_TEST }}/${{ vars.GCP_PROJECT_ID_TEST }}-int-repository/${{ vars.DTRO_IMAGE_NAME }}
-  TF_VAR_artifact_registry_service_ui_image_path: ${{ vars.DEFAULT_GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID_TEST }}/${{ vars.GCP_PROJECT_ID_TEST }}-ui-int-repository/${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
   TF_VAR_dtro_service_image: ${{ vars.DTRO_IMAGE_NAME }}
-  TF_VAR_service_ui_image: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
   TF_VAR_dtro_tag: ${{ vars.DTRO_IMAGE_TAG }}
-  TF_VAR_service_ui_tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
-  TF_VAR_cloud_run_service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_INT }}
-  TF_VAR_cloud_run_service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_INT }}
   cloud_url: https://dtro-int-${{ vars.DTRO_IMAGE_NAME }}-${{ secrets.GCP_PROJECT_NUMBER_TEST }}.${{ vars.DEFAULT_GCP_REGION }}.run.app
 
 permissions:
@@ -75,15 +70,6 @@ jobs:
           push: true
           provenance: false
           tags: ${{ env.TF_VAR_artifact_registry_dtro_image_path }}:${{ env.TF_VAR_dtro_tag }}
-
-      - name: Build and push Service Portal Docker image to Artifact Registry
-        uses: docker/build-push-action@v6.1.0
-        with:
-          context: dft-dtro-beta/Src/Dft.DTRO.Admin
-          platforms: linux/amd64
-          push: true
-          provenance: false
-          tags: ${{ env.TF_VAR_artifact_registry_service_ui_image_path }}:${{ env.TF_VAR_service_ui_tag }}
 
   deploy-resources:
     name: Deploy GCP Resources to Integration
