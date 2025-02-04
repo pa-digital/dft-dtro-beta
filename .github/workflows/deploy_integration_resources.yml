@@ -106,7 +106,7 @@ jobs:
         run: |
           terraform init \
           -backend-config "bucket=${{env.TF_VAR_tf_state_bucket}}" \
-          -backend-config "prefix=terraform/int-cloudrun-state"
+          -backend-config "prefix=terraform/int-cloudrun-state/api"
 
       - name: Terraform Plan
         run: terraform plan -input=false -out terraform-plan-gcp
