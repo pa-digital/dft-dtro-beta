@@ -23,7 +23,6 @@ locals {
 resource "google_cloud_run_v2_service" "dtro_service" {
   name     = local.cloud_run_service_name
   location = var.region
-  deletion_protection = false
   ingress  = "INGRESS_TRAFFIC_INTERNAL_ONLY"
 
   template {
