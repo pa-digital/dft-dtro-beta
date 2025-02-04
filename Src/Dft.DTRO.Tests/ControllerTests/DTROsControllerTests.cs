@@ -201,4 +201,45 @@ public class DTROsControllerTests
 
         Assert.Equal(200, ((ObjectResult)actual).StatusCode);
     }
+    
+    [Fact]
+    public async Task GenerateDtrosZipReturnsOkWhenZipGeneratedSuccessfully()
+    {
+        _mockDtroService
+            .Setup(it => it.GenerateDtrosAsZipAsync())
+            .ReturnsAsync(true);
+    
+        
+        var result = await _sut.GenerateDtrosZip();
+    
+        
+        var actual = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, ((ObjectResult)actual).StatusCode);
+    }
+    
+    
+    [Fact]
+    public async Task GenerateDtrosZipReturnsNotFoundWhenDtrosNotFound()
+    {
+        // Arrange
+        _mockDtroService.Setup(service => service.GenerateDtrosAsZipAsync()).ThrowsAsync(new NotFoundException());
+    
+        // Act
+        var result = await _sut.GenerateDtrosZip();
+    
+        // Assert
+        var actual = Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal(404, actual.StatusCode);
+    }
+    
+    [Fact]
+    public async Task GenerateDtrosZipReturnsInternalServerErrorWhenExceptionThrown()
+    {
+        _mockDtroService.Setup(service => service.GenerateDtrosAsZipAsync()).ThrowsAsync(new Exception());
+        
+        var result = await _sut.GenerateDtrosZip();
+        
+        var actual = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, actual.StatusCode);
+    }
 }
