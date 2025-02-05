@@ -85,3 +85,5 @@
 /Src/.idea/.idea.DfT.DTRO/.idea/workspace.xml
 
 .env
+/Src/DfT.DTRO.IntegrationTests/obj
+/Src/DfT.DTRO.IntegrationTests/bin/Debug/net6.0
