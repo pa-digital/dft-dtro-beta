@@ -65,4 +65,35 @@ public class GetDtrosTests
         await Assert.ThrowsAnyAsync<NotFoundException>(async () => await _sut.GetDtrosAsync(new GetAllQueryParameters()));
 
     }
+
+    [Fact]
+    public async Task GenerateDtrosAsZipAsyncReturnsTrueWhenZipGeneratedSuccessfully()
+    {
+        _mockDtroDal
+            .Setup(it => it.GetDtrosAsync())
+            .ReturnsAsync(() => MockTestObjects.Dtros.Where(it => !it.Deleted));
+
+        _mockDtroMappingService
+            .Setup(it => it.MapToDtroResponse(It.IsAny<DigitalTrafficRegulationOrder>()))
+            .Returns(MockTestObjects.DtroResponses.First);
+
+        var result = await _sut.GenerateDtrosAsZipAsync();
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public async Task GenerateDtrosAsZipAsyncThrowsNotFoundExceptionWhenNoDtrosFound()
+    {
+
+        _mockDtroDal
+            .Setup(it => it.GetDtrosAsync())
+            .ReturnsAsync(() => new List<DigitalTrafficRegulationOrder>());
+
+        _mockDtroMappingService
+            .Setup(it => it.MapToDtroResponse(It.IsAny<DigitalTrafficRegulationOrder>()))
+            .Returns(MockTestObjects.DtroResponses.First);
+
+        await Assert.ThrowsAnyAsync<NotFoundException>(async () => await _sut.GenerateDtrosAsZipAsync());
+    }
 }

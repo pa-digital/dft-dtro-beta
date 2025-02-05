@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.IO.Compression;
+
 namespace DfT.DTRO.Services;
 
 /// <inheritdoc cref="IDtroService"/>
@@ -9,6 +11,7 @@ public class DtroService : IDtroService
     private readonly IDtroHistoryDal _dtroHistoryDal;
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
+    private readonly string _fileDirectory;
 
     /// <summary>
     /// Default constructor
@@ -30,6 +33,8 @@ public class DtroService : IDtroService
         _dtroHistoryDal = dtroHistoryDal;
         _dtroMappingService = dtroMappingService;
         _dtroGroupValidatorService = dtroGroupValidatorService;
+        _fileDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Exported_Files");
+        Directory.CreateDirectory(_fileDirectory);
     }
 
     /// <inheritdoc cref="IDtroService"/>
@@ -69,6 +74,67 @@ public class DtroService : IDtroService
         }
 
         return dtros.Select(_dtroMappingService.MapToDtroResponse);
+    }
+
+    public async Task<bool> GenerateDtrosAsZipAsync()
+    {
+
+        var existingZipFiles = Directory.GetFiles(_fileDirectory, "dtro_export_*.zip");
+        foreach (var file in existingZipFiles)
+        {
+            File.Delete(file);
+        }
+
+
+        var dtros = await _dtroDal.GetDtrosAsync();
+        if (dtros is null || !dtros.Any())
+        {
+            throw new NotFoundException(); ;
+        }
+
+
+        var timestamp = DateTime.Now.ToString("s");
+        var zipFileName = $"dtro_export_{timestamp}.zip";
+        var zipFilePath = Path.Combine(_fileDirectory, zipFileName);
+
+        var fileIndex = 0;
+        int rowsPerFile = int.Parse(Environment.GetEnvironmentVariable("DTRO_PARTITION_SIZE") ?? "1000");
+        var jsonFilePaths = new List<string>();
+
+        foreach (var chunk in dtros.Chunk(rowsPerFile))
+        {
+            string jsonFilePath = Path.Combine(_fileDirectory, $"dtros_{fileIndex++}.json");
+            await WriteDtrosToJsonAsync(chunk, jsonFilePath);
+            jsonFilePaths.Add(jsonFilePath);
+        }
+
+
+        using (var zipStream = new FileStream(zipFilePath, FileMode.Create))
+        using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
+        {
+            foreach (var jsonFile in jsonFilePaths)
+            {
+                archive.CreateEntryFromFile(jsonFile, Path.GetFileName(jsonFile));
+                File.Delete(jsonFile);
+            }
+        }
+
+
+        return true;
+    }
+
+
+    private async Task WriteDtrosToJsonAsync(IEnumerable<DigitalTrafficRegulationOrder> dtros, string filePath)
+    {
+        using (var writer = new StreamWriter(filePath, append: false, encoding: Encoding.UTF8, bufferSize: 4096))
+        {
+            var json = System.Text.Json.JsonSerializer.Serialize(dtros, new System.Text.Json.JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+            await writer.WriteAsync(json);
+        }
     }
 
     /// <inheritdoc cref="IDtroService"/>

@@ -39,6 +39,12 @@ public interface IDtroDal
     Task<IEnumerable<Models.DataBase.DigitalTrafficRegulationOrder>> GetDtrosAsync(GetAllQueryParameters parameters);
 
     /// <summary>
+    /// Gets D-TRO records.
+    /// </summary>
+    /// <returns>All active D-TRO records</returns>
+    Task<IEnumerable<DigitalTrafficRegulationOrder>> GetDtrosAsync();
+
+    /// <summary>
     /// Gets a D-TRO by <paramref name="id"/>.
     /// </summary>
     /// <param name="id">D-TRO ID</param>

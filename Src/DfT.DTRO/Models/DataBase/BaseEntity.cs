@@ -29,6 +29,7 @@ public class BaseEntity
     [SwaggerSchema(ReadOnly = true)]
     public DateTime? LastUpdated { get; set; }
 
+
     /// <summary>
     /// Name of this document
     /// </summary>

@@ -21,6 +21,11 @@ public class DtroUser : BaseEntity
     public int? TraId { get; set; }
 
     /// <summary>
+    /// Name of the D-TRO user
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
     /// The prefix of the traffic regulation authority
     /// </summary>
     [DataMember(Name = "prefix")]

@@ -22,6 +22,12 @@ public interface IDtroService
     Task<IEnumerable<DtroResponse>> GetDtrosAsync(GetAllQueryParameters parameters);
 
     /// <summary>
+    /// Get all D-TRO records withing parameters
+    /// </summary>
+    /// <returns>List of D-TRO records</returns>
+    Task<bool> GenerateDtrosAsZipAsync();
+
+    /// <summary>
     /// Get Digital Traffic Regulation Order
     /// </summary>
     /// <param name="id">Unique identifier passed</param>

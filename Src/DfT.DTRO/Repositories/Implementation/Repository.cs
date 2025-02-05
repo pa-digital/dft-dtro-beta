@@ -32,19 +32,4 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
         await _context.SaveChangesAsync();
         return entity;
     }
-
-    /// <inheritdoc cref="IRepository{T}"/>
-    public async Task<bool> DeleteAsync(T entity)
-    {
-        var result = await ReadAsync(entity.Id);
-        if (result == null)
-        {
-            return false;
-        }
-
-        result.Status = false;
-
-        await _context.SaveChangesAsync();
-        return true;
-    }
 }

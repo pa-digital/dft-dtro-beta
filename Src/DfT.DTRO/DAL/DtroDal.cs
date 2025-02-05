@@ -96,6 +96,26 @@ public class DtroDal : IDtroDal
         return dtros;
     }
 
+    /// <inheritdoc cref="IDtroDal"/>
+    public async Task<IEnumerable<DigitalTrafficRegulationOrder>> GetDtrosAsync()
+    {
+        var cachedDtros = await _dtroCache.GetDtros();
+        if (cachedDtros.Any())
+        {
+            return cachedDtros;
+        }
+
+        var dtros = await _dtroContext.DigitalTrafficRegulationOrders.Where(dtro => !dtro.Deleted).ToListAsync();
+
+        if (!dtros.Any())
+        {
+            throw new NotFoundException("Active D-TRO records are not found.");
+        }
+
+        await _dtroCache.CacheDtros(dtros);
+        return dtros;
+    }
+
     ///<inheritdoc cref="IDtroDal"/>
     public async Task<DigitalTrafficRegulationOrder> GetDtroByIdAsync(Guid id)
     {

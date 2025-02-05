@@ -32,11 +32,4 @@ public interface IRepository<T> where T : BaseEntity
     /// <param name="entity">The entity to update</param>
     /// <returns>A task returning the asynchronous operation, returning the updated entity</returns>
     Task<T> UpdateAsync(T entity);
-
-    /// <summary>
-    /// Delete an entity from the repository asynchronously 
-    /// </summary>
-    /// <param name="entity">The entity to delete</param>
-    /// <returns>A task representing the asynchronous operation, returning a boolean indicating whether the deletion is successful.</returns>
-    Task<bool> DeleteAsync(T entity);
 }
