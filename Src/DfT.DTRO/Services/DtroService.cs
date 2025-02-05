@@ -11,7 +11,7 @@ public class DtroService : IDtroService
     private readonly ISchemaTemplateDal _schemaTemplateDal;
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
-    private readonly String _fileDirectory;
+    private readonly string _fileDirectory;
 
     public DtroService(
         IDtroUserDal swaCodeDal,
@@ -88,7 +88,7 @@ public class DtroService : IDtroService
         }
 
 
-        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+        var timestamp = DateTime.Now.ToString("s");
         var zipFileName = $"dtro_export_{timestamp}.zip";
         var zipFilePath = Path.Combine(_fileDirectory, zipFileName);
 
