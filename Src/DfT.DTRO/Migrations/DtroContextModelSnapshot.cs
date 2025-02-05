@@ -89,7 +89,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dtros");
+                    b.ToTable("Dtros", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DTROHistory", b =>
@@ -130,7 +130,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DtroHistories");
+                    b.ToTable("DtroHistories", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DtroUser", b =>
@@ -158,7 +158,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DtroUsers");
+                    b.ToTable("DtroUsers", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Metric", b =>
@@ -201,7 +201,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Metrics");
+                    b.ToTable("Metrics", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.RuleTemplate", b =>
@@ -231,7 +231,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RuleTemplate");
+                    b.ToTable("RuleTemplate", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.SchemaTemplate", b =>
@@ -264,7 +264,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SchemaTemplate");
+                    b.ToTable("SchemaTemplate", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.SystemConfig", b =>
@@ -283,7 +283,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemConfig");
+                    b.ToTable("SystemConfig", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -62,4 +62,9 @@ public class RuleTemplate
     [Required(ErrorMessage = "Template field must be included")]
     [DataMember(Name = "template")]
     public string Template { get; set; }
+
+    /// <summary>
+    /// Application related to the Rule Template
+    /// </summary>
+    public Application Application { get; set; }
 }

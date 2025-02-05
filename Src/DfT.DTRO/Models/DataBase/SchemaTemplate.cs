@@ -50,7 +50,7 @@ public class SchemaTemplate
     public string CreatedCorrelationId { get; set; }
 
     /// <summary>
-    /// Correlation ID of the request witch which Schema document was updated.
+    /// Correlation ID of the request by which Schema document was updated.
     /// </summary>
     [DataMember(Name = "lastUpdatedCorrelationId")]
     [SwaggerSchema(ReadOnly = true)]
@@ -70,4 +70,9 @@ public class SchemaTemplate
     [DataMember(Name = "template")]
     [JsonConverter(typeof(ExpandoObjectConverter))]
     public ExpandoObject Template { get; set; }
+
+    /// <summary>
+    /// Application related to the Schema Document
+    /// </summary>
+    public Application Application { get; set; }
 }

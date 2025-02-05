@@ -27,6 +27,7 @@ global using DfT.DTRO.FeatureManagement;
 global using DfT.DTRO.Filters;
 global using DfT.DTRO.Helpers;
 global using DfT.DTRO.JsonLogic;
+global using DfT.DTRO.Migrations;
 global using DfT.DTRO.Models;
 global using DfT.DTRO.Models.DataBase;
 global using DfT.DTRO.Models.DtroDtos;

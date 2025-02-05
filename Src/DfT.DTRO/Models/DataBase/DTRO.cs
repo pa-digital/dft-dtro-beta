@@ -132,4 +132,9 @@ public class DTRO
     /// The bounding box containing all points for this D-TRO regulated places.
     /// </summary>
     public BoundingBox Location { get; set; }
+
+    /// <summary>
+    /// Application related to the D-TRO
+    /// </summary>
+    public Application Application { get; set; }
 }

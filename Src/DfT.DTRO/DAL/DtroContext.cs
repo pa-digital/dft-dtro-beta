@@ -36,11 +36,60 @@ public class DtroContext : DbContext
     public virtual DbSet<DtroUser> DtroUsers { get; set; }
 
     /// <summary>
+    /// System configuration table
+    /// </summary>
+    public virtual DbSet<SystemConfig> SystemConfig { get; set; }
+
+    /// <summary>
+    /// Users table
+    /// </summary>
+    public virtual DbSet<User> Users { get; set; }
+
+    /// <summary>
+    /// User Statuses table
+    /// </summary>
+    public virtual DbSet<UserStatus> UserStatuses { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authorities table
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthority> TrafficRegulationAuthorities { get; set; }
+
+    /// <summary>
+    /// Digital Service Providers table
+    /// </summary>
+    public virtual DbSet<DigitalServiceProvider> DigitalServiceProviders { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authority and Digital Service Provider relationship table
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthorityDigitalServiceProvider> TrafficRegulationAuthorityDigitalServiceProviders { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authority and Digital Service Provider relationship Statuses table
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthorityDigitalServiceProviderStatus> TrafficRegulationAuthorityDigitalServiceProviderStatuses { get; set; }
+
+    /// <summary>
+    /// Applications table
+    /// </summary>
+    public virtual DbSet<Application> Applications { get; set; }
+
+    /// <summary>
+    /// Application Purposes table
+    /// </summary>
+    public virtual DbSet<ApplicationPurpose> ApplicationPurposes { get; set; }
+
+    /// <summary>
+    /// Application Types table
+    /// </summary>
+    public virtual DbSet<ApplicationType> ApplicationTypes { get; set; }
+
+
+    /// <summary>
     /// Default constructor.
     /// </summary>
     /// <param name="options">Base context options.</param>
-    public virtual DbSet<SystemConfig> SystemConfig { get; set; }
-
     public DtroContext(DbContextOptions<DtroContext> options)
         : base(options)
     {
