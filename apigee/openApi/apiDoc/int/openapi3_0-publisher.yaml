@@ -205,6 +205,24 @@ paths:
             - dsp
             - dc
       parameters:
+        - name: TraCode
+          in: query
+          description: SWA-like code that representing D-TRO record creator and owner
+          schema:
+            type: integer
+            format: int32
+        - name: StartDate
+          in: query
+          description: Query D-TRO records starting date
+          schema:
+            type: string
+            format: date-time
+        - name: EndDate
+          in: query
+          description: Query D-TRO records ending date
+          schema:
+            type: string
+            format: date-time
         - name: X-Correlation-ID
           in: header
           required: true
@@ -716,6 +734,13 @@ paths:
       description: Finds existing D-TROs that match the required criteria.
       operationId: search-dtro
       parameters:
+        - name: x-app-id
+          in: header
+          description: AppId identification.
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
@@ -880,6 +905,11 @@ components:
             type: string
           description: Vehicle type.
           nullable: true
+        regulatedPlaceType:
+          type: array
+          items:
+            type: string
+          nullable: true
         orderReportingPoint:
           type: array
           items:
@@ -938,6 +968,9 @@ components:
           type: string
           nullable: true
         regulationType:
+          type: string
+          nullable: true
+        regulatedPlaceType:
           type: string
           nullable: true
         vehicleType:
@@ -1137,6 +1170,11 @@ components:
           minLength: 0
           type: string
           nullable: true
+        regulatedPlaceType:
+          maxLength: 20
+          minLength: 0
+          type: string
+          nullable: true
         regulationStart:
           $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition
         regulationEnd:
@@ -1267,6 +1305,11 @@ components:
             type: string
           nullable: true
         orderReportingPoint:
+          type: array
+          items:
+            type: string
+          nullable: true
+        regulatedPlaceTypes:
           type: array
           items:
             type: string

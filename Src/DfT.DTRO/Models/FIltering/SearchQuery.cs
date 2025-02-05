@@ -36,6 +36,10 @@ public class SearchQuery
     [MaxLength(50)]
     public string OrderReportingPoint { get; set; }
 
+    [MinLength(0)]
+    [MaxLength(20)]
+    public string RegulatedPlaceType { get; set; }
+
     public ValueCondition<DateTime> RegulationStart { get; set; }
 
     public ValueCondition<DateTime> RegulationEnd { get; set; }

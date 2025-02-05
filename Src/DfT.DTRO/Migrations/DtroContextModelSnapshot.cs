@@ -57,6 +57,9 @@ namespace DfT.DTRO.Migrations
                     b.Property<List<string>>("OrderReportingPoints")
                         .HasColumnType("text[]");
 
+                    b.Property<List<string>>("RegulatedPlaceTypes")
+                        .HasColumnType("text[]");
+
                     b.Property<DateTime?>("RegulationEnd")
                         .HasColumnType("timestamp with time zone");
 
@@ -141,7 +144,6 @@ namespace DfT.DTRO.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Prefix")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 

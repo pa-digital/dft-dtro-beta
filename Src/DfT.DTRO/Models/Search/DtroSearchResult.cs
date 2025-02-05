@@ -24,6 +24,9 @@ public class DtroSearchResult
     [DataMember(Name = "orderReportingPoint")]
     public IEnumerable<string> OrderReportingPoint { get; set; }
 
+    [DataMember(Name = "regulatedPlaceTypes")]
+    public IEnumerable<string> RegulatedPlaceType { get; set; }
+
     [DataMember(Name = "regulationStart")]
     public IEnumerable<DateTime> RegulationStart { get; set; }
 

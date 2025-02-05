@@ -37,6 +37,7 @@ global using DfT.DTRO.Models.Errors;
 global using DfT.DTRO.Models.Filtering;
 global using DfT.DTRO.Models.Metrics;
 global using DfT.DTRO.Models.Pagination;
+global using DfT.DTRO.Models.Parameters;
 global using DfT.DTRO.Models.RuleTemplate;
 global using DfT.DTRO.Models.SchemaTemplate;
 global using DfT.DTRO.Models.Search;

@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.IO.Compression;
+
 namespace DfT.DTRO.Services;
 
 public class DtroService : IDtroService
@@ -9,12 +11,15 @@ public class DtroService : IDtroService
     private readonly ISchemaTemplateDal _schemaTemplateDal;
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
+    private readonly string _fileDirectory;
 
-    public DtroService(IDtroDal dtroDal, IDtroHistoryDal dtroHistoryDal,
+    public DtroService(
+        IDtroUserDal swaCodeDal,
+        IDtroDal dtroDal,
+        IDtroHistoryDal dtroHistoryDal,
         ISchemaTemplateDal schemaTemplateDal,
         IDtroMappingService dtroMappingService,
-        IDtroGroupValidatorService dtroGroupValidatorService,
-        IDtroUserDal swaCodeDal)
+        IDtroGroupValidatorService dtroGroupValidatorService)
     {
         _dtroUserDal = swaCodeDal;
         _dtroDal = dtroDal;
@@ -22,6 +27,8 @@ public class DtroService : IDtroService
         _schemaTemplateDal = schemaTemplateDal;
         _dtroMappingService = dtroMappingService;
         _dtroGroupValidatorService = dtroGroupValidatorService;
+        _fileDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Exported_Files");
+        Directory.CreateDirectory(_fileDirectory);
     }
 
     public async Task<bool> DeleteDtroAsync(Guid dtroId, DateTime? deletionTime = null)
@@ -47,9 +54,9 @@ public class DtroService : IDtroService
         return await _dtroDal.DtroCountForSchemaAsync(schemaVersion);
     }
 
-    public async Task<IEnumerable<DtroResponse>> GetDtrosAsync()
+    public async Task<IEnumerable<DtroResponse>> GetDtrosAsync(GetAllQueryParameters parameters)
     {
-        List<Models.DataBase.DTRO> dtros = (await _dtroDal.GetDtrosAsync()).ToList();
+        List<Models.DataBase.DTRO> dtros = (await _dtroDal.GetDtrosAsync(parameters)).ToList();
         if (!dtros.Any())
         {
             throw new NotFoundException();
@@ -62,6 +69,67 @@ public class DtroService : IDtroService
         }
 
         return dtros.Select(_dtroMappingService.MapToDtroResponse);
+    }
+    
+    public async Task<bool> GenerateDtrosAsZipAsync()
+    {
+
+        var existingZipFiles = Directory.GetFiles(_fileDirectory, "dtro_export_*.zip");
+        foreach (var file in existingZipFiles)
+        {
+            File.Delete(file);
+        }
+
+
+        var dtros = await _dtroDal.GetDtrosAsync();
+        if (dtros is null || !dtros.Any())
+        {
+            throw new NotFoundException();;
+        }
+
+
+        var timestamp = DateTime.Now.ToString("s");
+        var zipFileName = $"dtro_export_{timestamp}.zip";
+        var zipFilePath = Path.Combine(_fileDirectory, zipFileName);
+
+        var fileIndex = 0;
+        int rowsPerFile = int.Parse(Environment.GetEnvironmentVariable("DTRO_PARTITION_SIZE") ?? "1000");
+        var jsonFilePaths = new List<string>();
+
+        foreach (var chunk in dtros.Chunk(rowsPerFile))
+        {
+            string jsonFilePath = Path.Combine(_fileDirectory, $"dtros_{fileIndex++}.json");
+            await WriteDtrosToJsonAsync(chunk, jsonFilePath);
+            jsonFilePaths.Add(jsonFilePath);
+        }
+
+
+        using (var zipStream = new FileStream(zipFilePath, FileMode.Create))
+        using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
+        {
+            foreach (var jsonFile in jsonFilePaths)
+            {
+                archive.CreateEntryFromFile(jsonFile, Path.GetFileName(jsonFile));
+                File.Delete(jsonFile);
+            }
+        }
+
+
+        return true;
+    }
+
+
+    private async Task WriteDtrosToJsonAsync(IEnumerable<Models.DataBase.DTRO> dtros, string filePath)
+    {
+        using (var writer = new StreamWriter(filePath, append: false, encoding: Encoding.UTF8, bufferSize: 4096))
+        {
+            var json = System.Text.Json.JsonSerializer.Serialize(dtros, new System.Text.Json.JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+            await writer.WriteAsync(json);
+        }
     }
 
     public async Task<DtroResponse> GetDtroByIdAsync(Guid id)
@@ -120,17 +188,11 @@ public class DtroService : IDtroService
         return new GuidResponse { Id = id };
     }
 
-    public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search)
-    {
-        var result = await _dtroDal.FindDtrosAsync(search);
+    public async Task<PaginatedResult<Models.DataBase.DTRO>> FindDtrosAsync(DtroSearch search) =>
+        await _dtroDal.FindDtrosAsync(search);
 
-        return result;
-    }
-
-    public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search)
-    {
-        return await _dtroDal.FindDtrosAsync(search);
-    }
+    public async Task<List<Models.DataBase.DTRO>> FindDtrosAsync(DtroEventSearch search) =>
+        await _dtroDal.FindDtrosAsync(search);
 
     public async Task<List<DtroHistorySourceResponse>> GetDtroSourceHistoryAsync(Guid dtroId)
     {

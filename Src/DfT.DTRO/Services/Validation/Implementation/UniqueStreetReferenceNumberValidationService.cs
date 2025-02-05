@@ -23,6 +23,15 @@ public class UniqueStreetReferenceNumberValidationService : IUniqueStreetReferen
         {
             foreach (var concreteGeometry in Constants.ConcreteGeometries.Where(geometry.HasField))
             {
+
+                var hasExternalReference = geometry
+                    .GetExpandoOrDefault(concreteGeometry)
+                    .HasField("ExternalReference");
+                if (!hasExternalReference)
+                {
+                    continue;
+                }
+
                 var externalReferences = geometry
                     .GetValueOrDefault<IList<object>>($"{concreteGeometry}.ExternalReference")
                     .OfType<ExpandoObject>()

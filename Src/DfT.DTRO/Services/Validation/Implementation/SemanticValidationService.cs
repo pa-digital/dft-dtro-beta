@@ -37,14 +37,12 @@ public class SemanticValidationService : ISemanticValidationService
         List<SemanticValidationError> validationErrors = new();
         JObject parsedBody = JObject.Parse(dtroDataString);
 
-        ValidateLastUpdatedDate(parsedBody, dtroSchemaVersion, validationErrors);
         BoundingBox boundingBox = dtroSchemaVersion >= new SchemaVersion("3.3.0")
             ? _geometryValidation
                 .ValidateGeometryAgainstCurrentSchemaVersion(parsedBody, validationErrors)
             : _geometryValidation
                 .ValidateGeometryAgainstPreviousSchemaVersions(parsedBody, dtroSchemaVersion, validationErrors);
 
-        await ValidateReferencedTroId(parsedBody, dtroSchemaVersion, validationErrors);
         ValidateConditions(parsedBody, validationErrors);
 
         return new Tuple<BoundingBox, List<SemanticValidationError>>(boundingBox, validationErrors);
@@ -180,74 +178,6 @@ public class SemanticValidationService : ISemanticValidationService
             if (mappedConditions.Count < 2)
             {
                 continue;
-            }
-        }
-    }
-
-
-    private void ValidateLastUpdatedDate(JObject data, SchemaVersion schemaVersion, List<SemanticValidationError> errors)
-    {
-        IEnumerable<JProperty> externalReferences = data
-            .DescendantsAndSelf()
-            .OfType<JProperty>()
-            .Where(it => it.Name == "ExternalReference".ToBackwardCompatibility(schemaVersion))
-            .Select(it => it);
-
-        if (!externalReferences.Any())
-        {
-            errors.Add(new SemanticValidationError
-            {
-                Message = "value 'ExternalReference' cannot be found",
-                Path = "Source -> Provision -> RegulatedPlace -> Geometry -> External Reference"
-            });
-
-            _loggingExtension.LogError(nameof(ValidateLastUpdatedDate), "", "ExternalReference error", string.Join(",", errors));
-        }
-
-        IEnumerable<JProperty> lastUpdatedDateNodes = data.DescendantsAndSelf().OfType<JProperty>()
-            .Where(p => p.Name == "lastUpdateDate")
-            .Select(p => p);
-
-        foreach (var lastUpdatedDateNode in lastUpdatedDateNodes)
-        {
-            var dateTime = DateTime.Parse(lastUpdatedDateNode.Value.ToString()).ToUniversalTime();
-            if (dateTime > _clock.UtcNow)
-            {
-                errors.Add(
-                    new SemanticValidationError
-                    {
-                        Message = "value 'lastUpdateDate' cannot be in the future",
-                        Path = lastUpdatedDateNode.Path
-                    });
-                _loggingExtension.LogError(nameof(ValidateLastUpdatedDate), "", "LastUpdatedDate error", string.Join(",", errors));
-            }
-        }
-    }
-
-    private async Task ValidateReferencedTroId(
-        JObject data,
-        SchemaVersion dtroSchemaVersion,
-        List<SemanticValidationError> errors)
-    {
-        if (dtroSchemaVersion < "3.1.2")
-        {
-            return;
-        }
-
-        var referencedDtroIds =
-            (data["source"]?["crossRefTro"] as JArray ?? new JArray())
-            .Select(id => new Guid((string)id));
-
-        foreach (Guid dtroId in referencedDtroIds)
-        {
-            if (!await _dtroDal.DtroExistsAsync(dtroId))
-            {
-                errors.Add(
-                    new SemanticValidationError
-                    {
-                        Message = $"Referenced TRO with id '{dtroId}' does not exist.",
-                        Path = "Source.reference"
-                    });
             }
         }
     }
