@@ -7,3 +7,4 @@ global using DfT.DTRO.Models.DataBase;
 global using DfT.DTRO.Models.DtroJson;
 global using DfT.DTRO.Models.SchemaTemplate;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.DependencyInjection;

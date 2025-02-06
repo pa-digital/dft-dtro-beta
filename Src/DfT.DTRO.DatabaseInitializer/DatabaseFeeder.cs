@@ -14,14 +14,11 @@ public static class DatabaseFeeder
         await context.SaveChangesAsync();
     }
 
-    /// <summary>
-    /// List of users
-    /// </summary>
     public static List<User> Users =>
     [
         new()
         {
-            Id = Guid.Parse(""),
+            Id = Guid.Parse("5007c29d-18c0-494b-ad00-611a326fd063"),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             Forename = "John",
@@ -29,13 +26,13 @@ public static class DatabaseFeeder
             Email = "jon.doe@email.com",
             IsCentralServiceOperator = true,
             Status = "active",
-            UserStatusId = Guid.Parse(""),
+            UserStatusId = Guid.Parse("9bd349e1-ffed-4e85-b87d-66fcf6d3707d"),
             DigitalServiceProviders = [],
         },
 
         new()
         {
-            Id = Guid.Parse(""),
+            Id = Guid.Parse("14414134-1aca-49dd-aeaf-c05fc5ccc8e6"),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             Forename = "Jane",
@@ -43,13 +40,13 @@ public static class DatabaseFeeder
             Email = "jane.doe@email.com",
             IsCentralServiceOperator = false,
             Status = "active",
-            UserStatusId = Guid.Parse(""),
+            UserStatusId = Guid.Parse("2620b9a5-bc88-491a-82da-3060db1699e6"),
             DigitalServiceProviders = []
         },
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse("eddc3e66-242f-4003-90b7-e57807d0a968"),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             Forename = "Jake",
@@ -57,13 +54,13 @@ public static class DatabaseFeeder
             Email = "george.blogs@email.com",
             IsCentralServiceOperator = false,
             Status = "active",
-            UserStatusId = Guid.Parse(""),
+            UserStatusId = Guid.Parse("803e7960-e772-4a7d-9690-b4a45f27b607"),
             DigitalServiceProviders = []
         },
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse("4519447b-1a1c-4e0f-9a51-9270896c8f93"),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             Forename = "Jenny",
@@ -71,29 +68,23 @@ public static class DatabaseFeeder
             Email = "jenny.blogs@email.com",
             IsCentralServiceOperator = false,
             Status = "active",
-            UserStatusId = Guid.Parse(""),
+            UserStatusId = Guid.Parse("7cc4f298-c655-4268-984b-4a091b1a9b2e"),
             DigitalServiceProviders = []
         }
     ];
 
-    /// <summary>
-    /// List of user statuses 
-    /// </summary>
     public static List<UserStatus> UserStatuses =>
     [
-        new() { Id = Guid.NewGuid(), Status = "company" },
+        new() { Id = Guid.Parse(""), Status = "company" },
 
-        new() { Id = Guid.NewGuid(), Status = "hobbyist" }
+        new() { Id = Guid.Parse(""), Status = "hobbyist" }
     ];
 
-    /// <summary>
-    /// List of traffic regulation authorities
-    /// </summary>
     public static List<TrafficRegulationAuthority> TrafficRegulationAuthorities =>
     [
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "First County Council",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -102,7 +93,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Second County Council",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -111,7 +102,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Third County Council",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -120,7 +111,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Fourth County Council",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -129,7 +120,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Fifth County Council",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -137,14 +128,11 @@ public static class DatabaseFeeder
         }
     ];
 
-    /// <summary>
-    /// List of digital service providers
-    /// </summary>
     public static List<DigitalServiceProvider> DigitalServiceProviders =>
     [
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "First Publisher Company",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -153,7 +141,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Second Publisher Company",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -162,7 +150,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Third Publisher Company",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -171,7 +159,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Fourth Publisher Company",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -180,7 +168,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Fifth Publisher Company",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -188,9 +176,6 @@ public static class DatabaseFeeder
         }
     ];
 
-    /// <summary>
-    /// List of traffic regulation authority and digital service provider
-    /// </summary>
     public static List<TrafficRegulationAuthorityDigitalServiceProvider> TrafficRegulationAuthorityDigitalServiceProviders =>
     [
         new()
@@ -234,31 +219,18 @@ public static class DatabaseFeeder
         }
     ];
 
-    /// <summary>
-    /// List of traffic regulation authority digital service provider status
-    /// </summary>
-    public static List<TrafficRegulationAuthorityDigitalServiceProviderStatus> TrafficRegulationAuthorityDigitalServiceProviderStatuses => new()
-    {
-        new TrafficRegulationAuthorityDigitalServiceProviderStatus
-        {
-            Id = Guid.Parse(""),
-            Status = "accepted"
-        },
-        new TrafficRegulationAuthorityDigitalServiceProviderStatus
-        {
-            Id = Guid.Parse(""),
-            Status = "rejected"
-        }
-    };
+    public static List<TrafficRegulationAuthorityDigitalServiceProviderStatus> TrafficRegulationAuthorityDigitalServiceProviderStatuses =>
+    [
+        new() { Id = Guid.Parse(""), Status = "accepted" },
 
-    /// <summary>
-    /// List of application
-    /// </summary>
+        new() { Id = Guid.Parse(""), Status = "rejected" }
+    ];
+
     public static List<Application> Applications =>
     [
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "First-Publisher-Company-First-County-Council",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -271,7 +243,7 @@ public static class DatabaseFeeder
         },
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Second-Publisher-Company-Second-County-Council",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -284,7 +256,7 @@ public static class DatabaseFeeder
         },
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Third-Publisher-Company-Third-County-Council",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -297,7 +269,7 @@ public static class DatabaseFeeder
         },
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Fourth-Publisher-Company-Fourth-County-Council",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -310,7 +282,7 @@ public static class DatabaseFeeder
         },
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Name = "Fifth-Publisher-Company-Fifth-County-Council",
             Created = DateTime.UtcNow,
             LastUpdated = null,
@@ -323,9 +295,6 @@ public static class DatabaseFeeder
         }
         ];
 
-    /// <summary>
-    /// List of application types
-    /// </summary>
     public static List<ApplicationType> ApplicationTypes =>
     [
         new()
@@ -355,9 +324,6 @@ public static class DatabaseFeeder
         }
     ];
 
-    /// <summary>
-    /// List of application purpose
-    /// </summary>
     public static List<ApplicationPurpose> ApplicationPurposes =>
     [
         new()
@@ -387,14 +353,11 @@ public static class DatabaseFeeder
         }
     ];
 
-    /// <summary>
-    /// List of schema templates
-    /// </summary>
     public static List<SchemaTemplate> SchemaTemplates =>
     [
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.0"),
@@ -407,7 +370,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.1"),
@@ -420,7 +383,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.2"),
@@ -433,7 +396,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.3"),
@@ -446,7 +409,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.4"),
@@ -458,14 +421,11 @@ public static class DatabaseFeeder
         }
     ];
 
-    /// <summary>
-    /// List of rule templates
-    /// </summary>
     public static List<RuleTemplate> RuleTemplates =>
     [
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.0"),
@@ -477,7 +437,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.1"),
@@ -489,7 +449,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.2"),
@@ -501,7 +461,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.3"),
@@ -513,7 +473,7 @@ public static class DatabaseFeeder
 
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.5"),
@@ -524,19 +484,16 @@ public static class DatabaseFeeder
         }
     ];
 
-    /// <summary>
-    /// List of digital traffic regulation order
-    /// </summary>
-    public static List<Models.DataBase.DTRO> DigitalTrafficRegulationOrders => new()
-    {
-        new Models.DataBase.DTRO
+    public static List<Models.DataBase.DTRO> DigitalTrafficRegulationOrders =>
+    [
+        new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.0"),
-            RegulationStart = new DateTime(2020,1,1,1,1,1),
-            RegulationEnd = new DateTime(2020,2,2,2,2,2),
+            RegulationStart = new DateTime(2020, 1, 1, 1, 1, 1),
+            RegulationEnd = new DateTime(2020, 2, 2, 2, 2, 2),
             TrafficAuthorityCreatorId = 1000,
             TrafficAuthorityOwnerId = 1000,
             TroName = "",
@@ -551,14 +508,15 @@ public static class DatabaseFeeder
             Location = new BoundingBox(),
             Application = Applications.FirstOrDefault()
         },
-        new Models.DataBase.DTRO
+
+        new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.1"),
-            RegulationStart = new DateTime(2020,1,1,1,1,1),
-            RegulationEnd = new DateTime(2020,2,2,2,2,2),
+            RegulationStart = new DateTime(2020, 1, 1, 1, 1, 1),
+            RegulationEnd = new DateTime(2020, 2, 2, 2, 2, 2),
             TrafficAuthorityCreatorId = 1000,
             TrafficAuthorityOwnerId = 1000,
             TroName = "",
@@ -573,14 +531,15 @@ public static class DatabaseFeeder
             Location = new BoundingBox(),
             Application = Applications.FirstOrDefault()
         },
-        new Models.DataBase.DTRO
+
+        new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.2"),
-            RegulationStart = new DateTime(2020,1,1,1,1,1),
-            RegulationEnd = new DateTime(2020,2,2,2,2,2),
+            RegulationStart = new DateTime(2020, 1, 1, 1, 1, 1),
+            RegulationEnd = new DateTime(2020, 2, 2, 2, 2, 2),
             TrafficAuthorityCreatorId = 1000,
             TrafficAuthorityOwnerId = 1000,
             TroName = "",
@@ -595,14 +554,15 @@ public static class DatabaseFeeder
             Location = new BoundingBox(),
             Application = Applications.FirstOrDefault()
         },
-        new Models.DataBase.DTRO
+
+        new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.3"),
-            RegulationStart = new DateTime(2020,1,1,1,1,1),
-            RegulationEnd = new DateTime(2020,2,2,2,2,2),
+            RegulationStart = new DateTime(2020, 1, 1, 1, 1, 1),
+            RegulationEnd = new DateTime(2020, 2, 2, 2, 2, 2),
             TrafficAuthorityCreatorId = 1000,
             TrafficAuthorityOwnerId = 1000,
             TroName = "",
@@ -617,14 +577,15 @@ public static class DatabaseFeeder
             Location = new BoundingBox(),
             Application = Applications.FirstOrDefault()
         },
-        new Models.DataBase.DTRO
+
+        new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.4"),
-            RegulationStart = new DateTime(2020,1,1,1,1,1),
-            RegulationEnd = new DateTime(2020,2,2,2,2,2),
+            RegulationStart = new DateTime(2020, 1, 1, 1, 1, 1),
+            RegulationEnd = new DateTime(2020, 2, 2, 2, 2, 2),
             TrafficAuthorityCreatorId = 1000,
             TrafficAuthorityOwnerId = 1000,
             TroName = "",
@@ -639,16 +600,13 @@ public static class DatabaseFeeder
             Location = new BoundingBox(),
             Application = Applications.FirstOrDefault()
         }
-    };
+    ];
 
-    /// <summary>
-    /// List of digital traffic regulation order history
-    /// </summary>
     public static List<DTROHistory> DigitalTrafficRegulationOrderHistories =>
     [
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.0"),
@@ -661,7 +619,7 @@ public static class DatabaseFeeder
         },
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.1"),
@@ -674,7 +632,7 @@ public static class DatabaseFeeder
         },
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.2"),
@@ -687,7 +645,7 @@ public static class DatabaseFeeder
         },
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.3"),
@@ -700,7 +658,7 @@ public static class DatabaseFeeder
         },
         new()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse(""),
             Created = DateTime.UtcNow,
             LastUpdated = null,
             SchemaVersion = new SchemaVersion("1.0.4"),

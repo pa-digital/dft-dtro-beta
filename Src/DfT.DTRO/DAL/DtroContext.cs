@@ -85,7 +85,6 @@ public class DtroContext : DbContext
     /// </summary>
     public virtual DbSet<ApplicationType> ApplicationTypes { get; set; }
 
-
     /// <summary>
     /// Default constructor.
     /// </summary>
