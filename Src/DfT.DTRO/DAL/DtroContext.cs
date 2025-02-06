@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.DAL;
+﻿using Microsoft.EntityFrameworkCore.Query;
+
+namespace DfT.DTRO.DAL;
 
 /// <summary>
 /// Represents a session with the D-TRO database.
@@ -101,13 +103,22 @@ public class DtroContext : DbContext
         Justification = "Usage of this API is the easiest workaround for the time being.")]
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDbFunction(typeof(DatabaseMethods).GetMethod(nameof(DatabaseMethods.Overlaps), new[] { typeof(NpgsqlBox), typeof(NpgsqlBox) }))
+        modelBuilder.HasDbFunction(typeof(DatabaseMethods)
+                .GetMethod(nameof(DatabaseMethods.Overlaps), new[] { typeof(NpgsqlBox), typeof(NpgsqlBox) }))
             .HasTranslation(args =>
             {
-                return new PostgresBinaryExpression(
-                    PostgresExpressionType.Overlaps, args[0], args[1], args[0].Type, args[0].TypeMapping);
+                var sqlExpressionFactory = (SqlExpressionFactory)typeof(RelationalSqlTranslatingExpressionVisitor)
+                    .GetProperty("SqlExpressionFactory", BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                    .GetValue(args[0].TypeMapping) as SqlExpressionFactory;
+
+                return sqlExpressionFactory.MakeBinary(
+                    ExpressionType.AndAlso, // Equivalent to "OVERLAPS"
+                    args[0],
+                    args[1],
+                    args[0].TypeMapping);
             });
     }
+
 
     ///<inheritdoc />
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

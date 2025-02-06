@@ -1,9 +1,11 @@
-﻿var serviceCollection = new ServiceCollection();
-serviceCollection.AddDbContext<DtroContext>(options => options.UseNpgsql("Postgres"));
-var serviceProvider = serviceCollection.BuildServiceProvider();
+﻿var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddStorage(builder.Configuration);
+
+var serviceProvider = builder.Services.BuildServiceProvider();
 await using var context = serviceProvider.GetRequiredService<DtroContext>();
 
-await DatabaseFeeder.Seed<User>(context, DatabaseFeeder.Users);
+await DatabaseFeeder.Seed(context, DatabaseFeeder.Users);
 await DatabaseFeeder.Seed(context, DatabaseFeeder.UserStatuses);
 await DatabaseFeeder.Seed(context, DatabaseFeeder.TrafficRegulationAuthorities);
 await DatabaseFeeder.Seed(context, DatabaseFeeder.DigitalServiceProviders);
