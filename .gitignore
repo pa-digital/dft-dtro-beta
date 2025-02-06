@@ -41,3 +41,5 @@
 .env
 /Src/DfT.DTRO.IntegrationTests/obj
 /Src/DfT.DTRO.IntegrationTests/bin/Debug/net6.0
+/Src/DfT.DTRO.DatabaseInitializer/bin/Debug/net8.0
+/Src/DfT.DTRO.DatabaseInitializer/obj

@@ -4,6 +4,9 @@ using Newtonsoft.Json.Serialization;
 
 namespace DfT.DTRO;
 
+/// <summary>
+/// Entry point of the entire D-TRO API
+/// </summary>
 [ExcludeFromCodeCoverage]
 public class Startup
 {
@@ -11,12 +14,21 @@ public class Startup
 
     private IConfiguration Configuration { get; }
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="env">Environment the application is run into</param>
+    /// <param name="configuration">Configuration passed</param>
     public Startup(IWebHostEnvironment env, IConfiguration configuration)
     {
         Environment = env;
         Configuration = configuration;
     }
 
+    /// <summary>
+    /// Configure services
+    /// </summary>
+    /// <param name="services">Service collection to configure</param>
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
@@ -77,6 +89,12 @@ public class Startup
         services.AddCache(Configuration);
     }
 
+    /// <summary>
+    /// Configure application
+    /// </summary>
+    /// <param name="app">Application to configure</param>
+    /// <param name="env">Environment to configure the application into</param>
+    /// <param name="loggerFactory">Logger factory used</param>
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
         app.UseRouting();
@@ -92,7 +110,6 @@ public class Startup
             app.UseCustomSwagger();
         }
 
-        // Add the middleware before UseEndpoints
         app.UserGroupMiddleware();
 
         app.UseMiddleware<SecurityHeadersMiddleware>();

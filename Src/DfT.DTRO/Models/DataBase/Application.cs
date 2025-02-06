@@ -6,7 +6,11 @@
 public class Application : BaseEntity
 {
     /// <summary>
-    /// Automatic generated name of the Application
+    /// Automatic generated name of the application
+    /// </summary>
+    public string Name { get; set; }
+    /// <summary>
+    /// User friendly name of the Application
     /// </summary>
     public string Nickname { get; set; }
 
