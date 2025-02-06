@@ -27,7 +27,7 @@ public class DtroService : IDtroService
         _schemaTemplateDal = schemaTemplateDal;
         _dtroMappingService = dtroMappingService;
         _dtroGroupValidatorService = dtroGroupValidatorService;
-        _fileDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Exported_Files");
+        _fileDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AppData", "Exported_Files");
         Directory.CreateDirectory(_fileDirectory);
     }
 
