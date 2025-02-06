@@ -1819,13 +1819,6 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: x-app-id
-          in: header
-          description: AppId identification.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: X-Correlation-ID
           in: header
           required: true
