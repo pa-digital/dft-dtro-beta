@@ -72,7 +72,7 @@ public class SchemaTemplate
     public ExpandoObject Template { get; set; }
 
     /// <summary>
-    /// Application related to the Schema Document
+    /// Unique identifier application related to the Schema Document
     /// </summary>
-    public Application Application { get; set; }
+    public Guid ApplicationId { get; set; }
 }

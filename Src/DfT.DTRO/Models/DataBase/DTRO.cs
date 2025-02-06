@@ -133,8 +133,9 @@ public class DTRO
     /// </summary>
     public BoundingBox Location { get; set; }
 
+
     /// <summary>
-    /// Application related to the D-TRO
+    /// Unique identifier application related to the D-TRO Document
     /// </summary>
-    public Application Application { get; set; }
+    public Guid ApplicationId { get; set; }
 }

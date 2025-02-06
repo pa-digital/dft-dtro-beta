@@ -410,7 +410,7 @@ public static class DatabaseFeeder
             LastUpdatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             Template = new ExpandoObject(),
             IsActive = true,
-            Application = Applications.LastOrDefault()
+            ApplicationId = Guid.Parse("f3ba4506-93f2-457d-928b-3a30fc0139b6")
         },
         new()
         {
@@ -422,7 +422,7 @@ public static class DatabaseFeeder
             LastUpdatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             Template = new ExpandoObject(),
             IsActive = true,
-            Application = Applications.LastOrDefault()
+            ApplicationId = Guid.Parse("f3ba4506-93f2-457d-928b-3a30fc0139b6")
         },
         new()
         {
@@ -434,7 +434,7 @@ public static class DatabaseFeeder
             LastUpdatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             Template = new ExpandoObject(),
             IsActive = true,
-            Application = Applications.LastOrDefault()
+            ApplicationId = Guid.Parse("f3ba4506-93f2-457d-928b-3a30fc0139b6")
         },
         new()
         {
@@ -446,7 +446,7 @@ public static class DatabaseFeeder
             LastUpdatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             Template = new ExpandoObject(),
             IsActive = true,
-            Application = Applications.LastOrDefault()
+            ApplicationId = Guid.Parse("f3ba4506-93f2-457d-928b-3a30fc0139b6")
         },
         new()
         {
@@ -458,7 +458,7 @@ public static class DatabaseFeeder
             LastUpdatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             Template = new ExpandoObject(),
             IsActive = true,
-            Application = Applications.LastOrDefault()
+            ApplicationId = Guid.Parse("f3ba4506-93f2-457d-928b-3a30fc0139b6")
         }
     ];
 
@@ -473,7 +473,7 @@ public static class DatabaseFeeder
             CreatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             LastUpdatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             Template = "",
-            Application = Applications.LastOrDefault()
+            ApplicationId = Guid.Parse("f3ba4506-93f2-457d-928b-3a30fc0139b6")
         },
         new()
         {
@@ -484,7 +484,7 @@ public static class DatabaseFeeder
             CreatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             LastUpdatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             Template = "",
-            Application = Applications.LastOrDefault()
+            ApplicationId = Guid.Parse("f3ba4506-93f2-457d-928b-3a30fc0139b6")
         },
         new()
         {
@@ -495,7 +495,7 @@ public static class DatabaseFeeder
             CreatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             LastUpdatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             Template = "",
-            Application = Applications.LastOrDefault()
+            ApplicationId = Guid.Parse("f3ba4506-93f2-457d-928b-3a30fc0139b6")
         },
         new()
         {
@@ -506,7 +506,7 @@ public static class DatabaseFeeder
             CreatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             LastUpdatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             Template = "",
-            Application = Applications.LastOrDefault()
+            ApplicationId = Guid.Parse("f3ba4506-93f2-457d-928b-3a30fc0139b6")
         },
         new()
         {
@@ -517,7 +517,7 @@ public static class DatabaseFeeder
             CreatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             LastUpdatedCorrelationId ="41ae0471-d7de-4737-907f-cab2f0089796",
             Template = "",
-            Application = Applications.LastOrDefault()
+            ApplicationId = Guid.Parse("f3ba4506-93f2-457d-928b-3a30fc0139b6")
         }
     ];
 
@@ -543,7 +543,7 @@ public static class DatabaseFeeder
             RegulationTypes = [],
             OrderReportingPoints = [],
             Location = new BoundingBox(),
-            Application = Applications.FirstOrDefault()
+            ApplicationId = Guid.Parse("d39e04c9-fc3a-4c95-8955-37464d71c4ed")
         },
         new()
         {
@@ -565,7 +565,7 @@ public static class DatabaseFeeder
             RegulationTypes = [],
             OrderReportingPoints = [],
             Location = new BoundingBox(),
-            Application = Applications.FirstOrDefault()
+            ApplicationId = Guid.Parse("dd7c984d-09db-48c0-a12f-73cd84413df0")
         },
         new()
         {
@@ -587,7 +587,7 @@ public static class DatabaseFeeder
             RegulationTypes = [],
             OrderReportingPoints = [],
             Location = new BoundingBox(),
-            Application = Applications.FirstOrDefault()
+            ApplicationId = Guid.Parse("3fb08442-92d3-4c30-816c-47023aed6326")
         },
         new()
         {
@@ -609,7 +609,7 @@ public static class DatabaseFeeder
             RegulationTypes = [],
             OrderReportingPoints = [],
             Location = new BoundingBox(),
-            Application = Applications.FirstOrDefault()
+            ApplicationId = Guid.Parse("3035a615-9fbe-4976-a1f3-e1ab19a0c503")
         },
         new()
         {
@@ -631,7 +631,7 @@ public static class DatabaseFeeder
             RegulationTypes = [],
             OrderReportingPoints = [],
             Location = new BoundingBox(),
-            Application = Applications.FirstOrDefault()
+            ApplicationId = Guid.Parse("3035a615-9fbe-4976-a1f3-e1ab19a0c503")
         }
     ];
 

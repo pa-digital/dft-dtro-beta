@@ -1,6 +1,6 @@
 ﻿var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddStorage(builder.Configuration);
+builder.Services.AddDatabase(builder.Configuration);
 
 var serviceProvider = builder.Services.BuildServiceProvider();
 await using var context = serviceProvider.GetRequiredService<DtroContext>();

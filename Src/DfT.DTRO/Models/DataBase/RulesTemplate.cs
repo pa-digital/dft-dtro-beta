@@ -64,7 +64,7 @@ public class RuleTemplate
     public string Template { get; set; }
 
     /// <summary>
-    /// Application related to the Rule Template
+    /// Unique identifier application related to the Rule Document
     /// </summary>
-    public Application Application { get; set; }
+    public Guid ApplicationId { get; set; }
 }
