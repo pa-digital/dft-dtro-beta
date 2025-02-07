@@ -1,3 +1,4 @@
+using DfT.DTRO.Repositories.Implementation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -78,6 +79,7 @@ public class Startup
         services.AddScoped<IDtroUserDal, DtroUserDal>();
         services.AddScoped<IDtroUserService, DtroUserService>();
         services.AddScoped<ISystemConfigDal, SystemConfigDal>();
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<ISystemConfigService, SystemConfigService>();
         services.AddSingleton<LoggingExtension>();
 
