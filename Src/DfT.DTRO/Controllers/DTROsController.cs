@@ -9,7 +9,8 @@ namespace DfT.DTRO.Controllers;
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
-
+[Route(RouteTemplates.DtrosBase)]
+[Tags("Dtros")]
 public class DTROsController : ControllerBase
 {
     private readonly IDtroService _dtroService;
@@ -54,8 +55,7 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
-    [HttpPost]
-    [Route("/dtros/createFromFile")]
+    [HttpPost(RouteTemplates.DtrosCreateFromFile)]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [FeatureGate(FeatureNames.Publish)]
@@ -161,8 +161,7 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
-    [HttpPut]
-    [Route("/dtros/updateFromFile/{dtroId:guid}")]
+    [HttpPut(RouteTemplates.DtrosUpdateFromFile)]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
@@ -260,8 +259,7 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
-    [HttpPost]
-    [Route("/dtros/createFromBody")]
+    [HttpPost(RouteTemplates.DtrosCreateFromBody)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
@@ -363,8 +361,7 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
-    [HttpPut]
-    [Route("/dtros/updateFromBody/{dtroId:guid}")]
+    [HttpPut(RouteTemplates.DtrosUpdateFromBody)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Ok")]
@@ -448,8 +445,7 @@ public class DTROsController : ControllerBase
     /// </summary>
     /// <param name="parameters">Properties passed to query by</param>
     /// <returns>A list of D-TRO active records</returns>
-    [HttpGet]
-    [Route("/dtros")]
+    [HttpGet(RouteTemplates.DtrosFindAll)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
     [SwaggerResponse(statusCode: 404, description: "Could not found any D-TRO records.")]
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
@@ -489,8 +485,7 @@ public class DTROsController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>D-TRO object.</returns>
-    [HttpGet]
-    [Route("/dtros/{id:guid}")]
+    [HttpGet(RouteTemplates.DtrosFindById)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -527,7 +522,7 @@ public class DTROsController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpDelete("/dtros/{dtroId:guid}")]
+    [HttpDelete(RouteTemplates.DtrosDeleteById)]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
@@ -600,8 +595,7 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of D-TROs source history.</returns>
-    [HttpGet]
-    [Route("/dtros/sourceHistory/{dtroId:guid}")]
+    [HttpGet(RouteTemplates.DtrosFindSourceHistory)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<ActionResult<List<DtroHistorySourceResponse>>> GetSourceHistory(Guid dtroId)
     {
@@ -642,8 +636,7 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of D-TROs provision history.</returns>
-    [HttpGet]
-    [Route("/dtros/provisionHistory/{dtroId:guid}")]
+    [HttpGet(RouteTemplates.DtrosFindProvisionHistory)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<ActionResult<List<DtroHistoryProvisionResponse>>> GetProvisionHistory(Guid dtroId)
     {
@@ -685,7 +678,7 @@ public class DTROsController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpPost("/dtros/ownership/{dtroId:guid}/{assignToTraId:guid}")]
+    [HttpPost(RouteTemplates.DtrosAssignOwnership)]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]

@@ -6,7 +6,8 @@ namespace DfT.DTRO.Controllers;
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
-
+[Route(RouteTemplates.RulesBase)]
+[Tags("Rules")]
 public class RulesController : ControllerBase
 {
     private readonly IRuleTemplateService _ruleTemplateService;
@@ -41,8 +42,7 @@ public class RulesController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of rule template versions.</returns>
-    [HttpGet]
-    [Route("/rules/versions")]
+    [HttpGet(RouteTemplates.RulesFindVersions)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetVersions()
     {
@@ -88,8 +88,7 @@ public class RulesController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of rule templates.</returns>
-    [HttpGet]
-    [Route("/rules")]
+    [HttpGet(RouteTemplates.RulesFindAll)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> Get()
     {
@@ -136,8 +135,7 @@ public class RulesController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Rule template.</returns>
-    [HttpGet]
-    [Route("/rules/{version}")]
+    [HttpGet(RouteTemplates.RulesFindByVersion)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetByVersion(string version)
     {
@@ -196,8 +194,7 @@ public class RulesController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Rule template.</returns>
-    [HttpGet]
-    [Route("/rules/{ruleId:guid}")]
+    [HttpGet(RouteTemplates.RulesFindById)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid ruleId)
     {
@@ -261,8 +258,7 @@ public class RulesController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the rule template.</returns>
-    [HttpPost]
-    [Route("/rules/createFromFile/{version}")]
+    [HttpPost(RouteTemplates.RulesCreateFromFile)]
     [FeatureGate(FeatureNames.Admin)]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
@@ -360,8 +356,7 @@ public class RulesController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the rule template.</returns>
-    [HttpPut]
-    [Route("/rules/updateFromFile/{version}")]
+    [HttpPut(RouteTemplates.RulesUpdateFromFile)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
