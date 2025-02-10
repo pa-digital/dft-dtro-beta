@@ -42,6 +42,11 @@ public class DtroContext : DbContext
     /// </summary>
     /// <param name="options">Base context options.</param>
     public virtual DbSet<SystemConfig> SystemConfig { get; set; }
+    
+    /// <summary>
+    /// Traffic Regulation Authorities table
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthority> TrafficRegulationAuthorities { get; set; }
 
     public DtroContext(DbContextOptions<DtroContext> options)
         : base(options)
