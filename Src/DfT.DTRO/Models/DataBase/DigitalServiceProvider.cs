@@ -16,6 +16,11 @@ public class DigitalServiceProvider
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Digital Service Provider name
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
     /// Digital Service Provider created date
     /// </summary>
     public DateTime Created { get; set; }

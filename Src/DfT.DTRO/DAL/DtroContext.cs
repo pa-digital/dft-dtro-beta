@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-
-namespace DfT.DTRO.DAL;
+﻿namespace DfT.DTRO.DAL;
 
 /// <summary>
 /// Represents a session with the D-TRO database.

@@ -53,7 +53,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("TrafficRegulationAuthorityId");
 
-                    b.ToTable("Applications");
+                    b.ToTable("Applications", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationPurpose", b =>
@@ -71,7 +71,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("ApplicationId");
 
-                    b.ToTable("ApplicationPurposes");
+                    b.ToTable("ApplicationPurposes", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationType", b =>
@@ -89,7 +89,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("ApplicationId");
 
-                    b.ToTable("ApplicationTypes");
+                    b.ToTable("ApplicationTypes", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DTRO", b =>
@@ -162,7 +162,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("ApplicationId");
 
-                    b.ToTable("Dtros");
+                    b.ToTable("Dtros", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DTROHistory", b =>
@@ -203,7 +203,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DtroHistories");
+                    b.ToTable("DtroHistories", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DigitalServiceProvider", b =>
@@ -222,7 +222,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DigitalServiceProvider");
+                    b.ToTable("DigitalServiceProvider", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DtroUser", b =>
@@ -250,7 +250,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DtroUsers");
+                    b.ToTable("DtroUsers", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Metric", b =>
@@ -293,7 +293,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Metrics");
+                    b.ToTable("Metrics", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.RuleTemplate", b =>
@@ -328,7 +328,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("ApplicationId");
 
-                    b.ToTable("RuleTemplate");
+                    b.ToTable("RuleTemplate", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.SchemaTemplate", b =>
@@ -366,7 +366,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("ApplicationId");
 
-                    b.ToTable("SchemaTemplate");
+                    b.ToTable("SchemaTemplate", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.SystemConfig", b =>
@@ -385,7 +385,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemConfig");
+                    b.ToTable("SystemConfig", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthority", b =>
@@ -407,7 +407,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TrafficRegulationAuthorities");
+                    b.ToTable("TrafficRegulationAuthorities", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthorityDigitalServiceProvider", b =>
@@ -427,7 +427,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("TrafficRegulationAuthorityId");
 
-                    b.ToTable("TrafficRegulationAuthorityDigitalServiceProviders");
+                    b.ToTable("TrafficRegulationAuthorityDigitalServiceProviders", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthorityDigitalServiceProviderStatus", b =>
@@ -442,7 +442,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("TrafficRegulationAuthorityDigitalServiceProviderId");
 
-                    b.ToTable("TrafficRegulationAuthorityDigitalServiceProviderStatuses");
+                    b.ToTable("TrafficRegulationAuthorityDigitalServiceProviderStatuses", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.User", b =>
@@ -480,7 +480,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("UserStatusId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.UserStatus", b =>
@@ -493,7 +493,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserStatuses");
+                    b.ToTable("UserStatuses", (string)null);
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Application", b =>
