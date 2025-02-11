@@ -43,22 +43,19 @@ public class TraController : ControllerBase
         {
             IEnumerable<TraFindAllResponse> traFindAllResponse = await _traService.GetTrasAsync(parameters);
             _logger.LogInformation($"'{nameof(FindAll)}' method called ");
-            _loggingExtension.LogInformation(
-                nameof(FindAll),
-                $"{RouteTemplates.TrasBase}{RouteTemplates.TrasFindAll}",
-                $"'{nameof(FindAll)}' method called.");
+            _loggingExtension.LogInformation(nameof(FindAll), RouteTemplates.TrasFindAll, $"'{nameof(FindAll)}' method called.");
             return Ok(traFindAllResponse);
         }
         catch (NotFoundException ex)
         {
             _logger.LogError(ex.Message);
-            _loggingExtension.LogError(nameof(FindAll), $"{RouteTemplates.TrasBase}{RouteTemplates.TrasFindAll}", "TRA records not found", ex.Message);
+            _loggingExtension.LogError(nameof(FindAll), RouteTemplates.TrasFindAll, "TRA records not found", ex.Message);
             return NotFound(new ApiErrorResponse("TRA records not found", ex.Message));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            _loggingExtension.LogError(nameof(FindAll), $"{RouteTemplates.TrasBase}{RouteTemplates.TrasFindAll}", "", ex.Message);
+            _loggingExtension.LogError(nameof(FindAll), RouteTemplates.TrasFindAll, "", ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
