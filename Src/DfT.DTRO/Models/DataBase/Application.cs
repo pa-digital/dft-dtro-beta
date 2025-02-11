@@ -39,4 +39,20 @@ public class Application
     /// Application types
     /// </summary>
     public List<ApplicationType> ApplicationTypes { get; set; }
+
+    /// <summary>
+    /// Application rule templates
+    /// </summary>
+    public List<RuleTemplate> RuleTemplates { get; set; }
+
+
+    /// <summary>
+    /// Application schema templates
+    /// </summary>
+    public List<SchemaTemplate> SchemaTemplates { get; set; }
+
+    /// <summary>
+    /// Application D-TROs
+    /// </summary>
+    public List<DTRO> Dtros { get; set; }
 }

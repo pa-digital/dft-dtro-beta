@@ -63,6 +63,36 @@ public class DtroContext : DbContext
     public virtual DbSet<ApplicationType> ApplicationTypes { get; set; }
 
     /// <summary>
+    /// Application Purpose table
+    /// </summary>
+    public virtual DbSet<ApplicationPurpose> ApplicationPurposes { get; set; }
+
+    /// <summary>
+    /// Application table
+    /// </summary>
+    public virtual DbSet<Application> Applications { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authority table
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthority> TrafficRegulationAuthorities { get; set; }
+
+    /// <summary>
+    /// Digital Service Provider table
+    /// </summary>
+    public virtual DbSet<DigitalServiceProvider> ServiceProviders { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authority Digital Service Provider table
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthorityDigitalServiceProvider> TrafficRegulationAuthorityDigitalServiceProviders { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authority Digital Service Provider Status table
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthorityDigitalServiceProviderStatus> TrafficRegulationAuthorityDigitalServiceProviderStatuses { get; set; }
+
+    /// <summary>
     /// Default constructor.
     /// </summary>
     /// <param name="options">Base context options.</param>
