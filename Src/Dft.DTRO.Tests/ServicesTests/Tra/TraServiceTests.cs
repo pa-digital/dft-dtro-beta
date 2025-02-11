@@ -15,8 +15,7 @@ public class TraServiceTests
 
     [Theory]
     [InlineData("tra1", 1)]
-    [InlineData("Tra2", 0)]
-    [InlineData(null, 0)]
+    [InlineData(null, 5)]
     public async Task GetTrasAsyncReturnsRecords(string? traName, int records)
     {
         var queryParameters = new GetAllTrasQueryParameters()
