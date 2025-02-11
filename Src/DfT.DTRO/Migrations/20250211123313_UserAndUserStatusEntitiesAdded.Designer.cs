@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    partial class DtroContextModelSnapshot : ModelSnapshot
+    [Migration("20250211123313_UserAndUserStatusEntitiesAdded")]
+    partial class UserAndUserStatusEntitiesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,25 +134,6 @@ namespace DfT.DTRO.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DtroHistories");
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.DigitalServiceProvider", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("LastUpdated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DigitalServiceProviders");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DtroUser", b =>
@@ -313,9 +297,6 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("DigitalServiceProviderId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
@@ -335,8 +316,6 @@ namespace DfT.DTRO.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DigitalServiceProviderId");
 
                     b.HasIndex("UserStatusId");
 
@@ -358,20 +337,11 @@ namespace DfT.DTRO.Migrations
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.User", b =>
                 {
-                    b.HasOne("DfT.DTRO.Models.DataBase.DigitalServiceProvider", null)
-                        .WithMany("Users")
-                        .HasForeignKey("DigitalServiceProviderId");
-
                     b.HasOne("DfT.DTRO.Models.DataBase.UserStatus", "UserStatus")
                         .WithMany()
                         .HasForeignKey("UserStatusId");
 
                     b.Navigation("UserStatus");
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.DigitalServiceProvider", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }
