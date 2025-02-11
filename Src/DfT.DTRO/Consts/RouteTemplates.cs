@@ -2,32 +2,31 @@
 
 public static class RouteTemplates
 {
-    
     // Dtros
     public const string DtrosBase = "/dtros";
-    public const string DtrosCreateFromFile = "/createFromFile";
-    public const string DtrosUpdateFromFile = "/updateFromFile/{dtroId:guid}";
-    public const string DtrosCreateFromBody = "/createFromBody";
-    public const string DtrosUpdateFromBody = "/updateFromBody/{dtroId:guid}";
-    public const string DtrosFindAll = "";
-    public const string DtrosFindById = "/{id:guid}";
-    public const string DtrosDeleteById = "/{dtroId:guid}";
-    public const string DtrosFindSourceHistory = "/sourceHistory/{dtroId:guid}";
-    public const string DtrosFindProvisionHistory = "/provisionHistory/{dtroId:guid}";
-    public const string DtrosAssignOwnership = "/ownership/{dtroId:guid}/{assignToTraId}";
+    public const string DtrosCreateFromFile = DtrosBase + "/createFromFile";
+    public const string DtrosUpdateFromFile = DtrosBase + "/updateFromFile/{dtroId:guid}";
+    public const string DtrosCreateFromBody = DtrosBase + "/createFromBody";
+    public const string DtrosUpdateFromBody = DtrosBase + "/updateFromBody/{dtroId:guid}";
+    public const string DtrosFindAll = DtrosBase;
+    public const string DtrosFindById = DtrosBase + "/{id:guid}";
+    public const string DtrosDeleteById = DtrosBase + "/{dtroId:guid}";
+    public const string DtrosFindSourceHistory = DtrosBase + "/sourceHistory/{dtroId:guid}";
+    public const string DtrosFindProvisionHistory = DtrosBase + "/provisionHistory/{dtroId:guid}";
+    public const string DtrosAssignOwnership = DtrosBase + "/ownership/{dtroId:guid}/{assignToTraId}";
 
     // Dtro Users
     public const string DtroUsersBase = "/dtroUsers";
-    public const string DtroUsersFindAll = "";
-    public const string DtroUsersSearch = "/search/{partialName}";
-    public const string DtroUsersCreateFromBody = "/createFromBody";
-    public const string DtroUsersUpdateFromBody = "/updateFromBody";
-    public const string DtroUsersFindById = "/{dtroUserId:guid}";
-    public const string DtroUsersDeleteRedundant = "/redundant";
+    public const string DtroUsersFindAll = DtroUsersBase;
+    public const string DtroUsersSearch = DtroUsersBase + "/search/{partialName}";
+    public const string DtroUsersCreateFromBody = DtroUsersBase + "/createFromBody";
+    public const string DtroUsersUpdateFromBody = DtroUsersBase + "/updateFromBody";
+    public const string DtroUsersFindById = DtroUsersBase + "/{dtroUserId:guid}";
+    public const string DtroUsersDeleteRedundant = DtroUsersBase + "/redundant";
 
     // Events
     public const string EventsBase = "/events";
-    public const string EventsFindAll = "";
+    public const string EventsFindAll = EventsBase;
 
     // Metrics
     public const string HealthApi = "/healthApi";
@@ -37,36 +36,37 @@ public static class RouteTemplates
 
     // Rules
     public const string RulesBase = "/rules";
-    public const string RulesFindVersions = "/versions";
-    public const string RulesFindAll = "";
-    public const string RulesFindByVersion = "/{version}";
-    public const string RulesFindById = "/{ruleId:guid}";
-    public const string RulesCreateFromFile = "/createFromFile/{version}";
-    public const string RulesUpdateFromFile = "/updateFromFile/{version}";
+    public const string RulesFindVersions = RulesBase + "/versions";
+    public const string RulesFindAll = RulesBase;
+    public const string RulesFindByVersion = RulesBase + "/{version}";
+    public const string RulesFindById = RulesBase + "/{ruleId:guid}";
+    public const string RulesCreateFromFile = RulesBase + "/createFromFile/{version}";
+    public const string RulesUpdateFromFile = RulesBase + "/updateFromFile/{version}";
 
     // Schemas
     public const string SchemasBase = "/schemas";
-    public const string SchemasFindVersions = "/versions";
-    public const string SchemasFindAll = "";
-    public const string SchemasFindByVersion = "/{version}";
-    public const string SchemasFindById = "/{schemaId:guid}";
-    public const string SchemasCreateFromFile = "/createFromFile/{version}";
-    public const string SchemasCreateFromBody = "/createFromBody/{version}";
-    public const string SchemasUpdateFromFile = "/updateFromFile/{version}";
-    public const string SchemasUpdateFromBody = "/updateFromBody/{version}";
-    public const string SchemasActivate = "/activate/{version}";
-    public const string SchemasDeactivate = "/deactivate/{version}";
-    public const string SchemasDeleteByVersion = "/{version}";
+    public const string SchemasFindVersions = SchemasBase + "/versions";
+    public const string SchemasFindAll = SchemasBase;
+    public const string SchemasFindByVersion = SchemasBase + "/{version}";
+    public const string SchemasFindById = SchemasBase + "/{schemaId:guid}";
+    public const string SchemasCreateFromFile = SchemasBase + "/createFromFile/{version}";
+    public const string SchemasCreateFromBody = SchemasBase + "/createFromBody/{version}";
+    public const string SchemasUpdateFromFile = SchemasBase + "/updateFromFile/{version}";
+    public const string SchemasUpdateFromBody = SchemasBase + "/updateFromBody/{version}";
+    public const string SchemasActivate = SchemasBase + "/activate/{version}";
+    public const string SchemasDeactivate = SchemasBase + "/deactivate/{version}";
+    public const string SchemasDeleteByVersion = SchemasBase + "/{version}";
 
     // Search
     public const string Search = "/search";
 
     // System Config
     public const string SystemConfigBase = "/systemConfig";
-    public const string SystemConfigFind = "";
-    public const string SystemConfigUpdateFromBody = "/updateFromBody";
+    public const string SystemConfigFind = SystemConfigBase;
+    public const string SystemConfigUpdateFromBody = SystemConfigBase + "/updateFromBody";
     
     // Tras
     public const string TrasBase = "/tras";
-    public const string TrasFindAll = "";
+    public const string TrasFindAll = TrasBase;
 }
+
