@@ -58,6 +58,11 @@ public class DtroContext : DbContext
     public virtual DbSet<DigitalServiceProvider> DigitalServiceProviders { get; set; }
 
     /// <summary>
+    /// Application Type table
+    /// </summary>
+    public virtual DbSet<ApplicationType> ApplicationTypes { get; set; }
+
+    /// <summary>
     /// Default constructor.
     /// </summary>
     /// <param name="options">Base context options.</param>

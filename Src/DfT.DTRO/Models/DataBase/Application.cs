@@ -1,13 +1,13 @@
 ﻿namespace DfT.DTRO.Models.DataBase;
 
 /// <summary>
-/// Wrapper for Digital Service Provider
+/// Wrapper for Application
 /// </summary>
 [DataContract]
-public class DigitalServiceProvider
+public class Application
 {
     /// <summary>
-    /// Digital Service Provider unique identifier.
+    /// Application unique identifier.
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
@@ -16,28 +16,27 @@ public class DigitalServiceProvider
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Digital Service Provider created date
+    /// Application created date
     /// </summary>
     public DateTime Created { get; set; }
 
     /// <summary>
-    /// Digital Service Provider last updated date
+    /// Application last updated date
     /// </summary>
     public DateTime? LastUpdated { get; set; }
 
     /// <summary>
-    /// Digital Service Provider status
+    /// Application nickname
+    /// </summary>
+    public string Nickname { get; set; }
+
+    /// <summary>
+    /// Application status
     /// </summary>
     public string Status { get; set; }
 
     /// <summary>
-    /// Digital Service Provider users
+    /// Application types
     /// </summary>
-    public List<User> Users { get; set; }
-
-
-    /// <summary>
-    /// Digital Service Provider applications
-    /// </summary>
-    public List<Application> Applications { get; set; }
+    public List<ApplicationType> ApplicationTypes { get; set; }
 }
