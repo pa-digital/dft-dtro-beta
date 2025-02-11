@@ -3,7 +3,6 @@
 /// <summary>
 /// Controller for capturing Dtro Users
 /// </summary>
-[Route(RouteTemplates.DtroUsersBase)]
 [Tags("DtroUsers")]
 [ApiController]
 public class DtroUserController : ControllerBase

@@ -6,7 +6,6 @@ namespace DfT.DTRO.Controllers;
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
-[Route(RouteTemplates.RulesBase)]
 [Tags("Rules")]
 public class RulesController : ControllerBase
 {

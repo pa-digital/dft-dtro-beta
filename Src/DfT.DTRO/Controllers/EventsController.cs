@@ -4,7 +4,6 @@
 /// Controller for querying the database for data store events (e.g. create, update, delete)
 /// </summary>
 [ApiController]
-[Route(RouteTemplates.EventsBase)]
 [Tags("Events")]
 public class EventsController : ControllerBase
 {

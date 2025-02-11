@@ -3,7 +3,6 @@
 namespace DfT.DTRO.Controllers;
 
 [ApiController]
-[Route(RouteTemplates.SystemConfigBase)]
 [Tags("SystemConfig")]
 public class SystemConfigController : ControllerBase
 {

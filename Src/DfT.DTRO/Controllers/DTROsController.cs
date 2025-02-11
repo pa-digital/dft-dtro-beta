@@ -9,7 +9,6 @@ namespace DfT.DTRO.Controllers;
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
-[Route(RouteTemplates.DtrosBase)]
 [Tags("Dtros")]
 public class DTROsController : ControllerBase
 {

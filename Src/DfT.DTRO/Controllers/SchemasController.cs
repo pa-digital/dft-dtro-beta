@@ -8,7 +8,6 @@ namespace DfT.DTRO.Controllers;
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
-[Route(RouteTemplates.SchemasBase)]
 [Tags("Schemas")]
 public class SchemasController : ControllerBase
 {
