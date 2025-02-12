@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dft.DTRO.Tests", "Src\Dft.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DfT.DTRO.IntegrationTests", "Src\DfT.DTRO.IntegrationTests\DfT.DTRO.IntegrationTests.csproj", "{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DfT.DTRO.DatabaseFeeder", "DfT.DTRO.DatabaseFeeder\DfT.DTRO.DatabaseFeeder.csproj", "{17E7276F-CA04-46AA-A769-9EEA678DF77C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,10 +26,6 @@ Global
 		{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17E7276F-CA04-46AA-A769-9EEA678DF77C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17E7276F-CA04-46AA-A769-9EEA678DF77C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17E7276F-CA04-46AA-A769-9EEA678DF77C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17E7276F-CA04-46AA-A769-9EEA678DF77C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
