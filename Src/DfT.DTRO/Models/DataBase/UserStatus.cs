@@ -12,7 +12,7 @@ public class UserStatus
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 

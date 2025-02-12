@@ -11,14 +11,14 @@ public class Metric
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 
     /// <summary>
     /// Dtro User Id of the metric
     /// </summary>
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid DtroUserId { get; set; }
 
