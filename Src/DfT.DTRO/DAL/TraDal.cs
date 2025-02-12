@@ -24,7 +24,7 @@ public class TraDal : ITraDal
     public async Task<IEnumerable<TrafficRegulationAuthority>> GetTrasAsync(GetAllTrasQueryParameters parameters)
     {
         IQueryable<TrafficRegulationAuthority> trasQuery = _dtroContext.TrafficRegulationAuthorities;
-        trasQuery = parameters.TraName != null ? trasQuery.Where(tra => parameters.TraName.Equals(tra.Name)) : trasQuery;
+        trasQuery = parameters.TraName != null ? trasQuery.Where(tra => tra.Name.ToLower().Contains(parameters.TraName.ToLower())) : trasQuery;
         var tras = await trasQuery.ToListAsync();
         return tras;
     }
