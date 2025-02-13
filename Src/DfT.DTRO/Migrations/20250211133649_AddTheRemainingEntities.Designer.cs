@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    partial class DtroContextModelSnapshot : ModelSnapshot
+    [Migration("20250211133649_AddTheRemainingEntities")]
+    partial class AddTheRemainingEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +56,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("TrafficRegulationAuthorityId");
 
-                    b.ToTable("Applications", (string)null);
+                    b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationPurpose", b =>
@@ -71,7 +74,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("ApplicationId");
 
-                    b.ToTable("ApplicationPurposes", (string)null);
+                    b.ToTable("ApplicationPurposes");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationType", b =>
@@ -89,7 +92,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("ApplicationId");
 
-                    b.ToTable("ApplicationTypes", (string)null);
+                    b.ToTable("ApplicationTypes");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DTRO", b =>
@@ -162,7 +165,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("ApplicationId");
 
-                    b.ToTable("Dtros", (string)null);
+                    b.ToTable("Dtros");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DTROHistory", b =>
@@ -203,7 +206,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DtroHistories", (string)null);
+                    b.ToTable("DtroHistories");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DigitalServiceProvider", b =>
@@ -222,7 +225,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DigitalServiceProvider", (string)null);
+                    b.ToTable("DigitalServiceProvider");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DtroUser", b =>
@@ -250,7 +253,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DtroUsers", (string)null);
+                    b.ToTable("DtroUsers");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Metric", b =>
@@ -293,7 +296,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Metrics", (string)null);
+                    b.ToTable("Metrics");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.RuleTemplate", b =>
@@ -328,7 +331,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("ApplicationId");
 
-                    b.ToTable("RuleTemplate", (string)null);
+                    b.ToTable("RuleTemplate");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.SchemaTemplate", b =>
@@ -366,7 +369,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("ApplicationId");
 
-                    b.ToTable("SchemaTemplate", (string)null);
+                    b.ToTable("SchemaTemplate");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.SystemConfig", b =>
@@ -385,7 +388,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemConfig", (string)null);
+                    b.ToTable("SystemConfig");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthority", b =>
@@ -407,7 +410,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TrafficRegulationAuthorities", (string)null);
+                    b.ToTable("TrafficRegulationAuthorities");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthorityDigitalServiceProvider", b =>
@@ -427,7 +430,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("TrafficRegulationAuthorityId");
 
-                    b.ToTable("TrafficRegulationAuthorityDigitalServiceProviders", (string)null);
+                    b.ToTable("TrafficRegulationAuthorityDigitalServiceProviders");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthorityDigitalServiceProviderStatus", b =>
@@ -442,7 +445,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("TrafficRegulationAuthorityDigitalServiceProviderId");
 
-                    b.ToTable("TrafficRegulationAuthorityDigitalServiceProviderStatuses", (string)null);
+                    b.ToTable("TrafficRegulationAuthorityDigitalServiceProviderStatuses");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.User", b =>
@@ -480,7 +483,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("UserStatusId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.UserStatus", b =>
@@ -493,7 +496,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserStatuses", (string)null);
+                    b.ToTable("UserStatuses");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Application", b =>

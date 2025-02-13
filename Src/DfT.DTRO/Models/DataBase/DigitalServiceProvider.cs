@@ -1,42 +1,48 @@
-namespace DfT.DTRO.Models.DataBase;
+﻿namespace DfT.DTRO.Models.DataBase;
 
 /// <summary>
-/// Wrapper for Traffic Regulation Authority 
+/// Wrapper for Digital Service Provider
 /// </summary>
 [DataContract]
-public class TrafficRegulationAuthority
+public class DigitalServiceProvider
 {
     /// <summary>
-    /// Traffic Regulation Authority unique identifier.
+    /// Digital Service Provider unique identifier.
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Traffic Regulation Authority name
+    /// Digital Service Provider name
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    /// Traffic Regulation Authority created date
+    /// Digital Service Provider created date
     /// </summary>
     public DateTime Created { get; set; }
 
     /// <summary>
-    /// Traffic Regulation Authority last updated date
+    /// Digital Service Provider last updated date
     /// </summary>
     public DateTime? LastUpdated { get; set; }
 
     /// <summary>
-    /// Traffic Regulation Authority status
+    /// Digital Service Provider status
     /// </summary>
     public string Status { get; set; }
 
     /// <summary>
-    /// Traffic Regulation Authority applications
+    /// Digital Service Provider users
+    /// </summary>
+    public List<User> Users { get; set; }
+
+
+    /// <summary>
+    /// Digital Service Provider applications
     /// </summary>
     public List<Application> Applications { get; set; }
 
