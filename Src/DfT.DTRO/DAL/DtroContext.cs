@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
-
-namespace DfT.DTRO.DAL;
+﻿namespace DfT.DTRO.DAL;
 
 /// <summary>
 /// Represents a session with the D-TRO database.
@@ -38,11 +36,64 @@ public class DtroContext : DbContext
     public virtual DbSet<DtroUser> DtroUsers { get; set; }
 
     /// <summary>
+    /// System configuration table
+    /// </summary>
+    public virtual DbSet<SystemConfig> SystemConfig { get; set; }
+
+    /// <summary>
+    /// Users table
+    /// </summary>
+    public virtual DbSet<User> Users { get; set; }
+
+    /// <summary>
+    /// User Statuses table
+    /// </summary>
+    public virtual DbSet<UserStatus> UserStatuses { get; set; }
+
+    /// <summary>
+    /// Digital Service Provider table
+    /// </summary>
+    public virtual DbSet<DigitalServiceProvider> DigitalServiceProviders { get; set; }
+
+    /// <summary>
+    /// Application Type table
+    /// </summary>
+    public virtual DbSet<ApplicationType> ApplicationTypes { get; set; }
+
+    /// <summary>
+    /// Application Purpose table
+    /// </summary>
+    public virtual DbSet<ApplicationPurpose> ApplicationPurposes { get; set; }
+
+    /// <summary>
+    /// Application table
+    /// </summary>
+    public virtual DbSet<Application> Applications { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authority table
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthority> TrafficRegulationAuthorities { get; set; }
+
+    /// <summary>
+    /// Digital Service Provider table
+    /// </summary>
+    public virtual DbSet<DigitalServiceProvider> ServiceProviders { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authority Digital Service Provider table
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthorityDigitalServiceProvider> TrafficRegulationAuthorityDigitalServiceProviders { get; set; }
+
+    /// <summary>
+    /// Traffic Regulation Authority Digital Service Provider Status table
+    /// </summary>
+    public virtual DbSet<TrafficRegulationAuthorityDigitalServiceProviderStatus> TrafficRegulationAuthorityDigitalServiceProviderStatuses { get; set; }
+
+    /// <summary>
     /// Default constructor.
     /// </summary>
     /// <param name="options">Base context options.</param>
-    public virtual DbSet<SystemConfig> SystemConfig { get; set; }
-
     public DtroContext(DbContextOptions<DtroContext> options)
         : base(options)
     {
@@ -69,6 +120,7 @@ public class DtroContext : DbContext
                     args[1],
                     args[0].TypeMapping);
             });
+
     }
 
 
