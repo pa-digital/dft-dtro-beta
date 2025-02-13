@@ -1,4 +1,6 @@
-﻿namespace Dft.DTRO.Tests.Mocks;
+﻿using DfT.DTRO.Models.Tra;
+
+namespace Dft.DTRO.Tests.Mocks;
 
 [ExcludeFromCodeCoverage]
 public static class MockTestObjects
@@ -164,6 +166,44 @@ public static class MockTestObjects
         return dtros.ToList();
     }
     
+    public static List<TrafficRegulationAuthority> Tras => new()
+    {
+        new TrafficRegulationAuthority()
+        {
+            Name = "tra1"
+        },
+        new TrafficRegulationAuthority()
+        {
+            Name = "tra2"
+        },
+        new TrafficRegulationAuthority()
+        {
+            Name = "tra3"
+        },
+        new TrafficRegulationAuthority()
+        {
+            Name = "tra4"
+        },
+        new TrafficRegulationAuthority()
+        {
+            Name = "tra5"
+        }
+    };
+    
+    public static List<TrafficRegulationAuthority> GetTras(GetAllTrasQueryParameters queryParameters)
+    {
+        var tras = Tras;
+
+        if (queryParameters.TraName != null)
+        {
+            tras = tras
+                .Where(it => it.Name.Equals(queryParameters.TraName))
+                .ToList();
+        }
+
+        return tras.ToList();
+    }
+    
     public static List<DfT.DTRO.Models.DataBase.DTRO> GetDtros()
     {
         var dtros = Dtros.Where(dtro => !dtro.Deleted);
@@ -195,6 +235,14 @@ public static class MockTestObjects
             Id = Guid.NewGuid(),
             SchemaVersion = new SchemaVersion("3.3.1"),
             Data = new ExpandoObject()
+        }
+    };
+    
+    public static List<TraFindAllResponse> TraFindAllResponse => new()
+    {
+        new TraFindAllResponse
+        {
+            Name = "name"
         }
     };
 }

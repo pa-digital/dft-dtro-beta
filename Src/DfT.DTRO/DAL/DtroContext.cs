@@ -40,6 +40,7 @@ public class DtroContext : DbContext
     /// </summary>
     public virtual DbSet<SystemConfig> SystemConfig { get; set; }
 
+
     /// <summary>
     /// Users table
     /// </summary>
