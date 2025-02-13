@@ -6,26 +6,22 @@ public static class OSHelper
 {
     public static string GetOSAppDataPath()
     {
-        var filePath = string.Empty;
         var dtroDataFolder = "DtroAppData";
         var dataExportFolder = "ExportedData";
+        var userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        return RuntimeInformation.OSDescription switch
         {
-            filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), 
-                "AppData", dtroDataFolder, dataExportFolder);
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), 
-                "Library", "Application Support",  dtroDataFolder, dataExportFolder);
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
-                dtroDataFolder, dataExportFolder);
-        }
-        
-        return filePath;
+            var os when RuntimeInformation.IsOSPlatform(OSPlatform.Windows) 
+                => Path.Combine(userProfilePath, "AppData", "Local", dtroDataFolder, dataExportFolder),
+
+            var os when RuntimeInformation.IsOSPlatform(OSPlatform.OSX) 
+                => Path.Combine(userProfilePath, "Library", "Application Support", dtroDataFolder, dataExportFolder),
+
+            var os when RuntimeInformation.IsOSPlatform(OSPlatform.Linux) 
+                => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), dtroDataFolder, dataExportFolder),
+
+            _ => Path.Combine(userProfilePath, ".local", "share", dtroDataFolder, dataExportFolder) // assumes generic unix machine
+        };
     }
 }
