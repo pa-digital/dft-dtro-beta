@@ -42,3 +42,5 @@
 /Src/DfT.DTRO.IntegrationTests/obj
 /Src/DfT.DTRO.IntegrationTests/bin/Debug/net6.0
 /Src/Dft.DTRO.Admin/obj/Debug/net6.0
+/DfT.DTRO.DatabaseFeeder/bin/Debug/net8.0
+/DfT.DTRO.DatabaseFeeder/obj
