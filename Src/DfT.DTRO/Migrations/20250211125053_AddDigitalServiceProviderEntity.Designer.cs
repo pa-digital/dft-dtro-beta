@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    partial class DtroContextModelSnapshot : ModelSnapshot
+    [Migration("20250211125053_AddDigitalServiceProviderEntity")]
+    partial class AddDigitalServiceProviderEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,80 +27,9 @@ namespace DfT.DTRO.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.Application", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("DigitalServiceProviderId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("LastUpdated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Nickname")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("TrafficRegulationAuthorityId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DigitalServiceProviderId");
-
-                    b.HasIndex("TrafficRegulationAuthorityId");
-
-                    b.ToTable("Applications", (string)null);
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationPurpose", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ApplicationId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("ApplicationPurposes", (string)null);
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ApplicationId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("ApplicationTypes", (string)null);
-                });
-
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DTRO", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ApplicationId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("Created")
@@ -160,9 +92,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("Dtros", (string)null);
+                    b.ToTable("Dtros");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DTROHistory", b =>
@@ -203,7 +133,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DtroHistories", (string)null);
+                    b.ToTable("DtroHistories");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DigitalServiceProvider", b =>
@@ -222,7 +152,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DigitalServiceProvider", (string)null);
+                    b.ToTable("DigitalServiceProviders");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DtroUser", b =>
@@ -250,7 +180,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DtroUsers", (string)null);
+                    b.ToTable("DtroUsers");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Metric", b =>
@@ -293,15 +223,12 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Metrics", (string)null);
+                    b.ToTable("Metrics");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.RuleTemplate", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ApplicationId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("Created")
@@ -326,17 +253,12 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("RuleTemplate", (string)null);
+                    b.ToTable("RuleTemplate");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.SchemaTemplate", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ApplicationId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("Created")
@@ -364,9 +286,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("SchemaTemplate", (string)null);
+                    b.ToTable("SchemaTemplate");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.SystemConfig", b =>
@@ -385,64 +305,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemConfig", (string)null);
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthority", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("LastUpdated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TrafficRegulationAuthorities", (string)null);
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthorityDigitalServiceProvider", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("DigitalServiceProviderId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("TrafficRegulationAuthorityId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DigitalServiceProviderId");
-
-                    b.HasIndex("TrafficRegulationAuthorityId");
-
-                    b.ToTable("TrafficRegulationAuthorityDigitalServiceProviders", (string)null);
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthorityDigitalServiceProviderStatus", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("TrafficRegulationAuthorityDigitalServiceProviderId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TrafficRegulationAuthorityDigitalServiceProviderId");
-
-                    b.ToTable("TrafficRegulationAuthorityDigitalServiceProviderStatuses", (string)null);
+                    b.ToTable("SystemConfig");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.User", b =>
@@ -480,7 +343,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("UserStatusId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.UserStatus", b =>
@@ -493,75 +356,7 @@ namespace DfT.DTRO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserStatuses", (string)null);
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.Application", b =>
-                {
-                    b.HasOne("DfT.DTRO.Models.DataBase.DigitalServiceProvider", null)
-                        .WithMany("Applications")
-                        .HasForeignKey("DigitalServiceProviderId");
-
-                    b.HasOne("DfT.DTRO.Models.DataBase.TrafficRegulationAuthority", null)
-                        .WithMany("Applications")
-                        .HasForeignKey("TrafficRegulationAuthorityId");
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationPurpose", b =>
-                {
-                    b.HasOne("DfT.DTRO.Models.DataBase.Application", "Application")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId");
-
-                    b.Navigation("Application");
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationType", b =>
-                {
-                    b.HasOne("DfT.DTRO.Models.DataBase.Application", null)
-                        .WithMany("ApplicationTypes")
-                        .HasForeignKey("ApplicationId");
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.DTRO", b =>
-                {
-                    b.HasOne("DfT.DTRO.Models.DataBase.Application", null)
-                        .WithMany("Dtros")
-                        .HasForeignKey("ApplicationId");
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.RuleTemplate", b =>
-                {
-                    b.HasOne("DfT.DTRO.Models.DataBase.Application", null)
-                        .WithMany("RuleTemplates")
-                        .HasForeignKey("ApplicationId");
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.SchemaTemplate", b =>
-                {
-                    b.HasOne("DfT.DTRO.Models.DataBase.Application", null)
-                        .WithMany("SchemaTemplates")
-                        .HasForeignKey("ApplicationId");
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthorityDigitalServiceProvider", b =>
-                {
-                    b.HasOne("DfT.DTRO.Models.DataBase.DigitalServiceProvider", null)
-                        .WithMany("TrafficRegulationAuthorityDigitalServiceProviders")
-                        .HasForeignKey("DigitalServiceProviderId");
-
-                    b.HasOne("DfT.DTRO.Models.DataBase.TrafficRegulationAuthority", null)
-                        .WithMany("TrafficRegulationAuthorityDigitalServiceProviders")
-                        .HasForeignKey("TrafficRegulationAuthorityId");
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthorityDigitalServiceProviderStatus", b =>
-                {
-                    b.HasOne("DfT.DTRO.Models.DataBase.TrafficRegulationAuthorityDigitalServiceProvider", "TrafficRegulationAuthorityDigitalServiceProvider")
-                        .WithMany()
-                        .HasForeignKey("TrafficRegulationAuthorityDigitalServiceProviderId");
-
-                    b.Navigation("TrafficRegulationAuthorityDigitalServiceProvider");
+                    b.ToTable("UserStatuses");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.User", b =>
@@ -577,31 +372,9 @@ namespace DfT.DTRO.Migrations
                     b.Navigation("UserStatus");
                 });
 
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.Application", b =>
-                {
-                    b.Navigation("ApplicationTypes");
-
-                    b.Navigation("Dtros");
-
-                    b.Navigation("RuleTemplates");
-
-                    b.Navigation("SchemaTemplates");
-                });
-
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DigitalServiceProvider", b =>
                 {
-                    b.Navigation("Applications");
-
-                    b.Navigation("TrafficRegulationAuthorityDigitalServiceProviders");
-
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("DfT.DTRO.Models.DataBase.TrafficRegulationAuthority", b =>
-                {
-                    b.Navigation("Applications");
-
-                    b.Navigation("TrafficRegulationAuthorityDigitalServiceProviders");
                 });
 #pragma warning restore 612, 618
         }
