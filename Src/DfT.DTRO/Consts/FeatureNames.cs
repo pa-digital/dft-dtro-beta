@@ -1,4 +1,4 @@
-﻿namespace DfT.DTRO.FeatureManagement;
+﻿namespace DfT.DTRO.Consts;
 
 public static class FeatureNames
 {

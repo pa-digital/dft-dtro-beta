@@ -8,7 +8,7 @@ namespace DfT.DTRO.Controllers;
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
-
+[Tags("Schemas")]
 public class SchemasController : ControllerBase
 {
     private readonly ISchemaTemplateService _schemaTemplateService;
@@ -43,8 +43,7 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of schema template versions.</returns>
-    [HttpGet]
-    [Route("/schemas/versions")]
+    [HttpGet(RouteTemplates.SchemasFindVersions)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetVersions()
     {
@@ -94,8 +93,7 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of schema templates.</returns>
-    [HttpGet]
-    [Route("/schemas")]
+    [HttpGet(RouteTemplates.SchemasFindAll)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> Get()
     {
@@ -146,8 +144,7 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Schema template.</returns>
-    [HttpGet]
-    [Route("/schemas/{version}")]
+    [HttpGet(RouteTemplates.SchemasFindByVersion)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetByVersion(string version)
     {
@@ -209,8 +206,7 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Schema template.</returns>
-    [HttpGet]
-    [Route("/schemas/{schemaId:guid}")]
+    [HttpGet(RouteTemplates.SchemasFindById)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid schemaId)
     {
@@ -270,8 +266,7 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the schema template.</returns>
-    [HttpPost]
-    [Route("/schemas/createFromFile/{version}")]
+    [HttpPost(RouteTemplates.SchemasCreateFromFile)]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [FeatureGate(FeatureNames.Admin)]
@@ -364,12 +359,10 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the schema template.</returns>
-    [HttpPost]
-    [Route("/schemas/createFromBody/{version}")]
+    [HttpPost(RouteTemplates.SchemasCreateFromBody)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
-
     public async Task<IActionResult> CreateFromBodyByVersion(string version, [FromBody] ExpandoObject body)
     {
         try
@@ -444,8 +437,7 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the updated schema template.</returns>
-    [HttpPut]
-    [Route("/schemas/updateFromFile/{version}")]
+    [HttpPut(RouteTemplates.SchemasUpdateFromFile)]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
@@ -556,8 +548,7 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the updated schema template.</returns>
-    [HttpPut]
-    [Route("/schemas/updateFromBody/{version}")]
+    [HttpPut(RouteTemplates.SchemasUpdateFromBody)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
@@ -644,8 +635,7 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the activated schema template.</returns>
-    [HttpPatch]
-    [Route("/schemas/activate/{version}")]
+    [HttpPatch(RouteTemplates.SchemasActivate)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
@@ -702,8 +692,7 @@ public class SchemasController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the deactivated schema template.</returns>
-    [HttpPatch]
-    [Route("/schemas/deactivate/{version}")]
+    [HttpPatch(RouteTemplates.SchemasDeactivate)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
@@ -763,8 +752,7 @@ public class SchemasController : ControllerBase
     /// A <see cref="Task"/> whose result is <see langword="true"/> if schema template
     /// with specified schema version is deleted. Otherwise <see langword="false"/>
     /// </returns>
-    [HttpDelete]
-    [Route("/schemas/{version}")]
+    [HttpDelete(RouteTemplates.SchemasDeleteByVersion)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Successfully deleted schema template.")]

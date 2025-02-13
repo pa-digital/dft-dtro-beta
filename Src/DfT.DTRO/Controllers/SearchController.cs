@@ -3,10 +3,10 @@ namespace DfT.DTRO.Controllers;
 /// <summary>
 /// Controller for searching D-TROs
 /// </summary>
-[Tags("Search")]
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
+[Tags("Search")]
 public class SearchController : ControllerBase
 {
     private readonly ISearchService _searchService;
@@ -46,8 +46,7 @@ public class SearchController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>D-TRO matching searching request.</returns>
-    [HttpPost]
-    [Route("/search")]
+    [HttpPost(RouteTemplates.Search)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Consumer)]
     [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]

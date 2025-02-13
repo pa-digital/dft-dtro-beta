@@ -1,10 +1,9 @@
-﻿using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroDtos;
-using DfT.DTRO.Models.SystemConfig;
+﻿using DfT.DTRO.Models.SystemConfig;
 
 namespace DfT.DTRO.Controllers;
 
 [ApiController]
+[Tags("SystemConfig")]
 public class SystemConfigController : ControllerBase
 {
     private readonly ISystemConfigService _systemConfigService;
@@ -38,7 +37,7 @@ public class SystemConfigController : ControllerBase
     /// <response code="200">System name retrieved successfully.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>SystemConfigResponse</returns>
-    [HttpGet("/systemConfig")]
+    [HttpGet(RouteTemplates.SystemConfigFind)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "System name retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
@@ -87,8 +86,7 @@ public class SystemConfigController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>SystemConfigResponse</returns>
-    [HttpPut]
-    [Route("/systemConfig/updateFromBody")]
+    [HttpPut(RouteTemplates.SystemConfigUpdateFromBody)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
