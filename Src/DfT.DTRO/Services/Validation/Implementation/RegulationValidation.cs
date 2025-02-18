@@ -10,10 +10,10 @@ public class RegulationValidation : IRegulationValidation
 
         var regulations = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValue<IList<object>>("regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 
@@ -25,7 +25,7 @@ public class RegulationValidation : IRegulationValidation
             {
                 Name = "Regulation 'isDynamic'",
                 Message = "Indicates if the regulation is dynamic in nature.",
-                Path = "Source -> Provision -> Regulation -> isDynamic",
+                Path = "source -> provision -> regulation -> isDynamic",
                 Rule = "Regulation 'isDynamic' must be present and has to be 'true' or 'false'.",
             };
 
@@ -41,7 +41,7 @@ public class RegulationValidation : IRegulationValidation
             {
                 Name = "Regulation 'timeZone'",
                 Message = "IANA time-zone (see http://www.iana.org/time-zones).",
-                Path = "Source -> Provision -> Regulation -> timeZone",
+                Path = "source -> provision -> regulation -> timeZone",
                 Rule = "Regulation 'timeZone' must be of type 'string'.",
             };
 
@@ -54,7 +54,7 @@ public class RegulationValidation : IRegulationValidation
         .ToList();
 
         existingRegulations = existingRegulations
-            .Where(existingRegulation => !existingRegulation.HasField("TemporaryRegulation"))
+            .Where(existingRegulation => !existingRegulation.HasField("temporaryProvision"))
             .ToList();
 
         foreach (var existingRegulation in existingRegulations)
@@ -66,7 +66,7 @@ public class RegulationValidation : IRegulationValidation
                 {
                     Name = "Invalid number of regulations",
                     Message = "Object indicating the characteristics of a regulation",
-                    Path = "Source -> Provision -> Regulation -> oneOf",
+                    Path = "source -> provision -> regulation -> oneOf",
                     Rule = "Only one sub-type of Regulation can be associated with each Regulation instance",
                 };
 
@@ -81,7 +81,7 @@ public class RegulationValidation : IRegulationValidation
                 bool isValidType;
                 switch (regulationType)
                 {
-                    case "SpeedLimitValueBased":
+                    case "speedLimitValueBased":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
                         var mphValue = selectedRegulation.GetValueOrDefault<int>(Constants.MphValue);
                         if (mphValue.GetType() != typeof(int) || !Constants.MphValues.Any(mphValue.Equals))
@@ -90,7 +90,7 @@ public class RegulationValidation : IRegulationValidation
                             {
                                 Name = "Invalid 'mphValue'",
                                 Message = "Speed limit value in miles per hour",
-                                Path = "Source -> Provision -> Regulation -> SpeedLimitValueBased -> mphValue",
+                                Path = "source -> provision -> regulation -> SpeedLimitValueBased -> mphValue",
                                 Rule = "'mphValue' must be an integer and one of these values: 10, 20, 30, 40, 50, 60, 70",
                             };
 
@@ -105,14 +105,14 @@ public class RegulationValidation : IRegulationValidation
                             {
                                 Name = "Invalid 'type'",
                                 Message = "Speed limit value type value indicated",
-                                Path = "Source -> Provision -> Regulation -> SpeedLimitValueBased -> type",
+                                Path = "source -> provision -> regulation -> SpeedLimitValueBased -> type",
                                 Rule = $"'type' must be one of '{string.Join(",", Constants.SpeedLimitValueTypes)}'",
                             };
 
                             errors.Add(newError);
                         }
                         break;
-                    case "SpeedLimitProfileBased":
+                    case "speedLimitProfileBased":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
                         passedInType = selectedRegulation.GetValueOrDefault<string>(Constants.Type);
                         isValidType = Constants.SpeedLimitProfileTypes.Any(passedInType.Equals);
@@ -122,13 +122,13 @@ public class RegulationValidation : IRegulationValidation
                             {
                                 Name = "Invalid 'type'",
                                 Message = "Speed limit based value indicated",
-                                Path = "Source -> Provision -> Regulation -> SpeedLimitProfileBased -> type",
+                                Path = "source -> provision -> regulation -> SpeedLimitProfileBased -> type",
                                 Rule = $"'type' must be one of '{string.Join(",", Constants.SpeedLimitProfileTypes)}'",
                             };
                             errors.Add(newError);
                         }
                         break;
-                    case "GeneralRegulation":
+                    case "generalRegulation":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
                         passedInType = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationType);
                         isValidType = Constants.RegulationTypes.Any(passedInType.Equals);
@@ -138,13 +138,13 @@ public class RegulationValidation : IRegulationValidation
                             {
                                 Name = "Invalid 'type'",
                                 Message = "Object indicating a specific regulation (other than speed limit or user-defined off-list regulation)",
-                                Path = "Source -> Provision -> Regulation -> GeneralRegulation -> regulationType",
+                                Path = "source -> provision -> regulation -> GeneralRegulation -> regulationType",
                                 Rule = $"'type' must be one of '{string.Join(",", Constants.RegulationTypes)}'",
                             };
                             errors.Add(newError);
                         }
                         break;
-                    case "OffListRegulation":
+                    case "offListRegulation":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
                         var regulationFullText = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationFullText);
                         if (string.IsNullOrEmpty(regulationFullText))
@@ -153,7 +153,7 @@ public class RegulationValidation : IRegulationValidation
                             {
                                 Name = "Invalid 'regulationFullText'",
                                 Message = "Full description of the other type of regulation",
-                                Path = "Source -> Provision -> Regulation -> OffListRegulation -> regulationFullText",
+                                Path = "source -> provision -> regulation -> OffListRegulation -> regulationFullText",
                                 Rule = "'regulationFullText' must be of type 'string' and cannot be null",
                             };
 
@@ -167,7 +167,7 @@ public class RegulationValidation : IRegulationValidation
                             {
                                 Name = "Invalid 'regulationShortName'",
                                 Message = "User-defined short name for other type of regulation",
-                                Path = "Source -> Provision -> Regulation -> OffListRegulation -> regulationShortName",
+                                Path = "source -> provision -> regulation -> OffListRegulation -> regulationShortName",
                                 Rule = "'regulationShortName' must be of type 'string' and cannot be null",
                             };
 

@@ -17,7 +17,7 @@ public class SourceValidationService : ISourceValidationService
     {
         List<SemanticValidationError> validationErrors = new();
 
-        var source = dtroSubmit.Data.GetExpando("Source");
+        var source = dtroSubmit.Data.GetExpando("source");
 
         var actionType = source.GetValueOrDefault<string>("actionType");
         var isActionTypesValid = Constants.SourceActionTypes.Any(sourceActionType => actionType.Equals(sourceActionType));

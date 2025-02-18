@@ -10,21 +10,21 @@ public class RateTableValidationService : IRateTableValidationService
 
         var regulations = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(provision => provision
-                .GetValueOrDefault<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>("regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 
-        if (regulations.Any(it => !it.HasField("Condition") && !it.HasField("ConditionSet")))
+        if (regulations.Any(it => !it.HasField("condition") && !it.HasField("conditionSet")))
         {
             return errors;
         }
 
         var rateTables = regulations
             .Select(regulation => regulation
-                .GetExpandoOrDefault("RateTable"
+                .GetExpandoOrDefault("rateTable"
                     .ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Where(rateTable => rateTable != null)
             .ToList();
@@ -52,7 +52,7 @@ public class RateTableValidationService : IRateTableValidationService
             {
                 Name = "Additional information",
                 Message = "URI locator for supplementary additional information concerning use of the rate table.",
-                Path = "Source -> Provision -> Regulation -> Condition -> RateTable -> additionalInformation",
+                Path = "source -> provision -> regulation -> condition -> rateTable -> additionalInformation",
                 Rule = "If present, additional information must be formatted as URI",
             };
 
@@ -74,7 +74,7 @@ public class RateTableValidationService : IRateTableValidationService
             {
                 Name = "Rate type",
                 Message = "Defines the type of rate in use.",
-                Path = "Source -> Provision -> Regulation -> Condition -> RateTable -> type",
+                Path = "source -> provision -> regulation -> condition -> rateTable -> type",
                 Rule = $"Rate type must be one of '{string.Join(",", Constants.RateTypes)}'",
             };
 

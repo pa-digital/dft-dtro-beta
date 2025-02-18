@@ -150,7 +150,7 @@ public class SemanticValidationService : ISemanticValidationService
         var conditionArrays =
             data.DescendantsAndSelf()
                 .OfType<JProperty>()
-                .Where(it => it.Name == "Condition")
+                .Where(it => it.Name == "condition")
                 .Select(it => it.Value)
                 .Cast<JArray>();
 

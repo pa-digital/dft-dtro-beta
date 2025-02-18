@@ -10,21 +10,21 @@ public class RateLineValidationService : IRateLineValidationService
 
         var regulations = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(provision => provision
-                .GetValueOrDefault<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>("regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 
-        if (regulations.Any(it => !it.HasField("Condition") && !it.HasField("ConditionSet")))
+        if (regulations.Any(it => !it.HasField("condition") && !it.HasField("conditionSet")))
         {
             return errors;
         }
 
         var rateTables = regulations
             .Select(regulation => regulation
-                .GetExpandoOrDefault("RateTable"
+                .GetExpandoOrDefault("rateTable"
                     .ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Where(rateTable => rateTable != null)
             .ToList();
@@ -36,14 +36,14 @@ public class RateLineValidationService : IRateLineValidationService
 
         var rateLineCollections = rateTables
             .SelectMany(expandoObject => expandoObject
-                .GetValueOrDefault<IList<object>>("RateLineCollection".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
+                .GetValueOrDefault<IList<object>>("rateLineCollection".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Cast<ExpandoObject>()
             .Where(rateLineCollection => rateLineCollection != null)
             .ToList();
 
         var rateLines = rateLineCollections
             .SelectMany(expandoObject => expandoObject
-                .GetValueOrDefault<IList<object>>("RateLine")
+                .GetValueOrDefault<IList<object>>("rateLine")
                 .Cast<ExpandoObject>())
             .ToList();
 
@@ -58,7 +58,7 @@ public class RateLineValidationService : IRateLineValidationService
             {
                 Name = "Invalid 'Description'",
                 Message = "Free-text description associated with this rate line.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.Description}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> RateLine -> {Constants.Description}",
                 Rule = $"If present, {Constants.Description} must not be empty"
             };
 
@@ -76,7 +76,7 @@ public class RateLineValidationService : IRateLineValidationService
             {
                 Name = "Invalid 'Duration end'",
                 Message = "If used, indicates the end time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.DurationEnd}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> RateLine -> {Constants.DurationEnd}",
                 Rule = $"If present, {Constants.DurationEnd} must be of type 'integer' and greater than 0"
             };
 
@@ -94,7 +94,7 @@ public class RateLineValidationService : IRateLineValidationService
             {
                 Name = "Invalid 'Duration start'",
                 Message = "Indicates the start time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.DurationStart}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> RateLine -> {Constants.DurationStart}",
                 Rule = $"If present, {Constants.DurationStart} must be of type 'integer' and greater than 0"
             };
 
@@ -115,7 +115,7 @@ public class RateLineValidationService : IRateLineValidationService
             {
                 Name = "Invalid 'Increment period'",
                 Message = $"The time period for incrementing the rate line charge. If set to the same as the duration of the period between the '{Constants.DurationStart}' and '{Constants.DurationEnd}' the increment will occur once per period.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.IncrementPeriod}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> RateLine -> {Constants.IncrementPeriod}",
                 Rule = $"If present, {Constants.IncrementPeriod} must be in integer and not 0."
             };
 
@@ -133,7 +133,7 @@ public class RateLineValidationService : IRateLineValidationService
             {
                 Name = "Invalid 'Max value'",
                 Message = "The maximum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.MaxValue}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> RateLine -> {Constants.MaxValue}",
                 Rule = $"If present, {Constants.MaxValue} must be defined in applicable currency with 2 decimal places and not 0.0"
             };
 
@@ -151,7 +151,7 @@ public class RateLineValidationService : IRateLineValidationService
             {
                 Name = "Invalid 'Min value'",
                 Message = "The minimum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> RateLine -> {Constants.MinValue}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> RateLine -> {Constants.MinValue}",
                 Rule = $"If present, {Constants.MinValue} must be defined in applicable currency with 2 decimal places and not 0.0"
             };
 
@@ -171,7 +171,7 @@ public class RateLineValidationService : IRateLineValidationService
             {
                 Name = "Invalid 'Sequence'",
                 Message = "An indicator giving the place in sequence of this rate line collection.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.Sequence}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.Sequence}",
                 Rule = $"'{Constants.Sequence}' must be of type integer and not zero",
             };
 
@@ -191,7 +191,7 @@ public class RateLineValidationService : IRateLineValidationService
             {
                 Name = "Invalid 'Rate line type'",
                 Message = "Indicates the nature of the rate line",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.Type}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.Type}",
                 Rule = $"'{Constants.Type}' must be one of '{string.Join(",", Constants.RateLineTypes)}'",
             };
 
@@ -212,7 +212,7 @@ public class RateLineValidationService : IRateLineValidationService
             {
                 Name = "Invalid 'Rate usage condition type'",
                 Message = "Indicates conditions on the use of this rate line.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.UsageCondition}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.UsageCondition}",
                 Rule = $"'{Constants.UsageCondition}' must be one of '{string.Join(",", Constants.RateUsageConditionsTypes)}'",
             };
 
@@ -230,7 +230,7 @@ public class RateLineValidationService : IRateLineValidationService
             {
                 Name = "Invalid 'Value'",
                 Message = "The value of the fee to be charged in respect of this rate line.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.Value}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.Value}",
                 Rule = $"'{Constants.Value}' must be defined in applicable currency with 2 decimal places and not 0.0",
             };
 

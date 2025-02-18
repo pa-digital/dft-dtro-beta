@@ -10,21 +10,21 @@ public class ConditionValidationService : IConditionValidationService
 
         var regulations = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(provision => provision
-                .GetValueOrDefault<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>("regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 
         foreach (var regulation in regulations)
         {
-            var hasConditionSet = regulation.HasField("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
+            var hasConditionSet = regulation.HasField("conditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
             if (hasConditionSet)
             {
                 var conditionSets = regulation
                         .GetValueOrDefault<IList<object>>(
-                            "ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                            "conditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                         .OfType<ExpandoObject>()
                     .ToList();
 
@@ -40,7 +40,7 @@ public class ConditionValidationService : IConditionValidationService
                     {
                         Name = "Operator",
                         Message = "Operator is not present or incorrect",
-                        Path = "Source -> Provision -> Regulation -> ConditionSet -> operator",
+                        Path = "source -> provision -> regulation -> conditionSet -> operator",
                         Rule = $"One of '{string.Join(", ", Constants.OperatorTypes)}' operators must be present",
                     };
                     errors.Add(error);
@@ -84,7 +84,7 @@ public class ConditionValidationService : IConditionValidationService
                     {
                         Name = "Negate",
                         Message = "One or more 'negate' values are incorrect",
-                        Path = "Source -> Provision -> Regulation -> ConditionSet -> conditions -> negate",
+                        Path = "source -> provision -> regulation -> conditionSet -> conditions -> negate",
                         Rule = "Negate property must be boolean, 'true' or 'false'",
                     };
                     errors.Add(error);
@@ -103,7 +103,7 @@ public class ConditionValidationService : IConditionValidationService
                     {
                         Name = "Invalid conditions",
                         Message = "One or more conditions are invalid",
-                        Path = "Source -> Provision -> Regulation -> ConditionSet -> conditions",
+                        Path = "source -> provision -> regulation -> conditionSet -> conditions",
                         Rule =
                             $"One or more types of '{string.Join(", ", Constants.ConditionTypes)}' conditions must be present",
                     };
@@ -129,7 +129,7 @@ public class ConditionValidationService : IConditionValidationService
                     {
                         Name = "Negate",
                         Message = "One or more 'negate' values are incorrect",
-                        Path = "Source -> Provision -> Regulation -> ConditionSet -> conditions -> negate",
+                        Path = "source -> provision -> regulation -> conditionSet -> conditions -> negate",
                         Rule = "Negate property must be boolean, 'true' or 'false'",
                     };
                     errors.Add(error);
@@ -162,7 +162,7 @@ public class ConditionValidationService : IConditionValidationService
                     {
                         Name = "Condition",
                         Message = "Invalid condition",
-                        Path = "Source -> Provision -> Regulation -> Condition",
+                        Path = "source -> provision -> regulation -> condition",
                         Rule = $"One of '{string.Join(", ", Constants.ConditionTypes)}' condition must be present",
                     };
                     errors.Add(newError);

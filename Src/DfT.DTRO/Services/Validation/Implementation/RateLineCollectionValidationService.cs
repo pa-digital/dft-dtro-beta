@@ -10,21 +10,21 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
 
         var regulations = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(provision => provision
-                .GetValueOrDefault<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>("regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 
-        if (regulations.Any(it => !it.HasField("Condition") && !it.HasField("ConditionSet")))
+        if (regulations.Any(it => !it.HasField("condition") && !it.HasField("conditionSet")))
         {
             return errors;
         }
 
         var rateTables = regulations
             .Select(regulation => regulation
-                .GetExpandoOrDefault("RateTable"
+                .GetExpandoOrDefault("rateTable"
                     .ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Where(rateTable => rateTable != null)
             .ToList();
@@ -36,7 +36,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
 
         var rateLineCollections = rateTables
             .SelectMany(expandoObject => expandoObject
-                .GetValueOrDefault<IList<object>>("RateLineCollection".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
+                .GetValueOrDefault<IList<object>>("rateLineCollection".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Cast<ExpandoObject>()
             .Where(rateLineCollection => rateLineCollection != null)
             .ToList();
@@ -54,7 +54,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             {
                 Name = "Applicable currency",
                 Message = "The monetary currency that rates are specified in this rate line collection.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.ApplicableCurrency}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.ApplicableCurrency}",
                 Rule = $"'{Constants.ApplicableCurrency}' must be one of '{string.Join(",", Constants.CurrencyTypes)}'",
             };
 
@@ -72,7 +72,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             {
                 Name = "End usage valid period",
                 Message = "The end time for the validity of this rate line collection.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.EndValidUsagePeriod}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.EndValidUsagePeriod}",
                 Rule = $"If present '{Constants.EndValidUsagePeriod}' must be of type date-time",
             };
 
@@ -95,7 +95,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             {
                 Name = "Max time",
                 Message = "A maximum session duration to be applied to this rate line collection, specified in integer minutes.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.MaxTime}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.MaxTime}",
                 Rule = $"If present '{Constants.MaxTime}' must be of type integer and not 0.",
             };
 
@@ -113,7 +113,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             {
                 Name = "Max Value Collection",
                 Message = "The maximum monetary amount to be applied in conjunction with use of this rate line collection. Defined in applicable currency with 2 decimal places.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.MaxValueCollection}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.MaxValueCollection}",
                 Rule = $"If present '{Constants.MaxValueCollection}' must be defined in applicable currency with 2 decimal places and not 0.0"
             };
 
@@ -133,7 +133,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             {
                 Name = "Min time",
                 Message = "A minimum session duration to be applied to this rate line collection, specified in integer minutes.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.MinTime}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.MinTime}",
                 Rule = $"If present '{Constants.MinTime}' must be of type integer and not 0.",
             };
 
@@ -151,7 +151,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             {
                 Name = "Min Value Collection",
                 Message = "The minimum monetary amount to be applied in conjunction with use of this rate line collection. Defined in applicable currency with 2 decimal places.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.MinValueCollection}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.MinValueCollection}",
                 Rule = $"If present '{Constants.MinValueCollection}' must be defined in applicable currency with 2 decimal places and not 0.0"
             };
 
@@ -179,7 +179,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             {
                 Name = "Reset Time",
                 Message = "Time that rate resets.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.ResetTime}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.ResetTime}",
                 Rule = $"If present '{Constants.ResetTime}' must be between '00:00:00' and '23:59:59'",
             };
 
@@ -198,7 +198,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             {
                 Name = "Sequence",
                 Message = "An indicator giving the place in sequence of this rate line collection.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.Sequence}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.Sequence}",
                 Rule = $"'{Constants.Sequence}' must be of type integer and not a negative number",
             };
 
@@ -216,7 +216,7 @@ public class RateLineCollectionValidationService : IRateLineCollectionValidation
             {
                 Name = "Start usage valid period",
                 Message = "The start time for the validity of this rate line collection.",
-                Path = $"Source -> Provision -> Regulation -> Condition -> RateTable -> RateLineCollection -> {Constants.StartValidUsagePeriod}",
+                Path = $"source -> provision -> regulation -> condition -> rateTable -> RateLineCollection -> {Constants.StartValidUsagePeriod}",
                 Rule = $"'{Constants.StartValidUsagePeriod}' must be of type date-time",
             };
 

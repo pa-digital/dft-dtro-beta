@@ -10,10 +10,10 @@ public class UniqueStreetReferenceNumberValidationService : IUniqueStreetReferen
 
         var geometries = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(provisions => provisions
-                .GetValueOrDefault<IList<object>>("RegulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>("regulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .Where(expandoObject => Constants.ConcreteGeometries.Any(expandoObject.HasField))
             .Where(expandoObject => expandoObject != null)
@@ -26,19 +26,19 @@ public class UniqueStreetReferenceNumberValidationService : IUniqueStreetReferen
 
                 var hasExternalReference = geometry
                     .GetExpandoOrDefault(concreteGeometry)
-                    .HasField("ExternalReference");
+                    .HasField("externalReference");
                 if (!hasExternalReference)
                 {
                     continue;
                 }
 
                 var externalReferences = geometry
-                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.ExternalReference")
+                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.externalReference")
                     .OfType<ExpandoObject>()
                     .ToList();
 
                 var uniqueStreetReferenceNumbers = externalReferences
-                    .SelectMany(externalReference => externalReference.GetValueOrDefault<IList<object>>("UniqueStreetReferenceNumber"))
+                    .SelectMany(externalReference => externalReference.GetValueOrDefault<IList<object>>("uniqueStreetReferenceNumber"))
                     .OfType<ExpandoObject>()
                     .ToList();
 
@@ -53,7 +53,7 @@ public class UniqueStreetReferenceNumberValidationService : IUniqueStreetReferen
                     {
                         Name = "Invalid usrn",
                         Message = "One or more 'usrn' are invalid",
-                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> UniqueStreetReferenceNumber -> usrn",
+                        Path = $"source -> provision -> regulatedPlace -> {concreteGeometry} -> externalReference -> uniqueStreetReferenceNumber -> usrn",
                         Rule = "'usrn' value should be between 0 and 99999999"
                     };
 
@@ -72,7 +72,7 @@ public class UniqueStreetReferenceNumberValidationService : IUniqueStreetReferen
                     {
                         Name = "Duplicate unique street reference numbers",
                         Message = "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer Unique Street Reference Number",
-                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> UniqueStreetReferenceNumber -> usrn",
+                        Path = $"source -> provision -> regulatedPlace -> {concreteGeometry} -> externalReference -> uniqueStreetReferenceNumber -> usrn",
                         Rule = $"'usrn' number must be unique"
                     };
 

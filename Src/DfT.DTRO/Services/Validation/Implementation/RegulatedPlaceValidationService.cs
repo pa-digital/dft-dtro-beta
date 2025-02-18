@@ -10,11 +10,11 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
 
         List<ExpandoObject> regulatedPlaces = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision"
+            .GetValueOrDefault<IList<object>>("source.provision"
                 .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("RegulatedPlace"
+                .GetValue<IList<object>>("regulatedPlace"
                     .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
@@ -26,7 +26,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
             {
                 Name = "Invalid regulated place description",
                 Message = "Free text description of the regulated place",
-                Path = "Source -> Provision -> RegulatedPlace -> description",
+                Path = "source -> provision -> regulatedPlace -> description",
                 Rule = "Provision 'description' must be of type 'string'"
             };
 
@@ -51,7 +51,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
             {
                 Name = "Regulate place type",
                 Message = "Regulated place type missing or incorrect.",
-                Path = "Source -> Provision -> RegulatedPlace -> type",
+                Path = "source -> provision -> regulatedPlace -> type",
                 Rule = $"One of '{string.Join(",", Constants.RegulatedPlaceTypes)}' type(s) must be present.",
             };
 

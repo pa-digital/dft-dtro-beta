@@ -9,7 +9,7 @@ public class ProvisionValidationService : IProvisionValidationService
         List<SemanticValidationError> validationErrors = new();
 
         var provisions = dtroSubmit.Data
-            .GetValueOrDefault<IList<object>>("Source.Provision"
+            .GetValueOrDefault<IList<object>>("source.provision"
                 .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .Cast<ExpandoObject>()
             .ToList();
@@ -23,7 +23,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 Name = "Invalid 'actionType'",
                 Message = "Indicates the nature of update",
                 Rule = $"Provision 'actionType' must contain one of the following accepted values: '{string.Join(",", Constants.ProvisionActionTypes)}'",
-                Path = "Source -> Provision -> actionType"
+                Path = "source -> provision -> actionType"
             };
 
             validationErrors.Add(error);
@@ -43,7 +43,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 Name = "Invalid order reporting point",
                 Message = "Attribute identifying the lifecycle point and nature of a Provision",
                 Rule = $"'orderReportingPoint' must be one of '{string.Join(",", Constants.OrderReportingPointTypes)}'",
-                Path = "Source -> Provision -> orderReportingPoint"
+                Path = "source -> provision -> orderReportingPoint"
             };
 
             validationErrors.Add(error);
@@ -60,7 +60,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 Name = "Invalid description",
                 Message = "Free text description of the referenced provision",
                 Rule = "Provision 'provisionDescription' must be of type 'string'",
-                Path = "Source -> Provision -> provisionDescription"
+                Path = "source -> provision -> provisionDescription"
             };
 
             validationErrors.Add(error);
@@ -74,7 +74,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 Name = "Invalid reference",
                 Message = "Indicates a system reference to the relevant Provision of the TRO",
                 Rule = "Provision 'reference' must be of type 'string'",
-                Path = "Source -> Provision -> reference"
+                Path = "source -> provision -> reference"
             };
 
             validationErrors.Add(error);
@@ -95,7 +95,7 @@ public class ProvisionValidationService : IProvisionValidationService
                     Name = $"'{kv.Value}' duplication reference",
                     Message = $"Provision reference '{kv.Key}' is present {kv.Value} times.",
                     Rule = "Each provision 'reference' must be unique and of type 'string'",
-                    Path = "Source -> Provision -> reference"
+                    Path = "source -> provision -> reference"
                 };
 
                 return error;
