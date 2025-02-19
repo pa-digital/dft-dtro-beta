@@ -41,6 +41,9 @@ public class Startup
 
         services.AddFeatureManagement();
 
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ITraService, TraService>();
+        services.AddScoped<ITraDal, TraDal>();
         services.AddScoped<IAppIdMapperService, AppIdMapperService>();
         services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
         services.AddScoped<ISemanticValidationService, SemanticValidationService>();
