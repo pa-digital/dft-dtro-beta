@@ -1,5 +1,3 @@
-using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities;
-
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public abstract class BaseTest : IAsyncLifetime
