@@ -34,8 +34,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints
 
             string json = File.ReadAllText(tempFilePath);
             JObject jsonObj = JObject.Parse(json);
-            jsonObj["data"]["Source"]["currentTraOwner"] = int.Parse(traId);
-            jsonObj["data"]["Source"]["traCreator"] = int.Parse(traId);
+            var tradIdAsInt = int.Parse(traId);
+            jsonObj["data"]["Source"]["currentTraOwner"] = tradIdAsInt;
+            jsonObj["data"]["Source"]["traAffected"] = new JArray(tradIdAsInt);
+            jsonObj["data"]["Source"]["traCreator"] = tradIdAsInt;
+
             File.WriteAllText(tempFilePath, jsonObj.ToString());
             return tempFilePath;
         }
