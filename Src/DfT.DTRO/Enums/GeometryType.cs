@@ -8,24 +8,24 @@ public enum GeometryType
     /// <summary>
     /// Point geometry
     /// </summary>
-    [Display(Name = "PointGeometry")]
+    [Display(Name = "pointGeometry")]
     PointGeometry = 1,
 
     /// <summary>
     /// Linear geometry
     /// </summary>
-    [Display(Name = "LinearGeometry")]
+    [Display(Name = "linearGeometry")]
     LinearGeometry = 2,
 
     /// <summary>
     /// Polygon geometry
     /// </summary>
-    [Display(Name = "Polygon")]
+    [Display(Name = "polygon")]
     Polygon = 3,
 
     /// <summary>
     /// Directed linear geometry
     /// </summary>
-    [Display(Name = "DirectedLinear")]
+    [Display(Name = "directedLinear")]
     DirectedLinear = 4,
 }

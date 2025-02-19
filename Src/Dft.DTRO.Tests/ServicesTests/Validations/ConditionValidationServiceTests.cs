@@ -12,19 +12,19 @@ public class ConditionValidationServiceTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""ConditionSet"": [
+                                ""conditionSet"": [
                                     {
                                         ""operator"": ""and"",
                                         ""conditions"": [
                                             {
                                                 ""negate"": false,
-                                                ""VehicleCharacteristics"": {
-                                                    ""MaximumHeightCharacteristic"": {
+                                                ""vehicleCharacteristics"": {
+                                                    ""maximumHeightCharacteristic"": {
                                                         ""vehicleHeight"": 2.5
                                                     }
                                                 }
@@ -50,18 +50,18 @@ public class ConditionValidationServiceTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""ConditionSet"": [
+                                ""conditionSet"": [
                                     {
                                         ""conditions"": [
                                             {
                                                 ""negate"": false,
-                                                ""VehicleCharacteristics"": {
-                                                    ""MaximumHeightCharacteristic"": {
+                                                ""vehicleCharacteristics"": {
+                                                    ""maximumHeightCharacteristic"": {
                                                         ""vehicleHeight"": 2.5
                                                     }
                                                 }
@@ -80,7 +80,7 @@ public class ConditionValidationServiceTests
         Assert.Equal(1, actual.Count);
         Assert.Equal("Operator", actual[0].Name);
         Assert.Equal("Operator is not present or incorrect", actual[0].Message);
-        Assert.Equal("Source -> Provision -> Regulation -> ConditionSet -> operator", actual[0].Path);
+        Assert.Equal("source -> provision -> regulation -> conditionSet -> operator", actual[0].Path);
         Assert.Equal("One of 'and, or, xOr' operators must be present", actual[0].Rule);
     }
 
@@ -91,19 +91,19 @@ public class ConditionValidationServiceTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""ConditionSet"": [
+                                ""conditionSet"": [
                                     {
                                         ""operator"": ""some"",
                                         ""conditions"": [
                                             {
                                                 ""negate"": false,
-                                                ""VehicleCharacteristics"": {
-                                                    ""MaximumHeightCharacteristic"": {
+                                                ""vehicleCharacteristics"": {
+                                                    ""maximumHeightCharacteristic"": {
                                                         ""vehicleHeight"": 2.5
                                                     }
                                                 }
@@ -122,7 +122,7 @@ public class ConditionValidationServiceTests
         Assert.Equal(1, actual.Count);
         Assert.Equal("Operator", actual[0].Name);
         Assert.Equal("Operator is not present or incorrect", actual[0].Message);
-        Assert.Equal("Source -> Provision -> Regulation -> ConditionSet -> operator", actual[0].Path);
+        Assert.Equal("source -> provision -> regulation -> conditionSet -> operator", actual[0].Path);
         Assert.Equal("One of 'and, or, xOr' operators must be present", actual[0].Rule);
     }
 
@@ -133,19 +133,19 @@ public class ConditionValidationServiceTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""ConditionSet"": [
+                                ""conditionSet"": [
                                     {
                                         ""operator"": ""or"",
                                         ""conditions"": [
                                             {
                                                 ""negate"": false,
-                                                ""VehicleCharacteristics"": {
-                                                    ""MaximumHeightCharacteristic"": {
+                                                ""vehicleCharacteristics"": {
+                                                    ""maximumHeightCharacteristic"": {
                                                         ""vehicleHeight"": 2.5
                                                     }
                                                 }
@@ -153,7 +153,7 @@ public class ConditionValidationServiceTests
                                             {
                                                 ""negate"": true,
                                                 ""UnknownCharacteristics"": {
-                                                    ""MaximumHeightCharacteristic"": {
+                                                    ""maximumHeightCharacteristic"": {
                                                         ""vehicleHeight"": 2.5
                                                     }
                                                 }
@@ -172,8 +172,8 @@ public class ConditionValidationServiceTests
         Assert.Equal(1, actual.Count);
         Assert.Equal("Invalid conditions", actual[0].Name);
         Assert.Equal("One or more conditions are invalid", actual[0].Message);
-        Assert.Equal("Source -> Provision -> Regulation -> ConditionSet -> conditions", actual[0].Path);
-        Assert.Equal("One or more types of 'RoadCondition, OccupantCondition, DriverCondition, AccessCondition, TimeValidity, NonVehicularRoadUserCondition, PermitCondition, VehicleCharacteristics, ConditionSet, conditions, RateTable' conditions must be present", actual[0].Rule);
+        Assert.Equal("source -> provision -> regulation -> conditionSet -> conditions", actual[0].Path);
+        Assert.Equal("One or more types of 'roadCondition, occupantCondition, driverCondition, accessCondition, timeValidity, nonVehicularRoadUserCondition, permitCondition, vehicleCharacteristics, conditionSet, conditions, rateTable' conditions must be present", actual[0].Rule);
     }
 
     [Fact]
@@ -183,15 +183,15 @@ public class ConditionValidationServiceTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""Condition"": [
+                                ""condition"": [
                                     {
                                         ""negate"": false,
-                                        ""AccessCondition"": {
+                                        ""accessCondition"": {
                                         
                                         }
                                     }
@@ -214,15 +214,15 @@ public class ConditionValidationServiceTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""Condition"": [
+                                ""condition"": [
                                     {
                                         ""negate"": false,
-                                        ""OtherCondition"": {
+                                        ""otherCondition"": {
                                         
                                         }
                                     }
@@ -238,8 +238,8 @@ public class ConditionValidationServiceTests
         Assert.Equal(1, actual.Count);
         Assert.Equal("Condition", actual[0].Name);
         Assert.Equal("Invalid condition", actual[0].Message);
-        Assert.Equal("Source -> Provision -> Regulation -> Condition", actual[0].Path);
-        Assert.Equal("One of 'RoadCondition, OccupantCondition, DriverCondition, AccessCondition, TimeValidity, NonVehicularRoadUserCondition, PermitCondition, VehicleCharacteristics, ConditionSet, conditions, RateTable' condition must be present", actual[0].Rule);
+        Assert.Equal("source -> provision -> regulation -> condition", actual[0].Path);
+        Assert.Equal("One of 'roadCondition, occupantCondition, driverCondition, accessCondition, timeValidity, nonVehicularRoadUserCondition, permitCondition, vehicleCharacteristics, conditionSet, conditions, rateTable' condition must be present", actual[0].Rule);
     }
 
     [Fact]
@@ -249,15 +249,15 @@ public class ConditionValidationServiceTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""Condition"": [
+                                ""condition"": [
                                     {
                                         ""negate"": ""wrong"",
-                                        ""NonVehicularRoadUserCondition"": {
+                                        ""nonVehicularRoadUserCondition"": {
                                         
                                         }
                                     }
@@ -274,7 +274,7 @@ public class ConditionValidationServiceTests
         Assert.Equal(1, actual.Count);
         Assert.Equal("Negate", actual[0].Name);
         Assert.Equal("One or more 'negate' values are incorrect", actual[0].Message);
-        Assert.Equal("Source -> Provision -> Regulation -> ConditionSet -> conditions -> negate", actual[0].Path);
+        Assert.Equal("source -> provision -> regulation -> conditionSet -> conditions -> negate", actual[0].Path);
         Assert.Equal("Negate property must be boolean, 'true' or 'false'", actual[0].Rule);
     }
 
@@ -285,46 +285,46 @@ public class ConditionValidationServiceTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""ConditionSet"": [
+                                ""conditionSet"": [
                                     {
                                         ""operator"": ""and"",
-                                        ""ConditionSet"": [
+                                        ""conditionSet"": [
                                             {
                                                 ""operator"": ""or"",
                                                 ""conditions"": [
                                                     {
                                                         ""negate"": false,
-                                                        ""VehicleCharacteristics"": {
-                                                            ""MaximumHeightCharacteristic"": {
+                                                        ""vehicleCharacteristics"": {
+                                                            ""maximumHeightCharacteristic"": {
                                                                 ""vehicleHeight"": 2.5
                                                             }
                                                         }
                                                     },
                                                     {
                                                         ""negate"": true,
-                                                        ""VehicleCharacteristic"": {
+                                                        ""vehicleCharacteristic"": {
                                                             ""vehicleType"": ""bus""
                                                         }
                                                     },
                                                     {
-                                                        ""ConditionSet"": [
+                                                        ""conditionSet"": [
                                                             {
                                                                 ""operator"": ""and"",
                                                                 ""conditions"": [
                                                                     {
                                                                         ""negate"": false,
-                                                                        ""VehicleCharacteristics"": {
+                                                                        ""vehicleCharacteristics"": {
                                                                             ""vehicleType"": ""taxi""
                                                                         }
                                                                     },
                                                                     {
                                                                         ""negate"": false,
-                                                                        ""VehicleCharacteristics"": {
+                                                                        ""vehicleCharacteristics"": {
                                                                             ""vehicleUsage"": ""access""
                                                                         }
                                                                     }
@@ -335,10 +335,10 @@ public class ConditionValidationServiceTests
                                                 ]
                                             }
                                         ],
-                                        ""Condition"": [
+                                        ""condition"": [
                                             {
                                                 ""negate"": false,
-                                                ""TimeValidity"": {
+                                                ""timeValidity"": {
                                                     ""start"": ""2024-08-22T08:00:00"",
                                                     ""end"": ""202408-22T20:00:00""
                                                 }
@@ -364,26 +364,26 @@ public class ConditionValidationServiceTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""ConditionSet"": [
+                                ""conditionSet"": [
                                     {
                                         ""operator"": ""and"",
                                         ""conditions"": [
                                             {
                                                 ""negate"": false,
-                                                ""TimeValidity"": {
+                                                ""timeValidity"": {
                                                     ""start"": ""2024-08-22T08:00:00"",
                                                     ""end"": ""2024-08-22T20:00:00""
                                                 }
                                             },
                                             {
                                                 ""negate"": ""some"",
-                                                ""VehicleCharacteristics"": {
-                                                    ""MaximumHeightCharacteristic"": {
+                                                ""vehicleCharacteristics"": {
+                                                    ""maximumHeightCharacteristic"": {
                                                         ""vehicleHeight"": 2.5
                                                     }
                                                 }
@@ -403,7 +403,7 @@ public class ConditionValidationServiceTests
         Assert.Equal(1, actual.Count);
         Assert.Equal("Negate", actual[0].Name);
         Assert.Equal("One or more 'negate' values are incorrect", actual[0].Message);
-        Assert.Equal("Source -> Provision -> Regulation -> ConditionSet -> conditions -> negate", actual[0].Path);
+        Assert.Equal("source -> provision -> regulation -> conditionSet -> conditions -> negate", actual[0].Path);
         Assert.Equal("Negate property must be boolean, 'true' or 'false'", actual[0].Rule);
     }
 }

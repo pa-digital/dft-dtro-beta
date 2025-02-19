@@ -12,10 +12,10 @@ public class RegulatedPlaceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
                                 ""description"": ""{description}"",
                                 ""type"": ""regulationLocation""
@@ -39,7 +39,7 @@ public class RegulatedPlaceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
+            ""source"": {{
                 ""provision"": [
                     {{
                         ""regulatedPlace"": [
@@ -67,10 +67,10 @@ public class RegulatedPlaceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
                                 ""description"": ""some free text"",
                                 ""type"": ""{type}""
@@ -94,10 +94,10 @@ public class RegulatedPlaceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
                                 ""description"": ""some free text"",
                                 ""type"": ""{types.ElementAt(0)}""

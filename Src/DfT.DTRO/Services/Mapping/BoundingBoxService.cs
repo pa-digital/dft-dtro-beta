@@ -29,7 +29,7 @@ public class BoundingBoxService : IBoundingBoxService
 
         switch (geometrySelected?.Name)
         {
-            case "PointGeometry":
+            case "pointGeometry":
                 values = geometrySelected
                     .DescendantsAndSelf()
                     .Select(token => token.First?.Value<JToken>(Constants.Point))
@@ -53,7 +53,7 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = IsInUk(errors, toValidate, GeometryType.PointGeometry);
 
                 break;
-            case "LinearGeometry":
+            case "linearGeometry":
                 values = geometrySelected
                     .DescendantsAndSelf()
                     .Select(token => token.First?.Value<JToken>(Constants.LineString))
@@ -76,7 +76,7 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = IsInUk(errors, toValidate, GeometryType.LinearGeometry);
 
                 break;
-            case "Polygon":
+            case "polygon":
                 values = geometrySelected
                     .DescendantsAndSelf()
                     .Select(token => token.First?.Value<JToken>(Constants.Polygon))
@@ -102,7 +102,7 @@ public class BoundingBoxService : IBoundingBoxService
 
 
                 break;
-            case "DirectedLinear":
+            case "directedLinear":
                 values = geometrySelected
                     .DescendantsAndSelf()
                     .Select(token => token.First?.Value<JToken>(Constants.DirectedLineString))
@@ -130,7 +130,7 @@ public class BoundingBoxService : IBoundingBoxService
             default:
                 errors.Add(new SemanticValidationError
                 {
-                    Path = "Source.provision.regulatedPlace.geometry",
+                    Path = "source.provision.regulatedPlace.geometry",
                     Message = "Selected geometry ",
                     Name = "Wrong geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
@@ -165,7 +165,7 @@ public class BoundingBoxService : IBoundingBoxService
 
         switch (jProperty.Name)
         {
-            case "PointGeometry":
+            case "pointGeometry":
                 values = jProperty
                     .DescendantsAndSelf()
                     .Select(token => token.First?.Value<JToken>(Constants.Point))
@@ -188,7 +188,7 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = IsInUk(errors, toValidate, GeometryType.PointGeometry);
 
                 break;
-            case "LinearGeometry":
+            case "linearGeometry":
                 values = jProperty
                     .DescendantsAndSelf()
                     .Select(token => token.First?.Value<JToken>(Constants.LineString))
@@ -210,7 +210,7 @@ public class BoundingBoxService : IBoundingBoxService
                 isValid = IsInUk(errors, toValidate, GeometryType.LinearGeometry);
 
                 break;
-            case "Polygon":
+            case "polygon":
                 values = jProperty
                     .DescendantsAndSelf()
                     .Select(token => token.First?.Value<JToken>(Constants.Polygon))
@@ -235,7 +235,7 @@ public class BoundingBoxService : IBoundingBoxService
 
 
                 break;
-            case "DirectedLinear":
+            case "directedLinear":
                 values = jProperty
                     .DescendantsAndSelf()
                     .Select(token => token.First?.Value<JToken>(Constants.DirectedLineString))
@@ -262,7 +262,7 @@ public class BoundingBoxService : IBoundingBoxService
             default:
                 errors.Add(new SemanticValidationError
                 {
-                    Path = "Source.provision.regulatedPlace.geometry",
+                    Path = "source.provision.regulatedPlace.geometry",
                     Message = "Selected geometry ",
                     Name = "Wrong geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"
@@ -378,7 +378,7 @@ public class BoundingBoxService : IBoundingBoxService
             default:
                 errors.Add(new SemanticValidationError
                 {
-                    Path = "Source.provision.regulatedPlace.geometry",
+                    Path = "source.provision.regulatedPlace.geometry",
                     Message = "Selected geometry",
                     Name = "Wrong geometry",
                     Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"

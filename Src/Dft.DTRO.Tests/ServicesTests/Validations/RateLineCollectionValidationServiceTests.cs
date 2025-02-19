@@ -6,30 +6,30 @@ public class RateLineCollectionValidationServiceTests
     private readonly IRateLineCollectionValidationService _sut = new RateLineCollectionValidationService();
 
     [Theory]
-    [InlineData("Condition", "EUR", 0)]
-    [InlineData("Condition", "GBP", 0)]
-    [InlineData("Condition", "USD", 1)]
-    [InlineData("ConditionSet", "EUR", 0)]
-    [InlineData("ConditionSet", "GBP", 0)]
-    [InlineData("ConditionSet", "USD", 1)]
+    [InlineData("condition", "EUR", 0)]
+    [InlineData("condition", "GBP", 0)]
+    [InlineData("condition", "USD", 1)]
+    [InlineData("conditionSet", "EUR", 0)]
+    [InlineData("conditionSet", "GBP", 0)]
+    [InlineData("conditionSet", "USD", 1)]
     public void ValidateRateLineCollectionApplicableCurrency(string conditionType, string currencyType, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
                                 ""{conditionType}"": [
                                     {{
                                         ""negate"": false                                        
                                     }}
                                 ],
-                                ""RateTable"" : {{
-                                    ""RateLineCollection"": [
+                                ""rateTable"" : {{
+                                    ""rateLineCollection"": [
                                         {{
                                             ""applicableCurrency"": ""{currencyType}"",
                                             ""endValidUsagePeriod"": ""2024-12-10T09:00:00"",
@@ -55,28 +55,28 @@ public class RateLineCollectionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("Condition", "2024-12-10T09:00:00", 0)]
-    [InlineData("Condition", "bad-date-time", 1)]
-    [InlineData("ConditionSet", "2024-12-10T09:00:00", 0)]
-    [InlineData("ConditionSet", "bad-date-time", 1)]
+    [InlineData("condition", "2024-12-10T09:00:00", 0)]
+    [InlineData("condition", "bad-date-time", 1)]
+    [InlineData("conditionSet", "2024-12-10T09:00:00", 0)]
+    [InlineData("conditionSet", "bad-date-time", 1)]
     public void ValidateRateLineCollectionEndValidUsagePeriod(string conditionType, string endValidUsagePeriod, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
                                 ""{conditionType}"": [
                                     {{
                                         ""negate"": false
                                     }}
                                 ],
-                                ""RateTable"" : {{
-                                    ""RateLineCollection"": [
+                                ""rateTable"" : {{
+                                    ""rateLineCollection"": [
                                         {{
                                             ""applicableCurrency"": ""GBP"",
                                             ""endValidUsagePeriod"": ""{endValidUsagePeriod}"",
@@ -102,28 +102,28 @@ public class RateLineCollectionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("Condition", 1, 0)]
-    [InlineData("Condition", 0, 1)]
-    [InlineData("ConditionSet", 1, 0)]
-    [InlineData("ConditionSet", 0, 1)]
+    [InlineData("condition", 1, 0)]
+    [InlineData("condition", 0, 1)]
+    [InlineData("conditionSet", 1, 0)]
+    [InlineData("conditionSet", 0, 1)]
     public void ValidateRateLineCollectionMaxTime(string conditionType, int maxTime, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
                                 ""{conditionType}"": [
                                     {{
                                         ""negate"": false
                                     }}
                                 ],
-                                ""RateTable"" : {{
-                                    ""RateLineCollection"": [
+                                ""rateTable"" : {{
+                                    ""rateLineCollection"": [
                                         {{
                                             ""applicableCurrency"": ""EUR"",
                                             ""endValidUsagePeriod"": ""2024-12-10T09:00:00"",
@@ -149,26 +149,26 @@ public class RateLineCollectionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("Condition", 20.99, 0)]
-    [InlineData("ConditionSet", 20.99, 0)]
+    [InlineData("condition", 20.99, 0)]
+    [InlineData("conditionSet", 20.99, 0)]
     public void ValidateRateLineCollectionMaxValueCollection(string conditionType, double maxValueCollection, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
                                 ""{conditionType}"": [
                                     {{
                                         ""negate"": false
                                     }}
                                 ],
-                                ""RateTable"" : {{
-                                    ""RateLineCollection"": [
+                                ""rateTable"" : {{
+                                    ""rateLineCollection"": [
                                         {{
                                             ""applicableCurrency"": ""EUR"",
                                             ""endValidUsagePeriod"": ""2024-12-10T09:00:00"",
@@ -194,28 +194,28 @@ public class RateLineCollectionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("Condition", 1, 0)]
-    [InlineData("Condition", 0, 1)]
-    [InlineData("ConditionSet", 1, 0)]
-    [InlineData("ConditionSet", 0, 1)]
+    [InlineData("condition", 1, 0)]
+    [InlineData("condition", 0, 1)]
+    [InlineData("conditionSet", 1, 0)]
+    [InlineData("conditionSet", 0, 1)]
     public void ValidateRateLineCollectionMinTime(string conditionType, int minTime, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
                                 ""{conditionType}"": [
                                     {{
                                         ""negate"": false
                                     }}
                                 ],
-                                ""RateTable"" : {{
-                                    ""RateLineCollection"": [
+                                ""rateTable"" : {{
+                                    ""rateLineCollection"": [
                                         {{
                                             ""applicableCurrency"": ""EUR"",
                                             ""endValidUsagePeriod"": ""2024-12-10T09:00:00"",
@@ -241,26 +241,26 @@ public class RateLineCollectionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("Condition", 20.99, 0)]
-    [InlineData("ConditionSet", 20.99, 0)]
+    [InlineData("condition", 20.99, 0)]
+    [InlineData("conditionSet", 20.99, 0)]
     public void ValidateRateLineCollectionMinValueCollection(string conditionType, double minValueCollection, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
                                 ""{conditionType}"": [
                                     {{
                                         ""negate"": false
                                     }}
                                 ],
-                                ""RateTable"" : {{
-                                    ""RateLineCollection"": [
+                                ""rateTable"" : {{
+                                    ""rateLineCollection"": [
                                         {{
                                             ""applicableCurrency"": ""EUR"",
                                             ""endValidUsagePeriod"": ""2024-12-10T09:00:00"",
@@ -286,34 +286,34 @@ public class RateLineCollectionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("Condition", "00:00:00", 0)]
-    [InlineData("Condition", "10:00:00", 0)]
-    [InlineData("Condition", "23:59:59", 0)]
-    [InlineData("Condition", "24:00:00", 1)]
-    [InlineData("Condition", "badTime", 1)]
-    [InlineData("ConditionSet", "00:00:00", 0)]
-    [InlineData("ConditionSet", "10:00:00", 0)]
-    [InlineData("ConditionSet", "23:59:59", 0)]
-    [InlineData("ConditionSet", "24:00:00", 1)]
-    [InlineData("ConditionSet", "badTime", 1)]
+    [InlineData("condition", "00:00:00", 0)]
+    [InlineData("condition", "10:00:00", 0)]
+    [InlineData("condition", "23:59:59", 0)]
+    [InlineData("condition", "24:00:00", 1)]
+    [InlineData("condition", "badTime", 1)]
+    [InlineData("conditionSet", "00:00:00", 0)]
+    [InlineData("conditionSet", "10:00:00", 0)]
+    [InlineData("conditionSet", "23:59:59", 0)]
+    [InlineData("conditionSet", "24:00:00", 1)]
+    [InlineData("conditionSet", "badTime", 1)]
     public void ValidateRateLineCollectionResetTime(string conditionType, string resetTime, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
                                 ""{conditionType}"": [
                                     {{
                                         ""negate"": false
                                     }}
                                 ],
-                                ""RateTable"" : {{
-                                    ""RateLineCollection"": [
+                                ""rateTable"" : {{
+                                    ""rateLineCollection"": [
                                         {{
                                             ""applicableCurrency"": ""GBP"",
                                             ""endValidUsagePeriod"": ""2024-12-10T09:00:00"",
@@ -339,28 +339,28 @@ public class RateLineCollectionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("Condition", 1, 0)]
-    [InlineData("Condition", -1, 1)]
-    [InlineData("ConditionSet", 1, 0)]
-    [InlineData("ConditionSet", -1, 1)]
+    [InlineData("condition", 1, 0)]
+    [InlineData("condition", -1, 1)]
+    [InlineData("conditionSet", 1, 0)]
+    [InlineData("conditionSet", -1, 1)]
     public void ValidateRateLineCollectionSequence(string conditionType, int sequence, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
                                 ""{conditionType}"": [
                                     {{
                                         ""negate"": false
                                     }}
                                 ],
-                                ""RateTable"" : {{
-                                    ""RateLineCollection"": [
+                                ""rateTable"" : {{
+                                    ""rateLineCollection"": [
                                         {{
                                             ""applicableCurrency"": ""EUR"",
                                             ""endValidUsagePeriod"": ""2024-12-10T09:00:00"",
@@ -386,28 +386,28 @@ public class RateLineCollectionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("Condition", "2024-12-10T09:00:00", 0)]
-    [InlineData("Condition", "bad-date-time", 1)]
-    [InlineData("ConditionSet", "2024-12-10T09:00:00", 0)]
-    [InlineData("ConditionSet", "bad-date-time", 1)]
+    [InlineData("condition", "2024-12-10T09:00:00", 0)]
+    [InlineData("condition", "bad-date-time", 1)]
+    [InlineData("conditionSet", "2024-12-10T09:00:00", 0)]
+    [InlineData("conditionSet", "bad-date-time", 1)]
     public void ValidateRateLineCollectionStartValidUsagePeriod(string conditionType, string startValidUsagePeriod, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
                                 ""{conditionType}"": [
                                     {{
                                         ""negate"": false
                                     }}
                                 ],
-                                ""RateTable"" : {{
-                                    ""RateLineCollection"": [
+                                ""rateTable"" : {{
+                                    ""rateLineCollection"": [
                                         {{
                                             ""applicableCurrency"": ""GBP"",
                                             ""endValidUsagePeriod"": ""2024-12-10T09:00:00"",

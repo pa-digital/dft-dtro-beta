@@ -44,7 +44,7 @@ public static class Constants
 
     public static IEnumerable<string> RateLineTypes => typeof(RateLineType).GetDisplayNames<RateLineType>().ToList();
 
-    public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
+    public static List<string> PossibleConditions => new() { "conditions", "condition", "conditionSet" };
 
     public static List<int> MphValues => new() { 10, 20, 30, 40, 50, 60, 70 };
 

@@ -22,48 +22,48 @@ public class GeometryValidation : IGeometryValidation
         List<JProperty> geometries = data
             .Descendants()
             .OfType<JProperty>()
-            .Where(property => Constants.ConcreteGeometries.Any(property.Name.Contains))
+            .Where(property => Constants.ConcreteGeometries.Any(property.Name.Equals))
             .ToList();
 
-        foreach (JProperty geometry in geometries)
-        {
-            if (geometry?.Value is not JObject)
-            {
-                SemanticValidationError semanticValidationError = new()
-                {
-                    Message = $"'{nameof(geometry)}' is of type '{geometry?.Value.Type}', this it must be an 'object'."
-                };
+        //foreach (JProperty geometry in geometries)
+        //{
+        //    if (geometry?.Value is not JObject)
+        //    {
+        //        SemanticValidationError semanticValidationError = new()
+        //        {
+        //            Message = $"'{nameof(geometry)}' is of type '{geometry?.Value.Type}', this it must be an 'object'."
+        //        };
 
-                errors.Add(semanticValidationError);
-                _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Geometry error", string.Join(",", errors));
-            }
+        //        errors.Add(semanticValidationError);
+        //        _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Geometry error", string.Join(",", errors));
+        //    }
 
-            JObject jObject = geometry?.Value as JObject;
+        //    JObject jObject = geometry?.Value as JObject;
 
-            if (jObject != null && !jObject.TryGetValue(Constants.Version, out JToken _))
-            {
-                SemanticValidationError semanticValidationError = new()
-                {
-                    Message = $"'{Constants.Version}' was missing."
-                };
-                errors.Add(semanticValidationError);
-                _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Version error", string.Join(",", errors));
-            }
+        //    if (jObject != null && !jObject.TryGetValue(Constants.Version, out JToken _))
+        //    {
+        //        SemanticValidationError semanticValidationError = new()
+        //        {
+        //            Message = $"'{Constants.Version}' was missing."
+        //        };
+        //        errors.Add(semanticValidationError);
+        //        _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Version error", string.Join(",", errors));
+        //    }
 
-            if (jObject != null && jObject.TryGetValue(Constants.Version, out JToken value))
-            {
-                JTokenType type = value.Type;
-                if (type != JTokenType.Integer)
-                {
-                    SemanticValidationError semanticValidationError = new()
-                    {
-                        Message = $"'{Constants.Version}' must be an integer."
-                    };
-                    errors.Add(semanticValidationError);
-                    _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Version type error", string.Join(",", errors));
-                }
-            }
-        }
+        //    if (jObject != null && jObject.TryGetValue(Constants.Version, out JToken value))
+        //    {
+        //        JTokenType type = value.Type;
+        //        if (type != JTokenType.Integer)
+        //        {
+        //            SemanticValidationError semanticValidationError = new()
+        //            {
+        //                Message = $"'{Constants.Version}' must be an integer."
+        //            };
+        //            errors.Add(semanticValidationError);
+        //            _loggingExtension.LogError(nameof(ValidateGeometryAgainstCurrentSchemaVersion), "", "Version type error", string.Join(",", errors));
+        //        }
+        //    }
+        //}
 
         JProperty jProperty = geometries.FirstOrDefault();
         return _boundingBoxService.SetBoundingBoxForMultipleGeometries(errors, jProperty, boundingBox);
@@ -74,7 +74,7 @@ public class GeometryValidation : IGeometryValidation
         JProperty geometry = data
             .DescendantsAndSelf()
             .OfType<JProperty>()
-            .FirstOrDefault(property => property.Name == "Geometry".ToBackwardCompatibility(schemaVersion));
+            .FirstOrDefault(property => property.Name == "geometry".ToBackwardCompatibility(schemaVersion));
 
         BoundingBox boundingBox = new();
         if (geometry?.Value is not JObject)

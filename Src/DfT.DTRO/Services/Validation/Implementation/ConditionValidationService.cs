@@ -113,7 +113,7 @@ public class ConditionValidationService : IConditionValidationService
             else
             {
                 var passedInConditions = regulation
-                        .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                        .GetValueOrDefault<IList<object>>("condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                         .OfType<ExpandoObject>()
                     .SelectMany(expandoObjects => expandoObjects)
                     .Select(kv => kv)

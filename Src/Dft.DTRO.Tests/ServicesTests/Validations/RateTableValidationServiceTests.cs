@@ -16,17 +16,17 @@ public class RateTableValidationServiceTests
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
-                                ""Condition"": [
+                                ""condition"": [
                                     {{
                                         ""negate"": false
                                     }}
                                 ],
-                                ""RateTable"" : {{
+                                ""rateTable"" : {{
                                     ""additionalInformation"": ""{additionalInformation}"",
                                     ""type"": ""daily""
                                 }}
@@ -51,17 +51,17 @@ public class RateTableValidationServiceTests
 
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""Regulation"": [
+                        ""regulation"": [
                             {{
-                                ""Condition"": [
+                                ""condition"": [
                                     {{
                                         ""negate"": false
                                     }}
                                 ],
-                                ""RateTable"" : {{
+                                ""rateTable"" : {{
                                     ""additionalInformation"": ""https://loremipsum.co.uk"",
                                     ""type"": ""{rateType}""
                                 }}

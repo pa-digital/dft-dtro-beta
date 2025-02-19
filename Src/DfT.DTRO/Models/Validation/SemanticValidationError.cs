@@ -1,5 +1,3 @@
-using DfT.DTRO.Helpers;
-
 namespace DfT.DTRO.Models.Validation;
 
 /// <summary>
@@ -35,7 +33,7 @@ public class SemanticValidationError
     public SemanticValidationError SetIncorrectPairSemanticValidationError(GeometryType geometryType) =>
         new()
         {
-            Path = $"Source.provision.regulatedPlace.geometry.{geometryType}",
+            Path = $"source.provision.regulatedPlace.geometry.{geometryType}",
             Message = "Selected geometry",
             Name = "Incorrect pairs",
             Rule = $"Incorrect pairs for selected geometry: {geometryType} "
@@ -49,7 +47,7 @@ public class SemanticValidationError
         new()
         {
             Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
-            Path = "Source.provision.regulatedPlace.geometry",
+            Path = "source.provision.regulatedPlace.geometry",
             Name = "Spatial reference",
             Rule = $"Spatial reference should be '{Constants.Srid27700}'"
         };
@@ -62,7 +60,7 @@ public class SemanticValidationError
         new()
         {
             Message = "The provided coordinates are outside the recognized UK boundaries.",
-            Path = "Source.provision.regulatedPlace.geometry",
+            Path = "source.provision.regulatedPlace.geometry",
             Name = "Wrong coordinates",
             Rule = "Coordinates should be within UK coordinates - POLYGON((0 0, 700000 0, 700000 1300000, 0 1300000, 0 0))"
         };
@@ -74,7 +72,7 @@ public class SemanticValidationError
     public SemanticValidationError SetGeometryValidationError() =>
         new()
         {
-            Path = "Source.provision.regulatedPlace.geometry",
+            Path = "source.provision.regulatedPlace.geometry",
             Message = "Selected geometry ",
             Name = "Wrong geometry",
             Rule = $"Geometry accepted should be one of: {GeometryType.PointGeometry}, {GeometryType.LinearGeometry}, {GeometryType.Polygon} or {GeometryType.DirectedLinear}"

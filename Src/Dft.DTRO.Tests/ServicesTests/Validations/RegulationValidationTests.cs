@@ -10,10 +10,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": true,
                     ""timeZone"": ""Europe/London""
@@ -33,10 +33,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London""
@@ -59,10 +59,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": true,
                     ""timeZone"": ""{timeZone}""
@@ -94,10 +94,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London"",
@@ -125,10 +125,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London"",
@@ -156,10 +156,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London"",
@@ -248,10 +248,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London"",
@@ -277,10 +277,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": true,
                     ""timeZone"": ""Europe/London"",
@@ -307,10 +307,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": true,
                     ""timeZone"": ""Europe/London"",

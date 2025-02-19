@@ -13,12 +13,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"": {{
+                                ""pointGeometry"": {{
                                     ""version"": {version},
                                     ""point"": ""SRID=27700;POINT(323544 124622)"",
                                     ""representation"": ""centreLinePoint""
@@ -44,12 +44,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"": {{
+                                ""pointGeometry"": {{
                                     ""version"": 1,
                                     ""point"": ""{point}"",
                                     ""representation"": ""centreLinePoint""
@@ -76,12 +76,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"": {{
+                                ""pointGeometry"": {{
                                     ""version"": 1,
                                     ""point"": ""SRID=27700;POINT(323544 124622)"",
                                     ""representation"": ""{representation}""
@@ -106,12 +106,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""LinearGeometry"": {{
+                                ""linearGeometry"": {{
                                     ""version"": {version},
                                     ""direction"": ""bidirectional"",
                                     ""lateralPosition"": ""onKerb"",
@@ -135,12 +135,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""LinearGeometry"": {{
+                                ""linearGeometry"": {{
                                     ""version"": 1,
                                     ""direction"": ""bidirectional"",
                                     ""lateralPosition"": ""onKerb"",
@@ -149,7 +149,7 @@ public class GeometryValidationServiceTests
                                 }}
                             }},
                             {{
-                                ""LinearGeometry"": {{
+                                ""linearGeometry"": {{
                                     ""version"": 1,
                                     ""direction"": ""bidirectional"",
                                     ""lateralPosition"": ""onKerb"",
@@ -178,12 +178,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""LinearGeometry"": {{
+                                ""linearGeometry"": {{
                                     ""version"": 1,
                                     ""direction"": ""{direction}"",
                                     ""lateralPosition"": ""onKerb"",
@@ -213,12 +213,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""LinearGeometry"": {{
+                                ""linearGeometry"": {{
                                     ""version"": 1,
                                     ""direction"": ""startToEnd"",
                                     ""lateralPosition"": ""{lateralPosition}"",
@@ -246,12 +246,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""LinearGeometry"": {{
+                                ""linearGeometry"": {{
                                     ""version"": 1,
                                     ""direction"": ""startToEnd"",
                                     ""lateralPosition"": ""far"",
@@ -279,12 +279,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""LinearGeometry"": {{
+                                ""linearGeometry"": {{
                                     ""version"": 1,
                                     ""direction"": ""startToEnd"",
                                     ""lateralPosition"": ""near"",
@@ -311,12 +311,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""Polygon"": {{
+                                ""polygon"": {{
                                     ""version"": 1,
                                     ""polygon"": ""{polygon}""
                                 }}
@@ -341,12 +341,12 @@ public class GeometryValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""DirectedLinear"": {{
+                                ""directedLinear"": {{
                                     ""version"": 1,
                                     ""directedLineString"": ""{directedLineString}""
                                 }}
