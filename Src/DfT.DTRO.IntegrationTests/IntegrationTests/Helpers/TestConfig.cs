@@ -1,7 +1,10 @@
+using System.Linq;
+
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class TestConfig
     {
+        public static readonly string SchemaVersionUnderTest = "3.3.1";
         public static string EnvironmentName { get; }
         public static string BaseUri { get; }
         public static string AbsolutePathToProjectFolder { get; }
@@ -10,10 +13,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         public static string AbsolutePathToDtroExamplesTempFolder { get; }
         public static string RulesJsonFile { get; }
         public static string SchemaJsonFile { get; }
-
-        // TODO: Retrieve values from .env file
-        public static readonly string DatabaseConnectionString = "Host=localhost;Username=postgres;Password=admin;Database=DTRO";
-        public static readonly string SchemaVersionUnderTest = "3.3.1";
+        public static string DatabaseHostName { get; }
+        public static string DatabaseConnectionString { get; }
 
         private static string GetAbsolutePathToProjectFolder()
         {
@@ -36,15 +37,38 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             }
         }
 
+        private static string GetDatabaseConnectionString()
+        {
+            string envFilePath = $"{AbsolutePathToProjectFolder}/docker/dev/.env";
+            if (!File.Exists(envFilePath))
+            {
+                throw new Exception($".env file does not exist at path {envFilePath}");
+            }
+
+            var lines = File.ReadAllLines(envFilePath);
+            var postgresUserLine = lines.First(line => line.StartsWith("POSTGRES_USER="));
+            string postgresUser = postgresUserLine.Split('=')[1];
+            var postgresPasswordLine = lines.First(line => line.StartsWith("POSTGRES_PASSWORD="));
+            string postgresPassword = postgresPasswordLine.Split('=')[1];
+            var postgresDbLine = lines.First(line => line.StartsWith("POSTGRES_DB="));
+            string postgresDb = postgresDbLine.Split('=')[1];
+
+            return $"Host={DatabaseHostName};Username={postgresUser};Password={postgresPassword};Database={postgresDb}";
+        }
+
         static TestConfig()
         {
             EnvironmentName = Environment.GetEnvironmentVariable("ENVIRONMENT") ?? "local";
 
-            BaseUri = EnvironmentName switch
+            switch (EnvironmentName)
             {
-                "local" => "https://localhost:5001",
-                _ => throw new Exception($"Environment {EnvironmentName} not recognised!")
-            };
+                case "local":
+                    BaseUri = "https://localhost:5001";
+                    DatabaseHostName = "localhost";
+                    break;
+                default:
+                    throw new Exception($"Environment {EnvironmentName} not recognised!");
+            }
 
             AbsolutePathToProjectFolder = GetAbsolutePathToProjectFolder();
             AbsolutePathToExamplesFolder = $"{GetAbsolutePathToProjectFolder()}/examples";
@@ -52,6 +76,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             AbsolutePathToDtroExamplesTempFolder = $"{AbsolutePathToExamplesFolder}/temp";
             RulesJsonFile = $"{AbsolutePathToExamplesFolder}/Rules/rules-{SchemaVersionUnderTest}.json";
             SchemaJsonFile = $"{AbsolutePathToExamplesFolder}/Schemas/schemas-{SchemaVersionUnderTest}.json";
+            DatabaseConnectionString = GetDatabaseConnectionString();
         }
     }
 }
