@@ -1,10 +1,14 @@
-﻿namespace DfT.DTRO.Services.Mapping;
+﻿using DfT.DTRO.Models.Tra;
+
+namespace DfT.DTRO.Services.Mapping;
 
 public interface IDtroMappingService
 {
     void InferIndexFields(ref Models.DataBase.DTRO dtro);
 
     DtroResponse MapToDtroResponse(Models.DataBase.DTRO dtro);
+    
+    TraFindAllResponse MapToTraFindAllResponse(TrafficRegulationAuthority tra);
 
     IEnumerable<DtroEvent> MapToEvents(IEnumerable<Models.DataBase.DTRO> dtros, DateTime? searchSince);
 

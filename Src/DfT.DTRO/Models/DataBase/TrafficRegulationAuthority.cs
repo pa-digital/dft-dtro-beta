@@ -1,4 +1,4 @@
-﻿namespace DfT.DTRO.Models.DataBase;
+namespace DfT.DTRO.Models.DataBase;
 
 /// <summary>
 /// Wrapper for Traffic Regulation Authority 

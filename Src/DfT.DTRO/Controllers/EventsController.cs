@@ -3,8 +3,8 @@
 /// <summary>
 /// Controller for querying the database for data store events (e.g. create, update, delete)
 /// </summary>
-[Tags("Events")]
 [ApiController]
+[Tags("Events")]
 public class EventsController : ControllerBase
 {
     private readonly IEventSearchService _eventSearchService;
@@ -44,7 +44,7 @@ public class EventsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Search result.</returns>
-    [HttpPost("/events")]
+    [HttpPost(RouteTemplates.EventsFindAll)]
     [FeatureGate(FeatureNames.Consumer)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "Successfully received the event list")]
