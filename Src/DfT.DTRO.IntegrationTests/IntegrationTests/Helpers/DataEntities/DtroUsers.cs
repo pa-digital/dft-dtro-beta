@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
     public static class DtroUsers
     {
@@ -11,18 +11,25 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints
             var userIds = await GetAllUserIdsAsync();
             if (userIds.Count > 0)
             {
-                await DeleteUsersAsync(userIds);
+                var response = await DeleteUsersAsync(userIds);
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             }
         }
 
-        public static async Task<List<string>> GetAllUserIdsAsync()
+        public static async Task<HttpResponseMessage> GetAllUsersAsync()
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
             };
 
-            var response = await HttpRequestHelpers.MakeHttpRequestAsync(HttpMethod.Get, $"{TestConfig.BaseUri}/dtroUsers", headers);
+            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{TestConfig.BaseUri}/dtroUsers", headers);
+            return response;
+        }
+
+        public static async Task<List<string>> GetAllUserIdsAsync()
+        {
+            var response = await GetAllUsersAsync();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             string responseJson = await response.Content.ReadAsStringAsync();
@@ -40,8 +47,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints
             return ids;
         }
 
-
-        public static async Task DeleteUsersAsync(List<string> ids)
+        public static async Task<HttpResponseMessage> DeleteUsersAsync(List<string> ids)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -51,11 +57,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints
 
             var requestBody = new JObject { ["ids"] = JArray.FromObject(ids) };
 
-            var response = await HttpRequestHelpers.MakeHttpRequestAsync(HttpMethod.Delete, $"{TestConfig.BaseUri}/dtroUsers/redundant", headers, requestBody.ToString(Formatting.None));
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Delete, $"{TestConfig.BaseUri}/dtroUsers/redundant", headers, requestBody.ToString(Formatting.None));
+            return response;
         }
 
-        public static async Task CreateUserAsync(UserDetails userDetails)
+        public static async Task<HttpResponseMessage> CreateUserAsync(UserDetails userDetails)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -74,8 +80,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints
             }
             """;
 
-            var response = await HttpRequestHelpers.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}/dtroUsers/createFromBody", headers, jsonBody);
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}/dtroUsers/createFromBody", headers, jsonBody);
+            return response;
         }
     }
 }

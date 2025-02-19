@@ -1,6 +1,6 @@
 using Npgsql;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
     public static class SqlQueries
     {

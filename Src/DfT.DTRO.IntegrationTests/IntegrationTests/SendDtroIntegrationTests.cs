@@ -1,5 +1,5 @@
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers;
-using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests
 {
@@ -8,8 +8,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
         [Fact]
         public async Task CreateDtroShouldBeSavedCorrectly()
         {
-            await DtroUsers.CreateUserAsync(User.Publisher);
-            await Dtros.CreateDtroAsync(User.Publisher);
+            var userResponse = await DtroUsers.CreateUserAsync(User.Publisher);
+            Assert.Equal(HttpStatusCode.Created, userResponse.StatusCode);
+
+            var dtroResponse = await Dtros.CreateDtroAsync(User.Publisher);
+            Assert.Equal(HttpStatusCode.Created, dtroResponse.StatusCode);
         }
     }
 }

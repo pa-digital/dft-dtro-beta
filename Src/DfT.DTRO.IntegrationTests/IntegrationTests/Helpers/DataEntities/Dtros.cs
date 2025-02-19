@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
     public static class Dtros
     {
@@ -11,7 +10,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints
             SqlQueries.TruncateTable("Dtros");
         }
 
-        public static async Task CreateDtroAsync(UserDetails userDetails)
+        public static async Task<HttpResponseMessage> CreateDtroAsync(UserDetails userDetails)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -21,15 +20,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.RequestEndPoints
 
             var exampleFileName = $"JSON-{TestConfig.SchemaVersionUnderTest}-example-Derbyshire 2024 DJ388 partial.json";
             var tempFilePath = GetDtroFileWithTraUpdated(exampleFileName, userDetails.TraId);
-            var response = await HttpRequestHelpers.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}/dtros/createFromFile", headers, pathToJsonFile: tempFilePath);
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}/dtros/createFromFile", headers, pathToJsonFile: tempFilePath);
+            return response;
         }
 
         private static string GetDtroFileWithTraUpdated(string exampleFileName, string traId)
         {
-            var exampleFilePath = $"{TestConfig.AbsolutePathToExamplesFolder}/D-TROs/{TestConfig.SchemaVersionUnderTest}/{exampleFileName}";
-            var tempFilePath = $"{TestConfig.AbsolutePathToExamplesFolder}/temp/{exampleFileName}";
-            Directory.CreateDirectory($"{TestConfig.AbsolutePathToExamplesFolder}/temp");
+            var exampleFilePath = $"{TestConfig.AbsolutePathToDtroExamplesFolder}/{exampleFileName}";
+            Directory.CreateDirectory($"{TestConfig.AbsolutePathToDtroExamplesTempFolder}");
+            var tempFilePath = $"{TestConfig.AbsolutePathToDtroExamplesTempFolder}/{exampleFileName}";
             File.Copy(exampleFilePath, tempFilePath, overwrite: true);
 
             string json = File.ReadAllText(tempFilePath);

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
-    public static class HttpRequestHelpers
+    public static class HttpRequestHelper
     {
         public static async Task<HttpResponseMessage> MakeHttpRequestAsync(HttpMethod method, string uri, Dictionary<string, string> headers = null, string body = null, string pathToJsonFile = null, bool printCurl = true)
         {

@@ -4,15 +4,20 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
     {
         public static string EnvironmentName { get; }
         public static string BaseUri { get; }
+        public static string AbsolutePathToProjectFolder { get; }
         public static string AbsolutePathToExamplesFolder { get; }
+        public static string AbsolutePathToDtroExamplesFolder { get; }
+        public static string AbsolutePathToDtroExamplesTempFolder { get; }
+        public static string RulesJsonFile { get; }
+        public static string SchemaJsonFile { get; }
 
         // TODO: Retrieve values from .env file
         public static readonly string DatabaseConnectionString = "Host=localhost;Username=postgres;Password=admin;Database=DTRO";
         public static readonly string SchemaVersionUnderTest = "3.3.1";
 
-        private static string GetAbsolutePathToExamplesFolder()
+        private static string GetAbsolutePathToProjectFolder()
         {
-            DirectoryInfo currentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+            DirectoryInfo currentDirectory = new(Directory.GetCurrentDirectory());
 
             var projectDirectory = "dft-dtro-beta";
 
@@ -23,7 +28,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             if (currentDirectory != null && currentDirectory.Name == projectDirectory)
             {
-                return $"{currentDirectory.FullName}/examples";
+                return $"{currentDirectory.FullName}";
             }
             else
             {
@@ -41,7 +46,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                 _ => throw new Exception($"Environment {EnvironmentName} not recognised!")
             };
 
-            AbsolutePathToExamplesFolder = GetAbsolutePathToExamplesFolder();
+            AbsolutePathToProjectFolder = GetAbsolutePathToProjectFolder();
+            AbsolutePathToExamplesFolder = $"{GetAbsolutePathToProjectFolder()}/examples";
+            AbsolutePathToDtroExamplesFolder = $"{AbsolutePathToExamplesFolder}/D-TROs/{SchemaVersionUnderTest}";
+            AbsolutePathToDtroExamplesTempFolder = $"{AbsolutePathToExamplesFolder}/temp";
+            RulesJsonFile = $"{AbsolutePathToExamplesFolder}/Rules/rules-{SchemaVersionUnderTest}.json";
+            SchemaJsonFile = $"{AbsolutePathToExamplesFolder}/Schemas/schemas-{SchemaVersionUnderTest}.json";
         }
     }
 }
