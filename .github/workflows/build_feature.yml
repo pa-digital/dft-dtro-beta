@@ -78,6 +78,7 @@ jobs:
           DOTNET_USE_POLLING_FILE_WATCHER: 1
         run: |
           pushd Src/DfT.DTRO
+          echo "Current path is: $(pwd)" 
           dotnet ef database update
           dotnet run &
           # npm install -g wait-on
