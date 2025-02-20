@@ -1,53 +1,53 @@
 {
-  "Source": {
+  "source": {
     "actionType": "new",
     "currentTraOwner": 3300,
-    "Provision": [
+    "provision": [
       {
         "actionType": "new",
         "orderReportingPoint": "ttroTtmoNoticeOfIntention",
         "provisionDescription": "Temporary height and length restriction",
         "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
-        "Regulation": [
+        "regulation": [
           {
             "isDynamic": false,
             "timeZone": "Europe/London",
-            "GeneralRegulation": {
+            "generalRegulation": {
               "regulationType": "dimensionMaximumHeightWithTRO"
             },
-            "ConditionSet": [
+            "conditionSet": [
               {
                 "operator": "and",
-                "ConditionSet": [
+                "conditionSet": [
                   {
                     "operator": "or",
-                    "Condition": [
+                    "condition": [
                       {
                         "negate": false,
-                        "VehicleCharacteristics": {
-                          "MaximumHeightCharacteristic": {
+                        "vehicleCharacteristics": {
+                          "maximumHeightCharacteristic": {
                             "vehicleHeight": 2.5
                           }
                         }
                       },
                       {
                         "negate": true,
-                        "VehicleCharacteristics": {
+                        "vehicleCharacteristics": {
                           "vehicleType": "bus"
                         }
                       },
                       {
                         "operator": "and",
-                        "Condition": [
+                        "condition": [
                           {
                             "negate": false,
-                            "VehicleCharacteristics": {
+                            "vehicleCharacteristics": {
                               "vehicleType": "taxi"
                             }
                           },
                           {
                             "negate": false,
-                            "VehicleCharacteristics": {
+                            "vehicleCharacteristics": {
                               "vehicleUsage": "access"
                             }
                           }
@@ -57,7 +57,7 @@
                   }
                 ],
                 "condition": {
-                  "TimeValidity": {
+                  "timeValidity": {
                     "start": "2024-08-22T08:00:00",
                     "end": "2024-08-22T20:00:00"
                   }
@@ -66,20 +66,22 @@
             ]
           }
         ],
-        "RegulatedPlace": [
+        "regulatedPlace": [
           {
             "description": "East Reach - Taunton",
             "type": "regulationLocation",
-            "PointGeometry": {
+            "pointGeometry": {
               "version": 1,
               "point": "SRID=27700;POINT(323544 124622)",
               "representation": "centreLinePoint",
-              "ExternalReference": [
+              "externalReference": [
                 {
                   "lastUpdateDate": "2024-08-01T00:00:00",
-                  "UniqueStreetReferenceNumber": {
-                    "usrn": 39608173
-                  }
+                  "uniqueStreetReferenceNumber": [
+                    {
+                      "usrn": 39608173
+                    }
+                  ]
                 }
               ]
             }

@@ -12,44 +12,44 @@ public class ConditionValidationTests
         SchemaVersion schemaVersion = (version);
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""ConditionSet"": [
+                                ""conditionSet"": [
                                     {
                                         ""operator"": ""and"",
-                                        ""ConditionSet"": [
+                                        ""conditionSet"": [
                                             {
                                                 ""operator"": ""or"",
-                                                ""Condition"": [
+                                                ""condition"": [
                                                     {
                                                         ""negate"": false,
-                                                        ""VehicleCharacteristics"": {
-                                                            ""MaximumHeightCharacteristic"": {
+                                                        ""vehicleCharacteristics"": {
+                                                            ""maximumHeightCharacteristic"": {
                                                                 ""vehicleHeight"": 2.5
                                                             }
                                                         }
                                                     },
                                                     {
                                                         ""negate"": true,
-                                                        ""VehicleCharacteristics"": {
+                                                        ""vehicleCharacteristics"": {
                                                             ""vehicleType"": ""bus""
                                                         }
                                                     },
                                                     {
                                                         ""operator"": ""and"",
-                                                        ""Condition"": [
+                                                        ""condition"": [
                                                             {
                                                                 ""negate"": ""and"",
-                                                                ""VehicleCharacteristics"": {
+                                                                ""vehicleCharacteristics"": {
                                                                     ""vehicleType"": ""taxi""
                                                                 }
                                                             },
                                                             {
                                                                 ""negate"": false,
-                                                                ""VehicleCharacteristics"": {
+                                                                ""vehicleCharacteristics"": {
                                                                     ""vehicleUsage"": ""access""
                                                                 }
                                                             }
@@ -58,8 +58,8 @@ public class ConditionValidationTests
                                                 ]
                                             }
                                         ],
-                                        ""Condition"": {
-                                            ""TimeValidity"": {
+                                        ""condition"": {
+                                            ""timeValidity"": {
                                                 ""start"": ""2024-08-22T08:00:00"",
                                                 ""end"": ""2024-08-22T20:00:00""
                                             }
@@ -84,44 +84,44 @@ public class ConditionValidationTests
         SchemaVersion schemaVersion = (version);
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""ConditionSet"": [
+                                ""conditionSet"": [
                                     {
                                         ""operator"": ""some"",
-                                        ""ConditionSet"": [
+                                        ""conditionSet"": [
                                             {
                                                 ""operator"": ""or"",
-                                                ""Condition"": [
+                                                ""condition"": [
                                                     {
                                                         ""negate"": false,
-                                                        ""VehicleCharacteristics"": {
-                                                            ""MaximumHeightCharacteristic"": {
+                                                        ""vehicleCharacteristics"": {
+                                                            ""maximumHeightCharacteristic"": {
                                                                 ""vehicleHeight"": 2.5
                                                             }
                                                         }
                                                     },
                                                     {
                                                         ""negate"": true,
-                                                        ""VehicleCharacteristics"": {
+                                                        ""vehicleCharacteristics"": {
                                                             ""vehicleType"": ""bus""
                                                         }
                                                     },
                                                     {
                                                         ""operator"": ""and"",
-                                                        ""Condition"": [
+                                                        ""condition"": [
                                                             {
                                                                 ""negate"": ""and"",
-                                                                ""VehicleCharacteristics"": {
+                                                                ""vehicleCharacteristics"": {
                                                                     ""vehicleType"": ""taxi""
                                                                 }
                                                             },
                                                             {
                                                                 ""negate"": false,
-                                                                ""VehicleCharacteristics"": {
+                                                                ""vehicleCharacteristics"": {
                                                                     ""vehicleUsage"": ""access""
                                                                 }
                                                             }
@@ -130,8 +130,8 @@ public class ConditionValidationTests
                                                 ]
                                             }
                                         ],
-                                        ""Condition"": {
-                                            ""TimeValidity"": {
+                                        ""condition"": {
+                                            ""timeValidity"": {
                                                 ""start"": ""2024-08-22T08:00:00"",
                                                 ""end"": ""2024-08-22T20:00:00""
                                             }
@@ -156,16 +156,16 @@ public class ConditionValidationTests
         SchemaVersion schemaVersion = (version);
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""Condition"": {
-                                    ""TimeValidity"": {
+                                ""condition"": {
+                                    ""timeValidity"": {
 
                                     },
-                                    ""RoadCondition"": {
+                                    ""roadCondition"": {
 
                                     }
                                 }
@@ -188,13 +188,13 @@ public class ConditionValidationTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""Condition"": {
-                                    ""TimeValidity"": {
+                                ""condition"": {
+                                    ""timeValidity"": {
 
                                     }
                                 }
@@ -217,12 +217,12 @@ public class ConditionValidationTests
 
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-            ""Source"": {
-                ""Provision"": [
+            ""source"": {
+                ""provision"": [
                     {
-                        ""Regulation"": [
+                        ""regulation"": [
                             {
-                                ""Condition"": {
+                                ""condition"": {
                                     ""SomeCondition"": {
 
                                     }

@@ -46,12 +46,12 @@ public class JsonSchemaValidationTests
     }
 
     [Theory]
-    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-HeightRestrictionWithConditions", false)]
-    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-multiple-nested-condition-sets", false)]
-    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-SuspensionOneWay", false)]
-    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-TempOneWayWithConditions", false)]
-    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-WeightRestriction", false)]
-    public void ValidateAgainstSchema325ProducesCorrectResults(string schemaVersion, string sourceJson, bool expectedResult)
+    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-HeightRestrictionWithConditions", true)]
+    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-multiple-nested-condition-sets", true)]
+    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-SuspensionOneWay", true)]
+    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-TempOneWayWithConditions", true)]
+    [InlineData("3.3.0", "JSON-3.3.0-example-TTRO-WeightRestriction", true)]
+    public void ValidateAgainstSchema330ProducesCorrectResults(string schemaVersion, string sourceJson, bool expectedResult)
     {
         JsonSchemaValidationService sut = new();
         string jsonSchema =

@@ -124,7 +124,7 @@ public class SemanticValidationService : ISemanticValidationService
         var conditionSetArrays =
             data.DescendantsAndSelf()
                 .OfType<JObject>()
-                .Where(it => it.ContainsKey("ConditionSet"))
+                .Where(it => it.ContainsKey("conditionSet"))
                 .Select(it => it.Value<JObject>());
 
         if (conditionSetArrays.Any())
@@ -153,7 +153,7 @@ public class SemanticValidationService : ISemanticValidationService
         var conditionArrays =
             data.DescendantsAndSelf()
                 .OfType<JProperty>()
-                .Where(it => it.Name == "Condition")
+                .Where(it => it.Name == "condition")
                 .Select(it => it.Value)
                 .Cast<JArray>();
 
@@ -191,7 +191,7 @@ public class SemanticValidationService : ISemanticValidationService
         IEnumerable<JProperty> externalReferences = data
             .DescendantsAndSelf()
             .OfType<JProperty>()
-            .Where(it => it.Name == "ExternalReference".ToBackwardCompatibility(schemaVersion))
+            .Where(it => it.Name == "externalReference".ToBackwardCompatibility(schemaVersion))
             .Select(it => it);
 
         if (!externalReferences.Any())
@@ -247,7 +247,7 @@ public class SemanticValidationService : ISemanticValidationService
                     new SemanticValidationError
                     {
                         Message = $"Referenced TRO with id '{dtroId}' does not exist.",
-                        Path = "Source.reference"
+                        Path = "source.reference"
                     });
             }
         }

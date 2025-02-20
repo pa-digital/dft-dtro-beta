@@ -76,7 +76,7 @@ public class GeometryValidation : IGeometryValidation
         JProperty geometry = data
             .DescendantsAndSelf()
             .OfType<JProperty>()
-            .FirstOrDefault(property => property.Name == "Geometry".ToBackwardCompatibility(schemaVersion));
+            .FirstOrDefault(property => property.Name == "geometry".ToBackwardCompatibility(schemaVersion));
 
         BoundingBox boundingBox = new();
         if (geometry?.Value is not JObject)

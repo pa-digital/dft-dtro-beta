@@ -11,10 +11,10 @@ public class RegulatedPlaceValidation : IRegulatedPlaceValidation
 
         List<ExpandoObject> regulatedPlaces = request
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(request.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(request.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(expandoObject => expandoObject
-                .GetValue<IList<object>>("RegulatedPlace".ToBackwardCompatibility(request.SchemaVersion))
+                .GetValue<IList<object>>("regulatedPlace".ToBackwardCompatibility(request.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 

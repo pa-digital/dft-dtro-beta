@@ -8,30 +8,30 @@ public enum RegulationType
     /// <summary>
     /// Speed limit value based regulation
     /// </summary>
-    [Display(Name = "SpeedLimitValueBased")]
+    [Display(Name = "speedLimitValueBased")]
     SpeedLimitValueBased = 1,
 
     /// <summary>
     /// Speed limit profile based regulation
     /// </summary>
-    [Display(Name = "SpeedLimitProfileBased")]
+    [Display(Name = "speedLimitProfileBased")]
     SpeedLimitProfileBased = 2,
 
     /// <summary>
     /// General regulation
     /// </summary>
-    [Display(Name = "GeneralRegulation")]
+    [Display(Name = "generalRegulation")]
     GeneralRegulation = 3,
 
     /// <summary>
     /// Off list regulation
     /// </summary>
-    [Display(Name = "OffListRegulation")]
+    [Display(Name = "offListRegulation")]
     OffListRegulation = 4,
 
     /// <summary>
     /// Temporary regulation
     /// </summary>
-    [Display(Name = "TemporaryRegulation")]
+    [Display(Name = "temporaryRegulation")]
     TemporaryRegulation = 5
 }

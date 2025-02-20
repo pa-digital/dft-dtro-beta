@@ -8,49 +8,49 @@ public enum ConditionType
     /// <summary>
     /// Road condition
     /// </summary>
-    [Display(Name = "RoadCondition")]
+    [Display(Name = "roadCondition")]
     RoadCondition = 1,
 
     /// <summary>
     /// Occupant condition
     /// </summary>
-    [Display(Name = "OccupantCondition")]
+    [Display(Name = "occupantCondition")]
     OccupantCondition = 2,
 
     /// <summary>
     /// Driver condition
     /// </summary>
-    [Display(Name = "DriverCondition")]
+    [Display(Name = "driverCondition")]
     DriverCondition = 3,
 
     /// <summary>
     /// Access condition
     /// </summary>
-    [Display(Name = "AccessCondition")]
+    [Display(Name = "accessCondition")]
     AccessCondition = 4,
 
     /// <summary>
     /// Time validity condition
     /// </summary>
-    [Display(Name = "TimeValidity")]
+    [Display(Name = "timeValidity")]
     TimeValidity = 5,
 
     /// <summary>
     /// Non-vehicular road user condition
     /// </summary>
-    [Display(Name = "NonVehicularRoadUserCondition")]
+    [Display(Name = "nonVehicularRoadUserCondition")]
     NonVehicularRoadUserCondition = 6,
 
     /// <summary>
     /// Permit condition
     /// </summary>
-    [Display(Name = "PermitCondition")]
+    [Display(Name = "permitCondition")]
     PermitCondition = 7,
 
     /// <summary>
     /// Vehicle condition
     /// </summary>
-    [Display(Name = "VehicleCharacteristics")]
+    [Display(Name = "vehicleCharacteristics")]
     VehicleCharacteristics = 8,
 
     /// <summary>

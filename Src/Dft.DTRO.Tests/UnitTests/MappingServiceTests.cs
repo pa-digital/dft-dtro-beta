@@ -5,7 +5,7 @@ public class MappingServiceTests
 {
     private static readonly string[] ValidDtroHistoriesFor323 =
     {
-        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-Polygon.json",
+        "../../../TestFiles/D-TROs/3.2.3/temporary TRO - new-polygon.json",
         "../../../TestFiles/D-TROs/3.2.3/valid-noChange.json",
         "../../../TestFiles/D-TROs/3.2.3/temporary TRO - fullRevoke.json"
     };

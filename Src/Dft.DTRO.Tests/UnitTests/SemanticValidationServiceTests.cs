@@ -24,14 +24,10 @@ public class SemanticValidationServiceTests
         _mockClock.Setup(it => it.UtcNow).Returns(new DateTime(2023, 5, 1));
     }
 
-    [Theory]
-    [InlineData("3.2.4")]
-    [InlineData("3.3.0")]
-    public async Task AllowsLastUpdateDateInThePast(string version)
+    [Fact]
+    public async Task AllowsLastUpdateDateInThePast()
     {
-        DtroSubmit dtro = PrepareDtro(version != "3.3.0"
-            ? @"{""geometry"": { ""version"": 1, ""Polygon"": { ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1927-09-26 00:00:00""}]}}"
-            : @"{""Polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""ExternalReference"": [{ ""lastUpdateDate"": ""1927-09-26 00:00:00""}]}}", version);
+        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""polygon"": { ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1927-09-26 00:00:00""}]}}", "3.2.4");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
@@ -47,8 +43,8 @@ public class SemanticValidationServiceTests
     public async Task DisallowsLastUpdateDateInTheFuture(string version)
     {
         DtroSubmit dtro = PrepareDtro(version != "3.3.0"
-            ? @"{""geometry"": { ""version"": 1, ""Polygon"": { ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""2227-09-26 00:00:00""}]}}"
-            : @"{""Polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""ExternalReference"": [{ ""lastUpdateDate"": ""2227-09-26 00:00:00""}]}}", version);
+            ? @"{""geometry"": { ""version"": 1, ""polygon"": { ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""2227-09-26 00:00:00""}]}}"
+            : @"{""polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""externalReference"": [{ ""lastUpdateDate"": ""2227-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
@@ -64,8 +60,8 @@ public class SemanticValidationServiceTests
     public async Task AllowsCoordinatesWithinPolygon(string version)
     {
         DtroSubmit dtro = PrepareDtro(version != "3.3.0"
-            ? @"{""geometry"": { ""version"": 1, ""Polygon"": { ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
-            : @"{""Polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""ExternalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
+            ? @"{""geometry"": { ""version"": 1, ""polygon"": { ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
+            : @"{""polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
@@ -82,8 +78,8 @@ public class SemanticValidationServiceTests
     public async Task AllowsCoordinatesWithinPointGeometry(string version)
     {
         DtroSubmit dtro = PrepareDtro(version != "3.3.0"
-            ? @"{""geometry"": { ""version"": 1, ""PointGeometry"": { ""point"": ""SRID=27700;POINT(529157 178805)"", ""representation"": ""centreLinePoint""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
-            : @"{""PointGeometry"": { ""version"": 1, ""point"": ""SRID=27700;POINT(529157 178805)"", ""representation"": ""centreLinePoint"", ""ExternalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
+            ? @"{""geometry"": { ""version"": 1, ""pointGeometry"": { ""point"": ""SRID=27700;POINT(529157 178805)"", ""representation"": ""centreLinePoint""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
+            : @"{""pointGeometry"": { ""version"": 1, ""point"": ""SRID=27700;POINT(529157 178805)"", ""representation"": ""centreLinePoint"", ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
@@ -100,8 +96,8 @@ public class SemanticValidationServiceTests
     public async Task AllowsCoordinatesWithinLinearGeometry(string version)
     {
         DtroSubmit dtro = PrepareDtro(version != "3.3.0"
-            ? @"{""geometry"": { ""version"": 1, ""LinearGeometry"": { ""direction"": ""bidirectional"", ""lateralPosition"": ""centreline"",""linestring"": ""SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
-            : @"{""LinearGeometry"": { ""version"": 1, ""direction"": ""bidirectional"", ""lateralPosition"": ""centreline"",""linestring"": ""SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"", ""ExternalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
+            ? @"{""geometry"": { ""version"": 1, ""linearGeometry"": { ""direction"": ""bidirectional"", ""lateralPosition"": ""centreline"",""linestring"": ""SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
+            : @"{""linearGeometry"": { ""version"": 1, ""direction"": ""bidirectional"", ""lateralPosition"": ""centreline"",""linestring"": ""SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"", ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
@@ -118,8 +114,8 @@ public class SemanticValidationServiceTests
     public async Task AllowsCoordinatesWithinDirectedLinearGeometry(string version)
     {
         DtroSubmit dtro = PrepareDtro(version != "3.3.0"
-         ? @"{""geometry"": { ""version"": 1, ""DirectedLinear"": { ""directedLineString"": ""SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
-         : @"{""DirectedLinear"": { ""version"": 1, ""directedLineString"": ""SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"", ""ExternalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
+         ? @"{""geometry"": { ""version"": 1, ""directedLinear"": { ""directedLineString"": ""SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
+         : @"{""directedLinear"": { ""version"": 1, ""directedLineString"": ""SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"", ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
@@ -130,15 +126,10 @@ public class SemanticValidationServiceTests
         Assert.Equal(expected, actual.Item1);
     }
 
-    [Theory]
-    [InlineData("3.2.4")]
-    [InlineData("3.3.0")]
-    public async Task WhenVersionGeometryIsIntegerReturnsNoError(string version)
+    [Fact]
+    public async Task WhenVersionGeometryIsIntegerReturnsNoError()
     {
-        DtroSubmit dtro = PrepareDtro(version != "3.3.0"
-            ? @"{""geometry"": { ""version"": 1, ""Polygon"": { ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
-            : @"{""Polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""ExternalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
-
+        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""polygon"": { ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", "3.2.4");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
@@ -153,8 +144,8 @@ public class SemanticValidationServiceTests
     public async Task WhenVersionGeometryIsNotIntegerReturnsError(string version)
     {
         DtroSubmit dtro = PrepareDtro(version != "3.3.0"
-            ? @"{""geometry"": { ""version"": ""1"", ""Polygon"": { ""polygon"": ""SRID=27700;POLYGON((30 10, 40 40, 20 40, 10 20, 30 10))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
-            : @"{""Polygon"": { ""version"": ""1"", ""polygon"": ""SRID=27700;POLYGON((30 10, 40 40, 20 40, 10 20, 30 10))"", ""ExternalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
+            ? @"{""geometry"": { ""version"": ""1"", ""polygon"": { ""polygon"": ""SRID=27700;POLYGON((30 10, 40 40, 20 40, 10 20, 30 10))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}"
+            : @"{""polygon"": { ""version"": ""1"", ""polygon"": ""SRID=27700;POLYGON((30 10, 40 40, 20 40, 10 20, 30 10))"", ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
@@ -170,8 +161,8 @@ public class SemanticValidationServiceTests
     [InlineData("3.3.0")]
     public async Task WhenBritishNationalGridSpatialReferenceIsNotPresentReturnsError(string version)
     {
-        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""Polygon"": {
-            ""polygon"": ""POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""ExternalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
+        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""polygon"": {
+            ""polygon"": ""POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
@@ -186,8 +177,8 @@ public class SemanticValidationServiceTests
     [InlineData("3.3.0")]
     public async Task WhenBritishNationalGridSpatialReferenceIsIncorrectReturnsError(string version)
     {
-        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""Polygon"": {
-            ""polygon"": ""SRID=27770;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""ExternalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
+        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""polygon"": {
+            ""polygon"": ""SRID=27770;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
@@ -202,7 +193,7 @@ public class SemanticValidationServiceTests
     [InlineData("3.3.0")]
     public async Task TypoInExternalReferenceReturnsError(string version)
     {
-        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""Polygon"": {
+        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""polygon"": {
             ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalR"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,

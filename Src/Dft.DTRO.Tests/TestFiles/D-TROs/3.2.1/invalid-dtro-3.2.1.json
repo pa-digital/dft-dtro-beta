@@ -46,7 +46,7 @@
                         ]
                       ]
                     ],
-                    "type": "Polygon"
+                    "type": "polygon"
                   },
                   "crs": "osgb36Epsg27700",
                   "geometryType": "polygon"

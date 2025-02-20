@@ -125,7 +125,7 @@ public static class Utils
 
         List<IList<object>> objects = items
             .Select(JsonConvert.DeserializeObject<ExpandoObject>)
-            .Select(item => item.GetValueOrDefault<IList<object>>("Source.provision"))
+            .Select(item => item.GetValueOrDefault<IList<object>>("source.provision"))
             .ToList();
 
         List<DtroHistoryProvisionResponse> provisions = new();

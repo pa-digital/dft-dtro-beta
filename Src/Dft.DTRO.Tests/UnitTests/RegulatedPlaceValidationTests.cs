@@ -12,10 +12,10 @@ public class RegulatedPlaceValidationTests
     {
         var dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""Provision"": [
+          ""source"": {
+            ""provision"": [
               {
-                ""RegulatedPlace"": [
+                ""regulatedPlace"": [
                   {
                   ""type"":  ""regulationLocation""
                   },
@@ -37,10 +37,10 @@ public class RegulatedPlaceValidationTests
     {
         var dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""Provision"": [
+          ""source"": {
+            ""provision"": [
               {
-                ""RegulatedPlace"": [
+                ""regulatedPlace"": [
                   {
                   ""type"":  ""diversionRoute""
                   },

@@ -1,37 +1,39 @@
 {
-  "Source": {
-    "Provision": [
+  "source": {
+    "provision": [
       {
-        "RegulatedPlace": [
+        "regulatedPlace": [
           {
             "type": "regulationLocation",
-            "LinearGeometry": {
+            "linearGeometry": {
               "version": 1,
               "direction": "bidirectional",
               "lateralPosition": "onKerb",
               "linestring": "SRID=27700;LINESTRING(444284 333253, 444284 333253)",
               "representation": "linear",
-              "ExternalReference": [
+              "externalReference": [
                 {
                   "lastUpdateDate": "2024-10-01T08:00:00",
-                  "UniqueStreetReferenceNumber": {
-                    "usrn": 1515737
-                  }
+                  "uniqueStreetReferenceNumber": [
+                    {
+                      "usrn": 1515737
+                    }
+                  ]
                 }
               ]
             }
           }
         ],
-        "Regulation": [
+        "regulation": [
           {
             "isDynamic": false,
             "timeZone": "Europe/London",
-            "GeneralRegulation": {
+            "generalRegulation": {
               "regulationType": "kerbsideLimitedWaiting"
             },
-            "Condition": [
+            "condition": [
               {
-                "TimeValidity": [
+                "timeValidity": 
                   {
                     "start": "2024-08-01T08:00:00",
                     "validPeriod": [
@@ -57,7 +59,6 @@
                       }
                     ]
                   }
-                ]
               }
             ]
           }

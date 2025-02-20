@@ -1,24 +1,24 @@
 {
-  "Source": {
+  "source": {
     "actionType": "new",
     "currentTraOwner": 3300,
-    "Provision": [
+    "provision": [
       {
         "actionType": "new",
         "orderReportingPoint": "ttroTtmoNoticeAfterMakingCondition",
         "provisionDescription":
           "Suspension of one way on Haydon Road, perhaps to be linked to placement of temporary traffic signals",
         "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
-        "Regulation": [
+        "regulation": [
           {
             "isDynamic": false,
             "timeZone": "Europe/London",
-            "GeneralRegulation": {
+            "generalRegulation": {
               "regulationType": "miscSuspensionOfOneWay"
             },
-            "Condition": [
+            "condition": [
               {
-                "TimeValidity": {
+                "timeValidity": {
                   "start": "2024-10-23T08:00:00",
                   "end": "2024-10-23T20:00:00"
                 }
@@ -26,22 +26,24 @@
             ]
           }
         ],
-        "RegulatedPlace": [
+        "regulatedPlace": [
           {
             "type": "regulationLocation",
             "description": "Haydon Road",
-            "LinearGeometry": {
+            "linearGeometry": {
               "version": 1,
               "direction": "bidirectional",
               "lateralPosition": "centreline",
               "linestring": "SRID=27700;LINESTRING(323357 124578, 323338 124640)",
               "representation": "representingZone",
-              "ExternalReference": [
+              "externalReference": [
                 {
                   "lastUpdateDate": "2024-10-01T00:00:00",
-                  "UniqueStreetReferenceNumber": {
-                    "usrn": 39605715
-                  }
+                  "uniqueStreetReferenceNumber": [
+                    {
+                      "usrn": 39605715
+                    }
+                  ]
                 }
               ]
             }

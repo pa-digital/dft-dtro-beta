@@ -14,7 +14,7 @@
                             ],
                             "geometry": { /* GeoJSON format*/
                                 "coordinates": {
-                                    "type": "Polygon",
+                                    "type": "polygon",
                                     "coordinates": [
                                         [
                                             [

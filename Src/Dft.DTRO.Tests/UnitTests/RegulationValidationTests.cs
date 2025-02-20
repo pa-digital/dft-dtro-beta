@@ -12,12 +12,12 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""Provision"": [
+          ""source"": {
+            ""provision"": [
               {
-                ""Regulation"": [
+                ""regulation"": [
                   {
-                  ""GeneralRegulation"":  {
+                  ""generalRegulation"":  {
                     }
                   }
                 ]
@@ -35,16 +35,16 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""Provision"": [
+          ""source"": {
+            ""provision"": [
               {
-                ""Regulation"": [
+                ""regulation"": [
                   {
-                  ""GeneralRegulation"":  {
+                  ""generalRegulation"":  {
                     }
                   },
                   {
-                    ""OffListRegulation"": {
+                    ""offListRegulation"": {
                     }
                   }
                 ]
@@ -62,16 +62,16 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""Provision"": [
+          ""source"": {
+            ""provision"": [
               {
-                ""Regulation"": [
+                ""regulation"": [
                   {
-                  ""GeneralRegulation"":  {
+                  ""generalRegulation"":  {
                     }
                   },
                   {
-                    ""TemporaryRegulation"": {
+                    ""temporaryRegulation"": {
                     }
                   }
                 ]
@@ -89,10 +89,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
         {
-          ""Source"": {
-            ""Provision"": [
+          ""source"": {
+            ""provision"": [
               {
-                ""Regulation"": [
+                ""regulation"": [
                   {
                   ""RandomRegulation"":  {
                     }

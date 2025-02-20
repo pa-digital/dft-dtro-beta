@@ -12,7 +12,7 @@
             ],
             "geometry": {
               "coordinates": {
-                "type": "Polygon",
+                "type": "polygon",
                 "coordinates": [
                   [
                     [
@@ -202,7 +202,7 @@
                     }
                   ],
                   "recurringDayWeekMonthPeriod": [
-                    // DayWeekMonth
+                    // dayWeekMonth
                     {
                       "applicableDay": [
                         "friday"
@@ -211,7 +211,7 @@
                         "january"
                       ]
                     },
-                    // CalendarWeekInMonth
+                    // calendarWeekInMonth
                     {
                       "applicableDay": [
                         "friday"
@@ -221,7 +221,7 @@
                       ],
                       "weekInMonth": "fifthWeekOfMonth"
                     },
-                    // WeekOfMonth
+                    // weekOfMonth
                     {
                       "applicableDay": [
                         "friday"
@@ -233,7 +233,7 @@
                         "fifthWeek"
                       ]
                     },
-                    // InstanceOfDayWithinMonth
+                    // instanceOfDayWithinMonth
                     {
                       "applicableDay": [
                         "friday"

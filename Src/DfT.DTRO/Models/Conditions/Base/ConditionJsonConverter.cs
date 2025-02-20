@@ -20,7 +20,7 @@ public class ConditionJsonConverter : JsonConverter<Condition>
             throw new InvalidOperationException("The Condition must be an object");
         }
 
-        if (jsonObject.ContainsKey("Condition"))
+        if (jsonObject.ContainsKey("condition"))
         {
             return json.Deserialize<ConditionSet>(options);
         }

@@ -141,7 +141,7 @@
   },
   {
     "id": 4,
-    "message": "Period end date must not be later than overall period end date.",
+    "message": "period end date must not be later than overall period end date.",
     "name": "ExceptionPeriodEndNotMoreThanOverallPeriodEnd",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod",
     "rule": {
@@ -208,7 +208,7 @@
   },
   {
     "id": 5,
-    "message": "Period start time must be earlier than end time.",
+    "message": "period start time must be earlier than end time.",
     "name": "ExceptionPeriodRecurringTimePeriodOfDayStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod.recurringTimePeriodOfDay",
     "rule": {
@@ -270,7 +270,7 @@
   },
   {
     "id": 6,
-    "message": "Period start date must be earlier than end date.",
+    "message": "period start date must be earlier than end date.",
     "name": "ExceptionPeriodStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod",
     "rule": {
@@ -330,7 +330,7 @@
   },
   {
     "id": 7,
-    "message": "Period start date must not be earlier than overall period start date.",
+    "message": "period start date must not be earlier than overall period start date.",
     "name": "ExceptionPeriodStartNotLessThanOverallPeriodStart",
     "path": "source.provision.regulations.overallPeriod.exceptionPeriod",
     "rule": {
@@ -1177,7 +1177,7 @@
   
   {
     "id": 24,
-    "message": "Period end date must not be later than overall period end date.",
+    "message": "period end date must not be later than overall period end date.",
     "name": "ValidPeriodEndNotMoreThanOverallPeriodEnd",
     "path": "source.provision.regulations.overallPeriod.validPeriod",
     "rule": {
@@ -1244,7 +1244,7 @@
   },
   {
     "id": 25,
-    "message": "Period start time must be earlier than end time.",
+    "message": "period start time must be earlier than end time.",
     "name": "ValidPeriodRecurringTimePeriodOfDayStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.validPeriod.recurringTimePeriodOfDay",
     "rule": {
@@ -1306,7 +1306,7 @@
   },
   {
     "id": 26,
-    "message": "Period start date must be earlier than end date.",
+    "message": "period start date must be earlier than end date.",
     "name": "ValidPeriodStartLessThanEnd",
     "path": "source.provision.regulations.overallPeriod.validPeriod",
     "rule": {
@@ -1366,7 +1366,7 @@
   },
   {
     "id": 27,
-    "message": "Period start date must not be earlier than overall period start date.",
+    "message": "period start date must not be earlier than overall period start date.",
     "name": "ValidPeriodStartNotLessThanOverallPeriodStart",
     "path": "source.provision.regulations.overallPeriod.validPeriod",
     "rule": {

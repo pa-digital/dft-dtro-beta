@@ -21,7 +21,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -50,7 +50,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -78,7 +78,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -107,7 +107,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -138,7 +138,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -169,7 +169,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -200,7 +200,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -231,7 +231,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -262,7 +262,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -293,7 +293,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -324,7 +324,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -356,7 +356,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -387,7 +387,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -418,7 +418,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -449,7 +449,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -480,7 +480,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -522,7 +522,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -565,7 +565,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -599,7 +599,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -631,7 +631,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -659,7 +659,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -688,7 +688,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -715,7 +715,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -743,7 +743,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""traCreator"": 10,  ""currentTraOwner"": 10
             }
         }", new SchemaVersion("3.2.3"));
@@ -787,7 +787,7 @@ public class JsonLogicValidationTests
 
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulatedPlace"": [
@@ -835,7 +835,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -872,7 +872,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -909,7 +909,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -948,7 +948,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -991,7 +991,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -1028,7 +1028,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -1070,7 +1070,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   
                         ""provisionIndex"": 0
@@ -1099,7 +1099,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -1136,7 +1136,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-            ""Source"": {
+            ""source"": {
                 ""provision"": [
                     {   ""regulation"": [
                             {
@@ -1177,7 +1177,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1186,7 +1186,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""MaximumHeightCharacteristic"": [
+                          ""maximumHeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleHeight"": 6
@@ -1217,7 +1217,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1257,7 +1257,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1266,7 +1266,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""MaximumHeightCharacteristic"": [
+                          ""maximumHeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleHeight"": 6
@@ -1297,7 +1297,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1306,7 +1306,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""MaximumHeightCharacteristic"": [
+                          ""maximumHeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleHeight"": 7
@@ -1337,7 +1337,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1346,7 +1346,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""MaximumLengthCharacteristic"": [
+                          ""maximumLengthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleLength"": 5
@@ -1377,7 +1377,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1386,7 +1386,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""MaximumLengthCharacteristic"": [
+                          ""maximumLengthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleLength"": 41
@@ -1417,7 +1417,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1426,7 +1426,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""MaximumWidthCharacteristic"": [
+                          ""maximumWidthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleWidth"": 5
@@ -1457,7 +1457,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1466,7 +1466,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""MaximumWidthCharacteristic"": [
+                          ""maximumWidthCharacteristic"": [
                             {
                               ""comparisonOperator"": ""lessThanOrEqualTo"",
                               ""vehicleWidth"": 7
@@ -1499,7 +1499,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1508,7 +1508,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""MaximumGrossWeightCharacteristic"": [
+                          ""maximumGrossWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""grossVehicleWeight"": 5
@@ -1541,7 +1541,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1550,7 +1550,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""MaximumGrossWeightCharacteristic"": [
+                          ""maximumGrossWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""grossVehicleWeight"": 51
@@ -1583,7 +1583,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1592,7 +1592,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""HeaviestAxleWeightCharacteristic"": [
+                          ""heaviestAxleWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""heaviestAxleWeight"": 5
@@ -1625,7 +1625,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1634,7 +1634,7 @@ public class JsonLogicValidationTests
                     ""conditions"": [
                       {
                         ""vehicleCharacteristics"": {
-                          ""HeaviestAxleWeightCharacteristic"": [
+                          ""heaviestAxleWeightCharacteristic"": [
                             {
                               ""comparisonOperator"": ""greaterThan"",
                               ""heaviestAxleWeight"": 51
@@ -1665,7 +1665,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1712,7 +1712,7 @@ public class JsonLogicValidationTests
 
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1762,7 +1762,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
         {
-          ""Source"": {
+          ""source"": {
             ""provision"": [
               {
                 ""regulation"": [
@@ -1815,7 +1815,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -1852,7 +1852,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -1889,7 +1889,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -1926,7 +1926,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -1964,7 +1964,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -2001,7 +2001,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -2039,7 +2039,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -2076,7 +2076,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -2113,7 +2113,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -2150,7 +2150,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -2188,7 +2188,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {
@@ -2225,7 +2225,7 @@ public class JsonLogicValidationTests
     {
         DtroSubmit dtro = Utils.PrepareDtro(@"
 {
-    ""Source"": {
+    ""source"": {
         ""provision"": [
             {   ""regulation"": [
                     {

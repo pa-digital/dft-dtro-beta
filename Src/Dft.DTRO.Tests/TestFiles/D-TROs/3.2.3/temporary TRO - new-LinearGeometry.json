@@ -1,5 +1,5 @@
 {
-		"Source": {
+		"source": {
 			"actionType": "new",
 			"currentTraOwner": 1000,
 			"provision": [
@@ -17,7 +17,7 @@
 							},
 							"condition": [
 								{
-									"VehicleCharacteristics": {
+									"vehicleCharacteristics": {
 										"vehicleType": [
 											"taxi"
 										],
@@ -29,13 +29,13 @@
 								{
 									"timeValidity": {
 										"validityCondition": {
-											"ConditionSet": [
+											"conditionSet": [
 												{
 													"operator": "and",
 													"negate": false,
 													"conditions": [
 														{
-															"VehicleCharacteristics": {
+															"vehicleCharacteristics": {
 																"vehicleType": [
 																	"anyVehicle"
 																]
@@ -43,7 +43,7 @@
 															"negate": false
 														},
 														{
-															"VehicleCharacteristics": {
+															"vehicleCharacteristics": {
 																"vehicleType": [
 																	"taxi"
 																]
@@ -53,10 +53,10 @@
 													]
 												}
 											],
-											"RateTable": {
-												"RateLineCollection": [
+											"rateTable": {
+												"rateLineCollection": [
 													{
-														"RateLine": [
+														"rateLine": [
 															{
 																"sequence": 0,
 																"type": "flatRateTier",
@@ -173,7 +173,7 @@
 							"description": "Zone 5, Kenworthy Road, All Odd, All Even",
 							"geometry": {
 								"version": 1,
-								"LinearGeometry": {
+								"linearGeometry": {
 									"direction": "bidirectional",
 									"lateralPosition": "centreline",
 									"linestring": "SRID=27700;LINESTRING(529050 178750, 529157 178805, 529250 178860)"
@@ -181,7 +181,7 @@
 								"externalReference": [
 									{
 										"lastUpdateDate": "1981-02-08 11:30:43",
-										"UniqueStreetReferenceNumber": {
+										"uniqueStreetReferenceNumber": {
 											"usrn": 96854586
 										}
 									}
