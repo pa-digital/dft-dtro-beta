@@ -80,12 +80,12 @@ jobs:
           dotnet ef database update
           dotnet run &
           echo "Waiting for https://127.0.0.1:5001/index.html to be up..."
-          # for i in {1..60}; do
-          #   curl -k --output /dev/null --silent --head --fail https://127.0.0.1:5001/index.html && break
-          #   echo "Still waiting..."
-          #   sleep 5
-          # done
-          wait-on https://127.0.0.1:5001/index.html --timeout 60000 --interval 5000 --insecure
+          for i in {1..60}; do
+            curl -k --output /dev/null --silent --head --fail https://127.0.0.1:5001/index.html && break
+            echo "Still waiting..."
+            sleep 5
+          done
+          # wait-on https://127.0.0.1:5001/index.html --timeout 60000 --interval 5000 --insecure
           echo "Server is up!"
 
           popd
