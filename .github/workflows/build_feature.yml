@@ -55,11 +55,11 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      # - name: Unit tests
-      #   run: |
-      #     pushd Src/Dft.DTRO.Tests
-      #     dotnet test --verbosity normal
-      #     popd
+      - name: Unit tests
+        run: |
+          pushd Src/Dft.DTRO.Tests
+          dotnet test --verbosity normal
+          popd
 
       - name: Wait for PostgreSQL to be ready
         run: |
@@ -78,23 +78,15 @@ jobs:
           DOTNET_USE_POLLING_FILE_WATCHER: 1
         run: |
           pushd Src/DfT.DTRO
-          # echo "Current path is: $(pwd)" 
           dotnet ef database update
           dotnet run &
-          # npm install -g wait-on
-          # echo "Waiting for https://127.0.0.1:5001/index.html to be up..."
-          # for i in {1..60}; do
-          #   curl -k --output /dev/null --silent --head --fail https://0.0.0.0:5001/index.html && break
-          #   echo "Still waiting..."
-          #   sleep 5
-          # done
-          # wait-on https://127.0.0.1:5001/index.html --timeout 60000 --interval 5000 --insecure
-          # until curl -k --output /dev/null --silent --head --fail https://127.0.0.1:5001; do
-          #   printf '.'
-          #   sleep 5
-          # done
-          # echo "Server is up!"
-          sleep 120
+          echo "Waiting for https://0.0.0.0:5001/index.html to be up..."
+          for i in {1..60}; do
+            curl -k --output /dev/null --silent --head --fail https://0.0.0.0:5001/index.html && break
+            echo "Still waiting..."
+            sleep 5
+          done
+          echo "Server is up!"
 
           popd
           pushd Src/DfT.DTRO.IntegrationTests
