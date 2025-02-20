@@ -40,20 +40,22 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         private static string GetDatabaseConnectionString()
         {
             string envFilePath = $"{AbsolutePathToProjectFolder}/docker/dev/.env";
-            if (!File.Exists(envFilePath))
+            if (File.Exists(envFilePath))
             {
-                throw new Exception($".env file does not exist at path {envFilePath}");
+                var lines = File.ReadAllLines(envFilePath);
+                var postgresUserLine = lines.First(line => line.StartsWith("POSTGRES_USER="));
+                string postgresUser = postgresUserLine.Split('=')[1];
+                var postgresPasswordLine = lines.First(line => line.StartsWith("POSTGRES_PASSWORD="));
+                string postgresPassword = postgresPasswordLine.Split('=')[1];
+                var postgresDbLine = lines.First(line => line.StartsWith("POSTGRES_DB="));
+                string postgresDb = postgresDbLine.Split('=')[1];
+
+                return $"Host={DatabaseHostName};Username={postgresUser};Password={postgresPassword};Database={postgresDb}";
             }
-
-            var lines = File.ReadAllLines(envFilePath);
-            var postgresUserLine = lines.First(line => line.StartsWith("POSTGRES_USER="));
-            string postgresUser = postgresUserLine.Split('=')[1];
-            var postgresPasswordLine = lines.First(line => line.StartsWith("POSTGRES_PASSWORD="));
-            string postgresPassword = postgresPasswordLine.Split('=')[1];
-            var postgresDbLine = lines.First(line => line.StartsWith("POSTGRES_DB="));
-            string postgresDb = postgresDbLine.Split('=')[1];
-
-            return $"Host={DatabaseHostName};Username={postgresUser};Password={postgresPassword};Database={postgresDb}";
+            else
+            {
+                return "Host=localhost;Username=postgres;Password=admin;Database=DTRO";
+            }
         }
 
         static TestConfig()
