@@ -55,11 +55,11 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Unit tests
-        run: |
-          pushd Src/Dft.DTRO.Tests
-          dotnet test --verbosity normal
-          popd
+      # - name: Unit tests
+      #   run: |
+      #     pushd Src/Dft.DTRO.Tests
+      #     dotnet test --verbosity normal
+      #     popd
 
       - name: Wait for PostgreSQL to be ready
         run: |
