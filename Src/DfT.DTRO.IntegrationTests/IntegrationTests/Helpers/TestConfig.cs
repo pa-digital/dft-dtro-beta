@@ -65,8 +65,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             switch (EnvironmentName)
             {
                 case "local":
-                    // BaseUri = "https://localhost:5001";
-                    BaseUri = "https://127.0.0.1:5001";
+                    BaseUri = "https://localhost:5001";
+                    // BaseUri = "https://127.0.0.1:5001";
                     DatabaseHostName = "localhost";
                     break;
                 default:
