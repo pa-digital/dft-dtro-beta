@@ -78,7 +78,7 @@ jobs:
           DOTNET_USE_POLLING_FILE_WATCHER: 1
         run: |
           pushd Src/DfT.DTRO
-          echo "Current path is: $(pwd)" 
+          # echo "Current path is: $(pwd)" 
           dotnet ef database update
           dotnet run &
           # npm install -g wait-on
@@ -89,7 +89,7 @@ jobs:
           #   sleep 5
           # done
           # wait-on https://127.0.0.1:5001/index.html --timeout 60000 --interval 5000 --insecure
-          until curl -k --output /dev/null --silent --head --fail https://127.0.0.1:5001; do
+          until curl -k --output /dev/null --silent --head --fail https://0.0.0.0:5001; do
             printf '.'
             sleep 5
           done
