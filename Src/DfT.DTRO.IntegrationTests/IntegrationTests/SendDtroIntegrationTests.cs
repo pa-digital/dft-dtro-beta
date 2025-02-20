@@ -11,7 +11,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
             var userResponse = await DtroUsers.CreateUserAsync(User.Publisher);
             Assert.Equal(HttpStatusCode.Created, userResponse.StatusCode);
 
-            var dtroResponse = await Dtros.CreateDtroAsync(User.Publisher);
+            var dtroResponse = await Dtros.CreateDtroAsync(User.Publisher, $"JSON-{TestConfig.SchemaVersionUnderTest}-example-Derbyshire 2024 DJ388 partial.json");
             Assert.Equal(HttpStatusCode.Created, dtroResponse.StatusCode);
         }
     }

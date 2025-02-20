@@ -10,7 +10,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             SqlQueries.TruncateTable("Dtros");
         }
 
-        public static async Task<HttpResponseMessage> CreateDtroAsync(UserDetails userDetails)
+        public static async Task<HttpResponseMessage> CreateDtroAsync(UserDetails userDetails, string exampleFileName)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -18,7 +18,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "Content-Type", "multipart/form-data" }
             };
 
-            var exampleFileName = $"JSON-{TestConfig.SchemaVersionUnderTest}-example-Derbyshire 2024 DJ388 partial.json";
             var tempFilePath = GetDtroFileWithTraUpdated(exampleFileName, userDetails.TraId);
             var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}/dtros/createFromFile", headers, pathToJsonFile: tempFilePath);
             return response;
