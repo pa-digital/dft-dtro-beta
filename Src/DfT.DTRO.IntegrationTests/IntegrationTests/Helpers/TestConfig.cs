@@ -1,22 +1,23 @@
 using System.Linq;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class TestConfig
     {
         public static readonly string SchemaVersionUnderTest = "3.3.1";
-        public static string EnvironmentName { get; }
+        public static EnvironmentType EnvironmentName { get; }
         public static string BaseUri { get; }
-        public static string AbsolutePathToProjectFolder { get; }
-        public static string AbsolutePathToExamplesFolder { get; }
-        public static string AbsolutePathToDtroExamplesFolder { get; }
-        public static string AbsolutePathToDtroExamplesTempFolder { get; }
+        public static string AbsolutePathToProjectDirectory { get; }
+        public static string AbsolutePathToExamplesDirectory { get; }
+        public static string AbsolutePathToDtroExamplesDirectory { get; }
+        public static string AbsolutePathToDtroExamplesTempDirectory { get; }
         public static string RulesJsonFile { get; }
         public static string SchemaJsonFile { get; }
         public static string DatabaseHostName { get; }
         public static string DatabaseConnectionString { get; }
 
-        private static string GetAbsolutePathToProjectFolder()
+        private static string GetAbsolutePathToProjectDirectory()
         {
             DirectoryInfo currentDirectory = new(Directory.GetCurrentDirectory());
 
@@ -39,7 +40,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         private static string GetDatabaseConnectionString()
         {
-            string envFilePath = $"{AbsolutePathToProjectFolder}/docker/dev/.env";
+            string envFilePath = $"{AbsolutePathToProjectDirectory}/docker/dev/.env";
             if (File.Exists(envFilePath))
             {
                 var lines = File.ReadAllLines(envFilePath);
@@ -60,11 +61,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         static TestConfig()
         {
-            EnvironmentName = Environment.GetEnvironmentVariable("ENVIRONMENT") ?? "local";
+            var environmentFromBashCommand = Environment.GetEnvironmentVariable("ENVIRONMENT") ?? "local";
 
-            switch (EnvironmentName)
+            switch (environmentFromBashCommand)
             {
                 case "local":
+                    EnvironmentName = EnvironmentType.Local;
                     BaseUri = "https://localhost:5001";
                     DatabaseHostName = "localhost";
                     break;
@@ -72,12 +74,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                     throw new Exception($"Environment {EnvironmentName} not recognised!");
             }
 
-            AbsolutePathToProjectFolder = GetAbsolutePathToProjectFolder();
-            AbsolutePathToExamplesFolder = $"{GetAbsolutePathToProjectFolder()}/examples";
-            AbsolutePathToDtroExamplesFolder = $"{AbsolutePathToExamplesFolder}/D-TROs/{SchemaVersionUnderTest}";
-            AbsolutePathToDtroExamplesTempFolder = $"{AbsolutePathToExamplesFolder}/temp";
-            RulesJsonFile = $"{AbsolutePathToExamplesFolder}/Rules/rules-{SchemaVersionUnderTest}.json";
-            SchemaJsonFile = $"{AbsolutePathToExamplesFolder}/Schemas/schemas-{SchemaVersionUnderTest}.json";
+            AbsolutePathToProjectDirectory = GetAbsolutePathToProjectDirectory();
+            AbsolutePathToExamplesDirectory = $"{GetAbsolutePathToProjectDirectory()}/examples";
+            AbsolutePathToDtroExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/D-TROs/{SchemaVersionUnderTest}";
+            AbsolutePathToDtroExamplesTempDirectory = $"{AbsolutePathToExamplesDirectory}/temp";
+            RulesJsonFile = $"{AbsolutePathToExamplesDirectory}/Rules/rules-{SchemaVersionUnderTest}.json";
+            SchemaJsonFile = $"{AbsolutePathToExamplesDirectory}/Schemas/schemas-{SchemaVersionUnderTest}.json";
             DatabaseConnectionString = GetDatabaseConnectionString();
         }
     }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
@@ -57,7 +59,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             HttpClient _httpClient;
 
             // Only expect and handle an untrusted certificate when running the application against localhost
-            if (TestConfig.EnvironmentName == "local")
+            if (EnvironmentName == EnvironmentType.Local)
             {
                 HttpClientHandler handler = new HttpClientHandler
                 {

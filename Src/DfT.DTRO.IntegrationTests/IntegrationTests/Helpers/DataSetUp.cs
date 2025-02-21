@@ -13,8 +13,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         }
         public static async Task CreateRulesAndSchema()
         {
-            var ruleResponse = await Rules.CreateRuleSetFromFileAsync();
-            Assert.Equal(HttpStatusCode.Created, ruleResponse.StatusCode);
+            var createRuleResponse = await Rules.CreateRuleSetFromFileAsync();
+            Assert.Equal(HttpStatusCode.Created, createRuleResponse.StatusCode);
             await Schemas.CreateAndActivateSchemaAsync();
         }
     }

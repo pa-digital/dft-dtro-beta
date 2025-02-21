@@ -104,7 +104,6 @@ public class Startup
 
         app.UseHealthChecks("/health");
         //DbInitialize.EmptyDtroUsersTable(app);
-        // DbInitialize.SeedAppData(app);
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

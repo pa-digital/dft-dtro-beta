@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
@@ -21,8 +22,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             foreach (var schemaVersion in schemaVersions)
             {
-                var response = await DeleteSchemaAsync(schemaVersion);
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var deleteSchemaResponse = await DeleteSchemaAsync(schemaVersion);
+                Assert.Equal(HttpStatusCode.OK, deleteSchemaResponse.StatusCode);
             }
         }
 
@@ -33,16 +34,16 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
             };
 
-            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Delete, $"{TestConfig.BaseUri}/schemas/{schemaVersion}", headers);
-            return response;
+            var deleteSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Delete, $"{BaseUri}/schemas/{schemaVersion}", headers);
+            return deleteSchemaResponse;
         }
 
         private static async Task DeactivateAllSchemasAsync(List<string> schemaVersions)
         {
             foreach (var version in schemaVersions)
             {
-                var response = await DeactivateSchemaAsync(version);
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var deactivateSchemasResponse = await DeactivateSchemaAsync(version);
+                Assert.Equal(HttpStatusCode.OK, deactivateSchemasResponse.StatusCode);
             }
         }
 
@@ -53,26 +54,26 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
             };
 
-            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Patch, $"{TestConfig.BaseUri}/schemas/deactivate/{schemaVersion}", headers);
-            return response;
+            var deactivateSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Patch, $"{BaseUri}/schemas/deactivate/{schemaVersion}", headers);
+            return deactivateSchemaResponse;
         }
 
-        private static async Task<HttpResponseMessage> ActivateSchemaAsync(string schemaVersion)
+        public static async Task<HttpResponseMessage> ActivateSchemaAsync(string schemaVersion)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
             };
 
-            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Patch, $"{TestConfig.BaseUri}/schemas/activate/{schemaVersion}", headers);
-            return response;
+            var activateSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Patch, $"{BaseUri}/schemas/activate/{schemaVersion}", headers);
+            return activateSchemaResponse;
         }
 
-        private static async Task<List<string>> GetAllSchemaVersionsAsync()
+        public static async Task<List<string>> GetAllSchemaVersionsAsync()
         {
-            var response = await GetAllSchemasAsync();
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var allSchemas = await response.Content.ReadAsStringAsync();
+            var getAllSchemasResponse = await GetAllSchemasAsync();
+            Assert.Equal(HttpStatusCode.OK, getAllSchemasResponse.StatusCode);
+            var allSchemas = await getAllSchemasResponse.Content.ReadAsStringAsync();
 
             dynamic jsonArrayObject = JsonConvert.DeserializeObject<dynamic>(allSchemas);
             List<string> allSchemaVersions = [];
@@ -84,15 +85,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return allSchemaVersions;
         }
 
-        private static async Task<HttpResponseMessage> GetAllSchemasAsync()
+        public static async Task<HttpResponseMessage> GetAllSchemasAsync()
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
             };
 
-            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{TestConfig.BaseUri}/schemas/versions", headers);
-            return response;
+            var getAllSchemasResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/schemas/versions", headers);
+            return getAllSchemasResponse;
         }
 
         public static async Task CreateAndActivateSchemaAsync()
@@ -100,7 +101,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             var createSchemaResponse = await CreateSchemaFromFileAsync();
             Assert.Equal(HttpStatusCode.Created, createSchemaResponse.StatusCode);
 
-            var activateSchemaResponse = await ActivateSchemaAsync(TestConfig.SchemaVersionUnderTest);
+            var activateSchemaResponse = await ActivateSchemaAsync(SchemaVersionUnderTest);
             Assert.Equal(HttpStatusCode.OK, activateSchemaResponse.StatusCode);
         }
 
@@ -112,10 +113,19 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "Content-Type", "multipart/form-data" }
             };
 
-            var filePath = TestConfig.SchemaJsonFile;
+            var createSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/schemas/createFromFile/{SchemaVersionUnderTest}", headers, pathToJsonFile: SchemaJsonFile);
+            return createSchemaResponse;
+        }
 
-            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}/schemas/createFromFile/{TestConfig.SchemaVersionUnderTest}", headers, pathToJsonFile: filePath);
-            return response;
+        public static async Task<HttpResponseMessage> GetSchemaAsync(string schemaVersion)
+        {
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
+            };
+
+            var getSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/schemas/{schemaVersion}", headers);
+            return getSchemaResponse;
         }
     }
 }

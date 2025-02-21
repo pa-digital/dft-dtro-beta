@@ -1,4 +1,5 @@
 using Npgsql;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
@@ -6,7 +7,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
     {
         public static void TruncateTable(string tableName)
         {
-            string connectionString = TestConfig.DatabaseConnectionString;
+            string connectionString = DatabaseConnectionString;
 
             string truncateQuery = $"TRUNCATE TABLE public.\"{tableName}\" RESTART IDENTITY CASCADE;";
 

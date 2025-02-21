@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
@@ -11,8 +12,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             var userIds = await GetAllUserIdsAsync();
             if (userIds.Count > 0)
             {
-                var response = await DeleteUsersAsync(userIds);
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var deleteUsersResponse = await DeleteUsersAsync(userIds);
+                Assert.Equal(HttpStatusCode.OK, deleteUsersResponse.StatusCode);
             }
         }
 
@@ -23,16 +24,16 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
             };
 
-            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{TestConfig.BaseUri}/dtroUsers", headers);
-            return response;
+            var getAllUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/dtroUsers", headers);
+            return getAllUsersResponse;
         }
 
         public static async Task<List<string>> GetAllUserIdsAsync()
         {
-            var response = await GetAllUsersAsync();
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var getAllUsersResponse = await GetAllUsersAsync();
+            Assert.Equal(HttpStatusCode.OK, getAllUsersResponse.StatusCode);
 
-            string responseJson = await response.Content.ReadAsStringAsync();
+            string responseJson = await getAllUsersResponse.Content.ReadAsStringAsync();
 
             JArray jsonArray = JArray.Parse(responseJson);
 
@@ -57,8 +58,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
             var requestBody = new JObject { ["ids"] = JArray.FromObject(ids) };
 
-            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Delete, $"{TestConfig.BaseUri}/dtroUsers/redundant", headers, requestBody.ToString(Formatting.None));
-            return response;
+            var deleteUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Delete, $"{BaseUri}/dtroUsers/redundant", headers, requestBody.ToString(Formatting.None));
+            return deleteUsersResponse;
         }
 
         public static async Task<HttpResponseMessage> CreateUserAsync(UserDetails userDetails)
@@ -80,8 +81,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             }
             """;
 
-            var response = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}/dtroUsers/createFromBody", headers, jsonBody);
-            return response;
+            var createUserResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/dtroUsers/createFromBody", headers, jsonBody);
+            return createUserResponse;
         }
     }
 }
