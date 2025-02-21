@@ -19,20 +19,20 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             else
             // Only create rules and schema on dev, test, etc., if they don't already exist
             {
-                var getRulesResponse = await Rules.GetRuleSetAsync(SchemaVersionUnderTest);
+                var getRulesResponse = await Rules.GetRuleSetAsync(SchemaVersionUnderTest, User.Publisher);
                 if (getRulesResponse.StatusCode == HttpStatusCode.NotFound)
                 {
-                    var createRuleResponse = await Rules.CreateRuleSetFromFileAsync();
+                    var createRuleResponse = await Rules.CreateRuleSetFromFileAsync(User.Publisher);
                     Assert.Equal(HttpStatusCode.Created, createRuleResponse.StatusCode);
                 }
 
-                var getSchemaResponse = await Schemas.GetSchemaAsync(SchemaVersionUnderTest);
+                var getSchemaResponse = await Schemas.GetSchemaAsync(SchemaVersionUnderTest, User.Publisher);
                 if (getSchemaResponse.StatusCode == HttpStatusCode.NotFound)
                 {
-                    var createSchemaResponse = await Schemas.CreateSchemaFromFileAsync();
+                    var createSchemaResponse = await Schemas.CreateSchemaFromFileAsync(User.Publisher);
                     Assert.Equal(HttpStatusCode.Created, createSchemaResponse.StatusCode);
                 }
-                var activateSchemaResponse = await Schemas.ActivateSchemaAsync(SchemaVersionUnderTest);
+                var activateSchemaResponse = await Schemas.ActivateSchemaAsync(SchemaVersionUnderTest, User.Publisher);
                 Assert.Equal(HttpStatusCode.OK, activateSchemaResponse.StatusCode);
             }
         }

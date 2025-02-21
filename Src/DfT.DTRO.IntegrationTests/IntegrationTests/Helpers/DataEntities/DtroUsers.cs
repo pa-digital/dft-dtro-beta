@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
@@ -17,11 +18,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             }
         }
 
-        public static async Task<HttpResponseMessage> GetAllUsersAsync()
+        public static async Task<HttpResponseMessage> GetAllUsersAsync(UserDetails userDetails)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
+                { "x-App-Id", userDetails.AppId }
             };
 
             var getAllUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/dtroUsers", headers);
@@ -30,7 +31,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<List<string>> GetAllUserIdsAsync()
         {
-            var getAllUsersResponse = await GetAllUsersAsync();
+            var getAllUsersResponse = await GetAllUsersAsync(User.Publisher);
             Assert.Equal(HttpStatusCode.OK, getAllUsersResponse.StatusCode);
 
             string responseJson = await getAllUsersResponse.Content.ReadAsStringAsync();

@@ -22,16 +22,16 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             foreach (var schemaVersion in schemaVersions)
             {
-                var deleteSchemaResponse = await DeleteSchemaAsync(schemaVersion);
+                var deleteSchemaResponse = await DeleteSchemaAsync(schemaVersion, User.Publisher);
                 Assert.Equal(HttpStatusCode.OK, deleteSchemaResponse.StatusCode);
             }
         }
 
-        private static async Task<HttpResponseMessage> DeleteSchemaAsync(string schemaVersion)
+        private static async Task<HttpResponseMessage> DeleteSchemaAsync(string schemaVersion, UserDetails userDetails)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
+                { "x-App-Id", userDetails.AppId }
             };
 
             var deleteSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Delete, $"{BaseUri}/schemas/{schemaVersion}", headers);
@@ -42,27 +42,27 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             foreach (var version in schemaVersions)
             {
-                var deactivateSchemasResponse = await DeactivateSchemaAsync(version);
+                var deactivateSchemasResponse = await DeactivateSchemaAsync(version, User.Publisher);
                 Assert.Equal(HttpStatusCode.OK, deactivateSchemasResponse.StatusCode);
             }
         }
 
-        private static async Task<HttpResponseMessage> DeactivateSchemaAsync(string schemaVersion)
+        private static async Task<HttpResponseMessage> DeactivateSchemaAsync(string schemaVersion, UserDetails userDetails)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
+                { "x-App-Id", userDetails.AppId }
             };
 
             var deactivateSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Patch, $"{BaseUri}/schemas/deactivate/{schemaVersion}", headers);
             return deactivateSchemaResponse;
         }
 
-        public static async Task<HttpResponseMessage> ActivateSchemaAsync(string schemaVersion)
+        public static async Task<HttpResponseMessage> ActivateSchemaAsync(string schemaVersion, UserDetails userDetails)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
+                { "x-App-Id", userDetails.AppId }
             };
 
             var activateSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Patch, $"{BaseUri}/schemas/activate/{schemaVersion}", headers);
@@ -71,7 +71,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<List<string>> GetAllSchemaVersionsAsync()
         {
-            var getAllSchemasResponse = await GetAllSchemasAsync();
+            var getAllSchemasResponse = await GetAllSchemasAsync(User.Publisher);
             Assert.Equal(HttpStatusCode.OK, getAllSchemasResponse.StatusCode);
             var allSchemas = await getAllSchemasResponse.Content.ReadAsStringAsync();
 
@@ -85,11 +85,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return allSchemaVersions;
         }
 
-        public static async Task<HttpResponseMessage> GetAllSchemasAsync()
+        public static async Task<HttpResponseMessage> GetAllSchemasAsync(UserDetails userDetails)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
+                { "x-App-Id", userDetails.AppId }
             };
 
             var getAllSchemasResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/schemas/versions", headers);
@@ -98,18 +98,18 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task CreateAndActivateSchemaAsync()
         {
-            var createSchemaResponse = await CreateSchemaFromFileAsync();
+            var createSchemaResponse = await CreateSchemaFromFileAsync(User.Publisher);
             Assert.Equal(HttpStatusCode.Created, createSchemaResponse.StatusCode);
 
-            var activateSchemaResponse = await ActivateSchemaAsync(SchemaVersionUnderTest);
+            var activateSchemaResponse = await ActivateSchemaAsync(SchemaVersionUnderTest, User.Publisher);
             Assert.Equal(HttpStatusCode.OK, activateSchemaResponse.StatusCode);
         }
 
-        public static async Task<HttpResponseMessage> CreateSchemaFromFileAsync()
+        public static async Task<HttpResponseMessage> CreateSchemaFromFileAsync(UserDetails userDetails)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" },
+                { "x-App-Id", userDetails.AppId },
                 { "Content-Type", "multipart/form-data" }
             };
 
@@ -117,11 +117,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return createSchemaResponse;
         }
 
-        public static async Task<HttpResponseMessage> GetSchemaAsync(string schemaVersion)
+        public static async Task<HttpResponseMessage> GetSchemaAsync(string schemaVersion, UserDetails userDetails)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", "3fa85f64-5717-4562-b3fc-2c963f66afa6" }
+                { "x-App-Id", userDetails.AppId }
             };
 
             var getSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/schemas/{schemaVersion}", headers);
