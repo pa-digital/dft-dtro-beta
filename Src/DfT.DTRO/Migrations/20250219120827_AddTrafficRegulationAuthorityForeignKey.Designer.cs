@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    partial class DtroContextModelSnapshot : ModelSnapshot
+    [Migration("20250219120827_AddTrafficRegulationAuthorityForeignKey")]
+    partial class AddTrafficRegulationAuthorityForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,9 +30,6 @@ namespace DfT.DTRO.Migrations
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Application", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ApplicationTypeId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
@@ -58,8 +58,6 @@ namespace DfT.DTRO.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationTypeId");
 
                     b.HasIndex("DigitalServiceProviderId");
 
@@ -93,10 +91,15 @@ namespace DfT.DTRO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ApplicationId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
 
                     b.ToTable("ApplicationTypes");
                 });
@@ -522,12 +525,6 @@ namespace DfT.DTRO.Migrations
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Application", b =>
                 {
-                    b.HasOne("DfT.DTRO.Models.DataBase.ApplicationType", "ApplicationType")
-                        .WithMany()
-                        .HasForeignKey("ApplicationTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("DfT.DTRO.Models.DataBase.DigitalServiceProvider", null)
                         .WithMany("Applications")
                         .HasForeignKey("DigitalServiceProviderId");
@@ -550,13 +547,18 @@ namespace DfT.DTRO.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationType");
-
                     b.Navigation("Purpose");
 
                     b.Navigation("TrafficRegulationAuthority");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationType", b =>
+                {
+                    b.HasOne("DfT.DTRO.Models.DataBase.Application", null)
+                        .WithMany("ApplicationTypes")
+                        .HasForeignKey("ApplicationId");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DTRO", b =>
@@ -615,6 +617,8 @@ namespace DfT.DTRO.Migrations
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Application", b =>
                 {
+                    b.Navigation("ApplicationTypes");
+
                     b.Navigation("Dtros");
 
                     b.Navigation("RuleTemplates");

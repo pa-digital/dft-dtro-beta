@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    partial class DtroContextModelSnapshot : ModelSnapshot
+    [Migration("20250220150059_RemoveApplicationTypeApplications")]
+    partial class RemoveApplicationTypeApplications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -523,7 +526,7 @@ namespace DfT.DTRO.Migrations
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.Application", b =>
                 {
                     b.HasOne("DfT.DTRO.Models.DataBase.ApplicationType", "ApplicationType")
-                        .WithMany()
+                        .WithMany("Applications")
                         .HasForeignKey("ApplicationTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -625,6 +628,11 @@ namespace DfT.DTRO.Migrations
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationPurpose", b =>
                 {
                     b.Navigation("Application");
+                });
+
+            modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationType", b =>
+                {
+                    b.Navigation("Applications");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DigitalServiceProvider", b =>

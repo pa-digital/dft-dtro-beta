@@ -72,5 +72,7 @@ public static class RouteTemplates
     // Applications
     public const string ApplicationsBase = "/applications";
     public const string ValidateApplicationName = ApplicationsBase + "/validateName";
+    public const string GetApplicationDetails = ApplicationsBase + "/details";
+    public const string GetApplications = ApplicationsBase + "/list";
 }
 

@@ -121,7 +121,31 @@ public class DtroContext : DbContext
                     args[1],
                     args[0].TypeMapping);
             });
+        
+        modelBuilder.Entity<Application>()
+            .HasOne(a => a.Purpose)
+            .WithOne(p => p.Application)
+            .HasForeignKey<Application>(a => a.PurposeId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<Application>()
+            .HasOne(a => a.User)
+            .WithMany(u => u.Applications)
+            .HasForeignKey(a => a.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Application>()
+            .HasOne(a => a.TrafficRegulationAuthority)
+            .WithMany(tra => tra.Applications)
+            .HasForeignKey(a => a.TrafficRegulationAuthorityId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Application>()
+            .HasOne(a => a.ApplicationType)
+            .WithMany()
+            .HasForeignKey(a => a.ApplicationTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
 
