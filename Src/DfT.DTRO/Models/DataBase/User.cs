@@ -51,4 +51,5 @@ public class User
     public UserStatus UserStatus { get; set; }
 
     public bool CanPublishApp { get; set; }
+    public List<Application> Applications { get; set; }
 }

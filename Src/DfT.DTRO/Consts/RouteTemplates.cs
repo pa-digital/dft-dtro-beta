@@ -68,5 +68,11 @@ public static class RouteTemplates
     // Tras
     public const string TrasBase = "/tras";
     public const string TrasFindAll = TrasBase;
+
+    // Applications
+    public const string ApplicationsBase = "/applications";
+    public const string ValidateApplicationName = ApplicationsBase + "/validateName";
+    public const string GetApplicationDetails = ApplicationsBase + "/details";
+    public const string GetApplications = ApplicationsBase + "/list";
 }
 

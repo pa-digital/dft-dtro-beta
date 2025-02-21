@@ -69,6 +69,8 @@ public class Startup
         services.AddScoped<IPortalUserService, PortalUserService>();
         services.AddScoped<ISystemConfigDal, SystemConfigDal>();
         services.AddScoped<ISystemConfigService, SystemConfigService>();
+        services.AddScoped<IApplicationService, ApplicationService>();
+        services.AddScoped<IApplicationDal, ApplicationDal>();
         services.AddSingleton<LoggingExtension>();
 
         services.TryAddSingleton<ISystemClock, SystemClock>();
@@ -106,7 +108,7 @@ public class Startup
 
         app.UseHealthChecks("/health");
         //DbInitialize.EmptyDtroUsersTable(app);
-        DbInitialize.SeedAppData(app);
+        // DbInitialize.SeedAppData(app);
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
