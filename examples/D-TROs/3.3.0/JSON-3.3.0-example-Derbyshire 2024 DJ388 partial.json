@@ -1,26 +1,28 @@
 {
     "schemaVersion": "3.3.0",
     "data": {
-        "Source": {
+        "source": {
             "actionType": "new",
             "currentTraOwner": 1050,
-            "Provision": [
+            "provision": [
                 {
                     "actionType": "new",
                     "orderReportingPoint": "permanentNoticeOfMaking",
                     "provisionDescription": "Schedule 1: No Waiting Monday to Saturday, 8am to 6pm",
                     "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
-                    "RegulatedPlace": [
+                    "regulatedPlace": [
                         {
                             "type": "regulationLocation",
-                            "LinearGeometry": {
+                            "linearGeometry": {
                                 "direction": "bidirectional",
-                                "ExternalReference": [
+                                "externalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T08:00:00",
-                                        "UniqueStreetReferenceNumber": {
-                                            "usrn": 1515737
-                                        }
+                                        "uniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 1515737
+                                            }
+                                        ]
                                     }
                                 ],
                                 "lateralPosition": "onKerb",
@@ -30,11 +32,11 @@
                             }
                         }
                     ],
-                    "Regulation": [
+                    "regulation": [
                         {
-                            "Condition": [
+                            "condition": [
                                 {
-                                    "TimeValidity": [
+                                    "timeValidity": [
                                         {
                                             "start": "2024-08-01T08:00:00",
                                             "validPeriod": [
@@ -63,7 +65,7 @@
                                     ]
                                 }
                             ],
-                            "GeneralRegulation": {
+                            "generalRegulation": {
                                 "regulationType": "kerbsideLimitedWaiting"
                             },
                             "isDynamic": false,

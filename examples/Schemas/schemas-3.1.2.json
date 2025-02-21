@@ -90,7 +90,7 @@
 			],
 			"type": "object"
 		},
-		"CalendarWeekInMonth": {
+		"calendarWeekInMonth": {
 			"additionalProperties": false,
 			"description": "Calendar week within month (see ISO 8601). First Calendar week contains the first of the month, with the calendar week starting on a Monday. Several days of the first week of the month may occur in the previous calendar month. By construction, the last week of a preceding month can also be the first week of a subsequent month.",
 			"properties": {
@@ -153,7 +153,7 @@
 					"items": {
 						"anyOf": [
 							{
-								"$ref": "#/$defs/RoadCondition"
+								"$ref": "#/$defs/roadCondition"
 							},
 							{
 								"$ref": "#/$defs/occupantCondition"
@@ -168,13 +168,13 @@
 								"$ref": "#/$defs/validityCondition"
 							},
 							{
-								"$ref": "#/$defs/NonVehicularRoadUserCondition"
+								"$ref": "#/$defs/nonVehicularRoadUserCondition"
 							},
 							{
-								"$ref": "#/$defs/PermitCondition"
+								"$ref": "#/$defs/permitCondition"
 							},
 							{
-								"$ref": "#/$defs/VehicleCondition"
+								"$ref": "#/$defs/vehicleCondition"
 							},
 							{
 								"$ref": "#/$defs/conditionSet"
@@ -333,7 +333,7 @@
 			},
 			"type": "object"
 		},
-		"ExtensionEnumeration": {
+		"extensionEnumeration": {
 			"additionalProperties": false,
 			"description": "Object supporting the user-definition of a new list entry - to permit exceptional extension of the data model",
 			"properties": {
@@ -472,7 +472,7 @@
 			"type": "object"
 		},
 		"geoJsonPolygon": {
-			"description": "GeoJSON Polygon",
+			"description": "GeoJSON polygon",
 			"additionalProperties": false,
 			"type": "object",
 			"required": [
@@ -483,7 +483,7 @@
 				"type": {
 					"type": "string",
 					"enum": [
-						"Polygon"
+						"polygon"
 					]
 				},
 				"coordinates": {
@@ -554,7 +554,7 @@
 				}
 			}
 		},
-		"GeneralRegulation": {
+		"generalRegulation": {
 			"additionalProperties": false,
 			"description": "Object indicating a specific regulation (other than speed limit or user-defined offlist regulation)",
 			"properties": {
@@ -562,7 +562,7 @@
 					"items": {
 						"oneOf": [
 							{
-								"$ref": "#/$defs/RoadCondition"
+								"$ref": "#/$defs/roadCondition"
 							},
 							{
 								"$ref": "#/$defs/occupantCondition"
@@ -577,13 +577,13 @@
 								"$ref": "#/$defs/validityCondition"
 							},
 							{
-								"$ref": "#/$defs/NonVehicularRoadUserCondition"
+								"$ref": "#/$defs/nonVehicularRoadUserCondition"
 							},
 							{
-								"$ref": "#/$defs/PermitCondition"
+								"$ref": "#/$defs/permitCondition"
 							},
 							{
-								"$ref": "#/$defs/VehicleCondition"
+								"$ref": "#/$defs/vehicleCondition"
 							},
 							{
 								"$ref": "#/$defs/conditionSet"
@@ -629,7 +629,7 @@
 		},
 		"geometry": {
 			"additionalProperties": false,
-			"description": "Geometry string defined as per GeoJSON (RFC7946).\r\n\r\nFor moving traffic TROs, the geometry is expected to be defined as appropriate. Often this can by use of the linestring, with coordinates derived from a well-known linear road network model (such as OS Highways). For kerbside restriction TROs, the geometry would normally be represented by a zone (polygon) or linestring representing the shape of the related kerbline.",
+			"description": "geometry string defined as per GeoJSON (RFC7946).\r\n\r\nFor moving traffic TROs, the geometry is expected to be defined as appropriate. Often this can by use of the linestring, with coordinates derived from a well-known linear road network model (such as OS Highways). For kerbside restriction TROs, the geometry would normally be represented by a zone (polygon) or linestring representing the shape of the related kerbline.",
 			"properties": {
 				"coordinates": {
 					"description": "coordinate pairs defined in GeoJSON format",
@@ -796,7 +796,7 @@
 			],
 			"type": "object"
 		},
-		"InstanceOfDayWithinMonth": {
+		"instanceOfDayWithinMonth": {
 			"additionalProperties": false,
 			"description": "Instances of a day of the week in a month",
 			"properties": {
@@ -850,7 +850,7 @@
 			],
 			"type": "object"
 		},
-		"LinearGeometry": {
+		"linearGeometry": {
 			"additionalProperties": false,
 			"description": "Object indicating characteristics relating to a linear geometric location",
 			"properties": {
@@ -939,7 +939,7 @@
 				}
 			]
 		},
-		"NonVehicularRoadUserCondition": {
+		"nonVehicularRoadUserCondition": {
 			"additionalProperties": false,
 			"description": "Object indicating characteristics about non-vehicular road users",
 			"properties": {
@@ -987,7 +987,7 @@
 			],
 			"type": "object"
 		},
-		"NumbersOfOccupants": {
+		"numbersOfOccupants": {
 			"additionalProperties": false,
 			"description": "Object indicating conditional restrictions based on the number of vehicle occupants",
 			"properties": {
@@ -1035,7 +1035,7 @@
 			},
 			"type": "object"
 		},
-		"OffListRegulation": {
+		"offListRegulation": {
 			"additionalProperties": false,
 			"description": "Object indicating type of regulation other than those already listed (extension mechanism)",
 			"properties": {
@@ -1043,7 +1043,7 @@
 					"items": {
 						"oneOf": [
 							{
-								"$ref": "#/$defs/RoadCondition"
+								"$ref": "#/$defs/roadCondition"
 							},
 							{
 								"$ref": "#/$defs/occupantCondition"
@@ -1058,13 +1058,13 @@
 								"$ref": "#/$defs/validityCondition"
 							},
 							{
-								"$ref": "#/$defs/NonVehicularRoadUserCondition"
+								"$ref": "#/$defs/nonVehicularRoadUserCondition"
 							},
 							{
-								"$ref": "#/$defs/PermitCondition"
+								"$ref": "#/$defs/permitCondition"
 							},
 							{
-								"$ref": "#/$defs/VehicleCondition"
+								"$ref": "#/$defs/vehicleCondition"
 							},
 							{
 								"$ref": "#/$defs/conditionSet"
@@ -1128,7 +1128,7 @@
 					"$ref": "#/$defs/validityCondition"
 				},
 				"end": {
-					"description": "End of Overall Period.",
+					"description": "End of Overall period.",
 					"type": "string",
 					"format": "date-time"
 				},
@@ -1139,7 +1139,7 @@
 					"type": "array"
 				},
 				"start": {
-					"description": "Start of Overall Period",
+					"description": "Start of Overall period",
 					"type": "string",
 					"format": "date-time"
 				},
@@ -1176,13 +1176,13 @@
 								"$ref": "#/$defs/dayWeekMonth"
 							},
 							{
-								"$ref": "#/$defs/CalendarWeekInMonth"
+								"$ref": "#/$defs/calendarWeekInMonth"
 							},
 							{
-								"$ref": "#/$defs/WeekOfMonth"
+								"$ref": "#/$defs/weekOfMonth"
 							},
 							{
-								"$ref": "#/$defs/InstanceOfDayWithinMonth"
+								"$ref": "#/$defs/instanceOfDayWithinMonth"
 							}
 						]
 					},
@@ -1208,7 +1208,7 @@
 			},
 			"type": "object"
 		},
-		"PermitCondition": {
+		"permitCondition": {
 			"additionalProperties": false,
 			"description": "Object supporting the characteristics of a permit related condition",
 			"properties": {
@@ -1390,10 +1390,10 @@
 					"items": {
 						"oneOf": [
 							{
-								"$ref": "#/$defs/GeneralRegulation"
+								"$ref": "#/$defs/generalRegulation"
 							},
 							{
-								"$ref": "#/$defs/OffListRegulation"
+								"$ref": "#/$defs/offListRegulation"
 							},
 							{
 								"$ref": "#/$defs/SpeedLimitValueBased"
@@ -1439,7 +1439,7 @@
 			],
 			"type": "object"
 		},
-		"PublicHoliday": {
+		"publicHoliday": {
 			"additionalProperties": false,
 			"description": "Object indicating characteristics relating to a public holiday",
 			"properties": {
@@ -1725,7 +1725,7 @@
 			],
 			"type": "object"
 		},
-		"RoadCondition": {
+		"roadCondition": {
 			"additionalProperties": false,
 			"description": "Object indicating characteristics concerning the type of road.",
 			"properties": {
@@ -1818,7 +1818,7 @@
 			],
 			"type": "object"
 		},
-		"SpeedLimitProfileBased": {
+		"speedLimitProfileBased": {
 			"additionalProperties": false,
 			"description": "Object indicating characterisitics related to speed limits defined by profile",
 			"properties": {
@@ -1826,7 +1826,7 @@
 					"items": {
 						"oneOf": [
 							{
-								"$ref": "#/$defs/RoadCondition"
+								"$ref": "#/$defs/roadCondition"
 							},
 							{
 								"$ref": "#/$defs/occupantCondition"
@@ -1841,13 +1841,13 @@
 								"$ref": "#/$defs/validityCondition"
 							},
 							{
-								"$ref": "#/$defs/NonVehicularRoadUserCondition"
+								"$ref": "#/$defs/nonVehicularRoadUserCondition"
 							},
 							{
-								"$ref": "#/$defs/PermitCondition"
+								"$ref": "#/$defs/permitCondition"
 							},
 							{
-								"$ref": "#/$defs/VehicleCondition"
+								"$ref": "#/$defs/vehicleCondition"
 							},
 							{
 								"$ref": "#/$defs/conditionSet"
@@ -1891,7 +1891,7 @@
 			],
 			"type": "object"
 		},
-		"SpeedLimitValueBased": {
+		"speedLimitValueBased": {
 			"additionalProperties": false,
 			"description": "Object indicating speed limit regulation - defined by speed value",
 			"properties": {
@@ -1899,7 +1899,7 @@
 					"items": {
 						"oneOf": [
 							{
-								"$ref": "#/$defs/RoadCondition"
+								"$ref": "#/$defs/roadCondition"
 							},
 							{
 								"$ref": "#/$defs/occupantCondition"
@@ -1914,13 +1914,13 @@
 								"$ref": "#/$defs/validityCondition"
 							},
 							{
-								"$ref": "#/$defs/NonVehicularRoadUserCondition"
+								"$ref": "#/$defs/nonVehicularRoadUserCondition"
 							},
 							{
-								"$ref": "#/$defs/PermitCondition"
+								"$ref": "#/$defs/permitCondition"
 							},
 							{
-								"$ref": "#/$defs/VehicleCondition"
+								"$ref": "#/$defs/vehicleCondition"
 							},
 							{
 								"$ref": "#/$defs/conditionSet"
@@ -1988,10 +1988,10 @@
 				"temporarilyOverriddenRegulations": {
 					"oneOf": [
 						{
-							"$ref": "#/$defs/GeneralRegulation"
+							"$ref": "#/$defs/generalRegulation"
 						},
 						{
-							"$ref": "#/$defs/OffListRegulation"
+							"$ref": "#/$defs/offListRegulation"
 						},
 						{
 							"$ref": "#/$defs/SpeedLimitValueBased"
@@ -2151,7 +2151,7 @@
 			},
 			"type": "object"
 		},
-		"VehicleCondition": {
+		"vehicleCondition": {
 			"additionalProperties": false,
 			"description": "Conditions for a vehicle",
 			"properties": {
@@ -2179,7 +2179,7 @@
 			],
 			"type": "object"
 		},
-		"WeekOfMonth": {
+		"weekOfMonth": {
 			"additionalProperties": false,
 			"description": "provides information concerning an identifiable week in a calendar month - where the week starts on the same day of the week as the month",
 			"properties": {

@@ -1,5 +1,5 @@
 {
-    "schemaVersion": "3.3.0",
+    "schemaVersion": "3.3.2",
     "data": {
         "source": {
             "actionType": "new",
@@ -8,50 +8,47 @@
                 {
                     "actionType": "new",
                     "orderReportingPoint": "ttroTtmoNoticeOfIntention",
-                    "provisionDescription": "Temporary weight restriction Netherclay Bridge (2 tonnes)",
-                    "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
+                    "provisionDescription": "Temporary height restriction (2.5m)",
+                    "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
                     "regulatedPlace": [
                         {
-                            "description": "Netherclay Bridge, Bishops Hull, Taunton",
+                            "description": "East Reach - Taunton",
                             "type": "regulationLocation",
-                            "linearGeometry": {
-                                "direction": "bidirectional",
+                            "pointGeometry": {
                                 "externalReference": [
                                     {
-                                        "lastUpdateDate": "2024-08-01 00:00:00",
+                                        "lastUpdateDate": "2024-08-01T00:00:00",
                                         "uniqueStreetReferenceNumber": [
                                             {
-                                                "usrn": 39605836
+                                                "usrn": 39608173
                                             }
                                         ]
                                     }
                                 ],
-                                "lateralPosition": "centreline",
-                                "linestring": "SRID=27700;LINESTRING(320620 124993, 320621 124997, 320625 125007)",
-                                "representation": "representingZone",
+                                "point": "SRID=27700;POINT(323544 124622)",
+                                "representation": "centreLinePoint",
                                 "version": 1
                             }
                         }
                     ],
                     "regulation": [
                         {
-                            "conditionSet": [
+                            "ConditionSet": [
                                 {
                                     "operator": "and",
                                     "conditions": [
                                         {
                                             "negate": false,
                                             "timeValidity": {
-                                                "start": "2024-08-01T08:00:00",
-                                                "end": "2024-11-29T18:00:00"
+                                                "start": "2024-08-22T08:00:00",
+                                                "end": "2024-08-22T20:00:00"
                                             }
                                         },
                                         {
                                             "negate": false,
                                             "vehicleCharacteristics": {
-                                                "maximumGrossWeightCharacteristic": {
-                                                    "grossVehicleWeight": 2,
-                                                    "typeOfWeight": "maximumPermitted"
+                                                "maximumHeightCharacteristic": {
+                                                    "vehicleHeight": 2.5
                                                 }
                                             }
                                         }
@@ -59,17 +56,9 @@
                                 }
                             ],
                             "generalRegulation": {
-                                "regulationType": "dimensionMaximumWeightStructural"
+                                "regulationType": "dimensionMaximumHeightWithTRO"
                             },
                             "isDynamic": false,
-                            "temporaryRegulation": {
-                                "temporaryOverriddenProvision": {
-                                    "actionType": "new",
-                                    "orderReportingPoint": "permanentNoticeOfMaking",
-                                    "provisionDescription": "3 Tonnes Structural Weight Limit, Netherclay Bridge",
-                                    "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A"
-                                }
-                            },
                             "timeZone": "Europe/London"
                         }
                     ]
@@ -81,7 +70,7 @@
                 3300
             ],
             "traCreator": 3300,
-            "troName": "DfT Example - TTRO weight restriction v1, Oct. 2024"
+            "troName": "DfT Example - TTRO height restriction with multiple conditions v2, Nov. 2024"
         }
     }
 }

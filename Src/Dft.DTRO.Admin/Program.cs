@@ -6,8 +6,6 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 
-builder.Services.AddSingleton<SecurityHeaders>();
-
 ConfigHelper.ApiBaseUrl =
     Environment.GetEnvironmentVariable("BASE_URL") ??
     builder.Configuration.GetValue<string>("ExternalApi:BaseUrl");
@@ -35,6 +33,21 @@ ConfigHelper.TokenEndpoint =
 builder.Services.AddHttpClient("ExternalApi", client =>
 {
     client.BaseAddress = new Uri(ConfigHelper.ApiBaseUrl);
+}).ConfigurePrimaryHttpMessageHandler(() =>
+{
+    return new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) =>
+        {
+#if DEBUG
+            return true;
+
+#else
+            return sslPolicyErrors == System.Net.Security.SslPolicyErrors.None;
+
+#endif 
+        }
+    };
 });
 
 builder.Services.AddScoped<ISchemaService, SchemaService>();

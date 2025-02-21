@@ -1,5 +1,5 @@
 {
-    "schemaVersion": "3.3.0",
+    "schemaVersion": "3.3.2",
     "data": {
         "source": {
             "actionType": "new",
@@ -10,6 +10,71 @@
                     "orderReportingPoint": "ttroTtmoNoticeOfIntention",
                     "provisionDescription": "Temporary height and length restriction",
                     "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
+                    "regulation": [
+                        {
+                            "isDynamic": false,
+                            "timeZone": "Europe/London",
+                            "generalRegulation": {
+                                "regulationType": "dimensionMaximumHeightWithTRO"
+                            },
+                            "conditionSet": [
+                                {
+                                    "operator": "and",
+                                    "conditionSet": [
+                                        {
+                                            "operator": "or",
+                                            "conditions": [
+                                                {
+                                                    "negate": false,
+                                                    "vehicleCharacteristics": {
+                                                        "maximumHeightCharacteristic": {
+                                                            "vehicleHeight": 2.5
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "negate": true,
+                                                    "vehicleCharacteristics": {
+                                                        "vehicleType": "bus"
+                                                    }
+                                                },
+                                                {
+                                                    "conditionSet": [
+                                                        {
+                                                            "operator": "and",
+                                                            "conditions": [
+                                                                {
+                                                                    "negate": false,
+                                                                    "vehicleCharacteristics": {
+                                                                        "vehicleType": "taxi"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "negate": false,
+                                                                    "vehicleCharacteristics": {
+                                                                        "vehicleUsage": "access"
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "condition": [
+                                        {
+                                            "negate": false,
+                                            "timeValidity": {
+                                                "start": "2024-08-22T08:00:00",
+                                                "end": "2024-08-22T20:00:00"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
                     "regulatedPlace": [
                         {
                             "description": "East Reach - Taunton",
@@ -29,71 +94,6 @@
                                     }
                                 ]
                             }
-                        }
-                    ],
-                    "regulation": [
-                        {
-                            "isDynamic": false,
-                            "timeZone": "Europe/London",
-                            "generalRegulation": {
-                                "regulationType": "dimensionMaximumHeightWithTRO"
-                            },
-                            "conditionSet": [
-                                {
-                                    "condition": [
-                                        {
-                                            "negate": false,
-                                            "timeValidity": {
-                                                "start": "2024-08-22T08:00:00",
-                                                "end": "2024-08-22T20:00:00"
-                                            }
-                                        }
-                                    ],
-                                    "conditionSet": [
-                                        {
-                                            "conditions": [
-                                                {
-                                                    "negate": false,
-                                                    "vehicleCharacteristics": {
-                                                        "maximumHeightCharacteristic": {
-                                                            "vehicleHeight": 2.5
-                                                        }
-                                                    }
-                                                },
-                                                {
-                                                    "negate": true,
-                                                    "vehicleCharacteristics": {
-                                                        "vehicleType": "bus"
-                                                    }
-                                                },
-                                                {
-                                                    "conditionSet": [
-                                                        {
-                                                            "conditions": [
-                                                                {
-                                                                    "negate": false,
-                                                                    "vehicleCharacteristics": {
-                                                                        "vehicleType": "taxi"
-                                                                    }
-                                                                },
-                                                                {
-                                                                    "negate": false,
-                                                                    "vehicleCharacteristics": {
-                                                                        "vehicleUsage": "access"
-                                                                    }
-                                                                }
-                                                            ],
-                                                            "operator": "and"
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            "operator": "or"
-                                        }
-                                    ],
-                                    "operator": "and"
-                                }
-                            ]
                         }
                     ]
                 }

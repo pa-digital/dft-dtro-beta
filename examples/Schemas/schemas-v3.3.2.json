@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": true,
-    "description": "DTRO v3.3.0 Data Specification JSON schema",
+    "description": "DTRO v3.3.2 Data Specification JSON schema",
     "oneOf": [
         {
             "additionalProperties": true,
@@ -61,7 +61,7 @@
                         }
                     },
                     "required": [
-						"condition",
+                        "condition",
                         "accessConditionType"
                     ]
                 }
@@ -348,7 +348,8 @@
             ]
         },
         "condition": {
-            "type": "object",
+            "type": "array",
+            "minItems": 0,
             "description": "Abstract class that specifies a condition for the validity of a certain road feature such as time, weather conditions, vehicle type, vehicle propulsion fuel, vehicle occupancy, vehicle usage, vehicle dimensions or weight characteristics.",
             "properties": {
                 "accessCondition": {
@@ -356,7 +357,7 @@
                     "minItems": 0,
                     "maxItems": 1
                 },
-                "ConditionSet": {
+                "conditionSet": {
                     "$ref": "#/$defs/conditionSet"
                 },
                 "driverCondition": {
@@ -414,11 +415,11 @@
                     "minItems": 0
                 }
             },
-			"required": [
-				"regulation"
-			]
+            "required": [
+                "regulation"
+            ]
         },
-        "ConditionOperatorType": {
+        "conditionOperatorType": {
             "description": "Logical operators",
             "type": "string",
             "enum": [
@@ -427,7 +428,7 @@
                 "xor"
             ]
         },
-        "ConditionSet": {
+        "conditionSet": {
             "allOf": [
                 {
                     "$ref": "#/$defs/condition"
@@ -435,7 +436,7 @@
                 {
                     "description": "Groups a number of conditions into a condition set",
                     "properties": {
-                        "Conditions": {
+                        "conditions": {
                             "type": "array",
                             "items": {
                                 "$ref": "#/$defs/condition"
@@ -453,7 +454,7 @@
                         }
                     },
                     "required": [
-						"condition",
+                        "condition",
                         "operator"
                     ]
                 }
@@ -544,7 +545,7 @@
                 "GBP"
             ]
         },
-        "DayType": {
+        "dayType": {
             "description": "A list of days of the week",
             "type": "string",
             "enum": [
@@ -573,7 +574,7 @@
                     "description": "Applicable day of the week.",
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/DayType"
+                        "$ref": "#/$defs/dayType"
                     },
                     "maxItems": 7,
                     "minItems": 0,
@@ -668,14 +669,15 @@
                         }
                     },
                     "required": [
-						"condition",
+                        "condition",
                         "driverCharacteristicsType"
                     ]
                 }
             ]
         },
         "elementaryStreetUnit": {
-            "type": "object",
+            "type": "array",
+            "minItems": 0,
             "description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer Elementary Street Unit",
             "properties": {
                 "uniqueStreetReferenceNumber": {
@@ -702,7 +704,7 @@
                 "esu"
             ]
         },
-        "EmissionClassificationEuroType": {
+        "emissionClassificationEuroType": {
             "description": "List of European emissions classifications",
             "type": "string",
             "enum": [
@@ -734,7 +736,7 @@
                     "description": "The minimum Euro emission classification the vehicle(s) have to comply with according to the 1970 Directive 70/220/EEC and its several amendments. Note that vehicleType and fuelType need to be provided in order to make this classification explicit.",
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/EmissionClassificationEuroType"
+                        "$ref": "#/$defs/emissionClassificationEuroType"
                     },
                     "maxItems": 1,
                     "minItems": 0
@@ -779,7 +781,8 @@
             ]
         },
         "externalReference": {
-            "type": "object",
+            "type": "array",
+            "minItems": 0,
             "description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer",
             "properties": {
                 "directedLinear": {
@@ -817,7 +820,7 @@
                 }
             },
             "required": [
-				"uniqueStreetReferenceNumber",
+                "uniqueStreetReferenceNumber",
                 "lastUpdateDate"
             ]
         },
@@ -870,7 +873,7 @@
                             "description": "Indicates the status of this Regulation",
                             "type": "array",
                             "items": {
-                                "$ref": "#/$defs/RegulationType"
+                                "$ref": "#/$defs/regulationType"
                             },
                             "maxItems": 1,
                             "minItems": 1
@@ -878,7 +881,7 @@
                     },
                     "required": [
                         "regulation",
-						"regulationType"
+                        "regulationType"
                     ]
                 }
             ]
@@ -904,7 +907,7 @@
             },
             "required": [
                 "regulatedPlace",
-				"version"
+                "version"
             ]
         },
         "heaviestAxleWeightCharacteristic": {
@@ -924,7 +927,7 @@
                     "type": "number",
                     "maxItems": 1,
                     "minItems": 1,
-                    "multipleOf": 0.1
+                    "multipleOf": 0.01
                 }
             },
             "required": [
@@ -1065,7 +1068,7 @@
                     "type": "number",
                     "maxItems": 1,
                     "minItems": 1,
-                    "multipleOf": 0.1
+                    "multipleOf": 0.01
                 },
                 "typeOfWeight": {
                     "description": "The meaning of the weight value",
@@ -1199,7 +1202,7 @@
                     },
                     "required": [
                         "nonVehicularRoadUser",
-						"condition"
+                        "condition"
                     ]
                 }
             ]
@@ -1277,11 +1280,11 @@
                     "minItems": 1
                 }
             },
-			"required": [
-				"occupantCondition",
-				"operator",
-				"value"
-			]
+            "required": [
+                "occupantCondition",
+                "operator",
+                "value"
+            ]
         },
         "occupantCondition": {
             "allOf": [
@@ -1359,7 +1362,7 @@
                         }
                     },
                     "required": [
-						"regulation",
+                        "regulation",
                         "regulationShortName",
                         "regulationFullText"
                     ]
@@ -1465,9 +1468,9 @@
                     "minItems": 0
                 }
             },
-			"required": [
-				"timeValidity"
-			]
+            "required": [
+                "timeValidity"
+            ]
         },
         "permitCondition": {
             "allOf": [
@@ -1591,9 +1594,9 @@
                     "minItems": 0
                 }
             },
-			"required": [
-				"permitCondition"
-			]
+            "required": [
+                "permitCondition"
+            ]
         },
         "permitType": {
             "description": "List of permit types",
@@ -1678,7 +1681,8 @@
             ]
         },
         "provision": {
-            "type": "object",
+            "type": "array",
+            "minItems": 1,
             "description": "Object identifying the characteristics of a traffic regulation measure (TRO &amp; notice) specified Provision.",
             "properties": {
                 "regulatedPlace": {
@@ -1738,7 +1742,7 @@
                 "actionType",
                 "reference",
                 "regulation",
-				"regulatedPlace",
+                "regulatedPlace",
                 "source"
             ]
         },
@@ -1918,7 +1922,7 @@
             },
             "required": [
                 "rateLineCollection",
-				"sequence",
+                "sequence",
                 "type",
                 "value"
             ]
@@ -2009,8 +2013,8 @@
                 }
             },
             "required": [
-				"rateTable",
-				"rateLine",
+                "rateTable",
+                "rateLine",
                 "sequence",
                 "applicableCurrency",
                 "startValidUsagePeriod"
@@ -2056,18 +2060,18 @@
                     "description": "Defines the type of rate in use. [Defined by APDS - ISO/TS 5206-1]",
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/RateType"
+                        "$ref": "#/$defs/rateType"
                     },
                     "maxItems": 1,
                     "minItems": 0
                 }
             },
-			"required": [
-				"condition",
-				"rateLineCollection"
-			]
+            "required": [
+                "condition",
+                "rateLineCollection"
+            ]
         },
-        "RateType": {
+        "rateType": {
             "description": "List of rate types",
             "type": "string",
             "enum": [
@@ -2086,7 +2090,8 @@
             ]
         },
         "regulatedPlace": {
-            "type": "object",
+            "type": "array",
+            "minItems": 1,
             "description": "Object indicating the geographical and spatial location subject to a regulation",
             "properties": {
                 "geometry": {
@@ -2113,7 +2118,7 @@
                     "description": "Free text description of the regulated place",
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/RegulatedPlaceType"
+                        "$ref": "#/$defs/regulatedPlaceType"
                     },
                     "maxItems": 1,
                     "minItems": 1
@@ -2121,12 +2126,12 @@
             },
             "required": [
                 "description",
-				"type",
+                "type",
                 "provision"
             ]
         },
-        "RegulatedPlaceType": {
-            "description": "indicates the nature of regulatedPlace - location of the Regulation or Diversion Route.",
+        "regulatedPlaceType": {
+            "description": "indicates the nature of RegulatedPlace - location of the Regulation or Diversion Route.",
             "type": "string",
             "enum": [
                 "diversionRoute",
@@ -2163,12 +2168,12 @@
                     "maxItems": 1
                 },
                 "speedLimitProfileBased": {
-                    "$ref": "#/$defs/SpeedLimitProfileBased",
+                    "$ref": "#/$defs/speedLimitProfileBased",
                     "minItems": 0,
                     "maxItems": 1
                 },
                 "speedLimitValueBased": {
-                    "$ref": "#/$defs/SpeedLimitValueBased",
+                    "$ref": "#/$defs/speedLimitValueBased",
                     "minItems": 0,
                     "maxItems": 1
                 },
@@ -2289,7 +2294,7 @@
                             "description": "Indicates the type of road",
                             "type": "array",
                             "items": {
-                                "$ref": "#/$defs/RoadType"
+                                "$ref": "#/$defs/roadType"
                             },
                             "maxItems": 1,
                             "minItems": 1
@@ -2302,7 +2307,7 @@
                 }
             ]
         },
-        "RoadType": {
+        "roadType": {
             "description": "List of road types",
             "type": "string",
             "enum": [
@@ -2437,7 +2442,7 @@
                     "description": "Specification of a special day, for example schoolDay, publicHoliday, ...",
                     "type": "array",
                     "items": {
-                        "$ref": "#/$defs/SpecialDayType"
+                        "$ref": "#/$defs/specialDayType"
                     },
                     "maxItems": 1,
                     "minItems": 1
@@ -2567,7 +2572,8 @@
             ]
         },
         "temporaryRegulation": {
-            "type": "object",
+            "type": "array",
+            "minItems": 0,
             "description": "Object indicating the presence of a temporary regulation",
             "properties": {
                 "regulation": {
@@ -2587,10 +2593,10 @@
                     "minItems": 1
                 }
             },
-			"required": [
-				"regulation",
-				"temporaryOverridenProvision"
-			]
+            "required": [
+                "regulation",
+                "temporaryOverridenProvision"
+            ]
         },
         "timePeriodOfDay": {
             "type": "object",
@@ -2637,7 +2643,7 @@
                     "maxItems": 1
                 },
                 "end": {
-                    "description": "End of Overall period.",
+                    "description": "End of Overall Period.",
                     "type": "string",
                     "format": "date-time",
                     "maxItems": 1,
@@ -2651,7 +2657,7 @@
                     "minItems": 0
                 },
                 "start": {
-                    "description": "Start of Overall period",
+                    "description": "Start of Overall Period",
                     "type": "string",
                     "format": "date-time",
                     "maxItems": 1,
@@ -2670,7 +2676,8 @@
             ]
         },
         "uniqueStreetReferenceNumber": {
-            "type": "object",
+            "type": "array",
+            "minItems": 1,
             "description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer Unique Street Reference Number",
             "properties": {
                 "elementaryStreetUnit": {

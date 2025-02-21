@@ -1,5 +1,5 @@
 {
-    "schemaVersion": "3.3.0",
+    "schemaVersion": "3.3.2",
     "data": {
         "source": {
             "_comment": "DfT example D-TRO, multiple provisions, multiple conditions, TemporaryRegulation, OffListRegulation, Permits, Rates",
