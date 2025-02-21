@@ -1,4 +1,5 @@
-﻿using DfT.DTRO.Models.Tra;
+﻿using DfT.DTRO.Models.Auth;
+using DfT.DTRO.Models.Tra;
 
 namespace Dft.DTRO.Tests.Mocks;
 
@@ -245,4 +246,10 @@ public static class MockTestObjects
             Name = "name"
         }
     };
+    
+    public static AuthToken AuthToken => new()
+        {
+            AccessToken = "accessToken"
+        };
+    
 }
