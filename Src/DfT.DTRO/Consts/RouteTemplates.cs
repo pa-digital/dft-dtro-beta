@@ -2,6 +2,10 @@
 
 public static class RouteTemplates
 {
+    // Apps
+    public const string AppsBase = "/apps";
+    public const string AppsCreate = AppsBase;
+    
     // Auth
     public const string AuthBase = "/oauth";
     public const string AuthGetToken = AuthBase + "/token";

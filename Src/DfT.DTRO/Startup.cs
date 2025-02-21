@@ -43,21 +43,21 @@ public class Startup
         services.AddFeatureManagement();
 
         services.Scan(scan => scan
-                .FromAssemblies(Assembly.GetExecutingAssembly())
-                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services")) 
-                .AsImplementedInterfaces()
-                .WithScopedLifetime() 
-                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.DAL")) 
-                .AsImplementedInterfaces()
-                .WithScopedLifetime() 
-                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services.Mapping"))
-                .AsImplementedInterfaces()
-                .WithSingletonLifetime()
+            .FromAssemblies(Assembly.GetExecutingAssembly())
+            .AddClasses(classes => classes.InNamespaces(
+                "DfT.DTRO.Services",
+                "DfT.DTRO.DAL",
+                "DfT.DTRO.Apis.Clients",
+                "DfT.DTRO.Apis.Repositories"))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime()
+            .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services.Mapping"))
+            .AsImplementedInterfaces()
+            .WithSingletonLifetime()
         );
-        services.AddScoped<AuthClient, AuthClient>();
         services.AddSingleton<LoggingExtension>();
         services.TryAddSingleton<ISystemClock, SystemClock>();
-
+        services.AddHttpClient();
         services.AddStorage(Configuration);
         services.AddValidationServices();
         services.AddRequestCorrelation();

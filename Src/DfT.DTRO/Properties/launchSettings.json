@@ -18,11 +18,20 @@
         "ASPNETCORE_ENVIRONMENT": "Test"
       }
     },
-    "DfT.DTRO-Production": {
+    "DfT.DTRO-Integration": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "index.html",
       "applicationUrl": "https://localhost:5003",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Integration"
+      }
+    },
+    "DfT.DTRO-Production": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "index.html",
+      "applicationUrl": "https://localhost:5004",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
