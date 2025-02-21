@@ -49,4 +49,6 @@ public class User
     /// User Status relationship with User
     /// </summary>
     public UserStatus UserStatus { get; set; }
+
+    public bool CanPublishApp { get; set; }
 }

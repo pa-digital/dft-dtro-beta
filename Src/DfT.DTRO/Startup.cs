@@ -65,6 +65,8 @@ public class Startup
         services.AddScoped<IMetricDal, MetricDal>();
         services.AddScoped<IDtroUserDal, DtroUserDal>();
         services.AddScoped<IDtroUserService, DtroUserService>();
+        services.AddScoped<IPortalUserDal, PortalUserDal>();
+        services.AddScoped<IPortalUserService, PortalUserService>();
         services.AddScoped<ISystemConfigDal, SystemConfigDal>();
         services.AddScoped<ISystemConfigService, SystemConfigService>();
         services.AddSingleton<LoggingExtension>();
