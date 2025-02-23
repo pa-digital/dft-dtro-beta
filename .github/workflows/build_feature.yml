@@ -87,10 +87,7 @@ jobs:
           done
           echo "Server is up!"
 
-          popd
-          pushd Src/DfT.DTRO.IntegrationTests
-          dotnet test
-          popd
+          ./run_integration_tests.sh
 
       - name: Upload integration test results
         if: always()
