@@ -87,6 +87,7 @@ jobs:
           done
           echo "Server is up!"
 
+          popd
           ./run_integration_tests.sh
 
       - name: Upload integration test results

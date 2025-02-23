@@ -1,7 +1,7 @@
 using Npgsql;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class SqlQueries
     {
