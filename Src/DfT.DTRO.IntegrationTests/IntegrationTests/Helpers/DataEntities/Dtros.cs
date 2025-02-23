@@ -11,15 +11,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             SqlQueries.TruncateTable("Dtros");
         }
 
-        public static async Task<HttpResponseMessage> CreateDtroAsync(UserDetails userDetails, string exampleFileName)
+        public static async Task<HttpResponseMessage> CreateDtroAsync(string exampleFileName, TestUser testUser)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", userDetails.AppId },
+                { "x-App-Id", testUser.AppId },
                 { "Content-Type", "multipart/form-data" }
             };
 
-            var tempFilePath = GetDtroFileWithTraUpdated(exampleFileName, userDetails.TraId);
+            var tempFilePath = GetDtroFileWithTraUpdated(exampleFileName, testUser.TraId);
             var createDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/dtros/createFromFile", headers, pathToJsonFile: tempFilePath);
             return createDtroResponse;
         }

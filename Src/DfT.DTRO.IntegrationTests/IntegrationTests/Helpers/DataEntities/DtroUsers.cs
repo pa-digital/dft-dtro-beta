@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
@@ -8,30 +7,30 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
     public static class DtroUsers
     {
-        public static async Task DeleteExistingUsersAsync()
+        public static async Task DeleteExistingUsersAsync(TestUser testUser)
         {
-            var userIds = await GetAllUserIdsAsync();
+            var userIds = await GetAllUserIdsAsync(testUser);
             if (userIds.Count > 0)
             {
-                var deleteUsersResponse = await DeleteUsersAsync(userIds);
+                var deleteUsersResponse = await DeleteUsersAsync(userIds, testUser);
                 Assert.Equal(HttpStatusCode.OK, deleteUsersResponse.StatusCode);
             }
         }
 
-        public static async Task<HttpResponseMessage> GetAllUsersAsync(UserDetails userDetails)
+        public static async Task<HttpResponseMessage> GetAllUsersAsync(TestUser testUser)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", userDetails.AppId }
+                { "x-App-Id", testUser.AppId }
             };
 
             var getAllUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/dtroUsers", headers);
             return getAllUsersResponse;
         }
 
-        public static async Task<List<string>> GetAllUserIdsAsync()
+        public static async Task<List<string>> GetAllUserIdsAsync(TestUser testUser)
         {
-            var getAllUsersResponse = await GetAllUsersAsync(User.Publisher);
+            var getAllUsersResponse = await GetAllUsersAsync(testUser);
             Assert.Equal(HttpStatusCode.OK, getAllUsersResponse.StatusCode);
 
             string responseJson = await getAllUsersResponse.Content.ReadAsStringAsync();
@@ -49,11 +48,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return ids;
         }
 
-        public static async Task<HttpResponseMessage> DeleteUsersAsync(List<string> ids)
+        public static async Task<HttpResponseMessage> DeleteUsersAsync(List<string> ids, TestUser testUser)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", "f553d1ec-a7ca-43d2-b714-60dacbb4d005" },
+                { "x-App-Id", testUser.AppId },
                 { "Content-Type", "application/json" }
             };
 
@@ -63,22 +62,22 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return deleteUsersResponse;
         }
 
-        public static async Task<HttpResponseMessage> CreateUserAsync(UserDetails userDetails)
+        public static async Task<HttpResponseMessage> CreateUserAsync(TestUser testUser)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", userDetails.AppId },
+                { "x-App-Id", testUser.AppId },
                 { "Content-Type", "application/json" }
             };
 
             var jsonBody = $$"""
             {
                 "id": "26fc4211-fa5b-442b-9978-fda7b1109a3c",
-                "traId": {{userDetails.TraId}},
-                "name": "{{userDetails.Name}}",
+                "traId": {{testUser.TraId}},
+                "name": "{{testUser.Name}}",
                 "prefix": "AB",
-                "userGroup": {{userDetails.UserGroup}},
-                "xAppId": "{{userDetails.AppId}}"
+                "userGroup": {{testUser.UserGroup}},
+                "xAppId": "{{testUser.AppId}}"
             }
             """;
 

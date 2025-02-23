@@ -4,18 +4,19 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class DataSetUp
     {
-        public static async Task ClearAllDataAsync()
+        public static async Task ClearAllDataAsync(TestUser testUser)
         {
-            await DtroUsers.DeleteExistingUsersAsync();
+            await DtroUsers.DeleteExistingUsersAsync(testUser);
             Rules.DeleteExistingRules();
-            await Schemas.DeleteExistingSchemasAsync();
+            await Schemas.DeleteExistingSchemasAsync(testUser);
             Dtros.DeleteExistingDtros();
         }
-        public static async Task CreateRulesAndSchema()
+
+        public static async Task CreateRulesAndSchema(TestUser testUser)
         {
-            var createRuleResponse = await Rules.CreateRuleSetFromFileAsync(User.Publisher);
+            var createRuleResponse = await Rules.CreateRuleSetFromFileAsync(testUser);
             Assert.Equal(HttpStatusCode.Created, createRuleResponse.StatusCode);
-            await Schemas.CreateAndActivateSchemaAsync();
+            await Schemas.CreateAndActivateSchemaAsync(testUser);
         }
     }
 }

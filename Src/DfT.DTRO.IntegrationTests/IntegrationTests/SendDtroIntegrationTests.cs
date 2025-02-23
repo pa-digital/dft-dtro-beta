@@ -22,10 +22,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
         [MemberData(nameof(GetFileNames))]
         public async Task CreateDtroShouldBeSavedCorrectly(string filePath)
         {
-            var createUserResponse = await DtroUsers.CreateUserAsync(User.Publisher);
+            var publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            var createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
-            var createDtroResponse = await Dtros.CreateDtroAsync(User.Publisher, filePath);
+            var createDtroResponse = await Dtros.CreateDtroAsync(filePath, publisher);
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
         }
     }

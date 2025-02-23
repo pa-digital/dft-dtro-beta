@@ -10,11 +10,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             SqlQueries.TruncateTable("RuleTemplate");
         }
 
-        public static async Task<HttpResponseMessage> CreateRuleSetFromFileAsync(UserDetails userDetails)
+        public static async Task<HttpResponseMessage> CreateRuleSetFromFileAsync(TestUser testUser)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", userDetails.AppId },
+                { "x-App-Id", testUser.AppId },
                 { "Content-Type", "multipart/form-data" }
             };
 
@@ -22,11 +22,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return createRuleResponse;
         }
 
-        public static async Task<HttpResponseMessage> GetRuleSetAsync(string schemaVersion, UserDetails userDetails)
+        public static async Task<HttpResponseMessage> GetRuleSetAsync(string schemaVersion, TestUser testUser)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", userDetails.AppId }
+                { "x-App-Id", testUser.AppId }
             };
 
             var getSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/rules/{schemaVersion}", headers);
