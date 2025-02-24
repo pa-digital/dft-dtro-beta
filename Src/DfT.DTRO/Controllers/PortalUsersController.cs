@@ -5,8 +5,9 @@ namespace DfT.DTRO.Controllers;
 /// <summary>
 /// Controller for front-end user
 /// </summary>
-[Tags("Users")]
 [ApiController]
+[Tags("Users")]
+[TokenValidation]
 public class PortalUsersController : ControllerBase
 {
     private readonly IPortalUserService _portalUserService;
@@ -26,15 +27,15 @@ public class PortalUsersController : ControllerBase
     
     
     [HttpGet]
-    [Route("/canPublish/{userId}")]
+    [Route("/canPublish")]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "Publish permission retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
-    public async Task<ActionResult<List<PortalUserResponse>>> CanPublish([FromRoute] string userId)
+    public async Task<ActionResult<List<PortalUserResponse>>> CanPublish()
     {
         try
         {
-            // TODO verify based on token rather than user ID
+            var userId = HttpContext.Items["UserId"] as string;
             var response = await _portalUserService.CanUserPublish(userId);
             _logger.LogInformation($"'{nameof(CanPublish)}' method called");
             _loggingExtension.LogInformation(
@@ -42,7 +43,6 @@ public class PortalUsersController : ControllerBase
                 "/dtroUsers",
                 $"'{nameof(CanPublish)}' method called");
 
-            Console.WriteLine($"Will look for user {userId}");
             
             return Ok(new  PortalUserResponse {canPublish = response.canPublish});
         }
