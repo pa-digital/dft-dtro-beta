@@ -12,6 +12,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         private static async Task SetUpBeforeTestRunAsync()
         {
             UserWithAllPermissions = TestUsers.GenerateUser(UserGroup.All);
+            var createUserResponse = await DtroUsers.CreateUserAsync(UserWithAllPermissions);
+            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
             Console.WriteLine("Do once before each test run...");
             if (EnvironmentName == EnvironmentType.Local)
@@ -47,7 +49,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         public async Task InitializeAsync()
         {
-            Console.WriteLine("Do before before each test...");
+            Console.WriteLine("Do before each test...");
             if (EnvironmentName == EnvironmentType.Local)
             {
                 await DtroUsers.DeleteExistingUsersAsync(UserWithAllPermissions);

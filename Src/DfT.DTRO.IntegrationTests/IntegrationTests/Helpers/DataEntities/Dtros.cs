@@ -24,6 +24,17 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return createDtroResponse;
         }
 
+        public static async Task<HttpResponseMessage> GetDtroAsync(string dtroId, TestUser testUser)
+        {
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "x-App-Id", testUser.AppId }
+            };
+
+            var createDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/dtros/{dtroId}", headers);
+            return createDtroResponse;
+        }
+
         private static string GetDtroFileWithTraUpdated(string exampleFileName, string traId)
         {
             var exampleFilePath = $"{AbsolutePathToDtroExamplesDirectory}/{exampleFileName}";
