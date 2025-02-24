@@ -44,9 +44,9 @@ public class ConditionValidation : IConditionValidationService
                 SemanticValidationError error = new()
                 {
                     Name = "Operator",
-                    Message = "Operator is not present or incorrect.",
+                    Message = "Operator is not present or incorrect",
                     Path = "Source -> Provision -> Regulation -> ConditionSet -> operator",
-                    Rule = $"One or more of '{string.Join(", ", operatorTypes)}' operators must be present.",
+                    Rule = $"One or more of '{string.Join(", ", operatorTypes)}' operators must be present",
                 };
                 errors.Add(error);
             }

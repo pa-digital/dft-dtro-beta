@@ -137,7 +137,7 @@ public class DtroMappingService : IDtroMappingService
                 {
                     var regulatedPlaceList =
                         expandoProvision.GetValueOrDefault<IList<object>>(
-                            "RegulatedPlace".ToBackwardCompatibility(dtro.SchemaVersion));
+                            "regulatedPlace".ToBackwardCompatibility(dtro.SchemaVersion));
                     if (regulatedPlaceList == null)
                     {
                         _loggingExtension.LogError(nameof(MapToSearchResult), "", "Error: 'regulatedPlace' not found in one of the provisions.", "");

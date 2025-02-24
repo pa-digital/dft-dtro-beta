@@ -26,7 +26,7 @@ public static class ValidationServiceRegistration
             .AddScoped<IUniqueStreetReferenceNumberValidationService, UniqueStreetReferenceNumberValidationService>()
             .AddScoped<IElementaryStreetUnitValidationService, ElementaryStreetUnitValidationService>()
             .AddScoped<IRegulationValidation, RegulationValidation>()
-            .AddScoped<IConditionValidationService, ConditionValidationService>()
+            .AddScoped<IConditionValidationService, ConditionValidation>()
             .AddScoped<IRateTableValidationService, RateTableValidationService>()
             .AddScoped<IRateLineCollectionValidationService, RateLineCollectionValidationService>()
             .AddScoped<IRateLineValidationService, RateLineValidationService>();

@@ -10,21 +10,21 @@ public class RateLineValidationService : IRateLineValidationService
 
         var regulations = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(provision => provision
-                .GetValueOrDefault<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>("regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 
-        if (regulations.Any(it => !it.HasField("Condition") && !it.HasField("ConditionSet")))
+        if (regulations.Any(it => !it.HasField("condition") && !it.HasField("conditionSet")))
         {
             return errors;
         }
 
         var rateTables = regulations
             .Select(regulation => regulation
-                .GetExpandoOrDefault("RateTable"
+                .GetExpandoOrDefault("rateTable"
                     .ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Where(rateTable => rateTable != null)
             .ToList();
@@ -36,7 +36,7 @@ public class RateLineValidationService : IRateLineValidationService
 
         var rateLineCollections = rateTables
             .SelectMany(expandoObject => expandoObject
-                .GetValueOrDefault<IList<object>>("RateLineCollection".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
+                .GetValueOrDefault<IList<object>>("rateLineCollection".ToBackwardCompatibility(dtroSubmit.SchemaVersion)))
             .Cast<ExpandoObject>()
             .Where(rateLineCollection => rateLineCollection != null)
             .ToList();

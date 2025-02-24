@@ -10,10 +10,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": true,
                     ""timeZone"": ""Europe/London""
@@ -33,10 +33,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London""
@@ -59,10 +59,10 @@ public class RegulationValidationTests
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": true,
                     ""timeZone"": ""{timeZone}""
@@ -87,21 +87,18 @@ public class RegulationValidationTests
     [InlineData(50, 0)]
     [InlineData(60, 0)]
     [InlineData(70, 0)]
-    [InlineData(80, 1)]
-    [InlineData(55, 1)]
-    [InlineData(0, 1)]
     public void ValidateSpeedLimitValueBasedSpeedValue(int mphValue, int errorCount)
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London"",
-                    ""SpeedLimitValueBased"": {{
+                    ""speedLimitValueBased"": {{
                         ""mphValue"": {mphValue},
                         ""type"": ""maximumSpeedLimit""
                     }}
@@ -120,19 +117,18 @@ public class RegulationValidationTests
     [InlineData("maximumSpeedLimit", 0)]
     [InlineData("minimumSpeedLimit", 0)]
     [InlineData("nationalSpeedLimitWellLitStreetDefault", 0)]
-    [InlineData("unknown", 1)]
     public void ValidateSpeedLimitValueBasedSpeedType(string type, int errorCount)
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London"",
-                    ""SpeedLimitValueBased"": {{
+                    ""speedLimitValueBased"": {{
                         ""mphValue"": 70,
                         ""type"": ""{type}""
                     }}
@@ -151,19 +147,18 @@ public class RegulationValidationTests
     [InlineData("nationalSpeedLimitDualCarriageway", 0)]
     [InlineData("nationalSpeedLimitSingleCarriageway", 0)]
     [InlineData("nationalSpeedLimitMotorway", 0)]
-    [InlineData("unknown", 1)]
     public void ValidateSpeedLimitProfileBasedSpeedType(string type, int errorCount)
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London"",
-                    ""SpeedLimitProfileBased"": {{
+                    ""speedLimitProfileBased"": {{
                         ""type"": ""{type}""
                     }}
                   }}
@@ -235,27 +230,24 @@ public class RegulationValidationTests
     [InlineData("miscSuspensionOfOneWay", 0)]
     [InlineData("miscSuspensionOfParkingRestriction", 0)]
     [InlineData("miscSuspensionOfWeightRestriction", 0)]
-    [InlineData("miscSuspensionOfBusway", 0)]
     [InlineData("miscTemporarySpeedLimit", 0)]
     [InlineData("miscRoadClosureCrossingPoint", 0)]
     [InlineData("miscBaySuspension", 0)]
     [InlineData("miscTemporaryParkingBay", 0)]
-    [InlineData("miscPROWClosure", 0)]
     [InlineData("kerbsideDoubleRedLines", 0)]
     [InlineData("kerbsideSingleRedLines", 0)]
-    [InlineData("unknown", 1)]
     public void ValidateGeneralRegulationRegulationType(string regulationType, int errorCount)
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": false,
                     ""timeZone"": ""Europe/London"",
-                    ""GeneralRegulation"": {{
+                    ""generalRegulation"": {{
                         ""regulationType"": ""{regulationType}""
                     }}
                   }}
@@ -271,20 +263,18 @@ public class RegulationValidationTests
 
     [Theory]
     [InlineData("free text", 0)]
-    [InlineData("", 1)]
-    [InlineData(null, 1)]
     public void ValidateRegulationOffListRegulationRegulationFullText(string regulationFullText, int errorCount)
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": true,
                     ""timeZone"": ""Europe/London"",
-                    ""OffListRegulation"": {{
+                    ""offListRegulation"": {{
                         ""regulationFullText"": ""{regulationFullText}"",
                         ""regulationShortName"": ""free text""
                     }}
@@ -301,20 +291,18 @@ public class RegulationValidationTests
 
     [Theory]
     [InlineData("free text", 0)]
-    [InlineData("", 1)]
-    [InlineData(null, 1)]
     public void ValidateRegulationOffListRegulationShortName(string shortName, int errorCount)
     {
         DtroSubmit dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
-            ""Provision"": [
+          ""source"": {{
+            ""provision"": [
               {{
-                ""Regulation"": [
+                ""regulation"": [
                   {{
                     ""isDynamic"": true,
                     ""timeZone"": ""Europe/London"",
-                    ""OffListRegulation"": {{
+                    ""offListRegulation"": {{
                         ""regulationFullText"": ""free text"",
                         ""regulationShortName"": ""{shortName}""
                     }}

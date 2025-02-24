@@ -16,17 +16,17 @@ public class ElementaryStreetUnitValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"":  {{
-                                    ""ExternalReference"": [
+                                ""pointGeometry"":  {{
+                                    ""externalReference"": [
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""ElementaryStreetUnit"": [
+                                                    ""elementaryStreetUnit"": [
                                                         {{
                                                             ""esu"": {esu}
                                                         }}
@@ -52,17 +52,17 @@ public class ElementaryStreetUnitValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""LinearGeometry"":  {{
-                                    ""ExternalReference"": [
+                                ""linearGeometry"":  {{
+                                    ""externalReference"": [
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""ElementaryStreetUnit"": [
+                                                    ""elementaryStreetUnit"": [
                                                         {{
                                                             ""esu"": 39605715
                                                         }}
@@ -71,9 +71,9 @@ public class ElementaryStreetUnitValidationServiceTests
                                             ]
                                         }},
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""ElementaryStreetUnit"": [
+                                                    ""elementaryStreetUnit"": [
                                                         {{
                                                             ""esu"": 39605158
                                                         }}
@@ -99,17 +99,17 @@ public class ElementaryStreetUnitValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""DirectedLinear"":  {{
-                                    ""ExternalReference"": [
+                                ""directedLinear"":  {{
+                                    ""externalReference"": [
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""ElementaryStreetUnit"": [
+                                                    ""elementaryStreetUnit"": [
                                                         {{
                                                             ""esu"": 39605158
                                                         }}
@@ -118,9 +118,9 @@ public class ElementaryStreetUnitValidationServiceTests
                                             ]
                                         }},
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""ElementaryStreetUnit"": [
+                                                    ""elementaryStreetUnit"": [
                                                         {{
                                                             ""esu"": ""39605158""
                                                         }}
@@ -146,17 +146,17 @@ public class ElementaryStreetUnitValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""DirectedLinear"":  {{
-                                    ""ExternalReference"": [
+                                ""directedLinear"":  {{
+                                    ""externalReference"": [
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""ElementaryStreetUnit"": [
+                                                    ""elementaryStreetUnit"": [
                                                         {{
                                                             ""esu"": 39605158
                                                         }}
@@ -165,7 +165,7 @@ public class ElementaryStreetUnitValidationServiceTests
                                             ]
                                         }},
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     
                                                 }}
@@ -189,17 +189,17 @@ public class ElementaryStreetUnitValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""DirectedLinear"":  {{
-                                    ""ExternalReference"": [
+                                ""directedLinear"":  {{
+                                    ""externalReference"": [
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
-                                                    ""ElementaryStreetUnit"": [
+                                                    ""elementaryStreetUnit"": [
                                                         {{
                                                             ""esu"": 39605158
                                                         }}
@@ -208,12 +208,12 @@ public class ElementaryStreetUnitValidationServiceTests
                                             ]
                                         }},
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     
                                                 }},
                                                 {{
-                                                    ""ElementaryStreetUnit"": [
+                                                    ""elementaryStreetUnit"": [
                                                         {{
                                                             ""esu"": ""39605158""
                                                         }}
@@ -239,22 +239,22 @@ public class ElementaryStreetUnitValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""DirectedLinear"":  {{
-                                    ""ExternalReference"": [
+                                ""directedLinear"":  {{
+                                    ""externalReference"": [
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     
                                                 }}
                                             ]
                                         }},
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     
                                                 }}

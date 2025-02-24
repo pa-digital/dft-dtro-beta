@@ -10,10 +10,10 @@ public class ElementaryStreetUnitValidationService : IElementaryStreetUnitValida
 
         var geometries = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(provisions => provisions
-                .GetValueOrDefault<IList<object>>("RegulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>("regulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .Where(expandoObject => Constants.ConcreteGeometries.Any(expandoObject.HasField))
             .Where(expandoObject => expandoObject != null)
@@ -25,25 +25,25 @@ public class ElementaryStreetUnitValidationService : IElementaryStreetUnitValida
             {
                 var hasExternalReference = geometry
                     .GetExpandoOrDefault(concreteGeometry)
-                    .HasField("ExternalReference");
+                    .HasField("externalReference");
                 if (!hasExternalReference)
                 {
                     continue;
                 }
 
                 var externalReferences = geometry
-                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.ExternalReference")
+                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.externalReference")
                     .OfType<ExpandoObject>()
                     .ToList();
 
                 var uniqueStreetReferenceNumbers = externalReferences
-                    .SelectMany(externalReference => externalReference.GetValueOrDefault<IList<object>>("UniqueStreetReferenceNumber"))
+                    .SelectMany(externalReference => externalReference.GetValueOrDefault<IList<object>>("uniqueStreetReferenceNumber"))
                     .OfType<ExpandoObject>()
                     .ToList();
 
                 var elementaryStreetUnits = uniqueStreetReferenceNumbers
-                    .Where(it => it.HasField("ElementaryStreetUnit"))
-                    .SelectMany(uniqueStreetReferenceNumber => uniqueStreetReferenceNumber.GetValueOrDefault<IList<object>>("ElementaryStreetUnit"))
+                    .Where(it => it.HasField("elementaryStreetUnit"))
+                    .SelectMany(uniqueStreetReferenceNumber => uniqueStreetReferenceNumber.GetValueOrDefault<IList<object>>("elementaryStreetUnit"))
                     .OfType<ExpandoObject>()
                     .ToList();
 

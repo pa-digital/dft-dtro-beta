@@ -12,13 +12,13 @@ public class ExternalReferenceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"":  {{
-                                    ""ExternalReference"": [
+                                ""pointGeometry"":  {{
+                                    ""externalReference"": [
                                         {{
                                             ""lastUpdateDate"": ""{lastUpdateDate}""
                                         }}
@@ -41,13 +41,13 @@ public class ExternalReferenceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"":  {{
-                                    ""ExternalReference"": [
+                                ""pointGeometry"":  {{
+                                    ""externalReference"": [
                                         {{
                                             ""lastUpdateDate"": ""2023-01-01T00:00:00""
                                         }},
@@ -69,21 +69,21 @@ public class ExternalReferenceValidationServiceTests
     }
 
     [Theory]
-    [InlineData("PointGeometry")]
-    [InlineData("LinearGeometry")]
-    [InlineData("Polygon")]
-    [InlineData("DirectedLinear")]
+    [InlineData("pointGeometry")]
+    [InlineData("linearGeometry")]
+    [InlineData("polygon")]
+    [InlineData("directedLinear")]
     public void ValidateMultipleExternalReferencesWithinMultipleGeometriesLastUpdatedDate(string geometry)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
                                 ""{geometry}"":  {{
-                                    ""ExternalReference"": [
+                                    ""externalReference"": [
                                         {{
                                             ""lastUpdateDate"": ""2022-01-01T00:10:00""
                                         }},
@@ -110,13 +110,13 @@ public class ExternalReferenceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"":  {{
-                                    ""ExternalReference"": [
+                                ""pointGeometry"":  {{
+                                    ""externalReference"": [
                                         {{
                                             ""lastUpdateDate"": ""2023-01-01T00:00:00""
                                         }},
@@ -125,8 +125,8 @@ public class ExternalReferenceValidationServiceTests
                                         }}
                                     ]
                                 }},
-                                ""LinearGeometry"":  {{
-                                    ""ExternalReference"": [
+                                ""linearGeometry"":  {{
+                                    ""externalReference"": [
                                         {{
                                             ""lastUpdateDate"": ""2023-01-01T00:00:00""
                                         }},
@@ -135,8 +135,8 @@ public class ExternalReferenceValidationServiceTests
                                         }}
                                     ]
                                 }},
-                                ""Polygon"":  {{
-                                    ""ExternalReference"": [
+                                ""polygon"":  {{
+                                    ""externalReference"": [
                                         {{
                                             ""lastUpdateDate"": ""2023-01-01T00:00:00""
                                         }},
@@ -145,8 +145,8 @@ public class ExternalReferenceValidationServiceTests
                                         }}
                                     ]
                                 }},
-                                ""DirectedLinear"":  {{
-                                    ""ExternalReference"": [
+                                ""directedLinear"":  {{
+                                    ""externalReference"": [
                                         {{
                                             ""lastUpdateDate"": ""2023-01-01T00:00:00""
                                         }},
@@ -172,18 +172,18 @@ public class ExternalReferenceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"":  {{
+                                ""pointGeometry"":  {{
                                     }},
-                                ""LinearGeometry"":  {{
+                                ""linearGeometry"":  {{
                                     }},
-                                ""Polygon"":  {{
+                                ""polygon"":  {{
                                     }},
-                                ""DirectedLinear"":  {{
+                                ""directedLinear"":  {{
                                     }}
                             }}
                         ]

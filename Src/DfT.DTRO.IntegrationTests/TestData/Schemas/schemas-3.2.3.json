@@ -276,11 +276,11 @@
             ],
             "type": "string"
         },
-        "Condition": {
+        "condition": {
             "additionalProperties": false,
             "description": "Abstract class that specifies a condition for the validity of a certain road feature such as time, weather conditions, vehicle type, vehicle propulsion fuel, vehicle occupancy, vehicle usage, vehicle dimensions or weight characteristics.",
             "properties": {
-                "ConditionSet": {
+                "conditionSet": {
                     "items": {
                         "$ref": "#/$defs/ConditionSet"
                     }
@@ -289,10 +289,10 @@
                     "description": "If set to true means that the entire condition shall be negated.",
                     "type": "boolean"
                 },
-                "RateTable": {
+                "rateTable": {
                     "$ref": "#/$defs/RateTable"
                 },
-                "Regulation": {
+                "regulation": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Regulation"
@@ -311,7 +311,7 @@
             ],
             "type": "string"
         },
-        "ConditionSet": {
+        "conditionSet": {
             "additionalProperties": false,
             "description": "Groups a number of conditions into a condition set",
             "properties": {
@@ -450,7 +450,7 @@
                 "Period"
             ]
         },
-        "DirectedLinear": {
+        "directedLinear": {
             "additionalProperties": false,
             "description": "Object indicating characteristics relating to specified direction linear geometric location",
             "properties": {
@@ -499,11 +499,11 @@
             },
             "type": "object"
         },
-        "ElementaryStreetUnit": {
+        "elementaryStreetUnit": {
             "additionalProperties": false,
             "description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer Elementary Street Unit",
             "properties": {
-                "UniqueStreetReferenceNumber": {
+                "uniqueStreetReferenceNumber": {
                     "items": {
                         "$ref": "#/defs/UniqueStreetReferenceNumber"
                     },
@@ -517,7 +517,7 @@
                 }
             },
             "required": [
-                "UniqueStreetReferenceNumber",
+                "uniqueStreetReferenceNumber",
                 "esu"
             ],
             "type": "object"
@@ -586,27 +586,27 @@
             },
             "type": "object"
         },
-        "ExternalReference": {
+        "externalReference": {
             "additionalProperties": false,
             "description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer",
             "properties": {
-                "DirectedLinear": {
+                "directedLinear": {
                     "$ref": "#/$defs/DirectedLinear"
                 },
-                "LinearGeometry": {
+                "linearGeometry": {
                     "$ref": "#/$defs/LinearGeometry"
                 },
-                "PointGeometry": {
+                "pointGeometry": {
                     "$ref": "#/$defs/PointGeometry"
                 },
-                "Polygon": {
+                "polygon": {
                     "$ref": "#/$defs/Polygon"
                 },
                 "lastUpdateDate": {
                     "format": "date",
                     "type": "string"
                 },
-                "UniqueStreetReferenceNumber": {
+                "uniqueStreetReferenceNumber": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$refs/UniqueStreetReferenceNumber"
@@ -666,7 +666,7 @@
             "additionalProperties": false,
             "description": "An object linking to different discrete forms of geometry.",
             "properties": {
-                "RegulatedPlace": {
+                "regulatedPlace": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/RegulatedPlace"
@@ -745,11 +745,11 @@
             ],
             "type": "string"
         },
-        "LinearGeometry": {
+        "linearGeometry": {
             "additionalProperties": false,
             "description": "Object indicating characteristic for a linear geometry location",
             "properties": {
-                "ExternalReference": {
+                "externalReference": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/ExternalReference"
@@ -1219,10 +1219,10 @@
                 "residentWithNonResidentBlueBadge"
             ]
         },
-        "PointGeometry": {
+        "pointGeometry": {
             "description": "Object indicating characteristic for a point geometry location",
             "properties": {
-                "ExternalReference": {
+                "externalReference": {
                     "$ref": "#/$defs/ExternalReference"
                 },
                 "point": {
@@ -1248,10 +1248,10 @@
                 "trafficSignLocation"
             ]
         },
-        "Polygon": {
+        "polygon": {
             "description": "Object indicating characteristics relating to polygon geometric location",
             "properties": {
-                "ExternalReference": {
+                "externalReference": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/ExternalReference"
@@ -1271,14 +1271,14 @@
             "type": "object",
             "description": "Object identifying the characteristics of a traffic regulation measure (TRO & notice) specified Provision.",
             "properties": {
-                "RegulatedPlace": {
+                "regulatedPlace": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/RegulatedPlace"
                     },
                     "minItems": 1
                 },
-                "Regulation": {
+                "regulation": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Regulation"
@@ -1395,7 +1395,7 @@
             "type": "object",
             "description": "Object indicating characteristics for a rate line within a rate table",
             "properties": {
-                "RateLineCollection": {
+                "rateLineCollection": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/RateLineCollection"
@@ -1462,7 +1462,7 @@
                 "value"
             ]
         },
-        "RateLineCollection": {
+        "rateLineCollection": {
             "type": "object",
             "description": "group of rate line elements that logically group together within one rate table, e.g. such as the rate lines for the different tiers of a time based tier rate table",
             "properties": {
@@ -1473,7 +1473,7 @@
                     },
                     "minItems": 1
                 },
-                "RateTable": {
+                "rateTable": {
                     "type": "object",
                     "$ref": "#/$defs/RateTable"
                 },
@@ -1539,18 +1539,18 @@
                 "perUnit"
             ]
         },
-        "RateTable": {
+        "rateTable": {
             "type": "object",
             "description": "specific set of rate charges relating to one or more locations and optionally one set of eligibility criteria",
             "properties": {
-                "Condition": {
+                "condition": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Condition"
                     },
                     "minItems": 1
                 },
-                "RateLineCollection": {
+                "rateLineCollection": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/RateLineCollection"
@@ -1586,7 +1586,7 @@
                 "unlimited"
             ]
         },
-        "RegulatedPlace": {
+        "regulatedPlace": {
             "type": "object",
             "description": "Object indicating the geographical and spatial location subject to a regulation",
             "properties": {
@@ -1613,11 +1613,11 @@
                 "description"
             ]
         },
-        "Regulation": {
+        "regulation": {
             "type": "object",
             "description": "Object indicating the characteristics of a regulation",
             "properties": {
-                "Condition": {
+                "condition": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Condition"
@@ -1731,13 +1731,13 @@
             "type": "object",
             "description": "Object indicating characteristics concerning the type of road.",
             "properties": {
-                "ConditionSet": {
+                "conditionSet": {
                     "$ref": "#/$defs/ConditionSet"
                 },
-                "RateTable": {
+                "rateTable": {
                     "$ref": "#/$defs/RateTable"
                 },
-                "Regulation": {
+                "regulation": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Regulation"
@@ -1950,7 +1950,7 @@
             "type": "object",
             "description": "Object indicating the presence of a temporary regulation",
             "properties": {
-                "Regulation": {
+                "regulation": {
                     "type": "object",
                     "$ref": "#/$defs/Regulation"
                 },
@@ -1994,7 +1994,7 @@
             "type": "object",
             "description": "A continuous or discontinuous period of validity defined by overall bounding start and end times and the possible intersection of valid periods (potentially recurring) with the complement of exception periods (also potentially recurring). ",
             "properties": {
-                "Regulation": {
+                "regulation": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/Regulation"
@@ -2037,18 +2037,18 @@
                 "start"
             ]
         },
-        "UniqueStreetReferenceNumber": {
+        "uniqueStreetReferenceNumber": {
             "type": "object",
             "description": "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer Unique Street Reference Number",
             "properties": {
-                "ElementaryStreetUnit": {
+                "elementaryStreetUnit": {
                     "type": "array",
                     "items": {
                         "$ref": "#/$defs/ElementaryStreetUnit"
                     },
                     "minItems": 0
                 },
-                "ExternalReference": {
+                "externalReference": {
                     "type": "object",
                     "$ref": "#/$defs/ExternalReference",
                     "minItems": 0

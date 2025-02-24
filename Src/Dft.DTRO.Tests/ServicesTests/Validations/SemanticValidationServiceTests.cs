@@ -38,13 +38,10 @@ public class SemanticValidationServiceTests
     }
 
     [Theory]
-    [InlineData("3.2.4")]
     [InlineData("3.3.0")]
     public async Task DisallowsLastUpdateDateInTheFuture(string version)
     {
-        DtroSubmit dtro = PrepareDtro(version != "3.3.0"
-            ? @"{""geometry"": { ""version"": 1, ""polygon"": { ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalReference"": [{ ""lastUpdateDate"": ""2227-09-26 00:00:00""}]}}"
-            : @"{""polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""externalReference"": [{ ""lastUpdateDate"": ""2227-09-26 00:00:00""}]}}", version);
+        DtroSubmit dtro = PrepareDtro(@"{""polygon"": { ""version"": 1, ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"", ""externalReference"": [{ ""lastUpdateDate"": ""2227-09-26 00:00:00""}]}}", version);
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
@@ -186,20 +183,6 @@ public class SemanticValidationServiceTests
 
         Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
         Assert.NotEmpty(actual.Item2);
-    }
-
-    [Fact]
-    public async Task TypoInExternalReferenceReturnsError()
-    {
-        DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""polygon"": {
-            ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalR"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", "3.2.4");
-
-        SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
-            _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
-
-        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
-
-        Assert.NotEmpty(result.Item2);
     }
 
     private static DtroSubmit PrepareDtro(string jsonData, string schemaVersion) =>

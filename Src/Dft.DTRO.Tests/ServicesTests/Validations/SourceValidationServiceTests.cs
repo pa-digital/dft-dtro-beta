@@ -26,7 +26,7 @@ public class SourceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
+          ""source"": {{
             ""actionType"": ""{actionType}"",
             ""currentTraOwner"": 1050,
             ""reference"": ""D5E7FBE5-5A7A-4A81-8E27-CDB008EC729D"",
@@ -48,7 +48,7 @@ public class SourceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
+          ""source"": {{
             ""actionType"": ""new"",
             ""currentTraOwner"": {traCode},
             ""reference"": ""D5E7FBE5-5A7A-4A81-8E27-CDB008EC729D"",
@@ -70,7 +70,7 @@ public class SourceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
+          ""source"": {{
             ""actionType"": ""new"",
             ""currentTraOwner"": 1050,
             ""reference"": ""{reference}"",
@@ -93,7 +93,7 @@ public class SourceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
+          ""source"": {{
             ""actionType"": ""new"",
             ""currentTraOwner"": 1050,
             ""reference"": ""D5E7FBE5-5A7A-4A81-8E27-CDB008EC729D"",
@@ -120,7 +120,7 @@ public class SourceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
+          ""source"": {{
             ""actionType"": ""new"",
             ""currentTraOwner"": 1050,
             ""reference"": ""D5E7FBE5-5A7A-4A81-8E27-CDB008EC729D"",
@@ -142,7 +142,7 @@ public class SourceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
+          ""source"": {{
             ""actionType"": ""new"",
             ""currentTraOwner"": 1050,
             ""reference"": ""D5E7FBE5-5A7A-4A81-8E27-CDB008EC729D"",
@@ -164,7 +164,7 @@ public class SourceValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-          ""Source"": {{
+          ""source"": {{
             ""actionType"": ""new"",
             ""currentTraOwner"": 1050,
             ""reference"": ""D5E7FBE5-5A7A-4A81-8E27-CDB008EC729D"",

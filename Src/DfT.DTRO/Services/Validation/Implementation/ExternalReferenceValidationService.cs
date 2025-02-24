@@ -12,10 +12,10 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
 
         var geometries = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(provisions => provisions
-                .GetValueOrDefault<IList<object>>("RegulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>("regulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .Where(expandoObject => Constants.ConcreteGeometries.Any(expandoObject.HasField))
             .Where(expandoObject => expandoObject != null)
@@ -32,14 +32,14 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
 
                 var hasExternalReference = geometry
                     .GetExpandoOrDefault(concreteGeometry)
-                    .HasField("ExternalReference");
+                    .HasField("externalReference");
                 if (!hasExternalReference)
                 {
                     continue;
                 }
 
                 var lastDateUpdates = geometry
-                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.ExternalReference")
+                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.externalReference")
                     .OfType<ExpandoObject>()
                     .Select(it => it.GetDateTimeOrNull("lastUpdateDate"))
                     .ToList();

@@ -16,15 +16,15 @@ public class UniqueStreetReferenceNumberValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"":  {{
-                                    ""ExternalReference"": [
+                                ""pointGeometry"":  {{
+                                    ""externalReference"": [
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     ""usrn"": {usrn}
                                                 }}
@@ -48,22 +48,22 @@ public class UniqueStreetReferenceNumberValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"":  {{
-                                    ""ExternalReference"": [
+                                ""pointGeometry"":  {{
+                                    ""externalReference"": [
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     ""usrn"": 39605715
                                                 }}
                                             ]
                                         }},
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     ""usrn"": 39605158
                                                 }}
@@ -87,22 +87,22 @@ public class UniqueStreetReferenceNumberValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""PointGeometry"":  {{
-                                    ""ExternalReference"": [
+                                ""pointGeometry"":  {{
+                                    ""externalReference"": [
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     ""usrn"": 39605715
                                                 }}
                                             ]
                                         }},
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     ""usrn"": 39605715
                                                 }}
@@ -126,22 +126,22 @@ public class UniqueStreetReferenceNumberValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
-                        ""RegulatedPlace"": [
+                        ""regulatedPlace"": [
                             {{
-                                ""Polygon"":  {{
-                                    ""ExternalReference"": [
+                                ""polygon"":  {{
+                                    ""externalReference"": [
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     ""usrn"": 39605715
                                                 }}
                                             ]
                                         }},
                                         {{
-                                            ""UniqueStreetReferenceNumber"": [ 
+                                            ""uniqueStreetReferenceNumber"": [ 
                                                 {{
                                                     ""usrn"": ""39605158""
                                                 }}

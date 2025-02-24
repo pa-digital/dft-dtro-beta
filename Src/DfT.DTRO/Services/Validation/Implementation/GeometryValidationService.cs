@@ -15,10 +15,10 @@ public class GeometryValidationService : IGeometryValidationService
         {
             var passedInOldGeometries = dtroSubmit
                 .Data
-                .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>()
                 .SelectMany(provisions => provisions
-                    .GetValueOrDefault<IList<object>>("RegulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                    .GetValueOrDefault<IList<object>>("regulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .OfType<ExpandoObject>())
             .Where(expandoObject => expandoObject.HasField("geometry"))
             .ToList();
@@ -45,7 +45,7 @@ public class GeometryValidationService : IGeometryValidationService
                     var selectedGeometry = oldGeometry.GetExpando(concreteGeometry);
                     switch (concreteGeometry)
                     {
-                        case "PointGeometry":
+                        case "pointGeometry":
                             var point = selectedGeometry.GetValueOrDefault<string>("point");
                             if (string.IsNullOrEmpty(point))
                             {
@@ -116,7 +116,7 @@ public class GeometryValidationService : IGeometryValidationService
                             }
 
                             break;
-                        case "LinearGeometry":
+                        case "linearGeometry":
                             var direction = selectedGeometry.GetValueOrDefault<string>("direction");
                             if (string.IsNullOrEmpty(direction))
                             {
@@ -243,7 +243,7 @@ public class GeometryValidationService : IGeometryValidationService
                                 _errors.Add(error);
                             }
                             break;
-                        case "Polygon":
+                        case "polygon":
                             var polygon = selectedGeometry.GetValueOrDefault<string>("polygon");
                             if (string.IsNullOrEmpty(polygon))
                             {
@@ -286,7 +286,7 @@ public class GeometryValidationService : IGeometryValidationService
                                 _errors.Add(error);
                             }
                             break;
-                        case "DirectedLinear":
+                        case "directedLinear":
                             var directedLineString = selectedGeometry.GetValueOrDefault<string>("directedLineString");
                             if (string.IsNullOrEmpty(directedLineString))
                             {
@@ -337,10 +337,10 @@ public class GeometryValidationService : IGeometryValidationService
         {
             var passedInGeometries = dtroSubmit
                 .Data
-                .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>()
                 .SelectMany(provisions => provisions
-                    .GetValueOrDefault<IList<object>>("RegulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                    .GetValueOrDefault<IList<object>>("regulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .OfType<ExpandoObject>())
                 .Where(expandoObject => Constants.ConcreteGeometries.Any(expandoObject.HasField))
                 .ToList();
@@ -366,7 +366,7 @@ public class GeometryValidationService : IGeometryValidationService
 
                     switch (concreteGeometry)
                     {
-                        case "PointGeometry":
+                        case "pointGeometry":
                             var point = selectedGeometry.GetValueOrDefault<string>("point");
                             if (string.IsNullOrEmpty(point))
                             {
@@ -438,7 +438,7 @@ public class GeometryValidationService : IGeometryValidationService
                             }
 
                             break;
-                        case "LinearGeometry":
+                        case "linearGeometry":
                             var direction = selectedGeometry.GetValueOrDefault<string>("direction");
                             if (string.IsNullOrEmpty(direction))
                             {
@@ -565,7 +565,7 @@ public class GeometryValidationService : IGeometryValidationService
                                 _errors.Add(error);
                             }
                             break;
-                        case "Polygon":
+                        case "polygon":
                             var polygon = selectedGeometry.GetValueOrDefault<string>("polygon");
                             if (string.IsNullOrEmpty(polygon))
                             {
@@ -608,7 +608,7 @@ public class GeometryValidationService : IGeometryValidationService
                                 _errors.Add(error);
                             }
                             break;
-                        case "DirectedLinear":
+                        case "directedLinear":
                             var directedLineString = selectedGeometry.GetValueOrDefault<string>("directedLineString");
                             if (string.IsNullOrEmpty(directedLineString))
                             {
@@ -677,19 +677,19 @@ public class GeometryValidationService : IGeometryValidationService
         {
             switch (concreteGeometry)
             {
-                case "PointGeometry":
+                case "pointGeometry":
                     Point pointToValidate = wktReader.Read(coordinates) as Point;
                     isWithinUk = ukBoundary != null && ukBoundary.Contains(pointToValidate);
                     break;
-                case "LinearGeometry":
+                case "linearGeometry":
                     LineString lineStringToValidate = wktReader.Read(coordinates) as LineString;
                     isWithinUk = ukBoundary != null && ukBoundary.Contains(lineStringToValidate);
                     break;
-                case "Polygon":
+                case "polygon":
                     Polygon polygonToValidate = wktReader.Read(coordinates) as Polygon;
                     isWithinUk = ukBoundary != null && ukBoundary.Contains(polygonToValidate);
                     break;
-                case "DirectedLinear":
+                case "directedLinear":
                     LineString directedLinearToValidate = wktReader.Read(coordinates) as LineString;
                     isWithinUk = ukBoundary != null && ukBoundary.Contains(directedLinearToValidate);
                     break;

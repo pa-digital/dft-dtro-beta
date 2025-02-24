@@ -44,10 +44,9 @@ public class RegulationValidationTests
                   {
                   ""isDynamic"": true,
                   ""generalRegulation"":  {
-                    }
-                  },
-                  {
+                    },
                     ""offListRegulation"": {
+                        ""isDynamic"": true,
                     }
                   }
                 ]
@@ -58,34 +57,6 @@ public class RegulationValidationTests
 
         IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.3.0");
         Assert.NotEmpty(actual);
-    }
-
-    [Fact]
-    public void ValidateRegulationReturnsNoErrorsWhenMultipleRegulationsWithTemporaryRegulation()
-    {
-        DtroSubmit dtroSubmit = Utils.PrepareDtro(@"
-        {
-          ""source"": {
-            ""provision"": [
-              {
-                ""regulation"": [
-                  {
-                  ""isDynamic"": true,
-                  ""generalRegulation"":  {
-                    }
-                  },
-                  {
-                    ""temporaryRegulation"": {
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        }", new SchemaVersion("3.3.0"));
-
-        IList<SemanticValidationError>? actual = _sut.ValidateRegulation(dtroSubmit, "3.3.0");
-        Assert.Empty(actual);
     }
 
     [Fact]

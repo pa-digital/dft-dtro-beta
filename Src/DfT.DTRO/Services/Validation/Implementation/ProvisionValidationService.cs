@@ -9,7 +9,7 @@ public class ProvisionValidationService : IProvisionValidationService
         List<SemanticValidationError> validationErrors = new();
 
         var provisions = dtroSubmit.Data
-            .GetValueOrDefault<IList<object>>("Source.Provision"
+            .GetValueOrDefault<IList<object>>("source.provision"
                 .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .Cast<ExpandoObject>()
             .ToList();

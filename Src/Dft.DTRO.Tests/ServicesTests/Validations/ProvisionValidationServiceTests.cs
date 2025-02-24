@@ -18,8 +18,8 @@ public class ProvisionValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
                         ""actionType"": ""{actionType}"",
                         ""orderReportingPoint"": ""ttroTtmoRevocation"",
@@ -48,7 +48,7 @@ public class ProvisionValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
+            ""source"": {{
                 ""provision"": [
                     {{
                         ""actionType"": ""{actionType}"",
@@ -87,8 +87,8 @@ public class ProvisionValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
                         ""actionType"": ""new"",
                         ""orderReportingPoint"": ""{orderReportingPointType}"",
@@ -126,7 +126,7 @@ public class ProvisionValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
+            ""source"": {{
                 ""provision"": [
                     {{
                         ""actionType"": ""new"",
@@ -150,8 +150,8 @@ public class ProvisionValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
                         ""actionType"": ""new"",
                         ""orderReportingPoint"": ""variationByNotice"",
@@ -174,7 +174,7 @@ public class ProvisionValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
+            ""source"": {{
                 ""provision"": [
                     {{
                         ""actionType"": ""new"",
@@ -198,8 +198,8 @@ public class ProvisionValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
                         ""actionType"": ""new"",
                         ""orderReportingPoint"": ""variationByNotice"",
@@ -221,7 +221,7 @@ public class ProvisionValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
+            ""source"": {{
                 ""provision"": [
                     {{
                         ""actionType"": ""new"",
@@ -245,8 +245,8 @@ public class ProvisionValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
-                ""Provision"": [
+            ""source"": {{
+                ""provision"": [
                     {{
                         ""actionType"": ""new"",
                         ""orderReportingPoint"": ""variationByNotice"",
@@ -275,7 +275,7 @@ public class ProvisionValidationServiceTests
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
-            ""Source"": {{
+            ""source"": {{
                 ""provision"": [
                     {{
                         ""actionType"": ""new"",

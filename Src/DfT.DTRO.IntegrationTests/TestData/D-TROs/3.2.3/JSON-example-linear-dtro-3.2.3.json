@@ -172,7 +172,7 @@
 							"description": "Zone 5, Kenworthy Road, All Odd, All Even",
 							"geometry": {
 								"version": 1,
-								"LinearGeometry": {
+								"linearGeometry": {
 									"direction": "bidirectional",
 									"lateralPosition": "centreline",
 									"linestring": "SRID=27700;LINESTRING(502151 221149,502130 221168,502091 221201,502065 221223,502054 221232,502029 221254,502026 221256,502000 221280,501981 221299,501956 221325,501930 221354,501865 221426)"
@@ -180,7 +180,7 @@
 								"externalReference": [
 									{
 										"lastUpdateDate": "1981-02-08 11:30:43",
-										"UniqueStreetReferenceNumber": {
+										"uniqueStreetReferenceNumber": {
 											"usrn": 96854586
 										}
 									}
