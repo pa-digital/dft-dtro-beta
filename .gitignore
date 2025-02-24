@@ -48,3 +48,4 @@
 /Src/DfT.DTRO.IntegrationTests/bin/Debug/net6.0
 /Src/Dft.DTRO.Admin/bin/Debug/net6.0
 /Src/Dft.DTRO.Admin/obj
+/Src/Dft.DTRO.Admin/appsettings.json

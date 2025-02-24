@@ -78,11 +78,11 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         var dtroSubmitJson = dtroSubmit.Data.ToIndentedJsonString();
 
 
-        var requestComparedToSchema = _jsonSchemaValidationService.ValidateSchema(jsonSchemaAsString, dtroSubmitJson);
-        if (requestComparedToSchema.Count > 0)
-        {
-            return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
-        }
+        //var requestComparedToSchema = _jsonSchemaValidationService.ValidateSchema(jsonSchemaAsString, dtroSubmitJson);
+        //if (requestComparedToSchema.Count > 0)
+        //{
+        //    return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
+        //}
 
         var errors = _sourceValidationService.Validate(dtroSubmit, traCode);
         if (errors.Count > 0)
