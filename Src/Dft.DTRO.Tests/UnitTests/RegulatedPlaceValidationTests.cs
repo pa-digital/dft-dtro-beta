@@ -3,7 +3,7 @@
 [ExcludeFromCodeCoverage]
 public class RegulatedPlaceValidationTests
 {
-    private readonly IRegulatedPlaceValidation _sut = new RegulatedPlaceValidation();
+    private readonly IRegulatedPlaceValidationService _sut = new RegulatedPlaceValidation();
 
     [Theory]
     [InlineData("3.3.0", 0)]

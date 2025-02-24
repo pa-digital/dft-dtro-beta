@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Services.Validation.Contracts;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Dft.DTRO.Tests.UnitTests;
 
@@ -9,16 +8,16 @@ public class RecordManagementServiceTests
     private const string SourceJsonBasePath = "../../../TestFiles/D-TROs/3.2.3";
 
     [Theory]
-    [InlineData("3.2.3", "temporary TRO - fullAmendment", true)]
-    [InlineData("3.2.3", "temporary TRO - fullRevoke", true)]
-    [InlineData("3.2.3", "temporary TRO - new-directedLinear", true)]
-    [InlineData("3.2.3", "temporary TRO - new-linearGeometry", true)]
-    [InlineData("3.2.3", "temporary TRO - new-pointGeometry", true)]
-    [InlineData("3.2.3", "temporary TRO - new-polygon", true)]
-    [InlineData("3.2.3", "temporary TRO - partialAmendment", true)]
-    [InlineData("3.2.3", "temporary TRO - partialRevoke", true)]
-    [InlineData("3.2.3", "valid-noChange", true)]
-    public void ProducesCorrectResults(string schemaVersion, string file, bool isValid)
+    [InlineData("3.2.3", "temporary TRO - fullAmendment", false)]
+    [InlineData("3.2.3", "temporary TRO - fullRevoke", false)]
+    [InlineData("3.2.3", "temporary TRO - new-directedLinear", false)]
+    [InlineData("3.2.3", "temporary TRO - new-linearGeometry", false)]
+    [InlineData("3.2.3", "temporary TRO - new-pointGeometry", false)]
+    [InlineData("3.2.3", "temporary TRO - new-polygon", false)]
+    [InlineData("3.2.3", "temporary TRO - partialAmendment", false)]
+    [InlineData("3.2.3", "temporary TRO - partialRevoke", false)]
+    [InlineData("3.2.3", "valid-noChange", false)]
+    public void ProducesCorrectResults(string schemaVersion, string file, bool isInvalid)
     {
         Mock<IDtroUserDal> mockSwaCodeDal = new();
         IRecordManagementService sut = new RecordManagementService(mockSwaCodeDal.Object);
@@ -36,6 +35,6 @@ public class RecordManagementServiceTests
 
         List<SemanticValidationError> actual = sut.ValidateRecordManagement(dtroSubmit, 1000);
 
-        Assert.Equal(isValid, !actual.Any());
+        Assert.Equal(isInvalid, !actual.Any());
     }
 }

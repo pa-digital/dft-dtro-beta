@@ -3,7 +3,7 @@
 [ExcludeFromCodeCoverage]
 public class RegulatedPlaceValidationServiceTests
 {
-    private readonly IRegulatedPlaceValidationService _sut = new RegulatedPlaceValidationService();
+    private readonly IRegulatedPlaceValidationService _sut = new RegulatedPlaceValidation();
 
     [Theory]
     [InlineData("some free text", 0)]
@@ -27,7 +27,7 @@ public class RegulatedPlaceValidationServiceTests
             }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.Validate(dtroSubmit);
+        var actual = _sut.ValidateRegulatedPlacesType(dtroSubmit, new SchemaVersion("3.3.0"));
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -54,7 +54,7 @@ public class RegulatedPlaceValidationServiceTests
             }}
         }}", new SchemaVersion("3.2.4"));
 
-        var actual = _sut.Validate(dtroSubmit);
+        var actual = _sut.ValidateRegulatedPlacesType(dtroSubmit, new SchemaVersion("3.2.4"));
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -82,7 +82,7 @@ public class RegulatedPlaceValidationServiceTests
             }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.Validate(dtroSubmit);
+        var actual = _sut.ValidateRegulatedPlacesType(dtroSubmit, new SchemaVersion("3.3.0"));
         Assert.Equal(errorCount, actual.Count);
     }
 
@@ -113,7 +113,7 @@ public class RegulatedPlaceValidationServiceTests
             }}
         }}", new SchemaVersion("3.3.0"));
 
-        var actual = _sut.Validate(dtroSubmit);
+        var actual = _sut.ValidateRegulatedPlacesType(dtroSubmit, new SchemaVersion("3.3.0"));
         Assert.Equal(errorCount, actual.Count);
     }
 }

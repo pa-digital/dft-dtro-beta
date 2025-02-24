@@ -3,7 +3,7 @@
 [ExcludeFromCodeCoverage]
 public class ConditionValidationTests
 {
-    private readonly IConditionValidation _sut = new ConditionValidation();
+    private readonly IConditionValidationService _sut = new ConditionValidation();
 
     [Theory]
     [InlineData("3.3.0", 0)]

@@ -6,7 +6,7 @@ public static class Constants
 
     public static IEnumerable<string> SourceActionTypes => typeof(SourceActionType).GetDisplayNames<SourceActionType>().ToList();
 
-    public static IEnumerable<string> ProvisionActionTypes => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>().ToList();
+    public static List<string> ProvisionActionTypes => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>().ToList();
 
     public static IEnumerable<string> OrderReportingPointTypes => typeof(OrderReportingPointType).GetDisplayNames<OrderReportingPointType>().ToList();
 

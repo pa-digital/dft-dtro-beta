@@ -17,6 +17,8 @@ public class RegulationValidationTests
               {
                 ""regulation"": [
                   {
+                  ""isDynamic"": true,
+                  ""timeZone"": ""London/England"",
                   ""generalRegulation"":  {
                     }
                   }
@@ -40,6 +42,7 @@ public class RegulationValidationTests
               {
                 ""regulation"": [
                   {
+                  ""isDynamic"": true,
                   ""generalRegulation"":  {
                     }
                   },
@@ -67,6 +70,7 @@ public class RegulationValidationTests
               {
                 ""regulation"": [
                   {
+                  ""isDynamic"": true,
                   ""generalRegulation"":  {
                     }
                   },
@@ -94,6 +98,7 @@ public class RegulationValidationTests
               {
                 ""regulation"": [
                   {
+                  ""isDynamic"": true,
                   ""RandomRegulation"":  {
                     }
                   }

@@ -79,7 +79,7 @@ public class RecordManagementService : IRecordManagementService
         }
 
         var sourceActionType = dtroSubmit.Data.GetExpando("source").GetValueOrDefault<string>("actionType");
-        if (!sourceActionType.IsEnum("SourceActionType"))
+        if (Constants.SourceActionTypes.Any(it => it.Equals(sourceActionType)))
         {
             validationErrors.Add(new SemanticValidationError
             {
@@ -128,7 +128,7 @@ public class RecordManagementService : IRecordManagementService
             .Select(it => it.GetValue<string>("actionType"))
             .ToList();
 
-        if (!provisionActionTypes.TrueForAll(it => it.IsEnum("ProvisionActionType")))
+        if (!Constants.ProvisionActionTypes.TrueForAll(it => provisionActionTypes.Any(it.Equals)))
         {
             validationErrors.Add(new SemanticValidationError
             {

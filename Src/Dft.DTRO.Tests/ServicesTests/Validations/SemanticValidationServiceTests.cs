@@ -192,7 +192,7 @@ public class SemanticValidationServiceTests
     public async Task TypoInExternalReferenceReturnsError()
     {
         DtroSubmit dtro = PrepareDtro(@"{""geometry"": { ""version"": 1, ""polygon"": {
-            ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalR"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", version);
+            ""polygon"": ""SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))""}, ""externalR"": [{ ""lastUpdateDate"": ""1987-09-26 00:00:00""}]}}", "3.2.4");
 
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
