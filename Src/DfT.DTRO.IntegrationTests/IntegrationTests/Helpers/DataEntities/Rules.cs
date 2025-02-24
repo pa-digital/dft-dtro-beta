@@ -12,24 +12,24 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> CreateRuleSetFromFileAsync(TestUser testUser)
         {
-            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 { "x-App-Id", testUser.AppId },
                 { "Content-Type", "multipart/form-data" }
             };
 
-            var createRuleResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/rules/createFromFile/{SchemaVersionUnderTest}", headers, pathToJsonFile: RulesJsonFile);
+            HttpResponseMessage createRuleResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/rules/createFromFile/{SchemaVersionUnderTest}", headers, pathToJsonFile: RulesJsonFile);
             return createRuleResponse;
         }
 
         public static async Task<HttpResponseMessage> GetRuleSetAsync(string schemaVersion, TestUser testUser)
         {
-            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 { "x-App-Id", testUser.AppId }
             };
 
-            var getSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/rules/{schemaVersion}", headers);
+            HttpResponseMessage getSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/rules/{schemaVersion}", headers);
             return getSchemaResponse;
         }
     }

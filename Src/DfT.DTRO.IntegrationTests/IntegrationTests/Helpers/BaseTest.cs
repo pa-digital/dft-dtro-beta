@@ -12,7 +12,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         private static async Task SetUpBeforeTestRunAsync()
         {
             UserWithAllPermissions = TestUsers.GenerateUser(UserGroup.All);
-            var createUserResponse = await DtroUsers.CreateUserAsync(UserWithAllPermissions);
+            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(UserWithAllPermissions);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
             Console.WriteLine("Do once before each test run...");
@@ -24,20 +24,20 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             else
             // Only create rules and schema on dev, test, etc., if they don't already exist
             {
-                var getRulesResponse = await Rules.GetRuleSetAsync(SchemaVersionUnderTest, UserWithAllPermissions);
+                HttpResponseMessage getRulesResponse = await Rules.GetRuleSetAsync(SchemaVersionUnderTest, UserWithAllPermissions);
                 if (getRulesResponse.StatusCode == HttpStatusCode.NotFound)
                 {
-                    var createRuleResponse = await Rules.CreateRuleSetFromFileAsync(UserWithAllPermissions);
+                    HttpResponseMessage createRuleResponse = await Rules.CreateRuleSetFromFileAsync(UserWithAllPermissions);
                     Assert.Equal(HttpStatusCode.Created, createRuleResponse.StatusCode);
                 }
 
-                var getSchemaResponse = await Schemas.GetSchemaAsync(SchemaVersionUnderTest, UserWithAllPermissions);
+                HttpResponseMessage getSchemaResponse = await Schemas.GetSchemaAsync(SchemaVersionUnderTest, UserWithAllPermissions);
                 if (getSchemaResponse.StatusCode == HttpStatusCode.NotFound)
                 {
-                    var createSchemaResponse = await Schemas.CreateSchemaFromFileAsync(UserWithAllPermissions);
+                    HttpResponseMessage createSchemaResponse = await Schemas.CreateSchemaFromFileAsync(UserWithAllPermissions);
                     Assert.Equal(HttpStatusCode.Created, createSchemaResponse.StatusCode);
                 }
-                var activateSchemaResponse = await Schemas.ActivateSchemaAsync(SchemaVersionUnderTest, UserWithAllPermissions);
+                HttpResponseMessage activateSchemaResponse = await Schemas.ActivateSchemaAsync(SchemaVersionUnderTest, UserWithAllPermissions);
                 Assert.Equal(HttpStatusCode.OK, activateSchemaResponse.StatusCode);
             }
         }

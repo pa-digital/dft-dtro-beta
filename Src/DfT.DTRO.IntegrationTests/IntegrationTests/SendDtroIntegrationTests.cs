@@ -24,26 +24,26 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
         [MemberData(nameof(GetFileNames))]
         public async Task DtroSubmittedFromFileShouldBeSavedCorrectly(string fileName)
         {
-            var publisher = TestUsers.GenerateUser(UserGroup.Tra);
-            var createUserResponse = await DtroUsers.CreateUserAsync(publisher);
+            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
-            var createDtroResponse = await Dtros.CreateDtroFromFileAsync(fileName, publisher);
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(fileName, publisher);
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
             string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
 
-            var getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
+            HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
             Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
-            var dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
+            string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
 
-            var sentCreateDtroFile = $"{AbsolutePathToDtroExamplesTempDirectory}/{fileName}";
-            var sentCreateDtroJson = File.ReadAllText(sentCreateDtroFile);
+            string sentCreateDtroFile = $"{AbsolutePathToDtroExamplesTempDirectory}/{fileName}";
+            string sentCreateDtroJson = File.ReadAllText(sentCreateDtroFile);
 
             JObject createJsonObject = JObject.Parse(sentCreateDtroJson);
             createJsonObject["id"] = dtroId;
 
-            var sentCreateJsonWithIdForComparison = createJsonObject.ToString();
+            string sentCreateJsonWithIdForComparison = createJsonObject.ToString();
             CompareJson(sentCreateJsonWithIdForComparison, dtroResponseJson);
         }
 
@@ -51,27 +51,27 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
         [MemberData(nameof(GetFileNames))]
         public async Task DtroSubmittedFromJsonBodyShouldBeSavedCorrectly(string fileName)
         {
-            var publisher = TestUsers.GenerateUser(UserGroup.Tra);
-            var createUserResponse = await DtroUsers.CreateUserAsync(publisher);
+            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
-            var createDtroFile = $"{AbsolutePathToDtroExamplesTempDirectory}/{fileName}";
-            var createDtroJson = File.ReadAllText(createDtroFile);
-            var createDtroJsonWithTraUpdated = Dtros.UpdateTraId(createDtroJson, publisher.TraId);
+            string createDtroFile = $"{AbsolutePathToDtroExamplesTempDirectory}/{fileName}";
+            string createDtroJson = File.ReadAllText(createDtroFile);
+            string createDtroJsonWithTraUpdated = Dtros.UpdateTraId(createDtroJson, publisher.TraId);
 
-            var createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
             string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
 
-            var getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
+            HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
             Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
-            var dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
+            string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
 
             JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
             createJsonObject["id"] = dtroId;
 
-            var sentCreateJsonWithIdForComparison = createJsonObject.ToString();
+            string sentCreateJsonWithIdForComparison = createJsonObject.ToString();
             CompareJson(sentCreateJsonWithIdForComparison, dtroResponseJson);
         }
     }

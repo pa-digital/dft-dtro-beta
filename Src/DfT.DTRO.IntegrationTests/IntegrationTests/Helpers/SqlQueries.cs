@@ -13,11 +13,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             try
             {
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
                 {
                     connection.Open();
 
-                    using var command = new NpgsqlCommand(truncateQuery, connection);
+                    using NpgsqlCommand command = new NpgsqlCommand(truncateQuery, connection);
                     command.ExecuteNonQuery();
                     Console.WriteLine($"{tableName} table truncated successfully!");
                 }

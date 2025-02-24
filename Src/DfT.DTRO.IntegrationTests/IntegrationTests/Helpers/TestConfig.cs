@@ -21,7 +21,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         {
             DirectoryInfo currentDirectory = new(Directory.GetCurrentDirectory());
 
-            var projectDirectory = "dft-dtro-beta";
+            string projectDirectory = "dft-dtro-beta";
 
             while (currentDirectory != null && currentDirectory.Name != projectDirectory)
             {
@@ -43,12 +43,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             string envFilePath = $"{AbsolutePathToProjectDirectory}/docker/dev/.env";
             if (File.Exists(envFilePath))
             {
-                var lines = File.ReadAllLines(envFilePath);
-                var postgresUserLine = lines.First(line => line.StartsWith("POSTGRES_USER="));
+                string[] lines = File.ReadAllLines(envFilePath);
+                string postgresUserLine = lines.First(line => line.StartsWith("POSTGRES_USER="));
                 string postgresUser = postgresUserLine.Split('=')[1];
-                var postgresPasswordLine = lines.First(line => line.StartsWith("POSTGRES_PASSWORD="));
+                string postgresPasswordLine = lines.First(line => line.StartsWith("POSTGRES_PASSWORD="));
                 string postgresPassword = postgresPasswordLine.Split('=')[1];
-                var postgresDbLine = lines.First(line => line.StartsWith("POSTGRES_DB="));
+                string postgresDbLine = lines.First(line => line.StartsWith("POSTGRES_DB="));
                 string postgresDb = postgresDbLine.Split('=')[1];
 
                 return $"Host={DatabaseHostName};Username={postgresUser};Password={postgresPassword};Database={postgresDb}";
@@ -61,7 +61,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         static TestConfig()
         {
-            var environmentFromBashCommand = Environment.GetEnvironmentVariable("ENVIRONMENT") ?? "local";
+            string environmentFromBashCommand = Environment.GetEnvironmentVariable("ENVIRONMENT") ?? "local";
 
             switch (environmentFromBashCommand)
             {

@@ -4,9 +4,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
     {
         public static TestUser GenerateUser(UserGroup userGroup)
         {
-            var appId = Guid.NewGuid().ToString();
-            var timeNow = DateTime.UtcNow.Ticks.ToString();
-            var traId = timeNow.Substring(timeNow.Length - 9);
+            string appId = Guid.NewGuid().ToString();
+            string timeNow = DateTime.UtcNow.Ticks.ToString();
+            string traId = timeNow.Substring(timeNow.Length - 9);
             string name;
 
             switch (userGroup)

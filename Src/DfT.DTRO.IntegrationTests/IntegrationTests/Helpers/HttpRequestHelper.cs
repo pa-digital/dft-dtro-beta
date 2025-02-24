@@ -18,7 +18,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                 throw new Exception("Re-write test to send request with both the Content-Type header and a body (HttpClient doesn't allow one to exist and the other to be absent).");
             }
 
-            var request = new HttpRequestMessage(method, uri);
+            HttpRequestMessage request = new HttpRequestMessage(method, uri);
 
             if (headers != null)
             {
@@ -26,15 +26,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                 {
                     if (body != null)
                     {
-                        var content = new StringContent(body);
+                        StringContent content = new StringContent(body);
                         content.Headers.ContentType = new MediaTypeHeaderValue(contentTypeValue);
                         request.Content = content;
                     }
                     else
                     {
-                        var multipartContent = new MultipartFormDataContent();
-                        var fileStream = new FileStream(pathToJsonFile, FileMode.Open, FileAccess.Read);
-                        var fileContent = new StreamContent(fileStream);
+                        MultipartFormDataContent multipartContent = new MultipartFormDataContent();
+                        FileStream fileStream = new FileStream(pathToJsonFile, FileMode.Open, FileAccess.Read);
+                        StreamContent fileContent = new StreamContent(fileStream);
                         fileContent.Headers.ContentType = new MediaTypeHeaderValue("multipart/form-data");
 
                         multipartContent.Add(fileContent, "file", Path.GetFileName(pathToJsonFile));
@@ -44,7 +44,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                     headers.Remove("Content-Type");
                 }
 
-                foreach (var nonContentHeader in headers)
+                foreach (KeyValuePair<string, string> nonContentHeader in headers)
                 {
                     request.Headers.Add(nonContentHeader.Key, nonContentHeader.Value);
                 }
@@ -73,13 +73,13 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                 _httpClient = new HttpClient();
             }
 
-            var response = await _httpClient.SendAsync(request);
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
             string responseBody = await response.Content.ReadAsStringAsync();
 
             Console.WriteLine("\n========= HTTP response =========");
             Console.WriteLine($"Response status code: {response.StatusCode}");
             Console.WriteLine("\nResponse headers:");
-            foreach (var header in response.Headers)
+            foreach (KeyValuePair<string, IEnumerable<string>> header in response.Headers)
             {
                 Console.WriteLine($"  {header.Key}: {string.Join(", ", header.Value)}");
             }
@@ -91,16 +91,16 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         private static void PrintCurlCommand(HttpRequestMessage request, string pathToJsonFile)
         {
-            var curl = new StringBuilder($"curl -k -X {request.Method} \"{request.RequestUri}\"");
+            StringBuilder curl = new StringBuilder($"curl -k -X {request.Method} \"{request.RequestUri}\"");
 
-            foreach (var header in request.Headers)
+            foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
             {
                 curl.Append($" -H \"{header.Key}: {string.Join(", ", header.Value)}\"");
             }
 
             if (request.Content?.Headers != null)
             {
-                foreach (var contentHeader in request.Content.Headers)
+                foreach (KeyValuePair<string, IEnumerable<string>> contentHeader in request.Content.Headers)
                 {
                     string pattern = @";\s*boundary=""[^""]+""";
                     string headerValue = string.Join(", ", contentHeader.Value);
@@ -112,8 +112,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             if (request.Content is StringContent)
             {
-                var content = request.Content.ReadAsStringAsync().Result;
-                var contentWithEscapedDoubleQuotes = JsonConvert.SerializeObject(content);
+                string content = request.Content.ReadAsStringAsync().Result;
+                string contentWithEscapedDoubleQuotes = JsonConvert.SerializeObject(content);
                 curl.Append($" -d {contentWithEscapedDoubleQuotes}");
             }
             else if (request.Content is MultipartFormDataContent)
@@ -131,7 +131,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             if (string.IsNullOrWhiteSpace(json)) return "{}";
             try
             {
-                using var jDoc = JsonDocument.Parse(json);
+                using JsonDocument jDoc = JsonDocument.Parse(json);
                 return System.Text.Json.JsonSerializer.Serialize(jDoc, new JsonSerializerOptions { WriteIndented = true });
             }
             catch

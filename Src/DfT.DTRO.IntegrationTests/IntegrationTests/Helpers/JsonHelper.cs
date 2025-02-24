@@ -17,8 +17,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         public static void CompareJson(string expectedJson, string actualJson)
         {
             // Until files are set to camel case, convert files to lower case before comparison
-            var expectedJsonToLowerCase = expectedJson.ToLower();
-            var actualJsonToLowerCase = actualJson.ToLower();
+            string expectedJsonToLowerCase = expectedJson.ToLower();
+            string actualJsonToLowerCase = actualJson.ToLower();
 
             string orderedJson1 = SortJsonKeys(expectedJsonToLowerCase);
             string orderedJson2 = SortJsonKeys(actualJsonToLowerCase);
@@ -29,7 +29,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             Console.WriteLine("Comparing JSON...\n");
             int maxLines = Math.Max(expectedLines.Length, actualLines.Length);
 
-            var jsonsMatch = true;
+            bool jsonsMatch = true;
 
             for (int i = 0; i < maxLines; i++)
             {
@@ -87,9 +87,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         {
             if (token is JObject obj)
             {
-                var sortedProperties = obj.Properties().OrderBy(p => p.Name).ToList();
-                var sortedObject = new JObject();
-                foreach (var prop in sortedProperties)
+                System.Collections.Generic.List<JProperty> sortedProperties = obj.Properties().OrderBy(p => p.Name).ToList();
+                JObject sortedObject = new JObject();
+                foreach (JProperty prop in sortedProperties)
                 {
                     sortedObject[prop.Name] = SortToken(prop.Value);
                 }
@@ -97,7 +97,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             }
             else if (token is JArray arr)
             {
-                var sortedArray = new JArray(arr.Select(SortToken));
+                JArray sortedArray = new JArray(arr.Select(SortToken));
                 return sortedArray;
             }
             else
