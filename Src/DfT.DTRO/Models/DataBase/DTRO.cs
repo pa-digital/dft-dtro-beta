@@ -124,6 +124,11 @@ public class DTRO
     public List<string> OrderReportingPoints { get; set; }
 
     /// <summary>
+    /// Unique regulated place types this D-TRO applies to.
+    /// </summary>
+    public List<string> RegulatedPlaceTypes { get; set; }
+
+    /// <summary>
     /// The bounding box containing all points for this D-TRO regulated places.
     /// </summary>
     public BoundingBox Location { get; set; }

@@ -17,6 +17,20 @@ jobs:
       contents: read
       packages: read
       actions: read
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: ${{ secrets.INTEGRATION_TEST_DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.INTEGRATION_TEST_DB_NAME }}
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -25,6 +39,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.x'
+      
+      - name: Install EF Core Tools
+        run: dotnet tool install --global dotnet-ef --version 6.0.0
 
       - name: Restore dependencies
         run: dotnet restore
@@ -32,8 +49,33 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Test
-        run: dotnet test --verbosity normal
+      - name: Unit tests
+        run: |
+          pushd Src/Dft.DTRO.Tests
+          dotnet test --verbosity normal
+          popd
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in {1..10}; do
+            if pg_isready -h localhost -p 5432 -U postgres; then
+              echo "PostgreSQL is ready"
+              break
+            fi
+            echo "Waiting for PostgreSQL..."
+            sleep 5
+          done
+
+      - name: Integration tests
+        env:
+          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${{ secrets.INTEGRATION_TEST_DB_NAME }};Username=${{ secrets.INTEGRATION_TEST_DB_USER }};Password=${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}"
+        run: |
+          pushd Src/DfT.DTRO
+          dotnet ef database update
+          popd
+          pushd Src/DfT.DTRO.IntegrationTests
+          dotnet test
+          popd
 
       - name: Format check
         run: dotnet format
@@ -42,6 +84,4 @@ jobs:
         run: dotnet tool install -g dotnet-format
 
       - name: Run .NET analyzers
-        run: |
-          dotnet tool install --global dotnet-format
-          dotnet build --no-restore --configuration Release
+        run: dotnet build --no-restore --configuration Release

@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Services.Validation.Contracts;
-
-namespace DfT.DTRO.Services.Validation.Implementation;
+﻿namespace DfT.DTRO.Services.Validation.Implementation;
 
 public class RecordManagementService : IRecordManagementService
 {

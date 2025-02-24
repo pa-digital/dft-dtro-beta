@@ -21,13 +21,8 @@ env:
   TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID_TEST }}
   TF_VAR_execution_service_account: ${{ secrets.EXECUTION_SERVICE_ACCOUNT_TEST }}
   TF_VAR_artifact_registry_dtro_image_path: ${{ vars.DEFAULT_GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID_TEST }}/${{ vars.GCP_PROJECT_ID_TEST }}-int-repository/${{ vars.DTRO_IMAGE_NAME }}
-  TF_VAR_artifact_registry_service_ui_image_path: ${{ vars.DEFAULT_GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID_TEST }}/${{ vars.GCP_PROJECT_ID_TEST }}-ui-int-repository/${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
   TF_VAR_dtro_service_image: ${{ vars.DTRO_IMAGE_NAME }}
-  TF_VAR_service_ui_image: ${{ vars.DTRO_SERVICE_UI_IMAGE_NAME }}
   TF_VAR_dtro_tag: ${{ vars.DTRO_IMAGE_TAG }}
-  TF_VAR_service_ui_tag: ${{ vars.DTRO_SERVICE_UI_IMAGE_TAG }}
-  TF_VAR_cloud_run_service_ui_client_id: ${{ secrets.CSO_CLIENT_ID_INT }}
-  TF_VAR_cloud_run_service_ui_client_secret: ${{ secrets.CSO_CLIENT_SECRET_INT }}
   cloud_url: https://dtro-int-${{ vars.DTRO_IMAGE_NAME }}-${{ secrets.GCP_PROJECT_NUMBER_TEST }}.${{ vars.DEFAULT_GCP_REGION }}.run.app
 
 permissions:
@@ -76,15 +71,6 @@ jobs:
           provenance: false
           tags: ${{ env.TF_VAR_artifact_registry_dtro_image_path }}:${{ env.TF_VAR_dtro_tag }}
 
-      - name: Build and push Service Portal Docker image to Artifact Registry
-        uses: docker/build-push-action@v6.1.0
-        with:
-          context: dft-dtro-beta/Src/Dft.DTRO.Admin
-          platforms: linux/amd64
-          push: true
-          provenance: false
-          tags: ${{ env.TF_VAR_artifact_registry_service_ui_image_path }}:${{ env.TF_VAR_service_ui_tag }}
-
   deploy-resources:
     name: Deploy GCP Resources to Integration
     if: ${{ inputs.run-terraform }}
@@ -120,7 +106,7 @@ jobs:
         run: |
           terraform init \
           -backend-config "bucket=${{env.TF_VAR_tf_state_bucket}}" \
-          -backend-config "prefix=terraform/int-cloudrun-state"
+          -backend-config "prefix=terraform/int-cloudrun-state/api"
 
       - name: Terraform Plan
         run: terraform plan -input=false -out terraform-plan-gcp
@@ -179,26 +165,26 @@ jobs:
 
       # TODO: resolve the issue with the step below: Error:parse error: Invalid numeric literal at line 1, column 6
       # The below step was copied from 'deploy_resources.yml' and has worked successfully when deploying to Dev, Test and Prod environment.
-      - name: Delete Oldest Revision
-        shell: bash
-        run: |
-          revision_list=($(apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r --arg proxy_name "dtro-${env_name_prefix}-server" '.proxies[] | select(.name == $proxy_name) | .revision[]'))
-          revision_count=${#revision_list[@]}
-          if [ "$revision_count" -ge 200 ]; then
-            smallest_revision_1=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 1)
-            smallest_revision_2=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 2 | tail -n 1)
-            echo "There are $revision_count revisions. A maximum of 200 revisions(system max of 250) are allowed, therefore the oldest two revisions ($smallest_revision_1 and $smallest_revision_2) will be deleted."
+      #- name: Delete Oldest Revision
+      #  shell: bash
+      #  run: |
+      #    revision_list=($(apigeecli apis list --incl --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" | jq -r --arg proxy_name "dtro-${env_name_prefix}-server" '.proxies[] | select(.name == $proxy_name) | .revision[]'))
+      #    revision_count=${#revision_list[@]}
+      #    if [ "$revision_count" -ge 200 ]; then
+      #      smallest_revision_1=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 1)
+      #      smallest_revision_2=$(printf "%s\n" "${revision_list[@]}" | sort -n | head -n 2 | tail -n 1)
+      #      echo "There are $revision_count revisions. A maximum of 200 revisions(system max of 250) are allowed, therefore the oldest two revisions ($smallest_revision_1 and $smallest_revision_2) will be deleted."
 
-            echo "Deleting revision: $smallest_revision_1"
-            apigeecli apis delete --name "dtro-${env_name_prefix}-server" --rev $smallest_revision_1 --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --no-output
-            echo "Revision $smallest_revision_1 deleted"
+      #      echo "Deleting revision: $smallest_revision_1"
+      #      apigeecli apis delete --name "dtro-${env_name_prefix}-server" --rev $smallest_revision_1 --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --no-output
+      #      echo "Revision $smallest_revision_1 deleted"
 
-            echo "Deleting revision: $smallest_revision_2"
-            apigeecli apis delete --name "dtro-${env_name_prefix}-server" --rev $smallest_revision_2 --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --no-output
-            echo "Revision $smallest_revision_2 deleted"
+      #      echo "Deleting revision: $smallest_revision_2"
+      #      apigeecli apis delete --name "dtro-${env_name_prefix}-server" --rev $smallest_revision_2 --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --no-output
+      #      echo "Revision $smallest_revision_2 deleted"
 
-            echo "Revisions $smallest_revision_1 and $smallest_revision_2 for dtro-${env_name_prefix}-server deleted."
-          fi
+      #      echo "Revisions $smallest_revision_1 and $smallest_revision_2 for dtro-${env_name_prefix}-server deleted."
+      #    fi
 
       - name: Deploy Proxy
         run: apigeecli apis create oas --name "dtro-${env_name_prefix}-server" --oas-base-folderpath openApi --oas-name openapi3_0.yaml --target-url $target_url --basepath /v1 --add-cors=true --token ${{ steps.google-auth.outputs.access_token }} --org "$apigee_organisation" --ovr --wait=true

@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Connections;
-
 namespace DfT.DTRO;
 
 public class Program

@@ -6,16 +6,12 @@ namespace Dft.DTRO.Tests;
 [ExcludeFromCodeCoverage]
 public static class Utils
 {
-    public static DtroSubmit PrepareDtro(string jsonData, SchemaVersion schemaVersion)
-    {
-        var result = new DtroSubmit
+    public static DtroSubmit PrepareDtro(string jsonData, SchemaVersion schemaVersion) =>
+        new()
         {
             Data = JsonConvert.DeserializeObject<ExpandoObject>(jsonData, new ExpandoObjectConverter()),
             SchemaVersion = schemaVersion
         };
-
-        return result;
-    }
 
     public static async Task<StringContent> CreateSchemaPayload(string schemaPath, string schemaVersion)
     {
@@ -54,7 +50,7 @@ public static class Utils
         return schemaTemplate;
     }
 
-    public static async Task<DfT.DTRO.Models.DataBase.DTRO> CreateDtroObject(string dtroJsonPath, string schemaVersion = null)
+    public static async Task<DfT.DTRO.Models.DataBase.DTRO> CreateDtroObject(string dtroJsonPath, string schemaVersion)
     {
         var sampleDtroDataJson = await File.ReadAllTextAsync(dtroJsonPath);
 
@@ -80,8 +76,7 @@ public static class Utils
         return sampleDtro;
     }
 
-    public static async Task<StringContent> CreateDtroJsonPayload(string dtroJsonPath, string schemaVersion,
-        bool inferIndexFields = true)
+    public static async Task<StringContent> CreateDtroJsonPayload(string dtroJsonPath, string schemaVersion, bool inferIndexFields = true)
     {
         string sampleDtroDataJson = await File.ReadAllTextAsync(dtroJsonPath);
 
@@ -128,7 +123,7 @@ public static class Utils
             .Select(item => item.GetValueOrDefault<IList<object>>("source.provision"))
             .ToList();
 
-        List<DtroHistoryProvisionResponse> provisions = new();
+        List<DtroHistoryProvisionResponse> provisions = new List<DtroHistoryProvisionResponse>();
 
         foreach (IList<object> obj in objects)
         {
@@ -164,16 +159,17 @@ public static class Utils
         }).ToList();
     }
 
-    public static List<DtroUserResponse> SwaCodesResponse => new()
-    {
-        new DtroUserResponse
+    public static List<DtroUserResponse> SwaCodesResponse => new List<DtroUserResponse> {
+
+        new()
         {
             TraId = 1002,
             UserGroup = UserGroup.Admin,
             xAppId = Guid.NewGuid(),
             Name = "Department for Transport",
             Prefix = "DfT"
-        }, new DtroUserResponse
+        },
+        new()
         {
             TraId = 1000,
             UserGroup = UserGroup.Tra,
@@ -181,7 +177,7 @@ public static class Utils
             Name = "Essex Council",
             Prefix = "GP"
         },
-        new DtroUserResponse
+        new()
         {
             TraId = 1001,
             UserGroup = UserGroup.Tra,

@@ -1,5 +1,4 @@
-﻿using DfT.DTRO.Helpers;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json.Linq;
 using GeometryType = DfT.DTRO.Enums.GeometryType;
@@ -37,7 +36,7 @@ public class BoundingBoxService : IBoundingBoxService
                     .FirstOrDefault();
 
                 json = values.ToIndentedJsonString();
-                if (!json.Contains(Constants.Srid27000))
+                if (!json.Contains(Constants.Srid27700))
                 {
                     errors.Add(Error.SetSetSpatialReferenceValidationError());
 
@@ -60,7 +59,7 @@ public class BoundingBoxService : IBoundingBoxService
                     .Select(token => token.First?.Value<JToken>(Constants.LineString))
                     .FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains(Constants.Srid27000))
+                if (!json.Contains(Constants.Srid27700))
                 {
                     errors.Add(Error.SetSetSpatialReferenceValidationError());
 
@@ -83,7 +82,7 @@ public class BoundingBoxService : IBoundingBoxService
                     .Select(token => token.First?.Value<JToken>(Constants.Polygon))
                     .FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains(Constants.Srid27000))
+                if (!json.Contains(Constants.Srid27700))
                 {
                     errors.Add(Error.SetSetSpatialReferenceValidationError());
 
@@ -109,7 +108,7 @@ public class BoundingBoxService : IBoundingBoxService
                     .Select(token => token.First?.Value<JToken>(Constants.DirectedLineString))
                     .FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains(Constants.Srid27000))
+                if (!json.Contains(Constants.Srid27700))
                 {
                     errors.Add(Error.SetSetSpatialReferenceValidationError());
 
@@ -172,7 +171,7 @@ public class BoundingBoxService : IBoundingBoxService
                     .Select(token => token.First?.Value<JToken>(Constants.Point))
                     .FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains(Constants.Srid27000))
+                if (!json.Contains(Constants.Srid27700))
                 {
                     errors.Add(Error.SetSetSpatialReferenceValidationError());
 
@@ -195,7 +194,7 @@ public class BoundingBoxService : IBoundingBoxService
                     .Select(token => token.First?.Value<JToken>(Constants.LineString))
                     .FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains(Constants.Srid27000))
+                if (!json.Contains(Constants.Srid27700))
                 {
                     errors.Add(Error.SetSetSpatialReferenceValidationError());
                     _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
@@ -217,7 +216,7 @@ public class BoundingBoxService : IBoundingBoxService
                     .Select(token => token.First?.Value<JToken>(Constants.Polygon))
                     .FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains(Constants.Srid27000))
+                if (!json.Contains(Constants.Srid27700))
                 {
                     errors.Add(Error.SetSetSpatialReferenceValidationError());
                     _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
@@ -242,7 +241,7 @@ public class BoundingBoxService : IBoundingBoxService
                     .Select(token => token.First?.Value<JToken>(Constants.DirectedLineString))
                     .FirstOrDefault();
                 json = values.ToIndentedJsonString();
-                if (!json.Contains(Constants.Srid27000))
+                if (!json.Contains(Constants.Srid27700))
                 {
                     errors.Add(Error.SetSetSpatialReferenceValidationError());
                     _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Spatial reference error", string.Join(",", errors));
@@ -308,16 +307,9 @@ public class BoundingBoxService : IBoundingBoxService
                 LineString lineStringToValidate = wktReader.Read(toValidate) as LineString;
                 isWithinUk = ukBoundary != null && ukBoundary.Contains(lineStringToValidate);
                 break;
-            case GeometryType.Unknown:
-                errors.Add(Error.SetGeometryValidationError());
-                _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry type error", string.Join(",", errors));
-
-                break;
             default:
                 errors.Add(Error.SetGeometryValidationError());
-
                 _loggingExtension.LogError(nameof(SetBoundingBoxForMultipleGeometries), "", "Geometry type error", string.Join(",", errors));
-
                 break;
         }
         return isWithinUk;

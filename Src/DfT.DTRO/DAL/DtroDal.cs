@@ -58,6 +58,44 @@ public class DtroDal : IDtroDal
         return await _dtroContext.Dtros.CountAsync(it => it.SchemaVersion == schemaVersion);
     }
 
+    ///<inheritdoc cref="IDtroDal"/>
+    public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync(GetAllQueryParameters parameters)
+    {
+        var cachedDtros = await _dtroCache.GetDtros();
+        if (cachedDtros.Any())
+        {
+            return cachedDtros;
+        }
+
+        var dtrosQuery = _dtroContext.Dtros.Where(d => !d.Deleted);
+
+        dtrosQuery = parameters.TraCode != null &&
+                     parameters.TraCode != 0
+            ? dtrosQuery
+                .Where(dtro => !dtro.Deleted)
+                .Where(dtro => parameters.TraCode.Equals(dtro.TrafficAuthorityOwnerId) ||
+                               parameters.TraCode.Equals(dtro.TrafficAuthorityCreatorId))
+            : dtrosQuery.Where(dtro => !dtro.Deleted);
+
+        if (parameters.StartDate.HasValue)
+        {
+            dtrosQuery = dtrosQuery
+                .Where(dtro => dtro.Created >= parameters.StartDate.Value.ToDateTimeTruncated());
+        }
+
+        if (parameters.EndDate.HasValue)
+        {
+            dtrosQuery = dtrosQuery
+                .Where(dtro => dtro.Created <= parameters.EndDate.Value.ToDateTimeTruncated());
+        }
+
+        var dtros = await dtrosQuery.ToListAsync();
+
+        await _dtroCache.CacheDtros(dtros);
+
+        return dtros;
+    }
+    
     /// <inheritdoc cref="IDtroDal"/>
     public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync()
     {
@@ -177,7 +215,7 @@ public class DtroDal : IDtroDal
         }
 
         _dtroMappingService.SetOwnership(ref existing, assignToTraId);
-        _dtroMappingService.SetSourceActionType(ref existing, Enums.SourceActionType.Amendment);
+        _dtroMappingService.SetSourceActionType(ref existing, SourceActionType.Amendment);
 
         var lastUpdated = DateTime.UtcNow.ToDateTimeTruncated();
         existing.LastUpdated = lastUpdated;
@@ -199,7 +237,6 @@ public class DtroDal : IDtroDal
 
         foreach (var query in search.Queries)
         {
-            var properties = query.GetType().GetProperties();
             var expressionsToConjunct = new List<Expression<Func<Models.DataBase.DTRO, bool>>>();
 
             if (query.DeletionTime is { } deletionTime)
@@ -247,6 +284,11 @@ public class DtroDal : IDtroDal
             if (query.RegulationType is not null)
             {
                 expressionsToConjunct.Add(it => it.RegulationTypes.Contains(query.RegulationType));
+            }
+
+            if (query.RegulatedPlaceType is not null)
+            {
+                expressionsToConjunct.Add(it => it.RegulatedPlaceTypes.Contains(query.RegulatedPlaceType));
             }
 
             if (query.OrderReportingPoint is not null)
@@ -349,7 +391,10 @@ public class DtroDal : IDtroDal
         {
             publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc);
 
-            expressionsToConjunct.Add(it => it.Created >= publicationTime);
+            expressionsToConjunct.Add(it =>
+                it.Created >= publicationTime ||
+                it.LastUpdated >= publicationTime ||
+                (it.DeletionTime != null && it.DeletionTime >= publicationTime));
         }
 
         if (search.ModificationTime is { } modificationTime)
@@ -372,6 +417,11 @@ public class DtroDal : IDtroDal
         if (search.RegulationType is not null)
         {
             expressionsToConjunct.Add(it => it.RegulationTypes.Contains(search.RegulationType));
+        }
+
+        if (search.RegulatedPlaceType is not null)
+        {
+            expressionsToConjunct.Add(it => it.RegulatedPlaceTypes.Contains(search.RegulatedPlaceType));
         }
 
         if (search.OrderReportingPoint is not null)
@@ -400,7 +450,7 @@ public class DtroDal : IDtroDal
                 ComparisonOperator.LessThanOrEqual => it => it.RegulationStart <= value,
                 ComparisonOperator.GreaterThan => it => it.RegulationStart > value,
                 ComparisonOperator.GreaterThanOrEqual => it => it.RegulationStart >= value,
-                _ => throw new InvalidOperationException("Unsupported comparison operator.")
+                var _ => throw new InvalidOperationException("Unsupported comparison operator.")
             };
 
             expressionsToConjunct.Add(expr);
@@ -417,7 +467,7 @@ public class DtroDal : IDtroDal
                 ComparisonOperator.LessThanOrEqual => (it) => it.RegulationEnd <= value,
                 ComparisonOperator.GreaterThan => (it) => it.RegulationEnd > value,
                 ComparisonOperator.GreaterThanOrEqual => (it) => it.RegulationEnd >= value,
-                _ => throw new InvalidOperationException("Unsupported comparison operator.")
+                var _ => throw new InvalidOperationException("Unsupported comparison operator.")
             };
 
             expressionsToConjunct.Add(expr);

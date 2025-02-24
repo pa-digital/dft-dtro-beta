@@ -11,6 +11,6 @@ public static class MockLogger
         var factory = serviceProvider.GetService<ILoggerFactory>();
         var logger = factory?.CreateLogger<T>();
 
-        return (logger ?? default) ?? throw new InvalidOperationException();
+        return (logger ?? null) ?? throw new InvalidOperationException();
     }
 }

@@ -1,5 +1,4 @@
 using System.Data;
-using DfT.DTRO.Extensions.Exceptions;
 using Newtonsoft.Json;
 
 namespace DfT.DTRO.Controllers;
@@ -447,6 +446,7 @@ public class DTROsController : ControllerBase
     /// <summary>
     /// Get D-TRO records
     /// </summary>
+    /// <param name="parameters">Properties passed to query by</param>
     /// <returns>A list of D-TRO active records</returns>
     [HttpGet]
     [Route("/dtros")]
@@ -454,12 +454,12 @@ public class DTROsController : ControllerBase
     [SwaggerResponse(statusCode: 404, description: "Could not found any D-TRO records.")]
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 200, description: "Ok")]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] GetAllQueryParameters parameters)
     {
         try
         {
-            IEnumerable<DtroResponse> dtroResponses = await _dtroService.GetDtrosAsync();
-            _logger.LogInformation($"'{nameof(GetAll)}' method called.");
+            IEnumerable<DtroResponse> dtroResponses = await _dtroService.GetDtrosAsync(parameters);
+            _logger.LogInformation($"'{nameof(GetAll)}' method called ");
             _loggingExtension.LogInformation(
                 nameof(GetAll),
                 "/dtros",
@@ -659,7 +659,6 @@ public class DTROsController : ControllerBase
         }
         catch (NotFoundException nfex)
         {
-            ;
             _logger.LogError(nfex.Message);
             _loggingExtension.LogError(
                 nameof(GetProvisionHistory),

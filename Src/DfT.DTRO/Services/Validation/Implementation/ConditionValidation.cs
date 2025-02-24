@@ -1,11 +1,10 @@
-﻿using DfT.DTRO.Services.Validation.Contracts;
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace DfT.DTRO.Services.Validation.Implementation;
 
-public class ConditionValidation : IConditionValidation
+public class ConditionValidation : IConditionValidationService
 {
-    public IList<SemanticValidationError> ValidateCondition(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
+    public List<SemanticValidationError> ValidateCondition(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
     {
         List<SemanticValidationError> errors = new();
 

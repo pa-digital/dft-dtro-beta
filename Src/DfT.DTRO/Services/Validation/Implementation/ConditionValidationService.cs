@@ -1,185 +1,176 @@
-﻿using DfT.DTRO.Models.Conditions;
-using DfT.DTRO.Models.Conditions.Base;
-using DfT.DTRO.Services.Validation.Contracts;
-using ConditionConjunction = System.Collections.Generic.List<DfT.DTRO.Models.Conditions.Base.Condition>;
-using ConditionDnf = System.Collections.Generic.List<System.Collections.Generic.List<DfT.DTRO.Models.Conditions.Base.Condition>>;
+﻿namespace DfT.DTRO.Services.Validation.Implementation;
 
-namespace DfT.DTRO.Services.Validation.Implementation;
-
+/// <inheritdoc cref="IConditionValidationService"/>
 public class ConditionValidationService : IConditionValidationService
 {
-    public List<SemanticValidationError> Validate(ConditionSet conditions)
+    /// <inheritdoc cref="IConditionValidationService"/>
+    public List<SemanticValidationError> ValidateCondition(DtroSubmit dtroSubmit, SchemaVersion schemaVersion)
     {
-        var errors = new List<SemanticValidationError>();
+        List<SemanticValidationError> errors = new();
 
-        var dnf = ConvertToDnf(conditions);
+        var regulations = dtroSubmit
+            .Data
+            .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .OfType<ExpandoObject>()
+            .SelectMany(provision => provision
+                .GetValueOrDefault<IList<object>>("Regulation".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .OfType<ExpandoObject>())
+            .ToList();
 
-        if (dnf.All(it => it.Pairs().Any(it => it.Item1.Contradicts(it.Item2))))
+        foreach (var regulation in regulations)
         {
-            errors.Add(new SemanticValidationError { Message = "The expression is always false." });
+            var hasConditionSet = regulation.HasField("ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
+            if (hasConditionSet)
+            {
+                var conditionSets = regulation
+                        .GetValueOrDefault<IList<object>>(
+                            "ConditionSet".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                        .OfType<ExpandoObject>()
+                    .ToList();
+
+                var passedInOperator = conditionSets
+                    .Select(conditionSet => conditionSet.GetValueOrDefault<string>(Constants.Operator))
+                    .FirstOrDefault();
+
+
+                var hasValidOperator = passedInOperator != null && Constants.OperatorTypes.Any(passedInOperator.Equals);
+                if (!hasValidOperator)
+                {
+                    SemanticValidationError error = new()
+                    {
+                        Name = "Operator",
+                        Message = "Operator is not present or incorrect",
+                        Path = "Source -> Provision -> Regulation -> ConditionSet -> operator",
+                        Rule = $"One of '{string.Join(", ", Constants.OperatorTypes)}' operators must be present",
+                    };
+                    errors.Add(error);
+                }
+
+                List<KeyValuePair<string, object>> passedInConditions = new();
+
+                foreach (var possibleCondition in Constants.PossibleConditions
+                             .Select(possibleCondition => new
+                             {
+                                 possibleCondition,
+                                 hasCondition =
+                                     conditionSets
+                                         .Select(conditionSet => conditionSet.HasField(possibleCondition))
+                                         .FirstOrDefault()
+                             })
+                             .Where(both => both.hasCondition)
+                             .Select(both => both.possibleCondition))
+                {
+                    var conditions = conditionSets
+                        .Select(conditionSet =>
+                            conditionSet
+                                .GetValueOrDefault<IList<object>>(possibleCondition
+                                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                                .OfType<ExpandoObject>())
+                        .SelectMany(expandoObjects => expandoObjects)
+                        .SelectMany(expandoObject => expandoObject)
+                        .Select(kv => kv)
+                        .ToList();
+
+                    passedInConditions.AddRange(conditions);
+                }
+
+                var areCorrectNegateValues = passedInConditions
+                    .Where(passedInCondition => passedInCondition.Key == Constants.Negate)
+                    .Select(passedInCondition => passedInCondition.Value);
+
+                if (areCorrectNegateValues.Any(it => it is not bool))
+                {
+                    SemanticValidationError error = new()
+                    {
+                        Name = "Negate",
+                        Message = "One or more 'negate' values are incorrect",
+                        Path = "Source -> Provision -> Regulation -> ConditionSet -> conditions -> negate",
+                        Rule = "Negate property must be boolean, 'true' or 'false'",
+                    };
+                    errors.Add(error);
+                }
+
+                passedInConditions = passedInConditions
+                    .Where(passedInCondition => passedInCondition.Key != Constants.Operator)
+                    .Where(passedInCondition => passedInCondition.Key != Constants.Negate)
+                    .ToList();
+
+
+                var areAllValidConditions = passedInConditions.All(passedInCondition => Constants.ConditionTypes.Contains(passedInCondition.Key));
+                if (!areAllValidConditions)
+                {
+                    SemanticValidationError error = new()
+                    {
+                        Name = "Invalid conditions",
+                        Message = "One or more conditions are invalid",
+                        Path = "Source -> Provision -> Regulation -> ConditionSet -> conditions",
+                        Rule =
+                            $"One or more types of '{string.Join(", ", Constants.ConditionTypes)}' conditions must be present",
+                    };
+                    errors.Add(error);
+                }
+            }
+            else
+            {
+                var passedInConditions = regulation
+                        .GetValueOrDefault<IList<object>>("Condition".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                        .OfType<ExpandoObject>()
+                    .SelectMany(expandoObjects => expandoObjects)
+                    .Select(kv => kv)
+                    .ToList();
+
+                var areCorrectNegateValues = passedInConditions
+                    .Where(passedInCondition => passedInCondition.Key == Constants.Negate)
+                    .Select(passedInCondition => passedInCondition.Value);
+
+                if (areCorrectNegateValues.Any(it => it is not bool))
+                {
+                    SemanticValidationError error = new()
+                    {
+                        Name = "Negate",
+                        Message = "One or more 'negate' values are incorrect",
+                        Path = "Source -> Provision -> Regulation -> ConditionSet -> conditions -> negate",
+                        Rule = "Negate property must be boolean, 'true' or 'false'",
+                    };
+                    errors.Add(error);
+                }
+
+                passedInConditions = passedInConditions
+                    .Where(passedInCondition => passedInCondition.Key != Constants.Negate)
+                    .ToList();
+
+                //TODO: This should be refactored once schema version 3.2.4 will be decommissioned.
+                bool areAllValidConditions;
+                if (dtroSubmit.SchemaVersion >= new SchemaVersion("3.3.0"))
+                {
+                    areAllValidConditions = passedInConditions
+                        .All(passedInCondition => Constants.ConditionTypes
+                            .Contains(passedInCondition.Key));
+
+                }
+                else
+                {
+                    areAllValidConditions = passedInConditions
+                        .All(passedInCondition => Constants.PreviousConditionTypes
+                            .Contains(passedInCondition.Key));
+                }
+
+
+                if (!areAllValidConditions)
+                {
+                    SemanticValidationError newError = new()
+                    {
+                        Name = "Condition",
+                        Message = "Invalid condition",
+                        Path = "Source -> Provision -> Regulation -> Condition",
+                        Rule = $"One of '{string.Join(", ", Constants.ConditionTypes)}' condition must be present",
+                    };
+                    errors.Add(newError);
+                }
+            }
+
         }
 
         return errors;
-    }
-
-    private ConditionDnf ConvertToDnf(ConditionSet conditions)
-    {
-        conditions = ExpandXOr(conditions);
-        conditions = PropagateNegation(conditions);
-        return ToDnf(conditions);
-    }
-
-    private ConditionDnf ToDnf(Condition condition)
-    {
-        if (condition is ConditionSet conditionSet)
-        {
-            ToDnf(conditionSet);
-        }
-
-        return new ConditionDnf { new ConditionConjunction { condition } };
-    }
-
-    private ConditionDnf ToDnf(ConditionSet conditions)
-        => conditions.Operator switch
-        {
-            OperatorType.And => AndToDnf(conditions),
-            OperatorType.Or => OrToDnf(conditions),
-
-            _ => throw new InvalidOperationException()
-        };
-
-    private Condition PropagateNegation(Condition target)
-    {
-        if (target is ConditionSet conditionSet)
-        {
-            return PropagateNegation(conditionSet);
-        }
-
-        return target;
-    }
-
-    private ConditionSet PropagateNegation(ConditionSet conditionSet)
-    {
-        var newConditions = new ConditionConjunction();
-
-        if (conditionSet.Negate)
-        {
-            var newOp =
-                conditionSet.Operator == OperatorType.And
-                ? OperatorType.Or
-                : OperatorType.And;
-
-            foreach (var condition in conditionSet)
-            {
-                newConditions.Add(PropagateNegation(condition.Negated()));
-            }
-
-            return new ConditionSet(newConditions, newOp);
-        }
-
-        foreach (var condition in conditionSet)
-        {
-            newConditions.Add(PropagateNegation(condition));
-        }
-
-        return new ConditionSet(newConditions, conditionSet.Operator);
-    }
-
-    private Condition ExpandXOr(Condition target)
-    {
-        if (target is ConditionSet conditions)
-        {
-            ExpandXOr(conditions);
-        }
-
-        return target;
-    }
-
-    private ConditionSet ExpandXOr(ConditionSet conditions)
-    {
-        var newConditions = new ConditionConjunction();
-
-        if (conditions.Operator != OperatorType.XOr)
-        {
-            foreach (var condition in conditions)
-            {
-                newConditions.Add(ExpandXOr(condition));
-            }
-
-            return new ConditionSet(newConditions, conditions.Operator)
-            {
-                Negate = conditions.Negate
-            };
-        }
-
-        var expanded = ExpandXOr(conditions.ElementAt(0), conditions.ElementAt(1));
-
-        foreach (var condition in conditions.Skip(2))
-        {
-            expanded = ExpandXOr(ConditionSet.XOr(expanded, condition));
-        }
-
-        return expanded;
-    }
-
-    private ConditionSet ExpandXOr(Condition left, Condition right)
-    {
-        left = ExpandXOr(left);
-        right = ExpandXOr(right);
-
-        return
-            ConditionSet.And(
-                ConditionSet.Or(left, right),
-                ConditionSet.And(left, right).Negated());
-    }
-
-    private ConditionDnf AndToDnf(ConditionSet conditions)
-    {
-        var result = DnfConjunction(ToDnf(conditions.ElementAt(0)), ToDnf(conditions.ElementAt(1)));
-
-        foreach (var condition in conditions.Skip(2))
-        {
-            result = DnfConjunction(result, ToDnf(condition));
-        }
-
-        return result;
-    }
-
-    private ConditionDnf OrToDnf(ConditionSet conditions)
-    {
-        var result = DnfDisjunction(ToDnf(conditions.ElementAt(0)), ToDnf(conditions.ElementAt(1)));
-
-        foreach (var condition in conditions.Skip(2))
-        {
-            result = DnfDisjunction(result, ToDnf(condition));
-        }
-
-        return result;
-    }
-
-    private ConditionDnf DnfConjunction(ConditionDnf first, ConditionDnf second)
-    {
-        var result = new ConditionDnf();
-
-        foreach (var firstConditions in first)
-        {
-            foreach (var secondConditions in second)
-            {
-                var newList = new ConditionConjunction(firstConditions);
-                newList.AddRange(secondConditions);
-
-                result.Add(newList);
-            }
-        }
-
-        return result;
-    }
-
-    private ConditionDnf DnfDisjunction(ConditionDnf first, ConditionDnf second)
-    {
-        var result = new ConditionDnf(first);
-        result.AddRange(second);
-
-        return result;
     }
 }

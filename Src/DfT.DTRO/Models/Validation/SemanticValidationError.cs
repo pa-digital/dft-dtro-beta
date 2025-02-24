@@ -51,7 +51,7 @@ public class SemanticValidationError
             Message = "British National Grid - Spatial Reference is not present within the geometry or is referenced incorrectly.",
             Path = "source.provision.regulatedPlace.geometry",
             Name = "Spatial reference",
-            Rule = $"Spatial reference should be '{Constants.Srid27000}'"
+            Rule = $"Spatial reference should be '{Constants.Srid27700}'"
         };
 
     /// <summary>

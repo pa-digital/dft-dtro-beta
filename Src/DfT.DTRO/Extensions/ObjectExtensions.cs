@@ -15,24 +15,6 @@ public static class ObjectExtensions
     public static string ToIndentedJsonString(this object obj) => JsonConvert.SerializeObject(obj, Formatting.Indented);
 
     /// <summary>
-    /// Check if the string is of type enum
-    /// </summary>
-    /// <param name="value">Value to be checked</param>
-    /// <param name="type">Name of the checked type</param>
-    /// <returns><c>true</c> if is enum, otherwise <c>false</c></returns>
-    public static bool IsEnum(this string value, string type)
-    {
-        List<string> items = type switch
-        {
-            "SourceActionType" => typeof(SourceActionType).GetDisplayNames<SourceActionType>().ToList(),
-            "ProvisionActionType" => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>().ToList(),
-            _ => new List<string>()
-        };
-
-        return items.Contains(value);
-    }
-
-    /// <summary>
     /// Compare properties values
     /// </summary>
     /// <typeparam name="T">Type to check</typeparam>
@@ -99,6 +81,11 @@ public static class ObjectExtensions
         return end <= adjStart ? "" : source.Substring(adjStart, end - adjStart);
     }
 
+    /// <summary>
+    /// Truncate date time
+    /// </summary>
+    /// <param name="dateTime">Date time to be truncated</param>
+    /// <returns>Truncated date time</returns>
     public static DateTime ToDateTimeTruncated(this DateTime dateTime)
     {
         return new DateTime(
@@ -112,6 +99,12 @@ public static class ObjectExtensions
         );
     }
 
+    /// <summary>
+    /// Keep backward compatibility for previous versions
+    /// </summary>
+    /// <param name="source">Source to check</param>
+    /// <param name="schemaVersion">Schema version</param>
+    /// <returns>Source</returns>
     public static string ToBackwardCompatibility(this string source, SchemaVersion schemaVersion)
     {
         if (schemaVersion >= new SchemaVersion("3.3.0"))

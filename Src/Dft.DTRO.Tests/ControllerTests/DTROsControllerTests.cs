@@ -1,5 +1,3 @@
-using Dft.DTRO.Tests.Mocks;
-
 namespace Dft.DTRO.Tests.ControllerTests;
 
 [ExcludeFromCodeCoverage]
@@ -16,7 +14,6 @@ public class DTROsControllerTests
     public DTROsControllerTests()
     {
         ILogger<DTROsController> mockLogger = MockLogger.Setup<DTROsController>();
-        Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
         var mockLoggingExtension = new Mock<LoggingExtension>();
 
         _sut = new DTROsController(
@@ -183,5 +180,25 @@ public class DTROsControllerTests
 
         Assert.NotNull(actual);
         Assert.Equal(500, ((ObjectResult)actual).StatusCode);
+    }
+
+    [Fact]
+    public async Task GetAllReturnsRecords()
+    {
+        var queryParameters = new GetAllQueryParameters
+        {
+            TraCode = 1000,
+            StartDate = new DateTime(2025, 1, 21, 16, 21, 26),
+            EndDate = new DateTime(2025, 1, 23, 11, 2, 41)
+        };
+        _mockDtroService
+            .Setup(it => it.GetDtrosAsync(queryParameters))
+            .ReturnsAsync(() => MockTestObjects.DtroResponses);
+
+        IActionResult? actual = await _sut.GetAll(queryParameters);
+
+        Assert.NotNull(actual);
+
+        Assert.Equal(200, ((ObjectResult)actual).StatusCode);
     }
 }

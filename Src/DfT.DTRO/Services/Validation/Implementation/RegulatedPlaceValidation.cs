@@ -1,11 +1,10 @@
-﻿using DfT.DTRO.Services.Validation.Contracts;
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace DfT.DTRO.Services.Validation.Implementation;
 
-public class RegulatedPlaceValidation : IRegulatedPlaceValidation
+public class RegulatedPlaceValidation : IRegulatedPlaceValidationService
 {
-    public IList<SemanticValidationError> ValidateRegulatedPlacesType(DtroSubmit request, SchemaVersion schemaVersion)
+    public List<SemanticValidationError> ValidateRegulatedPlacesType(DtroSubmit request, SchemaVersion schemaVersion)
     {
         var errors = new List<SemanticValidationError>();
 
