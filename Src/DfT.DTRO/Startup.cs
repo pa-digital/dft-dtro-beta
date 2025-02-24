@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Scrutor;
 
 namespace DfT.DTRO;
 
@@ -41,36 +42,20 @@ public class Startup
 
         services.AddFeatureManagement();
 
-        services.AddScoped<IAppIdMapperService, AppIdMapperService>();
-        services.AddScoped<IJsonSchemaValidationService, JsonSchemaValidationService>();
-        services.AddScoped<ISemanticValidationService, SemanticValidationService>();
-        services.AddScoped<IGeometryValidation, GeometryValidation>();
-        services.AddSingleton<IBoundingBoxService, BoundingBoxService>();
-        services.AddScoped<IOldConditionValidationService, OldConditionValidationService>();
-        services.AddSingleton<ISpatialProjectionService, Proj4SpatialProjectionService>();
-        services.AddScoped<IDtroGroupValidatorService, DtroGroupValidatorService>();
-        services.AddSingleton<IDtroMappingService, DtroMappingService>();
-        services.AddSingleton<ISchemaTemplateMappingService, SchemaTemplateMappingService>();
-        services.AddSingleton<IRuleTemplateMappingService, RuleTemplateMappingService>();
-        services.AddScoped<IEventSearchService, EventSearchService>();
-        services.AddScoped<ISchemaTemplateService, SchemaTemplateService>();
-        services.AddScoped<IRuleTemplateService, RuleTemplateService>();
-        services.AddScoped<IDtroService, DtroService>();
-        services.AddScoped<ISearchService, SearchService>();
-        services.AddScoped<IMetricsService, MetricsService>();
-        services.AddScoped<IDtroDal, DtroDal>();
-        services.AddScoped<IDtroHistoryDal, DtroHistoryDal>();
-        services.AddScoped<ISchemaTemplateDal, SchemaTemplateDal>();
-        services.AddScoped<IRuleTemplateDal, RuleTemplateDal>();
-        services.AddScoped<IMetricDal, MetricDal>();
-        services.AddScoped<IDtroUserDal, DtroUserDal>();
-        services.AddScoped<IDtroUserService, DtroUserService>();
-        services.AddScoped<ISystemConfigDal, SystemConfigDal>();
-        services.AddScoped<ISystemConfigService, SystemConfigService>();
-        services.AddScoped<IApplicationService, ApplicationService>();
-        services.AddScoped<IApplicationDal, ApplicationDal>();
+        services.Scan(scan => scan
+                .FromAssemblies(Assembly.GetExecutingAssembly())
+                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services")) 
+                .AsImplementedInterfaces()
+                .WithScopedLifetime() 
+                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.DAL")) 
+                .AsImplementedInterfaces()
+                .WithScopedLifetime() 
+                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services.Mapping"))
+                .AsImplementedInterfaces()
+                .WithSingletonLifetime()
+        );
+        services.AddScoped<AuthClient, AuthClient>();
         services.AddSingleton<LoggingExtension>();
-
         services.TryAddSingleton<ISystemClock, SystemClock>();
 
         services.AddStorage(Configuration);
