@@ -11,7 +11,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             SqlQueries.TruncateTable("Dtros");
         }
 
-        public static async Task<HttpResponseMessage> CreateDtroAsync(string exampleFileName, TestUser testUser)
+        public static async Task<HttpResponseMessage> CreateDtroFromFileAsync(string exampleFileName, TestUser testUser)
         {
             var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -21,6 +21,18 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
             var tempFilePath = GetDtroFileWithTraUpdated(exampleFileName, testUser.TraId);
             var createDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/dtros/createFromFile", headers, pathToJsonFile: tempFilePath);
+            return createDtroResponse;
+        }
+
+        public static async Task<HttpResponseMessage> CreateDtroFromJsonBodyAsync(string jsonBody, TestUser testUser)
+        {
+            var headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "x-App-Id", testUser.AppId },
+                { "Content-Type", "application/json" }
+            };
+
+            var createDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/dtros/createFromBody", headers, jsonBody);
             return createDtroResponse;
         }
 
@@ -37,20 +49,25 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         private static string GetDtroFileWithTraUpdated(string exampleFileName, string traId)
         {
-            var exampleFilePath = $"{AbsolutePathToDtroExamplesDirectory}/{exampleFileName}";
+            string exampleFilePath = $"{AbsolutePathToDtroExamplesDirectory}/{exampleFileName}";
             Directory.CreateDirectory($"{AbsolutePathToDtroExamplesTempDirectory}");
-            var tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{exampleFileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{exampleFileName}";
             File.Copy(exampleFilePath, tempFilePath, overwrite: true);
 
-            string json = File.ReadAllText(tempFilePath);
-            JObject jsonObj = JObject.Parse(json);
+            string jsonString = File.ReadAllText(tempFilePath);
+            string jsonWithUpdatedTra = UpdateTraId(jsonString, traId);
+            File.WriteAllText(tempFilePath, jsonWithUpdatedTra);
+            return tempFilePath;
+        }
+
+        public static string UpdateTraId(string jsonString, string traId)
+        {
+            JObject jsonObj = JObject.Parse(jsonString);
             var tradIdAsInt = int.Parse(traId);
             jsonObj["data"]["Source"]["currentTraOwner"] = tradIdAsInt;
             jsonObj["data"]["Source"]["traAffected"] = new JArray(tradIdAsInt);
             jsonObj["data"]["Source"]["traCreator"] = tradIdAsInt;
-
-            File.WriteAllText(tempFilePath, jsonObj.ToString());
-            return tempFilePath;
+            return jsonObj.ToString();
         }
     }
 }

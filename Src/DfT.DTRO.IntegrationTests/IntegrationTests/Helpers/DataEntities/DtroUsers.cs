@@ -28,7 +28,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return getAllUsersResponse;
         }
 
-        public static async Task<List<string>> GetAllUserIdsAsync(TestUser testUser)
+        private static async Task<List<string>> GetAllUserIdsAsync(TestUser testUser)
         {
             var getAllUsersResponse = await GetAllUsersAsync(testUser);
             Assert.Equal(HttpStatusCode.OK, getAllUsersResponse.StatusCode);

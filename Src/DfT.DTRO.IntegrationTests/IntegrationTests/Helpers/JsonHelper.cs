@@ -55,7 +55,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                         Console.WriteLine($"+ {line2.TrimEnd()}");
                         Console.ResetColor();
                     }
-
                 }
             }
 
