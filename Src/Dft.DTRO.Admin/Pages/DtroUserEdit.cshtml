@@ -1,0 +1,190 @@
+﻿@page "{dtroUserId:Guid?}"
+@model DtroUserEditModel
+@{
+    bool isEdit = Model.IsEdit;
+    string search = Request.Query["search"];
+}
+
+<h2>@(isEdit ? "Edit User" : "Add User")</h2>
+
+<form method="post" class="form-horizontal">
+    <div style="max-width:600px">
+
+        <div class="form-group row" style="margin-top:10px">
+            <label for="Id" class="col-sm-4 col-form-label" hidden>Id</label>
+            <div class="col-sm-8">
+                <input hidden type="text" disabled class="form-control" id="id" name="DtroUser.Id" value="@Model.DtroUser.Id" />
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:10px">
+            <label  class="col-sm-4 col-form-label">User Group</label>
+            <div style="margin-top:8px" class="col-sm-8">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="DtroUser.UserGroup" id="userGroupTra" value="Tra" @(isEdit && Model.DtroUser.UserGroup == UserGroup.Tra ? "checked" : "") @(isEdit ? "" : "checked")>
+                    <label class="form-check-label" for="userGroupTra">Publisher</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="DtroUser.UserGroup" id="userGroupConsumer" value="Consumer" @(isEdit && Model.DtroUser.UserGroup == UserGroup.Consumer ? "checked" : "")>
+                    <label class="form-check-label" for="userGroupConsumer">Consumer</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="DtroUser.UserGroup" id="userGroupAdmin" value="Admin" @(isEdit && Model.DtroUser.UserGroup == UserGroup.Admin ? "checked" : "")>
+                    <label class="form-check-label" for="userGroupAdmin">Admin</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:10px">
+            <label for="traId" id="traIdLabel" class="col-sm-4 col-form-label">TRA Id</label>
+            <div class="col-sm-8">
+                <input type="number" style="max-width:140px" class="form-control" id="traId" name="DtroUser.TraId" value="@Model.DtroUser.TraId" />
+            </div>
+        </div>
+
+
+        <div class="form-group row" style="margin-top:10px">
+            <label for="xAppId" class="col-sm-4 col-form-label">x-App-Id</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="xAppId" name="DtroUser.xAppId" value="@Model.DtroUser.xAppId" required />
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:10px">
+            <label for="name" class="col-sm-4 col-form-label">Name</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="name" name="DtroUser.Name" value="@Model.DtroUser.Name" required />
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:10px">
+            <label for="prefix" class="col-sm-4 col-form-label">Prefix</label>
+            <div class="col-sm-8">
+                <input type="text" style="max-width:140px" class="form-control" id="prefix" name="DtroUser.Prefix" value="@Model.DtroUser.Prefix" maxlength="2"/>
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:20px">
+            <div class="col-sm-8 offset-sm-4 text-right">
+                <button id="saveButton" class="btn btn-primary" type="submit" disabled>@(isEdit ? "Update" : "Create")</button>
+                <button id="cancelButton" class="btn btn-secondary" type="button">Cancel</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            const saveButton = document.getElementById("saveButton");
+            const cancelButton = document.getElementById("cancelButton");
+            const requiredFields = document.querySelectorAll("input[required]");
+            const traIdInput = document.getElementById("traId");
+            const prefixInput = document.getElementById("prefix");
+            const traIdLabel = document.getElementById("traIdLabel");
+            const userGroupInputs = document.querySelectorAll('input[name="DtroUser.UserGroup"]');
+            const userGroupTra = document.getElementById("userGroupTra");
+            const userGroupConsumer = document.getElementById("userGroupConsumer");
+            const userGroupAdmin = document.getElementById("userGroupAdmin");
+            const isTestSystem = @Model.IsTestSystem.ToString().ToLower(); // Pass the IsTestSystem value from Razor to JS
+
+            let originalValues = {
+                traId: traIdInput.value,
+                name: document.getElementById("name").value,
+                xAppId: document.getElementById("xAppId").value,
+                prefix: document.getElementById("prefix").value,
+                userGroup: document.querySelector('input[name="DtroUser.UserGroup"]:checked').value
+            };
+
+            function updateSaveButtonState() {
+                const allRequiredFieldsFilled = Array.from(requiredFields).every(f => f.value.trim() !== "");
+                
+                const isAdminSelected = userGroupAdmin.checked;
+                const isConsumerSelected = userGroupConsumer.checked;
+                const isTraSelected = userGroupTra.checked;
+                const isTraText = traIdInput.value.trim() !== "";
+                const isPrefixText = prefixInput.value.trim() !== "";
+                const traIdValid = (isTraSelected && isTraText && isPrefixText) || (isConsumerSelected) || (isAdminSelected);
+                const dataChanged = hasDataChanged();
+
+                saveButton.disabled = !(allRequiredFieldsFilled && traIdValid && dataChanged);
+            }
+
+            function hasDataChanged() {
+                return (
+                 
+                    originalValues.traId !== traIdInput.value ||
+                    originalValues.name !== document.getElementById("name").value ||
+                    originalValues.xAppId !== document.getElementById("xAppId").value ||
+                    originalValues.prefix !== document.getElementById("prefix").value ||
+                    originalValues.userGroup !== document.querySelector('input[name="DtroUser.UserGroup"]:checked').value
+                );
+            }
+
+            function handleUserGroupChange() {
+                const userGroup = document.querySelector('input[name="DtroUser.UserGroup"]:checked').value;
+                if (userGroup === 'Tra') {
+                    traIdInput.disabled = false;
+                    traIdInput.value = originalValues.traId;
+                    traIdInput.required = true;
+                  
+
+                } 
+                else 
+                {
+                    traIdInput.value = "";
+                    traIdInput.disabled = true;
+                    traIdInput.required = false;
+        
+                }
+
+                if (userGroup === 'Tra') {
+                    prefixInput.disabled = false;
+                    prefixInput.value = originalValues.prefix;
+                    prefixInput.required = true;
+
+                } else{
+                    prefixInput.value = "";
+                    prefixInput.disabled = true;
+                    prefixInput.required = false;
+                }
+
+                updateSaveButtonState();
+            }
+
+            // Initial setup
+            handleUserGroupChange();
+            updateSaveButtonState();
+
+            // Add event listeners to required fields
+            requiredFields.forEach(field => {
+                field.addEventListener("input", updateSaveButtonState);
+            });
+
+            // Add event listener to TraId input
+            traIdInput.addEventListener("input", updateSaveButtonState);
+
+            // Add event listener to prefix input
+            prefixInput.addEventListener("input", updateSaveButtonState);
+
+            // Add event listeners to UserGroup radio buttons
+            userGroupInputs.forEach(group => {
+                group.addEventListener("change", function () {
+                    handleUserGroupChange();
+                    updateSaveButtonState();
+                });
+            });
+
+            cancelButton.addEventListener('click', function () {
+                const cancelInput = document.createElement('input');
+                cancelInput.type = 'hidden';
+                cancelInput.name = 'action';
+                cancelInput.value = 'Cancel';
+                form.appendChild(cancelInput);
+                form.submit();
+            });
+        });
+
+    </script>
+}

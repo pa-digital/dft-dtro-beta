@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DfT.DTRO", "Src\DfT.DTRO\Df
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dft.DTRO.Tests", "Src\Dft.DTRO.Tests\Dft.DTRO.Tests.csproj", "{FEBBD929-EF49-43DB-8344-6A4F0A3E69E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DfT.DTRO.IntegrationTests", "Src\DfT.DTRO.IntegrationTests\DfT.DTRO.IntegrationTests.csproj", "{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dft.DTRO.Admin", "Src\Dft.DTRO.Admin\Dft.DTRO.Admin.csproj", "{27FD0B3D-1CE9-79F9-7A0D-4AE79BE9FD1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,12 +22,15 @@ Global
 		{FEBBD929-EF49-43DB-8344-6A4F0A3E69E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEBBD929-EF49-43DB-8344-6A4F0A3E69E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEBBD929-EF49-43DB-8344-6A4F0A3E69E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27FD0B3D-1CE9-79F9-7A0D-4AE79BE9FD1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27FD0B3D-1CE9-79F9-7A0D-4AE79BE9FD1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27FD0B3D-1CE9-79F9-7A0D-4AE79BE9FD1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27FD0B3D-1CE9-79F9-7A0D-4AE79BE9FD1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DF95E19E-8219-47A4-A6F7-622E6057934D}
 	EndGlobalSection
 EndGlobal

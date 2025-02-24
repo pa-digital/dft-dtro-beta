@@ -1,0 +1,186 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="text-center" style="margin-top: 50px; margin-bottom: 50px">
+    <h1 class="display-4">D-TRO Service UI</h1>
+    <p>Dashboard</p>
+</div>
+
+<div id="pieChart" style="display: flex;">
+    <div id="metrics" style="color: grey; padding: 10px; flex: 1; position: relative;">
+        <div style="display: flex; justify-content: center; align-items: center; height: 30vh;">
+            <div style="position: relative; width: 70vh;">
+                <canvas id="metricSummaryChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="stats" style="position: absolute; bottom: 60px; right: 0;">
+        <div style="padding: 10px; flex: 1;">
+            <div class="checkbox-container" style="border: 1px solid lightgrey; padding: 10px;border-radius: 5px;">
+                <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: flex-end;">
+                    <span>Api Health</span>
+                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthApi ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: flex-end;">
+                    <span>Database Health</span>
+                    <div style="display: inline-block; width: 20px; height: 20px; background-color: @(Model.HealthDatabase ? "rgba(119, 221, 119, 0.5)" : "rgba(255, 105, 97, 0.5)"); /* pastel green or pastel red with 50% transparency */ border: 1px solid grey; border-radius: 5px; margin-left: 10px;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var canvas = document.getElementById('metricSummaryChart');
+            var ctx = canvas.getContext('2d');
+
+            var minimalValue = 0.01; // very small value to ensure visibility of zero-value slices
+
+            var dataValues = [
+                                @Model.Metrics.SubmissionCount,
+                                @Model.Metrics.SubmissionFailureCount,
+                                @Model.Metrics.SystemFailureCount
+                            ];
+
+            var total = dataValues.reduce((acc, curr) => acc + curr, 0);
+
+            var dataLabels = [
+                'Submission Accepted (' + (@Model.Metrics.SubmissionCount > 0 ? @Model.Metrics.SubmissionCount : 0) + ')',
+                'Submissions Rejected (' + (@Model.Metrics.SubmissionFailureCount > 0 ? @Model.Metrics.SubmissionFailureCount : 0) + ')',
+                'API Failures (' + (@Model.Metrics.SystemFailureCount > 0 ? @Model.Metrics.SystemFailureCount : 0) + ')'
+            ];
+
+            // Check if all values are zero
+            if (total === 0) {
+                dataValues = [0];
+                dataLabels = ['No data'];
+            }
+
+            var data = {
+                labels: dataLabels,
+                datasets: [{
+                    data: dataValues.map(value => value > 0 ? value : minimalValue),
+                    backgroundColor: [
+
+                        'rgb(144, 238, 144,0.5)',  // pastel green
+                        'rgba(255, 159, 64, 0.5)', // pastel orange
+                        'rgba(255, 99, 132, 0.5)' // pastel red
+
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',// pastel green
+                        'rgba(255, 159, 64, 1)', // pastel orange
+                        'rgba(255, 99, 132, 1)'// pastel red
+                    ],
+                    borderWidth: 1,
+                    hoverOffset: 10
+                }]
+            };
+
+            var totalSubmissions = @Model.Metrics.SubmissionCount + @Model.Metrics.SubmissionFailureCount;
+            var submissionPercentage = totalSubmissions > 0 ? (@Model.Metrics.SubmissionCount / totalSubmissions * 100).toFixed(2) : 0;
+
+            var options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        align: 'center',
+                        labels: {
+                            boxWidth: 11,  // Width of the color box next to each label
+                            padding: 20,   // Space between the legend items
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) { return ''; }
+                        }
+                    }
+                },
+                cutout: '70%',
+                elements: {
+                    arc: {
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }
+                },
+                radius: '90%'
+            };
+
+            var textInMiddle = "";
+            if (total === 0) {
+                textInMiddle = "No data";
+            }
+            else {
+                textInMiddle = Math.round(submissionPercentage) + "%";
+            }
+
+            var centerTextPlugin = {
+                id: 'centerText',
+                beforeDraw: function (chart) {
+                    var width = chart.chartArea.right - chart.chartArea.left,
+                        height = chart.chartArea.bottom - chart.chartArea.top,
+                        ctx = chart.ctx;
+
+                    ctx.restore();
+                    var fontSize = (height / 228).toFixed(2);
+                    ctx.font = fontSize + "em sans-serif";
+                    ctx.textBaseline = "middle";
+
+                    var text = textInMiddle,
+                        textX = Math.round((width - ctx.measureText(text).width) / 2),
+                        textY = height / 2;
+                    ctx.fillStyle = 'black';
+                    ctx.fillText(text, textX, textY);
+
+                    ctx.fillStyle = 'grey';
+
+                    ctx.font = (fontSize * 0.7) + "em sans-serif";
+                    var label = "Successful";
+                    var labelX = Math.round((width - ctx.measureText(label).width) / 2);
+                    var labelY = textY + (height * 0.1);
+
+                    ctx.fillText(label, labelX, labelY);
+
+                    ctx.fillStyle = 'lightgrey';
+
+                    ctx.font = (fontSize * 0.7) + "em sans-serif";
+                    var label = "Last 7 days";
+                    var labelX = Math.round((width - ctx.measureText(label).width) / 2);
+                    var labelY = textY - (height * 0.1);
+
+                    ctx.fillText(label, labelX, labelY);
+
+                    ctx.save();
+                }
+            };
+
+            Chart.register(centerTextPlugin);
+
+            var metricSummaryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: options
+            });
+
+            metricSummaryChart.update();
+        });
+    </script>
+
+}
+
+

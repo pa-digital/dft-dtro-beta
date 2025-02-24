@@ -1,0 +1,132 @@
+﻿@page
+@model SearchModel
+
+<h2>
+    DTROs - Total found: @Model.Dtros.TotalCount
+    @if (Model.AllowAddUpdate)
+    {
+        <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="false">+</a>
+    }
+</h2>
+
+<form id="searchSection" method="post" asp-page-handler="Update" style="display: flex; margin-top:20px;">
+    <div>
+        @await Html.PartialAsync("_TraSearchPartial", Model.DtroUserSearch)
+    </div>
+</form>
+
+<table style="margin-top:30px" class="table">
+    <thead>
+        <tr>
+            <th>Tro Name</th>
+            <th>Published</th>
+            <th>Regulation</th>
+            <th>Vehicle</th>
+            <th>DTRO Type</th>
+            <th>Period</th>
+            <th>File</th>
+            <th>Creator</th>
+            <th>Owner</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var result in Model.Dtros.Results)
+        {
+            <tr>
+                <td>@result.TroName</td>
+                <td>@result.PublicationTime</td>
+                <td>@Model.FormatListToSingle(result.RegulationType)</td>
+                <td>@Model.FormatListToSingle(result.VehicleType)</td>
+                <td>@Model.FormatListToSingle(result.OrderReportingPoint)</td>
+                <td>
+                    @for (int i = 0; i < result.RegulationStart.Count(); i++)
+                    {
+                        <div>
+                            <strong>Start:</strong> @result.RegulationStart.ElementAt(i) <br />
+                            <strong>End:</strong> @result.RegulationEnd.ElementAt(i)
+                        </div>
+                    }
+                </td>
+                <td>
+                    @if (Model.AllowAddUpdate)
+                    {
+                        <a class="btn btn-primary" asp-page="DtroDropEdit" asp-route-IsEdit="true" asp-route-id="@result.Id">Upload</a>
+                    }
+                </td>
+                <td>@result.TrafficAuthorityCreatorId</td>
+                <td>@result.TrafficAuthorityOwnerId</td>
+                <td>
+                    <a class="btn btn-primary" asp-page="DtroEdit" asp-route-id="@result.Id">Reassign</a>
+                </td>
+                <td>
+                    <a class="btn btn-info" asp-page="DtroHistory" asp-route-id="@result.Id">History</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    const int maxPageSize = 50;
+    var totalPages = (int)Math.Ceiling((double)Model.Dtros.TotalCount / maxPageSize);
+    const int displayPages = 2;
+}
+
+<div style="display: flex; justify-content: space-between; margin-top: 20px;">
+    <div>
+        @if (Model.Dtros.TotalCount > 0)
+        { 
+            var startRecord = (Model.Dtros.Page - 1) * maxPageSize + 1;
+            var endRecord = Math.Min(Model.Dtros.Page * maxPageSize, Model.Dtros.TotalCount);
+            <span>@startRecord - @endRecord of @Model.Dtros.TotalCount</span>
+        }
+    </div>
+    <!-- Pages Controls -->
+    <div>
+        @if (Model.Dtros.TotalCount > Model.Dtros.PageSize)
+        {
+            <nav aria-label="tro navigation">
+                <ul class="pagination justify-content-end">
+                    @if (Model.Dtros.Page > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page - 1)" asp-route-dtroUserIdSelect="@Model.DtroUserSearch.DtroUserIdSelect">Previous</a>
+                        </li>
+                    }
+
+                    @if (Model.Dtros.Page > displayPages + 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="1">1</a>
+                        </li>
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                    }
+
+                    @for (int i = Math.Max(1, Model.Dtros.Page - displayPages); i <= Math.Min(totalPages, Model.Dtros.Page + displayPages); i++)
+                    {
+                        <li class="page-item @(i == Model.Dtros.Page ? "active" : "")">
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@i" asp-route-dtroUserIdSelect="@Model.DtroUserSearch.DtroUserIdSelect">@i</a>
+                        </li>
+                    }
+
+                    @if (Model.Dtros.Page < totalPages - displayPages)
+                    {
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                        <li class="page-item">
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@totalPages">@totalPages</a>
+                        </li>
+                    }
+                    @if (Model.Dtros.Page < totalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-page-handler="Update" asp-route-pageNumber="@(Model.Dtros.Page + 1)" asp-route-dtroUserIdSelect="@Model.DtroUserSearch.DtroUserIdSelect">Next</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+</div>
