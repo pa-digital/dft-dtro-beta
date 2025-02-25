@@ -133,7 +133,7 @@
                     ],
                     "regulation": [
                         {
-                            "condition": [
+                            "conditions": [
                                 {
                                     "timeValidity": {
                                         "start": "2024-10-22T06:00:00",

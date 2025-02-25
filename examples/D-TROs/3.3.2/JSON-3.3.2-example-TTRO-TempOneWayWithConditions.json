@@ -32,7 +32,7 @@
                     ],
                     "regulation": [
                         {
-                            "condition": [
+                            "conditions": [
                                 {
                                     "roadCondition": {
                                         "roadType": "other"

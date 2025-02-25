@@ -34,7 +34,7 @@
                     ],
                     "regulation": [
                         {
-                            "condition": [
+                            "conditions": [
                                 {
                                     "timeValidity": [
                                         {

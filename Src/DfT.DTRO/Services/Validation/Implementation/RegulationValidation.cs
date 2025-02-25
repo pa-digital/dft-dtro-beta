@@ -54,7 +54,7 @@ public class RegulationValidation : IRegulationValidation
         .ToList();
 
         existingRegulations = existingRegulations
-            .Where(existingRegulation => !existingRegulation.HasField("TemporaryRegulation"))
+            .Where(existingRegulation => !existingRegulation.HasField("temporaryRegulation"))
             .ToList();
 
         foreach (var existingRegulation in existingRegulations)

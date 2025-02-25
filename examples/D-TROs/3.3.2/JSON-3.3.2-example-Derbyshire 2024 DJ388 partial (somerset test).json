@@ -33,7 +33,7 @@
                             "generalRegulation": {
                                 "regulationType": "kerbsideLimitedWaiting"
                             },
-                            "condition": [
+                            "conditions": [
                                 {
                                     "timeValidity": [
                                         {
