@@ -31,7 +31,7 @@ public class RateLineValidationServiceTests
                                 ""rateTable"" : {{
                                     ""rateLineCollection"": [
                                         {{
-                                            ""RateLine"": [
+                                            ""rateLine"": [
                                                 {{
                                                     ""description"": ""{description}"",
                                                     ""durationEnd"": 1,
@@ -87,7 +87,7 @@ public class RateLineValidationServiceTests
                                 ""rateTable"" : {{
                                     ""rateLineCollection"": [
                                         {{
-                                            ""RateLine"": [
+                                            ""rateLine"": [
                                                 {{
                                                     ""description"": ""freeText"",
                                                     ""durationEnd"": {durationEnd},
@@ -143,7 +143,7 @@ public class RateLineValidationServiceTests
                                 ""rateTable"" : {{
                                     ""rateLineCollection"": [
                                         {{
-                                            ""RateLine"": [
+                                            ""rateLine"": [
                                                 {{
                                                     ""description"": ""freeText"",
                                                     ""durationEnd"": 1,
@@ -197,7 +197,7 @@ public class RateLineValidationServiceTests
                                 ""rateTable"" : {{
                                     ""rateLineCollection"": [
                                         {{
-                                            ""RateLine"": [
+                                            ""rateLine"": [
                                                 {{
                                                     ""description"": ""freeText"",
                                                     ""durationEnd"": 1,
@@ -247,7 +247,7 @@ public class RateLineValidationServiceTests
                                 ""rateTable"" : {{
                                     ""rateLineCollection"": [
                                         {{
-                                            ""RateLine"": [
+                                            ""rateLine"": [
                                                 {{
                                                     ""description"": ""freeText"",
                                                     ""durationEnd"": 1,
@@ -301,7 +301,7 @@ public class RateLineValidationServiceTests
                                 ""rateTable"" : {{
                                     ""rateLineCollection"": [
                                         {{
-                                            ""RateLine"": [
+                                            ""rateLine"": [
                                                 {{
                                                     ""description"": ""freeText"",
                                                     ""durationEnd"": 1,
@@ -361,7 +361,7 @@ public class RateLineValidationServiceTests
                                 ""rateTable"" : {{
                                     ""rateLineCollection"": [
                                         {{
-                                            ""RateLine"": [
+                                            ""rateLine"": [
                                                 {{
                                                     ""description"": ""freeText"",
                                                     ""durationEnd"": 1,
@@ -421,7 +421,7 @@ public class RateLineValidationServiceTests
                                 ""rateTable"" : {{
                                     ""rateLineCollection"": [
                                         {{
-                                            ""RateLine"": [
+                                            ""rateLine"": [
                                                 {{
                                                     ""description"": ""freeText"",
                                                     ""durationEnd"": 1,
@@ -471,7 +471,7 @@ public class RateLineValidationServiceTests
                                 ""rateTable"" : {{
                                     ""rateLineCollection"": [
                                         {{
-                                            ""RateLine"": [
+                                            ""rateLine"": [
                                                 {{
                                                     ""description"": ""freeText"",
                                                     ""durationEnd"": 1,
