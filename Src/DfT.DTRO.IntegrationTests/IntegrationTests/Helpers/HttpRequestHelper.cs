@@ -91,7 +91,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         private static void PrintCurlCommand(HttpRequestMessage request, string pathToJsonFile)
         {
-            StringBuilder curl = new StringBuilder($"curl -k -X {request.Method} \"{request.RequestUri}\"");
+            StringBuilder curl = new StringBuilder($"curl");
+
+            // Bypass certificate verification when running app against localhost
+            if (EnvironmentName == EnvironmentType.Local)
+            {
+                curl.Append(" -k");
+            }
+
+            curl.Append($" -X {request.Method} \"{request.RequestUri}\"");
 
             foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
             {
@@ -112,7 +120,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             if (request.Content is StringContent)
             {
-                string content = request.Content.ReadAsStringAsync().Result;
+                string content = request.Content.ReadAsStringAsync().Result.Replace("\n", "");
                 string contentWithEscapedDoubleQuotes = JsonConvert.SerializeObject(content);
                 curl.Append($" -d {contentWithEscapedDoubleQuotes}");
             }

@@ -29,6 +29,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             Console.WriteLine("Comparing JSON...\n");
             int maxLines = Math.Max(expectedLines.Length, actualLines.Length);
 
+            // Assume JSONs match until a discrepancy is found
             bool jsonsMatch = true;
 
             for (int i = 0; i < maxLines; i++)
@@ -58,7 +59,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                 }
             }
 
-            if (!jsonsMatch)
+            if (jsonsMatch)
+            {
+                Console.WriteLine("JSONs match!");
+            }
+            else
             {
                 throw new Exception("Actual JSON doesn't match expected JSON!");
             }

@@ -5,8 +5,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         public static TestUser GenerateUser(UserGroup userGroup)
         {
             string appId = Guid.NewGuid().ToString();
+
             string timeNow = DateTime.UtcNow.Ticks.ToString();
-            string traId = timeNow.Substring(timeNow.Length - 9);
+            string first9Digits = timeNow.Substring(timeNow.Length - 9);
+            string traId = "9" + first9Digits.Substring(1); // Make sure traId doesn't have leading 0
+
             string name;
 
             switch (userGroup)
