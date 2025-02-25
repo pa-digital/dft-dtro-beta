@@ -3,7 +3,7 @@
     "data": {
         "source": {
             "actionType": "new",
-            "currentTraOwner": 3300,
+            "currentTraOwner": 586,
             "provision": [
                 {
                     "actionType": "new",
@@ -18,7 +18,7 @@
                                 "direction": "bidirectional",
                                 "externalReference": [
                                     {
-                                        "lastUpdateDate": "2024-08-01 00:00:00",
+                                        "lastUpdateDate": "2024-08-01T00:00:00",
                                         "uniqueStreetReferenceNumber": [
                                             {
                                                 "usrn": 39605836
@@ -62,14 +62,6 @@
                                 "regulationType": "dimensionMaximumWeightStructural"
                             },
                             "isDynamic": false,
-                            "temporaryRegulation": {
-                                "temporaryOverriddenProvision": {
-                                    "actionType": "new",
-                                    "orderReportingPoint": "permanentNoticeOfMaking",
-                                    "provisionDescription": "3 Tonnes Structural Weight Limit, Netherclay Bridge",
-                                    "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A"
-                                }
-                            },
                             "timeZone": "Europe/London"
                         }
                     ]
@@ -78,9 +70,9 @@
             "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
             "section": "All sections",
             "traAffected": [
-                3300
+                586
             ],
-            "traCreator": 3300,
+            "traCreator": 586,
             "troName": "DfT Example - TTRO weight restriction v1, Oct. 2024"
         }
     }

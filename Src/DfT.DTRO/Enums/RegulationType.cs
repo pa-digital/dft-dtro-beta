@@ -3,7 +3,7 @@
 /// <summary>
 /// Indicates instance regulation
 /// </summary>
-public enum RegulationInstanceType
+public enum RegulationType
 {
     /// <summary>
     /// Speed limit value based instance regulation
