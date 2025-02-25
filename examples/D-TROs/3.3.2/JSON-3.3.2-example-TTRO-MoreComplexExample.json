@@ -234,7 +234,7 @@
                             "condition": [
                                 {
                                     "negate": false,
-                                    "RateTable": [
+                                    "rateTable": [
                                         {
                                             "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
                                             "additionalInformation": "http://www.somewhere.something.gov.uk",
@@ -246,7 +246,7 @@
                                                     "maxValueCollection": 7.2000000000000002,
                                                     "minTime": 60,
                                                     "minValueCollection": 1,
-                                                    "RateLine": [
+                                                    "rateLine": [
                                                         {
                                                             "durationEnd": 59,
                                                             "durationStart": 1,
@@ -630,13 +630,13 @@
                                                 },
                                                 {
                                                     "negate": false,
-                                                    "OccupantCondition": {
+                                                    "occupantCondition": {
                                                         "disabledWithPermit": true
                                                     }
                                                 },
                                                 {
                                                     "negate": false,
-                                                    "OccupantCondition": {
+                                                    "occupantCondition": {
                                                         "NumberOfOccupants": {
                                                             "operator": "greaterThan",
                                                             "value": 2
@@ -645,7 +645,7 @@
                                                 },
                                                 {
                                                     "negate": false,
-                                                    "PermitCondition": {
+                                                    "permitCondition": {
                                                         "schemeIdentifier": "ABC123",
                                                         "type": "resident",
                                                         "Authority": {

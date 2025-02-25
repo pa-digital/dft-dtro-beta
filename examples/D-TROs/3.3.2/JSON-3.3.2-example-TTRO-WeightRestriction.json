@@ -3,7 +3,7 @@
     "data": {
         "source": {
             "actionType": "new",
-            "currentTraOwner": 586,
+            "currentTraOwner": 3300,
             "provision": [
                 {
                     "actionType": "new",
@@ -70,9 +70,9 @@
             "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
             "section": "All sections",
             "traAffected": [
-                586
+                3300
             ],
-            "traCreator": 586,
+            "traCreator": 3300,
             "troName": "DfT Example - TTRO weight restriction v1, Oct. 2024"
         }
     }

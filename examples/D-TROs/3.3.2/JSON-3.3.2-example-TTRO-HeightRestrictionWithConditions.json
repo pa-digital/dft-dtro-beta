@@ -33,7 +33,7 @@
                     ],
                     "regulation": [
                         {
-                            "ConditionSet": [
+                            "conditionSet": [
                                 {
                                     "operator": "and",
                                     "conditions": [
