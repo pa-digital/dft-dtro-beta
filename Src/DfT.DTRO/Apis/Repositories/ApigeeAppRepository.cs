@@ -5,12 +5,12 @@ using Newtonsoft.Json;
 
 namespace DfT.DTRO.Apis.Repositories;
 
-public class ApigeeApigeeAppRepository : IApigeeAppRepository
+public class ApigeeAppRepository : IApigeeAppRepository
 {
     
     private readonly IApigeeClient _apigeeClient;
 
-    public ApigeeApigeeAppRepository(IApigeeClient apigeeClient) =>
+    public ApigeeAppRepository(IApigeeClient apigeeClient) =>
         _apigeeClient = apigeeClient;
     
     public async Task<ApigeeDeveloperApp> CreateApp(string developerEmail, ApigeeDeveloperAppInput developerAppInput)
