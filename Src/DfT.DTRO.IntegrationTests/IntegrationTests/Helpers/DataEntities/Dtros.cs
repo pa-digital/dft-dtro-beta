@@ -11,7 +11,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             SqlQueries.TruncateTable("Dtros");
         }
 
-        public static async Task<HttpResponseMessage> CreateDtroFromFileAsync(string exampleFileName, TestUser testUser)
+        public static async Task<HttpResponseMessage> CreateDtroFromFileAsync(string filePath, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -19,8 +19,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "Content-Type", "multipart/form-data" }
             };
 
-            string tempFilePath = GetDtroFileWithTraUpdated(exampleFileName, testUser.TraId);
-            HttpResponseMessage createDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/dtros/createFromFile", headers, pathToJsonFile: tempFilePath);
+            HttpResponseMessage createDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/dtros/createFromFile", headers, pathToJsonFile: filePath);
             return createDtroResponse;
         }
 
@@ -47,20 +46,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return createDtroResponse;
         }
 
-        private static string GetDtroFileWithTraUpdated(string exampleFileName, string traId)
-        {
-            string exampleFilePath = $"{AbsolutePathToDtroExamplesDirectory}/{exampleFileName}";
-            Directory.CreateDirectory($"{AbsolutePathToDtroExamplesTempDirectory}");
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{exampleFileName}";
-            File.Copy(exampleFilePath, tempFilePath, overwrite: true);
-
-            string jsonString = File.ReadAllText(tempFilePath);
-            string jsonWithUpdatedTra = UpdateTraId(jsonString, traId);
-            File.WriteAllText(tempFilePath, jsonWithUpdatedTra);
-            return tempFilePath;
-        }
-
-        public static string UpdateTraId(string jsonString, string traId)
+        public static string UpdateTraIdInDtro(string jsonString, string traId)
         {
             JObject jsonObj = JObject.Parse(jsonString);
             int tradIdAsInt = int.Parse(traId);
