@@ -76,19 +76,20 @@ jobs:
         env:
           ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${{ secrets.INTEGRATION_TEST_DB_NAME }};Username=${{ secrets.INTEGRATION_TEST_DB_USER }};Password=${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}"
         run: |
-          pushd Src/DfT.DTRO
-          dotnet ef database update
-          dotnet run &
-          echo "Waiting for https://0.0.0.0:5001/index.html to be up..."
-          for i in {1..60}; do
-            curl -k --output /dev/null --silent --head --fail https://0.0.0.0:5001/index.html && break
-            echo "Still waiting..."
-            sleep 5
-          done
-          echo "Server is up!"
+          # pushd Src/DfT.DTRO
+          # dotnet ef database update
+          # dotnet run &
+          # echo "Waiting for https://0.0.0.0:5001/index.html to be up..."
+          # for i in {1..60}; do
+          #   curl -k --output /dev/null --silent --head --fail https://0.0.0.0:5001/index.html && break
+          #   echo "Still waiting..."
+          #   sleep 5
+          # done
+          # echo "Server is up!"
 
-          popd
-          ./run_integration_tests.sh
+          # popd
+          # ./run_integration_tests.sh
+          ./ci_scripts/run_integration_tests_against_localhost_on_ci.sh
 
       - name: Upload integration test results
         if: always()
