@@ -11,12 +11,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         public static void DeleteFilesInDirectory(string directoryPath)
         {
-            string[] files = Directory.GetFiles(directoryPath);
-
-            foreach (string file in files)
+            if (Directory.Exists(directoryPath))
             {
-                File.Delete(file);
-                Console.WriteLine($"Deleted file {file}");
+                string[] files = Directory.GetFiles(directoryPath);
+
+                foreach (string file in files)
+                {
+                    File.Delete(file);
+                    Console.WriteLine($"Deleted file {file}");
+                }
             }
         }
     }
