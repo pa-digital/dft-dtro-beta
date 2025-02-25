@@ -25,6 +25,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
         [MemberData(nameof(GetFileNames))]
         public async Task DtroSubmittedFromFileShouldBeSavedCorrectly(string fileName)
         {
+            Console.WriteLine($"\nTesting with file {fileName}...");
             TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
@@ -54,6 +55,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
         [MemberData(nameof(GetFileNames))]
         public async Task DtroSubmittedFromJsonBodyShouldBeSavedCorrectly(string fileName)
         {
+            Console.WriteLine($"\nTesting with file {fileName}...");
             TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
