@@ -100,7 +100,8 @@ jobs:
 
       - name: Format check
         run: |
-          popd
+          echo "Printing current directory!!!!"
+          pwd
           dotnet format
 
       - name: Install .NET analyzers
