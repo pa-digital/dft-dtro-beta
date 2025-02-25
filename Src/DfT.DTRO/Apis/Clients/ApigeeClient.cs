@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using DfT.DTRO.Models.App;
+using DfT.DTRO.Models.Apigee;
 using Google.Apis.Auth.OAuth2;
 using Newtonsoft.Json;
 
@@ -19,15 +19,15 @@ public class ApigeeClient : IApigeeClient
         _secretManagerClient = secretManagerClient;
     }
     
-    public async Task<HttpResponseMessage> CreateApp(AppInput appInput)
+    public async Task<HttpResponseMessage> CreateApp(string developerEmail, ApigeeDeveloperAppInput developerAppInput)
     {
-        var requestUri = $"developers/{appInput.Username}/apps";
-        return await SendRequest(HttpMethod.Post, requestUri, appInput);
+        var requestUri = $"developers/{developerEmail}/apps";
+        return await SendRequest(HttpMethod.Post, requestUri, developerAppInput);
     }
     
     private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string requestUri, object requestMessageContent)
     {
-        string secret = _secretManagerClient.GetSecret("d-tro-dev-db-access");
+        string secret = _secretManagerClient.GetSecret("sa-execution-private-key");
         GoogleCredential credential = GoogleCredential.FromJson(secret).CreateScoped("https://www.googleapis.com/auth/cloud-platform");
         var accessToken = await credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
         var apiUrl = _configuration.GetValue<string>("ApiSettings:ApigeeApiUrl");

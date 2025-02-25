@@ -1,4 +1,5 @@
 ﻿using DfT.DTRO.Apis.Repositories;
+using DfT.DTRO.Models.Apigee;
 using DfT.DTRO.Models.App;
 
 namespace DfT.DTRO.Services;
@@ -6,13 +7,16 @@ namespace DfT.DTRO.Services;
 public class AppService : IAppService
 {
     
-    private readonly IAppRepository _appRepository;
+    private readonly IApigeeAppRepository _apigeeAppRepository;
 
-    public AppService(IAppRepository appRepository) =>
-        _appRepository = appRepository;
+    public AppService(IApigeeAppRepository apigeeAppRepository) =>
+        _apigeeAppRepository = apigeeAppRepository;
     
     public async Task<App> CreateApp(AppInput appInput)
     {
-       return await _appRepository.CreateApp(appInput);
+        var username = appInput.Username;
+        var developerAppInput = JsonHelper.ConvertObject<AppInput, ApigeeDeveloperAppInput>(appInput);
+        var developerApp = await _apigeeAppRepository.CreateApp(username, developerAppInput);
+        return JsonHelper.ConvertObject<ApigeeDeveloperApp, App>(developerApp);
     }
 }

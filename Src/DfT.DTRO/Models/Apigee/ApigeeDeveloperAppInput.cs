@@ -1,10 +1,10 @@
-﻿namespace DfT.DTRO.Models.App;
+﻿namespace DfT.DTRO.Models.Apigee;
 
 /// <summary>
 /// Auth token input.
 /// </summary>
 [DataContract]
-public class AppInput
+public class ApigeeDeveloperAppInput
 {
         
     /// <summary>
@@ -12,11 +12,4 @@ public class AppInput
     /// </summary>
     [DataMember(Name = "name")]
     public string Name { get; set; }
-    
-    /// <summary>
-    /// username.
-    /// </summary>
-    [DataMember(Name = "username")]
-    public string Username { get; set; }
-
 }

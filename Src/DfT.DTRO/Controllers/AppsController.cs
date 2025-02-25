@@ -37,7 +37,7 @@ public class AppsController : ControllerBase
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 200, description: "Ok")]
-    public async Task<IActionResult> CreateApp([FromHeader(Name = "Authorization")][Required] string accessToken, [FromBody] AppInput appInput)
+    public async Task<IActionResult> CreateApp([FromBody] AppInput appInput)
     {
         try
         {
