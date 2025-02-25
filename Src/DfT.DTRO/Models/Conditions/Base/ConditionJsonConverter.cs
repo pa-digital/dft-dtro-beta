@@ -26,12 +26,12 @@ public class ConditionJsonConverter : JsonConverter<Condition>
         }
 
         if (jsonObject.ContainsKey("roadType") ||
-            jsonObject.ContainsKey("RoadCondition"))
+            jsonObject.ContainsKey("roadCondition"))
         {
             return json.Deserialize<RoadCondition>(options);
         }
 
-        if (jsonObject.ContainsKey("NumbersOfOccupants") || jsonObject.ContainsKey("disabledWithPermit"))
+        if (jsonObject.ContainsKey("numbersOfOccupants") || jsonObject.ContainsKey("disabledWithPermit"))
         {
             return json.Deserialize<OccupantCondition>(options);
         }
@@ -54,12 +54,12 @@ public class ConditionJsonConverter : JsonConverter<Condition>
             return json.Deserialize<PermitCondition>(options);
         }
 
-        if (jsonObject.ContainsKey("VehicleCharacteristics"))
+        if (jsonObject.ContainsKey("vehicleCharacteristics"))
         {
             return json.Deserialize<VehicleCharacteristic>(options);
         }
 
-        if (jsonObject.ContainsKey("TimeValidity"))
+        if (jsonObject.ContainsKey("timeValidity"))
         {
             return json.Deserialize<TimeValidity>(options);
         }

@@ -9,7 +9,6 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
     public List<SemanticValidationError> Validate(DtroSubmit dtroSubmit)
     {
         var errors = new List<SemanticValidationError>();
-
         var geometries = dtroSubmit
             .Data
             .GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
