@@ -1,7 +1,7 @@
+using DfT.DTRO.Apis.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Scrutor;
 
 namespace DfT.DTRO;
 
@@ -55,6 +55,7 @@ public class Startup
             .AsImplementedInterfaces()
             .WithSingletonLifetime()
         );
+        services.AddScoped<SecretManagerClient>();
         services.AddSingleton<LoggingExtension>();
         services.TryAddSingleton<ISystemClock, SystemClock>();
         services.AddHttpClient();

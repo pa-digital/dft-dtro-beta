@@ -10,6 +10,6 @@ public interface IAppService
     /// </summary>
     /// <param name="parameters">Parameters passed</param>
     /// <returns>App</returns>
-    Task<App> CreateApp(AppInput appInput, string accessToken);
+    Task<App> CreateApp(AppInput appInput);
     
 }

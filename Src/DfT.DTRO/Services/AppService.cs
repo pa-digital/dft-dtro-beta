@@ -11,8 +11,8 @@ public class AppService : IAppService
     public AppService(IAppRepository appRepository) =>
         _appRepository = appRepository;
     
-    public async Task<App> CreateApp(AppInput appInput, string accessToken)
+    public async Task<App> CreateApp(AppInput appInput)
     {
-       return await _appRepository.CreateApp(appInput, accessToken);
+       return await _appRepository.CreateApp(appInput);
     }
 }

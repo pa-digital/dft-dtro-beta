@@ -41,7 +41,7 @@ public class AppsController : ControllerBase
     {
         try
         {
-            App app = await _appService.CreateApp(appInput, accessToken);
+            App app = await _appService.CreateApp(appInput);
             _logger.LogInformation($"'{nameof(CreateApp)}' method called ");
             _loggingExtension.LogInformation(nameof(CreateApp), RouteTemplates.AppsCreate, $"'{nameof(CreateApp)}' method called.");
             return Ok(app);

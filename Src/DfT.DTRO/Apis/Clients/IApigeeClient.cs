@@ -11,6 +11,6 @@ public interface IApigeeClient
     /// <param name="appInput"></param>
     /// <param name="parameters">Parameters passed</param>
     /// <returns>App</returns>
-    Task<HttpResponseMessage> CreateApp(AppInput appInput, string accessToken);
+    Task<HttpResponseMessage> CreateApp(AppInput appInput);
     
 }
