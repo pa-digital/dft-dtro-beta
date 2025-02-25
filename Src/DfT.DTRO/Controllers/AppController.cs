@@ -9,10 +9,10 @@ namespace DfT.DTRO.Controllers;
 [Consumes("application/json")]
 [Produces("application/json")]
 [Tags("Apps")]
-public class AppsController : ControllerBase
+public class AppController : ControllerBase
 {
     private readonly IAppService _appService;
-    private readonly ILogger<AppsController> _logger;
+    private readonly ILogger<AppController> _logger;
     private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
@@ -21,7 +21,7 @@ public class AppsController : ControllerBase
     /// <param name="appService">An <see cref="IAppService"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{AppsController}"/> instance.</param>
     /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
-    public AppsController(IAppService appService, ILogger<AppsController> logger, LoggingExtension loggingExtension) {
+    public AppController(IAppService appService, ILogger<AppController> logger, LoggingExtension loggingExtension) {
         _appService = appService;
         _logger = logger;
         _loggingExtension = loggingExtension;
