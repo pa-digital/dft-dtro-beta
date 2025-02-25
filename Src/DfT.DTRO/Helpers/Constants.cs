@@ -24,9 +24,9 @@ public static class Constants
 
     public static IEnumerable<string> ConditionTypes => typeof(ConditionType).GetDisplayNames<ConditionType>();
 
-    public static IEnumerable<string> RegulationInstances => typeof(RegulationType).GetDisplayNames<RegulationType>();
-
     public static IEnumerable<string> RegulationTypes => typeof(RegulationType).GetDisplayNames<RegulationType>().ToList();
+
+    public static IEnumerable<string> RegulationInstanceTypes => typeof(RegulationInstanceType).GetDisplayNames<RegulationInstanceType>().ToList();
 
     public static IEnumerable<string> PreviousConditionTypes => ConditionTypes.Select(conditionType => conditionType.ToBackwardCompatibility(new SchemaVersion("3.2.4")));
 

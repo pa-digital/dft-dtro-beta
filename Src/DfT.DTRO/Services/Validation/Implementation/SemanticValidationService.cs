@@ -221,32 +221,4 @@ public class SemanticValidationService : ISemanticValidationService
             }
         }
     }
-
-    private async Task ValidateReferencedTroId(
-        JObject data,
-        SchemaVersion dtroSchemaVersion,
-        List<SemanticValidationError> errors)
-    {
-        if (dtroSchemaVersion < "3.1.2")
-        {
-            return;
-        }
-
-        var referencedDtroIds =
-            (data["source"]?["crossRefTro"] as JArray ?? new JArray())
-            .Select(id => new Guid((string)id));
-
-        foreach (Guid dtroId in referencedDtroIds)
-        {
-            if (!await _dtroDal.DtroExistsAsync(dtroId))
-            {
-                errors.Add(
-                    new SemanticValidationError
-                    {
-                        Message = $"Referenced TRO with id '{dtroId}' does not exist.",
-                        Path = "source.reference"
-                    });
-            }
-        }
-    }
 }

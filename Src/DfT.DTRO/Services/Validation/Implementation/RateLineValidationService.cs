@@ -43,7 +43,7 @@ public class RateLineValidationService : IRateLineValidationService
 
         var rateLines = rateLineCollections
             .SelectMany(expandoObject => expandoObject
-                .GetValueOrDefault<IList<object>>("RateLine")
+                .GetValueOrDefault<IList<object>>("rateLine")
                 .Cast<ExpandoObject>())
             .ToList();
 

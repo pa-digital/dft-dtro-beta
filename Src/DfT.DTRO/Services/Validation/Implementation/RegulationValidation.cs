@@ -50,7 +50,7 @@ public class RegulationValidation : IRegulationValidation
 
 
         var existingRegulations = regulations
-        .Where(regulation => Constants.RegulationInstances.Any(regulation.HasField))
+        .Where(regulation => Constants.RegulationInstanceTypes.Any(regulation.HasField))
         .ToList();
 
         existingRegulations = existingRegulations
@@ -59,7 +59,7 @@ public class RegulationValidation : IRegulationValidation
 
         foreach (var existingRegulation in existingRegulations)
         {
-            var multipleRegulations = Constants.RegulationInstances.Where(existingRegulation.HasField).ToList();
+            var multipleRegulations = Constants.RegulationInstanceTypes.Where(existingRegulation.HasField).ToList();
             if (multipleRegulations.Count > 1)
             {
                 SemanticValidationError newError = new()
@@ -74,14 +74,14 @@ public class RegulationValidation : IRegulationValidation
                 return errors;
             }
 
-            foreach (var regulationType in Constants.RegulationInstances.Where(existingRegulation.HasField))
+            foreach (var regulationType in Constants.RegulationInstanceTypes.Where(existingRegulation.HasField))
             {
                 ExpandoObject selectedRegulation;
                 string passedInType;
                 bool isValidType;
                 switch (regulationType)
                 {
-                    case "SpeedLimitValueBased":
+                    case "speedLimitValueBased":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
                         var mphValue = selectedRegulation.GetValueOrDefault<int>(Constants.MphValue);
                         if (mphValue.GetType() != typeof(int) || !Constants.MphValues.Any(mphValue.Equals))
@@ -112,7 +112,7 @@ public class RegulationValidation : IRegulationValidation
                             errors.Add(newError);
                         }
                         break;
-                    case "SpeedLimitProfileBased":
+                    case "speedLimitProfileBased":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
                         passedInType = selectedRegulation.GetValueOrDefault<string>(Constants.Type);
                         isValidType = Constants.SpeedLimitProfileTypes.Any(passedInType.Equals);
@@ -128,7 +128,7 @@ public class RegulationValidation : IRegulationValidation
                             errors.Add(newError);
                         }
                         break;
-                    case "GeneralRegulation":
+                    case "generalRegulation":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
                         passedInType = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationType);
                         isValidType = Constants.RegulationTypes.Any(passedInType.Equals);
@@ -144,7 +144,7 @@ public class RegulationValidation : IRegulationValidation
                             errors.Add(newError);
                         }
                         break;
-                    case "OffListRegulation":
+                    case "offListRegulation":
                         selectedRegulation = existingRegulation.GetValueOrDefault<ExpandoObject>(regulationType);
                         var regulationFullText = selectedRegulation.GetValueOrDefault<string>(Constants.RegulationFullText);
                         if (string.IsNullOrEmpty(regulationFullText))
