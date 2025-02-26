@@ -72,6 +72,13 @@ jobs:
         run: |
           ./Src/DfT.DTRO.IntegrationTests/ci_scripts/run_integration_tests_against_localhost_on_ci.sh
 
+      - name: Upload integration test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Integration test results
+          path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.trx
+
       - name: Format check
         run: dotnet format
 
