@@ -47,7 +47,7 @@ public class DtroMappingService : IDtroMappingService
                 .SelectMany(it => it.GetListOrDefault("condition".ToBackwardCompatibility(dtro.SchemaVersion)) ?? Enumerable.Empty<object>())
                 .Where(it => it is not null)
                 .OfType<ExpandoObject>()
-                .Select(it => it.GetExpandoOrDefault("TimeValidity".ToBackwardCompatibility(dtro.SchemaVersion)))
+                .Select(it => it.GetExpandoOrDefault("timeValidity".ToBackwardCompatibility(dtro.SchemaVersion)))
                 .Where(it => it is not null)
                 .ToList();
             }
@@ -114,7 +114,7 @@ public class DtroMappingService : IDtroMappingService
                 var provisions = dtro.Data.GetValueOrDefault<IList<object>>("source.provision".ToBackwardCompatibility(dtro.SchemaVersion));
                 if (provisions == null)
                 {
-                    _loggingExtension.LogError(nameof(MapToSearchResult), "", "Error: 'Source.provision' is null or not found.", "");
+                    _loggingExtension.LogError(nameof(MapToSearchResult), "", "Error: 'source.provision' is null or not found.", "");
                     continue;
                 }
 
@@ -161,7 +161,7 @@ public class DtroMappingService : IDtroMappingService
                 .SelectMany(it => it.GetListOrDefault("condition".ToBackwardCompatibility(dtro.SchemaVersion)) ?? Enumerable.Empty<object>())
                 .Where(it => it is not null)
                 .OfType<ExpandoObject>()
-                .Select(it => it.GetExpandoOrDefault("TimeValidity".ToBackwardCompatibility(dtro.SchemaVersion)))
+                .Select(it => it.GetExpandoOrDefault("timeValidity".ToBackwardCompatibility(dtro.SchemaVersion)))
                 .Where(it => it is not null)
                 .ToList();
             }
@@ -265,7 +265,7 @@ public class DtroMappingService : IDtroMappingService
         {
             sourceDetails["actionType"] = sourceActionType.GetDisplayName();
 
-            if (sourceDetails.TryGetValue("Provision", out var provisionList) && provisionList is IEnumerable<object> provisions)
+            if (sourceDetails.TryGetValue("provision", out var provisionList) && provisionList is IEnumerable<object> provisions)
             {
                 foreach (var provision in provisions)
                 {
@@ -333,7 +333,7 @@ public class DtroMappingService : IDtroMappingService
         dtro.VehicleTypes = regulations.SelectMany(it => it.GetListOrDefault("condition".ToBackwardCompatibility(schemaVersion)) ?? Enumerable.Empty<object>())
             .Where(it => it is not null)
             .OfType<ExpandoObject>()
-            .Select(it => it.GetExpandoOrDefault("VehicleCharacteristics".ToBackwardCompatibility(schemaVersion)))
+            .Select(it => it.GetExpandoOrDefault("vehicleCharacteristics".ToBackwardCompatibility(schemaVersion)))
             .Where(it => it is not null)
             .SelectMany(it => it.GetListOrDefault("vehicleType") ?? Enumerable.Empty<object>())
             .OfType<string>()
@@ -353,7 +353,7 @@ public class DtroMappingService : IDtroMappingService
             .SelectMany(it => it.GetListOrDefault("condition".ToBackwardCompatibility(schemaVersion)) ?? Enumerable.Empty<object>())
             .Where(it => it is not null)
             .OfType<ExpandoObject>()
-            .Select(it => it.GetExpandoOrDefault("TimeValidity".ToBackwardCompatibility(schemaVersion)))
+            .Select(it => it.GetExpandoOrDefault("timeValidity".ToBackwardCompatibility(schemaVersion)))
             .Where(it => it is not null)
             .ToList();
         }

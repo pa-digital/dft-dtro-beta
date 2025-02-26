@@ -188,7 +188,7 @@
                         {
                             "_comment": "First location - Two versions of same regulated location - version 2",
                             "description": "East Reach, Taunton, northside / eastbound, between 10 metres east from the junction with Tancred Street to 15 metres west of the junction with South Street {approximate - polygon}",
-                            "Geometry": {
+                            "polygon": {
                                 "externalReference": [
                                     {
                                         "lastUpdateDate": "2024-10-01T00:00:00",
@@ -199,7 +199,7 @@
                                         ]
                                     }
                                 ],
-                                "geometry": "SRID=27700;POLYGON((323158 124529, 323156 124529, 323587 125149,323589 125149,323158 124529))",
+                                "polygon": "SRID=27700;POLYGON((323158 124529, 323156 124529, 323587 125149,323589 125149,323158 124529))",
                                 "version": 2
                             },
                             "type": "regulationLocation"
@@ -239,7 +239,7 @@
                                             "_comment": "trial rates table, with increments £1 first hour, £2 cumulative for first two hours, £7.20 thereafter, between 9am and 8pm",
                                             "additionalInformation": "http://www.somewhere.something.gov.uk",
                                             "type": "hourly",
-                                            "RateLineCollection": [
+                                            "rateLineCollection": [
                                                 {
                                                     "applicableCurrency": "GBP",
                                                     "maxTime": 660,
@@ -431,7 +431,7 @@
                                 }
                             ],
                             "isDynamic": false,
-                            "SpeedLimitValueBased": {
+                            "speedLimitValueBased": {
                                 "type": "maximumSpeedLimit",
                                 "mphValue": 40
                             },
@@ -543,7 +543,7 @@
                                 }
                             ],
                             "isDynamic": false,
-                            "SpeedLimitProfileBased": {
+                            "speedLimitProfileBased": {
                                 "type": "nationalSpeedLimitSingleCarriageway"
                             },
                             "timeZone": "Europe/London"
@@ -637,7 +637,7 @@
                                                 {
                                                     "negate": false,
                                                     "occupantCondition": {
-                                                        "NumberOfOccupants": {
+                                                        "numberOfOccupants": {
                                                             "operator": "greaterThan",
                                                             "value": 2
                                                         }
@@ -648,7 +648,7 @@
                                                     "permitCondition": {
                                                         "schemeIdentifier": "ABC123",
                                                         "type": "resident",
-                                                        "Authority": {
+                                                        "authority": {
                                                             "name": "Somerset Council"
                                                         }
                                                     }
@@ -700,23 +700,23 @@
                                                         ]
                                                     },
                                                     {
-                                                        "ChangeableTimePeriodStart": [
+                                                        "changeableTimePeriodStart": [
                                                             {
                                                                 "startType": "external",
-                                                                "ChangeableTimePeriodSource": {
+                                                                "changeableTimePeriodSource": {
                                                                     "definition": "Source of start of non-school day periods, in 'Any' county",
-                                                                    "source": "http:\\www.schooldiaries.com"
+                                                                    "source": "http://www.schooldiaries.com"
                                                                 }
                                                             }
                                                         ]
                                                     },
                                                     {
-                                                        "ChangeableTimePeriodEnd": [
+                                                        "changeableTimePeriodEnd": [
                                                             {
                                                                 "startType": "external",
-                                                                "ChangeableTimePeriodSource": {
+                                                                "changeableTimePeriodSource": {
                                                                     "definition": "Source of end of non-school day periods, in 'Any' county",
-                                                                    "source": "http:\\www.schooldiaries.com"
+                                                                    "source": "http://www.schooldiaries.com"
                                                                 }
                                                             }
                                                         ]
