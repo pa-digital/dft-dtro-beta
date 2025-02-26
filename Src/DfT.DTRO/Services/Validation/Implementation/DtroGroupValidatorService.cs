@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.Services.Validation.Implementation;
+﻿using Newtonsoft.Json;
+
+namespace DfT.DTRO.Services.Validation.Implementation;
 
 /// <inheritdoc cref="IDtroGroupValidatorService"/>
 public class DtroGroupValidatorService : IDtroGroupValidatorService
@@ -74,14 +76,28 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToSchemaVersion = error };
         }
 
-        var jsonSchemaAsString = schema.Template.ToIndentedJsonString();
-        var dtroSubmitJson = dtroSubmit.Data.ToIndentedJsonString();
+        // Temporarily remove schema validation logic while we improve it
+        // var jsonSchemaAsString = schema.Template.ToIndentedJsonString();
+        // var dtroSubmitJson = dtroSubmit.Data.ToIndentedJsonString();
+        // var requestComparedToSchema = _jsonSchemaValidationService.ValidateSchema(jsonSchemaAsString, dtroSubmitJson);
+        // if (requestComparedToSchema.Count > 0)
+        // {
+        //     return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
+        // }
 
-
-        var requestComparedToSchema = _jsonSchemaValidationService.ValidateSchema(jsonSchemaAsString, dtroSubmitJson);
-        if (requestComparedToSchema.Count > 0)
+        // Validation of camel case for schemas >= 3.3.2
+        CasingValidationService casingValidationService = new ();
+        if (casingValidationService.SchemaVersionEnforcesCamelCase(dtroSubmit.SchemaVersion))
         {
-            return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
+            List<string> invalidProperties = casingValidationService.ValidateCamelCase(dtroSubmit.Data);
+            if (invalidProperties.Count > 0)
+            {
+                string message = $"All property names must conform to camel case naming conventions. The following properties violate this: [{string.Join(", ", invalidProperties)}]";
+                throw new CamelCaseException(message);
+            }
+
+            // Here, we turn all the Dtro object keys into Pascal case
+            dtroSubmit.Data = casingValidationService.ConvertKeysToPascalCase(dtroSubmit.Data);
         }
 
         var errors = _sourceValidationService.Validate(dtroSubmit, traCode);
