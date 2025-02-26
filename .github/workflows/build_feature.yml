@@ -44,7 +44,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "8.x"
+          dotnet-version: '8.x'
 
       - name: Install EF Core Tools
         run: dotnet tool install --global dotnet-ef --version 8.0.0
