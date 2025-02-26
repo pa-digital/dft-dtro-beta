@@ -60,7 +60,7 @@ jobs:
           pushd Src/Dft.DTRO.Tests
           dotnet test --verbosity normal
           popd
-
+      
       - name: Wait for PostgreSQL to be ready
         run: |
           for i in {1..10}; do
