@@ -18,7 +18,7 @@ public class Application
     /// <summary>
     /// Application created date
     /// </summary>
-    public DateTime Created { get; set; }
+    public DateTime Created { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// Application last updated date
@@ -36,11 +36,6 @@ public class Application
     public string Status { get; set; }
 
     /// <summary>
-    /// Application types
-    /// </summary>
-    public List<ApplicationType> ApplicationTypes { get; set; }
-
-    /// <summary>
     /// Application rule templates
     /// </summary>
     public List<RuleTemplate> RuleTemplates { get; set; }
@@ -55,4 +50,18 @@ public class Application
     /// Application D-TROs
     /// </summary>
     public List<DTRO> Dtros { get; set; }
+
+    public Guid PurposeId { get; set; }  
+    public ApplicationPurpose Purpose { get; set; }
+
+    public Guid UserId { get; set; }
+    public User User { get; set; }
+
+    [Column("TrafficRegulationAuthorityId")]
+    [ForeignKey("TrafficRegulationAuthority")]
+    public Guid TrafficRegulationAuthorityId { get; set; }
+    public TrafficRegulationAuthority TrafficRegulationAuthority { get; set; }
+
+    public Guid ApplicationTypeId { get; set; }
+    public ApplicationType ApplicationType { get; set; }
 }
