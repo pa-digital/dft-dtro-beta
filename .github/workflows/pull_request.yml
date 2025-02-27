@@ -51,9 +51,7 @@ jobs:
 
       - name: Unit tests
         run: |
-          pushd Src/Dft.DTRO.Tests
-          dotnet test --verbosity normal
-          popd
+          ./run_unit_tests_with_coverage.sh
 
       - name: Wait for PostgreSQL to be ready
         run: |
