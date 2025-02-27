@@ -21,6 +21,7 @@ namespace Dft.DTRO.Tests.DALTests
 
         private void SeedDatabase()
         {
+            var user0 = new User { Id = Guid.NewGuid(), Email = "admin@test.com", IsCentralServiceOperator = true };
             var user1 = new User { Id = Guid.NewGuid(), Email = "user@test.com" };
             var user2 = new User { Id = Guid.NewGuid(), Email = "anotheruser@test.com" };
 
@@ -34,7 +35,7 @@ namespace Dft.DTRO.Tests.DALTests
             var purposeB = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeB" };
             var purposeC = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeC" };
 
-            _context.Users.AddRange(user1, user2);
+            _context.Users.AddRange(user0, user1, user2);
             _context.TrafficRegulationAuthorities.AddRange(tra1, tra2);
             _context.ApplicationTypes.AddRange(typeA, typeB);
             _context.ApplicationPurposes.AddRange(purposeA, purposeB);
@@ -69,6 +70,15 @@ namespace Dft.DTRO.Tests.DALTests
                     TrafficRegulationAuthority = tra1,
                     Purpose = purposeC
                 },
+                new Application
+                {
+                    Id = Guid.NewGuid(),
+                    Nickname = "Yet Another App",
+                    User = user0,
+                    ApplicationType = typeA,
+                    TrafficRegulationAuthority = tra1,
+                    Status = "pending"
+                }
             });
 
             _context.SaveChanges();
@@ -108,7 +118,7 @@ namespace Dft.DTRO.Tests.DALTests
         [Fact]
         public void GetApplicationDetailsShouldReturnApplicationDetailsWhenAppExists()
         {
-            var app = _context.Applications.First();
+            var app = _context.Applications.Include(application => application.Purpose).First();
             var appId = app.Id.ToString();
 
             var details = _applicationDal.GetApplicationDetails(appId);
@@ -150,6 +160,20 @@ namespace Dft.DTRO.Tests.DALTests
         {
             _context.Database.EnsureDeleted();
             _context.Dispose();
+        }
+
+        [Fact]
+        public void GetPendingApplications_ShouldReturnEmptyWhenNoAppsForUsers()
+        {
+            var apps = _applicationDal.GetApplicationList("nonexistent@test.com");
+            Assert.Empty(apps);
+        }
+
+        [Fact]
+        public void GetPendingApplications_ShouldReturnPendingApplicationForUserAdminUser()
+        {
+            var apps = _applicationDal.GetPendingApplications("admin@test.com");
+            Assert.Equal(1, apps.Count);
         }
     }
 }

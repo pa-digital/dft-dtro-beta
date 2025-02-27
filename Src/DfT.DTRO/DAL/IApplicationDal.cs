@@ -7,5 +7,6 @@ namespace DfT.DTRO.DAL
         bool CheckApplicationNameDoesNotExist(string appName);
         ApplicationDetailsDto GetApplicationDetails(string appId);
         List<ApplicationListDto> GetApplicationList(string userId);
+        List<ApplicationListDto> GetPendingApplications(string userId);
     }
 }

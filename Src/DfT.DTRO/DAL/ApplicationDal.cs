@@ -1,9 +1,14 @@
 namespace DfT.DTRO.DAL
 
 {
-    public class ApplicationDal(DtroContext context) : IApplicationDal
+    public class ApplicationDal : IApplicationDal
     {
-        private readonly DtroContext _context = context;
+        private readonly DtroContext _context;
+
+        public ApplicationDal(DtroContext context)
+        {
+            _context = context;
+        }
 
         public bool CheckApplicationNameDoesNotExist(string appName)
         {
@@ -55,5 +60,23 @@ namespace DfT.DTRO.DAL
                 .ToList();
         }
 
+        public List<ApplicationListDto> GetPendingApplications(string userId)
+        {
+            return _context
+                .Applications
+                .Include(application => application.User)
+                .Include(application => application.TrafficRegulationAuthority)
+                .Include(application => application.ApplicationType)
+                .Where(application => application.User.Email == userId)
+                .Where(application => application.User.IsCentralServiceOperator)
+                .Where(application => application.Status == "pending")
+                .Select(application => new ApplicationListDto
+                {
+                    Id = application.Id,
+                    Name = application.Nickname,
+                    Type = application.ApplicationType.Name,
+                    Tra = application.TrafficRegulationAuthority.Name
+                }).ToList();
+        }
     }
 }

@@ -1,6 +1,6 @@
 using Dft.DTRO.Tests.Fixtures;
 
-public class ApplicationControllerTests  : IClassFixture<ApplicationControllerTestFixture>
+public class ApplicationControllerTests : IClassFixture<ApplicationControllerTestFixture>
 {
     private readonly Mock<IApplicationService> _mockApplicationService;
     private readonly ApplicationController _controller;
@@ -115,5 +115,40 @@ public class ApplicationControllerTests  : IClassFixture<ApplicationControllerTe
         var result = _controller.GetApplications();
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
+    }
+
+    [Fact]
+    public void GetPendingApplicationsValidUserReturnsOk()
+    {
+        var applicationListDtos = new List<ApplicationListDto>
+        {
+            new ApplicationListDto { Id = Guid.NewGuid(), Name = "Yet Another App", Type = "Test" }
+        };
+        _mockApplicationService
+            .Setup(service => service
+                .GetPendingApplications(It.IsAny<string>()))
+            .Returns(applicationListDtos);
+        var result = _controller.GetPendingApplications();
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+    }
+
+    [Fact]
+    public void GetPendingApplicationsReturnsBadRequestWhenNoneFound()
+    {
+        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
+
+        var mockHttpContext = new Mock<HttpContext>();
+        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
+        _controller.ControllerContext = new ControllerContext()
+        {
+            HttpContext = mockHttpContext.Object
+        };
+
+        _mockApplicationService.Setup(service => service.GetPendingApplications(userId));
+
+        var result = _controller.GetPendingApplications();
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(400, badRequestResult.StatusCode);
     }
 }

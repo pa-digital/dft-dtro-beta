@@ -5,7 +5,7 @@ public static class RouteTemplates
     // Auth
     public const string AuthBase = "/oauth";
     public const string AuthGetToken = AuthBase + "/token";
-    
+
     // Dtros
     public const string DtrosBase = "/dtros";
     public const string DtrosCreateFromFile = DtrosBase + "/createFromFile";
@@ -68,7 +68,7 @@ public static class RouteTemplates
     public const string SystemConfigBase = "/systemConfig";
     public const string SystemConfigFind = SystemConfigBase;
     public const string SystemConfigUpdateFromBody = SystemConfigBase + "/updateFromBody";
-    
+
     // Tras
     public const string TrasBase = "/tras";
     public const string TrasFindAll = TrasBase;
@@ -78,5 +78,6 @@ public static class RouteTemplates
     public const string ValidateApplicationName = ApplicationsBase + "/validateName";
     public const string GetApplicationDetails = ApplicationsBase + "/details";
     public const string GetApplications = ApplicationsBase + "/list";
+    public const string GetPendingApplications = ApplicationsBase + "/list" + "/pending";
 }
 
