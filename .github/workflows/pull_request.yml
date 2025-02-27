@@ -53,6 +53,13 @@ jobs:
         run: |
           ./run_unit_tests_with_coverage.sh
 
+      - name: Upload unit test coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Unit test coverage report
+          path: TestReports/UnitTests
+
       - name: Wait for PostgreSQL to be ready
         run: |
           for i in {1..10}; do
