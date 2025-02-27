@@ -24,7 +24,7 @@ public class AuthClient : IAuthClient
         var password = authTokenInput.Password;
         requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", 
             Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}")));
-        requestMessage.Content = new FormUrlEncodedContent([new KeyValuePair<string, string>("grant_type", "client_credentials")]);;
+        requestMessage.Content = new FormUrlEncodedContent([new KeyValuePair<string, string>("grant_type", "client_credentials")]);
         return await _httpClient.SendAsync(requestMessage);
     }
 }

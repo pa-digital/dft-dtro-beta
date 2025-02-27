@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
+using DfT.DTRO.Apis.Consts;
 using DfT.DTRO.Models.Apigee;
 using Google.Apis.Auth.OAuth2;
 using Newtonsoft.Json;
@@ -27,8 +28,8 @@ public class ApigeeClient : IApigeeClient
     
     private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string requestUri, object requestMessageContent)
     {
-        string secret = _secretManagerClient.GetSecret("sa-execution-private-key");
-        GoogleCredential credential = GoogleCredential.FromJson(secret).CreateScoped("https://www.googleapis.com/auth/cloud-platform");
+        string secret = _secretManagerClient.GetSecret(ApiConsts.SaExecutionPrivateKeySecretName);
+        GoogleCredential credential = GoogleCredential.FromJson(secret).CreateScoped(ApiConsts.GoogleApisAuthScope);
         var accessToken = await credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
         var apiUrl = _configuration.GetValue<string>("ApiSettings:ApigeeApiUrl");
         var requestMessage = new HttpRequestMessage(method, $"{apiUrl}{requestUri}");
