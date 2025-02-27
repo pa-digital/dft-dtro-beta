@@ -54,4 +54,7 @@ public class DtroEventSearch
 
     [DataMember(Name = "regulationEnd")]
     public ValueCondition<DateTime> RegulationEnd { get; set; }
+    
+    [DataMember(Name = "eventType")]
+    public string EventType { get; set; }
 }
