@@ -60,14 +60,14 @@ namespace DfT.DTRO.DAL
                 .ToList();
         }
 
-        public List<ApplicationListDto> GetPendingApplications(string userId)
+        public PaginatedResult<ApplicationListDto> GetPendingApplications(ApplicationRequest request)
         {
-            return _context
+            IQueryable<ApplicationListDto> query = _context
                 .Applications
                 .Include(application => application.User)
                 .Include(application => application.TrafficRegulationAuthority)
                 .Include(application => application.ApplicationType)
-                .Where(application => application.User.Email == userId)
+                .Where(application => application.User.Email == request.UserId)
                 .Where(application => application.User.IsCentralServiceOperator)
                 .Where(application => application.Status == "pending")
                 .Select(application => new ApplicationListDto
@@ -76,7 +76,14 @@ namespace DfT.DTRO.DAL
                     Name = application.Nickname,
                     Type = application.ApplicationType.Name,
                     Tra = application.TrafficRegulationAuthority.Name
-                }).ToList();
+                });
+
+            IQueryable<ApplicationListDto> paginatedQuery = query
+                .OrderBy(dto => dto.Id)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize);
+
+            return new PaginatedResult<ApplicationListDto>(paginatedQuery.ToList(), paginatedQuery.Count());
         }
     }
 }

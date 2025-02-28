@@ -1,5 +1,3 @@
-using DfT.DTRO.Models.Pagination;
-
 namespace DfT.DTRO.Models.Filtering;
 
 public class DtroSearch : PaginatedRequest

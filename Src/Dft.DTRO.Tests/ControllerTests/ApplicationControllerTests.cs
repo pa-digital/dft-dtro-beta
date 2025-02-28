@@ -1,4 +1,6 @@
 using Dft.DTRO.Tests.Fixtures;
+using DfT.DTRO.Models.Filtering;
+using DfT.DTRO.Models.Pagination;
 
 public class ApplicationControllerTests : IClassFixture<ApplicationControllerTestFixture>
 {
@@ -120,35 +122,85 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
     [Fact]
     public void GetPendingApplicationsValidUserReturnsOk()
     {
-        var applicationListDtos = new List<ApplicationListDto>
+        var request = new ApplicationRequest { UserId = "admin@test.com", Page = 1, PageSize = 1 };
+
+        var applications = new List<ApplicationListDto>
         {
-            new ApplicationListDto { Id = Guid.NewGuid(), Name = "Yet Another App", Type = "Test" }
+            new() { Id = Guid.NewGuid(), Name = "Yet Another App", Type = "Test" }
         };
+
         _mockApplicationService
-            .Setup(service => service
-                .GetPendingApplications(It.IsAny<string>()))
-            .Returns(applicationListDtos);
-        var result = _controller.GetPendingApplications();
-        var okResult = Assert.IsType<OkObjectResult>(result);
+            .Setup(it => it.GetPendingApplications(request))
+            .Returns(() => new PaginatedResponse<ApplicationListDto>(applications, 1, applications.Count));
+
+        var actual = _controller.GetPendingApplications(request);
+        var okResult = Assert.IsType<OkObjectResult>(actual.Result);
         Assert.Equal(200, okResult.StatusCode);
     }
 
     [Fact]
-    public void GetPendingApplicationsReturnsBadRequestWhenNoneFound()
+    public void GetPendingApplicationsThrowsArgumentNullException()
     {
+        var request = new ApplicationRequest { UserId = "wrong@test.com", Page = 1, PageSize = 1 };
         var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
 
         var mockHttpContext = new Mock<HttpContext>();
         mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
-        _controller.ControllerContext = new ControllerContext()
+        _controller.ControllerContext = new ControllerContext
         {
             HttpContext = mockHttpContext.Object
         };
 
-        _mockApplicationService.Setup(service => service.GetPendingApplications(userId));
+        _mockApplicationService
+            .Setup(service => service.GetPendingApplications(request))
+            .Throws(() => new ArgumentNullException());
 
-        var result = _controller.GetPendingApplications();
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(400, badRequestResult.StatusCode);
+        var actual = _controller.GetPendingApplications(request);
+        var requestResult = Assert.IsType<BadRequestObjectResult>(actual.Result);
+        Assert.Equal(400, requestResult.StatusCode);
+    }
+
+    [Fact]
+    public void GetPendingApplicationsThrowsInvalidOperationException()
+    {
+        var request = new ApplicationRequest { UserId = "wrong@test.com", Page = 1, PageSize = 1 };
+        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
+
+        var mockHttpContext = new Mock<HttpContext>();
+        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = mockHttpContext.Object
+        };
+
+        _mockApplicationService
+            .Setup(service => service.GetPendingApplications(request))
+            .Throws(() => new InvalidOperationException());
+
+        var actual = _controller.GetPendingApplications(request);
+        var requestResult = Assert.IsType<ObjectResult>(actual.Result);
+        Assert.Equal(500, requestResult.StatusCode);
+    }
+
+    [Fact]
+    public void GetPendingApplicationsThrowsException()
+    {
+        var request = new ApplicationRequest { UserId = "wrong@test.com", Page = 1, PageSize = 1 };
+        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
+
+        var mockHttpContext = new Mock<HttpContext>();
+        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = mockHttpContext.Object
+        };
+
+        _mockApplicationService
+            .Setup(service => service.GetPendingApplications(request))
+            .Throws(() => new Exception());
+
+        var actual = _controller.GetPendingApplications(request);
+        var requestResult = Assert.IsType<ObjectResult>(actual.Result);
+        Assert.Equal(500, requestResult.StatusCode);
     }
 }

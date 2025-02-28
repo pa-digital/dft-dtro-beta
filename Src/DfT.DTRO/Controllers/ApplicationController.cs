@@ -143,17 +143,22 @@ namespace DfT.DTRO.Controllers
         /// <response code="200">Valid user ID</response>
         /// <response code="400">Invalid or empty parameters, or no matching user</response>
         /// <response code="500">Invalid operation or other exception</response>
-        [HttpGet(RouteTemplates.GetPendingApplications)]
+        [HttpPost(RouteTemplates.GetPendingApplications)]
         [FeatureGate(FeatureNames.Admin)]
-        public IActionResult GetPendingApplications()
+        [SwaggerResponse(statusCode: 200, type: typeof(PaginatedResponse<ApplicationListDto>), description: "Ok")]
+        [SwaggerResponse(statusCode: 400, type: typeof(BadRequestObjectResult), description: "No pending applications found for this user ID")]
+        [SwaggerResponse(statusCode: 404, type: typeof(ArgumentNullException), description: "Could not found any pending applications")]
+        [SwaggerResponse(statusCode: 500, type: typeof(InvalidOperationException), description: "An error occurred while fetching the pending applications")]
+        [SwaggerResponse(statusCode: 500, type: typeof(Exception), description: "An unexpected error occurred")]
+        public ActionResult<PaginatedResponse<ApplicationListDto>> GetPendingApplications([FromBody] ApplicationRequest request)
         {
             try
             {
-                var userId = HttpContext.Items["UserId"] as string;
-                var result = _applicationService.GetPendingApplications(userId);
-                if (result != null)
+                request.UserId = HttpContext.Items["UserId"] as string;
+                var response = _applicationService.GetPendingApplications(request);
+                if (response != null)
                 {
-                    return Ok(result);
+                    return Ok(response);
                 }
 
                 return BadRequest(new { message = "No pending applications found for this user ID" });

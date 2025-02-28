@@ -95,7 +95,7 @@ public class DtroDal : IDtroDal
 
         return dtros;
     }
-    
+
     /// <inheritdoc cref="IDtroDal"/>
     public async Task<IEnumerable<Models.DataBase.DTRO>> GetDtrosAsync()
     {
@@ -393,7 +393,7 @@ public class DtroDal : IDtroDal
             publicationTimeTo = DateTime.SpecifyKind(publicationTimeTo, DateTimeKind.Utc);
 
             expressionsToConjunct.Add(it =>
-                it.Created >= publicationTimeSince && it.Created <= publicationTimeTo||
+                it.Created >= publicationTimeSince && it.Created <= publicationTimeTo ||
                 it.LastUpdated >= publicationTimeSince && it.LastUpdated <= publicationTimeTo ||
                 (it.DeletionTime != null && (it.DeletionTime >= publicationTimeSince && it.DeletionTime <= publicationTimeTo)));
         }

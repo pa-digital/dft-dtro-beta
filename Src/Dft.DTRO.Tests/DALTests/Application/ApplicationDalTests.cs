@@ -1,3 +1,4 @@
+using DfT.DTRO.Models.Filtering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dft.DTRO.Tests.DALTests
@@ -172,8 +173,9 @@ namespace Dft.DTRO.Tests.DALTests
         [Fact]
         public void GetPendingApplications_ShouldReturnPendingApplicationForUserAdminUser()
         {
-            var apps = _applicationDal.GetPendingApplications("admin@test.com");
-            Assert.Equal(1, apps.Count);
+            var request = new ApplicationRequest { UserId = "admin@test.com", Page = 1, PageSize = 1 };
+            var apps = _applicationDal.GetPendingApplications(request);
+            Assert.Equal(1, apps.TotalCount);
         }
     }
 }
