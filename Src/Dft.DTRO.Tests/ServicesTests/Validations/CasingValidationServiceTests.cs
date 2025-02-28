@@ -146,6 +146,35 @@ public class CasingValidationServiceTests
     }
 
     [Fact]
+    public void Validate_CommentKeyIsIgnored()
+    {
+        string jsonString = @"
+            {
+                ""source"": {
+                ""actionType"": ""new"",
+                ""currentTraOwner"": 9999,
+                ""_comment"": ""Some comment here""
+                }
+            }
+        ";
+
+        string expectedJsonString = @"
+            {
+                ""Source"": {
+                ""actionType"": ""new"",
+                ""currentTraOwner"": 9999,
+                ""_comment"": ""Some comment here""
+                }
+            }
+        ";
+
+        dynamic json = JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
+        List<string> invalidProperties = _casingValidationService.ValidateCamelCase(json);
+
+        Assert.Empty(invalidProperties);
+    }
+
+    [Fact]
     public void SimpleObjectCanBeConvertedToPascalCase()
     {
         string jsonString = @"
@@ -215,10 +244,75 @@ public class CasingValidationServiceTests
                       ""someKey"": 1,
                       ""collection"": [
                         {
-                            ""TimeValidity"": 2
+                            ""timeValidity"": 2
                         }
                       ]
                     }
+                }
+                }
+            }
+        ";
+
+        dynamic json = JsonConvert.DeserializeObject<ExpandoObject>(jsonString);
+        dynamic actual = _casingValidationService.ConvertKeysToPascalCase(json);
+        dynamic expected = JsonConvert.DeserializeObject<ExpandoObject>(expectedJsonString);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void Validate_CommentKeyIsIgnoredWhenConverting()
+    {
+        string jsonString = @"
+            {
+                ""source"": {
+                ""actionType"": ""new"",
+                ""currentTraOwner"": 9999,
+                ""_comment"": ""Some comment here"",
+                ""nested"": {
+                    ""item"": 1,
+                    ""anotherItem"": ""hello"",
+                    ""_comment"": ""Some comment here"",
+                },
+                ""provision"": {
+                    ""_comment"": ""Some comment here"",
+                  ""vehicleCharacteristics"": {
+                    ""someKey"": 1,
+                    ""collection"": [
+                        {
+                            ""_comment"": ""Some comment here"",
+                            ""timeValidity"": 2
+                        }
+                    ]
+                  }
+                }
+                }
+            }
+        ";
+
+
+        string expectedJsonString = @"
+            {
+                ""Source"": {
+                ""actionType"": ""new"",
+                ""currentTraOwner"": 9999,
+                ""_comment"": ""Some comment here"",
+                ""nested"": {
+                    ""item"": 1,
+                    ""anotherItem"": ""hello"",
+                    ""_comment"": ""Some comment here"",
+                },
+                ""Provision"": {
+                    ""_comment"": ""Some comment here"",
+                  ""VehicleCharacteristics"": {
+                    ""someKey"": 1,
+                    ""collection"": [
+                        {
+                            ""_comment"": ""Some comment here"",
+                            ""timeValidity"": 2
+                        }
+                    ]
+                  }
                 }
                 }
             }
@@ -292,7 +386,7 @@ public class CasingValidationServiceTests
                     ""object"": {
                         ""keyName"": ""value"",
                         ""TimeValidity"": {
-                            ""VehicleCharacteristics"": ""value"",
+                            ""vehicleCharacteristics"": ""value"",
                         },
                         ""Geometry"": {
                             ""PointGeometry"": {
