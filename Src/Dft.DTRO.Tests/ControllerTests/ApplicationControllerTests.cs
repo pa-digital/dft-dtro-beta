@@ -89,7 +89,6 @@ public class ApplicationControllerTests  : IClassFixture<ApplicationControllerTe
             HttpContext = mockHttpContext.Object
         };
 
-
         Guid appGuid = Guid.NewGuid();
         string appId = appGuid.ToString();
 
@@ -117,5 +116,4 @@ public class ApplicationControllerTests  : IClassFixture<ApplicationControllerTe
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
     }
-    
 }
