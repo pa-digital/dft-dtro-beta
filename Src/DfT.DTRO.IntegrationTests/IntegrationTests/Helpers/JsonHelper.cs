@@ -16,15 +16,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         public static void CompareJson(string expectedJson, string actualJson)
         {
-            // Until files are set to camel case, convert files to lower case before comparison
-            string expectedJsonToLowerCase = expectedJson.ToLower();
-            string actualJsonToLowerCase = actualJson.ToLower();
+            string orderedExpectedJson = SortJsonKeys(expectedJson);
+            string orderedActualJson = SortJsonKeys(actualJson);
 
-            string orderedJson1 = SortJsonKeys(expectedJsonToLowerCase);
-            string orderedJson2 = SortJsonKeys(actualJsonToLowerCase);
-
-            string[] expectedLines = orderedJson1.Split('\n');
-            string[] actualLines = orderedJson2.Split('\n');
+            string[] expectedLines = orderedExpectedJson.Split('\n');
+            string[] actualLines = orderedActualJson.Split('\n');
 
             Console.WriteLine("Comparing JSON...\n");
             int maxLines = Math.Max(expectedLines.Length, actualLines.Length);
@@ -109,6 +105,54 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             {
                 return token; // Leave primitive values unchanged
             }
+        }
+
+        public static string ConvertJsonKeysToCamelCase(string json)
+        {
+            JObject jsonObject = JObject.Parse(json);
+            JObject camelCasedObject = ConvertKeysToCamelCase(jsonObject);
+            return JsonConvert.SerializeObject(camelCasedObject, Formatting.Indented);
+        }
+
+        private static JObject ConvertKeysToCamelCase(JObject original)
+        {
+            JObject newObject = new JObject();
+
+            foreach (var property in original.Properties())
+            {
+                string camelCaseKey = Char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1);
+
+                if (property.Value.Type == JTokenType.Object)
+                {
+                    newObject[camelCaseKey] = ConvertKeysToCamelCase((JObject)property.Value);
+                }
+                else if (property.Value.Type == JTokenType.Array)
+                {
+                    JArray array = (JArray)property.Value;
+                    JArray newArray = new JArray();
+
+                    foreach (var item in array)
+                    {
+                        if (item.Type == JTokenType.Object)
+                        {
+                            newArray.Add(ConvertKeysToCamelCase((JObject)item));
+                        }
+                        else
+                        {
+                            newArray.Add(item);
+                        }
+
+                    }
+
+                    newObject[camelCaseKey] = newArray;
+                }
+                else
+                {
+                    newObject[camelCaseKey] = property.Value;
+                }
+            }
+
+            return newObject;
         }
     }
 }

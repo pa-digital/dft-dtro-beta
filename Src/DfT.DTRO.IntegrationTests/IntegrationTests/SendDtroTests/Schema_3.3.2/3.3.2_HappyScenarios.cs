@@ -6,11 +6,11 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 using Newtonsoft.Json.Linq;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2
 {
-    public class SendDtroIntegrationTests : BaseTest
+    public class HappyScenarios : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.3.1";
+        readonly static string schemaVersionToTest = "3.3.2";
 
         public static IEnumerable<object[]> GetDtroFileNames()
         {
@@ -37,7 +37,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(createDtroJson, publisher.TraId);
+            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{fileName}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, fileName, createDtroJsonWithTraUpdated);
 
@@ -56,8 +56,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
             createJsonObject["id"] = dtroId;
 
             // Check retrieved DTRO matches sent DTRO
-            string sentCreateJsonWithIdForComparison = createJsonObject.ToString();
-            CompareJson(sentCreateJsonWithIdForComparison, dtroResponseJson);
+            string sentCreateJsonWithId = createJsonObject.ToString();
+            CompareJson(sentCreateJsonWithId, dtroResponseJson);
         }
 
         [Theory]
@@ -74,7 +74,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionToTest}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(createDtroJson, publisher.TraId);
+            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
@@ -91,8 +91,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
             createJsonObject["id"] = dtroId;
 
             // Check retrieved DTRO matches sent DTRO
-            string sentCreateJsonWithIdForComparison = createJsonObject.ToString();
-            CompareJson(sentCreateJsonWithIdForComparison, dtroResponseJson);
+            string sentCreateJsonWithId = createJsonObject.ToString();
+            CompareJson(sentCreateJsonWithId, dtroResponseJson);
         }
     }
 }

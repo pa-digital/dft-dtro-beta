@@ -46,13 +46,28 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return createDtroResponse;
         }
 
-        public static string UpdateTraIdInDtro(string jsonString, string traId)
+        public static string UpdateTraIdInDtro(string schemaVersion, string jsonString, string traId)
         {
             JObject jsonObj = JObject.Parse(jsonString);
             int tradIdAsInt = int.Parse(traId);
-            jsonObj["data"]["Source"]["currentTraOwner"] = tradIdAsInt;
-            jsonObj["data"]["Source"]["traAffected"] = new JArray(tradIdAsInt);
-            jsonObj["data"]["Source"]["traCreator"] = tradIdAsInt;
+
+            int schemaVersionAsInt = int.Parse(schemaVersion.Replace(".", ""));
+
+            if (schemaVersionAsInt >= 332)
+            {
+                // New camel case format
+                jsonObj["data"]["source"]["currentTraOwner"] = tradIdAsInt;
+                jsonObj["data"]["source"]["traAffected"] = new JArray(tradIdAsInt);
+                jsonObj["data"]["source"]["traCreator"] = tradIdAsInt;
+            }
+            else
+            {
+                // Old Pascal case format
+                jsonObj["data"]["Source"]["currentTraOwner"] = tradIdAsInt;
+                jsonObj["data"]["Source"]["traAffected"] = new JArray(tradIdAsInt);
+                jsonObj["data"]["Source"]["traCreator"] = tradIdAsInt;
+            }
+
             return jsonObj.ToString();
         }
     }

@@ -38,12 +38,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         public async Task InitializeAsync()
         {
-            Console.WriteLine("Do before each test...");
-            if (EnvironmentName == EnvironmentType.Local)
-            {
-                await DtroUsers.DeleteExistingUsersAsync(UserWithAllPermissions);
-                Dtros.DeleteExistingDtros();
-            }
+            // If necessary, put logic here to execute before each test
         }
 
         public Task DisposeAsync()
