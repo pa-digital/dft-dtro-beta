@@ -10,9 +10,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
 {
     public class SendDtroIntegrationTests : BaseTest
     {
-        public static IEnumerable<object[]> GetFileNames()
+        readonly static string schemaVersionToTest = "3.3.1";
+
+        public static IEnumerable<object[]> GetDtroFileNames()
         {
-            DirectoryInfo directoryPath = new DirectoryInfo(AbsolutePathToDtroExamplesDirectory);
+            DirectoryInfo directoryPath = new DirectoryInfo($"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionToTest}");
             FileInfo[] files = directoryPath.GetFiles();
 
             foreach (FileInfo file in files)
@@ -22,59 +24,73 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests
         }
 
         [Theory]
-        [MemberData(nameof(GetFileNames))]
+        [MemberData(nameof(GetDtroFileNames))]
         public async Task DtroSubmittedFromFileShouldBeSavedCorrectly(string fileName)
         {
             Console.WriteLine($"\nTesting with file {fileName}...");
+
+            // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
-            string createDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{fileName}";
+            // Prepare DTRO
+            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
             string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(createDtroJson, publisher.TraId);
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{fileName}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, fileName, createDtroJsonWithTraUpdated);
 
+            // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
+            // Get created DTRO
             string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
             HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
             Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
             string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
 
+            // Add ID to sent DTRO for comparison purposes
             JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
             createJsonObject["id"] = dtroId;
 
+            // Check retrieved DTRO matches sent DTRO
             string sentCreateJsonWithIdForComparison = createJsonObject.ToString();
             CompareJson(sentCreateJsonWithIdForComparison, dtroResponseJson);
         }
 
         [Theory]
-        [MemberData(nameof(GetFileNames))]
+        [MemberData(nameof(GetDtroFileNames))]
         public async Task DtroSubmittedFromJsonBodyShouldBeSavedCorrectly(string fileName)
         {
             Console.WriteLine($"\nTesting with file {fileName}...");
+
+            // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
-            string createDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{fileName}";
+            // Prepare DTRO
+            string createDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionToTest}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
             string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(createDtroJson, publisher.TraId);
 
+            // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
+            // Get created DTRO
             string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
             HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
             Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
             string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
 
+            // Add ID to sent DTRO for comparison purposes
             JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
             createJsonObject["id"] = dtroId;
 
+            // Check retrieved DTRO matches sent DTRO
             string sentCreateJsonWithIdForComparison = createJsonObject.ToString();
             CompareJson(sentCreateJsonWithIdForComparison, dtroResponseJson);
         }

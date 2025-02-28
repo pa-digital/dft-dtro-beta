@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
@@ -96,16 +98,16 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return getAllSchemasResponse;
         }
 
-        public static async Task CreateAndActivateSchemaAsync(TestUser testUser)
+        public static async Task CreateAndActivateSchemaAsync(string schemaVersion, TestUser testUser)
         {
-            HttpResponseMessage createSchemaResponse = await CreateSchemaFromFileAsync(testUser);
+            HttpResponseMessage createSchemaResponse = await CreateSchemaFromFileAsync(schemaVersion, testUser);
             Assert.Equal(HttpStatusCode.Created, createSchemaResponse.StatusCode);
 
-            HttpResponseMessage activateSchemaResponse = await ActivateSchemaAsync(SchemaVersionUnderTest, testUser);
+            HttpResponseMessage activateSchemaResponse = await ActivateSchemaAsync(schemaVersion, testUser);
             Assert.Equal(HttpStatusCode.OK, activateSchemaResponse.StatusCode);
         }
 
-        public static async Task<HttpResponseMessage> CreateSchemaFromFileAsync(TestUser testUser)
+        public static async Task<HttpResponseMessage> CreateSchemaFromFileAsync(string schemaVersion, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -113,7 +115,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "Content-Type", "multipart/form-data" }
             };
 
-            HttpResponseMessage createSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/schemas/createFromFile/{SchemaVersionUnderTest}", headers, pathToJsonFile: SchemaJsonFile);
+            HttpResponseMessage createSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/schemas/createFromFile/{schemaVersion}", headers, pathToJsonFile: $"{AbsolutePathToSchemaExamplesDirectory}/schemas-{schemaVersion}.json");
             return createSchemaResponse;
         }
 
@@ -126,6 +128,29 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
             HttpResponseMessage getSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/schemas/{schemaVersion}", headers);
             return getSchemaResponse;
+        }
+
+        public static string[] GetSchemaVersions(string[] schemaFiles)
+        {
+            if (schemaFiles == null || schemaFiles.Length == 0)
+            {
+                throw new Exception("No schema files available!");
+            }
+
+            return schemaFiles
+                .Select(fileName =>
+                {
+                    Match match = Regex.Match(fileName, @"schemas-(\d+\.\d+\.\d+)\.json");
+                    if (match.Success)
+                    {
+                        return match.Groups[1].Value;
+                    }
+                    else
+                    {
+                        throw new Exception($"{fileName} doesn't contain schema version!");
+                    }
+                })
+                .ToArray();
         }
     }
 }

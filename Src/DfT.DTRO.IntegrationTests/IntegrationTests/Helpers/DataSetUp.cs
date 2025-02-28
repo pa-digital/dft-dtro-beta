@@ -1,4 +1,5 @@
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
@@ -14,9 +15,40 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         public static async Task CreateRulesAndSchema(TestUser testUser)
         {
-            HttpResponseMessage createRuleResponse = await Rules.CreateRuleSetFromFileAsync(testUser);
-            Assert.Equal(HttpStatusCode.Created, createRuleResponse.StatusCode);
-            await Schemas.CreateAndActivateSchemaAsync(testUser);
+            string[] schemaFiles = FileHelper.GetFileNames(AbsolutePathToSchemaExamplesDirectory);
+            string[] schemaVersions = Schemas.GetSchemaVersions(schemaFiles);
+
+            foreach (string schemaVersion in schemaVersions)
+            {
+                HttpResponseMessage createRuleResponse = await Rules.CreateRuleSetFromFileAsync(schemaVersion, testUser);
+                Assert.Equal(HttpStatusCode.Created, createRuleResponse.StatusCode);
+                await Schemas.CreateAndActivateSchemaAsync(schemaVersion, testUser);
+            }
+        }
+
+        public static async Task CreateRulesAndSchemaIfDoNotExist(TestUser testUser)
+        {
+            string[] schemaFiles = FileHelper.GetFileNames(AbsolutePathToSchemaExamplesDirectory);
+            string[] schemaVersions = Schemas.GetSchemaVersions(schemaFiles);
+
+            foreach (string schemaVersion in schemaVersions)
+            {
+                HttpResponseMessage getRulesResponse = await Rules.GetRuleSetAsync(schemaVersion, testUser);
+                if (getRulesResponse.StatusCode == HttpStatusCode.NotFound)
+                {
+                    HttpResponseMessage createRuleResponse = await Rules.CreateRuleSetFromFileAsync(schemaVersion, testUser);
+                    Assert.Equal(HttpStatusCode.Created, createRuleResponse.StatusCode);
+                }
+
+                HttpResponseMessage getSchemaResponse = await Schemas.GetSchemaAsync(schemaVersion, testUser);
+                if (getSchemaResponse.StatusCode == HttpStatusCode.NotFound)
+                {
+                    HttpResponseMessage createSchemaResponse = await Schemas.CreateSchemaFromFileAsync(schemaVersion, testUser);
+                    Assert.Equal(HttpStatusCode.Created, createSchemaResponse.StatusCode);
+                }
+                HttpResponseMessage activateSchemaResponse = await Schemas.ActivateSchemaAsync(schemaVersion, testUser);
+                Assert.Equal(HttpStatusCode.OK, activateSchemaResponse.StatusCode);
+            }
         }
     }
 }

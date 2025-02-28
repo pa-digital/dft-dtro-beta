@@ -10,7 +10,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             SqlQueries.TruncateTable("RuleTemplate");
         }
 
-        public static async Task<HttpResponseMessage> CreateRuleSetFromFileAsync(TestUser testUser)
+        public static async Task<HttpResponseMessage> CreateRuleSetFromFileAsync(string schemaVersion, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -18,7 +18,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "Content-Type", "multipart/form-data" }
             };
 
-            HttpResponseMessage createRuleResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/rules/createFromFile/{SchemaVersionUnderTest}", headers, pathToJsonFile: RulesJsonFile);
+            HttpResponseMessage createRuleResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/rules/createFromFile/{schemaVersion}", headers, pathToJsonFile: $"{AbsolutePathToRuleExamplesDirectory}/rules-{schemaVersion}.json");
             return createRuleResponse;
         }
 

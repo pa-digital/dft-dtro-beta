@@ -46,5 +46,6 @@
 /DfT.DTRO.DatabaseFeeder/obj
 
 /TestReports
+**/TestResults
 **/Coverage
 **/temp
