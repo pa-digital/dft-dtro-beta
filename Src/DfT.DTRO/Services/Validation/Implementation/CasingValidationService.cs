@@ -17,7 +17,7 @@ public class CasingValidationService
 
         foreach (var kvp in dictionary)
         {
-            string newKey = keysToConvert.Contains(kvp.Key.ToLower()) && IsObjectOrArray(kvp.Value) ? ToPascalCase(kvp.Key) : kvp.Key;
+            string newKey = kvp.Key != "_comment" && keysToConvert.Contains(kvp.Key.ToLower()) && IsObjectOrArray(kvp.Value) ? ToPascalCase(kvp.Key) : kvp.Key;
             resultDict[newKey] = ConvertValue(kvp.Value);
         }
 
@@ -78,6 +78,11 @@ public class CasingValidationService
             foreach (var kvp in dict)
             {
                 string key = kvp.Key;
+                if (key == "_comment")
+                {
+                    continue;
+                }
+
                 if (!IsCamelCase(key))
                 {
                     invalidProperties.Add(key);
