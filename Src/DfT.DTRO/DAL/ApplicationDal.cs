@@ -10,11 +10,12 @@ namespace DfT.DTRO.DAL
             return !_context.Applications.Any(a => a.Nickname == appName);
         }
 
-        public Guid GetApplicationUser(Guid appGuid)
+        public string GetApplicationUser(Guid appGuid)
         {
             return _context.Applications
+                .Include(a => a.User)
                 .Where(a => a.Id == appGuid)
-                .Select(a => a.UserId)
+                .Select(a => a.User.Email)
                 .FirstOrDefault();
         }
 
@@ -39,16 +40,11 @@ namespace DfT.DTRO.DAL
 
         public List<ApplicationListDto> GetApplicationList(string userId)
         {
-            if (!Guid.TryParse(userId, out Guid userGuid))
-            {
-                return null;
-            }
-
             return _context.Applications
                 .Include(a => a.User)
                 .Include(a => a.TrafficRegulationAuthority)
                 .Include(a => a.ApplicationType)
-                .Where(a => a.User.Id == userGuid)
+                .Where(a => a.User.Email == userId)
                 .Select(a => new ApplicationListDto
                 {
                     Id = a.Id,

@@ -1,19 +1,17 @@
-using Xunit;
-using Moq;
-using Microsoft.AspNetCore.Mvc;
-using DfT.DTRO.Controllers;
-using DfT.DTRO.Services;
-using System;
+using Dft.DTRO.Tests.Fixtures;
 
-public class ApplicationControllerTests
+public class ApplicationControllerTests  : IClassFixture<ApplicationControllerTestFixture>
 {
     private readonly Mock<IApplicationService> _mockApplicationService;
     private readonly ApplicationController _controller;
+    private readonly ApplicationControllerTestFixture _fixture;
 
-    public ApplicationControllerTests()
+    public ApplicationControllerTests(ApplicationControllerTestFixture fixture)
     {
         _mockApplicationService = new Mock<IApplicationService>();
         _controller = new ApplicationController(_mockApplicationService.Object);
+        _fixture = fixture;
+        _controller.ControllerContext = _fixture.ControllerContext;
     }
 
     [Fact]
@@ -48,17 +46,7 @@ public class ApplicationControllerTests
     [Fact]
     public void GetApplicationDetailsValidRequestReturnsOk()
     {
-        Guid userGuid = Guid.NewGuid();
-        string userId = userGuid.ToString();
-
-        var mockHttpContext = new Mock<HttpContext>();
-        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
-        _controller.ControllerContext = new ControllerContext()
-        {
-            HttpContext = mockHttpContext.Object
-        };
-
-
+        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
         Guid appGuid = Guid.NewGuid();
         string appId = appGuid.ToString();
 
@@ -75,17 +63,7 @@ public class ApplicationControllerTests
     [Fact]
     public void GetApplicationDetailsNotUsersAppReturnsForbidden()
     {
-        Guid userGuid = Guid.NewGuid();
-        string userId = userGuid.ToString();
-
-        var mockHttpContext = new Mock<HttpContext>();
-        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
-        _controller.ControllerContext = new ControllerContext()
-        {
-            HttpContext = mockHttpContext.Object
-        };
-
-
+        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
         Guid appGuid = Guid.NewGuid();
         string appId = appGuid.ToString();
 
@@ -102,8 +80,7 @@ public class ApplicationControllerTests
     public void GetApplicationDetailsInvalidAppIdReturnsBadRequest()
     {
 
-        Guid userGuid = Guid.NewGuid();
-        string userId = userGuid.ToString();
+        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
 
         var mockHttpContext = new Mock<HttpContext>();
         mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
@@ -129,16 +106,6 @@ public class ApplicationControllerTests
     [Fact]
     public void GetApplicationsValidUserReturnsOk()
     {
-        Guid userGuid = Guid.NewGuid();
-        string userId = userGuid.ToString();
-
-        var mockHttpContext = new Mock<HttpContext>();
-        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
-        _controller.ControllerContext = new ControllerContext()
-        {
-            HttpContext = mockHttpContext.Object
-        };
-
         var applicationListDtos = new List<ApplicationListDto>
         {
             new ApplicationListDto { Id = Guid.NewGuid(), Name = "App 1", Type = "Test", Tra = "Test" },

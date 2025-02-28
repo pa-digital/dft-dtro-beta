@@ -26,6 +26,6 @@ public class TokenValidationAttribute : Attribute, IAuthorizationFilter
     private static String? ValidateToken(string? token)
     {
         // TODO: validate token with Apigee
-        return "e138b942-a42b-49b2-a8fb-a961a7378408";
+        return "user@test.com";
     }
 }

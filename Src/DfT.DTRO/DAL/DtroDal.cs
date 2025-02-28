@@ -387,14 +387,15 @@ public class DtroDal : IDtroDal
             expressionsToConjunct.Add(it => it.TrafficAuthorityOwnerId == currentTraOwner);
         }
 
-        if (search.Since is { } publicationTime)
+        if (search.Since is { } publicationTimeSince && search.To is { } publicationTimeTo)
         {
-            publicationTime = DateTime.SpecifyKind(publicationTime, DateTimeKind.Utc);
+            publicationTimeSince = DateTime.SpecifyKind(publicationTimeSince, DateTimeKind.Utc);
+            publicationTimeTo = DateTime.SpecifyKind(publicationTimeTo, DateTimeKind.Utc);
 
             expressionsToConjunct.Add(it =>
-                it.Created >= publicationTime ||
-                it.LastUpdated >= publicationTime ||
-                (it.DeletionTime != null && it.DeletionTime >= publicationTime));
+                it.Created >= publicationTimeSince && it.Created <= publicationTimeTo||
+                it.LastUpdated >= publicationTimeSince && it.LastUpdated <= publicationTimeTo ||
+                (it.DeletionTime != null && (it.DeletionTime >= publicationTimeSince && it.DeletionTime <= publicationTimeTo)));
         }
 
         if (search.ModificationTime is { } modificationTime)

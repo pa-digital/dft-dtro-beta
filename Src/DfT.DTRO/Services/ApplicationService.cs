@@ -1,4 +1,3 @@
-
 namespace DfT.DTRO.Services
 
 {
@@ -13,9 +12,8 @@ namespace DfT.DTRO.Services
 
         public bool ValidateAppBelongsToUser(string userId, string appId) {
             Guid appGuid = Guid.Parse(appId);
-            Guid user = _applicationDal.GetApplicationUser(appGuid);
-            Guid userGuid = Guid.Parse(userId);
-            return user == userGuid;
+            string user = _applicationDal.GetApplicationUser(appGuid);
+            return user == userId;
         }
 
         public bool ValidateApplicationName(string appName)

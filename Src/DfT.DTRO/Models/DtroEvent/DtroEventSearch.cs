@@ -16,6 +16,10 @@ public class DtroEventSearch
     [Required]
     [DataMember(Name = "since")]
     public DateTime? Since { get; set; }
+    
+    [Required]
+    [DataMember(Name = "to")]
+    public DateTime? To { get; set; }
 
     public DateTime? DeletionTime { get; set; }
 
