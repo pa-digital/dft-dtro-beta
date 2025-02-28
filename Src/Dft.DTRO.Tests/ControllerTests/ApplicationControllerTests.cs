@@ -117,4 +117,5 @@ public class ApplicationControllerTests  : IClassFixture<ApplicationControllerTe
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
     }
+    
 }
