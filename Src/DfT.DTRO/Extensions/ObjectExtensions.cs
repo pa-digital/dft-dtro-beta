@@ -131,4 +131,15 @@ public static class ObjectExtensions
             return item;
         }
     }
+
+    /// <summary>
+    /// Check if the source is a valid UUID
+    /// </summary>
+    /// <param name="source">The source to check</param>
+    /// <returns>A valid UUID</returns>
+    public static Guid ToGuid(this string source)
+    {
+        var isValid = Guid.TryParse(source, out var guid);
+        return isValid ? guid : Guid.Empty;
+    }
 }

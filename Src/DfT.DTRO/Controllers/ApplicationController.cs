@@ -72,12 +72,14 @@ namespace DfT.DTRO.Controllers
                 string appId = request.appId;
                 var userId = HttpContext.Items["UserId"] as string;
                 bool appBelongsToUser = _applicationService.ValidateAppBelongsToUser(userId, appId);
-                if (!appBelongsToUser) {
+                if (!appBelongsToUser)
+                {
                     return Forbid();
                 }
 
                 var result = _applicationService.GetApplicationDetails(appId);
-                if (result != null) {
+                if (result != null)
+                {
                     // TODO: fetch API key and secret from Apigee
                     return Ok(new { name = result.Name, appId = result.AppId, purpose = result.Purpose, apiKey = "thisismyapikey", apiSecret = "thisismyapisecret" });
                 }
@@ -102,7 +104,6 @@ namespace DfT.DTRO.Controllers
         /// <summary>
         /// Retrieves application list for user
         /// </summary>
-        /// <param name="parameters"></param>
         /// <response code="200">Valid user ID</response>
         /// <response code="400">Invalid or empty parameters, or no matching user</response>
         /// <response code="500">Invalid operation or other exception</response>
@@ -114,7 +115,8 @@ namespace DfT.DTRO.Controllers
             {
                 var userId = HttpContext.Items["UserId"] as string;
                 var result = _applicationService.GetApplicationList(userId);
-                if (result != null) {
+                if (result != null)
+                {
                     return Ok(result);
                 }
 

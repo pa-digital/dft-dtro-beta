@@ -19,6 +19,7 @@ global using DfT.DTRO.Caching;
 global using DfT.DTRO.Consts;
 global using DfT.DTRO.Converters;
 global using DfT.DTRO.DAL;
+global using DfT.DTRO.DTO;
 global using DfT.DTRO.Enums;
 global using DfT.DTRO.Extensions;
 global using DfT.DTRO.Extensions.Configuration;
