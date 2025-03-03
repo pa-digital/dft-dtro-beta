@@ -8,8 +8,11 @@ public class ApplicationControllerTests  : IClassFixture<ApplicationControllerTe
 
     public ApplicationControllerTests(ApplicationControllerTestFixture fixture)
     {
+        ILogger<ApplicationController> mockLogger = MockLogger.Setup<ApplicationController>();
+        var mockLoggingExtension = new Mock<LoggingExtension>();
+        
         _mockApplicationService = new Mock<IApplicationService>();
-        _controller = new ApplicationController(_mockApplicationService.Object);
+        _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, mockLoggingExtension.Object);
         _fixture = fixture;
         _controller.ControllerContext = _fixture.ControllerContext;
     }

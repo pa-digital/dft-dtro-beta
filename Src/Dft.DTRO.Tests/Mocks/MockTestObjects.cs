@@ -1,4 +1,5 @@
-﻿using DfT.DTRO.Models.Auth;
+﻿using DfT.DTRO.Models.App;
+using DfT.DTRO.Models.Auth;
 using DfT.DTRO.Models.Tra;
 
 namespace Dft.DTRO.Tests.Mocks;
@@ -251,5 +252,27 @@ public static class MockTestObjects
         {
             AccessToken = "accessToken"
         };
+    
+     public static App App => new()
+        {
+            AppId = "appId",
+            CreatedAt = -1,
+            Credentials =
+            [
+                new AppCredential
+                {
+                    ConsumerKey = "consumerKey",
+                    ConsumerSecret = "consumerSecret",
+                    ExpiresAt = -1,
+                    IssuedAt = -1,
+                    Status = "status"
+                }
+            ],
+            DeveloperId = "developerId",
+            LastModifiedAt = -1,
+            Name = "name",
+            Status = "status",
+        };
+    
     
 }
