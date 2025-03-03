@@ -1,4 +1,4 @@
-﻿namespace DfT.DTRO.Models.App;
+﻿namespace DfT.DTRO.Models.Apigee;
 
 /// <summary>
 /// Represents an Apigee App.
@@ -22,7 +22,7 @@ public class ApigeeDeveloperApp
     /// List of credentials associated with the app.
     /// </summary>
     [DataMember(Name = "credentials")]
-    public List<AppCredential> Credentials { get; set; }
+    public List<ApigeeDeveloperAppCredential> Credentials { get; set; }
 
     /// <summary>
     /// Unique identifier for the developer who owns the app.

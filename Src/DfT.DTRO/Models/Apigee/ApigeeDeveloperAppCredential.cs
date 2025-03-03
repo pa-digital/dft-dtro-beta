@@ -1,4 +1,4 @@
-﻿namespace DfT.DTRO.Models.App;
+﻿namespace DfT.DTRO.Models.Apigee;
 
 /// <summary>
 /// Represents API credentials for an Apigee app.

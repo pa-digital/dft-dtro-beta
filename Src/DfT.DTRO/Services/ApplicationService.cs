@@ -1,6 +1,5 @@
 using DfT.DTRO.Apis.Repositories;
 using DfT.DTRO.Models.Apigee;
-using DfT.DTRO.Models.App;
 using DfT.DTRO.Models.Applications;
 
 namespace DfT.DTRO.Services;
