@@ -1,12 +1,26 @@
 ﻿namespace DfT.DTRO.Services;
 
-public class UserService(IUserDal userDal) : IUserService
+/// <inheritdoc cref="IUserService"/>
+public class UserService(IUserDal userDal, IUserStatusDal userStatusDal) : IUserService
 {
-    public PaginatedResponse<UserDto> GetUsers(string userId)
+    /// <inheritdoc cref="IUserService"/>
+    public PaginatedResponse<UserDto> GetUsers(UserRequest request)
     {
-        var id = userId.ToGuid();
-        var users = userDal.GetUsers(id);
+        var users = userDal.GetUsers(request);
 
-        return new PaginatedResponse<UserDto>([], 0, 1);
+        var userStatuses = userStatusDal.GetStatuses();
+
+        var dto = users.Results.Select(user => new UserDto
+        {
+            Id = user.Id,
+            Email = user.Email,
+            Created = user.Created.ToString("G"),
+            LastUpdated = user.LastUpdated.HasValue ? user.LastUpdated.Value.ToString("G") : string.Empty,
+            IsCentralServiceOperator = user.IsCentralServiceOperator,
+            Username = $"{user.Forename} {user.Surname}",
+            Status = userStatuses.FirstOrDefault(userStatus => userStatus.Id == user.UserStatus.Id)?.Status
+        }).ToList();
+
+        return new PaginatedResponse<UserDto>(dto, request.Page, request.PageSize);
     }
 }

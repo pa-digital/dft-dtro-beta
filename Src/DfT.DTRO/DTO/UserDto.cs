@@ -7,6 +7,6 @@ public class UserDto
     public string LastUpdated { get; set; }
     public string Username { get; set; }
     public string Email { get; set; }
-    public bool IsCSO { get; set; }
+    public bool IsCentralServiceOperator { get; set; }
     public string Status { get; set; }
 }

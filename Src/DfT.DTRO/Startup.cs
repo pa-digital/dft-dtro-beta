@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Scrutor;
 
 namespace DfT.DTRO;
 
@@ -44,12 +43,12 @@ public class Startup
 
         services.Scan(scan => scan
                 .FromAssemblies(Assembly.GetExecutingAssembly())
-                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services")) 
+                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services"))
                 .AsImplementedInterfaces()
-                .WithScopedLifetime() 
-                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.DAL")) 
+                .WithScopedLifetime()
+                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.DAL"))
                 .AsImplementedInterfaces()
-                .WithScopedLifetime() 
+                .WithScopedLifetime()
                 .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services.Mapping"))
                 .AsImplementedInterfaces()
                 .WithSingletonLifetime()

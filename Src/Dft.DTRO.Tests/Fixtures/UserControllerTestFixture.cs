@@ -1,16 +1,16 @@
-namespace Dft.DTRO.Tests.Fixtures;
+﻿namespace Dft.DTRO.Tests.Fixtures;
 
 [ExcludeFromCodeCoverage]
-public class ApplicationControllerTestFixture
+public class UserControllerTestFixture
 {
     public ControllerContext ControllerContext { get; }
 
-    public ApplicationControllerTestFixture()
-    {
-        var userId = "user@test.com";
+    public string UserId { get; set; }
 
+    public UserControllerTestFixture()
+    {
         var mockHttpContext = new Mock<HttpContext>();
-        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
+        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(UserId);
 
         ControllerContext = new ControllerContext
         {

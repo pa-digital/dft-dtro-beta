@@ -50,5 +50,6 @@ public class User
     /// </summary>
     public UserStatus UserStatus { get; set; }
 
+
     public List<Application> Applications { get; set; }
 }
