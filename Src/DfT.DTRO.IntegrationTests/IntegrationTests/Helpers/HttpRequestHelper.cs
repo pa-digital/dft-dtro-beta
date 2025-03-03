@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
@@ -120,8 +121,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             if (request.Content is StringContent)
             {
-                string content = request.Content.ReadAsStringAsync().Result.Replace("\n", "");
-                string contentWithEscapedDoubleQuotes = JsonConvert.SerializeObject(content);
+                string content = request.Content.ReadAsStringAsync().Result;
+                string contentWithTrimmedWhiteSpace = MinifyJson(content);
+                string contentWithEscapedDoubleQuotes = JsonConvert.SerializeObject(contentWithTrimmedWhiteSpace);
                 curl.Append($" -d {contentWithEscapedDoubleQuotes}");
             }
             else if (request.Content is MultipartFormDataContent)

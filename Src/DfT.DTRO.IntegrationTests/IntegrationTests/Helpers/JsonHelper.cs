@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -153,6 +154,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             }
 
             return newObject;
+        }
+
+        public static string MinifyJson(string json)
+        {
+            using JsonDocument doc = JsonDocument.Parse(json);
+            return System.Text.Json.JsonSerializer.Serialize(doc.RootElement);
         }
     }
 }
