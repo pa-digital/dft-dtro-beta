@@ -70,5 +70,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
             return jsonObj.ToString();
         }
+
+        public static string UpdateSchemaVersionInDtro(string jsonString, string schemaVersion)
+        {
+            JObject jsonObj = JObject.Parse(jsonString);
+            jsonObj["schemaVersion"] = schemaVersion;
+            return jsonObj.ToString();
+        }
     }
 }
