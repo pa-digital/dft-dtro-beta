@@ -1,14 +1,18 @@
+using DfT.DTRO.Apis.Repositories;
+
 namespace Dft.DTRO.Tests.ServicesTests.Application
 {
     public class ApplicationServiceTests
     {
         private readonly Mock<IApplicationDal> _applicationDalMock;
+        private readonly Mock<IApigeeAppRepository> _apigeeAppRepositoryMock;
         private readonly ApplicationService _applicationService;
 
         public ApplicationServiceTests()
         {
             _applicationDalMock = new Mock<IApplicationDal>();
-            _applicationService = new ApplicationService(_applicationDalMock.Object);
+            _apigeeAppRepositoryMock = new Mock<IApigeeAppRepository>();
+            _applicationService = new ApplicationService(_applicationDalMock.Object, _apigeeAppRepositoryMock.Object);
         }
 
         [Fact]
@@ -67,7 +71,7 @@ namespace Dft.DTRO.Tests.ServicesTests.Application
         {
             Guid appGuid = Guid.NewGuid();
             string appId = appGuid.ToString();
-            var expectedDetails = new ApplicationDetailsDto { AppId = appGuid, Name = "Test", Purpose = "Test" } ;
+            var expectedDetails = new ApplicationDetailsDto { AppId = appGuid, Name = "Test", Purpose = "Test" };
             _applicationDalMock
                 .Setup(dal => dal.GetApplicationDetails(appId))
                 .Returns(expectedDetails);
@@ -80,7 +84,7 @@ namespace Dft.DTRO.Tests.ServicesTests.Application
         public void GetApplicationListShouldReturnListOfApplications()
         {
             string userId = "user@test.com";
-            var expectedList = new List<ApplicationListDto> { 
+            var expectedList = new List<ApplicationListDto> {
                 new ApplicationListDto{ Id = Guid.NewGuid(), Name = "Test", Tra = "Test", Type = "Test" },
                 new ApplicationListDto{ Id = Guid.NewGuid(), Name = "Another Test", Tra = "test TRA", Type = "Publish" }
             };

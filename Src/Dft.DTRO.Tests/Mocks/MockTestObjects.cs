@@ -1,4 +1,4 @@
-﻿using DfT.DTRO.Models.App;
+﻿using DfT.DTRO.Models.Applications;
 using DfT.DTRO.Models.Auth;
 using DfT.DTRO.Models.Tra;
 
@@ -167,7 +167,7 @@ public static class MockTestObjects
 
         return dtros.ToList();
     }
-    
+
     public static List<TrafficRegulationAuthority> Tras => new()
     {
         new TrafficRegulationAuthority()
@@ -191,7 +191,7 @@ public static class MockTestObjects
             Name = "tra5"
         }
     };
-    
+
     public static List<TrafficRegulationAuthority> GetTras(GetAllTrasQueryParameters queryParameters)
     {
         var tras = Tras;
@@ -205,7 +205,7 @@ public static class MockTestObjects
 
         return tras.ToList();
     }
-    
+
     public static List<DfT.DTRO.Models.DataBase.DTRO> GetDtros()
     {
         var dtros = Dtros.Where(dtro => !dtro.Deleted);
@@ -239,7 +239,7 @@ public static class MockTestObjects
             Data = new ExpandoObject()
         }
     };
-    
+
     public static List<TraFindAllResponse> TraFindAllResponse => new()
     {
         new TraFindAllResponse
@@ -247,19 +247,19 @@ public static class MockTestObjects
             Name = "name"
         }
     };
-    
+
     public static AuthToken AuthToken => new()
-        {
-            AccessToken = "accessToken"
-        };
-    
-     public static App App => new()
-        {
-            AppId = "appId",
-            CreatedAt = -1,
-            Credentials =
-            [
-                new AppCredential
+    {
+        AccessToken = "accessToken"
+    };
+
+    public static App App => new()
+    {
+        AppId = "appId",
+        CreatedAt = -1,
+        Credentials =
+           [
+               new AppCredential
                 {
                     ConsumerKey = "consumerKey",
                     ConsumerSecret = "consumerSecret",
@@ -267,12 +267,12 @@ public static class MockTestObjects
                     IssuedAt = -1,
                     Status = "status"
                 }
-            ],
-            DeveloperId = "developerId",
-            LastModifiedAt = -1,
-            Name = "name",
-            Status = "status",
-        };
-    
-    
+           ],
+        DeveloperId = "developerId",
+        LastModifiedAt = -1,
+        Name = "name",
+        Status = "status",
+    };
+
+
 }
