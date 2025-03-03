@@ -1,6 +1,5 @@
 ﻿using DfT.DTRO.Apis.Clients;
 using DfT.DTRO.Models.Apigee;
-using DfT.DTRO.Models.App;
 using Newtonsoft.Json;
 
 namespace DfT.DTRO.Apis.Repositories;
