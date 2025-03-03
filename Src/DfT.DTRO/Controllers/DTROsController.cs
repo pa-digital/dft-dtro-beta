@@ -84,13 +84,13 @@ public class DTROsController : ControllerBase
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }
-        catch (CamelCaseException ccex)
+        catch (CaseException cex)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
 
-            _logger.LogError(ccex.Message);
-            _loggingExtension.LogError(nameof(CreateFromFile), "/dtros/createFromFile", "Camel case naming convention exception", ccex.Message);
-            return BadRequest(new ApiErrorResponse("Camel case naming convention exception", ccex.Message));
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(CreateFromFile), "/dtros/createFromFile", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
         }
         catch (DtroValidationException dvex)
         {
@@ -199,13 +199,13 @@ public class DTROsController : ControllerBase
                 return Ok(response);
             }
         }
-        catch (CamelCaseException ccex)
+        catch (CaseException cex)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
 
-            _logger.LogError(ccex.Message);
-            _loggingExtension.LogError(nameof(UpdateFromFile), "/dtros/updateFromFile", "Camel case naming convention exception", ccex.Message);
-            return BadRequest(new ApiErrorResponse("Camel case naming convention exception", ccex.Message));
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(UpdateFromFile), "/dtros/updateFromFile", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
         }
         catch (DtroValidationException dvex)
         {
@@ -292,13 +292,13 @@ public class DTROsController : ControllerBase
                 $"'{nameof(CreateFromBody)}' method called using appId: '{appId}' and body '{dtroSubmit}'");
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
-        catch (CamelCaseException ccex)
+        catch (CaseException cex)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
 
-            _logger.LogError(ccex.Message);
-            _loggingExtension.LogError(nameof(CreateFromBody), "/dtros/createFromBody", "Camel case naming convention exception", ccex.Message);
-            return BadRequest(new ApiErrorResponse("Camel case naming convention exception", ccex.Message));
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(CreateFromBody), "/dtros/createFromBody", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
         }
         catch (DtroValidationException dvex)
         {
@@ -402,13 +402,13 @@ public class DTROsController : ControllerBase
                 $"'{nameof(UpdateFromBody)}' method called using appId: '{appId}', unique identifier: '{dtroId}' and body: '{dtroSubmit}'");
             return Ok(guidResponse);
         }
-        catch (CamelCaseException ccex)
+        catch (CaseException cex)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
 
-            _logger.LogError(ccex.Message);
-            _loggingExtension.LogError(nameof(UpdateFromBody), "/dtros/updateFromBody", "Camel case naming convention exception", ccex.Message);
-            return BadRequest(new ApiErrorResponse("Camel case naming convention exception", ccex.Message));
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(UpdateFromBody), "/dtros/updateFromBody", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
         }
         catch (DtroValidationException dvex)
         {

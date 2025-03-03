@@ -51,7 +51,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
             dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(dtroResponseJson)!;
             string responseMessage = jsonDeserialised.message.ToString();
             string responseError = jsonDeserialised.error.ToString();
-            Assert.Equal(responseMessage, "Camel case naming convention exception");
+            Assert.Equal(responseMessage, "Case naming convention exception");
             Assert.StartsWith("All property names must conform to camel case naming conventions. The following properties violate this: [Source, Provision, RegulatedPlace", responseError);
         }
 
@@ -81,7 +81,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
             dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(dtroResponseJson)!;
             string responseMessage = jsonDeserialised.message.ToString();
             string responseError = jsonDeserialised.error.ToString();
-            Assert.Equal(responseMessage, "Camel case naming convention exception");
+            Assert.Equal(responseMessage, "Case naming convention exception");
             Assert.StartsWith("All property names must conform to camel case naming conventions. The following properties violate this: [Source, Provision, RegulatedPlace", responseError);
         }
     }

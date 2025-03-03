@@ -93,11 +93,19 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             if (invalidProperties.Count > 0)
             {
                 string message = $"All property names must conform to camel case naming conventions. The following properties violate this: [{string.Join(", ", invalidProperties)}]";
-                throw new CamelCaseException(message);
+                throw new CaseException(message);
             }
 
             // Here, we turn all the Dtro object keys into Pascal case
             dtroSubmit.Data = casingValidationService.ConvertKeysToPascalCase(dtroSubmit.Data);
+        } else
+        {
+            List<string> invalidProperties = casingValidationService.ValidatePascalCase(dtroSubmit.Data);
+            if (invalidProperties.Count > 0)
+            {
+                string message = $"All property names must conform to pascal case naming conventions. The following properties violate this: [{string.Join(", ", invalidProperties)}]";
+                throw new CaseException(message);
+            }
         }
 
         var errors = _sourceValidationService.Validate(dtroSubmit, traCode);

@@ -1,9 +1,15 @@
 using System.Collections;
 using System.Text.RegularExpressions;
 
+enum Casing
+{
+    Camel,
+    Pascal
+}
+
 public class CasingValidationService
 {
-    HashSet<string> keysToConvert = new HashSet<string> { "source", "provision", "regulatedplace", "geometry", "lineargeometry", "pointgeometry", "polygon", "directedlinear", "externalreference", "uniquestreetreferencenumber", "elementarystreetunit", "regulation", "speedlimitvaluebased", "speedlimitprofilebased", "generalregulation", "offlistregulation", "condition", "ratetable", "temporaryregulation", "roadcondition", "numberofoccupants", "occupantcondition", "drivercondition", "accesscondition", "timevalidity", "nonvehicularroaduser", "permitcondition", "vehiclecharacteristics", "conditionset", "authority", "permitsubjecttofee", "period", "timeperiodofday", "specialday", "publicholiday", "dayweekmonth", "changeabletimeperiod", "changeabletimeperiodstart", "changeabletimeperiodend", "calendarweekinmonth", "weekofmonth", "instanceofdaywithinmonth", "changeabletimeperiodsource", "changeabletimeperiodentry", "maximumgrossweightcharacteristic", "maximumheightcharacteristic", "maximumlengthcharacteristic", "maximumwidthcharacteristic", "heaviestaxleweightcharacteristic", "numberofaxlescharacteristic", "emissions", "ratetable,", "ratelinecollection", "rateline" };
+    HashSet<string> keysToConvert = new HashSet<string> { "source", "provision", "regulatedplace", "geometry", "lineargeometry", "pointgeometry", "polygon", "directedlinear", "externalreference", "uniquestreetreferencenumber", "elementarystreetunit", "regulation", "speedlimitvaluebased", "speedlimitprofilebased", "generalregulation", "offlistregulation", "condition", "ratetable", "temporaryregulation", "roadcondition", "numberofoccupants", "occupantcondition", "drivercondition", "accesscondition", "timevalidity", "nonvehicularroaduser", "permitcondition", "vehiclecharacteristics", "conditionset", "authority", "permitsubjecttofee", "period", "timeperiodofday", "specialday", "publicholiday", "dayweekmonth", "changeabletimeperiod", "changeabletimeperiodstart", "changeabletimeperiodend", "calendarweekinmonth", "weekofmonth", "instanceofdaywithinmonth", "changeabletimeperiodsource", "changeabletimeperiodentry", "maximumgrossweightcharacteristic", "maximumheightcharacteristic", "maximumlengthcharacteristic", "maximumwidthcharacteristic", "heaviestaxleweightcharacteristic", "numberofaxlescharacteristic", "emissions", "ratetable", "ratelinecollection", "rateline" };
 
     private bool IsObjectOrArray(object value)
     {
@@ -57,7 +63,15 @@ public class CasingValidationService
     public List<string> ValidateCamelCase(ExpandoObject data)
     {
         List<string> invalidProperties = new();
-        CheckCamelCase(data, invalidProperties);
+        CheckCase(data, invalidProperties, Casing.Camel);
+
+        return invalidProperties;
+    }
+
+    public List<string> ValidatePascalCase(ExpandoObject data)
+    {
+        List<string> invalidProperties = new();
+        CheckCase(data, invalidProperties, Casing.Pascal);
 
         return invalidProperties;
     }
@@ -69,8 +83,9 @@ public class CasingValidationService
             (schemaVersion.Major == 3 && schemaVersion.Minor == 3 && schemaVersion.Patch >= 2);
     }
 
-    private void CheckCamelCase(object obj, List<string> invalidProperties)
+    private void CheckCase(object obj, List<string> invalidProperties, Casing casing)
     {
+        Func<string, bool> func = casing == Casing.Camel ? IsCamelCase : IsPascalCase;
         if (obj is ExpandoObject expandoObj)
         {
             var dict = (IDictionary<string, object>)expandoObj;
@@ -83,15 +98,21 @@ public class CasingValidationService
                     continue;
                 }
 
-                if (!IsCamelCase(key))
+                if (casing == Casing.Pascal && keysToConvert.Contains(key.ToLower()) &&  IsObjectOrArray(kvp.Value) && !func(key))
                 {
+                    invalidProperties.Add(key);
+                }
+
+                if (casing == Casing.Camel && !func(key))
+                {
+
                     invalidProperties.Add(key);
                 }
 
                 // Recursively check the value, if it's an ExpandoObject or a list
                 if (kvp.Value is ExpandoObject || kvp.Value is List<object>)
                 {
-                    CheckCamelCase(kvp.Value, invalidProperties);
+                    CheckCase(kvp.Value, invalidProperties, casing);
                 }
             }
         }
@@ -99,13 +120,18 @@ public class CasingValidationService
         {
             foreach (var item in listObj)
             {
-                CheckCamelCase(item, invalidProperties);
+                CheckCase(item, invalidProperties, casing);
             }
         }
     }
 
-    private bool IsCamelCase(string key)
+    private bool IsCamelCase(string input)
     {
-        return Regex.IsMatch(key, "^[a-z][a-zA-Z0-9]*$");
+        return !string.IsNullOrEmpty(input) && char.IsLower(input[0]);
+    }
+
+    private bool IsPascalCase(string input)
+    {
+        return !string.IsNullOrEmpty(input) && char.IsUpper(input[0]);
     }
 }

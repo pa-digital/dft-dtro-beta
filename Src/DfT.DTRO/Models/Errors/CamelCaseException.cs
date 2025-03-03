@@ -1,17 +1,17 @@
 namespace DfT.DTRO.Models.Errors;
-public class CamelCaseException : Exception
+public class CaseException : Exception
 {
-    public CamelCaseException()
-        : base("Camel case naming convention exception")
+    public CaseException()
+        : base("Case naming convention exception")
     {
     }
 
-    public CamelCaseException(string message)
+    public CaseException(string message)
         : base(message)
     {
     }
 
-    public CamelCaseException(string message, Exception innerException)
+    public CaseException(string message, Exception innerException)
         : base(message, innerException)
     {
     }
