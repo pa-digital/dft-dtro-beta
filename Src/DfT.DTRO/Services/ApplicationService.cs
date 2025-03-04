@@ -1,7 +1,3 @@
-using DfT.DTRO.Apis.Repositories;
-using DfT.DTRO.Models.Apigee;
-using DfT.DTRO.Models.Applications;
-
 namespace DfT.DTRO.Services;
 
 public class ApplicationService : IApplicationService
@@ -15,7 +11,8 @@ public class ApplicationService : IApplicationService
         _apigeeAppRepository = apigeeAppRepository;
     }
 
-    public bool ValidateAppBelongsToUser(string userId, string appId) {
+    public bool ValidateAppBelongsToUser(string userId, string appId)
+    {
         Guid appGuid = Guid.Parse(appId);
         string user = _applicationDal.GetApplicationUser(appGuid);
         return user == userId;
@@ -35,7 +32,7 @@ public class ApplicationService : IApplicationService
     {
         return _applicationDal.GetApplicationList(userId);
     }
-    
+
     public async Task<App> CreateApplication(AppInput appInput)
     {
         var username = appInput.Username;
