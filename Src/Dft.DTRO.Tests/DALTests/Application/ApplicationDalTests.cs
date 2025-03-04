@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace Dft.DTRO.Tests.DALTests
 {
     public class ApplicationDalTests : IDisposable

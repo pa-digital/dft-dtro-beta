@@ -14,6 +14,7 @@ global using System.Runtime.Serialization;
 global using System.Security.Cryptography.X509Certificates;
 global using System.Text;
 global using System.Threading.Tasks;
+global using DfT.DTRO.Apis.Clients;
 global using DfT.DTRO.Apis.Repositories;
 global using DfT.DTRO.Attributes;
 global using DfT.DTRO.Caching;
