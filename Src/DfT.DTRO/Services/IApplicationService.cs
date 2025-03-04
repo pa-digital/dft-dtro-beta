@@ -6,6 +6,6 @@ namespace DfT.DTRO.Services
         bool ValidateApplicationName(string appName);
         ApplicationDetailsDto GetApplicationDetails(string appId);
         List<ApplicationListDto> GetApplicationList(string userId);
-        PaginatedResponse<ApplicationListDto> GetPendingApplications(ApplicationRequest request);
+        PaginatedResponse<ApplicationListDto> GetPendingApplications(PaginatedRequest request);
     }
 }

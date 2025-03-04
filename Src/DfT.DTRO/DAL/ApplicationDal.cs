@@ -60,15 +60,13 @@ namespace DfT.DTRO.DAL
                 .ToList();
         }
 
-        public PaginatedResult<ApplicationListDto> GetPendingApplications(ApplicationRequest request)
+        public PaginatedResult<ApplicationListDto> GetPendingApplications(PaginatedRequest request)
         {
             IQueryable<ApplicationListDto> query = _context
                 .Applications
                 .Include(application => application.User)
                 .Include(application => application.TrafficRegulationAuthority)
                 .Include(application => application.ApplicationType)
-                .Where(application => application.User.Email == request.UserId)
-                .Where(application => application.User.IsCentralServiceOperator)
                 .Where(application => application.Status == "pending")
                 .Select(application => new ApplicationListDto
                 {

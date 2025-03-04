@@ -1,6 +1,4 @@
 using Dft.DTRO.Tests.Fixtures;
-using DfT.DTRO.Models.Filtering;
-using DfT.DTRO.Models.Pagination;
 
 public class ApplicationControllerTests : IClassFixture<ApplicationControllerTestFixture>
 {
@@ -122,7 +120,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
     [Fact]
     public void GetPendingApplicationsValidUserReturnsOk()
     {
-        var request = new ApplicationRequest { UserId = "admin@test.com", Page = 1, PageSize = 1 };
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
 
         var applications = new List<ApplicationListDto>
         {
@@ -141,7 +139,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
     [Fact]
     public void GetPendingApplicationsThrowsArgumentNullException()
     {
-        var request = new ApplicationRequest { UserId = "wrong@test.com", Page = 1, PageSize = 1 };
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
         var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
 
         var mockHttpContext = new Mock<HttpContext>();
@@ -163,7 +161,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
     [Fact]
     public void GetPendingApplicationsThrowsInvalidOperationException()
     {
-        var request = new ApplicationRequest { UserId = "wrong@test.com", Page = 1, PageSize = 1 };
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
         var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
 
         var mockHttpContext = new Mock<HttpContext>();
@@ -185,7 +183,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
     [Fact]
     public void GetPendingApplicationsThrowsException()
     {
-        var request = new ApplicationRequest { UserId = "wrong@test.com", Page = 1, PageSize = 1 };
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
         var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
 
         var mockHttpContext = new Mock<HttpContext>();

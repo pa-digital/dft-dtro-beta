@@ -150,11 +150,10 @@ namespace DfT.DTRO.Controllers
         [SwaggerResponse(statusCode: 404, type: typeof(ArgumentNullException), description: "Could not found any pending applications")]
         [SwaggerResponse(statusCode: 500, type: typeof(InvalidOperationException), description: "An error occurred while fetching the pending applications")]
         [SwaggerResponse(statusCode: 500, type: typeof(Exception), description: "An unexpected error occurred")]
-        public ActionResult<PaginatedResponse<ApplicationListDto>> GetPendingApplications([FromBody] ApplicationRequest request)
+        public ActionResult<PaginatedResponse<ApplicationListDto>> GetPendingApplications([FromBody] PaginatedRequest request)
         {
             try
             {
-                request.UserId = HttpContext.Items["UserId"] as string;
                 var response = _applicationService.GetPendingApplications(request);
                 if (response != null)
                 {

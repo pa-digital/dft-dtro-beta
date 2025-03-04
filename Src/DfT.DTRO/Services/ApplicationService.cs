@@ -23,7 +23,7 @@ public class ApplicationService : IApplicationService
     public List<ApplicationListDto> GetApplicationList(string userId) =>
         _applicationDal.GetApplicationList(userId);
 
-    public PaginatedResponse<ApplicationListDto> GetPendingApplications(ApplicationRequest request)
+    public PaginatedResponse<ApplicationListDto> GetPendingApplications(PaginatedRequest request)
     {
         PaginatedResult<ApplicationListDto> paginatedResult = _applicationDal.GetPendingApplications(request);
         PaginatedResponse<ApplicationListDto> paginatedResponse =
