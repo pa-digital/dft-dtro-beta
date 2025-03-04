@@ -6,11 +6,11 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 using Newtonsoft.Json.Linq;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_2
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_0
 {
     public class HappyScenarios : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.3.2";
+        readonly static string schemaVersionToTest = "3.3.0";
 
         public static IEnumerable<object[]> GetDtroFileNames()
         {
@@ -47,19 +47,30 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
-            // Get created DTRO
+            // Prepare DTRO update
+            string updateJson = Dtros.UpdateActionTypeAndTroName(schemaVersionToTest, createDtroJsonWithTraUpdated);
+            string nameOfUpdateJsonFile = $"updated{nameOfCopyFile}";
+            string tempUpdateFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfUpdateJsonFile}";
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfUpdateJsonFile, updateJson);
+
+            // Send DTRO update
             string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
+            HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromFileAsync(tempUpdateFilePath, dtroId, publisher);
+            Assert.Equal(HttpStatusCode.OK, updateDtroResponse.StatusCode);
+
+            // Get updated DTRO
             HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
             Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
             string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
 
-            // Add ID to sent DTRO for comparison purposes
-            JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
-            createJsonObject["id"] = dtroId;
+            // Add ID to updated DTRO for comparison purposes
+            JObject updateJsonObject = JObject.Parse(updateJson);
+            updateJsonObject["id"] = dtroId;
 
-            // Check retrieved DTRO matches sent DTRO
-            string sentCreateJsonWithId = createJsonObject.ToString();
-            CompareJson(sentCreateJsonWithId, dtroResponseJson);
+            // Check retrieved DTRO matches updated DTRO
+            string sentUpdateJsonWithId = updateJsonObject.ToString();
+            string sentUpdateJsonWithIdToCamelCase = ConvertJsonKeysToCamelCase(sentUpdateJsonWithId);
+            CompareJson(sentUpdateJsonWithIdToCamelCase, dtroResponseJson);
         }
 
         [Theory]
@@ -82,19 +93,27 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
-            // Get created DTRO
+            // Prepare DTRO update
+            string updateJson = Dtros.UpdateActionTypeAndTroName(schemaVersionToTest, createDtroJsonWithTraUpdated);
+
+            // Send DTRO update
             string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
+            HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromJsonBodyAsync(updateJson, dtroId, publisher);
+            Assert.Equal(HttpStatusCode.OK, updateDtroResponse.StatusCode);
+
+            // Get updated DTRO
             HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
             Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
             string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
 
-            // Add ID to sent DTRO for comparison purposes
-            JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
-            createJsonObject["id"] = dtroId;
+            // Add ID to updated DTRO for comparison purposes
+            JObject updateJsonObject = JObject.Parse(updateJson);
+            updateJsonObject["id"] = dtroId;
 
-            // Check retrieved DTRO matches sent DTRO
-            string sentCreateJsonWithId = createJsonObject.ToString();
-            CompareJson(sentCreateJsonWithId, dtroResponseJson);
+            // Check retrieved DTRO matches updated DTRO
+            string sentUpdateJsonWithId = updateJsonObject.ToString();
+            string sentUpdateJsonWithIdToCamelCase = ConvertJsonKeysToCamelCase(sentUpdateJsonWithId);
+            CompareJson(sentUpdateJsonWithIdToCamelCase, dtroResponseJson);
         }
     }
 }

@@ -7,9 +7,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class JsonHelper
     {
-        public static async Task<string> GetIdFromResponseJsonAsync(HttpResponseMessage httpResponse)
+        public static async Task<string> GetIdFromResponseJsonAsync(HttpResponseMessage httpResponseMessage)
         {
-            string createDtroResponseJson = await httpResponse.Content.ReadAsStringAsync();
+            string createDtroResponseJson = await httpResponseMessage.Content.ReadAsStringAsync();
             dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(createDtroResponseJson)!;
             string id = jsonDeserialised.id.ToString();
             return id;
@@ -31,26 +31,27 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             for (int i = 0; i < maxLines; i++)
             {
-                string line1 = i < expectedLines.Length ? expectedLines[i] : "";
-                string line2 = i < actualLines.Length ? actualLines[i] : "";
+                string expectedLine = i < expectedLines.Length ? expectedLines[i] : "";
+                string actualLine = i < actualLines.Length ? actualLines[i] : "";
+                int lineNumberToPrint = i + 1;
 
-                if (line1 == line2)
+                if (expectedLine == actualLine)
                 {
-                    Console.WriteLine(line1);
+                    Console.WriteLine($"line {lineNumberToPrint}    {expectedLine}");
                 }
                 else
                 {
                     jsonsMatch = false;
-                    if (!string.IsNullOrWhiteSpace(line1))
+                    if (!string.IsNullOrWhiteSpace(expectedLine))
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"- {line1.TrimEnd()}");
+                        Console.WriteLine($"line {lineNumberToPrint}    - {expectedLine.TrimEnd()}");
                         Console.ResetColor();
                     }
-                    if (!string.IsNullOrWhiteSpace(line2))
+                    if (!string.IsNullOrWhiteSpace(actualLine))
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"+ {line2.TrimEnd()}");
+                        Console.WriteLine($"line {lineNumberToPrint}    + {actualLine.TrimEnd()}");
                         Console.ResetColor();
                     }
                 }
@@ -160,14 +161,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         {
             using JsonDocument doc = JsonDocument.Parse(json);
             return System.Text.Json.JsonSerializer.Serialize(doc.RootElement);
-        }
-
-        public static async Task<string> GetIdFromJsonResponseAsync(HttpResponseMessage httpttpResponseMessage)
-        {
-            string responseJson = await httpttpResponseMessage.Content.ReadAsStringAsync();
-            dynamic responseJsonDeserialised = JsonConvert.DeserializeObject<dynamic>(responseJson)!;
-            string id = responseJsonDeserialised.id.ToString();
-            return id;
         }
     }
 }
