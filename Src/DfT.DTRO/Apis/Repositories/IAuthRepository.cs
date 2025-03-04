@@ -1,8 +1,8 @@
 ﻿using DfT.DTRO.Models.Auth;
 
-namespace DfT.DTRO.Services;
+namespace DfT.DTRO.Apis.Repositories;
 
-public interface IAuthClient
+public interface IAuthRepository
 {
     
     /// <summary>
