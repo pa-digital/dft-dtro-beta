@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using NpgsqlTypes;
-using System;
 
 #nullable disable
 
 namespace DfT.DTRO.Migrations;
+[ExcludeFromCodeCoverage]
 public partial class OtherSearchOptimizationFields : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)

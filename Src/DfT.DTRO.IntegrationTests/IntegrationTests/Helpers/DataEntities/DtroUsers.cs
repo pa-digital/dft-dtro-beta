@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
+    [ExcludeFromCodeCoverage]
     public static class DtroUsers
     {
         public static async Task DeleteExistingUsersAsync(TestUser testUser)

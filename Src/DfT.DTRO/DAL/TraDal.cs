@@ -17,7 +17,7 @@ public class TraDal : ITraDal
     public TraDal(DtroContext dtroContext, IDtroMappingService dtroMappingService)
     {
         _dtroContext = dtroContext;
-        _dtroMappingService = dtroMappingService; 
+        _dtroMappingService = dtroMappingService;
     }
 
     ///<inheritdoc cref="ITraDal"/>

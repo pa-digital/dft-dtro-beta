@@ -37,11 +37,8 @@
 
 	<ItemGroup>
 		<Compile Remove="CodeiumTests\Unit\**" />
-		<Compile Remove="TestResults\**" />
 		<EmbeddedResource Remove="CodeiumTests\Unit\**" />
-		<EmbeddedResource Remove="TestResults\**" />
 		<None Remove="CodeiumTests\Unit\**" />
-		<None Remove="TestResults\**" />
 	</ItemGroup>
 
 	<ItemGroup>
