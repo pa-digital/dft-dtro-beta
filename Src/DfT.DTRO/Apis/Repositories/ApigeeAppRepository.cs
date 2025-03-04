@@ -1,0 +1,22 @@
+﻿using DfT.DTRO.Apis.Clients;
+using DfT.DTRO.Models.Apigee;
+using Newtonsoft.Json;
+
+namespace DfT.DTRO.Apis.Repositories;
+
+public class ApigeeAppRepository : IApigeeAppRepository
+{
+    
+    private readonly IApigeeClient _apigeeClient;
+
+    public ApigeeAppRepository(IApigeeClient apigeeClient) =>
+        _apigeeClient = apigeeClient;
+    
+    public async Task<ApigeeDeveloperApp> CreateApp(string developerEmail, ApigeeDeveloperAppInput developerAppInput)
+    {
+        var responseMessage = await _apigeeClient.CreateApp(developerEmail, developerAppInput);
+        var responseMessageContent = await responseMessage.Content.ReadAsStringAsync();
+        return responseMessage.IsSuccessStatusCode ? JsonConvert.DeserializeObject<ApigeeDeveloperApp>(responseMessageContent)
+            : throw new Exception(responseMessageContent);
+    }
+}
