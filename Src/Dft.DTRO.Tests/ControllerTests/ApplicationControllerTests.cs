@@ -1,6 +1,7 @@
 using Dft.DTRO.Tests.Fixtures;
 
-public class ApplicationControllerTests  : IClassFixture<ApplicationControllerTestFixture>
+[ExcludeFromCodeCoverage]
+public class ApplicationControllerTests : IClassFixture<ApplicationControllerTestFixture>
 {
     private readonly Mock<IApplicationService> _mockApplicationService;
     private readonly ApplicationController _controller;
@@ -10,7 +11,7 @@ public class ApplicationControllerTests  : IClassFixture<ApplicationControllerTe
     {
         ILogger<ApplicationController> mockLogger = MockLogger.Setup<ApplicationController>();
         var mockLoggingExtension = new Mock<LoggingExtension>();
-        
+
         _mockApplicationService = new Mock<IApplicationService>();
         _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, mockLoggingExtension.Object);
         _fixture = fixture;

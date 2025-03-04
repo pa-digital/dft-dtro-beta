@@ -1,5 +1,6 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.Users.Controller;
 
+[ExcludeFromCodeCoverage]
 public class UserControllerCreateFromBodyTests
 {
     private readonly Mock<IDtroUserService> _traServiceMock;

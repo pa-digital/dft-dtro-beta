@@ -6,7 +6,6 @@ global using System.Net;
 global using System.Text;
 global using Dft.DTRO.Tests.Mocks;
 global using DfT.DTRO;
-global using DfT.DTRO.Apis.Clients;
 global using DfT.DTRO.Apis.Repositories;
 global using DfT.DTRO.Controllers;
 global using DfT.DTRO.Converters;

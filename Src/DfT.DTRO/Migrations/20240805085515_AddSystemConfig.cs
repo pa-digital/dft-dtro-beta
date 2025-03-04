@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace DfT.DTRO.Migrations
 {
+    [ExcludeFromCodeCoverage]
     public partial class AddSystemConfig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

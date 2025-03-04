@@ -3,6 +3,7 @@
 #nullable disable
 
 namespace DfT.DTRO.Migrations;
+[ExcludeFromCodeCoverage]
 public partial class RulesChangedToText : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)
