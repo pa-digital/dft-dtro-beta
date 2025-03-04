@@ -33,13 +33,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
             TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            string userGuid = await GetIdFromJsonResponseAsync(createUserResponse);
 
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
             string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{fileName}";
-            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, fileName, createDtroJsonWithTraUpdated);
+            string nameOfCopyFile = $"{userGuid.Substring(0, 5)}{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);

@@ -78,7 +78,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             AbsolutePathToProjectDirectory = GetAbsolutePathToProjectDirectory();
             AbsolutePathToExamplesDirectory = $"{GetAbsolutePathToProjectDirectory()}/examples";
             AbsolutePathToDtroExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/D-TROs";
-            AbsolutePathToDtroExamplesTempDirectory = $"{AbsolutePathToExamplesDirectory}/temp";
+            AbsolutePathToDtroExamplesTempDirectory = $"{AbsolutePathToExamplesDirectory}/temp_integration_tests";
             AbsolutePathToSchemaExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/Schemas";
             AbsolutePathToRuleExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/Rules";
             DatabaseConnectionString = GetDatabaseConnectionString();

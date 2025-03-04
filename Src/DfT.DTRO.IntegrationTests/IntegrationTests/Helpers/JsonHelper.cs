@@ -161,5 +161,13 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             using JsonDocument doc = JsonDocument.Parse(json);
             return System.Text.Json.JsonSerializer.Serialize(doc.RootElement);
         }
+
+        public static async Task<string> GetIdFromJsonResponseAsync(HttpResponseMessage httpttpResponseMessage)
+        {
+            string responseJson = await httpttpResponseMessage.Content.ReadAsStringAsync();
+            dynamic responseJsonDeserialised = JsonConvert.DeserializeObject<dynamic>(responseJson)!;
+            string id = responseJsonDeserialised.id.ToString();
+            return id;
+        }
     }
 }

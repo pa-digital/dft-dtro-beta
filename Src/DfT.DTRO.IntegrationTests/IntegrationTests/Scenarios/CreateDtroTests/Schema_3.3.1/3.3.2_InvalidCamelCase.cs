@@ -3,11 +3,12 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelper;
 using Newtonsoft.Json;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_1
 {
-    public class CamelCase : BaseTest
+    public class InvalidCamelCase : BaseTest
     {
         readonly static string schemaVersionToTest = "3.3.1";
         readonly static string filesWithInvalidCamelCase = "3.3.2";
@@ -25,7 +26,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
 
         [Theory]
         [MemberData(nameof(GetDtroFileNames))]
-        public async Task DtroSubmittedFromFileShouldBeSavedCorrectly(string fileName)
+        public async Task DtroSubmittedFromFileWithCamelCaseShouldBeRejected(string fileName)
         {
             Console.WriteLine($"\nTesting with file {fileName}...");
 
@@ -33,14 +34,16 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
             TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            string userGuid = await GetIdFromJsonResponseAsync(createUserResponse);
 
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{filesWithInvalidCamelCase}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
             string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(filesWithInvalidCamelCase, createDtroJson, publisher.TraId);
             string createDtroJsonWithSchemaVersionUpdated = Dtros.UpdateSchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{fileName}";
-            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, fileName, createDtroJsonWithSchemaVersionUpdated);
+            string nameOfCopyFile = $"{userGuid.Substring(0, 5)}{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithSchemaVersionUpdated);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
@@ -57,7 +60,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
 
         [Theory]
         [MemberData(nameof(GetDtroFileNames))]
-        public async Task DtroSubmittedFromJsonBodyShouldBeSavedCorrectly(string fileName)
+        public async Task DtroSubmittedFromJsonBodyWithCamelCaseShouldBeRejected(string fileName)
         {
             Console.WriteLine($"\nTesting with file {fileName}...");
 
