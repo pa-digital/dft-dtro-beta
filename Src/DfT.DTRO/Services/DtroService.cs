@@ -70,7 +70,7 @@ public class DtroService : IDtroService
 
         return dtros.Select(_dtroMappingService.MapToDtroResponse);
     }
-    
+
     public async Task<bool> GenerateDtrosAsZipAsync()
     {
         var existingZipFiles = Directory.GetFiles(_fileDirectory, "dtro_export_*.zip");
@@ -78,13 +78,13 @@ public class DtroService : IDtroService
         {
             File.Delete(file);
         }
-        
+
         var dtros = await _dtroDal.GetDtrosAsync();
         if (dtros is null || !dtros.Any())
         {
-            throw new NotFoundException();;
+            throw new NotFoundException(); ;
         }
-        
+
         var timestamp = DateTime.Now.ToString("s");
         var zipFileName = $"dtro_export_{timestamp}.zip";
         var zipFilePath = Path.Combine(_fileDirectory, zipFileName);
@@ -97,7 +97,7 @@ public class DtroService : IDtroService
             await WriteDtroToJsonAsync(record, jsonFilePath);
             jsonFilePaths.Add(jsonFilePath);
         }
-        
+
         await using (var zipStream = new FileStream(zipFilePath, FileMode.Create))
         using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
         {
@@ -107,7 +107,7 @@ public class DtroService : IDtroService
                 File.Delete(jsonFile);
             }
         }
-        
+
         return true;
     }
 

@@ -3,7 +3,6 @@
 /// <summary>
 /// Implementation of the <see cref="IDtroUserDal"/> service.
 /// </summary>
-[ExcludeFromCodeCoverage]
 public class DtroUserDal : IDtroUserDal
 {
     private readonly DtroContext _dtroContext;

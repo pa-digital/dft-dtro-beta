@@ -1,7 +1,6 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace Dft.DTRO.Tests.DALTests
 {
+    [ExcludeFromCodeCoverage]
     public class ApplicationDalTests : IDisposable
     {
         private readonly DtroContext _context;
@@ -82,74 +81,74 @@ namespace Dft.DTRO.Tests.DALTests
         }
 
         [Fact]
-        public void CheckApplicationNameDoesNotExistShouldReturnFalseWhenNameExists()
+        public async Task CheckApplicationNameDoesNotExistShouldReturnFalseWhenNameExists()
         {
-            bool result = _applicationDal.CheckApplicationNameDoesNotExist("TestApp1");
+            bool result = await _applicationDal.CheckApplicationNameDoesNotExist("TestApp1");
             Assert.False(result);
         }
 
         [Fact]
-        public void CheckApplicationNameDoesNotExistShouldReturnTrueWhenNameDoesNotExist()
+        public async Task CheckApplicationNameDoesNotExistShouldReturnTrueWhenNameDoesNotExist()
         {
-            bool result = _applicationDal.CheckApplicationNameDoesNotExist("NonExistentApp");
+            bool result = await _applicationDal.CheckApplicationNameDoesNotExist("NonExistentApp");
             Assert.True(result);
         }
 
         [Fact]
-        public void GetApplicationUserShouldReturnUserEmailWhenAppExists()
+        public async Task GetApplicationUserShouldReturnUserEmailWhenAppExists()
         {
             var app = _context.Applications.First();
             var appGuid = app.Id;
 
-            string userEmail = _applicationDal.GetApplicationUser(appGuid);
+            string userEmail = await _applicationDal.GetApplicationUser(appGuid);
             Assert.Equal(app.User.Email, userEmail);
         }
 
         [Fact]
-        public void GetApplicationUserShouldReturnNullWhenAppDoesNotExist()
+        public async Task GetApplicationUserShouldReturnNullWhenAppDoesNotExist()
         {
-            string userEmail = _applicationDal.GetApplicationUser(Guid.NewGuid());
+            string userEmail = await _applicationDal.GetApplicationUser(Guid.NewGuid());
             Assert.Null(userEmail);
         }
 
         [Fact]
-        public void GetApplicationDetailsShouldReturnApplicationDetailsWhenAppExists()
+        public async Task GetApplicationDetailsShouldReturnApplicationDetailsWhenAppExists()
         {
             var app = _context.Applications.First();
             var appId = app.Id.ToString();
 
-            var details = _applicationDal.GetApplicationDetails(appId);
+            var details = await _applicationDal.GetApplicationDetails(appId);
             Assert.NotNull(details);
             Assert.Equal(app.Nickname, details.Name);
             Assert.Equal(app.Purpose.Description, details.Purpose);
         }
 
         [Fact]
-        public void GetApplicationDetailsShouldReturnNullWhenInvalidAppId()
+        public async Task GetApplicationDetailsShouldReturnNullWhenInvalidAppId()
         {
-            var details = _applicationDal.GetApplicationDetails("invalid-guid");
+            var details = await _applicationDal.GetApplicationDetails("invalid-guid");
             Assert.Null(details);
         }
 
         [Fact]
-        public void GetApplicationListShouldReturnApplicationForUserWithSingleApp()
+        public async Task GetApplicationListShouldReturnApplicationForUserWithSingleApp()
         {
-            var apps = _applicationDal.GetApplicationList("anotheruser@test.com");
+            var apps = await _applicationDal.GetApplicationList("anotheruser@test.com");
             Assert.Single(apps);
             Assert.Equal("TestApp2", apps[0].Name);
         }
 
         [Fact]
-        public void GetApplicationListShouldReturnApplicationsForUserWithMultipleApps()
+        public async Task GetApplicationListShouldReturnApplicationsForUserWithMultipleApps()
         {
-            var apps = _applicationDal.GetApplicationList("user@test.com");
+            var apps = await _applicationDal.GetApplicationList("user@test.com");
             Assert.Equal(2, apps.Count);
         }
 
         [Fact]
-        public void GetApplicationList_ShouldReturnEmptyListWhenNoAppsForUser()
+        public async Task GetApplicationList_ShouldReturnEmptyListWhenNoAppsForUser()
         {
-            var apps = _applicationDal.GetApplicationList("nonexistent@test.com");
+            var apps = await _applicationDal.GetApplicationList("nonexistent@test.com");
             Assert.Empty(apps);
         }
 

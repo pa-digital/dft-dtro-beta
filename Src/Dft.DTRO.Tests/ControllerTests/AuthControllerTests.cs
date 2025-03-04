@@ -1,5 +1,3 @@
-using DfT.DTRO.Models.Auth;
-
 namespace Dft.DTRO.Tests.ControllerTests;
 
 [ExcludeFromCodeCoverage]

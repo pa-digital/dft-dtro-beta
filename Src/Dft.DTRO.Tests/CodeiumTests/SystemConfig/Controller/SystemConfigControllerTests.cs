@@ -1,5 +1,6 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.SystemConfig.Controller;
 
+[ExcludeFromCodeCoverage]
 public class SystemConfigControllerTests
 {
     private readonly Mock<IAppIdMapperService> _mockXappIdMapperService;

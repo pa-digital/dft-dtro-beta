@@ -4,14 +4,14 @@ namespace DfT.DTRO.Services;
 
 public class AuthService : IAuthService
 {
-    
-    private readonly IAuthClient _authClient;
 
-    public AuthService(IAuthClient authClient) =>
-        _authClient = authClient;
-    
+    private readonly IAuthRepository _authRepository;
+
+    public AuthService(IAuthRepository authRepository) =>
+        _authRepository = authRepository;
+
     public async Task<AuthToken> GetToken(AuthTokenInput authTokenInput)
     {
-       return await _authClient.GetToken(authTokenInput);
+        return await _authRepository.GetToken(authTokenInput);
     }
 }

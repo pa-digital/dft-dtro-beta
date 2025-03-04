@@ -1,7 +1,4 @@
-﻿using DfT.DTRO.Enums;
-using DfT.DTRO.Models.DataBase;
-
-namespace DfT.DTRO.DAL;
+﻿namespace DfT.DTRO.DAL;
 
 /// <summary>
 /// Implementation of <see cref="IMetricDal"/> service.
@@ -32,7 +29,7 @@ public class MetricDal : IMetricDal
                 Id = Guid.NewGuid(),
                 ForDate = today,
                 DtroUserId = dtroUserId,
-                UserGroup = (int) userGroup
+                UserGroup = (int)userGroup
             };
             await _dtroContext.Metrics.AddAsync(metric);
         }
@@ -102,7 +99,7 @@ public class MetricDal : IMetricDal
         }
 
         var aggregatedMetrics = await query
-            .GroupBy(metric => 1) 
+            .GroupBy(metric => 1)
             .Select(group => new MetricSummary
             {
                 SystemFailureCount = group.Sum(metric => metric.SystemFailureCount),

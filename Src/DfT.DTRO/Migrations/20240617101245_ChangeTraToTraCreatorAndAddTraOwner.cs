@@ -4,6 +4,7 @@
 
 namespace DfT.DTRO.Migrations
 {
+    [ExcludeFromCodeCoverage]
     public partial class ChangeTraToTraCreatorAndAddTraOwner : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

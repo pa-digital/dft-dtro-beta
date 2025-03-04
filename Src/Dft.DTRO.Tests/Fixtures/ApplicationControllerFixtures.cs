@@ -1,5 +1,6 @@
 namespace Dft.DTRO.Tests.Fixtures
 {
+    [ExcludeFromCodeCoverage]
     public class ApplicationControllerTestFixture
     {
         public ControllerContext ControllerContext { get; }

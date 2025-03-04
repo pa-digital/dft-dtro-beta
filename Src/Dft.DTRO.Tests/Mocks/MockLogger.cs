@@ -1,5 +1,6 @@
 ﻿namespace Dft.DTRO.Tests.Mocks;
 
+[ExcludeFromCodeCoverage]
 public static class MockLogger
 {
     public static ILogger<T> Setup<T>()
