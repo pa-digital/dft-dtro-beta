@@ -32,5 +32,11 @@ namespace DfT.DTRO.Services
             return _applicationDal.GetApplicationList(userId);
         }
 
+        public async Task<bool> ActivateApplicationById(string applicationId)
+        {
+            Guid appGuid = Guid.Parse(applicationId);
+            // TODO: approve application on Apigee
+            return await _applicationDal.ActivateApplicationById(appGuid);
+        }
     }
 }

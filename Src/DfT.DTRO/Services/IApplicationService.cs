@@ -6,5 +6,6 @@ namespace DfT.DTRO.Services
         bool ValidateApplicationName(string appName);
         ApplicationDetailsDto GetApplicationDetails(string appId);
         List<ApplicationListDto> GetApplicationList(string userId);
+        Task<bool> ActivateApplicationById(string applicationId);
     }
 }

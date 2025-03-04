@@ -116,4 +116,90 @@ public class ApplicationControllerTests  : IClassFixture<ApplicationControllerTe
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
     }
+
+    [Fact]
+    public async Task ActivateApplicationNullRequestReturnsBadRequest()
+    {
+        var result = await _controller.ActivateApplication(null);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(400, badRequestResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task ActivateApplicationEmptyAppIdReturnsBadRequest()
+    {
+        var request = new ApplicationDetailsRequest { appId = "" };
+        var result = await _controller.ActivateApplication(request);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(400, badRequestResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task ActivateApplicationAppDoesNotBelongToUserReturnsForbid()
+    {
+        var request = new ApplicationDetailsRequest { appId = "valid-app-id" };
+        _mockApplicationService
+            .Setup(s => s.ValidateAppBelongsToUser("test-user-id", "valid-app-id"))
+            .Returns(false);
+
+        var result = await _controller.ActivateApplication(request);
+        Assert.IsType<ForbidResult>(result);
+    }
+
+    [Fact]
+    public async Task ActivateApplicationSuccessfulActivationReturnsOk()
+    {
+        var request = new ApplicationDetailsRequest { appId = "valid-app-id" };
+        _mockApplicationService
+            .Setup(s => s.ValidateAppBelongsToUser("user@test.com", "valid-app-id"))
+            .Returns(true);
+        _mockApplicationService
+            .Setup(s => s.ActivateApplicationById("valid-app-id"))
+            .ReturnsAsync(true);
+
+        var result = await _controller.ActivateApplication(request);
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, okResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task ActivateApplicationInvalidOperationExceptionReturnsInternalServerError()
+    {
+        var request = new ApplicationDetailsRequest { appId = "valid-app-id" };
+        _mockApplicationService
+            .Setup(s => s.ValidateAppBelongsToUser("user@test.com", "valid-app-id"))
+            .Returns(true);
+        _mockApplicationService
+            .Setup(s => s.ActivateApplicationById("valid-app-id"))
+            .ThrowsAsync(new InvalidOperationException("Database error"));
+
+        var result = await _controller.ActivateApplication(request);
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, objectResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task ActivateApplicationUnexpectedExceptionReturnsInternalServerError()
+    {
+        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
+
+        var mockHttpContext = new Mock<HttpContext>();
+        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
+        _controller.ControllerContext = new ControllerContext()
+        {
+            HttpContext = mockHttpContext.Object
+        };
+
+        var request = new ApplicationDetailsRequest { appId = "valid-app-id" };
+        _mockApplicationService
+            .Setup(s => s.ValidateAppBelongsToUser("user@test.com", "valid-app-id"))
+            .Returns(true);
+        _mockApplicationService
+            .Setup(s => s.ActivateApplicationById("valid-app-id"))
+            .ThrowsAsync(new Exception("Something went wrong"));
+
+        var result = await _controller.ActivateApplication(request);
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, objectResult.StatusCode);
+    }
 }

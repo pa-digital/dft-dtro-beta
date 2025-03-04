@@ -34,10 +34,14 @@ namespace Dft.DTRO.Tests.DALTests
             var purposeB = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeB" };
             var purposeC = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeC" };
 
+            var statusA = new ApplicationStatus { Id = Guid.NewGuid(), Status = "Active" };
+            var statusB = new ApplicationStatus { Id = Guid.NewGuid(), Status = "Inactive" };
+
             _context.Users.AddRange(user1, user2);
             _context.TrafficRegulationAuthorities.AddRange(tra1, tra2);
             _context.ApplicationTypes.AddRange(typeA, typeB);
             _context.ApplicationPurposes.AddRange(purposeA, purposeB);
+            _context.ApplicationStatus.AddRange(statusA, statusB);
             _context.SaveChanges();
 
             _context.Applications.AddRange(new List<Application>
@@ -49,7 +53,8 @@ namespace Dft.DTRO.Tests.DALTests
                     User = user1,
                     ApplicationType = typeA,
                     TrafficRegulationAuthority = tra1,
-                    Purpose = purposeA
+                    Purpose = purposeA,
+                    Status = statusB
                 },
                 new Application
                 {
@@ -58,7 +63,8 @@ namespace Dft.DTRO.Tests.DALTests
                     User = user2,
                     ApplicationType = typeB,
                     TrafficRegulationAuthority = tra2,
-                    Purpose = purposeB
+                    Purpose = purposeB,
+                    Status = statusB
                 },
                 new Application
                 {
@@ -67,7 +73,8 @@ namespace Dft.DTRO.Tests.DALTests
                     User = user1,
                     ApplicationType = typeA,
                     TrafficRegulationAuthority = tra1,
-                    Purpose = purposeC
+                    Purpose = purposeC,
+                    Status = statusB
                 },
             });
 
@@ -144,6 +151,42 @@ namespace Dft.DTRO.Tests.DALTests
         {
             var apps = _applicationDal.GetApplicationList("nonexistent@test.com");
             Assert.Empty(apps);
+        }
+
+        [Fact]
+        public async Task ActivateApplicationByIdApplicationNotFoundReturnsFalse()
+        {
+            var appGuid = Guid.NewGuid(); // Non-existing GUID
+            var result = await _applicationDal.ActivateApplicationById(appGuid);
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task ActivateApplicationByIdApplicationStatusUpdatedReturnsTrue()
+        {
+            Application application = _context.Applications.First();
+            ApplicationStatus activeStatus = await _context.ApplicationStatus.FirstOrDefaultAsync(a => a.Status == "Active");
+            ApplicationStatus inactiveStatus = await _context.ApplicationStatus.FirstOrDefaultAsync(a => a.Status == "Inactive");
+            Assert.Equal(application.Status, inactiveStatus);
+
+            var result = await _applicationDal.ActivateApplicationById(application.Id);
+            Assert.True(result);
+            application = _context.Applications.First();
+            Assert.Equal(application.Status, activeStatus);
+        }
+
+        [Fact]
+        public async Task ActivateApplicationReturnsFalseWHenActiveStatusIsNull()
+        {
+            Application application = _context.Applications.First();
+            var activeStatuses = await _context.ApplicationStatus
+                .Where(a => a.Status == "Active").ToListAsync();
+
+            _context.ApplicationStatus.RemoveRange(activeStatuses);
+            await _context.SaveChangesAsync();
+
+            var result = await _applicationDal.ActivateApplicationById(application.Id);
+            Assert.False(result);
         }
 
         public void Dispose()

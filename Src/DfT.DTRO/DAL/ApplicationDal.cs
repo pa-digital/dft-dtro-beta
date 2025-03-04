@@ -55,5 +55,34 @@ namespace DfT.DTRO.DAL
                 .ToList();
         }
 
+        public async Task<bool> ActivateApplicationById(Guid appGuid)
+        {
+            try
+            {
+                Application application = await _context.Applications.FindAsync(appGuid);
+                if (application == null)
+                {
+                    return false;
+                }
+
+                ApplicationStatus activeStatus = await _context.ApplicationStatus.SingleOrDefaultAsync(a => a.Status == "Active");
+                if (activeStatus == null)
+                {
+                    return false;
+                }
+
+                if (application.Status != activeStatus)
+                {
+                    application.Status = activeStatus;
+                    await _context.SaveChangesAsync();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

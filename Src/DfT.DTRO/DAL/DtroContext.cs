@@ -91,6 +91,8 @@ public class DtroContext : DbContext
     /// </summary>
     public virtual DbSet<TrafficRegulationAuthorityDigitalServiceProviderStatus> TrafficRegulationAuthorityDigitalServiceProviderStatuses { get; set; }
 
+    public DbSet<ApplicationStatus> ApplicationStatus { get; set; }
+
     /// <summary>
     /// Default constructor.
     /// </summary>
@@ -146,6 +148,14 @@ public class DtroContext : DbContext
             .WithMany()
             .HasForeignKey(a => a.ApplicationTypeId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Application>()
+            .HasOne(a => a.Status)
+            .WithMany()
+            .HasForeignKey(a => a.StatusId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<ApplicationStatus>().ToTable("ApplicationStatus");
     }
 
 

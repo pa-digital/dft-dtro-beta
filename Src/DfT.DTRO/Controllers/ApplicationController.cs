@@ -72,12 +72,14 @@ namespace DfT.DTRO.Controllers
                 string appId = request.appId;
                 var userId = HttpContext.Items["UserId"] as string;
                 bool appBelongsToUser = _applicationService.ValidateAppBelongsToUser(userId, appId);
-                if (!appBelongsToUser) {
+                if (!appBelongsToUser)
+                {
                     return Forbid();
                 }
 
                 var result = _applicationService.GetApplicationDetails(appId);
-                if (result != null) {
+                if (result != null)
+                {
                     // TODO: fetch API key and secret from Apigee
                     return Ok(new { name = result.Name, appId = result.AppId, purpose = result.Purpose, apiKey = "thisismyapikey", apiSecret = "thisismyapisecret" });
                 }
@@ -114,7 +116,8 @@ namespace DfT.DTRO.Controllers
             {
                 var userId = HttpContext.Items["UserId"] as string;
                 var result = _applicationService.GetApplicationList(userId);
-                if (result != null) {
+                if (result != null)
+                {
                     return Ok(result);
                 }
 
@@ -128,6 +131,50 @@ namespace DfT.DTRO.Controllers
             catch (InvalidOperationException ex)
             {
                 return StatusCode(500, new { message = "An error occurred while fetching the applications", error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An unexpected error occurred.", error = ex.Message });
+            }
+        }
+
+        // <summary>
+        /// Activates an application by app ID
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <response code="200">Valid application ID</response>
+        /// <response code="400">Invalid or empty parameters, or no matching application</response>
+        /// <response code="500">Invalid operation or other exception</response>
+        [HttpPost(RouteTemplates.ActivateApplication)]
+        [FeatureGate(FeatureNames.ReadOnly)]
+        public async Task<IActionResult> ActivateApplication([FromBody] ApplicationDetailsRequest request)
+        {
+            try
+            {
+                if (request == null || string.IsNullOrEmpty(request.appId))
+                {
+                    return BadRequest(new { message = "Application ID is required" });
+                }
+
+                string appId = request.appId;
+                var userId = HttpContext.Items["UserId"] as string;
+                bool appBelongsToUser = _applicationService.ValidateAppBelongsToUser(userId, appId);
+                if (!appBelongsToUser)
+                {
+                    return Forbid();
+                }
+
+                bool result = await _applicationService.ActivateApplicationById(appId);
+                return Ok(new {id = appId, status = "Active"});
+
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(new { message = "Invalid input parameters", error = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while trying to activate application", error = ex.Message });
             }
             catch (Exception ex)
             {
