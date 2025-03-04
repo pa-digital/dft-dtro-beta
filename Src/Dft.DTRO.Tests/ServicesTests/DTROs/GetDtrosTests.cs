@@ -26,6 +26,16 @@ public class GetDtrosTests
     }
 
     [Theory]
+    [InlineData("9193F714-EDAC-4411-A6D0-6B888675BAD5", true)]
+    [InlineData("00000000-0000-0000-0000-000000000000", false)]
+    public async Task DtroExistsAsyncReturnsTrue(string guid, bool state)
+    {
+        var actual = await _sut.DtroExistsAsync(Guid.Parse(guid));
+        Assert.Equal(actual, state);
+    }
+
+
+    [Theory]
     [InlineData(1000, "2025-01-21 16:21:26", "2025-01-23 11:02:41", 3)]
     [InlineData(3300, "2025-01-21 16:21:26", "2025-01-23 11:02:41", 2)]
     [InlineData(3300, "2025-01-21 16:21:26", "2025-01-22 16:21:26", 2)]
