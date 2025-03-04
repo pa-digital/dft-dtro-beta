@@ -128,7 +128,7 @@ public class MetricsController : ControllerBase
         catch (ArgumentException aex)
         {
             _logger.LogError(aex.Message);
-            _loggingExtension.LogError( nameof(GetMetricsForDtroUser), "/metricsForDtroUser", "", aex.Message);
+            _loggingExtension.LogError(nameof(GetMetricsForDtroUser), "/metricsForDtroUser", "", aex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", aex.Message));
         }
         catch (Exception ex)

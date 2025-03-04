@@ -1,5 +1,3 @@
-using DfT.DTRO.Models.Tra;
-
 namespace DfT.DTRO.Controllers;
 
 /// <summary>
@@ -21,7 +19,8 @@ public class TraController : ControllerBase
     /// <param name="traService">An <see cref="ITraService"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{TraController}"/> instance.</param>
     /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
-    public TraController(ITraService traService, ILogger<TraController> logger, LoggingExtension loggingExtension) {
+    public TraController(ITraService traService, ILogger<TraController> logger, LoggingExtension loggingExtension)
+    {
         _traService = traService;
         _logger = logger;
         _loggingExtension = loggingExtension;

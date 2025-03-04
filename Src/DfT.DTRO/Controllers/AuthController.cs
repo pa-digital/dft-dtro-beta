@@ -1,5 +1,3 @@
-using DfT.DTRO.Models.Auth;
-
 namespace DfT.DTRO.Controllers;
 
 /// <summary>
@@ -21,7 +19,8 @@ public class AuthController : ControllerBase
     /// <param name="authService">An <see cref="IAuthService"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{AuthController}"/> instance.</param>
     /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
-    public AuthController(IAuthService authService, ILogger<AuthController> logger, LoggingExtension loggingExtension) {
+    public AuthController(IAuthService authService, ILogger<AuthController> logger, LoggingExtension loggingExtension)
+    {
         _authService = authService;
         _logger = logger;
         _loggingExtension = loggingExtension;
