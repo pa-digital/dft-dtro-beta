@@ -48,7 +48,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
             // Prepare DTRO update
-            string updateJson = Dtros.UpdateActionTypeAndTroName(schemaVersionToTest, createDtroJsonWithTraUpdated);
+            string updateJson = Dtros.UpdateActionTypeAndTroName(createDtroJsonWithTraUpdated, schemaVersionToTest);
             string nameOfUpdateJsonFile = $"updated{nameOfCopyFile}";
             string tempUpdateFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfUpdateJsonFile}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfUpdateJsonFile, updateJson);
@@ -94,7 +94,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
             // Prepare DTRO update
-            string updateJson = Dtros.UpdateActionTypeAndTroName(schemaVersionToTest, createDtroJsonWithTraUpdated);
+            string updateJson = Dtros.UpdateActionTypeAndTroName(createDtroJsonWithTraUpdated, schemaVersionToTest);
 
             // Send DTRO update
             string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
