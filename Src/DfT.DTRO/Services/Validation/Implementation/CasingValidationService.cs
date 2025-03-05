@@ -9,7 +9,7 @@ enum Casing
 
 public class CasingValidationService
 {
-    HashSet<string> keysToConvert = new HashSet<string> { "source", "provision", "regulatedplace", "geometry", "lineargeometry", "pointgeometry", "polygon", "directedlinear", "externalreference", "uniquestreetreferencenumber", "elementarystreetunit", "regulation", "speedlimitvaluebased", "speedlimitprofilebased", "generalregulation", "offlistregulation", "condition", "temporaryregulation", "roadcondition", "numberofoccupants", "occupantcondition", "drivercondition", "accesscondition", "timevalidity", "nonvehicularroadusercondition", "permitcondition", "vehiclecharacteristics", "conditionset", "authority", "permitsubjecttofee", "specialday", "publicholiday", "changeabletimeperiodstart", "changeabletimeperiodend", "calendarweekinmonth", "weekofmonth", "instanceofdaywithinmonth", "changeabletimeperiodsource", "changeabletimeperiodentry", "maximumgrossweightcharacteristic", "maximumheightcharacteristic", "maximumlengthcharacteristic", "maximumwidthcharacteristic", "heaviestaxleweightcharacteristic", "numberofaxlescharacteristic", "emissions", "ratetable", "ratelinecollection", "rateline" };
+    HashSet<string> keysToConvert = Constants.KeysToConvert;
 
     private bool IsObjectOrArray(object value)
     {
