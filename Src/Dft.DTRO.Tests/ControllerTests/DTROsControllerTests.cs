@@ -1,6 +1,5 @@
 namespace Dft.DTRO.Tests.ControllerTests;
 
-[ExcludeFromCodeCoverage]
 public class DTROsControllerTests
 {
     private readonly Mock<IDtroService> _mockDtroService = new();

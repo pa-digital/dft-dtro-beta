@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class RegulatedPlaceValidationServiceTests
 {
     private readonly IRegulatedPlaceValidationService _sut = new RegulatedPlaceValidationService();

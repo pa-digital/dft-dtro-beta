@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class RateLineCollectionValidationServiceTests
 {
     private readonly IRateLineCollectionValidationService _sut = new RateLineCollectionValidationService();

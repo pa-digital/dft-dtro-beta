@@ -5,7 +5,6 @@ using Newtonsoft.Json.Linq;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
-    [ExcludeFromCodeCoverage]
     public static class JsonHelper
     {
         public static async Task<string> GetIdFromResponseJsonAsync(HttpResponseMessage httpResponseMessage)

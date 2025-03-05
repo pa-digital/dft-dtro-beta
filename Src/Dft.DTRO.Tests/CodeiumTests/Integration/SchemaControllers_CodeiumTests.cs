@@ -3,7 +3,6 @@ using Newtonsoft.Json.Converters;
 
 namespace DfT.DTRO.Tests.CodeiumTests.Integration;
 
-[ExcludeFromCodeCoverage]
 public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactory<Program>>
 {
     private const string SchemaVersion = "3.2.0";

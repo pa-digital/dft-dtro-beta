@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 #nullable disable
 
 namespace DfT.DTRO.Migrations;
-[ExcludeFromCodeCoverage]
 public partial class RenameHaToTa : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)

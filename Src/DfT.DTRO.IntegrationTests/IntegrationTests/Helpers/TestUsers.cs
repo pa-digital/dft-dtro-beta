@@ -1,6 +1,5 @@
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
-    [ExcludeFromCodeCoverage]
     public static class TestUsers
     {
         public static TestUser GenerateUser(UserGroup userGroup)

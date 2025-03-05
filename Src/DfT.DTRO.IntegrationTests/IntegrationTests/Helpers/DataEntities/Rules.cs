@@ -2,7 +2,6 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
-    [ExcludeFromCodeCoverage]
     public static class Rules
     {
         public static void DeleteExistingRules()

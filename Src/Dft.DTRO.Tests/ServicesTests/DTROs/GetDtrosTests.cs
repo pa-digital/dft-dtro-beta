@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.DTROs;
 
-[ExcludeFromCodeCoverage]
 public class GetDtrosTests
 {
     private readonly Mock<IDtroUserDal> _mockDtroUserDal = new();

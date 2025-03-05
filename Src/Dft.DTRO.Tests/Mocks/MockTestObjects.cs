@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.Mocks;
 
-[ExcludeFromCodeCoverage]
 public static class MockTestObjects
 {
     public static IFormFile TestFile

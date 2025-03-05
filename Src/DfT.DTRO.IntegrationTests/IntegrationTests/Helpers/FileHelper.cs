@@ -2,7 +2,6 @@ using System.Linq;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
-    [ExcludeFromCodeCoverage]
     public static class FileHelper
     {
         public static void WriteStringToFile(string directory, string fileName, string stringToWrite)

@@ -1,6 +1,5 @@
 using Dft.DTRO.Tests.Fixtures;
 
-[ExcludeFromCodeCoverage]
 public class ApplicationControllerTests : IClassFixture<ApplicationControllerTestFixture>
 {
     private readonly Mock<IApplicationService> _mockApplicationService;

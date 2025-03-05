@@ -1,11 +1,10 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.Tra;
 
-[ExcludeFromCodeCoverage]
 public class TraServiceTests
 {
     private readonly Mock<ITraDal> _mockTraDal = new();
     private readonly Mock<IDtroMappingService> _mockDtroMappingService = new();
-    
+
     private readonly ITraService _sut;
 
     public TraServiceTests()

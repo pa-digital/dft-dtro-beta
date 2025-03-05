@@ -6,6 +6,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for D-TRO submission.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class DTRO
 {

@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller;
 
-[ExcludeFromCodeCoverage]
 public class RulesControllerUpdateTests
 {
     private readonly RulesController _controller;
