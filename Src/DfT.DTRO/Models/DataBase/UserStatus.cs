@@ -3,6 +3,7 @@
 /// <summary>
 /// Wrapper for User Status table
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class UserStatus
 {

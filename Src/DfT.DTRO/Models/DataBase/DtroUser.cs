@@ -3,6 +3,7 @@
 /// <summary>
 /// Wrapper for Street Work Manager codes.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class DtroUser
 {
