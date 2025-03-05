@@ -25,7 +25,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
 
         [Theory]
         [MemberData(nameof(GetDtroFileNames))]
-        public async Task DtroSubmittedFromFileShouldBeSavedCorrectly(string fileName)
+        public async Task DtroUpdatedFromFileShouldBeSavedCorrectly(string fileName)
         {
             Console.WriteLine($"\nTesting with file {fileName}...");
 
@@ -75,7 +75,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
 
         [Theory]
         [MemberData(nameof(GetDtroFileNames))]
-        public async Task DtroSubmittedFromJsonBodyShouldBeSavedCorrectly(string fileName)
+        public async Task DtroUpdatedFromJsonBodyShouldBeSavedCorrectly(string fileName)
         {
             Console.WriteLine($"\nTesting with file {fileName}...");
 
