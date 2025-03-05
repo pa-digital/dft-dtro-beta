@@ -66,8 +66,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
 
             // Check retrieved DTRO matches updated DTRO
             string sentUpdateJsonWithId = updateJsonObject.ToString();
-            string sentUpdateJsonWithIdToCamelCase = ConvertJsonKeysToCamelCase(sentUpdateJsonWithId);
-            CompareJson(sentUpdateJsonWithIdToCamelCase, dtroResponseJson);
+            CompareJson(sentUpdateJsonWithId, dtroResponseJson);
         }
 
         [Theory]
@@ -109,8 +108,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
 
             // Check retrieved DTRO matches updated DTRO
             string sentUpdateJsonWithId = updateJsonObject.ToString();
-            string sentUpdateJsonWithIdToCamelCase = ConvertJsonKeysToCamelCase(sentUpdateJsonWithId);
-            CompareJson(sentUpdateJsonWithIdToCamelCase, dtroResponseJson);
+            CompareJson(sentUpdateJsonWithId, dtroResponseJson);
         }
 
         [Fact]
@@ -163,8 +161,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
 
             // Check retrieved DTRO matches updated DTRO
             string sentUpdateJsonWithId = updateJsonObject.ToString();
-            string sentUpdateJsonWithIdToCamelCase = ConvertJsonKeysToCamelCase(sentUpdateJsonWithId);
-            CompareJson(sentUpdateJsonWithIdToCamelCase, dtroResponseJson);
+            CompareJson(sentUpdateJsonWithId, dtroResponseJson);
         }
 
         [Fact]
@@ -210,8 +207,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
 
             // Check retrieved DTRO matches updated DTRO
             string sentUpdateJsonWithId = updateJsonObject.ToString();
-            string sentUpdateJsonWithIdToCamelCase = ConvertJsonKeysToCamelCase(sentUpdateJsonWithId);
-            CompareJson(sentUpdateJsonWithIdToCamelCase, dtroResponseJson);
+            CompareJson(sentUpdateJsonWithId, dtroResponseJson);
         }
     }
 }
