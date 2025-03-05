@@ -1,6 +1,5 @@
 namespace Dft.DTRO.Tests.ServicesTests.Application;
 
-[ExcludeFromCodeCoverage]
 public class ApplicationServiceTests
 {
     private readonly Mock<IApplicationDal> _applicationDalMock;

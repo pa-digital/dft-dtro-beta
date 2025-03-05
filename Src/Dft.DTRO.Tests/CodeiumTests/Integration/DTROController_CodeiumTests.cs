@@ -3,7 +3,6 @@ using Newtonsoft.Json.Converters;
 
 namespace DfT.DTRO.Tests.CodeiumTests.Integration;
 
-[ExcludeFromCodeCoverage]
 public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly Mock<IDtroService> _mockDtroService;

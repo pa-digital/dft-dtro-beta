@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class ConditionValidationServiceTests
 {
     private readonly IConditionValidationService _sut = new ConditionValidationService();

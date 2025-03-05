@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class UniqueStreetReferenceNumberValidationServiceTests
 {
     private readonly IUniqueStreetReferenceNumberValidationService _sut =

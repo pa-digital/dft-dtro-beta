@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.UnitTests;
 
-[ExcludeFromCodeCoverage]
 public class MappingServiceTests
 {
     private static readonly string[] ValidDtroHistoriesFor323 =

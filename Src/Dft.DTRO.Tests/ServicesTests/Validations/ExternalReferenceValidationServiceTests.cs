@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class ExternalReferenceValidationServiceTests
 {
     private readonly IExternalReferenceValidationService _sut = new ExternalReferenceValidationService();

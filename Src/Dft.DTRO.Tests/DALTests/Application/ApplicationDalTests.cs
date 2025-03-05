@@ -1,6 +1,5 @@
 namespace Dft.DTRO.Tests.DALTests
 {
-    [ExcludeFromCodeCoverage]
     public class ApplicationDalTests : IDisposable
     {
         private readonly DtroContext _context;
