@@ -32,10 +32,14 @@ namespace Dft.DTRO.Tests.DALTests
             var purposeB = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeB" };
             var purposeC = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeC" };
 
+            var statusA = new ApplicationStatus { Id = Guid.NewGuid(), Status = "Active" };
+            var statusB = new ApplicationStatus { Id = Guid.NewGuid(), Status = "Inactive" };
+
             _context.Users.AddRange(user1, user2);
             _context.TrafficRegulationAuthorities.AddRange(tra1, tra2);
             _context.ApplicationTypes.AddRange(typeA, typeB);
             _context.ApplicationPurposes.AddRange(purposeA, purposeB);
+            _context.ApplicationStatus.AddRange(statusA, statusB);
             _context.SaveChanges();
 
             _context.Applications.AddRange(new List<Application>
@@ -47,7 +51,8 @@ namespace Dft.DTRO.Tests.DALTests
                     User = user1,
                     ApplicationType = typeA,
                     TrafficRegulationAuthority = tra1,
-                    Purpose = purposeA
+                    Purpose = purposeA,
+                    Status = statusB
                 },
                 new Application
                 {
@@ -56,7 +61,8 @@ namespace Dft.DTRO.Tests.DALTests
                     User = user2,
                     ApplicationType = typeB,
                     TrafficRegulationAuthority = tra2,
-                    Purpose = purposeB
+                    Purpose = purposeB,
+                    Status = statusB
                 },
                 new Application
                 {
@@ -65,7 +71,8 @@ namespace Dft.DTRO.Tests.DALTests
                     User = user1,
                     ApplicationType = typeA,
                     TrafficRegulationAuthority = tra1,
-                    Purpose = purposeC
+                    Purpose = purposeC,
+                    Status = statusB
                 },
             });
 
@@ -73,75 +80,111 @@ namespace Dft.DTRO.Tests.DALTests
         }
 
         [Fact]
-        public void CheckApplicationNameDoesNotExistShouldReturnFalseWhenNameExists()
+        public async Task CheckApplicationNameDoesNotExistShouldReturnFalseWhenNameExists()
         {
-            bool result = _applicationDal.CheckApplicationNameDoesNotExist("TestApp1");
+            bool result = await _applicationDal.CheckApplicationNameDoesNotExist("TestApp1");
             Assert.False(result);
         }
 
         [Fact]
-        public void CheckApplicationNameDoesNotExistShouldReturnTrueWhenNameDoesNotExist()
+        public async Task CheckApplicationNameDoesNotExistShouldReturnTrueWhenNameDoesNotExist()
         {
-            bool result = _applicationDal.CheckApplicationNameDoesNotExist("NonExistentApp");
+            bool result = await _applicationDal.CheckApplicationNameDoesNotExist("NonExistentApp");
             Assert.True(result);
         }
 
         [Fact]
-        public void GetApplicationUserShouldReturnUserEmailWhenAppExists()
+        public async Task GetApplicationUserShouldReturnUserEmailWhenAppExists()
         {
             var app = _context.Applications.First();
             var appGuid = app.Id;
 
-            string userEmail = _applicationDal.GetApplicationUser(appGuid);
+            string userEmail = await _applicationDal.GetApplicationUser(appGuid);
             Assert.Equal(app.User.Email, userEmail);
         }
 
         [Fact]
-        public void GetApplicationUserShouldReturnNullWhenAppDoesNotExist()
+        public async Task GetApplicationUserShouldReturnNullWhenAppDoesNotExist()
         {
-            string userEmail = _applicationDal.GetApplicationUser(Guid.NewGuid());
+            string userEmail = await _applicationDal.GetApplicationUser(Guid.NewGuid());
             Assert.Null(userEmail);
         }
 
         [Fact]
-        public void GetApplicationDetailsShouldReturnApplicationDetailsWhenAppExists()
+        public async Task GetApplicationDetailsShouldReturnApplicationDetailsWhenAppExists()
         {
             var app = _context.Applications.First();
             var appId = app.Id.ToString();
 
-            var details = _applicationDal.GetApplicationDetails(appId);
+            var details = await _applicationDal.GetApplicationDetails(appId);
             Assert.NotNull(details);
             Assert.Equal(app.Nickname, details.Name);
             Assert.Equal(app.Purpose.Description, details.Purpose);
         }
 
         [Fact]
-        public void GetApplicationDetailsShouldReturnNullWhenInvalidAppId()
+        public async Task GetApplicationDetailsShouldReturnNullWhenInvalidAppId()
         {
-            var details = _applicationDal.GetApplicationDetails("invalid-guid");
+            var details = await _applicationDal.GetApplicationDetails("invalid-guid");
             Assert.Null(details);
         }
 
         [Fact]
-        public void GetApplicationListShouldReturnApplicationForUserWithSingleApp()
+        public async Task GetApplicationListShouldReturnApplicationForUserWithSingleApp()
         {
-            var apps = _applicationDal.GetApplicationList("anotheruser@test.com");
+            var apps = await _applicationDal.GetApplicationList("anotheruser@test.com");
             Assert.Single(apps);
             Assert.Equal("TestApp2", apps[0].Name);
         }
 
         [Fact]
-        public void GetApplicationListShouldReturnApplicationsForUserWithMultipleApps()
+        public async Task GetApplicationListShouldReturnApplicationsForUserWithMultipleApps()
         {
-            var apps = _applicationDal.GetApplicationList("user@test.com");
+            var apps = await _applicationDal.GetApplicationList("user@test.com");
             Assert.Equal(2, apps.Count);
         }
 
         [Fact]
-        public void GetApplicationList_ShouldReturnEmptyListWhenNoAppsForUser()
+        public async Task GetApplicationList_ShouldReturnEmptyListWhenNoAppsForUser()
         {
-            var apps = _applicationDal.GetApplicationList("nonexistent@test.com");
+            var apps = await _applicationDal.GetApplicationList("nonexistent@test.com");
             Assert.Empty(apps);
+        }
+
+        [Fact]
+        public async Task ActivateApplicationByIdApplicationNotFoundReturnsFalse()
+        {
+            var appGuid = Guid.NewGuid(); // Non-existing GUID
+            var result = await _applicationDal.ActivateApplicationById(appGuid);
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task ActivateApplicationByIdApplicationStatusUpdatedReturnsTrue()
+        {
+            Application application = _context.Applications.First();
+            ApplicationStatus activeStatus = await _context.ApplicationStatus.FirstOrDefaultAsync(a => a.Status == "Active");
+            ApplicationStatus inactiveStatus = await _context.ApplicationStatus.FirstOrDefaultAsync(a => a.Status == "Inactive");
+            Assert.Equal(application.Status, inactiveStatus);
+
+            var result = await _applicationDal.ActivateApplicationById(application.Id);
+            Assert.True(result);
+            application = _context.Applications.First();
+            Assert.Equal(application.Status, activeStatus);
+        }
+
+        [Fact]
+        public async Task ActivateApplicationReturnsFalseWHenActiveStatusIsNull()
+        {
+            Application application = _context.Applications.First();
+            var activeStatuses = await _context.ApplicationStatus
+                .Where(a => a.Status == "Active").ToListAsync();
+
+            _context.ApplicationStatus.RemoveRange(activeStatuses);
+            await _context.SaveChangesAsync();
+
+            var result = await _applicationDal.ActivateApplicationById(application.Id);
+            Assert.False(result);
         }
 
         public void Dispose()

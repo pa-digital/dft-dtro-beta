@@ -19,7 +19,7 @@ public class ApplicationController : ControllerBase
         _logger = logger;
         _loggingExtension = loggingExtension;
     }
-        
+
     /// <summary>
     /// Create App
     /// </summary>
@@ -47,6 +47,50 @@ public class ApplicationController : ControllerBase
         }
     }
 
+    // <summary>
+    /// Activates an application by app ID
+    /// </summary>
+    /// <param name="parameters"></param>
+    /// <response code="200">Valid application ID</response>
+    /// <response code="400">Invalid or empty parameters, or no matching application</response>
+    /// <response code="500">Invalid operation or other exception</response>
+    [HttpPost(RouteTemplates.ActivateApplication)]
+    [FeatureGate(FeatureNames.ReadOnly)]
+    public async Task<IActionResult> ActivateApplication([FromBody] ApplicationDetailsRequest request)
+    {
+        try
+        {
+            if (request == null || string.IsNullOrEmpty(request.appId))
+            {
+                return BadRequest(new { message = "Application ID is required" });
+            }
+
+            string appId = request.appId;
+            var userId = HttpContext.Items["UserId"] as string;
+            bool appBelongsToUser = await _applicationService.ValidateAppBelongsToUser(userId, appId);
+            if (!appBelongsToUser)
+            {
+                return Forbid();
+            }
+
+            bool result = await _applicationService.ActivateApplicationById(appId);
+            return Ok(new { id = appId, status = "Active" });
+
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(new { message = "Invalid input parameters", error = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while trying to activate application", error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An unexpected error occurred.", error = ex.Message });
+        }
+    }
+
     /// <summary>
     /// Validates if the Application Name is available.
     /// </summary>
@@ -56,7 +100,7 @@ public class ApplicationController : ControllerBase
     /// <response code="500">Invalid operation or other exception</response>
     [HttpPost(RouteTemplates.ValidateApplicationName)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public IActionResult ValidateApplicationName([FromBody] ApplicationNameQueryParameters parameters)
+    public async Task<IActionResult> ValidateApplicationName([FromBody] ApplicationNameQueryParameters parameters)
     {
         try
         {
@@ -66,7 +110,7 @@ public class ApplicationController : ControllerBase
             }
 
             string appName = parameters.Name;
-            var result = _applicationService.ValidateApplicationName(appName);
+            var result = await _applicationService.ValidateApplicationName(appName);
             return Ok(new { isValid = result, message = result ? "Application name available" : "Application name already in use" });
 
         }
@@ -93,7 +137,7 @@ public class ApplicationController : ControllerBase
     /// <response code="500">Invalid operation or other exception</response>
     [HttpPost(RouteTemplates.GetApplicationDetails)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public IActionResult GetApplicationDetails([FromBody] ApplicationDetailsRequest request)
+    public async Task<IActionResult> GetApplicationDetails([FromBody] ApplicationDetailsRequest request)
     {
         try
         {
@@ -104,13 +148,15 @@ public class ApplicationController : ControllerBase
 
             string appId = request.appId;
             var userId = HttpContext.Items["UserId"] as string;
-            bool appBelongsToUser = _applicationService.ValidateAppBelongsToUser(userId, appId);
-            if (!appBelongsToUser) {
+            bool appBelongsToUser = await _applicationService.ValidateAppBelongsToUser(userId, appId);
+            if (!appBelongsToUser)
+            {
                 return Forbid();
             }
 
-            var result = _applicationService.GetApplicationDetails(appId);
-            if (result != null) {
+            var result = await _applicationService.GetApplicationDetails(appId);
+            if (result != null)
+            {
                 // TODO: fetch API key and secret from Apigee
                 return Ok(new { name = result.Name, appId = result.AppId, purpose = result.Purpose, apiKey = "thisismyapikey", apiSecret = "thisismyapisecret" });
             }
@@ -141,13 +187,14 @@ public class ApplicationController : ControllerBase
     /// <response code="500">Invalid operation or other exception</response>
     [HttpPost(RouteTemplates.GetApplications)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public IActionResult GetApplications()
+    public async Task<IActionResult> GetApplications()
     {
         try
         {
             var userId = HttpContext.Items["UserId"] as string;
-            var result = _applicationService.GetApplicationList(userId);
-            if (result != null) {
+            var result = await _applicationService.GetApplicationList(userId);
+            if (result != null)
+            {
                 return Ok(result);
             }
 

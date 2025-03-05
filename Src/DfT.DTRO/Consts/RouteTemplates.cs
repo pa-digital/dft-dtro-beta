@@ -8,6 +8,7 @@ public static class RouteTemplates
     public const string ValidateApplicationName = ApplicationsBase + "/validateName";
     public const string GetApplicationDetails = ApplicationsBase + "/details";
     public const string GetApplications = ApplicationsBase + "/list";
+    public const string ActivateApplication = ApplicationsBase + "/activate";
     
     // Auth
     public const string AuthBase = "/oauth";
@@ -79,6 +80,5 @@ public static class RouteTemplates
     // Tras
     public const string TrasBase = "/tras";
     public const string TrasFindAll = TrasBase;
-    
 }
 

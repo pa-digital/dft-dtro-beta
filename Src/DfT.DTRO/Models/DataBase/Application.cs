@@ -30,10 +30,13 @@ public class Application
     /// </summary>
     public string Nickname { get; set; }
 
+    [ForeignKey("Status")]
+    public Guid StatusId { get; set; }
+
     /// <summary>
     /// Application status
     /// </summary>
-    public string Status { get; set; }
+    public ApplicationStatus Status { get; set; }
 
     /// <summary>
     /// Application rule templates
