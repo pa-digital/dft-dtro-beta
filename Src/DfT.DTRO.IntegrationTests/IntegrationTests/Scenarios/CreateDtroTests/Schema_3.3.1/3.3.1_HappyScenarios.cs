@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers;
-using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;

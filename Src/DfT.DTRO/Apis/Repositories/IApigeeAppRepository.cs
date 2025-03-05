@@ -1,15 +1,14 @@
-﻿using DfT.DTRO.Models.Apigee;
-
-namespace DfT.DTRO.Apis.Repositories;
+﻿namespace DfT.DTRO.Apis.Repositories;
 
 public interface IApigeeAppRepository
 {
-    
+
     /// <summary>
     /// CreateApp
     /// </summary>
-    /// <param name="parameters">Parameters passed</param>
+    /// <param name="developerEmail">Developer email parameter passed</param>
+    /// <param name="developerAppInput">Developer application input parameter passed</param>
     /// <returns>App</returns>
     Task<ApigeeDeveloperApp> CreateApp(string developerEmail, ApigeeDeveloperAppInput developerAppInput);
-    
+
 }

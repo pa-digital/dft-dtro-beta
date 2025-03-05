@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
@@ -6,6 +5,7 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
+    [ExcludeFromCodeCoverage]
     public static class Schemas
     {
         public static async Task DeleteExistingSchemasAsync(TestUser testUser)

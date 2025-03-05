@@ -3,6 +3,7 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
+    [ExcludeFromCodeCoverage]
     public static class TestConfig
     {
         public static EnvironmentType EnvironmentName { get; }

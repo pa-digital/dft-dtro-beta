@@ -1,8 +1,8 @@
-using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
+    [ExcludeFromCodeCoverage]
     public static class DataSetUp
     {
         public static async Task ClearAllDataAsync(TestUser testUser)

@@ -1,7 +1,4 @@
-﻿
-using DfT.DTRO.Models.SystemConfig;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.DAL;
 
 public interface ISystemConfigDal
 {
