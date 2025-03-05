@@ -3,7 +3,6 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
-    [ExcludeFromCodeCoverage]
     public static class SqlQueries
     {
         public static void TruncateTable(string tableName)

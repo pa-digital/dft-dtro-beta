@@ -4,7 +4,6 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
-    [ExcludeFromCodeCoverage]
     public abstract class BaseTest : IAsyncLifetime
     {
         private static readonly Task _setUpBeforeTestRunAsync = SetUpBeforeTestRunAsync();
