@@ -112,5 +112,106 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
             string sentUpdateJsonWithIdToCamelCase = ConvertJsonKeysToCamelCase(sentUpdateJsonWithId);
             CompareJson(sentUpdateJsonWithIdToCamelCase, dtroResponseJson);
         }
+
+        [Fact]
+        public async Task DtroUpdatedWithLaterSchemaFromFileShouldBeSavedCorrectly()
+        {
+            string oldSchemaVersion = "3.3.1";
+            string createFileWithSchema3_3_1 = "JSON-3.3.1-example-Derbyshire 2024 DJ388 partial.json";
+            string updateFileWithSchema3_3_2 = "JSON-3.3.2-example-Derbyshire 2024 DJ388 partial.json";
+
+            // Generate user to send DTRO and read it back
+            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
+            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            string userGuid = await GetIdFromResponseJsonAsync(createUserResponse);
+
+            // Prepare DTRO
+            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{oldSchemaVersion}/{createFileWithSchema3_3_1}";
+            string createDtroJson = File.ReadAllText(createDtroFile);
+            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(oldSchemaVersion, createDtroJson, publisher.TraId);
+            string nameOfCopyFile = $"{userGuid.Substring(0, 5)}{createFileWithSchema3_3_1}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
+
+            // Send DTRO
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
+            Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
+
+            // Prepare DTRO update
+            string updateDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{updateFileWithSchema3_3_2}";
+            string updateDtroJson = File.ReadAllText(updateDtroFile);
+            string updateDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, updateDtroJson, publisher.TraId);
+            string nameOfCopyUpdateFile = $"update{userGuid.Substring(0, 5)}{updateFileWithSchema3_3_2}";
+            string tempUpdateFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyUpdateFile}";
+            string updateJson = Dtros.UpdateActionTypeAndTroName(updateDtroJsonWithTraUpdated, schemaVersionToTest);
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyUpdateFile, updateJson);
+
+            // Send DTRO update
+            string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
+            HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromFileAsync(tempUpdateFilePath, dtroId, publisher);
+            Assert.Equal(HttpStatusCode.OK, updateDtroResponse.StatusCode);
+
+            // Get updated DTRO
+            HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
+            Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
+            string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
+
+            // Add ID to updated DTRO for comparison purposes
+            JObject updateJsonObject = JObject.Parse(updateJson);
+            updateJsonObject["id"] = dtroId;
+
+            // Check retrieved DTRO matches updated DTRO
+            string sentUpdateJsonWithId = updateJsonObject.ToString();
+            string sentUpdateJsonWithIdToCamelCase = ConvertJsonKeysToCamelCase(sentUpdateJsonWithId);
+            CompareJson(sentUpdateJsonWithIdToCamelCase, dtroResponseJson);
+        }
+
+        [Fact]
+        public async Task DtroUpdatedWithLaterSchemaFromJsonBodyShouldBeSavedCorrectly()
+        {
+            string oldSchemaVersion = "3.3.1";
+            string createFileWithSchema3_3_1 = "JSON-3.3.1-example-Derbyshire 2024 DJ388 partial.json";
+            string updateFileWithSchema3_3_2 = "JSON-3.3.2-example-Derbyshire 2024 DJ388 partial.json";
+
+            // Generate user to send DTRO and read it back
+            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
+            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+
+            // Prepare DTRO
+            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{oldSchemaVersion}/{createFileWithSchema3_3_1}";
+            string createDtroJson = File.ReadAllText(createDtroFile);
+            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(oldSchemaVersion, createDtroJson, publisher.TraId);
+
+            // Send DTRO
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
+            Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
+
+            // Prepare DTRO update
+            string updateDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{updateFileWithSchema3_3_2}";
+            string updateDtroJson = File.ReadAllText(updateDtroFile);
+            string updateDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, updateDtroJson, publisher.TraId);
+            string updateJson = Dtros.UpdateActionTypeAndTroName(updateDtroJsonWithTraUpdated, schemaVersionToTest);
+
+            // Send DTRO update
+            string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
+            HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromJsonBodyAsync(updateJson, dtroId, publisher);
+            Assert.Equal(HttpStatusCode.OK, updateDtroResponse.StatusCode);
+
+            // Get updated DTRO
+            HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
+            Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
+            string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
+
+            // Add ID to updated DTRO for comparison purposes
+            JObject updateJsonObject = JObject.Parse(updateJson);
+            updateJsonObject["id"] = dtroId;
+
+            // Check retrieved DTRO matches updated DTRO
+            string sentUpdateJsonWithId = updateJsonObject.ToString();
+            string sentUpdateJsonWithIdToCamelCase = ConvertJsonKeysToCamelCase(sentUpdateJsonWithId);
+            CompareJson(sentUpdateJsonWithIdToCamelCase, dtroResponseJson);
+        }
     }
 }
