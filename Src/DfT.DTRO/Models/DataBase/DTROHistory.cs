@@ -6,6 +6,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for D-TRO history.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class DTROHistory
 {

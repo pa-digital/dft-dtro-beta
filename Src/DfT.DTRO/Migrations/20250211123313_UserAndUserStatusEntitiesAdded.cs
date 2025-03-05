@@ -5,7 +5,6 @@
 namespace DfT.DTRO.Migrations
 {
     /// <inheritdoc />
-    [ExcludeFromCodeCoverage]
     public partial class UserAndUserStatusEntitiesAdded : Migration
     {
         /// <inheritdoc />

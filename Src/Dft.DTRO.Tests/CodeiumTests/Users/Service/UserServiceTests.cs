@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.Users.Service;
 
-[ExcludeFromCodeCoverage]
 public class UserServiceTests
 {
     private readonly Mock<IDtroUserDal> _mockDtroUserDal;

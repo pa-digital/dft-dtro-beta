@@ -3,7 +3,6 @@
 #nullable disable
 
 namespace DfT.DTRO.Migrations;
-[ExcludeFromCodeCoverage]
 public partial class SchemaRulesCorrelation : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)

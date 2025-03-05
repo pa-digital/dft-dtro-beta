@@ -5,7 +5,6 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests;
 
-[ExcludeFromCodeCoverage]
 public class SendDtroIntegrationTests : BaseTest
 {
     public static IEnumerable<object[]> GetFileNames()

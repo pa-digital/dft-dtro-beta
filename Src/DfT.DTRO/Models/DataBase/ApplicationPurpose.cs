@@ -1,8 +1,8 @@
 ﻿namespace DfT.DTRO.Models.DataBase;
-
 /// <summary>
 /// Wrapper for Application Purpose
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class ApplicationPurpose
 {

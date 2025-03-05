@@ -1,6 +1,5 @@
 namespace Dft.DTRO.Tests.ControllerTests;
 
-[ExcludeFromCodeCoverage]
 public class TraControllerTests
 {
     private readonly Mock<ITraService> _mockTraService = new();

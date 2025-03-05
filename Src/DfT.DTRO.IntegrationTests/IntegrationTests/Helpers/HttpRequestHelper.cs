@@ -7,7 +7,6 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
-    [ExcludeFromCodeCoverage]
     public static class HttpRequestHelper
     {
         public static async Task<HttpResponseMessage> MakeHttpRequestAsync(HttpMethod method, string uri, Dictionary<string, string> headers = null, string body = null, string pathToJsonFile = null, bool printCurl = true)

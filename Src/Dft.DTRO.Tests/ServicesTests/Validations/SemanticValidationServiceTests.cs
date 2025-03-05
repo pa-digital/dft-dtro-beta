@@ -3,7 +3,6 @@ using Newtonsoft.Json.Converters;
 
 namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class SemanticValidationServiceTests
 {
     private readonly Mock<ISystemClock> _mockClock;

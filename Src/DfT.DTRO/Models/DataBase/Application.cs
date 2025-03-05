@@ -1,8 +1,8 @@
 ﻿namespace DfT.DTRO.Models.DataBase;
-
 /// <summary>
 /// Wrapper for Application
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class Application
 {
@@ -51,7 +51,7 @@ public class Application
     /// </summary>
     public List<DTRO> Dtros { get; set; }
 
-    public Guid PurposeId { get; set; }  
+    public Guid PurposeId { get; set; }
     public ApplicationPurpose Purpose { get; set; }
 
     public Guid UserId { get; set; }

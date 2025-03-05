@@ -1,5 +1,6 @@
 ﻿namespace DfT.DTRO.Models.DataBase;
 
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class SystemConfig
 {

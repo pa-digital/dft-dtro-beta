@@ -3,6 +3,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for Metric
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class Metric
 {
