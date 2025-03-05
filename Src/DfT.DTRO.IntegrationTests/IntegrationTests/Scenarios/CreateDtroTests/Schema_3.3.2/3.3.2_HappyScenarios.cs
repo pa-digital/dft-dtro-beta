@@ -31,12 +31,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
             string userGuid = await GetIdFromResponseJsonAsync(createUserResponse);
+            // Avoid files being overwritten by using a unique prefix in file names for each test
+            string uniquePrefixOnFileName = userGuid.Substring(0, 5);
 
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
             string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
-            string nameOfCopyFile = $"{userGuid.Substring(0, 5)}{fileName}";
+            string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
 

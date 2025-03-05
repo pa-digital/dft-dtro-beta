@@ -33,12 +33,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
             string userGuid = await GetIdFromResponseJsonAsync(createUserResponse);
+            // Avoid files being overwritten by using a unique prefix in file names for each test
+            string uniquePrefixOnFileName = userGuid.Substring(0, 5);
 
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{fileToUseWithPascalCaseVersion3_3_1}";
             string createDtroJson = File.ReadAllText(createDtroFile);
             string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
-            string nameOfCopyFile = $"{userGuid.Substring(0, 5)}{fileToUseWithPascalCaseVersion3_3_1}";
+            string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileToUseWithPascalCaseVersion3_3_1}";
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
 
@@ -52,7 +54,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_
             string updateDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionOfFilesWithInvalidCamelCase, updateDtroJson, publisher.TraId);
             string updateDtroJsonWithSchemaVersionUpdated = Dtros.UpdateSchemaVersionInDtro(updateDtroJsonWithTraUpdated, schemaVersionToTest);
             string updateJsonWithModifiedActionTypeAndTroName = Dtros.UpdateActionTypeAndTroName(updateDtroJsonWithSchemaVersionUpdated, schemaVersionOfFilesWithInvalidCamelCase);
-            string nameOfUpdateCopyFile = $"update{userGuid.Substring(0, 5)}{nameOfFileWithCamelCaseVersion3_3_2}";
+            string nameOfUpdateCopyFile = $"update{uniquePrefixOnFileName}{nameOfFileWithCamelCaseVersion3_3_2}";
             string tempUpdateFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfUpdateCopyFile}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfUpdateCopyFile, updateJsonWithModifiedActionTypeAndTroName);
 
