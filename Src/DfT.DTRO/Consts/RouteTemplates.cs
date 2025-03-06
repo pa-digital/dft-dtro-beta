@@ -80,5 +80,10 @@ public static class RouteTemplates
     // Tras
     public const string TrasBase = "/tras";
     public const string TrasFindAll = TrasBase;
+
+    // Users
+    public const string  UserBase = "/users";
+    public const string UserDelete = UserBase + "/delete";
+    
 }
 
