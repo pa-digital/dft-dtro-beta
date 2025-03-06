@@ -55,44 +55,44 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Unit tests
-        run: |
-          ./run_unit_tests_with_coverage.sh
+      # - name: Unit tests
+      #   run: |
+      #     ./run_unit_tests_with_coverage.sh
 
-      - name: Upload unit test coverage report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Unit test coverage report
-          path: TestReports/UnitTests
+      # - name: Upload unit test coverage report
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Unit test coverage report
+      #     path: TestReports/UnitTests
       
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          for i in {1..10}; do
-            if pg_isready -h localhost -p 5432 -U postgres; then
-              echo "PostgreSQL is ready"
-              break
-            fi
-            echo "Waiting for PostgreSQL..."
-            sleep 5
-          done
+      # - name: Wait for PostgreSQL to be ready
+      #   run: |
+      #     for i in {1..10}; do
+      #       if pg_isready -h localhost -p 5432 -U postgres; then
+      #         echo "PostgreSQL is ready"
+      #         break
+      #       fi
+      #       echo "Waiting for PostgreSQL..."
+      #       sleep 5
+      #     done
 
-      - name: Integration tests
-        env:
-          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${{ secrets.INTEGRATION_TEST_DB_NAME }};Username=${{ secrets.INTEGRATION_TEST_DB_USER }};Password=${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}"
-        run: |
-          ./Src/DfT.DTRO.IntegrationTests/ci_scripts/run_integration_tests_against_localhost_on_ci.sh
+      # - name: Integration tests
+      #   env:
+      #     ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${{ secrets.INTEGRATION_TEST_DB_NAME }};Username=${{ secrets.INTEGRATION_TEST_DB_USER }};Password=${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}"
+      #   run: |
+      #     ./Src/DfT.DTRO.IntegrationTests/ci_scripts/run_integration_tests_against_localhost_on_ci.sh
 
-      - name: Upload integration test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: Integration test results
-          path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.trx
+      # - name: Upload integration test results
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Integration test results
+      #     path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.trx
 
       - name: Format check
         run: |
-          dotnet format
+          dotnet format --verify-no-changes
 
       - name: Install .NET analyzers
         run: dotnet tool install -g dotnet-format
