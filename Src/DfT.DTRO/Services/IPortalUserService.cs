@@ -6,4 +6,6 @@ namespace DfT.DTRO.Services;
 public interface IPortalUserService
 {
     Task<PortalUserResponse> CanUserPublish(string userId);
+    
+    Task<UserAppDto> GetUserInfo(string userId);
 }

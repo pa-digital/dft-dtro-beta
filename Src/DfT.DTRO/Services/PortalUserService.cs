@@ -13,4 +13,7 @@ public class PortalUserService : IPortalUserService
     
     public async Task<PortalUserResponse> CanUserPublish(string userId) => 
         await _portalUserDal.GetUserPublishPermission(userId);
+
+    public async Task<UserAppDto> GetUserInfo(string userId) =>
+        await _portalUserDal.GetUserInfo(userId);
 }
