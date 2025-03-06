@@ -81,3 +81,7 @@ To simplify/automate the initialisation and selection of workspaces - make sure 
 ## Sample API requests
 
 Sample requests can be found in the src/DfT.DTRO/Schemas directory.
+
+## Swagger documentation
+
+See [here](https://localhost:5001/index.html).
