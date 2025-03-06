@@ -23,7 +23,7 @@ The application can be run on Windows, MacOS and Linux.
 
 2. Install .NET Entity Framework with `dotnet tool install --global dotnet-ef --version 8.0.0`. Make sure to install version `8.0.0`.
 
-3. Rename `dft-dtro-beta/Src/DfT.DTRO/docker/dev/.env.local` to `dft-dtro-beta/Src/DfT.DTRO/docker/dev/.env`. This contains the database connection settings for local development.
+3. Rename `dft-dtro-beta/Src/DfT.DTRO/docker/dev/.env.local` to `dft-dtro-beta/Src/DfT.DTRO/docker/dev/.env`. This file contains the database connection settings for local development.
 
 4. Install Docker. Follow the installation instructions at https://docs.docker.com/engine/install/ubuntu/ for installing Docker on your system.
 
