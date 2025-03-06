@@ -47,8 +47,8 @@ namespace DfT.DTRO.Migrations
                     b.Property<Guid>("PurposeId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("text");
+                    b.Property<Guid>("StatusId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("TrafficRegulationAuthorityId")
                         .HasColumnType("uuid")
@@ -65,6 +65,8 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("PurposeId")
                         .IsUnique();
+
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("TrafficRegulationAuthorityId");
 
@@ -85,6 +87,20 @@ namespace DfT.DTRO.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationPurposes");
+                });
+
+            modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationStatus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationStatus");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationType", b =>
@@ -538,6 +554,12 @@ namespace DfT.DTRO.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DfT.DTRO.Models.DataBase.ApplicationStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("DfT.DTRO.Models.DataBase.TrafficRegulationAuthority", "TrafficRegulationAuthority")
                         .WithMany("Applications")
                         .HasForeignKey("TrafficRegulationAuthorityId")
@@ -553,6 +575,8 @@ namespace DfT.DTRO.Migrations
                     b.Navigation("ApplicationType");
 
                     b.Navigation("Purpose");
+
+                    b.Navigation("Status");
 
                     b.Navigation("TrafficRegulationAuthority");
 

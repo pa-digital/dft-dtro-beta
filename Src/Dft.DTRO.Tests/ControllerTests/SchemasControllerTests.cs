@@ -1,6 +1,5 @@
 namespace Dft.DTRO.Tests.ControllerTests;
 
-[ExcludeFromCodeCoverage]
 //TODO: The entire class needs refactoring
 public class SchemasControllerTests
     : IClassFixture<WebApplicationFactory<Program>>

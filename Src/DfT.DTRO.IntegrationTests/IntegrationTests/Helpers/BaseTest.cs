@@ -1,4 +1,3 @@
-using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;

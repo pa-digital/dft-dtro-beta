@@ -3,6 +3,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Base entity
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class BaseEntity
 {
     /// <summary>

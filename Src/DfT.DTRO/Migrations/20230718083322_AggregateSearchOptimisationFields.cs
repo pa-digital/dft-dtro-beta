@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System.Collections.Generic;
 
 #nullable disable
 

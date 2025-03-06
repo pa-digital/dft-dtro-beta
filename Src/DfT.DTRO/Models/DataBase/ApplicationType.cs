@@ -3,6 +3,7 @@
 /// <summary>
 /// Wrapper for application type
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class ApplicationType
 {

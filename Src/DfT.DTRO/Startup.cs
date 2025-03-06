@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Scrutor;
 
 namespace DfT.DTRO;
 
@@ -43,21 +42,22 @@ public class Startup
         services.AddFeatureManagement();
 
         services.Scan(scan => scan
-                .FromAssemblies(Assembly.GetExecutingAssembly())
-                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services")) 
-                .AsImplementedInterfaces()
-                .WithScopedLifetime() 
-                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.DAL")) 
-                .AsImplementedInterfaces()
-                .WithScopedLifetime() 
-                .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services.Mapping"))
-                .AsImplementedInterfaces()
-                .WithSingletonLifetime()
+            .FromAssemblies(Assembly.GetExecutingAssembly())
+            .AddClasses(classes => classes.InNamespaces(
+                "DfT.DTRO.Services",
+                "DfT.DTRO.DAL",
+                "DfT.DTRO.Apis.Clients",
+                "DfT.DTRO.Apis.Repositories"))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime()
+            .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services.Mapping"))
+            .AsImplementedInterfaces()
+            .WithSingletonLifetime()
         );
-        services.AddScoped<AuthClient, AuthClient>();
+        services.AddScoped<SecretManagerClient>();
         services.AddSingleton<LoggingExtension>();
         services.TryAddSingleton<ISystemClock, SystemClock>();
-
+        services.AddHttpClient();
         services.AddStorage(Configuration);
         services.AddValidationServices();
         services.AddRequestCorrelation();

@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class JsonSchemaValidationTests
 {
     private const string ExampleFilesForSchema311 = "../../../TestFiles/D-TROs/3.1.1";

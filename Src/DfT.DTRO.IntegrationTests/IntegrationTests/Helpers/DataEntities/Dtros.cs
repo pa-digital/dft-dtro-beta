@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 

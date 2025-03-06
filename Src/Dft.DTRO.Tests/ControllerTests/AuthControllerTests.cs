@@ -1,8 +1,5 @@
-using DfT.DTRO.Models.Auth;
-
 namespace Dft.DTRO.Tests.ControllerTests;
 
-[ExcludeFromCodeCoverage]
 public class AuthControllerTests
 {
     private readonly Mock<IAuthService> _mockAuthService = new();

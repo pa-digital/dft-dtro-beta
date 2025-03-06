@@ -2,7 +2,6 @@
 
 namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class GeometryValidationTests
 {
     private readonly IGeometryValidation _sut;

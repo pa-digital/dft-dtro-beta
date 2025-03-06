@@ -45,5 +45,7 @@
 /DfT.DTRO.DatabaseFeeder/bin/Debug/net8.0
 /DfT.DTRO.DatabaseFeeder/obj
 
-**/temp
 **/TestResults
+**/TestReports
+**/Coverage
+**/temp

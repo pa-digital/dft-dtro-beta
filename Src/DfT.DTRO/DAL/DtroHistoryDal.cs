@@ -41,7 +41,8 @@ public class DtroHistoryDal : IDtroHistoryDal
 
             return result;
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             throw new Exception($"Error: Unable to get retrieving history for '{dtroId}'", ex);
         }
     }

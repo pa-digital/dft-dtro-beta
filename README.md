@@ -46,6 +46,14 @@ If you are running on a Windows host, please see the contents of the Makefile in
 
 ## GCP Components
 
+Apply GCP Credentials
+
+First, you must obtain a .json file containing credentials to connect to the GCP project. This is needed to run the integration tests. You can generate a key file for the project on the IAM page. Once downloaded, add the path to the key in your environment variables as follows:
+
+export GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_KEY_FILE>
+
+If you are building the package via an IDE (VS, Rider) ensure the environment variable above is added to your run configuration.
+
 To deploy this project, the following GCP APIs need to be enabled at a project level:
 
 1. Cloud Domains API
@@ -57,6 +65,7 @@ To deploy this project, the following GCP APIs need to be enabled at a project l
 1. Cloud Resource Manager API
 1. Identity and Access Management (IAM) API
 1. Service Usage API
+
 
 ## Terraform Use
 

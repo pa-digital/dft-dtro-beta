@@ -1,8 +1,8 @@
 ﻿namespace DfT.DTRO.Models.DataBase;
-
 /// <summary>
 /// Wrapper for Application
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class Application
 {
@@ -30,10 +30,13 @@ public class Application
     /// </summary>
     public string Nickname { get; set; }
 
+    [ForeignKey("Status")]
+    public Guid StatusId { get; set; }
+
     /// <summary>
     /// Application status
     /// </summary>
-    public string Status { get; set; }
+    public ApplicationStatus Status { get; set; }
 
     /// <summary>
     /// Application rule templates
@@ -51,7 +54,7 @@ public class Application
     /// </summary>
     public List<DTRO> Dtros { get; set; }
 
-    public Guid PurposeId { get; set; }  
+    public Guid PurposeId { get; set; }
     public ApplicationPurpose Purpose { get; set; }
 
     public Guid UserId { get; set; }

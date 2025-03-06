@@ -1,8 +1,7 @@
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 

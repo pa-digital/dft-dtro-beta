@@ -5,6 +5,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for a Rule.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class RuleTemplate
 {

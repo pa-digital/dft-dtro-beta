@@ -91,6 +91,8 @@ public class DtroContext : DbContext
     /// </summary>
     public virtual DbSet<TrafficRegulationAuthorityDigitalServiceProviderStatus> TrafficRegulationAuthorityDigitalServiceProviderStatuses { get; set; }
 
+    public DbSet<ApplicationStatus> ApplicationStatus { get; set; }
+
     /// <summary>
     /// Default constructor.
     /// </summary>
@@ -112,8 +114,8 @@ public class DtroContext : DbContext
             .HasTranslation(args =>
             {
                 var sqlExpressionFactory = (SqlExpressionFactory)typeof(RelationalSqlTranslatingExpressionVisitor)
-                    .GetProperty("SqlExpressionFactory", BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                    .GetValue(args[0].TypeMapping) as SqlExpressionFactory;
+                    .GetProperty("SqlExpressionFactory", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .GetValue(args[0].TypeMapping);
 
                 return sqlExpressionFactory.MakeBinary(
                     ExpressionType.AndAlso, // Equivalent to "OVERLAPS"
@@ -121,7 +123,7 @@ public class DtroContext : DbContext
                     args[1],
                     args[0].TypeMapping);
             });
-        
+
         modelBuilder.Entity<Application>()
             .HasOne(a => a.Purpose)
             .WithOne(p => p.Application)
@@ -146,6 +148,14 @@ public class DtroContext : DbContext
             .WithMany()
             .HasForeignKey(a => a.ApplicationTypeId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Application>()
+            .HasOne(a => a.Status)
+            .WithMany()
+            .HasForeignKey(a => a.StatusId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<ApplicationStatus>().ToTable("ApplicationStatus");
     }
 
 
