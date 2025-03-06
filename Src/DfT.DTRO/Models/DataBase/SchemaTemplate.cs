@@ -6,6 +6,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for a Schema.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class SchemaTemplate
 {

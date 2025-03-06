@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class ProvisionValidationServiceTests
 {
     private readonly IProvisionValidationService _sut = new ProvisionValidationService();

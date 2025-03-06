@@ -3,7 +3,6 @@
 #nullable disable
 
 namespace DfT.DTRO.Migrations;
-[ExcludeFromCodeCoverage]
 public partial class AggregateSearchOptimisationFields : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)

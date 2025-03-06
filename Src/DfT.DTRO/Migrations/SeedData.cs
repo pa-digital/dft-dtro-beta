@@ -1,6 +1,5 @@
 ﻿namespace DfT.DTRO.Migrations;
 
-[ExcludeFromCodeCoverage]
 public static class SeedData
 {
 

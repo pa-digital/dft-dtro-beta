@@ -3,6 +3,7 @@
 /// <summary>
 /// Wrapper for User table
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class User
 {

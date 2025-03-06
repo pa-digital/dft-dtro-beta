@@ -4,7 +4,6 @@
 
 namespace DfT.DTRO.Migrations
 {
-    [ExcludeFromCodeCoverage]
     public partial class DTROHistoryTableCreated : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

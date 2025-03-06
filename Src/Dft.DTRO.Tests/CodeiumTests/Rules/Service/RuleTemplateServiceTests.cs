@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.Rules.Service;
 
-[ExcludeFromCodeCoverage]
 public class RuleTemplateServiceTests
 {
     private readonly Mock<IDtroDal> _mockDtroDal;

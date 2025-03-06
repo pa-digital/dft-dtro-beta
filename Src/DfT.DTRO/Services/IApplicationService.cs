@@ -4,16 +4,10 @@ namespace DfT.DTRO.Services;
 
 public interface IApplicationService
 {
-    
-    /// <summary>
-    /// Create app
-    /// </summary>
-    /// <param name="parameters">Parameters passed</param>
-    /// <returns>App</returns>
     Task<App> CreateApplication(AppInput appInput);
-    
-    bool ValidateAppBelongsToUser(string userId, string appId);
-    bool ValidateApplicationName(string appName);
-    ApplicationDetailsDto GetApplicationDetails(string appId);
-    List<ApplicationListDto> GetApplicationList(string userId);
+    Task<bool> ValidateAppBelongsToUser(string userId, string appId);
+    Task<bool> ValidateApplicationName(string appName);
+    Task<ApplicationDetailsDto> GetApplicationDetails(string appId);
+    Task<List<ApplicationListDto>> GetApplicationList(string userId);
+    Task<bool> ActivateApplicationById(string applicationId);
 }

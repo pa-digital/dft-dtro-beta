@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.Mocks;
 
-[ExcludeFromCodeCoverage]
 public static class MockHttpContext
 {
     public static Mock<HttpContext> Setup()

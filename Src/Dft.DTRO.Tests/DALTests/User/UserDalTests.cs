@@ -9,7 +9,7 @@ namespace DfT.DTRO.Tests.DALTests
         public UserDalTests()
         {
             var options = new DbContextOptionsBuilder<DtroContext>()
-                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             _context = new DtroContext(options);
@@ -33,10 +33,12 @@ namespace DfT.DTRO.Tests.DALTests
         [Fact]
         public async Task DeleteUserDeletesUserAndDtroUserWhenUserAndDtroUserExist()
         {
-            var userId = _context.Users.First().Id;
+            var user = _context.Users.First();
+            Assert.NotNull(user);
+            var userId = user.Id;
 
             await _userDal.DeleteUser(userId);
-            var user = await _context.Users.FindAsync(userId);
+            user = await _context.Users.FindAsync(userId);
             var dtroUser = await _context.DtroUsers.FindAsync(userId);
 
             Assert.Null(user);

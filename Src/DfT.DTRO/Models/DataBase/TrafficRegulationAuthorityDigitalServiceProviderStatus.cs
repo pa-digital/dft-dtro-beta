@@ -3,6 +3,7 @@
 /// <summary>
 /// Wrapper for Traffic Regulation Authority Digital Service Provider Status
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class TrafficRegulationAuthorityDigitalServiceProviderStatus
 {

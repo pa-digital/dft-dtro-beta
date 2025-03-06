@@ -1,6 +1,5 @@
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
-    [ExcludeFromCodeCoverage]
     public static class DataSetUp
     {
         public static async Task ClearAllDataAsync(TestUser testUser)

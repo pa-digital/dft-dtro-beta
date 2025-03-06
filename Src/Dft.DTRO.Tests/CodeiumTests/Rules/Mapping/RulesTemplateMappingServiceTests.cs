@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.Rules.Mapping;
 
-[ExcludeFromCodeCoverage]
 public class RulesTemplateMappingServiceTests
 {
     private readonly RuleTemplateMappingService _service = new();

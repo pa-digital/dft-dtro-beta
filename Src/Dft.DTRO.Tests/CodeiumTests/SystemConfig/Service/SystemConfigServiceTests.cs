@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.SystemConfig.Service;
 
-[ExcludeFromCodeCoverage]
 public class SystemConfigServiceTests
 {
     private readonly Mock<ISystemConfigDal> _mockSystemConfigDal;

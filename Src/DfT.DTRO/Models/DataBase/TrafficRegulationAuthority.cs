@@ -3,6 +3,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for Traffic Regulation Authority 
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class TrafficRegulationAuthority
 {

@@ -3,7 +3,6 @@ using Newtonsoft.Json.Converters;
 
 namespace Dft.DTRO.Tests;
 
-[ExcludeFromCodeCoverage]
 public static class Utils
 {
     public static DtroSubmit PrepareDtro(string jsonData, SchemaVersion schemaVersion) =>
