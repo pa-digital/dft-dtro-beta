@@ -13,11 +13,11 @@ namespace DfT.DTRO.Tests.DALTests
                 .Options;
 
             _context = new DtroContext(options);
-            SeedDatabase();
+            SeedDatabase().GetAwaiter().GetResult();
             _userDal = new UserDal(_context);
         }
 
-        private void SeedDatabase()
+        private async Task SeedDatabase()
         {
             var user1 = new User { Id = Guid.NewGuid(), Email = "user@test.com" };
             var user2 = new User { Id = Guid.NewGuid(), Email = "anotheruser@test.com" };
@@ -27,7 +27,7 @@ namespace DfT.DTRO.Tests.DALTests
 
             _context.Users.AddRange(user1, user2);
             _context.DtroUsers.AddRange(dtroUser1, dtroUser2);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         [Fact]
