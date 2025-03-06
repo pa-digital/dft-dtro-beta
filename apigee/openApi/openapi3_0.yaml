@@ -13,10 +13,119 @@ info:
 servers:
   - url: 'http://localhost'
 paths:
+  /applications:
+    post:
+      tags:
+        - Applications
+      summary: Create App
+      operationId: create-app
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      requestBody:
+        description: Properties passed by body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DfT.DTRO.Models.Applications.AppInput'
+      responses:
+        '200':
+          description: Ok
+        '500':
+          description: Internal Server Error
+  /applications/validateName:
+    post:
+      tags:
+        - Applications
+      summary: Validates if the Application Name is available.
+      operationId: validate-app-name
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationNameQueryParameters'
+      responses:
+        '200':
+          description: Valid or invalid application name
+        '400':
+          description: Invalid or empty parameters
+        '500':
+          description: Invalid operation or other exception
+  /applications/details:
+    post:
+      tags:
+        - Applications
+      summary: Retrieves application details by ID
+      operationId: get-app-details
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationDetailsRequest'
+      responses:
+        '200':
+          description: Valid application ID
+        '400':
+          description: Invalid or empty parameters, or no matching application
+        '500':
+          description: Invalid operation or other exception
+  /applications/list:
+    post:
+      tags:
+        - Applications
+      summary: Retrieves application list for user
+      operationId: get-apps
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      responses:
+        '200':
+          description: Valid user ID
+        '400':
+          description: Invalid or empty parameters, or no matching user
+        '500':
+          description: Invalid operation or other exception
+  /oauth/token:
+    post:
+      tags:
+        - Auth
+      summary: Get Auth token
+      operationId: get-auth-token
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - $ref: "#/components/parameters/XCorrelationId"
+      requestBody:
+        description: Properties passed by body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DfT.DTRO.Models.Auth.AuthTokenInput'
+      responses:
+        '200':
+          description: Ok
+        '500':
+          description: Internal Server Error
   /dtros/createFromFile:
     post:
       tags:
-        - DTROs
+        - Dtros
       summary: Create a new D-TRO
       operationId: create-dtro-from-file
       security:
@@ -24,20 +133,8 @@ paths:
             - cso
             - dsp
       parameters:
-        - name: x-app-id
-          in: header
-          description: AppId identification a D-TRO is being submitted for.
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XAppId"
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         content:
           multipart/form-data:
@@ -74,7 +171,7 @@ paths:
   /dtros/updateFromFile/{dtroId}:
     put:
       tags:
-        - DTROs
+        - Dtros
       summary: Update an existing D-TRO
       operationId: update-dtro-from-file
       security:
@@ -82,13 +179,6 @@ paths:
             - cso
             - dsp
       parameters:
-        - name: x-app-id
-          in: header
-          description: AppId identification a D-TRO is being updated for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: dtroId
           in: path
           description: ID of the D-TRO to update.
@@ -96,13 +186,8 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XAppId"
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         content:
           multipart/form-data:
@@ -141,7 +226,7 @@ paths:
   /dtros/createFromBody:
     post:
       tags:
-        - DTROs
+        - Dtros
       summary: Create a new D-TRO
       operationId: create-dtro-from-body
       security:
@@ -149,20 +234,8 @@ paths:
             - cso
             - dsp
       parameters:
-        - name: x-app-id
-          in: header
-          description: AppId identification a D-TRO is being updated for.
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XAppId"
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing a full D-TRO details.
         content:
@@ -185,7 +258,7 @@ paths:
   /dtros/updateFromBody/{dtroId}:
     put:
       tags:
-        - DTROs
+        - Dtros
       summary: Update an existing D-TRO
       operationId: update-dtro-from-body
       security:
@@ -193,13 +266,6 @@ paths:
             - cso
             - dsp
       parameters:
-        - name: x-app-id
-          in: header
-          description: AppId identification a D-TRO is being updated for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: dtroId
           in: path
           description: ID of the D-TRO to update.
@@ -207,13 +273,8 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XAppId"
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing a full D-TRO details.
         content:
@@ -236,7 +297,7 @@ paths:
   /dtros:
     get:
       tags:
-        - DTROs
+        - Dtros
       summary: Get D-TRO records
       operationId: get-dtros
       security:
@@ -263,13 +324,7 @@ paths:
           schema:
             type: string
             format: date-time
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Ok
@@ -280,7 +335,7 @@ paths:
   /dtros/{id}:
     get:
       tags:
-        - DTROs
+        - Dtros
       summary: Gets a D-TRO by its ID
       operationId: get-dtro-by-id
       security:
@@ -296,13 +351,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -313,7 +362,7 @@ paths:
   /dtros/{dtroId}:
     delete:
       tags:
-        - DTROs
+        - Dtros
       summary: Marks a D-TRO as deleted.
       operationId: delete-dtro-by-dtroId
       security:
@@ -321,13 +370,6 @@ paths:
             - cso
             - dsp
       parameters:
-        - name: x-app-id
-          in: header
-          description: AppId identification a D-TRO is being updated for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: dtroId
           in: path
           description: ID of the D-TRO to mark as deleted.
@@ -335,13 +377,8 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XAppId"
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '204':
           description: Successfully deleted the DTRO.
@@ -354,7 +391,7 @@ paths:
   /dtros/sourceHistory/{dtroId}:
     get:
       tags:
-        - DTROs
+        - Dtros
       summary: Retrieve the Source History for existing D-TROs
       operationId: get-dtro-source-history-by-dtroId
       security:
@@ -370,13 +407,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -395,7 +426,7 @@ paths:
   /dtros/provisionHistory/{dtroId}:
     get:
       tags:
-        - DTROs
+        - Dtros
       summary: Retrieve the Provision History for existing D-TROs
       operationId: get-dtro-provision-history-by-dtroId
       security:
@@ -411,13 +442,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -436,20 +461,13 @@ paths:
   /dtros/ownership/{dtroId}/{assignToTraId}:
     post:
       tags:
-        - DTROs
+        - Dtros
       summary: Assign D-TRO ownership
       operationId: assign-dtro-ownership-by-dtroId-assignToTraId
       security:
         - oAuth:
             - cso
       parameters:
-        - name: x-app-id
-          in: header
-          description: AppId identification a D-TRO is being updated for.
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: dtroId
           in: path
           description: ID of the D-TRO to assign.
@@ -464,13 +482,8 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XAppId"
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '201':
           description: Successfully assigned the DTRO.
@@ -483,20 +496,14 @@ paths:
   /dtroUsers:
     get:
       tags:
-        - DtroUser
+        - DtroUsers
       summary: Retrieve All Dtro Users
       operationId: get-d-tro-users
       security:
         - oAuth:
             - cso
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Dtro Users retrieved successfully.
@@ -533,7 +540,7 @@ paths:
   /dtroUsers/search/{partialName}:
     get:
       tags:
-        - DtroUser
+        - DtroUsers
       summary: Find the existing Dtro Users that matches the requested criteria.
       operationId: search-d-tro-users
       security:
@@ -546,13 +553,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Dtro User retrieved successfully.
@@ -591,20 +592,14 @@ paths:
   /dtroUsers/createFromBody:
     post:
       tags:
-        - DtroUser
+        - DtroUsers
       summary: Create a new Dtro user entity.
       operationId: create-d-tro-user
       security:
         - oAuth:
             - cso
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing the dtro Users details.
         content:
@@ -657,20 +652,14 @@ paths:
   /dtroUsers/updateFromBody:
     put:
       tags:
-        - DtroUser
+        - DtroUsers
       summary: Update an existing Dtro User.
       operationId: update-d-tro-users
       security:
         - oAuth:
             - cso
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing the Dtro User details.
         content:
@@ -723,7 +712,7 @@ paths:
   /dtroUsers/{dtroUserId}:
     get:
       tags:
-        - DtroUser
+        - DtroUsers
       summary: Retrieve a Dtro User
       operationId: get-dtro-by-dtroUserId
       security:
@@ -737,13 +726,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Ok
@@ -770,20 +753,14 @@ paths:
   /dtroUsers/redundant:
     delete:
       tags:
-        - DtroUser
+        - DtroUsers
       summary: Delete Dtro users by ids
       operationId: delete-d-tro-users-by-ids
       security:
         - oAuth:
             - cso
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: List of D-TRO User ID, comma separated
         content:
@@ -843,20 +820,8 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: x-app-id
-          in: header
-          description: AppId identification a D-TRO is being submitted for.
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XAppId"
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: A search query object
         content:
@@ -918,13 +883,7 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: The API is up and running.
@@ -958,13 +917,7 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Database is available.
@@ -1000,13 +953,7 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing a metric request.
         content:
@@ -1068,13 +1015,7 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing a metric request.
         content:
@@ -1146,13 +1087,7 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1174,13 +1109,7 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1208,13 +1137,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1243,13 +1166,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1275,13 +1192,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         content:
           multipart/form-data:
@@ -1331,13 +1242,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         content:
           multipart/form-data:
@@ -1387,13 +1292,7 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1415,13 +1314,7 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1449,13 +1342,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1480,13 +1367,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Successfully deleted schema template.
@@ -1519,13 +1400,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1551,13 +1426,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         content:
           multipart/form-data:
@@ -1607,13 +1476,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing a full schema template.
         content:
@@ -1650,13 +1513,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         content:
           multipart/form-data:
@@ -1708,13 +1565,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing a full schema template.
         content:
@@ -1751,13 +1602,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Ok
@@ -1787,13 +1632,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Ok
@@ -1819,13 +1658,8 @@ paths:
             - dsp
             - dc
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XAppId"
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: A D-TRO object search criteria.
         content:
@@ -1855,20 +1689,8 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - name: x-app-id
-          in: header
-          description: AppId identification.
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XAppId"
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: System name retrieved successfully.
@@ -1900,13 +1722,7 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing System Config details.
         content:
@@ -1954,8 +1770,62 @@ paths:
           description: Bad Request.
         '500':
           description: Internal server error.
+  /tras:
+    get:
+      tags:
+        - Tras
+      summary: Get TRA records
+      operationId: get-tras
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - name: TraName
+          in: query
+          description: TRA name
+          schema:
+            type: string
+        - $ref: "#/components/parameters/XCorrelationId"
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: Could not found any TRA records.
+        '500':
+          description: Internal Server Error
 components:
+  parameters:
+    XAppId:
+      name: x-app-id
+      in: header
+      description: AppId identification.
+      required: true
+      schema:
+        type: string
+        format: uuid
+    XCorrelationId:
+      name: X-Correlation-ID
+      in: header
+      required: true
+      schema:
+        type: string
+        description: UUID formatted string to track the request through the enquiries stack.
+        default: 41ae0471-d7de-4737-907f-cab2f0089796
   schemas:
+    ApplicationDetailsRequest:
+      type: object
+      properties:
+        appId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ApplicationNameQueryParameters:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
     DeleteDtroUsersRequest:
       type: object
       properties:
@@ -1966,6 +1836,32 @@ components:
             format: uuid
           nullable: true
       additionalProperties: false
+    DfT.DTRO.Models.Applications.AppInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: app name.
+          nullable: true
+        username:
+          type: string
+          description: username.
+          nullable: true
+      additionalProperties: false
+      description: Auth token input.
+    DfT.DTRO.Models.Auth.AuthTokenInput:
+      type: object
+      properties:
+        username:
+          type: string
+          description: username.
+          nullable: true
+        password:
+          type: string
+          description: password.
+          nullable: true
+      additionalProperties: false
+      description: Auth token input.
     DfT.DTRO.Models.DtroDtos.DtroResponse:
       type: object
       properties:
@@ -2067,6 +1963,7 @@ components:
         - page
         - pageSize
         - since
+        - to
       type: object
       properties:
         page:
@@ -2080,6 +1977,9 @@ components:
           type: integer
           format: int32
         since:
+          type: string
+          format: date-time
+        to:
           type: string
           format: date-time
         traCreator:
