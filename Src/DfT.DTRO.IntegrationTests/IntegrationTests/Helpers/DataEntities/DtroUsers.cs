@@ -1,3 +1,4 @@
+using DfT.DTRO.Consts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
@@ -23,7 +24,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "x-App-Id", testUser.AppId }
             };
 
-            HttpResponseMessage getAllUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}/dtroUsers", headers);
+            HttpResponseMessage getAllUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtroUsersBase}", headers);
             return getAllUsersResponse;
         }
 
@@ -57,7 +58,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
             JObject requestBody = new JObject { ["ids"] = JArray.FromObject(ids) };
 
-            HttpResponseMessage deleteUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Delete, $"{BaseUri}/dtroUsers/redundant", headers, requestBody.ToString(Formatting.None));
+            HttpResponseMessage deleteUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Delete, $"{BaseUri}{RouteTemplates.DtroUsersDeleteRedundant}", headers, requestBody.ToString(Formatting.None));
             return deleteUsersResponse;
         }
 
@@ -80,7 +81,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             }
             """;
 
-            HttpResponseMessage createUserResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}/dtroUsers/createFromBody", headers, jsonBody);
+            HttpResponseMessage createUserResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.DtroUsersCreateFromBody}", headers, jsonBody);
             return createUserResponse;
         }
     }

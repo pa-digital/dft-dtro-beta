@@ -48,4 +48,4 @@
 **/TestResults
 **/TestReports
 **/Coverage
-**/temp
+**/temp_integration_tests

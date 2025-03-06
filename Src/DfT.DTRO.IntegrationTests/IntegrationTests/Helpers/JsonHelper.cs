@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -6,9 +7,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class JsonHelper
     {
-        public static async Task<string> GetIdFromResponseJsonAsync(HttpResponseMessage httpResponse)
+        public static async Task<string> GetIdFromResponseJsonAsync(HttpResponseMessage httpResponseMessage)
         {
-            string createDtroResponseJson = await httpResponse.Content.ReadAsStringAsync();
+            string createDtroResponseJson = await httpResponseMessage.Content.ReadAsStringAsync();
             dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(createDtroResponseJson)!;
             string id = jsonDeserialised.id.ToString();
             return id;
@@ -16,15 +17,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         public static void CompareJson(string expectedJson, string actualJson)
         {
-            // Until files are set to camel case, convert files to lower case before comparison
-            string expectedJsonToLowerCase = expectedJson.ToLower();
-            string actualJsonToLowerCase = actualJson.ToLower();
+            string orderedExpectedJson = SortJsonKeys(expectedJson);
+            string orderedActualJson = SortJsonKeys(actualJson);
 
-            string orderedJson1 = SortJsonKeys(expectedJsonToLowerCase);
-            string orderedJson2 = SortJsonKeys(actualJsonToLowerCase);
-
-            string[] expectedLines = orderedJson1.Split('\n');
-            string[] actualLines = orderedJson2.Split('\n');
+            string[] expectedLines = orderedExpectedJson.Split('\n');
+            string[] actualLines = orderedActualJson.Split('\n');
 
             Console.WriteLine("Comparing JSON...\n");
             int maxLines = Math.Max(expectedLines.Length, actualLines.Length);
@@ -34,26 +31,27 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             for (int i = 0; i < maxLines; i++)
             {
-                string line1 = i < expectedLines.Length ? expectedLines[i] : "";
-                string line2 = i < actualLines.Length ? actualLines[i] : "";
+                string expectedLine = i < expectedLines.Length ? expectedLines[i] : "";
+                string actualLine = i < actualLines.Length ? actualLines[i] : "";
+                int lineNumberToPrint = i + 1;
 
-                if (line1 == line2)
+                if (expectedLine == actualLine)
                 {
-                    Console.WriteLine(line1);
+                    Console.WriteLine($"line {lineNumberToPrint}    {expectedLine}");
                 }
                 else
                 {
                     jsonsMatch = false;
-                    if (!string.IsNullOrWhiteSpace(line1))
+                    if (!string.IsNullOrWhiteSpace(expectedLine))
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"- {line1.TrimEnd()}");
+                        Console.WriteLine($"line {lineNumberToPrint}    - {expectedLine.TrimEnd()}");
                         Console.ResetColor();
                     }
-                    if (!string.IsNullOrWhiteSpace(line2))
+                    if (!string.IsNullOrWhiteSpace(actualLine))
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"+ {line2.TrimEnd()}");
+                        Console.WriteLine($"line {lineNumberToPrint}    + {actualLine.TrimEnd()}");
                         Console.ResetColor();
                     }
                 }
@@ -109,6 +107,60 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             {
                 return token; // Leave primitive values unchanged
             }
+        }
+
+        public static string ConvertJsonKeysToCamelCase(string json)
+        {
+            JObject jsonObject = JObject.Parse(json);
+            JObject camelCasedObject = ConvertKeysToCamelCase(jsonObject);
+            return JsonConvert.SerializeObject(camelCasedObject, Formatting.Indented);
+        }
+
+        private static JObject ConvertKeysToCamelCase(JObject original)
+        {
+            JObject newObject = new JObject();
+
+            foreach (var property in original.Properties())
+            {
+                string camelCaseKey = Char.ToLowerInvariant(property.Name[0]) + property.Name.Substring(1);
+
+                if (property.Value.Type == JTokenType.Object)
+                {
+                    newObject[camelCaseKey] = ConvertKeysToCamelCase((JObject)property.Value);
+                }
+                else if (property.Value.Type == JTokenType.Array)
+                {
+                    JArray array = (JArray)property.Value;
+                    JArray newArray = new JArray();
+
+                    foreach (var item in array)
+                    {
+                        if (item.Type == JTokenType.Object)
+                        {
+                            newArray.Add(ConvertKeysToCamelCase((JObject)item));
+                        }
+                        else
+                        {
+                            newArray.Add(item);
+                        }
+
+                    }
+
+                    newObject[camelCaseKey] = newArray;
+                }
+                else
+                {
+                    newObject[camelCaseKey] = property.Value;
+                }
+            }
+
+            return newObject;
+        }
+
+        public static string MinifyJson(string json)
+        {
+            using JsonDocument doc = JsonDocument.Parse(json);
+            return System.Text.Json.JsonSerializer.Serialize(doc.RootElement);
         }
     }
 }

@@ -84,6 +84,14 @@ public class DTROsController : ControllerBase
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
         }
+        catch (CaseException cex)
+        {
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
+
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(CreateFromFile), "/dtros/createFromFile", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
+        }
         catch (DtroValidationException dvex)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
@@ -191,6 +199,14 @@ public class DTROsController : ControllerBase
                 return Ok(response);
             }
         }
+        catch (CaseException cex)
+        {
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
+
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(UpdateFromFile), "/dtros/updateFromFile", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
+        }
         catch (DtroValidationException dvex)
         {
             await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
@@ -275,6 +291,14 @@ public class DTROsController : ControllerBase
                 "/dtros/createFromBody",
                 $"'{nameof(CreateFromBody)}' method called using appId: '{appId}' and body '{dtroSubmit}'");
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
+        }
+        catch (CaseException cex)
+        {
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
+
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(CreateFromBody), "/dtros/createFromBody", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
         }
         catch (DtroValidationException dvex)
         {
@@ -377,6 +401,14 @@ public class DTROsController : ControllerBase
                 $"/dtros/updateFromBody/{dtroId}",
                 $"'{nameof(UpdateFromBody)}' method called using appId: '{appId}', unique identifier: '{dtroId}' and body: '{dtroSubmit}'");
             return Ok(guidResponse);
+        }
+        catch (CaseException cex)
+        {
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
+
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(UpdateFromBody), "/dtros/updateFromBody", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
         }
         catch (DtroValidationException dvex)
         {

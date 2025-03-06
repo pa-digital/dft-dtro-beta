@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class FileHelper
@@ -20,6 +22,20 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                     File.Delete(file);
                     Console.WriteLine($"Deleted file {file}");
                 }
+            }
+        }
+
+        public static string[] GetFileNames(string directoryPath)
+        {
+            if (Directory.Exists(directoryPath))
+            {
+                return Directory.GetFiles(directoryPath)
+                                .Select(Path.GetFileName)
+                                .ToArray();
+            }
+            else
+            {
+                throw new DirectoryNotFoundException($"The directory '{directoryPath}' does not exist.");
             }
         }
     }

@@ -5,13 +5,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class TestConfig
     {
-        public static readonly string SchemaVersionUnderTest = "3.3.1";
         public static EnvironmentType EnvironmentName { get; }
         public static string BaseUri { get; }
         public static string AbsolutePathToProjectDirectory { get; }
         public static string AbsolutePathToExamplesDirectory { get; }
         public static string AbsolutePathToDtroExamplesDirectory { get; }
         public static string AbsolutePathToDtroExamplesTempDirectory { get; }
+        public static string AbsolutePathToSchemaExamplesDirectory { get; }
+        public static string AbsolutePathToRuleExamplesDirectory { get; }
         public static string RulesJsonFile { get; }
         public static string SchemaJsonFile { get; }
         public static string DatabaseHostName { get; }
@@ -76,10 +77,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             AbsolutePathToProjectDirectory = GetAbsolutePathToProjectDirectory();
             AbsolutePathToExamplesDirectory = $"{GetAbsolutePathToProjectDirectory()}/examples";
-            AbsolutePathToDtroExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/D-TROs/{SchemaVersionUnderTest}";
-            AbsolutePathToDtroExamplesTempDirectory = $"{AbsolutePathToExamplesDirectory}/temp";
-            RulesJsonFile = $"{AbsolutePathToExamplesDirectory}/Rules/rules-{SchemaVersionUnderTest}.json";
-            SchemaJsonFile = $"{AbsolutePathToExamplesDirectory}/Schemas/schemas-{SchemaVersionUnderTest}.json";
+            AbsolutePathToDtroExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/D-TROs";
+            AbsolutePathToDtroExamplesTempDirectory = $"{AbsolutePathToExamplesDirectory}/temp_integration_tests";
+            AbsolutePathToSchemaExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/Schemas";
+            AbsolutePathToRuleExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/Rules";
             DatabaseConnectionString = GetDatabaseConnectionString();
         }
     }
