@@ -11,13 +11,13 @@ namespace DfT.DTRO.Controllers;
 public class PortalUsersController : ControllerBase
 {
     private readonly IPortalUserService _portalUserService;
-    private readonly ILogger<DtroUserController> _logger;
+    private readonly ILogger<PortalUsersController> _logger;
     private readonly LoggingExtension _loggingExtension;
 
    
     public PortalUsersController(
         IPortalUserService portalUserService,
-        ILogger<DtroUserController> logger,
+        ILogger<PortalUsersController> logger,
         LoggingExtension loggingExtension)
     {
         _portalUserService = portalUserService;
