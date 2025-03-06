@@ -11,6 +11,7 @@ public class ElementaryStreetUnitValidationServiceTests
     [InlineData(null, 1)]
     [InlineData(99999999999, 0)]
     [InlineData(100000000000000, 1)]
+    // @formatter:off
     public void ValidateElementaryStreetUnitEsu(long esu, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
@@ -45,6 +46,7 @@ public class ElementaryStreetUnitValidationServiceTests
         var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
+    // @formatter:on
 
     [Fact]
     public void ValidateElementaryStreetUnitMultipleEsu()
