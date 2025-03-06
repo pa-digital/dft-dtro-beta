@@ -41,7 +41,7 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Format check
+      - name: Check code formatting
         run: |
           dotnet format --verify-no-changes
 
