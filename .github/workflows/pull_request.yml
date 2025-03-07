@@ -55,11 +55,12 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Unit tests
+        id: unit-tests
         run: |
           ./run_unit_tests_with_coverage.sh
 
       - name: Upload unit test coverage report
-        if: always()
+        if: steps.unit-tests.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
           name: Unit test coverage report
@@ -77,13 +78,14 @@ jobs:
           done
 
       - name: Integration tests
+        id: integration-tests
         env:
           ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${{ secrets.INTEGRATION_TEST_DB_NAME }};Username=${{ secrets.INTEGRATION_TEST_DB_USER }};Password=${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}"
         run: |
           ./Src/DfT.DTRO.IntegrationTests/ci_scripts/run_integration_tests_against_localhost_on_ci.sh
 
       - name: Upload integration test results
-        if: always()
+        if: steps.integration-tests.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
           name: Integration test results
