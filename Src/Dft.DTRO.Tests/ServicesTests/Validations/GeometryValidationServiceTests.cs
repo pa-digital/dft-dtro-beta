@@ -8,7 +8,7 @@ public class GeometryValidationServiceTests
     [InlineData(1, "3.3.0", 0)]
     [InlineData(null, "3.3.0", 1)]
     [InlineData(0, "3.3.0", 1)]
-    public void ValidatePointGeometryVersion(int? version, string schemaVersion, int errorCount)
+    public void ValidatePointGeometryVersion(long version, string schemaVersion, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -101,7 +101,7 @@ public class GeometryValidationServiceTests
     [InlineData(1, "3.3.0", 0)]
     [InlineData(null, "3.3.0", 1)]
     [InlineData(0, "3.3.0", 1)]
-    public void ValidateLinearGeometryVersion(int? version, string schemaVersion, int errorCount)
+    public void ValidateLinearGeometryVersion(long version, string schemaVersion, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{

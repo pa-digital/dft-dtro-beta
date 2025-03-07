@@ -16,7 +16,7 @@ public class DtroEventSearch
     [Required]
     [DataMember(Name = "since")]
     public DateTime? Since { get; set; }
-    
+
     [Required]
     [DataMember(Name = "to")]
     public DateTime? To { get; set; }
@@ -54,7 +54,7 @@ public class DtroEventSearch
 
     [DataMember(Name = "regulationEnd")]
     public ValueCondition<DateTime> RegulationEnd { get; set; }
-    
+
     [DataMember(Name = "eventType")]
     public string EventType { get; set; }
 }

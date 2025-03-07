@@ -11,7 +11,6 @@ public class UniqueStreetReferenceNumberValidationServiceTests
     [InlineData(null, 1)]
     [InlineData(39605158, 0)]
     [InlineData(100000000, 1)]
-    // @formatter:off
     public void ValidateUniqueStreetReferenceNumberUsrn(long usrn, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
@@ -42,7 +41,6 @@ public class UniqueStreetReferenceNumberValidationServiceTests
         var actual = _sut.Validate(dtroSubmit);
         Assert.Equal(errorCount, actual.Count);
     }
-    // @formatter:on
 
     [Fact]
     public void ValidateUniqueStreetReferenceNumberMultipleDifferentUsrn()

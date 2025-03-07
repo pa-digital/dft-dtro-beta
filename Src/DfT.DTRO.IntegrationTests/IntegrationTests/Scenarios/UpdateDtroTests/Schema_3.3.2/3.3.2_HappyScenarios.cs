@@ -1,7 +1,7 @@
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelper;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 using Newtonsoft.Json.Linq;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelper;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_2
 {

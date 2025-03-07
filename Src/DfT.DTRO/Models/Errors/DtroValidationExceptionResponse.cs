@@ -2,7 +2,7 @@ using DfT.DTRO.Models.Validation;
 
 namespace DfT.DTRO.Models.Errors;
 
-public class DtroValidationExceptionResponse 
+public class DtroValidationExceptionResponse
 {
     public ApiErrorResponse RequestComparedToSchemaVersion { get; set; }
 

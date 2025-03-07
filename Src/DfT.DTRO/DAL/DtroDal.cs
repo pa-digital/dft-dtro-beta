@@ -428,30 +428,30 @@ public class DtroDal : IDtroDal
         {
             expressionsToConjunct.Add(it => it.OrderReportingPoints.Contains(search.OrderReportingPoint));
         }
-        
+
         const string deleteEvent = "delete";
         const string createEvent = "create";
         const string updateEvent = "update";
         if (search.EventType is { } eventType)
         {
-                switch (eventType)
-                {
-                    case deleteEvent:
-                        expressionsToConjunct.Add(it => it.Deleted == true);
-                        break;
+            switch (eventType)
+            {
+                case deleteEvent:
+                    expressionsToConjunct.Add(it => it.Deleted == true);
+                    break;
 
-                    case createEvent:
-                        expressionsToConjunct.Add(it => it.Created == it.LastUpdated);
-                        break;
+                case createEvent:
+                    expressionsToConjunct.Add(it => it.Created == it.LastUpdated);
+                    break;
 
-                    case updateEvent:
-                        expressionsToConjunct.Add(it => it.LastUpdated != it.Created);
-                        break;
-                    default:
-                        throw new InvalidOperationException($"Invalid eventType, please use one of the following: {deleteEvent}, {createEvent}, {updateEvent}");
-                }
+                case updateEvent:
+                    expressionsToConjunct.Add(it => it.LastUpdated != it.Created);
+                    break;
+                default:
+                    throw new InvalidOperationException($"Invalid eventType, please use one of the following: {deleteEvent}, {createEvent}, {updateEvent}");
+            }
         }
-        
+
         //if (search.Location is not null)
         //{
         //    var boundingBox =

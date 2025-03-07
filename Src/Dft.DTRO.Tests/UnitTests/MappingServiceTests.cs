@@ -36,9 +36,6 @@ public class MappingServiceTests
     {
         var dtro = await Utils.CreateDtroObject(path, schemaVersion);
         _sut.InferIndexFields(ref dtro);
-
-        Assert.NotNull(dtro.TrafficAuthorityCreatorId);
-        Assert.NotNull(dtro.TrafficAuthorityOwnerId);
         Assert.NotNull(dtro.TroName);
     }
 

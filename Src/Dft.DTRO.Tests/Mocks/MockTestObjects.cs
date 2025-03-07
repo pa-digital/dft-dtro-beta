@@ -255,13 +255,13 @@ public static class MockTestObjects
         Credentials =
            [
                new AppCredential
-                {
-                    ConsumerKey = "consumerKey",
-                    ConsumerSecret = "consumerSecret",
-                    ExpiresAt = -1,
-                    IssuedAt = -1,
-                    Status = "status"
-                }
+               {
+                   ConsumerKey = "consumerKey",
+                   ConsumerSecret = "consumerSecret",
+                   ExpiresAt = -1,
+                   IssuedAt = -1,
+                   Status = "status"
+               }
            ],
         DeveloperId = "developerId",
         LastModifiedAt = -1,
