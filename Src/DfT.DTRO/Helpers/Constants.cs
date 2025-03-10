@@ -48,6 +48,26 @@ public static class Constants
 
     public static List<int> MphValues => new() { 10, 20, 30, 40, 50, 60, 70 };
 
+    public static string ConsultationName => "consultationName";
+
+    public static string EndOfConsultation => "endOfConsultation";
+
+    public static string HowToComment => "howToComment";
+
+    public static string LocalReference => "localReference";
+
+    public static string Consultation => "Consultation";
+
+    public static string PointOfContactAddress => "pointOfContactAddress";
+
+    public static string PointOfContactEmail => "pointOfContactEmail";
+
+    public static string StartOfConsultation => "startOfConsultation";
+
+    public static string StatementOfReason => "statementOfReason";
+
+    public static string UrlAdditionalInformation => "urlAdditionalInformation";
+
     public static string Value => "value";
 
     public static string UsageCondition => "usageCondition";
