@@ -11,7 +11,7 @@ public class AuthTokenInput
     /// </summary>
     [DataMember(Name = "username")]
     public string Username { get; set; }
-    
+
     /// <summary>
     /// password.
     /// </summary>

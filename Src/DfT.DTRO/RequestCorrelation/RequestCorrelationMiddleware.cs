@@ -25,7 +25,7 @@ public class RequestCorrelationMiddleware : IMiddleware
         else
         {
             correlationId = Guid.NewGuid().ToString();
-            context.Request.Headers.Add(_options.HeaderName, correlationId);
+            context.Request.Headers.Append(_options.HeaderName, correlationId);
             _logger.LogDebug("Generated correlation Id: {CorrelationId}", correlationId);
         }
 
@@ -33,7 +33,7 @@ public class RequestCorrelationMiddleware : IMiddleware
         {
             if (!context.Response.Headers.TryGetValue(_options.HeaderName, out correlationIds))
             {
-                context.Response.Headers.Add(_options.HeaderName, correlationId);
+                context.Response.Headers.Append(_options.HeaderName, correlationId);
             }
 
             return Task.CompletedTask;

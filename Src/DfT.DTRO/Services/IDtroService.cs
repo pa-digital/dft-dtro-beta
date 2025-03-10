@@ -14,7 +14,7 @@ public interface IDtroService
     /// <param name="parameters">Parameters passed</param>
     /// <returns>List of D-TRO records</returns>
     Task<IEnumerable<DtroResponse>> GetDtrosAsync(GetAllQueryParameters parameters);
-    
+
     /// <summary>
     /// Get all D-TRO records withing parameters
     /// </summary>

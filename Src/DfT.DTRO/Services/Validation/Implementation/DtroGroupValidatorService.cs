@@ -86,7 +86,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         // }
 
         // Validation of camel case for schemas >= 3.3.2
-        CasingValidationService casingValidationService = new ();
+        CasingValidationService casingValidationService = new();
         if (casingValidationService.SchemaVersionEnforcesCamelCase(dtroSubmit.SchemaVersion))
         {
             List<string> invalidProperties = casingValidationService.ValidateCamelCase(dtroSubmit.Data);
@@ -98,7 +98,8 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
 
             // Here, we turn all the Dtro object keys into Pascal case
             dtroSubmit.Data = casingValidationService.ConvertKeysToPascalCase(dtroSubmit.Data);
-        } else
+        }
+        else
         {
             List<string> invalidProperties = casingValidationService.ValidatePascalCase(dtroSubmit.Data);
             if (invalidProperties.Count > 0)

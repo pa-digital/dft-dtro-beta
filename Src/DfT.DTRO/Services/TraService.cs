@@ -14,7 +14,7 @@ public class TraService : ITraService
         _traDal = traDal;
         _dtroMappingService = dtroMappingService;
     }
-    
+
     public async Task<IEnumerable<TraFindAllResponse>> GetTrasAsync(GetAllTrasQueryParameters parameters)
     {
         List<TrafficRegulationAuthority> tras = (await _traDal.GetTrasAsync(parameters)).ToList();

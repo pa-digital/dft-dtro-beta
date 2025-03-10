@@ -12,5 +12,5 @@ public interface IApigeeClient
     /// <param name="parameters">Parameters passed</param>
     /// <returns>App</returns>
     Task<HttpResponseMessage> CreateApp(string developerEmail, ApigeeDeveloperAppInput developerAppInput);
-    
+
 }

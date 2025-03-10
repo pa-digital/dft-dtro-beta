@@ -12,20 +12,20 @@ public class ApigeeClient : IApigeeClient
     private readonly IConfiguration _configuration;
     private readonly HttpClient _httpClient;
     private readonly SecretManagerClient _secretManagerClient;
-    
+
     public ApigeeClient(IConfiguration configuration, HttpClient httpClient, SecretManagerClient secretManagerClient)
     {
         _configuration = configuration;
         _httpClient = httpClient;
         _secretManagerClient = secretManagerClient;
     }
-    
+
     public async Task<HttpResponseMessage> CreateApp(string developerEmail, ApigeeDeveloperAppInput developerAppInput)
     {
         var requestUri = $"developers/{developerEmail}/apps";
         return await SendRequest(HttpMethod.Post, requestUri, developerAppInput);
     }
-    
+
     private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string requestUri, object requestMessageContent)
     {
         string secret = _secretManagerClient.GetSecret(ApiConsts.SaExecutionPrivateKeySecretName);
@@ -38,5 +38,5 @@ public class ApigeeClient : IApigeeClient
         requestMessage.Content = new StringContent(content, Encoding.UTF8, "application/json");
         return await _httpClient.SendAsync(requestMessage);
     }
-    
+
 }

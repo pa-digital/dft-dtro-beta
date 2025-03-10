@@ -4,6 +4,14 @@ root = true
 # C# files
 [*.cs]
 
+# Exclude certain files where "dotnet format" changes long to long?, causing unit tests to fail
+Src/Dft.DTRO.Tests/ServicesTests/Validations/ElementaryStreetUnitValidationServiceTests.cs
+generated_code = true
+Src/Dft.DTRO.Tests/ServicesTests/Validations/GeometryValidationServiceTests.cs
+generated_code = true
+Src/Dft.DTRO.Tests/ServicesTests/Validations/UniqueStreetReferenceNumberValidationServiceTests.cs
+generated_code = true
+
 #### Core EditorConfig Options ####
 
 # Indentation and spacing

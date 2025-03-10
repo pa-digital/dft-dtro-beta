@@ -12,5 +12,5 @@ public interface IAuthClient
     /// <param name="parameters">Parameters passed</param>
     /// <returns>Auth token</returns>
     Task<HttpResponseMessage> GetToken(AuthTokenInput authTokenInput);
-    
+
 }

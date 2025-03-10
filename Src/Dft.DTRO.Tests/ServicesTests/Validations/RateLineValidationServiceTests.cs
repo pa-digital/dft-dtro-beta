@@ -11,7 +11,7 @@ public class RateLineValidationServiceTests
     [InlineData("ConditionSet", "free text", 0)]
     [InlineData("ConditionSet", "", 1)]
     [InlineData("ConditionSet", null, 1)]
-    public void ValidateRateLineDuration(string conditionType, string description, int errorCount)
+    public void ValidateRateLineDuration(string conditionType, string? description, int errorCount)
     {
         SchemaVersion schemaVersion = new("3.3.0");
 

@@ -11,5 +11,5 @@ public class TraFindAllResponse
     /// </summary>
     [DataMember(Name = "name")]
     public string Name { get; set; }
-    
+
 }

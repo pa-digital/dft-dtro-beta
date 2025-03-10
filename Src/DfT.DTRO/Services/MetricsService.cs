@@ -15,9 +15,9 @@ public class MetricsService : IMetricsService
 
     public async Task<bool> IncrementMetric(MetricType type, Guid xAppId)
     {
-            var dtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
-            var result = await _metricDal.IncrementMetric(type, dtroUser.Id,(UserGroup) dtroUser.UserGroup);
-            return result;
+        var dtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var result = await _metricDal.IncrementMetric(type, dtroUser.Id, (UserGroup)dtroUser.UserGroup);
+        return result;
     }
 
     public async Task<MetricSummary> GetMetrics(MetricRequest metricRequest)
@@ -32,7 +32,7 @@ public class MetricsService : IMetricsService
         return await _metricDal.GetMetricsForDtroUser(metricRequest.DtroUserId,
             dateFrom,
             dateTo,
-            metricRequest.UserGroup );
+            metricRequest.UserGroup);
     }
 
     public async Task<List<FullMetricSummary>> GetFullMetrics(MetricRequest metricRequest)

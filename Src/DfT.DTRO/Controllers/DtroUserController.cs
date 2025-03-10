@@ -188,7 +188,7 @@ public class DtroUserController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            _loggingExtension.LogError(nameof(CreateFromBody),"/dtroUsers/createFromBody", "", ex.Message);
+            _loggingExtension.LogError(nameof(CreateFromBody), "/dtroUsers/createFromBody", "", ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
