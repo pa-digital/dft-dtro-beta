@@ -9,6 +9,10 @@
     },
     "consultation": {
       "$ref": "#/$defs/consultation"
+    },
+    "_comment": {
+      "type": "string",
+      "minLength": 1
     }
   },
   "oneOf": [
@@ -76,6 +80,10 @@
           "items": {
             "$ref": "#/$defs/provision"
           }
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "additionalProperties": false,
@@ -142,6 +150,10 @@
         "urlAdditionalInformation": {
           "type": "string",
           "format": "uri"
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "required": [
@@ -159,6 +171,7 @@
     "provision": {
       "description": "Object identifying the characteristics of a traffic regulation measure (TRO &amp; notice) specified Provision.",
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "actionType": {
           "$ref": "#/$defs/actionType"
@@ -262,6 +275,10 @@
                 "regulationShortName": {
                   "type": "string",
                   "minLength": 1
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             },
@@ -274,6 +291,10 @@
                 },
                 "type": {
                   "$ref": "#/$defs/speedLimitValueType"
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             },
@@ -282,6 +303,10 @@
               "properties": {
                 "type": {
                   "$ref": "#/$defs/speedLimitProfileType"
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             },
@@ -296,6 +321,10 @@
                   }
                 }
               }
+            },
+            "_comment": {
+              "type": "string",
+              "minLength": 1
             }
           },
           "required": ["isDynamic", "timeZone"],
@@ -314,6 +343,10 @@
             }
           ],
           "additionalProperties": false
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "required": [
@@ -407,6 +440,10 @@
           "items": {
             "$ref": "#/$defs/externalReference"
           }
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -428,6 +465,10 @@
           "items": {
             "$ref": "#/$defs/externalReference"
           }
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -456,6 +497,10 @@
         },
         "origin": {
           "$ref": "#/$defs/externalReference"
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -479,6 +524,10 @@
           "items": {
             "$ref": "#/$defs/uniqueStreetReferenceNumber"
           }
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -519,6 +568,10 @@
           "items": {
             "$ref": "#/$defs/elementaryStreetUnit"
           }
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -528,6 +581,10 @@
         "esu": {
           "type": "integer",
           "minimum": 1
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -605,6 +662,10 @@
             "nonOrderKerbsidePedestrianCrossing",
             "nonOrderMovementBoxJunction"
           ]
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -724,6 +785,10 @@
                     "sourceLocator": {
                       "type": "string",
                       "format": "uri"
+                    },
+                    "_comment": {
+                      "type": "string",
+                      "minLength": 1
                     }
                   }
                 },
@@ -736,6 +801,10 @@
                       "format": "datetime"
                     }
                   }
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             },
@@ -759,6 +828,10 @@
                     "sourceLocator": {
                       "type": "string",
                       "format": "uri"
+                    },
+                    "_comment": {
+                      "type": "string",
+                      "minLength": 1
                     }
                   }
                 },
@@ -771,8 +844,16 @@
                       "format": "datetime"
                     }
                   }
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
+            },
+            "_comment": {
+              "type": "string",
+              "minLength": 1
             }
           },
           "recurringTimePeriodOfDay": {
@@ -790,6 +871,10 @@
                 "starTimeOfPeriod": {
                   "type": "string",
                   "format": "time"
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             }
@@ -828,10 +913,18 @@
                 },
                 "applicableInstanceOfDayWithinMonth": {
                   "$ref": "#/$defs/instanceOfDayInMonth"
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             }
           }
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -1161,6 +1254,9 @@
         "negate": {
           "type": "boolean"
         },
+        "operator": {
+          "$ref": "#/$defs/conditionOperatorType"
+        },
         "rateTable": {
           "type": "object",
           "additionalProperties": false,
@@ -1252,6 +1348,10 @@
                   }
                 }
               }
+            },
+            "_comment": {
+              "type": "string",
+              "minLength": 1
             }
           }
         },
@@ -1293,6 +1393,10 @@
                 },
                 "typeOfWeight": {
                   "$ref": "#/$defs/weightType"
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             },
@@ -1304,6 +1408,10 @@
                 "vehicleHeight": {
                   "type": "number",
                   "minimum": 0
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             },
@@ -1315,6 +1423,10 @@
                 "vehicleLength": {
                   "type": "number",
                   "minimum": 0
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             },
@@ -1326,6 +1438,10 @@
                 "vehicleWidth": {
                   "type": "number",
                   "minimum": 0
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             },
@@ -1337,6 +1453,10 @@
                 "heaviestAxleWeight": {
                   "type": "number",
                   "minimum": 0
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             },
@@ -1353,6 +1473,10 @@
                   },
                   "comparisonOperator": {
                     "$ref": "#/$defs/comparisonOperatorType"
+                  },
+                  "_comment": {
+                    "type": "string",
+                    "minLength": 1
                   }
                 }
               }
@@ -1370,8 +1494,16 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
+            },
+            "_comment": {
+              "type": "string",
+              "minLength": 1
             }
           }
         },
@@ -1382,6 +1514,10 @@
           "properties": {
             "roadType": {
               "$ref": "#/$defs/roadType"
+            },
+            "_comment": {
+              "type": "string",
+              "minLength": 1
             }
           }
         },
@@ -1404,9 +1540,17 @@
                   },
                   "value": {
                     "type": "integer"
+                  },
+                  "_comment": {
+                    "type": "string",
+                    "minLength": 1
                   }
                 }
               }
+            },
+            "_comment": {
+              "type": "string",
+              "minLength": 1
             }
           }
         },
@@ -1417,6 +1561,10 @@
           "properties": {
             "driverCharacteristics": {
               "$ref": "#/$defs/driverCharacteristicsType"
+            },
+            "_comment": {
+              "type": "string",
+              "minLength": 1
             }
           }
         },
@@ -1433,6 +1581,10 @@
               }
             },
             "otherAccessRestriction": {
+              "type": "string",
+              "minLength": 1
+            },
+            "_comment": {
               "type": "string",
               "minLength": 1
             }
@@ -1462,6 +1614,10 @@
               "items": {
                 "$ref": "#/$defs/period"
               }
+            },
+            "_comment": {
+              "type": "string",
+              "minLength": 1
             }
           }
         },
@@ -1469,7 +1625,13 @@
           "type": "object",
           "additionalProperties": false,
           "required": ["nonVehicularRoadUser"],
-          "$ref": "#/$defs/nonVehicularRoadUserType"
+          "$ref": "#/$defs/nonVehicularRoadUserType",
+          "properties": {
+            "_comment": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         },
         "permitCondition": {
           "type": "object",
@@ -1510,6 +1672,10 @@
                 "name": {
                   "type": "string",
                   "minLength": 1
+                },
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             },
@@ -1532,9 +1698,23 @@
                   "type": "string",
                   "format": "uri"
                 }
+              },
+              "properties": {
+                "_comment": {
+                  "type": "string",
+                  "minLength": 1
+                }
               }
+            },
+            "_comment": {
+              "type": "string",
+              "minLength": 1
             }
           }
+        },
+        "_comment": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "oneOf": [
@@ -1564,6 +1744,44 @@
         }
       ]
     },
+    "conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "anyOf": [
+          { "$ref": "#/$defs/condition" },
+          { "$ref": "#/$defs/conditions" },
+          {
+            "type": "object",
+            "properties": {
+              "negate": { "type": "boolean" }
+            }
+          }
+        ]
+      }
+    },
+    "conditionSet": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "anyOf": [
+          { "$ref": "#/$defs/condition" },
+          { "$ref": "#/$defs/conditions" },
+          { "$ref": "#/$defs/conditionSet" },
+          {
+            "type": "object",
+            "properties": {
+              "operator": { "$ref": "#/$defs/conditionOperatorType" },
+              "condition": { "$ref": "#/$defs/condition" },
+              "conditions": { "$ref": "#/$defs/conditions" },
+              "conditionSet": { "$ref": "#/$defs/conditionSet" }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
     "geometryType": {
       "required": ["description", "type"],
       "properties": {
@@ -1578,24 +1796,48 @@
           "type": "object",
           "items": {
             "$ref": "#/$defs/pointGeometry"
+          },
+          "properties": {
+            "_comment": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "linearGeometry": {
           "type": "object",
           "items": {
             "$ref": "#/$defs/linearGeometry"
+          },
+          "properties": {
+            "_comment": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "polygon": {
           "type": "object",
           "items": {
             "$ref": "#/$defs/polygon"
+          },
+          "properties": {
+            "_comment": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "directedLinear": {
           "type": "object",
           "items": {
             "$ref": "#/$defs/directedLinear"
+          },
+          "properties": {
+            "_comment": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         }
       },
@@ -1613,32 +1855,6 @@
           "required": ["directedLinear"]
         }
       ]
-    },
-    "conditionSet": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "additionalProperties": false,
-        "required": ["operator"],
-        "properties": {
-          "operator": {
-            "$ref": "#/$defs/conditionOperatorType"
-          },
-          "conditions": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "$ref": "#/$defs/condition"
-            }
-          },
-          "condition": {
-            "$ref": "#/$defs/condition"
-          },
-          "conditionSet": {
-            "$ref": "#/$defs/conditionSet"
-          }
-        }
-      }
     }
   }
 }
