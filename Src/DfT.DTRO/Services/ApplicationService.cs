@@ -41,11 +41,10 @@ public class ApplicationService : IApplicationService
         return await _applicationDal.ActivateApplicationById(appGuid);
     }
 
-    public async Task<App> CreateApplication(AppInput appInput)
+    public async Task<App> CreateApplication(string email, AppInput appInput)
     {
-        var username = appInput.Username;
         var developerAppInput = JsonHelper.ConvertObject<AppInput, ApigeeDeveloperAppInput>(appInput);
-        var developerApp = await _apigeeAppRepository.CreateApp(username, developerAppInput);
+        var developerApp = await _apigeeAppRepository.CreateApp(email, developerAppInput);
         return JsonHelper.ConvertObject<ApigeeDeveloperApp, App>(developerApp);
     }
 }

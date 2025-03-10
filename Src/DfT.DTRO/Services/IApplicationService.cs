@@ -4,7 +4,7 @@ namespace DfT.DTRO.Services;
 
 public interface IApplicationService
 {
-    Task<App> CreateApplication(AppInput appInput);
+    Task<App> CreateApplication(string email, AppInput appInput);
     Task<bool> ValidateAppBelongsToUser(string userId, string appId);
     Task<bool> ValidateApplicationName(string appName);
     Task<ApplicationDetailsDto> GetApplicationDetails(string appId);
