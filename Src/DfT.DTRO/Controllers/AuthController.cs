@@ -37,14 +37,14 @@ public class AuthController : ControllerBase
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 200, description: "Ok")]
-    public async Task<IActionResult> GetToken([FromBody] AuthTokenInput authTokenInput)
+    public async Task<IActionResult> GetToken([FromHeader(Name = "x-email")][Required] string email, [FromBody] AuthTokenInput authTokenInput)
     {
         try
         {
-            AuthToken authToken = await _authService.GetToken(authTokenInput);
+            // AuthToken authToken = await _authService.GetToken(authTokenInput);
             _logger.LogInformation($"'{nameof(GetToken)}' method called ");
             _loggingExtension.LogInformation(nameof(GetToken), RouteTemplates.AuthGetToken, $"'{nameof(GetToken)}' method called.");
-            return Ok(authToken);
+            return Ok(email);
         }
         catch (Exception ex)
         {
