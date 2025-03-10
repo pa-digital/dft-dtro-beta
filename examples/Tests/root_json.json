@@ -1,0 +1,40 @@
+{
+    "source": {
+      "actionType": "new",
+      "currentTraOwner": 9999,
+      "reference": "Some reference",
+      "section": "Test Section",
+      "traAffected": [9999],
+      "traCreator": 9999,
+      "troName": "Test TRO",
+      "provision": [
+        {
+          "actionType": "new",
+          "orderReportingPoint": "permanentNoticeOfMaking",
+          "provisionDescription": "Some description",
+          "reference": "Some reference",
+          "regulatedPlace": [
+            {
+              "description": "Some description",
+              "type": "regulationLocation",
+              "pointGeometry": [
+                {
+                  "version": 1,
+                  "point": "Some point",
+                  "representation": "centreLinePoint"
+                }
+              ]
+            }
+          ],
+          "regulation": {
+            "isDynamic": false,
+            "timeZone": "2025-01-01T00:00:00",
+            "generalRegulation": {
+              "regulationType": "bannedMovementNoEntry"
+            }
+          }
+        }
+      ]
+    }
+  }
+  
