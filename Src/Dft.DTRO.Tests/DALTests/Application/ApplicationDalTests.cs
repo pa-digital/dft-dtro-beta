@@ -114,7 +114,7 @@ namespace Dft.DTRO.Tests.DALTests
         public async Task GetApplicationDetailsShouldReturnApplicationDetailsWhenAppExists()
         {
             var app = _context.Applications.First();
-            var appId = app.Id.ToString();
+            var appId = app.Id;
 
             var details = await _applicationDal.GetApplicationDetails(appId);
             Assert.NotNull(details);
@@ -125,7 +125,8 @@ namespace Dft.DTRO.Tests.DALTests
         [Fact]
         public async Task GetApplicationDetailsShouldReturnNullWhenInvalidAppId()
         {
-            var details = await _applicationDal.GetApplicationDetails("invalid-guid");
+            Guid appId = Guid.NewGuid();
+            var details = await _applicationDal.GetApplicationDetails(appId);
             Assert.Null(details);
         }
 

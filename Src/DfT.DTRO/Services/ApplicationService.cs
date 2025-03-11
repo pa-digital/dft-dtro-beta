@@ -12,11 +12,10 @@ public class ApplicationService : IApplicationService
         _apigeeAppRepository = apigeeAppRepository;
     }
 
-    public async Task<bool> ValidateAppBelongsToUser(string userId, string appId)
+    public async Task<bool> ValidateAppBelongsToUser(string email, Guid appId)
     {
-        Guid appGuid = Guid.Parse(appId);
-        string user = await _applicationDal.GetApplicationUser(appGuid);
-        return user == userId;
+        string userEmail = await _applicationDal.GetApplicationUser(appId);
+        return userEmail == email;
     }
 
     public async Task<bool> ValidateApplicationName(string appName)
@@ -24,21 +23,20 @@ public class ApplicationService : IApplicationService
         return await _applicationDal.CheckApplicationNameDoesNotExist(appName);
     }
 
-    public async Task<ApplicationDetailsDto> GetApplicationDetails(string appId)
+    public async Task<ApplicationDetailsDto> GetApplicationDetails(Guid appId)
     {
         return await _applicationDal.GetApplicationDetails(appId);
     }
 
-    public async Task<List<ApplicationListDto>> GetApplicationList(string userId)
+    public async Task<List<ApplicationListDto>> GetApplicationList(string email)
     {
-        return await _applicationDal.GetApplicationList(userId);
+        return await _applicationDal.GetApplicationList(email);
     }
 
-    public async Task<bool> ActivateApplicationById(string applicationId)
+    public async Task<bool> ActivateApplicationById(Guid appId)
     {
-        Guid appGuid = Guid.Parse(applicationId);
         // TODO: approve application on Apigee
-        return await _applicationDal.ActivateApplicationById(appGuid);
+        return await _applicationDal.ActivateApplicationById(appId);
     }
 
     public async Task<App> CreateApplication(string email, AppInput appInput)

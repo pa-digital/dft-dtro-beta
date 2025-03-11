@@ -10,25 +10,20 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
         return !await _context.Applications.AnyAsync(a => a.Nickname == appName);
     }
 
-    public async Task<string> GetApplicationUser(Guid appGuid)
+    public async Task<string> GetApplicationUser(Guid appId)
     {
         return await _context.Applications
             .Include(a => a.User)
-            .Where(a => a.Id == appGuid)
+            .Where(a => a.Id == appId)
             .Select(a => a.User.Email)
             .FirstOrDefaultAsync();
     }
 
-    public async Task<ApplicationDetailsDto> GetApplicationDetails(string appId)
+    public async Task<ApplicationDetailsDto> GetApplicationDetails(Guid appId)
     {
-        if (!Guid.TryParse(appId, out Guid appGuid))
-        {
-            return null;
-        }
-
         return await _context.Applications
             .Include(a => a.Purpose)
-            .Where(a => a.Id == appGuid)
+            .Where(a => a.Id == appId)
             .Select(a => new ApplicationDetailsDto
             {
                 Name = a.Nickname,
@@ -38,13 +33,13 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
             .FirstOrDefaultAsync();
     }
 
-    public async Task<List<ApplicationListDto>> GetApplicationList(string userId)
+    public async Task<List<ApplicationListDto>> GetApplicationList(string email)
     {
         return await _context.Applications
             .Include(a => a.User)
             .Include(a => a.TrafficRegulationAuthority)
             .Include(a => a.ApplicationType)
-            .Where(a => a.User.Email == userId)
+            .Where(a => a.User.Email == email)
             .Select(a => new ApplicationListDto
             {
                 Id = a.Id,
@@ -55,11 +50,11 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
             .ToListAsync();
     }
 
-    public async Task<bool> ActivateApplicationById(Guid appGuid)
+    public async Task<bool> ActivateApplicationById(Guid appId)
     {
         try
         {
-            Application application = await _context.Applications.FindAsync(appGuid);
+            Application application = await _context.Applications.FindAsync(appId);
             if (application == null)
             {
                 return false;

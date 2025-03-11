@@ -5,38 +5,38 @@ public class ApplicationServiceTests
     private readonly Mock<IApplicationDal> _applicationDalMock;
     private readonly Mock<IApigeeAppRepository> _apigeeAppRepositoryMock;
     private readonly ApplicationService _applicationService;
+    private readonly string _email;
 
     public ApplicationServiceTests()
     {
         _applicationDalMock = new Mock<IApplicationDal>();
         _apigeeAppRepositoryMock = new Mock<IApigeeAppRepository>();
         _applicationService = new ApplicationService(_applicationDalMock.Object, _apigeeAppRepositoryMock.Object);
+        _email = "user@test.com";
     }
 
     [Fact]
     public async Task ValidateAppBelongsToUserShouldReturnTrueWhenUserMatches()
     {
-        string userId = "user@test.com";
-        string appId = Guid.NewGuid().ToString();
+        Guid appId = Guid.NewGuid();
         _applicationDalMock
-            .Setup(dal => dal.GetApplicationUser(Guid.Parse(appId)))
-            .ReturnsAsync(userId);
+            .Setup(dal => dal.GetApplicationUser(appId))
+            .ReturnsAsync(_email);
 
-        bool result = await _applicationService.ValidateAppBelongsToUser(userId, appId);
+        bool result = await _applicationService.ValidateAppBelongsToUser(_email, appId);
         Assert.True(result);
     }
 
     [Fact]
     public async Task ValidateAppBelongsToUserShouldReturnFalseWhenUserDoesNotMatch()
     {
-        string userId = "user@test.com";
-        string differentUserId = "another@test.com";
-        string appId = Guid.NewGuid().ToString();
+        string differentEmail = "another@test.com";
+        Guid appId = Guid.NewGuid();
         _applicationDalMock
-            .Setup(dal => dal.GetApplicationUser(Guid.Parse(appId)))
-            .ReturnsAsync(differentUserId);
+            .Setup(dal => dal.GetApplicationUser(appId))
+            .ReturnsAsync(differentEmail);
 
-        bool result = await _applicationService.ValidateAppBelongsToUser(userId, appId);
+        bool result = await _applicationService.ValidateAppBelongsToUser(_email, appId);
         Assert.False(result);
     }
 
@@ -67,9 +67,8 @@ public class ApplicationServiceTests
     [Fact]
     public async Task GetApplicationDetailsShouldReturnApplicationDetails()
     {
-        Guid appGuid = Guid.NewGuid();
-        string appId = appGuid.ToString();
-        var expectedDetails = new ApplicationDetailsDto { AppId = appGuid, Name = "Test", Purpose = "Test" };
+        Guid appId = Guid.NewGuid();
+        var expectedDetails = new ApplicationDetailsDto { AppId = appId, Name = "Test", Purpose = "Test" };
         _applicationDalMock
             .Setup(dal => dal.GetApplicationDetails(appId))
             .ReturnsAsync(expectedDetails);
@@ -81,52 +80,51 @@ public class ApplicationServiceTests
     [Fact]
     public async Task GetApplicationListShouldReturnListOfApplications()
     {
-        string userId = "user@test.com";
         var expectedList = new List<ApplicationListDto> {
             new ApplicationListDto{ Id = Guid.NewGuid(), Name = "Test", Tra = "Test", Type = "Test" },
             new ApplicationListDto{ Id = Guid.NewGuid(), Name = "Another Test", Tra = "test TRA", Type = "Publish" }
         };
         _applicationDalMock
-            .Setup(dal => dal.GetApplicationList(userId))
+            .Setup(dal => dal.GetApplicationList(_email))
             .ReturnsAsync(expectedList);
 
-        var result = await _applicationService.GetApplicationList(userId);
+        var result = await _applicationService.GetApplicationList(_email);
         Assert.Equal(expectedList, result);
     }
 
     [Fact]
     public async Task ActivateApplicationByIdSuccessfulActivationReturnsTrue()
     {
-        string validAppId = Guid.NewGuid().ToString();
+        Guid appId = Guid.NewGuid();
         _applicationDalMock
             .Setup(dal => dal.ActivateApplicationById(It.IsAny<Guid>()))
             .ReturnsAsync(true);
 
-        var result = await _applicationService.ActivateApplicationById(validAppId);
+        var result = await _applicationService.ActivateApplicationById(appId);
         Assert.True(result);
     }
 
     [Fact]
     public async Task ActivateApplicationByIdActivationFailsReturnsFalse()
     {
-        string validAppId = Guid.NewGuid().ToString();
+        Guid appId = Guid.NewGuid();
         _applicationDalMock
             .Setup(dal => dal.ActivateApplicationById(It.IsAny<Guid>()))
             .ReturnsAsync(false);
 
-        var result = await _applicationService.ActivateApplicationById(validAppId);
+        var result = await _applicationService.ActivateApplicationById(appId);
         Assert.False(result);
     }
 
     [Fact]
     public async Task ActivateApplicationByIdUnexpectedExceptionThrowsException()
     {
-        string validAppId = Guid.NewGuid().ToString();
+        Guid appId = Guid.NewGuid();
         _applicationDalMock
             .Setup(dal => dal.ActivateApplicationById(It.IsAny<Guid>()))
             .ThrowsAsync(new Exception("Unexpected error"));
 
-        var ex = await Assert.ThrowsAsync<Exception>(() => _applicationService.ActivateApplicationById(validAppId));
+        var ex = await Assert.ThrowsAsync<Exception>(() => _applicationService.ActivateApplicationById(appId));
         Assert.Equal("Unexpected error", ex.Message);
     }
 }
