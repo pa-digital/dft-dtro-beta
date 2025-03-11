@@ -94,9 +94,11 @@
             ]
         },
         "actualStartOrStop": {
+            "description": "Object supporting the recording of actual start and stop dates and times",
             "type": "object",
             "properties": {
                 "eventAt": {
+                    "description": "Indicates the date / time of the related event",
                     "type": "string",
                     "format": "date-time"
                 },
@@ -422,6 +424,9 @@
                 "directedLineString"
             ],
             "properties": {
+                "diversionType": {
+                    "$ref": "#/$defs/diversionType"
+                },
                 "version": {
                     "type": "integer",
                     "minimum": 1
@@ -448,6 +453,27 @@
                     "minLength": 1
                 }
             }
+        },
+        "diversionType": {
+            "description": "An object linking to different forms of diversion route.",
+            "type": "object",
+            "properties": {
+                "diversionType": {
+                    "$ref": "#/$defs/diversionRouteType"
+                }
+            },
+            "required": [
+                "diversionType"
+            ]
+        },
+        "diversionRouteType": {
+            "description": "",
+            "type": "string",
+            "enum": [
+                "hgvRoute",
+                "allTraffic",
+                "non-HGVRoute"
+            ]
         },
         "driverCharacteristicsType": {
             "description": "Indicates a specific type of driver characteristic",
@@ -489,6 +515,22 @@
                 }
             }
         },
+        "emissionClassificationEuroType": {
+            "description": "The minimum Euro emission classification the vehicle(s) have to comply with according to the 1970 Directive 70/220/EEC and its several amendments. Note that vehicle type and fuel type need to be provided in order to make this classification explicit.",
+            "type": "string",
+            "enum": [
+                "euro5",
+                "euro5a",
+                "euro5b",
+                "euro6",
+                "euro6a",
+                "euro6b",
+                "euro6c",
+                "euroV",
+                "euroVI",
+                "other"
+            ]
+        },
         "emissions": {
             "description": "Emission characteristics of vehicles.",
             "type": "object",
@@ -511,24 +553,8 @@
                 }
             }
         },
-        "emissionClassificationEuroType": {
-            "description": "The minimum Euro emission classification the vehicle(s) have to comply with according to the 1970 Directive 70/220/EEC and its several amendments. Note that vehicle type and fuel type need to be provided in order to make this classification explicit.",
-            "type": "string",
-            "enum": [
-                "euro5",
-                "euro5a",
-                "euro5b",
-                "euro6",
-                "euro6a",
-                "euro6b",
-                "euro6c",
-                "euroV",
-                "euroVI",
-                "other"
-            ]
-        },
         "eventType": {
-            "description": "indicates that the event represents an actual start or stop time",
+            "description": "Indicates that the event represents an actual start or stop time",
             "type": "string",
             "enum": [
                 "start",
@@ -628,6 +654,8 @@
                 "unknown"
             ]
         },
+        "generalRegulation": {
+        },
         "geometryType": {
             "required": [
                 "description",
@@ -713,8 +741,6 @@
                 }
             ]
         },
-        "generalRegulation": {
-        },
         "heaviestAxleWeightCharacteristic": {
             "description": "Object indicating condition related to the heaviest axle of vehicle",
             "type": "object",
@@ -765,6 +791,9 @@
                 "representation"
             ],
             "properties": {
+                "diversionType": {
+                    "$ref": "#/$defs/diversionType"
+                },
                 "version": {
                     "type": "integer",
                     "minimum": 1
@@ -1386,6 +1415,9 @@
             ],
             "additionalProperties": false,
             "properties": {
+                "diversionType": {
+                    "$ref": "#/$defs/diversionType"
+                },
                 "externalReference": {
                     "$ref": "#/$defs/externalReference"
                 },
@@ -1420,6 +1452,9 @@
                 "polygon"
             ],
             "properties": {
+                "diversionType": {
+                    "$ref": "#/$defs/diversionType"
+                },
                 "version": {
                     "type": "integer",
                     "minimum": 1
@@ -1475,12 +1510,10 @@
                     "$ref": "#/$defs/actualStartOrStop"
                 },
                 "experimentalCessation": {
-                    "description": "Object to enable the characteristic of an Experimental Order cessation to be defined",
                     "type": "object",
                     "$ref": "#/$defs/experimentalCessation"
                 },
                 "experimentalVariation": {
-                    "description": "Object to enable the characteristic of an Experimental Order variation to be defined",
                     "type": "object",
                     "$ref": "#/$defs/experimentalVariation"
                 },
@@ -1575,6 +1608,61 @@
                 "winterSportsMeeting"
             ]
         },
+        "rateLine": {
+            "description": "Object indicating characteristics for a rate line within a rate table",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "sequence",
+                "type",
+                "value"
+            ],
+            "properties": {
+                "description": {
+                    "description": "Free-text description associated with this rate line.",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "durationEnd": {
+                    "description": "If used, indicates the end time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session. e.g. the end of a time-based tier charge rate.",
+                    "type": "string",
+                    "format": "time"
+                },
+                "durationStart": {
+                    "description": "If used, indicates the start time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session. e.g. the start of a time-based tier charge rate.",
+                    "type": "string",
+                    "format": "time"
+                },
+                "incrementPeriod": {
+                    "description": "The time period for incrementing the rate line charge. If set to the same as the duration of the period between the duration start and duration end the increment will occur once per period, i.e. a flat rate time-based tier charge rate. The duration is defined in integer minutes.",
+                    "type": "integer"
+                },
+                "maxValue": {
+                    "description": "The maximum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places.",
+                    "type": "number"
+                },
+                "minValue": {
+                    "description": "The minimum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places.",
+                    "type": "number"
+                },
+                "sequence": {
+                    "description": "The ordered sequence of this rate line instance within the rate line collection. Used to define the order of operation of multiple rate lines. Typically used to ensure taxes and surcharges are applied correctly.",
+                    "type": "integer"
+                },
+                "type": {
+                    "description": "Indicates the nature of the rate line.",
+                    "$ref": "#/$defs/rateLineType"
+                },
+                "usageCondition": {
+                    "description": "Indicates conditions on the use of this rate line.",
+                    "$ref": "#/$defs/rateUsageConditionsType"
+                },
+                "value": {
+                    "description": "The value of the fee to be charged in respect of this rate line.  Defined in applicable currency with 2 decimal places.",
+                    "type": "number"
+                }
+            }
+        },
         "rateLineCollection": {
             "description": "Group of rate line elements that logically group together within one rate table, e.g. such as the rate lines for the different tiers of a time based tier rate table",
             "type": "object",
@@ -1633,6 +1721,16 @@
                 }
             }
         },
+        "rateLineType": {
+            "description": "List of rate line types",
+            "type": "string",
+            "enum": [
+                "flatRate",
+                "flatRateTier",
+                "incrementingRate",
+                "perUnit"
+            ]
+        },
         "rateTable": {
             "description": "Specific set of rate charges relating to one or more locations and optionally one set of eligibility criteria",
             "type": "object",
@@ -1661,71 +1759,6 @@
             },
             "required": [
                 "rateLineCollection"
-            ]
-        },
-        "rateLine": {
-            "description": "Object indicating characteristics for a rate line within a rate table",
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-                "sequence",
-                "type",
-                "value"
-            ],
-            "properties": {
-                "description": {
-                    "description": "Free-text description associated with this rate line.",
-                    "type": "string",
-                    "minLength": 1
-                },
-                "durationEnd": {
-                    "description": "If used, indicates the end time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session. e.g. the end of a time-based tier charge rate.",
-                    "type": "string",
-                    "format": "time"
-                },
-                "durationStart": {
-                    "description": "If used, indicates the start time for the applicability of the specific rate line, generally with respect to the start of the parking or other mobility session. e.g. the start of a time-based tier charge rate.",
-                    "type": "string",
-                    "format": "time"
-                },
-                "incrementPeriod": {
-                    "description": "The time period for incrementing the rate line charge. If set to the same as the duration of the period between the duration start and duration end the increment will occur once per period, i.e. a flat rate time-based tier charge rate. The duration is defined in integer minutes.",
-                    "type": "integer"
-                },
-                "maxValue": {
-                    "description": "The maximum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places.",
-                    "type": "number"
-                },
-                "minValue": {
-                    "description": "The minimum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places.",
-                    "type": "number"
-                },
-                "sequence": {
-                    "description": "The ordered sequence of this rate line instance within the rate line collection. Used to define the order of operation of multiple rate lines. Typically used to ensure taxes and surcharges are applied correctly.",
-                    "type": "integer"
-                },
-                "type": {
-                    "description": "Indicates the nature of the rate line.",
-                    "$ref": "#/$defs/rateLineType"
-                },
-                "usageCondition": {
-                    "description": "Indicates conditions on the use of this rate line.",
-                    "$ref": "#/$defs/rateUsageConditionsType"
-                },
-                "value": {
-                    "description": "The value of the fee to be charged in respect of this rate line.  Defined in applicable currency with 2 decimal places.",
-                    "type": "number"
-                }
-            }
-        },
-        "rateLineType": {
-            "description": "List of rate line types",
-            "type": "string",
-            "enum": [
-                "flatRate",
-                "flatRateTier",
-                "incrementingRate",
-                "perUnit"
             ]
         },
         "rateType": {
@@ -2119,30 +2152,6 @@
                 "schoolDay"
             ]
         },
-        "speedLimitValueBased": {
-            "type": "object",
-            "properties": {
-                "mphValue": {
-                    "type": "integer",
-                    "minimum": 1
-                },
-                "nature": {
-                    "$ref": "#/$defs/speedLimitNatureType"
-                },
-                "type": {
-                    "$ref": "#/$defs/speedLimitValueType"
-                },
-                "required": [
-                    "mphValue",
-                    "nature",
-                    "type"
-                ],
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
-                }
-            }
-        },
         "speedLimitNatureType": {
             "description": "type of speed limit value indicated",
             "type": "string",
@@ -2171,6 +2180,30 @@
                 "nationalSpeedLimitMotorway",
                 "nationalSpeedLimitSingleCarriageway"
             ]
+        },
+        "speedLimitValueBased": {
+            "type": "object",
+            "properties": {
+                "mphValue": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "nature": {
+                    "$ref": "#/$defs/speedLimitNatureType"
+                },
+                "type": {
+                    "$ref": "#/$defs/speedLimitValueType"
+                },
+                "required": [
+                    "mphValue",
+                    "nature",
+                    "type"
+                ],
+                "_comment": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
         },
         "speedLimitValueType": {
             "description": "List of speed limit value types",
