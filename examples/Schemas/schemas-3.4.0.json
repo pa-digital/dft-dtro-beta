@@ -163,7 +163,7 @@
             ]
         },
         "comparisonOperatorType": {
-            "description": "The operator to be used in the characteristic comparison operation.",
+            "description": "The operator to be used in the vehicle characteristic comparison operation.",
             "type": "string",
             "enum": [
                 "equalTo",
@@ -489,8 +489,30 @@
                 }
             }
         },
+        "emissions": {
+            "description": "Emission characteristics of vehicles.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "emissionClassificationEuro": {
+                    "$ref": "#/$defs/emissionClassificationEuroType"
+                },
+                "emissionClassificationOther": {
+                    "description": "Locally defined value(s) for emission classification.",
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "_comment": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
         "emissionClassificationEuroType": {
-            "description": "List of European emissions classifications",
+            "description": "The minimum Euro emission classification the vehicle(s) have to comply with according to the 1970 Directive 70/220/EEC and its several amendments. Note that vehicle type and fuel type need to be provided in order to make this classification explicit.",
             "type": "string",
             "enum": [
                 "euro5",
@@ -693,6 +715,25 @@
         },
         "generalRegulation": {
         },
+        "heaviestAxleWeightCharacteristic": {
+            "description": "Object indicating condition related to the heaviest axle of vehicle",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "heaviestAxleWeight"
+            ],
+            "properties": {
+                "heaviestAxleWeight": {
+                    "description": "Indicates a characteristic relating to the heaviest axle of vehicle. Defined in metric tonnes, with one decimal place",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "_comment": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
         "instanceOfDayInMonth": {
             "description": "Specification  of  periods  defined  by  the  instance  of  a specific weekday within a month (e.g. 3rd Tuesday in May).",
             "type": "string",
@@ -771,6 +812,86 @@
                 "representingZone"
             ]
         },
+        "maximumGrossWeightCharacteristic": {
+            "description": "Gross weight characteristic of a vehicle.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "grossVehicleWeight",
+                "typeOfWeight"
+            ],
+            "properties": {
+                "grossVehicleWeight": {
+                    "description": "The gross weight of the vehicle and its load, including any trailers. Defined in metric tonnes, with one decimal place",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "typeOfWeight": {
+                    "$ref": "#/$defs/weightType"
+                },
+                "_comment": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "maximumHeightCharacteristic": {
+            "description": "Height characteristic of a vehicle",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "vehicleHeight"
+            ],
+            "properties": {
+                "vehicleHeight": {
+                    "description": "Height of the highest part, excluding antennae, of an individual vehicle from the reference plane defined by the bottom of the wheels touching the ground, in metres, defined to two decimal places.",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "_comment": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "maximumLengthCharacteristic": {
+            "description": "Length characteristic of a vehicle.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "vehicleLength"
+            ],
+            "properties": {
+                "vehicleLength": {
+                    "description": "The overall distance between the front and back of an individual vehicle, including the length of any trailers, couplings, embedded features etc., in metres, to two decimal places.",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "_comment": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
+        "maximumWidthCharacteristic": {
+            "description": "Width characteristic of a vehicle.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "vehicleWidth"
+            ],
+            "properties": {
+                "vehicleWidth": {
+                    "description": "The maximum width of an individual vehicle, including any features embedded or fixed on it, in metres, to two decimal places.",
+                    "type": "number",
+                    "minimum": 0
+                },
+                "_comment": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        },
         "monthType": {
             "description": "List containing calendar months",
             "type": "string",
@@ -815,6 +936,28 @@
                 "pedestrians",
                 "riddenOrAccompaniedHorses"
             ]
+        },
+        "numberOfAxlesCharacteristic": {
+            "description": "Number of axles characteristic of a vehicle.",
+            "type": "object",
+            "required": [
+                "numberOfAxles",
+                "comparisonOperator"
+            ],
+            "properties": {
+                "numberOfAxles": {
+                    "description": "The total number of axles of an individual vehicle.",
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "comparisonOperator": {
+                    "$ref": "#/$defs/comparisonOperatorType"
+                },
+                "_comment": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
         },
         "numberOfOccupants": {
             "description": "Object indicating conditional restrictions based on the number of vehicle occupants",
@@ -2142,141 +2285,35 @@
                     "$ref": "#/$defs/vehicleUsageType"
                 },
                 "yearOfFirstRegistration": {
+                    "description": "Year of first registration of the vehicle",
                     "type": "integer",
                     "minimum": 1
                 },
                 "maximumGrossWeightCharacteristic": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                        "grossVehicleWeight",
-                        "typeOfWeight"
-                    ],
-                    "properties": {
-                        "grossVehicleWeight": {
-                            "type": "number",
-                            "minimum": 0
-                        },
-                        "typeOfWeight": {
-                            "$ref": "#/$defs/weightType"
-                        },
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    }
+                    "$ref": "#/$defs/maximumGrossWeightCharacteristic"
                 },
                 "maximumHeightCharacteristic": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                        "vehicleHeight"
-                    ],
-                    "properties": {
-                        "vehicleHeight": {
-                            "type": "number",
-                            "minimum": 0
-                        },
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    }
+                    "$ref": "#/$defs/maximumHeightCharacteristic"
                 },
                 "maximumLengthCharacteristic": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                        "vehicleLength"
-                    ],
-                    "properties": {
-                        "vehicleLength": {
-                            "type": "number",
-                            "minimum": 0
-                        },
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    }
+                    "$ref": "#/$defs/maximumLengthCharacteristic"
                 },
                 "maximumWidthCharacteristic": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                        "vehicleWidth"
-                    ],
-                    "properties": {
-                        "vehicleWidth": {
-                            "type": "number",
-                            "minimum": 0
-                        },
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    }
+                    "$ref": "#/$defs/maximumWidthCharacteristic"
                 },
                 "heaviestAxleWeightCharacteristic": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                        "heaviestAxleWeight"
-                    ],
-                    "properties": {
-                        "heaviestAxleWeight": {
-                            "type": "number",
-                            "minimum": 0
-                        },
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    }
+                    "$ref": "#/$defs/heaviestAxleWeightCharacteristic"
                 },
                 "numberOfAxlesCharacteristic": {
                     "type": "array",
+                    "minItems": 0,
                     "maxItems": 2,
                     "items": {
-                        "type": "object",
-                        "required": [
-                            "numberOfAxles",
-                            "comparisonOperator"
-                        ],
-                        "properties": {
-                            "numberOfAxles": {
-                                "type": "integer",
-                                "minimum": 1
-                            },
-                            "comparisonOperator": {
-                                "$ref": "#/$defs/comparisonOperatorType"
-                            },
-                            "_comment": {
-                                "type": "string",
-                                "minLength": 1
-                            }
-                        }
+                        "$ref": "#/$defs/numberOfAxlesCharacteristic"
                     }
                 },
                 "emissions": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "emissionClassificationEuro": {
-                            "$ref": "#/$defs/emissionClassificationEuroType"
-                        },
-                        "emissionClassificationOther": {
-                            "type": "array",
-                            "minItems": 1,
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    }
+                    "$ref": "#/$defs/emissions"
                 },
                 "_comment": {
                     "type": "string",
@@ -2357,7 +2394,7 @@
             ]
         },
         "weightType": {
-            "description": "List of weight types",
+            "description": "The meaning of the weight value",
             "type": "string",
             "enum": [
                 "actual",

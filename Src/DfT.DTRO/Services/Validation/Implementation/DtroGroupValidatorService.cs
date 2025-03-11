@@ -85,6 +85,12 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         //     return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
         // }
 
+        var errors = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
+        if (errors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
+        }
+
         // Validation of camel case for schemas >= 3.3.2
         CasingValidationService casingValidationService = new();
         if (casingValidationService.SchemaVersionEnforcesCamelCase(dtroSubmit.SchemaVersion))
@@ -109,7 +115,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             }
         }
 
-        var errors = _sourceValidationService.Validate(dtroSubmit, traCode);
+        errors = _sourceValidationService.Validate(dtroSubmit, traCode);
         if (errors.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
@@ -146,12 +152,6 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         }
 
         errors = _elementaryStreetUnitValidationService.Validate(dtroSubmit);
-        if (errors.Count > 0)
-        {
-            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
-        }
-
-        errors = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
         if (errors.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
