@@ -50,6 +50,22 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
             .ToListAsync();
     }
 
+    public async Task<List<ApplicationPendingListDto>> GetPendingApplications(string email)
+    {
+        return await _context.Applications
+            .Include(a => a.User)
+            .Include(a => a.TrafficRegulationAuthority)
+            .Include(a => a.ApplicationType)
+            .Where(a => a.User.Email == email)
+            .Select(a => new ApplicationPendingListDto
+            {
+                User = $"{a.User.Forename} {a.User.Surname}",
+                Type = a.ApplicationType.Name,
+                Tra = a.TrafficRegulationAuthority.Name
+            })
+            .ToListAsync();
+    }
+
     public async Task<bool> ActivateApplicationById(Guid appId)
     {
         try

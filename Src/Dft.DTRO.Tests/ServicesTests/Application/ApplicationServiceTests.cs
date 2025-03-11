@@ -73,7 +73,7 @@ public class ApplicationServiceTests
             .Setup(dal => dal.GetApplicationDetails(appId))
             .ReturnsAsync(expectedDetails);
 
-        var result = await _applicationService.GetApplicationDetails(appId);
+        var result = await _applicationService.GetApplication(appId);
         Assert.Equal(expectedDetails, result);
     }
 
@@ -88,7 +88,7 @@ public class ApplicationServiceTests
             .Setup(dal => dal.GetApplicationList(_email))
             .ReturnsAsync(expectedList);
 
-        var result = await _applicationService.GetApplicationList(_email);
+        var result = await _applicationService.GetApplications(_email);
         Assert.Equal(expectedList, result);
     }
 

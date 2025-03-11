@@ -23,14 +23,19 @@ public class ApplicationService : IApplicationService
         return await _applicationDal.CheckApplicationNameDoesNotExist(appName);
     }
 
-    public async Task<ApplicationDetailsDto> GetApplicationDetails(Guid appId)
+    public async Task<ApplicationDetailsDto> GetApplication(Guid appId)
     {
         return await _applicationDal.GetApplicationDetails(appId);
     }
 
-    public async Task<List<ApplicationListDto>> GetApplicationList(string email)
+    public async Task<List<ApplicationListDto>> GetApplications(string email)
     {
         return await _applicationDal.GetApplicationList(email);
+    }
+
+    public async Task<List<ApplicationPendingListDto>> GetPendingApplications(string email)
+    {
+        return await _applicationDal.GetPendingApplications(email);
     }
 
     public async Task<bool> ActivateApplicationById(Guid appId)

@@ -139,7 +139,7 @@ public class ApplicationController : ControllerBase
                 return Forbid();
             }
 
-            var result = await _applicationService.GetApplicationDetails(appId);
+            var result = await _applicationService.GetApplication(appId);
             if (result != null)
             {
                 // TODO: fetch API key and secret from Apigee
@@ -176,7 +176,37 @@ public class ApplicationController : ControllerBase
     {
         try
         {
-            var result = await _applicationService.GetApplicationList(email);
+            var result = await _applicationService.GetApplications(email);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(new { message = "Invalid input parameters", error = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while fetching the applications", error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An unexpected error occurred.", error = ex.Message });
+        }
+    }
+    
+    /// <summary>
+    /// Retrieves application list for user
+    /// </summary>
+    /// <param name="email">Developer email linked to access token.</param>
+    /// <response code="200">Valid user ID</response>
+    /// <response code="400">Invalid or empty parameters, or no matching user</response>
+    /// <response code="500">Invalid operation or other exception</response>
+    [HttpGet(RouteTemplates.ApplicationsFindAllPending)]
+    [FeatureGate(FeatureNames.ReadOnly)]
+    public async Task<IActionResult> FindPendingApplications([FromHeader(Name = "x-email")][Required] string email)
+    {
+        try
+        {
+            var result = await _applicationService.GetPendingApplications(email);
             return Ok(result);
         }
         catch (ArgumentNullException ex)

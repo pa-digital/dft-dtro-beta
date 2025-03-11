@@ -54,7 +54,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
         Guid appId = Guid.NewGuid();
 
         ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appId, Purpose = "Test" };
-        _mockApplicationService.Setup(service => service.GetApplicationDetails(appId)).ReturnsAsync(mockAppDetails);
+        _mockApplicationService.Setup(service => service.GetApplication(appId)).ReturnsAsync(mockAppDetails);
         _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(true);
 
         var result = await _controller.FindApplicationById(_xEmail, appId);
@@ -68,7 +68,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
         Guid appId = Guid.NewGuid();
         
         ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appId, Purpose = "Test" };
-        _mockApplicationService.Setup(service => service.GetApplicationDetails(appId)).ReturnsAsync(mockAppDetails);
+        _mockApplicationService.Setup(service => service.GetApplication(appId)).ReturnsAsync(mockAppDetails);
         _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(false);
 
         var result = await _controller.FindApplicationById(_xEmail, appId);
@@ -81,7 +81,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
         Guid appId = Guid.NewGuid();
 
         ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appId, Purpose = "Test" };
-        _mockApplicationService.Setup(service => service.GetApplicationDetails(appId)).ReturnsAsync((ApplicationDetailsDto)null);
+        _mockApplicationService.Setup(service => service.GetApplication(appId)).ReturnsAsync((ApplicationDetailsDto)null);
         _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(true);
 
         var result = await _controller.FindApplicationById(_xEmail, appId);
@@ -98,7 +98,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
             new ApplicationListDto { Id = Guid.NewGuid(), Name = "App 2", Type = "Test", Tra = "Test" },
             new ApplicationListDto { Id = Guid.NewGuid(), Name = "App 3", Type = "Test", Tra = "Test" }
         };
-        _mockApplicationService.Setup(service => service.GetApplicationList(It.IsAny<string>())).ReturnsAsync(applicationListDtos);
+        _mockApplicationService.Setup(service => service.GetApplications(It.IsAny<string>())).ReturnsAsync(applicationListDtos);
         var result = await _controller.FindApplications(_xEmail);
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);

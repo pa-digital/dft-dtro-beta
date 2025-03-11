@@ -8,6 +8,7 @@ public static class RouteTemplates
     public const string ValidateApplicationName = ApplicationsBase + "/validateName";
     public const string ApplicationsFindById = ApplicationsBase + "/{appId:guid}";
     public const string ApplicationsFindAll = ApplicationsBase;
+    public const string ApplicationsFindAllPending = ApplicationsBase + "/pending";
     public const string ActivateApplication = ApplicationsBase + "/{appId:guid}" + "/activate";
 
     // Auth
