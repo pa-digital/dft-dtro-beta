@@ -13,10 +13,4 @@ public class AppInput
     [DataMember(Name = "name")]
     public string Name { get; set; }
 
-    /// <summary>
-    /// username.
-    /// </summary>
-    [DataMember(Name = "username")]
-    public string Username { get; set; }
-
 }
