@@ -46,7 +46,7 @@ public class ApplicationController : ControllerBase
         }
     }
 
-    // <summary>
+    /// <summary>
     /// Activates an application by app ID
     /// </summary>
     /// <param name="parameters"></param>
