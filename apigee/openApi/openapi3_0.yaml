@@ -23,6 +23,7 @@ paths:
         - oAuth:
             - cso
       parameters:
+        - $ref: "#/components/parameters/XEmail"
         - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Properties passed by body
@@ -1811,6 +1812,13 @@ components:
         type: string
         description: UUID formatted string to track the request through the enquiries stack.
         default: 41ae0471-d7de-4737-907f-cab2f0089796
+    XEmail:
+      name: x-email
+      in: header
+      description: Developer email linked to access token.
+      required: true
+      schema:
+        type: string      
   schemas:
     ApplicationDetailsRequest:
       type: object
@@ -1843,12 +1851,8 @@ components:
           type: string
           description: app name.
           nullable: true
-        username:
-          type: string
-          description: username.
-          nullable: true
       additionalProperties: false
-      description: Auth token input.
+      description: App input.
     DfT.DTRO.Models.Auth.AuthTokenInput:
       type: object
       properties:

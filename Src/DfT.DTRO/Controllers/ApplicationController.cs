@@ -6,7 +6,6 @@ namespace DfT.DTRO.Controllers;
 [Consumes("application/json")]
 [Produces("application/json")]
 [Tags("Applications")]
-[TokenValidation]
 public class ApplicationController : ControllerBase
 {
     private readonly IApplicationService _applicationService;
@@ -23,18 +22,18 @@ public class ApplicationController : ControllerBase
     /// <summary>
     /// Create App
     /// </summary>
-    /// <param name="accessToken">Access token.</param>
+    /// <param name="email">Developer email linked to access token.</param>
     /// <param name="appInput">Properties passed by body</param>
     /// <returns>created app</returns>
     [HttpPost(RouteTemplates.ApplicationsCreate)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 200, description: "Ok")]
-    public async Task<IActionResult> CreateApplication([FromBody] AppInput appInput)
+    public async Task<IActionResult> CreateApplication([FromHeader(Name = "x-email")][Required] string email, [FromBody] AppInput appInput)
     {
         try
         {
-            App app = await _applicationService.CreateApplication(appInput);
+            App app = await _applicationService.CreateApplication(email, appInput);
             _logger.LogInformation($"'{nameof(CreateApplication)}' method called ");
             _loggingExtension.LogInformation(nameof(CreateApplication), RouteTemplates.ApplicationsCreate, $"'{nameof(CreateApplication)}' method called.");
             return Ok(app);
@@ -47,7 +46,7 @@ public class ApplicationController : ControllerBase
         }
     }
 
-    // <summary>
+    /// <summary>
     /// Activates an application by app ID
     /// </summary>
     /// <param name="parameters"></param>
