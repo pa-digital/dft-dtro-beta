@@ -1,5 +1,6 @@
-﻿using System.Data;
+using System.Data;
 using System.IO.Compression;
+using System.Text.Json;
 
 namespace DfT.DTRO.Services;
 
@@ -11,7 +12,8 @@ public class DtroService : IDtroService
     private readonly ISchemaTemplateDal _schemaTemplateDal;
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
-    private readonly string _fileDirectory;
+    private readonly IGoogleCloudStorageService _storageService;
+
 
     public DtroService(
         IDtroUserDal swaCodeDal,
@@ -19,7 +21,8 @@ public class DtroService : IDtroService
         IDtroHistoryDal dtroHistoryDal,
         ISchemaTemplateDal schemaTemplateDal,
         IDtroMappingService dtroMappingService,
-        IDtroGroupValidatorService dtroGroupValidatorService)
+        IDtroGroupValidatorService dtroGroupValidatorService, 
+        IGoogleCloudStorageService storageService)
     {
         _dtroUserDal = swaCodeDal;
         _dtroDal = dtroDal;
@@ -27,8 +30,7 @@ public class DtroService : IDtroService
         _schemaTemplateDal = schemaTemplateDal;
         _dtroMappingService = dtroMappingService;
         _dtroGroupValidatorService = dtroGroupValidatorService;
-        _fileDirectory = OSHelper.GetOSAppDataPath();
-        Directory.CreateDirectory(_fileDirectory);
+        _storageService = storageService;
     }
 
     public async Task<bool> DeleteDtroAsync(Guid dtroId, DateTime? deletionTime = null)
@@ -70,59 +72,53 @@ public class DtroService : IDtroService
 
         return dtros.Select(_dtroMappingService.MapToDtroResponse);
     }
-
+    
     public async Task<bool> GenerateDtrosAsZipAsync()
     {
-        var existingZipFiles = Directory.GetFiles(_fileDirectory, "dtro_export_*.zip");
-        foreach (var file in existingZipFiles)
+        try
         {
-            File.Delete(file);
-        }
-
-        var dtros = await _dtroDal.GetDtrosAsync();
-        if (dtros is null || !dtros.Any())
-        {
-            throw new NotFoundException(); ;
-        }
-
-        var timestamp = DateTime.Now.ToString("s");
-        var zipFileName = $"dtro_export_{timestamp}.zip";
-        var zipFilePath = Path.Combine(_fileDirectory, zipFileName);
-
-        var jsonFilePaths = new List<string>();
-
-        foreach (var record in dtros)
-        {
-            string jsonFilePath = Path.Combine(_fileDirectory, $"{record.Id}.json");
-            await WriteDtroToJsonAsync(record, jsonFilePath);
-            jsonFilePaths.Add(jsonFilePath);
-        }
-
-        await using (var zipStream = new FileStream(zipFilePath, FileMode.Create))
-        using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
-        {
-            foreach (var jsonFile in jsonFilePaths)
+            var dtros = await _dtroDal.GetDtrosAsync();
+            if (dtros is null || !dtros.Any())
             {
-                archive.CreateEntryFromFile(jsonFile, Path.GetFileName(jsonFile));
-                File.Delete(jsonFile);
+                throw new NotFoundException();
             }
-        }
 
-        return true;
+            var timestamp = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
+            var zipFileName = $"dtro_export_{timestamp}.zip";
+
+           
+            await using var zipMemoryStream = new MemoryStream();
+            using (var archive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Create, leaveOpen: true))
+            {
+                foreach (var record in dtros)
+                {
+                    string entryName = $"{record.Id}.json";
+                    var jsonBytes = ConvertJsonToBytes(record);
+
+                    var entry = archive.CreateEntry(entryName, CompressionLevel.SmallestSize);
+                    await using var entryStream = entry.Open();
+                    await entryStream.WriteAsync(jsonBytes, 0, jsonBytes.Length);
+                }
+            }
+
+            zipMemoryStream.Position = 0;
+
+           
+            await _storageService.UploadStreamAsync(zipMemoryStream, zipFileName);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error generating DTRO ZIP: {ex.Message}");
+            return false;
+        }
     }
 
-
-    private async Task WriteDtroToJsonAsync(Models.DataBase.DTRO dtro, string filePath)
+    private static byte[] ConvertJsonToBytes(Models.DataBase.DTRO dtro)
     {
-        await using (var writer = new StreamWriter(filePath, append: false, encoding: Encoding.UTF8, bufferSize: 4096))
-        {
-            var json = System.Text.Json.JsonSerializer.Serialize(dtro, new System.Text.Json.JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
-
-            await writer.WriteAsync(json);
-        }
+        var json = JsonSerializer.Serialize(dtro, new JsonSerializerOptions { WriteIndented = false });
+        return Encoding.UTF8.GetBytes(json);
     }
 
     public async Task<DtroResponse> GetDtroByIdAsync(Guid id)

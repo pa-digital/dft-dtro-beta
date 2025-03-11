@@ -8,6 +8,7 @@ public class GetDtrosTests
     private readonly Mock<ISchemaTemplateDal> _mockSchemaTemplateDal = new();
     private readonly Mock<IDtroMappingService> _mockDtroMappingService = new();
     private readonly Mock<IDtroGroupValidatorService> _mockDtroGroupValidatorService = new();
+    private readonly Mock<IGoogleCloudStorageService> _mockGoogleCloudStorageService = new();
 
 
     private readonly IDtroService _sut;
@@ -20,7 +21,8 @@ public class GetDtrosTests
                 _mockDtroHistoryDal.Object,
                 _mockSchemaTemplateDal.Object,
                 _mockDtroMappingService.Object,
-                _mockDtroGroupValidatorService.Object
+                _mockDtroGroupValidatorService.Object,
+                _mockGoogleCloudStorageService.Object
             );
     }
 
