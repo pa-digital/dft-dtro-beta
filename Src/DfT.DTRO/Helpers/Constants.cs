@@ -149,4 +149,12 @@ public static class Constants
     public static string TraCreator => "traCreator";
 
     public static string TroName => "troName";
+
+    public static string Provision => "Provision";
+
+    public static string ExpectedOccupancyDuration => "expectedOccupancyDuration";
+
+    public static string OrderReportingPoint => "orderReportingPoint";
+
+    public static string ProvisionDescription => "provisionDescription";
 }

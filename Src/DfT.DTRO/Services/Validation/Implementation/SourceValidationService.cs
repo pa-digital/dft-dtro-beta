@@ -47,7 +47,7 @@ public class SourceValidationService : ISourceValidationService
                     Name = $"Invalid '{Constants.ComingIntoForceDate}'",
                     Message = "The date that the TRO is coming into force",
                     Path = $"{Constants.Source} -> {Constants.ComingIntoForceDate}",
-                    Rule = $"{Constants.ComingIntoForceDate} must be of type {typeof(string)} and formatted as {typeof(DateOnly)}"
+                    Rule = $"{Constants.ComingIntoForceDate} if present, must be of type {typeof(string)} and formatted as {typeof(DateOnly)}"
                 };
 
                 validationErrors.Add(error);
@@ -101,7 +101,7 @@ public class SourceValidationService : ISourceValidationService
                     Name = $"Invalid '{Constants.MadeDate}'",
                     Message = "If appropriate, the date that the TRO is made",
                     Path = $"{Constants.Source} -> {Constants.MadeDate}",
-                    Rule = $"{Constants.MadeDate} must be of type {typeof(string)} and formatted as {typeof(DateOnly)}"
+                    Rule = $"{Constants.MadeDate} if present, must be of type {typeof(string)} and formatted as {typeof(DateOnly)}"
                 };
 
                 validationErrors.Add(error);
@@ -115,7 +115,7 @@ public class SourceValidationService : ISourceValidationService
                 Name = $"Invalid '{validMadeDate}'",
                 Message = $"{validMadeDate} cannot be later then {comingIntoForceValidDate}",
                 Path = $"{Constants.Source} -> {Constants.MadeDate}",
-                Rule = $"{Constants.MadeDate} must earlier than {Constants.ComingIntoForceDate}"
+                Rule = $"{Constants.MadeDate} if present, must earlier than {Constants.ComingIntoForceDate}"
             };
 
             validationErrors.Add(error);

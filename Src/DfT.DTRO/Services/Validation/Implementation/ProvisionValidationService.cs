@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.Services.Validation.Implementation;
+﻿using static Google.Rpc.Context.AttributeContext.Types;
+
+namespace DfT.DTRO.Services.Validation.Implementation;
 
 /// <inheritdoc cref="IProvisionValidationService"/>
 public class ProvisionValidationService : IProvisionValidationService
@@ -9,28 +11,85 @@ public class ProvisionValidationService : IProvisionValidationService
         List<SemanticValidationError> validationErrors = new();
 
         var provisions = dtroSubmit.Data
-            .GetValueOrDefault<IList<object>>("Source.Provision"
+            .GetValueOrDefault<IList<object>>($"{Constants.Source}.{Constants.Provision}"
                 .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .Cast<ExpandoObject>()
             .ToList();
 
-        var actionTypes = provisions.Select(provision => provision.GetValue<string>("actionType")).ToList();
+        var actionTypes = provisions.Select(provision => provision.GetValue<string>(Constants.ActionType)).ToList();
         var areActionTypesValid = actionTypes.TrueForAll(actionType => Constants.ProvisionActionTypes.Any(actionType.Equals));
         if (!areActionTypesValid)
         {
             var error = new SemanticValidationError
             {
-                Name = "Invalid 'actionType'",
+                Name = $"Invalid '{Constants.ActionType}'",
                 Message = "Indicates the nature of update",
-                Rule = $"Provision 'actionType' must contain one of the following accepted values: '{string.Join(",", Constants.ProvisionActionTypes)}'",
-                Path = "Source -> Provision -> actionType"
+                Rule = $"Provision '{Constants.ActionType}' must contain one of the following accepted values: '{string.Join(",", Constants.ProvisionActionTypes)}'",
+                Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActionType}"
             };
 
             validationErrors.Add(error);
         }
 
+        DateOnly validDate = default;
+        var hasComingIntoForceDates = provisions.Any(provision => provision.HasField(Constants.ComingIntoForceDate));
+        if (hasComingIntoForceDates)
+        {
+            var comingIntoForceDates = provisions.Select(provision =>
+                provision.GetValueOrDefault<string>(Constants.ComingIntoForceDate))
+                .ToList();
+            var areValidDates = comingIntoForceDates
+                .Any(comingIntoForceDate => DateOnly.TryParse(comingIntoForceDate,  out validDate));
+            if (!areValidDates)
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.ComingIntoForceDate}'",
+                    Message = "The date that the provision is coming into force",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ComingIntoForceDate}",
+                    Rule = $"{Constants.ComingIntoForceDate} if present, must be of type {typeof(string)} and formatted as {typeof(DateOnly)}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            if (validDate > DateOnly.FromDateTime(DateTime.UtcNow))
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.ComingIntoForceDate}'",
+                    Message = "The date that the provision is coming into force",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ComingIntoForceDate}",
+                    Rule = $"{Constants.ComingIntoForceDate} can not be in the future"
+                };
+
+                validationErrors.Add(error);
+            }
+        }
+
+        var hasExpectedOccupancyDurations = provisions.Any(provision => provision.HasField(Constants.ExpectedOccupancyDuration));
+        if (hasExpectedOccupancyDurations)
+        {
+            var expectedOccupancyDurations = provisions
+                .Select(provision => provision.GetValueOrDefault<int>(Constants.ExpectedOccupancyDuration))
+                .ToList();
+
+            if (expectedOccupancyDurations.Any(expectedOccupancyDuration => expectedOccupancyDuration <= 0))
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.ExpectedOccupancyDuration}'",
+                    Message = "Expected duration (in integer days) of the provision occupancy",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExpectedOccupancyDuration}",
+                    Rule = $"{Constants.ExpectedOccupancyDuration} if present, must be of type '{typeof(int)}' and can not be less or equal to 0"
+                };
+
+                validationErrors.Add(error);
+            }
+        }
+
         var orderReportingPoints = provisions
-            .Select(provision => provision.GetValueOrDefault<string>("orderReportingPoint"))
+            .Select(provision => provision.GetValueOrDefault<string>(Constants.OrderReportingPoint))
             .ToList();
 
         var areValidOrderReportingPoints = orderReportingPoints
@@ -40,41 +99,41 @@ public class ProvisionValidationService : IProvisionValidationService
         {
             var error = new SemanticValidationError
             {
-                Name = "Invalid order reporting point",
+                Name = $"Invalid '{Constants.OrderReportingPoint}'",
                 Message = "Attribute identifying the lifecycle point and nature of a Provision",
-                Rule = $"'orderReportingPoint' must be one of '{string.Join(",", Constants.OrderReportingPointTypes)}'",
-                Path = "Source -> Provision -> orderReportingPoint"
+                Rule = $"'{Constants.OrderReportingPoint}' must be one of '{string.Join(",", Constants.OrderReportingPointTypes)}'",
+                Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.OrderReportingPoint}"
             };
 
             validationErrors.Add(error);
         }
 
         var provisionDescription = provisions
-            .Select(it => it.GetValueOrDefault<string>("provisionDescription"))
+            .Select(it => it.GetValueOrDefault<string>(Constants.ProvisionDescription))
             .ToList();
 
         if (provisionDescription.Any(string.IsNullOrEmpty))
         {
             var error = new SemanticValidationError
             {
-                Name = "Invalid description",
+                Name = $"Invalid '{Constants.ProvisionDescription}'",
                 Message = "Free text description of the referenced provision",
-                Rule = "Provision 'provisionDescription' must be of type 'string'",
-                Path = "Source -> Provision -> provisionDescription"
+                Rule = $"Provision '{Constants.ProvisionDescription}' must be of type '{typeof(string)}'",
+                Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ProvisionDescription}"
             };
 
             validationErrors.Add(error);
         }
 
-        var references = provisions.Select(provision => provision.GetValueOrDefault<string>("reference")).ToList();
+        var references = provisions.Select(provision => provision.GetValueOrDefault<string>(Constants.Reference)).ToList();
         if (references.Any(string.IsNullOrWhiteSpace))
         {
             var error = new SemanticValidationError
             {
-                Name = "Invalid reference",
+                Name = $"Invalid '{Constants.Reference}'",
                 Message = "Indicates a system reference to the relevant Provision of the TRO",
-                Rule = "Provision 'reference' must be of type 'string'",
-                Path = "Source -> Provision -> reference"
+                Rule = $"{Constants.Provision} '{Constants.Reference}' must be of type 'string'",
+                Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.Reference}"
             };
 
             validationErrors.Add(error);
@@ -92,10 +151,10 @@ public class ProvisionValidationService : IProvisionValidationService
             {
                 var error = new SemanticValidationError
                 {
-                    Name = $"'{kv.Value}' duplication reference",
-                    Message = $"Provision reference '{kv.Key}' is present {kv.Value} times.",
-                    Rule = "Each provision 'reference' must be unique and of type 'string'",
-                    Path = "Source -> Provision -> reference"
+                    Name = $"'{kv.Value}' duplication {Constants.Reference}",
+                    Message = $"{Constants.Provision} {Constants.Reference} '{kv.Key}' is present {kv.Value} times.",
+                    Rule = $"Each provision '{Constants.Reference}' must be unique and of type '{typeof(string)}'",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.Reference}"
                 };
 
                 return error;
