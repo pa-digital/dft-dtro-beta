@@ -50,20 +50,25 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
             .ToListAsync();
     }
 
-    public async Task<List<ApplicationPendingListDto>> GetPendingApplications(string email)
+    public async Task<PaginatedResult<ApplicationPendingListDto>> GetPendingApplications(PaginatedRequest paginatedRequest)
     {
-        return await _context.Applications
+        IQueryable<ApplicationPendingListDto> query = _context.Applications
             .Include(a => a.User)
             .Include(a => a.TrafficRegulationAuthority)
+            .Include(a => a.Status)
             .Include(a => a.ApplicationType)
-            .Where(a => a.User.Email == email)
+            .Where(application => application.Status.Status == "pending")
             .Select(a => new ApplicationPendingListDto
             {
-                User = $"{a.User.Forename} {a.User.Surname}",
+                TraName = a.TrafficRegulationAuthority.Name,
                 Type = a.ApplicationType.Name,
-                Tra = a.TrafficRegulationAuthority.Name
-            })
-            .ToListAsync();
+                UserEmail = a.User.Email,
+                UserName = $"{a.User.Forename} {a.User.Surname}",
+            });
+        IQueryable<ApplicationPendingListDto> paginatedQuery = query
+            .Skip((paginatedRequest.Page - 1) * paginatedRequest.PageSize)
+            .Take(paginatedRequest.PageSize);
+        return new PaginatedResult<ApplicationPendingListDto>(paginatedQuery.ToList(), paginatedQuery.Count());
     }
 
     public async Task<bool> ActivateApplicationById(Guid appId)

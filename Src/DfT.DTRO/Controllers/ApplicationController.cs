@@ -196,17 +196,16 @@ public class ApplicationController : ControllerBase
     /// <summary>
     /// Retrieves application list for user
     /// </summary>
-    /// <param name="email">Developer email linked to access token.</param>
     /// <response code="200">Valid user ID</response>
     /// <response code="400">Invalid or empty parameters, or no matching user</response>
     /// <response code="500">Invalid operation or other exception</response>
     [HttpGet(RouteTemplates.ApplicationsFindAllPending)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> FindPendingApplications([FromHeader(Name = "x-email")][Required] string email)
+    public async Task<ActionResult<PaginatedResponse<ApplicationPendingListDto>>> FindPendingApplications([FromQuery] PaginatedRequest paginatedRequest)
     {
         try
         {
-            var result = await _applicationService.GetPendingApplications(email);
+            var result = await _applicationService.GetPendingApplications(paginatedRequest);
             return Ok(result);
         }
         catch (ArgumentNullException ex)

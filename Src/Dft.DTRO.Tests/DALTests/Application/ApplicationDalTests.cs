@@ -1,3 +1,5 @@
+using DfT.DTRO.Models.Pagination;
+
 namespace Dft.DTRO.Tests.DALTests
 {
     public class ApplicationDalTests : IDisposable
@@ -33,7 +35,7 @@ namespace Dft.DTRO.Tests.DALTests
             var purposeC = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeC" };
 
             var statusA = new ApplicationStatus { Id = Guid.NewGuid(), Status = "Active" };
-            var statusB = new ApplicationStatus { Id = Guid.NewGuid(), Status = "Inactive" };
+            var statusB = new ApplicationStatus { Id = Guid.NewGuid(), Status = "pending" };
 
             _context.Users.AddRange(user1, user2);
             _context.TrafficRegulationAuthorities.AddRange(tra1, tra2);
@@ -186,6 +188,14 @@ namespace Dft.DTRO.Tests.DALTests
 
             var result = await _applicationDal.ActivateApplicationById(application.Id);
             Assert.False(result);
+        }
+
+        [Fact]
+        public async Task GetPendingApplications_ShouldReturnPendingApplicationForUserAdminUser()
+        {
+            var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+            var apps = await _applicationDal.GetPendingApplications(request);
+            Assert.Equal(1, apps.TotalCount);
         }
 
         public void Dispose()

@@ -1,3 +1,4 @@
+using DfT.DTRO.Models.Pagination;
 using Dft.DTRO.Tests.Fixtures;
 
 public class ApplicationControllerTests : IClassFixture<ApplicationControllerTestFixture>
@@ -166,5 +167,66 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
         var result = await _controller.ActivateApplication(_xEmail, appId);
         var objectResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, objectResult.StatusCode);
+    }
+    
+    [Fact]
+    public async Task GetPendingApplicationsValidUserReturnsOk()
+    {
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+
+        var applications = new List<ApplicationPendingListDto>
+        {
+            new() { TraName = "TraName", Type = "Type", UserEmail = "UserEmail", UserName = "UserName" }
+        };
+
+        _mockApplicationService
+            .Setup(it => it.GetPendingApplications(request))
+            .ReturnsAsync(() => new PaginatedResponse<ApplicationPendingListDto>(applications, 1, applications.Count));
+
+        var actual = await _controller.FindPendingApplications(request);
+        var okResult = Assert.IsType<OkObjectResult>(actual.Result);
+        Assert.Equal(200, okResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetPendingApplicationsThrowsArgumentNullException()
+    {
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+
+        _mockApplicationService
+            .Setup(service => service.GetPendingApplications(request))
+            .ThrowsAsync(new ArgumentNullException());
+
+        var actual = await _controller.FindPendingApplications(request);
+        var requestResult = Assert.IsType<BadRequestObjectResult>(actual.Result);
+        Assert.Equal(400, requestResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task  GetPendingApplicationsThrowsInvalidOperationException()
+    {
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+
+        _mockApplicationService
+            .Setup(service => service.GetPendingApplications(request))
+            .ThrowsAsync(new InvalidOperationException());
+
+        var actual = await _controller.FindPendingApplications(request);
+        var requestResult = Assert.IsType<ObjectResult>(actual.Result);
+        Assert.Equal(500, requestResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetPendingApplicationsThrowsException()
+    {
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+
+        _mockApplicationService
+            .Setup(service => service.GetPendingApplications(request))
+            .ThrowsAsync(new Exception());
+
+        var actual = await _controller.FindPendingApplications(request);
+        var requestResult = Assert.IsType<ObjectResult>(actual.Result);
+        Assert.Equal(500, requestResult.StatusCode);
     }
 }
