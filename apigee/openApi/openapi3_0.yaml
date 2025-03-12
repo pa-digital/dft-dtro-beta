@@ -36,8 +36,73 @@ paths:
           description: Ok
         '500':
           description: Internal Server Error
-  /applications/validateName:
+    get:
+      tags:
+        - Applications
+      summary: Retrieves application details by ID
+      operationId: get-apps
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - name: x-email
+          in: header
+          description: Developer email linked to access token.
+          required: true
+          schema:
+            type: string
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
+      responses:
+        '200':
+          description: Valid user ID
+        '400':
+          description: Invalid or empty parameters, or no matching user
+        '500':
+          description: Invalid operation or other exception
+  /applications/{appId}/activate:
     post:
+      tags:
+        - Applications
+      summary: Activates an application by app ID
+      operationId: activate-app
+      security:
+        - oAuth:
+            - cso
+      parameters:
+        - name: x-email
+          in: header
+          description: Developer email linked to access token.
+          required: true
+          schema:
+            type: string
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
+      responses:
+        '200':
+          description: Valid application ID
+        '400':
+          description: Invalid or empty parameters, or no matching application
+        '500':
+          description: Invalid operation or other exception
+  /applications/validateName:
+    get:
       tags:
         - Applications
       summary: Validates if the Application Name is available.
@@ -46,13 +111,17 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
-      requestBody:
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ApplicationNameQueryParameters'
+        - name: Name
+          in: query
+          schema:
+            type: string
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
           description: Valid or invalid application name
@@ -60,22 +129,31 @@ paths:
           description: Invalid or empty parameters
         '500':
           description: Invalid operation or other exception
-  /applications/details:
-    post:
+  /applications/{appId}:
+    get:
       tags:
         - Applications
       summary: Retrieves application details by ID
-      operationId: get-app-details
-      security:
-        - oAuth:
-            - cso
       parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ApplicationDetailsRequest'
+        - name: x-email
+          in: header
+          description: Developer email linked to access token.
+          required: true
+          schema:
+            type: string
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
           description: Valid application ID
@@ -83,20 +161,42 @@ paths:
           description: Invalid or empty parameters, or no matching application
         '500':
           description: Invalid operation or other exception
-  /applications/list:
-    post:
+  /applications/pending:
+    get:
       tags:
         - Applications
       summary: Retrieves application list for user
-      operationId: get-apps
-      security:
-        - oAuth:
-            - cso
       parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
+        - name: Page
+          in: query
+          required: true
+          schema:
+            maximum: 2147483647
+            minimum: 1
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          required: true
+          schema:
+            maximum: 50
+            minimum: 1
+            type: integer
+            format: int32
+        - name: X-Correlation-ID
+          in: header
+          required: true
+          schema:
+            type: string
+            description: UUID formatted string to track the request through the enquiries stack.
+            default: 41ae0471-d7de-4737-907f-cab2f0089796
       responses:
         '200':
           description: Valid user ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse.Applications'
         '400':
           description: Invalid or empty parameters, or no matching user
         '500':
@@ -1820,6 +1920,22 @@ components:
       schema:
         type: string      
   schemas:
+    ApplicationPendingListDto:
+      type: object
+      properties:
+        traName:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        userEmail:
+          type: string
+          nullable: true
+        userName:
+          type: string
+          nullable: true
+      additionalProperties: false    
     ApplicationDetailsRequest:
       type: object
       properties:
@@ -2255,6 +2371,24 @@ components:
           type: integer
           format: int32
         eventCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+    DfT.DTRO.Models.Pagination.PaginatedResponse.Applications:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationPendingListDto'
+          nullable: true
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
           type: integer
           format: int32
       additionalProperties: false
