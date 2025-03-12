@@ -9,15 +9,12 @@
         },
         "consultation": {
             "$ref": "#/$defs/consultation"
-        },
-        "_comment": {
-            "type": "string",
-            "minLength": 1
         }
     },
     "oneOf": [
         {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "source": {
                     "$ref": "#/$defs/source"
@@ -29,6 +26,7 @@
         },
         {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "consultation": {
                     "$ref": "#/$defs/consultation"
@@ -57,10 +55,6 @@
                 },
                 "otherAccessRestriction": {
                     "description": "Free text description of other access restrictions.",
-                    "type": "string",
-                    "minLength": 1
-                },
-                "_comment": {
                     "type": "string",
                     "minLength": 1
                 }
@@ -96,6 +90,7 @@
         "actualStartOrStop": {
             "description": "Object supporting the recording of actual start and stop dates and times",
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "eventAt": {
                     "description": "Indicates the date / time of the related event",
@@ -121,10 +116,6 @@
             "properties": {
                 "name": {
                     "description": "Name of the authority issuing permits",
-                    "type": "string",
-                    "minLength": 1
-                },
-                "_comment": {
                     "type": "string",
                     "minLength": 1
                 }
@@ -182,36 +173,427 @@
                 "negate": {
                     "type": "boolean"
                 },
+                "operator": {
+                    "$ref": "#/$defs/conditionOperatorType"
+                },
                 "rateTable": {
-                    "$ref": "#/$defs/rateTable"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "type": {
+                            "$ref": "#/$defs/rateType"
+                        },
+                        "additionalInformation": {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        "rateLineCollection": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "required": [
+                                    "applicableCurrency",
+                                    "sequence",
+                                    "startValidUsagePeriod",
+                                    "rateLine"
+                                ],
+                                "properties": {
+                                    "applicableCurrency": {
+                                        "$ref": "#/$defs/currencyType"
+                                    },
+                                    "startValidUsagePeriod": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "endValidUsagePeriod": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "maxTime": {
+                                        "type": "integer"
+                                    },
+                                    "minTime": {
+                                        "type": "integer"
+                                    },
+                                    "maximumCollection": {
+                                        "type": "number"
+                                    },
+                                    "minimumCollection": {
+                                        "type": "number"
+                                    },
+                                    "resetTime": {
+                                        "type": "string",
+                                        "format": "time"
+                                    },
+                                    "sequence": {
+                                        "type": "integer"
+                                    },
+                                    "rateLine": {
+                                        "type": "array",
+                                        "minItems": 1,
+                                        "items": {
+                                            "required": [
+                                                "sequence",
+                                                "type",
+                                                "value"
+                                            ],
+                                            "properties": {
+                                                "description": {
+                                                    "type": "string",
+                                                    "minLength": 1
+                                                },
+                                                "durationEnd": {
+                                                    "type": "string",
+                                                    "format": "time"
+                                                },
+                                                "durationStart": {
+                                                    "type": "string",
+                                                    "format": "time"
+                                                },
+                                                "incrementPeriod": {
+                                                    "type": "integer"
+                                                },
+                                                "maximum": {
+                                                    "type": "number"
+                                                },
+                                                "minimum": {
+                                                    "type": "number"
+                                                },
+                                                "sequence": {
+                                                    "type": "integer"
+                                                },
+                                                "type": {
+                                                    "$ref": "#/$defs/rateLineType"
+                                                },
+                                                "usageCondition": {
+                                                    "$ref": "#/$defs/rateUsageConditionsType"
+                                                },
+                                                "value": {
+                                                    "type": "number"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
                 "vehicleCharacteristics": {
-                    "$ref": "#/$defs/vehicleCharacteristics"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "fuelType": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "#/$defs/fuelType"
+                            }
+                        },
+                        "loadType": {
+                            "$ref": "#/$defs/payloadType"
+                        },
+                        "vehicleEquipment": {
+                            "$ref": "#/$defs/vehicleEquipmentType"
+                        },
+                        "vehicleType": {
+                            "$ref": "#/$defs/vehicleType"
+                        },
+                        "vehicleUsage": {
+                            "$ref": "#/$defs/vehicleUsageType"
+                        },
+                        "yearOfFirstRegistration": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "maximumGrossWeightCharacteristic": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "grossVehicleWeight",
+                                "typeOfWeight"
+                            ],
+                            "properties": {
+                                "grossVehicleWeight": {
+                                    "type": "number",
+                                    "minimum": 0
+                                },
+                                "typeOfWeight": {
+                                    "$ref": "#/$defs/weightType"
+                                }
+                            }
+                        },
+                        "maximumHeightCharacteristic": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "vehicleHeight"
+                            ],
+                            "properties": {
+                                "vehicleHeight": {
+                                    "type": "number",
+                                    "minimum": 0
+                                }
+                            }
+                        },
+                        "maximumLengthCharacteristic": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "vehicleLength"
+                            ],
+                            "properties": {
+                                "vehicleLength": {
+                                    "type": "number",
+                                    "minimum": 0
+                                }
+                            }
+                        },
+                        "maximumWidthCharacteristic": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "vehicleWidth"
+                            ],
+                            "properties": {
+                                "vehicleWidth": {
+                                    "type": "number",
+                                    "minimum": 0
+                                }
+                            }
+                        },
+                        "heaviestAxleWeightCharacteristic": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "heaviestAxleWeight"
+                            ],
+                            "properties": {
+                                "heaviestAxleWeight": {
+                                    "type": "number",
+                                    "minimum": 0
+                                }
+                            }
+                        },
+                        "numberOfAxlesCharacteristic": {
+                            "type": "array",
+                            "maxItems": 2,
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                    "numberOfAxles",
+                                    "comparisonOperator"
+                                ],
+                                "properties": {
+                                    "numberOfAxles": {
+                                        "type": "integer",
+                                        "minimum": 1
+                                    },
+                                    "comparisonOperator": {
+                                        "$ref": "#/$defs/comparisonOperatorType"
+                                    }
+                                }
+                            }
+                        },
+                        "emissions": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "emissionClassificationEuro": {
+                                    "$ref": "#/$defs/emissionClassificationEuroType"
+                                },
+                                "emissionClassificationOther": {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
                 "roadCondition": {
-                    "$ref": "#/$defs/roadCondition"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "roadType"
+                    ],
+                    "properties": {
+                        "roadType": {
+                            "$ref": "#/$defs/roadType"
+                        }
+                    }
                 },
                 "occupantCondition": {
-                    "$ref": "#/$defs/occupantCondition"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "disabledWithPermit": {
+                            "type": "boolean"
+                        },
+                        "numberOfOccupants": {
+                            "type": "array",
+                            "maxItems": 2,
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                    "operator",
+                                    "value"
+                                ],
+                                "properties": {
+                                    "operator": {
+                                        "$ref": "#/$defs/comparisonOperatorType"
+                                    },
+                                    "value": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
                 "driverCondition": {
-                    "$ref": "#/$defs/driverCondition"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "driverCharacteristics"
+                    ],
+                    "properties": {
+                        "driverCharacteristics": {
+                            "$ref": "#/$defs/driverCharacteristicsType"
+                        }
+                    }
                 },
                 "accessCondition": {
-                    "$ref": "#/$defs/accessCondition"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "accessConditionType"
+                    ],
+                    "properties": {
+                        "accessConditionType": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "#/$defs/accessConditionType"
+                            }
+                        },
+                        "otherAccessRestriction": {
+                            "type": "string",
+                            "minLength": 1
+                        }
+                    }
                 },
                 "timeValidity": {
-                    "$ref": "#/$defs/timeValidity"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "start"
+                    ],
+                    "properties": {
+                        "end": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "start": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "validPeriod": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/$defs/period"
+                            }
+                        },
+                        "exceptionPeriod": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/$defs/period"
+                            }
+                        }
+                    }
                 },
                 "nonVehicularRoadUserCondition": {
-                    "$ref": "#/$defs/nonVehicularRoadUserCondition"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "nonVehicularRoadUser"
+                    ],
+                    "$ref": "#/$defs/nonVehicularRoadUserType",
+                    "properties": {}
                 },
                 "permitCondition": {
-                    "$ref": "#/$defs/permitCondition"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "type"
+                    ],
+                    "properties": {
+                        "locationRelatedPermit": {
+                            "type": "boolean"
+                        },
+                        "maxDurationOfPermit": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "permitIdentifier": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "schemeIdentifier": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "whereToApplyForPermit": {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        "whereToCallForPermit": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "type": {
+                            "$ref": "#/$defs/permitType"
+                        },
+                        "authority": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "name"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "minLength": 1
+                                }
+                            }
+                        },
+                        "permitSubjectToFee": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "amountDue": {
+                                "name": {
+                                    "type": "number"
+                                },
+                                "maximumAccessDuration": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "minimumTimeToNextEntry": {
+                                    "type": "integer",
+                                    "minimum": 1
+                                },
+                                "paymentInformation": {
+                                    "type": "string",
+                                    "format": "uri"
+                                }
+                            },
+                            "properties": {}
+                        }
+                    }
                 }
             },
             "oneOf": [
@@ -257,81 +639,61 @@
                 }
             ]
         },
-        "conditionOperatorType": {
-            "description": "Logical operators",
-            "type": "string",
-            "enum": [
-                "and",
-                "or",
-                "xor"
-            ]
-        },
         "conditions": {
-            "type": "object",
-            "properties": {
-                "operator": {
-                    "$ref": "#/$defs/conditionOperatorType"
-                },
-                "condition": {
-                    "$ref": "#/$defs/condition"
-                },
-                "conditions": {
-                    "$ref": "#/$defs/conditions"
-                },
-                "conditionSet": {
-                    "$ref": "#/$defs/conditionSet"
-                }
-            },
-            "required": [
-                "operator"
-            ],
-            "additionalProperties": false,
-            "anyOf": [
-                {
-                    "$ref": "#/$defs/condition"
-                },
-                {
-                    "$ref": "#/$defs/conditions"
-                },
-                {
-                    "$ref": "#/$defs/conditionSet"
-                }
-            ]
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "oneOf": [
+                    {
+                        "$ref": "#/$defs/condition"
+                    },
+                    {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "operator": {
+                                "type": "string"
+                            },
+                            "condition": {
+                                "type": "array",
+                                "minItems": 1,
+                                "items": {
+                                    "$ref": "#/$defs/condition"
+                                }
+                            },
+                            "conditionSet": {
+                                "$ref": "#/$defs/conditionSet"
+                            }
+                        }
+                    }
+                ]
+            }
         },
         "conditionSet": {
-            "type": "object",
-            "properties": {
-                "operator": {
-                    "$ref": "#/$defs/conditionOperatorType"
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "operator": {
+                        "$ref": "#/$defs/conditionOperatorType"
+                    },
+                    "conditionSet": {
+                        "$ref": "#/$defs/conditionSet"
+                    },
+                    "conditions": {
+                        "$ref": "#/$defs/conditions"
+                    },
+                    "condition": {
+                        "$ref": "#/$defs/condition"
+                    }
                 },
-                "condition": {
-                    "$ref": "#/$defs/condition"
-                },
-                "conditions": {
-                    "$ref": "#/$defs/conditions"
-                },
-                "conditionSet": {
-                    "$ref": "#/$defs/conditionSet"
-                }
-            },
-            "required": [
-                "operator"
-            ],
-            "additionalProperties": false,
-            "anyOf": [
-                {
-                    "$ref": "#/$defs/condition"
-                },
-                {
-                    "$ref": "#/$defs/conditions"
-                },
-                {
-                    "$ref": "#/$defs/conditionSet"
-                }
-            ]
+                "additionalProperties": false
+            }
         },
         "consultation": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "consultationName": {
                     "description": "Free text descriptive name for the consultation given by the Traffic Regulation Authority.",
@@ -384,10 +746,6 @@
                     "items": {
                         "$ref": "#/$defs/source"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             },
             "required": [
@@ -439,7 +797,6 @@
                     "minLength": 1
                 },
                 "destination": {
-                    "type": "object",
                     "$ref": "#/$defs/externalReference"
                 },
                 "intermediateLocation": {
@@ -450,12 +807,7 @@
                     }
                 },
                 "origin": {
-                    "type": "object",
                     "$ref": "#/$defs/externalReference"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -471,6 +823,7 @@
         "diversionType": {
             "description": "An object linking to different forms of diversion route.",
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "diversionType": {
                     "$ref": "#/$defs/diversionRouteType"
@@ -500,23 +853,16 @@
             "properties": {
                 "driverCharacteristics": {
                     "$ref": "#/$defs/driverCharacteristicsType"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
         "elementaryStreetUnit": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "esu": {
                     "type": "integer",
                     "minimum": 1
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -551,10 +897,6 @@
                     "items": {
                         "type": "string"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -647,10 +989,6 @@
                     "items": {
                         "$ref": "#/$defs/uniqueStreetReferenceNumber"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -686,16 +1024,13 @@
         "generalRegulation": {
             "description": "A list of regulation types",
             "type": "object",
+            "additionalProperties": false,
             "required": [
                 "regulationType"
             ],
             "properties": {
                 "regulationType": {
                     "$ref": "#/$defs/regulationType"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -714,51 +1049,35 @@
                 },
                 "pointGeometry": {
                     "type": "object",
+                    "additionalProperties": false,
                     "items": {
                         "$ref": "#/$defs/pointGeometry"
                     },
-                    "properties": {
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    }
+                    "properties": {}
                 },
                 "linearGeometry": {
                     "type": "object",
+                    "additionalProperties": false,
                     "items": {
                         "$ref": "#/$defs/linearGeometry"
                     },
-                    "properties": {
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    }
+                    "properties": {}
                 },
                 "polygon": {
                     "type": "object",
+                    "additionalProperties": false,
                     "items": {
                         "$ref": "#/$defs/polygon"
                     },
-                    "properties": {
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    }
+                    "properties": {}
                 },
                 "directedLinear": {
                     "type": "object",
+                    "additionalProperties": false,
                     "items": {
                         "$ref": "#/$defs/directedLinear"
                     },
-                    "properties": {
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    }
+                    "properties": {}
                 }
             },
             "oneOf": [
@@ -796,10 +1115,6 @@
                     "description": "Indicates a characteristic relating to the heaviest axle of vehicle. Defined in metric tonnes, with one decimal place",
                     "type": "number",
                     "minimum": 0
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -859,10 +1174,6 @@
                     "items": {
                         "$ref": "#/$defs/externalReference"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -900,10 +1211,6 @@
                 },
                 "typeOfWeight": {
                     "$ref": "#/$defs/weightType"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -919,10 +1226,6 @@
                     "description": "Height of the highest part, excluding antennae, of an individual vehicle from the reference plane defined by the bottom of the wheels touching the ground, in metres, defined to two decimal places.",
                     "type": "number",
                     "minimum": 0
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -938,10 +1241,6 @@
                     "description": "The overall distance between the front and back of an individual vehicle, including the length of any trailers, couplings, embedded features etc., in metres, to two decimal places.",
                     "type": "number",
                     "minimum": 0
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -957,10 +1256,6 @@
                     "description": "The maximum width of an individual vehicle, including any features embedded or fixed on it, in metres, to two decimal places.",
                     "type": "number",
                     "minimum": 0
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -992,10 +1287,6 @@
             "properties": {
                 "nonVehicularRoadUser": {
                     "$ref": "#/$defs/nonVehicularRoadUserType"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -1012,6 +1303,7 @@
         "numberOfAxlesCharacteristic": {
             "description": "Number of axles characteristic of a vehicle.",
             "type": "object",
+            "additionalProperties": false,
             "required": [
                 "numberOfAxles",
                 "comparisonOperator"
@@ -1024,10 +1316,6 @@
                 },
                 "comparisonOperator": {
                     "$ref": "#/$defs/comparisonOperatorType"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -1035,6 +1323,7 @@
             "description": "Object indicating conditional restrictions based on the number of vehicle occupants",
             "maxItems": 2,
             "type": "object",
+            "additionalProperties": false,
             "required": [
                 "operator",
                 "value"
@@ -1046,10 +1335,6 @@
                 "value": {
                     "description": "Indicates the number of occupants.",
                     "type": "integer"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -1068,10 +1353,6 @@
                     "items": {
                         "$ref": "#/$defs/numberOfOccupants"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -1092,10 +1373,6 @@
                     "minLength": 1
                 },
                 "regulationShortName": {
-                    "type": "string",
-                    "minLength": 1
-                },
-                "_comment": {
                     "type": "string",
                     "minLength": 1
                 }
@@ -1139,6 +1416,7 @@
         },
         "period": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "endOfPeriod": {
                     "type": "string",
@@ -1158,200 +1436,77 @@
                 "recurringPeriod": {
                     "type": "integer"
                 },
-                "specialDay": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                        "intersectWithApplicableDays",
-                        "publicEvent",
-                        "specialDayType"
-                    ],
-                    "properties": {
-                        "intersectWithApplicableDays": {
-                            "type": "boolean"
-                        },
-                        "publicEvent": {
-                            "$ref": "#/$defs/publicEventType"
-                        },
-                        "specialDayType": {
-                            "$ref": "#/$defs/specialDayType"
-                        },
-                        "changeableTimePeriodStart": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "startType"
-                            ],
-                            "properties": {
-                                "startType": {
-                                    "$ref": "#/$defs/changeableTimeType"
-                                },
-                                "changeableTimePeriodSource": {
-                                    "type": "object",
-                                    "additionalProperties": false,
-                                    "required": [
-                                        "definition",
-                                        "sourceLocator"
-                                    ],
-                                    "properties": {
-                                        "definition": {
-                                            "type": "string",
-                                            "minLength": 1
-                                        },
-                                        "sourceLocator": {
-                                            "type": "string",
-                                            "format": "uri"
-                                        },
-                                        "_comment": {
-                                            "type": "string",
-                                            "minLength": 1
-                                        }
-                                    }
-                                },
-                                "changeableTimePeriodEntry": {
-                                    "type": "array",
-                                    "minItems": 1,
-                                    "items": {
-                                        "entry": {
-                                            "type": "string",
-                                            "format": "datetime"
-                                        }
-                                    }
-                                },
-                                "_comment": {
-                                    "type": "string",
-                                    "minLength": 1
-                                }
-                            }
-                        },
-                        "changeableTimePeriodEnd": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "endType"
-                            ],
-                            "properties": {
-                                "endType": {
-                                    "$ref": "#/$defs/changeableTimeType"
-                                },
-                                "changeableTimePeriodSource": {
-                                    "type": "object",
-                                    "additionalProperties": false,
-                                    "required": [
-                                        "definition",
-                                        "sourceLocator"
-                                    ],
-                                    "properties": {
-                                        "definition": {
-                                            "type": "string",
-                                            "minLength": 1
-                                        },
-                                        "sourceLocator": {
-                                            "type": "string",
-                                            "format": "uri"
-                                        },
-                                        "_comment": {
-                                            "type": "string",
-                                            "minLength": 1
-                                        }
-                                    }
-                                },
-                                "changeableTimePeriodEntry": {
-                                    "type": "array",
-                                    "minItems": 1,
-                                    "items": {
-                                        "entry": {
-                                            "type": "string",
-                                            "format": "datetime"
-                                        }
-                                    }
-                                },
-                                "_comment": {
-                                    "type": "string",
-                                    "minLength": 1
-                                }
-                            }
-                        },
-                        "_comment": {
-                            "type": "string",
-                            "minLength": 1
-                        }
-                    },
-                    "recurringTimePeriodOfDay": {
-                        "type": "array",
-                        "minLength": 1,
-                        "items": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "endTimeOfPeriod",
-                                "startTimeOfPeriod"
-                            ],
-                            "properties": {
-                                "endTimeOfPeriod": {
-                                    "type": "string",
-                                    "format": "time"
-                                },
-                                "starTimeOfPeriod": {
-                                    "type": "string",
-                                    "format": "time"
-                                },
-                                "_comment": {
-                                    "type": "string",
-                                    "minLength": 1
-                                }
-                            }
-                        }
-                    },
-                    "recurringDayWeekMonthPeriod": {
-                        "type": "array",
-                        "minLength": 1,
-                        "items": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "applicableDay",
-                                "applicableMonth"
-                            ],
-                            "properties": {
-                                "applicableDay": {
-                                    "type": "array",
-                                    "minItems": 1,
-                                    "maxItems": 7,
-                                    "uniqueItems": true,
-                                    "items": {
-                                        "$ref": "#/$defs/dayType"
-                                    }
-                                },
-                                "applicableMonth": {
-                                    "type": "array",
-                                    "minItems": 1,
-                                    "maxItems": 12,
-                                    "uniqueItems": true,
-                                    "items": {
-                                        "$ref": "#/$defs/monthType"
-                                    }
-                                },
-                                "weekInMonth": {
-                                    "$ref": "#/$defs/calendarWeekInMonthType"
-                                },
-                                "applicableWeek": {
-                                    "$ref": "#/$defs/weekInMonthType"
-                                },
-                                "applicableInstanceOfDayWithinMonth": {
-                                    "$ref": "#/$defs/instanceOfDayInMonth"
-                                },
-                                "_comment": {
-                                    "type": "string",
-                                    "minLength": 1
-                                }
+                "recurringTimePeriodOfDay": {
+                    "type": "array",
+                    "minLength": 1,
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "endTimeOfPeriod",
+                            "startTimeOfPeriod"
+                        ],
+                        "properties": {
+                            "endTimeOfPeriod": {
+                                "type": "string",
+                                "format": "time"
+                            },
+                            "startTimeOfPeriod": {
+                                "type": "string",
+                                "format": "time"
                             }
                         }
                     }
                 },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
+                "recurringDayWeekMonthPeriod": {
+                    "type": "array",
+                    "minLength": 1,
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "applicableDay": {
+                                "type": "array",
+                                "minItems": 1,
+                                "maxItems": 7,
+                                "uniqueItems": true,
+                                "items": {
+                                    "$ref": "#/$defs/dayType"
+                                }
+                            },
+                            "applicableMonth": {
+                                "type": "array",
+                                "minItems": 1,
+                                "maxItems": 12,
+                                "uniqueItems": true,
+                                "items": {
+                                    "$ref": "#/$defs/monthType"
+                                }
+                            },
+                            "weekInMonth": {
+                                "$ref": "#/$defs/calendarWeekInMonthType"
+                            },
+                            "applicableWeek": {
+                                "$ref": "#/$defs/weekInMonthType"
+                            },
+                            "applicableInstanceOfDayWithinMonth": {
+                                "$ref": "#/$defs/instanceOfDayInMonth"
+                            }
+                        }
+                    }
+                },
+                "recurringSpecialDay": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/$defs/specialDay"
+                    }
+                },
+                "periodStart": {
+                    "$ref": "#/$defs/changeableTimePeriodStart"
+                },
+                "periodEnd": {
+                    "$ref": "#/$defs/changeableTimePeriodEnd"
                 }
             }
         },
@@ -1410,10 +1565,6 @@
                 },
                 "permitSubjectToFee": {
                     "$ref": "#/$defs/permitSubjectToFee"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -1430,10 +1581,6 @@
                     "description": "URL for further information on permit and related payment",
                     "type": "string",
                     "format": "uri"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -1464,7 +1611,6 @@
                     "$ref": "#/$defs/diversionType"
                 },
                 "externalReference": {
-                    "type": "object",
                     "$ref": "#/$defs/externalReference"
                 },
                 "point": {
@@ -1514,10 +1660,6 @@
                     "items": {
                         "$ref": "#/$defs/externalReference"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -1556,11 +1698,9 @@
                     "$ref": "#/$defs/actualStartOrStop"
                 },
                 "experimentalCessation": {
-                    "type": "object",
                     "$ref": "#/$defs/experimentalCessation"
                 },
                 "experimentalVariation": {
-                    "type": "object",
                     "$ref": "#/$defs/experimentalVariation"
                 },
                 "regulatedPlace": {
@@ -1571,12 +1711,7 @@
                     }
                 },
                 "regulation": {
-                    "type": "object",
                     "$ref": "#/$defs/regulation"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             },
             "required": [
@@ -1750,7 +1885,7 @@
                     "type": "number"
                 },
                 "resetTime": {
-                    "description": "Time that rate resets.  Example a rate table that charges £2 per hour with a max value collection of £10, resets at 2 am.  At 2 am the £2 per hour fee would start to charge until the £10 is reached.",
+                    "description": "Time that rate resets.  Example a rate table that charges \u00c2\u00a32 per hour with a max value collection of \u00c2\u00a310, resets at 2 am.  At 2 am the \u00c2\u00a32 per hour fee would start to charge until the \u00c2\u00a310 is reached.",
                     "type": "string",
                     "format": "time"
                 },
@@ -1797,10 +1932,6 @@
                     "items": {
                         "$ref": "#/$defs/rateLineCollection"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             },
             "required": [
@@ -1926,8 +2057,12 @@
                     "$ref": "#/$defs/conditionSet"
                 },
                 "condition": {
-                    "type": "object",
-                    "$ref": "#/$defs/condition"
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/$defs/condition"
+                    }
                 },
                 "conditions": {
                     "type": "array",
@@ -1937,19 +2072,15 @@
                     }
                 },
                 "generalRegulation": {
-                    "type": "object",
                     "$ref": "#/$defs/generalRegulation"
                 },
                 "offListRegulation": {
-                    "type": "object",
                     "$ref": "#/$defs/offListRegulation"
                 },
                 "speedLimitValueBased": {
-                    "type": "object",
                     "$ref": "#/$defs/speedLimitValueBased"
                 },
                 "speedLimitProfileBased": {
-                    "type": "object",
                     "$ref": "#/$defs/speedLimitProfileBased"
                 },
                 "temporaryProvision": {
@@ -1958,10 +2089,6 @@
                     "items": {
                         "$ref": "#/$defs/temporaryProvision"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             },
             "required": [
@@ -2078,10 +2205,6 @@
                 "roadType": {
                     "description": "Indicates the type of road",
                     "$ref": "#/$defs/roadType"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -2158,10 +2281,6 @@
                     "items": {
                         "$ref": "#/$defs/provision"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             },
             "additionalProperties": false,
@@ -2204,10 +2323,6 @@
             "properties": {
                 "type": {
                     "$ref": "#/$defs/speedLimitProfileType"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -2222,6 +2337,7 @@
         },
         "speedLimitValueBased": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "mphValue": {
                     "type": "integer",
@@ -2232,10 +2348,6 @@
                 },
                 "type": {
                     "$ref": "#/$defs/speedLimitValueType"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             },
             "required": [
@@ -2304,15 +2416,12 @@
                     "items": {
                         "$ref": "#/$defs/period"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
         "uniqueStreetReferenceNumber": {
             "type": "object",
+            "additionalProperties": false,
             "required": [
                 "usrn"
             ],
@@ -2335,10 +2444,6 @@
                     "items": {
                         "$ref": "#/$defs/elementaryStreetUnit"
                     }
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -2396,10 +2501,6 @@
                 },
                 "emissions": {
                     "$ref": "#/$defs/emissions"
-                },
-                "_comment": {
-                    "type": "string",
-                    "minLength": 1
                 }
             }
         },
@@ -2488,6 +2589,120 @@
                 "maximumPermitted",
                 "unladen"
             ]
+        },
+        "conditionOperatorType": {
+            "description": "Logical operators",
+            "type": "string",
+            "enum": [
+                "and",
+                "or",
+                "xor"
+            ]
+        },
+        "changeableTimePeriodStart": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "startType"
+            ],
+            "properties": {
+                "startType": {
+                    "$ref": "#/$defs/changeableTimeType"
+                },
+                "changeableTimePeriodSource": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "definition",
+                        "sourceLocator"
+                    ],
+                    "properties": {
+                        "definition": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "sourceLocator": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    }
+                },
+                "changeableTimePeriodEntry": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "entry": {
+                            "type": "string",
+                            "format": "datetime"
+                        }
+                    }
+                },
+                "specialDay": {
+                    "$ref": "#/$defs/specialDay"
+                }
+            }
+        },
+        "changeableTimePeriodEnd": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "endType"
+            ],
+            "properties": {
+                "endType": {
+                    "$ref": "#/$defs/changeableTimeType"
+                },
+                "changeableTimePeriodSource": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "definition",
+                        "sourceLocator"
+                    ],
+                    "properties": {
+                        "definition": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "sourceLocator": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    }
+                },
+                "changeableTimePeriodEntry": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "entry": {
+                            "type": "string",
+                            "format": "datetime"
+                        }
+                    }
+                },
+                "specialDay": {
+                    "$ref": "#/$defs/specialDay"
+                }
+            }
+        },
+        "specialDay": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "intersectWithApplicableDays",
+                "specialDayType"
+            ],
+            "properties": {
+                "intersectWithApplicableDays": {
+                    "type": "boolean"
+                },
+                "publicEvent": {
+                    "$ref": "#/$defs/publicEventType"
+                },
+                "specialDayType": {
+                    "$ref": "#/$defs/specialDayType"
+                }
+            }
         }
     }
 }
