@@ -36,7 +36,7 @@ public class SourceValidationService : ISourceValidationService
         }
 
         DateOnly comingIntoForceValidDate = default;
-        if (source.HasField(Constants.ComingIntoForceDate))
+        if (dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && source.HasField(Constants.ComingIntoForceDate))
         {
             var comingIntoForceDate = source.GetValueOrDefault<string>(Constants.ComingIntoForceDate);
             var isValidDate = DateOnly.TryParse(comingIntoForceDate, out comingIntoForceValidDate);
@@ -52,6 +52,19 @@ public class SourceValidationService : ISourceValidationService
 
                 validationErrors.Add(error);
             }
+        }
+
+        if (comingIntoForceValidDate > DateOnly.FromDateTime(DateTime.UtcNow))
+        {
+            var error = new SemanticValidationError
+            {
+                Name = $"Invalid '{Constants.ComingIntoForceDate}'",
+                Message = "The date that the TRO is coming into force",
+                Path = $"{Constants.Source} -> {Constants.ComingIntoForceDate}",
+                Rule = $"{Constants.ComingIntoForceDate} can not be in the future"
+            };
+
+            validationErrors.Add(error);
         }
 
         var users = _dtroUserDal.GetAllDtroUsersAsync().Result;
@@ -77,7 +90,7 @@ public class SourceValidationService : ISourceValidationService
         }
 
         DateOnly validMadeDate = default;
-        if (source.HasField(Constants.MadeDate))
+        if (dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && source.HasField(Constants.MadeDate))
         {
             var madeDate = source.GetValueOrDefault<string>(Constants.MadeDate);
             var isValidMadeDate = DateOnly.TryParse(madeDate, out validMadeDate);
@@ -136,7 +149,7 @@ public class SourceValidationService : ISourceValidationService
             validationErrors.Add(error);
         }
 
-        if (source.HasField(Constants.StatementDescription))
+        if (dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && source.HasField(Constants.StatementDescription))
         {
             var statementDescription = source.GetValueOrDefault<string>(Constants.StatementDescription);
             if (string.IsNullOrEmpty(statementDescription))
