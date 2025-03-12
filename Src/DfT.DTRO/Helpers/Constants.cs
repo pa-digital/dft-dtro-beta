@@ -43,6 +43,8 @@ public static class Constants
 
     public static IEnumerable<string> RateLineTypes => typeof(RateLineType).GetDisplayNames<RateLineType>().ToList();
 
+    public static IEnumerable<string> EventTypes => typeof(EventType).GetDisplayNames<EventType>().ToList();
+
     public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
 
     public static List<int> MphValues => new() { 10, 20, 30, 40, 50, 60, 70 };
@@ -157,4 +159,22 @@ public static class Constants
     public static string OrderReportingPoint => "orderReportingPoint";
 
     public static string ProvisionDescription => "provisionDescription";
+
+    public static string ActualStartOrStop => "ActualStartOrStop";
+
+    public static string EventAt => "eventAt";
+
+    public static string EventType => "eventType";
+
+    public static string ExperimentalVariation => "ExperimentalVariation";
+
+    public static string EffectOfChange => "effectOfChange";
+
+    public static string ExpectedDuration => "expectedDuration";
+
+    public static string ExperimentalCessation => "ExperimentalCessation";
+
+    public static string ActualDateOfCessation => "actualDateOfCessation";
+
+    public static string NatureOfCessation => "natureOfCessation";
 }

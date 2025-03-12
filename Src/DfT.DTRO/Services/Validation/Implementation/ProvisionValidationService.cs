@@ -39,7 +39,8 @@ public class ProvisionValidationService : IProvisionValidationService
                 provision.GetValueOrDefault<string>(Constants.ComingIntoForceDate))
                 .ToList();
             var areValidDates = comingIntoForceDates
-                .Any(comingIntoForceDate => DateOnly.TryParse(comingIntoForceDate,  out validDate));
+                .TrueForAll(comingIntoForceDate => 
+                    DateOnly.TryParse(comingIntoForceDate,  out validDate));
             if (!areValidDates)
             {
                 var error = new SemanticValidationError
@@ -108,10 +109,68 @@ public class ProvisionValidationService : IProvisionValidationService
             validationErrors.Add(error);
         }
 
+        var anyTemporaryOrderReportingPoints = orderReportingPoints
+            .Any(orderReportingPoint => orderReportingPoint.StartsWith("ttro"));
+        if (anyTemporaryOrderReportingPoints)
+        {
+            var actualStartOrStops = provisions
+                .Select(provision => provision.GetValueOrDefault<IList<object>>(Constants.ActualStartOrStop))
+                .Cast<ExpandoObject>()
+                .ToList();
+
+            if (actualStartOrStops.Count == 0)
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.ActualStartOrStop}'",
+                    Message = "Object supporting the recording of actual start and stop dates and times",
+                    Rule = $"'{Constants.ActualStartOrStop}' must be present if a temporary ordering reporting point exists",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            var eventAts = actualStartOrStops
+                .Select(actualStartOrStop => actualStartOrStop.GetValueOrDefault<string>(Constants.EventAt))
+                .ToList();
+
+            var areValidEventAts = eventAts.TrueForAll(eventAt => DateTime.TryParse(eventAt, out var dateTime));
+            if (!areValidEventAts)
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.EventAt}'",
+                    Message = "Indicates the date / time of the related event",
+                    Rule = $"'{Constants.EventAt}' must be of type '{typeof(string)}' and formatted as date-time",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventAt}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            var eventTypes = actualStartOrStops
+                .Select(actualStartOrStop => actualStartOrStop.GetValueOrDefault<string>(Constants.EventType))
+                .ToList();
+
+            var areValidEventTypes = eventTypes.TrueForAll(eventType => Constants.EventTypes.Any(eventType.Equals));
+            if (!areValidEventTypes)
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.EventType}'",
+                    Message = "Indicates that the event represents an actual start or stop time",
+                    Rule = $"'{Constants.EventType}' must be one of '{string.Join(",", Constants.EventTypes)}'",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventType}"
+                };
+
+                validationErrors.Add(error);
+            }
+        }
+
         var provisionDescription = provisions
             .Select(it => it.GetValueOrDefault<string>(Constants.ProvisionDescription))
             .ToList();
-
         if (provisionDescription.Any(string.IsNullOrEmpty))
         {
             var error = new SemanticValidationError
@@ -138,7 +197,6 @@ public class ProvisionValidationService : IProvisionValidationService
 
             validationErrors.Add(error);
         }
-
         if (references.Count > 1)
         {
             var dictionary = references
