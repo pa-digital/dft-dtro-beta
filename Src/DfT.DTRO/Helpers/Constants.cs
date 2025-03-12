@@ -3,7 +3,6 @@ namespace DfT.DTRO.Helpers;
 
 public static class Constants
 {
-
     public static IEnumerable<string> SourceActionTypes => typeof(SourceActionType).GetDisplayNames<SourceActionType>().ToList();
 
     public static IEnumerable<string> ProvisionActionTypes => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>().ToList();
@@ -114,5 +113,40 @@ public static class Constants
 
     public static string DirectedLineString => "directedLineString";
 
-    public static readonly HashSet<string> KeysToConvert = new HashSet<string> { "source", "provision", "regulatedplace", "geometry", "lineargeometry", "pointgeometry", "polygon", "directedlinear", "externalreference", "uniquestreetreferencenumber", "elementarystreetunit", "regulation", "speedlimitvaluebased", "speedlimitprofilebased", "generalregulation", "offlistregulation", "condition", "temporaryregulation", "roadcondition", "numberofoccupants", "occupantcondition", "drivercondition", "accesscondition", "timevalidity", "nonvehicularroadusercondition", "permitcondition", "vehiclecharacteristics", "conditionset", "authority", "permitsubjecttofee", "specialday", "publicholiday", "changeabletimeperiodstart", "changeabletimeperiodend", "calendarweekinmonth", "weekofmonth", "instanceofdaywithinmonth", "changeabletimeperiodsource", "changeabletimeperiodentry", "maximumgrossweightcharacteristic", "maximumheightcharacteristic", "maximumlengthcharacteristic", "maximumwidthcharacteristic", "heaviestaxleweightcharacteristic", "numberofaxlescharacteristic", "emissions", "ratetable", "ratelinecollection", "rateline" };
+    public static readonly HashSet<string> KeysToConvert =
+    [
+        "source", "provision", "regulatedplace", "geometry", "lineargeometry", "pointgeometry", "polygon",
+        "directedlinear", "externalreference", "uniquestreetreferencenumber", "elementarystreetunit", "regulation",
+        "speedlimitvaluebased", "speedlimitprofilebased", "generalregulation", "offlistregulation", "condition",
+        "temporaryregulation", "roadcondition", "numberofoccupants", "occupantcondition", "drivercondition",
+        "accesscondition", "timevalidity", "nonvehicularroadusercondition", "permitcondition", "vehiclecharacteristics",
+        "conditionset", "authority", "permitsubjecttofee", "specialday", "publicholiday", "changeabletimeperiodstart",
+        "changeabletimeperiodend", "calendarweekinmonth", "weekofmonth", "instanceofdaywithinmonth",
+        "changeabletimeperiodsource", "changeabletimeperiodentry", "maximumgrossweightcharacteristic",
+        "maximumheightcharacteristic", "maximumlengthcharacteristic", "maximumwidthcharacteristic",
+        "heaviestaxleweightcharacteristic", "numberofaxlescharacteristic", "emissions", "ratetable",
+        "ratelinecollection", "rateline"
+    ];
+
+    public static string Source => "Source";
+
+    public static string ActionType => "actionType";
+
+    public static string ComingIntoForceDate => "comingIntoForceDate";
+
+    public static string CurrentTraOwner => "currentTraOwner";
+
+    public static string MadeDate => "madeDate";
+
+    public static string Reference => "reference";
+
+    public static string Section => "section";
+
+    public static string StatementDescription => "statementDescription";
+
+    public static string TraAffected => "traAffected";
+
+    public static string TraCreator => "traCreator";
+
+    public static string TroName => "troName";
 }
