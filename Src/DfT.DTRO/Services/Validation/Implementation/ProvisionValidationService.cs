@@ -109,8 +109,7 @@ public class ProvisionValidationService : IProvisionValidationService
             validationErrors.Add(error);
         }
 
-        var anyTemporaryOrderReportingPoints = orderReportingPoints
-            .Any(orderReportingPoint => orderReportingPoint.StartsWith("ttro"));
+        var anyTemporaryOrderReportingPoints = orderReportingPoints.Any(orderReportingPoint => orderReportingPoint.StartsWith("ttro"));
         if (anyTemporaryOrderReportingPoints)
         {
             var actualStartOrStops = provisions
@@ -162,6 +161,111 @@ public class ProvisionValidationService : IProvisionValidationService
                     Message = "Indicates that the event represents an actual start or stop time",
                     Rule = $"'{Constants.EventType}' must be one of '{string.Join(",", Constants.EventTypes)}'",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventType}"
+                };
+
+                validationErrors.Add(error);
+            }
+        }
+
+        var anyExperimentalOrderReportingPoints = orderReportingPoints.Any(orderReportingPoint => orderReportingPoint.StartsWith("experimental"));
+        if (anyExperimentalOrderReportingPoints)
+        {
+            var experimentalVariations = provisions
+                .Select(provision => provision.GetExpandoOrDefault(Constants.ExperimentalVariation))
+                .ToList();
+            if (experimentalVariations.Count == 0)
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.ExperimentalVariation}'",
+                    Message = "Object to enable the characteristic of an Experimental Order variation to be defined",
+                    Rule = $"'{Constants.ExperimentalVariation}' must be present if a experimental ordering reporting point exists",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalVariation}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            var effectOfChanges = experimentalVariations
+                .Select(experimentalVariation => experimentalVariation.GetValueOrDefault<string>(Constants.EffectOfChange))
+                .ToList();
+
+            if (effectOfChanges.Any(string.IsNullOrEmpty))
+            {
+                
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.EffectOfChange}'",
+                    Message = "Description of the effect of the change of the Experimental Order",
+                    Rule = $"'{Constants.EffectOfChange}' must be present and of type '{typeof(string)}'",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalVariation} -> {Constants.EffectOfChange}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            var expectedDurations = experimentalVariations
+                .Select(experimentalVariation => experimentalVariation.GetValueOrDefault<int>(Constants.ExpectedDuration))
+                .ToList();
+            if (expectedDurations.Any(expectedDuration => expectedDuration <= 0))
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.ExpectedDuration}'",
+                    Message = "Duration (in integer days) of the change of effect of the Experimental Order",
+                    Rule = $"'{Constants.ExpectedDuration}' must be present and of type '{typeof(int)}'",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalVariation} -> {Constants.ExpectedDuration}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            var experimentalCessations = provisions
+                .Select(provision => provision.GetExpandoOrDefault(Constants.ExperimentalCessation))
+                .ToList();
+            if (experimentalCessations.Count == 0)
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.ExperimentalCessation}'",
+                    Message = "Object to enable the characteristic of an Experimental Order cessation to be defined",
+                    Rule = $"'{Constants.ExperimentalCessation}' must be present if a experimental ordering reporting point exists",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalCessation}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            var actualDateOfCessations = experimentalCessations
+                .Select(experimentalCessation => experimentalCessation.GetValueOrDefault<string>(Constants.ActualDateOfCessation))
+                .ToList();
+
+            if (actualDateOfCessations.Any(string.IsNullOrEmpty))
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.ActualDateOfCessation}'",
+                    Message = "Description of the effect of the change of the Experimental Order",
+                    Rule = $"'{Constants.ActualDateOfCessation}' must be present and of type '{typeof(string)}' and formatted as date-time",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalCessation} -> {Constants.ActualDateOfCessation}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            var natureOfCessations = experimentalCessations
+                .Select(experimentalCessation => experimentalCessation
+                    .GetValueOrDefault<string>(Constants.NatureOfCessation))
+                .ToList();
+
+            if (natureOfCessations.Any(string.IsNullOrEmpty))
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.NatureOfCessation}'",
+                    Message = "Description of the reason for the cessation of the Experimental Order",
+                    Rule = $"'{Constants.NatureOfCessation}' must be present and of type '{typeof(string)}'",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalCessation} -> {Constants.NatureOfCessation}"
                 };
 
                 validationErrors.Add(error);
