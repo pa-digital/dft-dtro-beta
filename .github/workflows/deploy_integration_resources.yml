@@ -209,8 +209,7 @@ jobs:
           } 1' apiproxy/proxies/default.xml
           
           gawk -i inplace '/<Policies>/ {
-              print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>";
-              print $0 "\n        <Policy>AM-Set-Email-Header</Policy>";
+              print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>\n        <Policy>AM-Set-Email-Header</Policy>";
               next
           } 1' apiproxy/dtro-${env}-server.xml
           
