@@ -41,7 +41,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
                     regulatedPlace.GetValueOrDefault<bool>(Constants.Assignment))
                 .ToList();
 
-            if (assignments.Any(assignment => assignment != true || assignment != false))
+            if (!assignments.Any(assignment => assignment == true || assignment == false))
             {
                 var error = new SemanticValidationError
                 {
@@ -64,7 +64,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
                     regulatedPlace.GetValueOrDefault<bool>(Constants.BusRoute))
                 .ToList();
 
-            if (busRoutes.Any(busRoute => busRoute != true || busRoute != false))
+            if (!busRoutes.Any(busRoute => busRoute == true || busRoute == false))
             {
                 var error = new SemanticValidationError
                 {
@@ -84,7 +84,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
         {
             var byways = regulatedPlaces
                 .Select(regulatedPlace => 
-                    regulatedPlace.GetValueOrDefault<bool>(Constants.BywayType))
+                    regulatedPlace.GetValueOrDefault<string>(Constants.BywayType))
                 .ToList();
 
             var areAcceptedByways = byways
@@ -111,7 +111,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
                 .Select(regulatedPlace => 
                     regulatedPlace.GetValueOrDefault<bool>(Constants.Concession))
                 .ToList();
-            if (concessions.Any(concession => concession != true || concession != false))
+            if (!concessions.Any(concession => concession == true || concession == false))
             {
                 var error = new SemanticValidationError
                 {
@@ -174,7 +174,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
                 .Select(regulatedPlace => 
                     regulatedPlace.GetValueOrDefault<bool>(Constants.TramCar))
                 .ToList();
-            if (tramCars.Any(concession => concession != true || concession != false))
+            if (!tramCars.Any(concession => concession == true || concession == false))
             {
                 var error = new SemanticValidationError
                 {

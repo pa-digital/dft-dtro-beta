@@ -8,7 +8,7 @@ public enum BywayType
     /// <summary>
     /// footpath byway
     /// </summary>
-    [Display(Name = "footPath")]
+    [Display(Name = "footpath")]
     FootPath = 1,
 
     /// <summary>
