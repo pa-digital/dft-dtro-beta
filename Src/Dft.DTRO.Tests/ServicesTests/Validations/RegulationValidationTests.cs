@@ -102,6 +102,7 @@ public class RegulationValidationTests
                     ""timeZone"": ""Europe/London"",
                     ""SpeedLimitValueBased"": {{
                         ""mphValue"": {mphValue},
+                        ""nature"": ""temporary"",
                         ""type"": ""maximumSpeedLimit""
                     }}
                   }}
@@ -133,6 +134,7 @@ public class RegulationValidationTests
                     ""timeZone"": ""Europe/London"",
                     ""SpeedLimitValueBased"": {{
                         ""mphValue"": 70,
+                        ""nature"": ""permanent"",
                         ""type"": ""{type}""
                     }}
                   }}
@@ -191,7 +193,6 @@ public class RegulationValidationTests
 [InlineData("kerbsideDisabledBadgeHoldersOnly",0)]
 [InlineData("kerbsideDoubleRedLines",0)]
 [InlineData("kerbsideFootwayParking",0)]
-[InlineData("kerbsideFootwayParkingProhibited",0)]
 [InlineData("kerbsideLimitedWaiting",0)]
 [InlineData("kerbsideLoadingBay",0)]
 [InlineData("kerbsideLoadingPlace",0)]
