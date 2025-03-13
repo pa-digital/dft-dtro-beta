@@ -35,7 +35,8 @@ public class ProvisionValidationService : IProvisionValidationService
         }
 
         DateOnly validDate = default;
-        var hasComingIntoForceDates = provisions.Any(provision => provision.HasField(Constants.ComingIntoForceDate));
+        var hasComingIntoForceDates = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
+                                      provisions.Any(provision => provision.HasField(Constants.ComingIntoForceDate));
         if (hasComingIntoForceDates)
         {
             var comingIntoForceDates = provisions.Select(provision =>
@@ -71,7 +72,8 @@ public class ProvisionValidationService : IProvisionValidationService
             }
         }
 
-        var hasExpectedOccupancyDurations = provisions.Any(provision => provision.HasField(Constants.ExpectedOccupancyDuration));
+        var hasExpectedOccupancyDurations = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
+                                            provisions.Any(provision => provision.HasField(Constants.ExpectedOccupancyDuration));
         if (hasExpectedOccupancyDurations)
         {
             var expectedOccupancyDurations = provisions
@@ -112,7 +114,8 @@ public class ProvisionValidationService : IProvisionValidationService
             validationErrors.Add(error);
         }
 
-        var anyTemporaryOrderReportingPoints = orderReportingPoints.Any(orderReportingPoint => orderReportingPoint.StartsWith("ttro"));
+        var anyTemporaryOrderReportingPoints = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
+                                               orderReportingPoints.Any(orderReportingPoint => orderReportingPoint.StartsWith("ttro"));
         if (anyTemporaryOrderReportingPoints)
         {
             var actualStartOrStops = provisions
@@ -185,7 +188,8 @@ public class ProvisionValidationService : IProvisionValidationService
             }
         }
 
-        var anyExperimentalOrderReportingPoints = orderReportingPoints.Any(orderReportingPoint => orderReportingPoint.StartsWith("experimental"));
+        var anyExperimentalOrderReportingPoints = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
+                                                  orderReportingPoints.Any(orderReportingPoint => orderReportingPoint.StartsWith("experimental"));
         if (anyExperimentalOrderReportingPoints)
         {
             var experimentalVariations = provisions

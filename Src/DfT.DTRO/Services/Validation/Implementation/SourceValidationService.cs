@@ -36,7 +36,8 @@ public class SourceValidationService : ISourceValidationService
         }
 
         DateOnly comingIntoForceValidDate = default;
-        if (dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && source.HasField(Constants.ComingIntoForceDate))
+        if (dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
+            source.HasField(Constants.ComingIntoForceDate))
         {
             var comingIntoForceDate = source.GetValueOrDefault<string>(Constants.ComingIntoForceDate);
             var isValidDate = DateOnly.TryParse(comingIntoForceDate, out comingIntoForceValidDate);
@@ -90,7 +91,8 @@ public class SourceValidationService : ISourceValidationService
         }
 
         DateOnly validMadeDate = default;
-        if (dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && source.HasField(Constants.MadeDate))
+        if (dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
+            source.HasField(Constants.MadeDate))
         {
             var madeDate = source.GetValueOrDefault<string>(Constants.MadeDate);
             var isValidMadeDate = DateOnly.TryParse(madeDate, out validMadeDate);

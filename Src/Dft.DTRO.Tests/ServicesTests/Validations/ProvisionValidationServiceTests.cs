@@ -74,9 +74,6 @@ public class ProvisionValidationServiceTests
     }
 
     [Theory]
-    [InlineData(1, "3.3.0",0)]
-    [InlineData(0, "3.3.0",1)]
-    [InlineData(-1, "3.3.0",1)]
     [InlineData(1, "3.4.0",0)]
     [InlineData(0, "3.4.0",1)]
     [InlineData(-1, "3.4.0",1)]
@@ -308,11 +305,6 @@ public class ProvisionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("2024-10-03 20:00:00","3.3.0", 0)]
-    [InlineData("3024-10-03 20:00:00","3.3.0", 1)]
-    [InlineData("wrongDateFormat","3.3.0", 1)]
-    [InlineData("","3.3.0", 1)]
-    [InlineData(null,"3.3.0", 1)]
     [InlineData("2024-10-03 20:00:00","3.4.0", 0)]
     [InlineData("3024-10-03 20:00:00","3.4.0", 1)]
     [InlineData("wrongDateFormat","3.4.0", 1)]
@@ -348,11 +340,6 @@ public class ProvisionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("start","3.3.0", 0)]
-    [InlineData("stop","3.3.0", 0)]
-    [InlineData("wrong","3.3.0", 1)]
-    [InlineData("","3.3.0", 1)]
-    [InlineData(null,"3.3.0", 1)]
     [InlineData("start","3.4.0", 0)]
     [InlineData("stop","3.4.0", 0)]
     [InlineData("wrong","3.4.0", 1)]
@@ -428,9 +415,6 @@ public class ProvisionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("free text","3.3.0", 0)]
-    [InlineData("","3.3.0", 1)]
-    [InlineData(null,"3.3.0", 1)]
     [InlineData("free text","3.4.0", 0)]
     [InlineData("","3.4.0", 1)]
     [InlineData(null,"3.4.0", 1)]
@@ -466,9 +450,6 @@ public class ProvisionValidationServiceTests
     }
 
     [Theory]
-    [InlineData(1,"3.3.0", 0)]
-    [InlineData(0,"3.3.0", 1)]
-    [InlineData(null,"3.3.0", 1)]
     [InlineData(1,"3.4.0", 0)]
     [InlineData(0,"3.4.0", 1)]
     [InlineData(null,"3.4.0", 1)]
@@ -547,9 +528,6 @@ public class ProvisionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("2020-10-01","3.3.0", 0)]
-    [InlineData("0000-01-01","3.3.0", 1)]
-    [InlineData("3025-12-12","3.3.0", 1)]
     [InlineData("2020-10-01","3.4.0", 0)]
     [InlineData("0000-01-01","3.4.0", 1)]
     [InlineData("3025-12-12","3.4.0", 1)]
@@ -585,9 +563,6 @@ public class ProvisionValidationServiceTests
     }
 
     [Theory]
-    [InlineData("free text","3.3.0", 0)]
-    [InlineData("","3.3.0", 1)]
-    [InlineData(null,"3.3.0", 1)]
     [InlineData("free text","3.4.0", 0)]
     [InlineData("","3.4.0", 1)]
     [InlineData(null,"3.4.0", 1)]
