@@ -14,6 +14,62 @@
               "eventType": "start"
             }
           ],
+          "regulation": {
+            "isDynamic": false,
+            "timeZone": "Europe/London",
+            "generalRegulation": {
+              "regulationType": "dimensionMaximumHeightWithTRO"
+            },
+            "conditionSet": [
+              {
+                "operator": "and",
+                "conditionSet": [
+                  {
+                    "operator": "or",
+                    "conditions": [
+                      {
+                        "negate": false,
+                        "vehicleCharacteristics": {
+                          "maximumHeightCharacteristic": {
+                            "vehicleHeight": 2.5
+                          }
+                        }
+                      },
+                      {
+                        "negate": true,
+                        "vehicleCharacteristics": {
+                          "vehicleType": "bus"
+                        }
+                      },
+                      {
+                        "operator": "and",
+                        "condition": [
+                          {
+                            "negate": false,
+                            "vehicleCharacteristics": {
+                              "vehicleType": "taxi"
+                            }
+                          },
+                          {
+                            "negate": false,
+                            "vehicleCharacteristics": {
+                              "vehicleUsage": "access"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "condition": {
+                  "timeValidity": {
+                    "start": "2024-08-22T08:00:00",
+                    "end": "2024-08-22T20:00:00"
+                  }
+                }
+              }
+            ]
+          },
           "regulatedPlace": [
             {
               "description": "East Reach - Taunton",
@@ -32,68 +88,7 @@
                 }
               }
             }
-          ],
-          "regulation": {
-            "isDynamic": false,
-            "timeZone": "Europe/London",
-            "generalRegulation": {
-              "regulationType": "dimensionMaximumHeightWithTRO"
-            },
-            "conditionSet": [
-              {
-                "condition": {
-                  "negate": false,
-                  "timeValidity": {
-                    "start": "2024-08-22T08:00:00",
-                    "end": "2024-08-22T20:00:00"
-                  }
-                },
-                "conditionSet": [
-                  {
-                    "conditions": [
-                      {
-                        "negate": false,
-                        "vehicleCharacteristics": {
-                          "maximumHeightCharacteristic": {
-                            "vehicleHeight": 2.5
-                          }
-                        }
-                      },
-                      {
-                        "negate": true,
-                        "vehicleCharacteristics": {
-                          "vehicleType": "bus"
-                        }
-                      },
-                      {
-                        "conditionSet": [
-                          {
-                            "conditions": [
-                              {
-                                "negate": false,
-                                "vehicleCharacteristics": {
-                                  "vehicleType": "taxi"
-                                }
-                              },
-                              {
-                                "negate": false,
-                                "vehicleCharacteristics": {
-                                  "vehicleUsage": "access"
-                                }
-                              }
-                            ],
-                            "operator": "and"
-                          }
-                        ]
-                      }
-                    ],
-                    "operator": "or"
-                  }
-                ],
-                "operator": "and"
-              }
-            ]
-          }
+          ]
         }
       ],
       "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
