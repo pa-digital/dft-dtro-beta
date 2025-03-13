@@ -22,6 +22,11 @@ public static class EnumerableExtensions
         return enums.Select(it => it.GetDisplayName()).ToList();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="enumValue"></param>
+    /// <returns></returns>
     public static string GetDisplayName(this Enum enumValue)
     {
         var displayAttribute =

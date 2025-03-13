@@ -15,26 +15,26 @@ public class GeometryValidationService : IGeometryValidationService
         {
             var passedInOldGeometries = dtroSubmit
                 .Data
-                .GetValueOrDefault<IList<object>>("Source.Provision".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>($"{Constants.Source}.{Constants.Provision}".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>()
                 .SelectMany(provisions => provisions
-                    .GetValueOrDefault<IList<object>>("RegulatedPlace".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                    .GetValueOrDefault<IList<object>>($"{Constants.RegulatedPlace}".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .OfType<ExpandoObject>())
-            .Where(expandoObject => expandoObject.HasField("geometry"))
+            .Where(expandoObject => expandoObject.HasField(Constants.Geometry))
             .ToList();
 
-            var oldGeometries = passedInOldGeometries.Select(it => it.GetExpandoOrDefault("geometry")).ToList();
+            var oldGeometries = passedInOldGeometries.Select(it => it.GetExpandoOrDefault(Constants.Geometry)).ToList();
             foreach (var oldGeometry in oldGeometries)
             {
-                var version = oldGeometry.GetValueOrDefault<long>("version");
+                var version = oldGeometry.GetValueOrDefault<long>(Constants.Version);
                 if (version == 0)
                 {
                     var error = new SemanticValidationError
                     {
-                        Name = "Invalid geometry version",
+                        Name = $"Invalid geometry '{Constants.Version}'",
                         Message = "Version of geometry linked to a concrete instance of geometry",
-                        Path = "Source -> Provision -> RegulatedPlace -> Geometry -> version",
-                        Rule = $"Version number must be an integer and cannot be '{version}'"
+                        Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.RegulatedPlace} -> {Constants.Geometry} -> {Constants.Version}",
+                        Rule = $"{Constants.Version} must be an integer and cannot be negative or 0"
                     };
 
                     _errors.Add(error);
@@ -46,14 +46,14 @@ public class GeometryValidationService : IGeometryValidationService
                     switch (concreteGeometry)
                     {
                         case "PointGeometry":
-                            var point = selectedGeometry.GetValueOrDefault<string>("point");
+                            var point = selectedGeometry.GetValueOrDefault<string>(Constants.Point);
                             if (string.IsNullOrEmpty(point))
                             {
                                 var error = new SemanticValidationError
                                 {
                                     Name = "Invalid geometry coordinates",
-                                    Message = "Geometry coordinates linked to 'PointGeometry'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
+                                    Message = $"Geometry coordinates linked to '{Constants.PointGeometry}'",
+                                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.RegulatedPlace} -> {Constants.PointGeometry} -> {Constants.Point}",
                                     Rule = "The coordinates cannot be null"
                                 };
 
@@ -66,8 +66,8 @@ public class GeometryValidationService : IGeometryValidationService
                                 var error = new SemanticValidationError
                                 {
                                     Name = "Invalid geometry grid",
-                                    Message = "Geometry grid linked to 'PointGeometry'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
+                                    Message = $"Geometry grid linked to '{Constants.PointGeometry}'",
+                                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.RegulatedPlace} -> {Constants.PointGeometry} -> {Constants.Point}",
                                     Rule = $"The WKT string must start with '{Constants.Srid27700}'"
                                 };
 
@@ -79,23 +79,23 @@ public class GeometryValidationService : IGeometryValidationService
                                 var error = new SemanticValidationError
                                 {
                                     Name = "Invalid coordinates",
-                                    Message = "Geometry coordinates linked to 'PointGeometry'",
-                                    Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
+                                    Message = $"Geometry coordinates linked to '{Constants.PointGeometry}'",
+                                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.RegulatedPlace} -> {Constants.PointGeometry} -> {Constants.Point}",
                                     Rule = $"Coordinates '{point}' are incorrect or not within Great Britain"
                                 };
 
                                 _errors.Add(error);
                             }
 
-                            var representation = selectedGeometry.GetValueOrDefault<string>("representation");
+                            var representation = selectedGeometry.GetValueOrDefault<string>(Constants.Representation);
                             if (string.IsNullOrEmpty(representation))
                             {
                                 var error = new SemanticValidationError
                                 {
-                                    Name = "Missing representation",
+                                    Name = $"Missing '{Constants.Representation}'",
                                     Message = "Indicates the nature of the point location for a point representation of a regulated place.",
-                                    Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> representation",
-                                    Rule = "'representation' is missing"
+                                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.RegulatedPlace} -> {Constants.PointGeometry} -> {Constants.Representation}",
+                                    Rule = $"'{Constants.Representation}' is missing"
                                 };
 
                                 _errors.Add(error);
@@ -106,10 +106,10 @@ public class GeometryValidationService : IGeometryValidationService
                             {
                                 var error = new SemanticValidationError
                                 {
-                                    Name = "Invalid representation",
+                                    Name = $"Invalid '{Constants.Representation}'",
                                     Message = "Indicates the nature of the point location for a point representation of a regulated place.",
-                                    Path = "Source -> Provision -> RegulatedPlace -> PointGeometry -> representation",
-                                    Rule = $"'representation' must be one of '{string.Join(",", Constants.PointTypes)}'"
+                                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.RegulatedPlace} -> {Constants.PointGeometry} -> {Constants.Representation}",
+                                    Rule = $"'{Constants.Representation}' must be one of '{string.Join(",", Constants.PointTypes)}'"
                                 };
 
                                 _errors.Add(error);
@@ -117,7 +117,7 @@ public class GeometryValidationService : IGeometryValidationService
 
                             break;
                         case "LinearGeometry":
-                            var direction = selectedGeometry.GetValueOrDefault<string>("direction");
+                            var direction = selectedGeometry.GetValueOrDefault<string>(Constants.Direction);
                             if (string.IsNullOrEmpty(direction))
                             {
                                 var error = new SemanticValidationError
@@ -333,7 +333,7 @@ public class GeometryValidationService : IGeometryValidationService
                 }
             }
         }
-        else
+        else if (dtroSubmit.SchemaVersion >=new SchemaVersion("3.3.0") && dtroSubmit.SchemaVersion < new SchemaVersion("3.4.0"))
         {
             var passedInGeometries = dtroSubmit
                 .Data
@@ -655,7 +655,70 @@ public class GeometryValidationService : IGeometryValidationService
                 }
             }
         }
+        else
+        {
+            var regulatedPlaces = dtroSubmit
+                .Data
+                .GetValueOrDefault<IList<object>>($"{Constants.Source}.{Constants.Provision}"
+                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .OfType<ExpandoObject>()
+                .SelectMany(expandoObject => expandoObject
+                    .GetValue<IList<object>>($"{Constants.RegulatedPlace}"
+                        .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                    .OfType<ExpandoObject>())
+                .ToList();
 
+            var regulatedPlaceTypes = regulatedPlaces
+                .Select(regulatedPlace => regulatedPlace.GetValueOrDefault<string>(Constants.Type))
+                .ToList();
+            var areDiversionRoutes = regulatedPlaceTypes
+                .Any(RegulatedPlaceType.DiversionRoute.GetDisplayName().Equals);
+
+            if (areDiversionRoutes)
+            {
+                var passedInGeometries = dtroSubmit
+                    .Data
+                    .GetValueOrDefault<IList<object>>($"{Constants.Source}.{Constants.Provision}".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                    .OfType<ExpandoObject>()
+                    .SelectMany(provisions => provisions
+                        .GetValueOrDefault<IList<object>>($"{Constants.RegulatedPlace}".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                        .OfType<ExpandoObject>())
+                    .Where(expandoObject => Constants.ConcreteGeometries.Any(expandoObject.HasField))
+                    .ToList();
+
+                var hasDiversionTypes = regulatedPlaces
+                    .Any(regulatedPlace => regulatedPlace.HasField(Constants.DiversionTypeObj));
+
+                if (hasDiversionTypes)
+                {
+                    var diversionTypes = regulatedPlaces
+                        .Select(regulatedPlace =>
+                            regulatedPlace.GetExpandoOrDefault(Constants.DiversionTypeObj))
+                        .ToList();
+
+                    var diversionRouteTypes = diversionTypes
+                        .Select(diversionType => 
+                            diversionType.GetValueOrDefault<string>(Constants.DiversionType))
+                        .ToList();
+
+                    var areAcceptedDiversionRouteTypes = diversionRouteTypes.TrueForAll(diversionRouteType =>
+                        Constants.DiversionRouteTypes.Any(diversionRouteType.Equals));
+
+                    if (!areAcceptedDiversionRouteTypes)
+                    {
+                        var error = new SemanticValidationError
+                        {
+                            Name = $"Invalid '{Constants.DiversionType}'",
+                            Message = "",
+                            Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.RegulatedPlace} -> {Constants.Geometry} -> {Constants.DiversionTypeObj} -> {Constants.DiversionType}",
+                            Rule = $"'{Constants.DiversionType}' must be of type '{typeof(string)}' and one of {string.Join(",", Constants.DiversionRouteTypes)}"
+                        };
+
+                        _errors.Add(error);
+                    }
+                }
+            }
+        }
         return _errors;
     }
 

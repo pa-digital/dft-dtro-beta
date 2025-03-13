@@ -48,7 +48,10 @@ public static class Constants
     public static IEnumerable<string> EventTypes => typeof(EventType).GetDisplayNames<EventType>().ToList();
 
     public static IEnumerable<string> BywayTypes => typeof(BywayType).GetDisplayNames<BywayType>().ToList();
-    
+
+    public static IEnumerable<string> DiversionRouteTypes =>
+        typeof(DiversionRouteType).GetDisplayNames<DiversionRouteType>().ToList();
+
     public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
 
     public static List<int> MphValues => new() { 10, 20, 30, 40, 50, 60, 70 };
@@ -111,11 +114,21 @@ public static class Constants
 
     public static string Srid27700 => "SRID=27700";
 
+    public static string Geometry => "geometry";
+
+    public static string PointGeometry => "PointGeometry";
+
     public static string Point => "point";
+
+    public static string LinearGeometry => "LinearGeometry";
 
     public static string LineString => "linestring";
 
+    public static string PolygonObj => "Polygon";
+
     public static string Polygon => "polygon";
+
+    public static string DirectedLinear => "DirectedLinear";
 
     public static string DirectedLineString => "directedLineString";
   
@@ -195,4 +208,12 @@ public static class Constants
     public static string TramCar => "tramCar";
 
     public static string Nature => "nature";
+
+    public static string Representation => "representation";
+
+    public static string Direction => "direction";
+
+    public static string DiversionTypeObj => "DiversionType";
+
+    public static string DiversionType => "diversionType";
 }
