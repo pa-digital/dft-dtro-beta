@@ -1,3 +1,5 @@
+using DfT.DTRO.Models.Pagination;
+
 namespace Dft.DTRO.Tests.ServicesTests.Application;
 
 public class ApplicationServiceTests
@@ -65,7 +67,7 @@ public class ApplicationServiceTests
     }
 
     [Fact]
-    public async Task GetApplicationDetailsShouldReturnApplicationDetails()
+    public async Task GetApplicationShouldReturnApplication()
     {
         Guid appId = Guid.NewGuid();
         var expectedDetails = new ApplicationDetailsDto { AppId = appId, Name = "Test", Purpose = "Test" };
@@ -78,7 +80,7 @@ public class ApplicationServiceTests
     }
 
     [Fact]
-    public async Task GetApplicationListShouldReturnListOfApplications()
+    public async Task GetApplicationsShouldReturnApplications()
     {
         var expectedList = new List<ApplicationListDto> {
             new ApplicationListDto{ Id = Guid.NewGuid(), Name = "Test", Tra = "Test", Type = "Test" },
@@ -90,6 +92,29 @@ public class ApplicationServiceTests
 
         var result = await _applicationService.GetApplications(_email);
         Assert.Equal(expectedList, result);
+    }
+    
+    [Fact]
+    public async Task GetPendingApplicationsShouldReturnPendingApplications()
+    {
+        
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+
+        var expectedList = new List<ApplicationPendingListDto> {
+            new() { TraName = "TraName", Type = "Type", UserEmail = "UserEmail", UserName = "UserName" },
+            new() { TraName = "TraName2", Type = "Type2", UserEmail = "UserEmail2", UserName = "UserName2" }
+        };
+        
+        var paginatedResult = new PaginatedResult<ApplicationPendingListDto>(expectedList, 2);
+
+        var paginatedResponse = new PaginatedResponse<ApplicationPendingListDto>(expectedList, 1, 2);
+
+        _applicationDalMock
+            .Setup(dal => dal.GetPendingApplications(request))
+            .ReturnsAsync(paginatedResult);
+
+        var result = await _applicationService.GetPendingApplications(request);
+        Assert.Equal(paginatedResponse.TotalCount, result.TotalCount);
     }
 
     [Fact]
