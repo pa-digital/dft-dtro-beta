@@ -137,7 +137,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         private static string PrettyFormatJson(string json)
         {
-            if (string.IsNullOrWhiteSpace(json)) return "{}";
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                return "{}";
+            }
+
             try
             {
                 using JsonDocument jDoc = JsonDocument.Parse(json);

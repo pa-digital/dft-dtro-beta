@@ -17,12 +17,12 @@ public class EventSearchService : IEventSearchService
         {
             throw new InvalidOperationException("The datetime for the since field cannot be in the future.");
         }
-        
+
         if (search.To is not null && search.To > DateTime.Now)
         {
             throw new InvalidOperationException("The datetime for the to field cannot be in the future.");
         }
-        
+
         if (search.To is not null && search.Since is not null && search.To < search.Since)
         {
             throw new InvalidOperationException("The datetime for the to field cannot be before the since field.");

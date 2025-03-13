@@ -12,11 +12,10 @@ public class ApplicationService : IApplicationService
         _apigeeAppRepository = apigeeAppRepository;
     }
 
-    public async Task<bool> ValidateAppBelongsToUser(string userId, string appId)
+    public async Task<bool> ValidateAppBelongsToUser(string email, Guid appId)
     {
-        Guid appGuid = Guid.Parse(appId);
-        string user = await _applicationDal.GetApplicationUser(appGuid);
-        return user == userId;
+        string userEmail = await _applicationDal.GetApplicationUser(appId);
+        return userEmail == email;
     }
 
     public async Task<bool> ValidateApplicationName(string appName)
@@ -24,28 +23,32 @@ public class ApplicationService : IApplicationService
         return await _applicationDal.CheckApplicationNameDoesNotExist(appName);
     }
 
-    public async Task<ApplicationDetailsDto> GetApplicationDetails(string appId)
+    public async Task<ApplicationDetailsDto> GetApplication(Guid appId)
     {
         return await _applicationDal.GetApplicationDetails(appId);
     }
 
-    public async Task<List<ApplicationListDto>> GetApplicationList(string userId)
+    public async Task<List<ApplicationListDto>> GetApplications(string email)
     {
-        return await _applicationDal.GetApplicationList(userId);
+        return await _applicationDal.GetApplicationList(email);
     }
 
-    public async Task<bool> ActivateApplicationById(string applicationId)
+    public async Task<PaginatedResponse<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest)
     {
-        Guid appGuid = Guid.Parse(applicationId);
+        PaginatedResult<ApplicationInactiveListDto> paginatedResult =  await _applicationDal.GetInactiveApplications(paginatedRequest);
+        return new(paginatedResult.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResult.TotalCount);
+    }
+
+    public async Task<bool> ActivateApplicationById(Guid appId)
+    {
         // TODO: approve application on Apigee
-        return await _applicationDal.ActivateApplicationById(appGuid);
+        return await _applicationDal.ActivateApplicationById(appId);
     }
 
-    public async Task<App> CreateApplication(AppInput appInput)
+    public async Task<App> CreateApplication(string email, AppInput appInput)
     {
-        var username = appInput.Username;
         var developerAppInput = JsonHelper.ConvertObject<AppInput, ApigeeDeveloperAppInput>(appInput);
-        var developerApp = await _apigeeAppRepository.CreateApp(username, developerAppInput);
+        var developerApp = await _apigeeAppRepository.CreateApp(email, developerAppInput);
         return JsonHelper.ConvertObject<ApigeeDeveloperApp, App>(developerApp);
     }
 }

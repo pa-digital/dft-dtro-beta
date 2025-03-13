@@ -6,7 +6,7 @@
 [DataContract]
 public class ApigeeDeveloperAppInput
 {
-        
+
     /// <summary>
     /// app name.
     /// </summary>

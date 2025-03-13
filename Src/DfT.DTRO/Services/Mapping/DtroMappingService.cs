@@ -102,9 +102,9 @@ public class DtroMappingService : IDtroMappingService
             SchemaVersion = dtro.SchemaVersion,
             Data = dtro.Data
         };
-    
+
     /// <inheritdoc cref="IDtroMappingService"/>
-    public TraFindAllResponse MapToTraFindAllResponse(TrafficRegulationAuthority tra) => 
+    public TraFindAllResponse MapToTraFindAllResponse(TrafficRegulationAuthority tra) =>
         new()
         {
             Name = tra.Name,

@@ -29,6 +29,6 @@ public class SystemConfigService : ISystemConfigService
     {
         return await _systemConfigDal.UpdateSystemConfigAsync(systemConfigRequest);
     }
-    
+
 
 }

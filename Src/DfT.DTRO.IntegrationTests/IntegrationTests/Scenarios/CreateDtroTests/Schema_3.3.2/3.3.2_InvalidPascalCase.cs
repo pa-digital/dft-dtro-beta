@@ -1,7 +1,7 @@
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
+using Newtonsoft.Json;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelper;
-using Newtonsoft.Json;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_2
 {
@@ -53,7 +53,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
             dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(dtroResponseJson)!;
             string responseMessage = jsonDeserialised.message.ToString();
             string responseError = jsonDeserialised.error.ToString();
-            Assert.Equal(responseMessage, "Case naming convention exception");
+            Assert.Equal("Case naming convention exception", responseMessage);
             Assert.StartsWith("All property names must conform to camel case naming conventions. The following properties violate this: [Source, Provision, RegulatedPlace", responseError);
         }
 
@@ -83,7 +83,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_3_
             dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(dtroResponseJson)!;
             string responseMessage = jsonDeserialised.message.ToString();
             string responseError = jsonDeserialised.error.ToString();
-            Assert.Equal(responseMessage, "Case naming convention exception");
+            Assert.Equal("Case naming convention exception", responseMessage);
             Assert.StartsWith("All property names must conform to camel case naming conventions. The following properties violate this: [Source, Provision, RegulatedPlace", responseError);
         }
     }

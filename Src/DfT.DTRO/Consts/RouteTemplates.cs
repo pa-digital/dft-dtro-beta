@@ -6,14 +6,15 @@ public static class RouteTemplates
     public const string ApplicationsBase = "/applications";
     public const string ApplicationsCreate = ApplicationsBase;
     public const string ValidateApplicationName = ApplicationsBase + "/validateName";
-    public const string GetApplicationDetails = ApplicationsBase + "/details";
-    public const string GetApplications = ApplicationsBase + "/list";
-    public const string ActivateApplication = ApplicationsBase + "/activate";
-    
+    public const string ApplicationsFindById = ApplicationsBase + "/{appId:guid}";
+    public const string ApplicationsFindAll = ApplicationsBase;
+    public const string ApplicationsFindAllInactive = ApplicationsBase + "/inactive";
+    public const string ActivateApplication = ApplicationsBase + "/{appId:guid}" + "/activate";
+
     // Auth
     public const string AuthBase = "/oauth";
     public const string AuthGetToken = AuthBase + "/token";
-    
+
     // Dtros
     public const string DtrosBase = "/dtros";
     public const string DtrosCreateFromFile = DtrosBase + "/createFromFile";
@@ -76,14 +77,13 @@ public static class RouteTemplates
     public const string SystemConfigBase = "/systemConfig";
     public const string SystemConfigFind = SystemConfigBase;
     public const string SystemConfigUpdateFromBody = SystemConfigBase + "/updateFromBody";
-    
+
     // Tras
     public const string TrasBase = "/tras";
     public const string TrasFindAll = TrasBase;
 
     // Users
-    public const string  UserBase = "/users";
+    public const string UserBase = "/users";
     public const string UserDelete = UserBase + "/delete";
-    
-}
 
+}

@@ -5,12 +5,12 @@ namespace DfT.DTRO.Apis.Clients;
 public class SecretManagerClient : ISecretManagerClient
 {
     private readonly IConfiguration _configuration;
-    
+
     public SecretManagerClient(IConfiguration configuration)
     {
         _configuration = configuration;
     }
-    
+
     public string GetSecret(string secretName)
     {
         var apiProject = _configuration.GetValue<string>("ApiSettings:ApiProject");

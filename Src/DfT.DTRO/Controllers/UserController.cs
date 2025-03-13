@@ -6,7 +6,6 @@ namespace DfT.DTRO.Controllers;
 [Consumes("application/json")]
 [Produces("application/json")]
 [Tags("Users")]
-[TokenValidation]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;

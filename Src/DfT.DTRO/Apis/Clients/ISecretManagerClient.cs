@@ -8,5 +8,5 @@ public interface ISecretManagerClient
     /// <param name="secretName">secret name</param>
     /// <returns>App</returns>
     string GetSecret(string secretName);
-    
+
 }

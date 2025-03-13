@@ -98,7 +98,7 @@ public class CasingValidationService
                     continue;
                 }
 
-                if (casing == Casing.Pascal && keysToConvert.Contains(key.ToLower()) &&  IsObjectOrArray(kvp.Value) && !func(key))
+                if (casing == Casing.Pascal && keysToConvert.Contains(key.ToLower()) && IsObjectOrArray(kvp.Value) && !func(key))
                 {
                     invalidProperties.Add(key);
                 }
