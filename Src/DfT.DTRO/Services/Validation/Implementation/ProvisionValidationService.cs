@@ -1,4 +1,7 @@
-﻿namespace DfT.DTRO.Services.Validation.Implementation;
+﻿using Google.Type;
+using DateTime = System.DateTime;
+
+namespace DfT.DTRO.Services.Validation.Implementation;
 
 /// <inheritdoc cref="IProvisionValidationService"/>
 public class ProvisionValidationService : IProvisionValidationService
@@ -134,8 +137,8 @@ public class ProvisionValidationService : IProvisionValidationService
                 .Select(actualStartOrStop => actualStartOrStop.GetValueOrDefault<string>(Constants.EventAt))
                 .ToList();
 
-            DateTime dateTime = default;
-            var areValidEventAts = eventAts.TrueForAll(eventAt => DateTime.TryParse(eventAt, out dateTime));
+            DateTime eventAtValidDate = default;
+            var areValidEventAts = eventAts.TrueForAll(eventAt => DateTime.TryParse(eventAt, out eventAtValidDate));
             if (!areValidEventAts)
             {
                 var error = new SemanticValidationError
@@ -149,7 +152,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 validationErrors.Add(error);
             }
 
-            var isInTheFuture = dateTime > _clock.UtcNow;
+            var isInTheFuture = eventAtValidDate > _clock.UtcNow;
             if (isInTheFuture)
             {
                 var error = new SemanticValidationError
@@ -262,6 +265,37 @@ public class ProvisionValidationService : IProvisionValidationService
                     Name = $"Invalid '{Constants.ActualDateOfCessation}'",
                     Message = "Description of the effect of the change of the Experimental Order",
                     Rule = $"'{Constants.ActualDateOfCessation}' must be present and of type '{typeof(string)}' and formatted as date-time",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalCessation} -> {Constants.ActualDateOfCessation}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            DateOnly actualDateOfCessationValidDate = default;
+            var isActualDateOfCessationValid = actualDateOfCessations.Any(actualDateOfCessation =>
+                DateOnly.TryParse(actualDateOfCessation, out actualDateOfCessationValidDate));
+
+            if (!isActualDateOfCessationValid)
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.ActualDateOfCessation}'",
+                    Message = "The date that the Experimental Order was ceased",
+                    Rule = $"'{Constants.ActualDateOfCessation}' must be of type '{typeof(string)}' and formatted as date-time",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalCessation} -> {Constants.ActualDateOfCessation}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            var isInTheFuture = actualDateOfCessationValidDate > DateOnly.FromDateTime(_clock.UtcNow.DateTime);
+            if (isInTheFuture)
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.ActualDateOfCessation}'",
+                    Message = "The date that the Experimental Order was ceased",
+                    Rule = $"'{Constants.ActualDateOfCessation}' can not be in the future",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalCessation} -> {Constants.ActualDateOfCessation}"
                 };
 

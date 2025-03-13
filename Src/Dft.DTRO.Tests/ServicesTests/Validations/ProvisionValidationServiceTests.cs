@@ -162,7 +162,7 @@ public class ProvisionValidationServiceTests
                             ""expectedDuration"": 10
                         }},
                         ""ExperimentalCessation"": {{
-                            ""actualDateOfCessation"": ""2024-10-03 10:00:00"",
+                            ""actualDateOfCessation"": ""2024-10-03"",
                             ""natureOfCessation"": ""free text""
                         }}
                     }}
@@ -416,6 +416,201 @@ public class ProvisionValidationServiceTests
                         ""ExperimentalCessation"": {{
                             ""actualDateOfCessation"": ""2020-12-31"",
                             ""natureOfCessation"": ""free text""
+                        }}
+                    }}
+                ]
+
+            }}
+        }}", new SchemaVersion(version));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData("free text","3.3.0", 0)]
+    [InlineData("","3.3.0", 1)]
+    [InlineData(null,"3.3.0", 1)]
+    [InlineData("free text","3.4.0", 0)]
+    [InlineData("","3.4.0", 1)]
+    [InlineData(null,"3.4.0", 1)]
+    public void ValidateEffectOfChangeWithinExperimentalVariation(string effectOfChange, string version, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""actionType"": ""new"",
+                        ""comingIntoForceDate"": ""2020-01-01"",
+                        ""expectedOccupancyDuration"": 10,
+                        ""orderReportingPoint"": ""experimentalNoticeOfMaking"",
+                        ""provisionDescription"": ""some free text"",
+                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E"",
+                        ""ExperimentalVariation"": {{
+                            ""effectOfChange"": ""{effectOfChange}"",
+                            ""expectedDuration"": 10
+                        }},
+                        ""ExperimentalCessation"": {{
+                            ""actualDateOfCessation"": ""2020-12-31"",
+                            ""natureOfCessation"": ""free text""
+                        }}
+                    }}
+                ]
+
+            }}
+        }}", new SchemaVersion(version));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData(1,"3.3.0", 0)]
+    [InlineData(0,"3.3.0", 1)]
+    [InlineData(null,"3.3.0", 1)]
+    [InlineData(1,"3.4.0", 0)]
+    [InlineData(0,"3.4.0", 1)]
+    [InlineData(null,"3.4.0", 1)]
+    public void ValidateExpectedDurationWithinExperimentalVariation(int expectedDuration, string version, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""actionType"": ""new"",
+                        ""comingIntoForceDate"": ""2020-01-01"",
+                        ""expectedOccupancyDuration"": 10,
+                        ""orderReportingPoint"": ""experimentalNoticeOfMaking"",
+                        ""provisionDescription"": ""some free text"",
+                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E"",
+                        ""ExperimentalVariation"": {{
+                            ""effectOfChange"": ""free text"",
+                            ""expectedDuration"": {expectedDuration}
+                        }},
+                        ""ExperimentalCessation"": {{
+                            ""actualDateOfCessation"": ""2020-12-31"",
+                            ""natureOfCessation"": ""free text""
+                        }}
+                    }}
+                ]
+
+            }}
+        }}", new SchemaVersion(version));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+
+
+
+    [Theory]
+    [InlineData("experimentalAmendment","3.3.0", 0)]
+    [InlineData("experimentalMakingPermanent","3.3.0", 0)]
+    [InlineData("experimentalNoticeOfMaking","3.3.0", 0)]
+    [InlineData("experimentalRevocation","3.3.0", 0)]
+    [InlineData("experimentalAmendment","3.4.0", 0)]
+    [InlineData("experimentalMakingPermanent","3.4.0", 0)]
+    [InlineData("experimentalNoticeOfMaking","3.4.0", 0)]
+    [InlineData("experimentalRevocation","3.4.0", 0)]
+    public void ValidateExperimentalCessationWhenOrderReportingPointIsExperimental(string orderReportingPointType, string version, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""actionType"": ""new"",
+                        ""comingIntoForceDate"": ""2020-01-01"",
+                        ""expectedOccupancyDuration"": 10,
+                        ""orderReportingPoint"": ""{orderReportingPointType}"",
+                        ""provisionDescription"": ""some free text"",
+                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E"",
+                        ""ExperimentalVariation"": {{
+                            ""effectOfChange"": ""free text"",
+                            ""expectedDuration"": 10
+                        }},
+                        ""ExperimentalCessation"": {{
+                            ""actualDateOfCessation"": ""2020-12-31"",
+                            ""natureOfCessation"": ""free text""
+                        }}
+                    }}
+                ]
+
+            }}
+        }}", new SchemaVersion(version));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData("2020-10-01","3.3.0", 0)]
+    [InlineData("0000-01-01","3.3.0", 1)]
+    [InlineData("3025-12-12","3.3.0", 1)]
+    [InlineData("2020-10-01","3.4.0", 0)]
+    [InlineData("0000-01-01","3.4.0", 1)]
+    [InlineData("3025-12-12","3.4.0", 1)]
+    public void ValidateActualDateOfCessationWithExperimentalCessation(string actualDateOfCessation, string version, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""actionType"": ""new"",
+                        ""comingIntoForceDate"": ""2020-01-01"",
+                        ""expectedOccupancyDuration"": 10,
+                        ""orderReportingPoint"": ""experimentalNoticeOfMaking"",
+                        ""provisionDescription"": ""some free text"",
+                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E"",
+                        ""ExperimentalVariation"": {{
+                            ""effectOfChange"": ""free text"",
+                            ""expectedDuration"": 10
+                        }},
+                        ""ExperimentalCessation"": {{
+                            ""actualDateOfCessation"": ""{actualDateOfCessation}"",
+                            ""natureOfCessation"": ""free text""
+                        }}
+                    }}
+                ]
+
+            }}
+        }}", new SchemaVersion(version));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData("free text","3.3.0", 0)]
+    [InlineData("","3.3.0", 1)]
+    [InlineData(null,"3.3.0", 1)]
+    [InlineData("free text","3.4.0", 0)]
+    [InlineData("","3.4.0", 1)]
+    [InlineData(null,"3.4.0", 1)]
+    public void ValidateNatureOfCessationWithinExperimentalVariation(string natureOfCessation, string version, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""actionType"": ""new"",
+                        ""comingIntoForceDate"": ""2020-01-01"",
+                        ""expectedOccupancyDuration"": 10,
+                        ""orderReportingPoint"": ""experimentalNoticeOfMaking"",
+                        ""provisionDescription"": ""some free text"",
+                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E"",
+                        ""ExperimentalVariation"": {{
+                            ""effectOfChange"": ""free text"",
+                            ""expectedDuration"": 10
+                        }},
+                        ""ExperimentalCessation"": {{
+                            ""actualDateOfCessation"": ""2020-12-31"",
+                            ""natureOfCessation"": ""{natureOfCessation}""
                         }}
                     }}
                 ]
