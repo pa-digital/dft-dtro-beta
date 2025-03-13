@@ -1,3 +1,4 @@
+using DfT.DTRO.Models.Pagination;
 using Dft.DTRO.Tests.Fixtures;
 
 public class ApplicationControllerTests : IClassFixture<ApplicationControllerTestFixture>
@@ -5,6 +6,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
     private readonly Mock<IApplicationService> _mockApplicationService;
     private readonly ApplicationController _controller;
     private readonly ApplicationControllerTestFixture _fixture;
+    private readonly string _xEmail;
 
     public ApplicationControllerTests(ApplicationControllerTestFixture fixture)
     {
@@ -15,6 +17,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
         _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, mockLoggingExtension.Object);
         _fixture = fixture;
         _controller.ControllerContext = _fixture.ControllerContext;
+        _xEmail = "user@test.com";
     }
 
     [Fact]
@@ -47,66 +50,48 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
     }
 
     [Fact]
-    public async Task GetApplicationDetailsValidRequestReturnsOk()
+    public async Task FindApplicationByIdValidRequestReturnsOk()
     {
-        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
-        Guid appGuid = Guid.NewGuid();
-        string appId = appGuid.ToString();
+        Guid appId = Guid.NewGuid();
 
-        var request = new ApplicationDetailsRequest { appId = appId };
-        ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appGuid, Purpose = "Test" };
-        _mockApplicationService.Setup(service => service.GetApplicationDetails(appId)).ReturnsAsync(mockAppDetails);
-        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(userId, appId)).ReturnsAsync(true);
+        ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appId, Purpose = "Test" };
+        _mockApplicationService.Setup(service => service.GetApplication(appId)).ReturnsAsync(mockAppDetails);
+        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(true);
 
-        var result = await _controller.GetApplicationDetails(request);
+        var result = await _controller.FindApplicationById(_xEmail, appId);
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
     }
 
     [Fact]
-    public async Task GetApplicationDetailsNotUsersAppReturnsForbidden()
+    public async Task FindApplicationByIdNotUsersAppReturnsForbidden()
     {
-        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
-        Guid appGuid = Guid.NewGuid();
-        string appId = appGuid.ToString();
+        Guid appId = Guid.NewGuid();
+        
+        ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appId, Purpose = "Test" };
+        _mockApplicationService.Setup(service => service.GetApplication(appId)).ReturnsAsync(mockAppDetails);
+        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(false);
 
-        var request = new ApplicationDetailsRequest { appId = appId };
-        ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appGuid, Purpose = "Test" };
-        _mockApplicationService.Setup(service => service.GetApplicationDetails(appId)).ReturnsAsync(mockAppDetails);
-        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(userId, appId)).ReturnsAsync(false);
-
-        var result = await _controller.GetApplicationDetails(request);
+        var result = await _controller.FindApplicationById(_xEmail, appId);
         var forbiddenRequestResult = Assert.IsType<ForbidResult>(result);
     }
 
     [Fact]
-    public async Task GetApplicationDetailsInvalidAppIdReturnsBadRequest()
+    public async Task FindApplicationByIdInvalidAppIdReturnsBadRequest()
     {
+        Guid appId = Guid.NewGuid();
 
-        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
+        ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appId, Purpose = "Test" };
+        _mockApplicationService.Setup(service => service.GetApplication(appId)).ReturnsAsync((ApplicationDetailsDto)null);
+        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(true);
 
-        var mockHttpContext = new Mock<HttpContext>();
-        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
-        _controller.ControllerContext = new ControllerContext()
-        {
-            HttpContext = mockHttpContext.Object
-        };
-
-        Guid appGuid = Guid.NewGuid();
-        string appId = appGuid.ToString();
-
-        var request = new ApplicationDetailsRequest { appId = appId };
-        ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appGuid, Purpose = "Test" };
-        _mockApplicationService.Setup(service => service.GetApplicationDetails(appId)).ReturnsAsync((ApplicationDetailsDto)null);
-        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(userId, appId)).ReturnsAsync(true);
-
-        var result = await _controller.GetApplicationDetails(request);
+        var result = await _controller.FindApplicationById(_xEmail, appId);
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal(400, badRequestResult.StatusCode);
     }
 
     [Fact]
-    public async Task GetApplicationsValidUserReturnsOk()
+    public async Task FindApplicationsValidUserReturnsOk()
     {
         var applicationListDtos = new List<ApplicationListDto>
         {
@@ -114,53 +99,38 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
             new ApplicationListDto { Id = Guid.NewGuid(), Name = "App 2", Type = "Test", Tra = "Test" },
             new ApplicationListDto { Id = Guid.NewGuid(), Name = "App 3", Type = "Test", Tra = "Test" }
         };
-        _mockApplicationService.Setup(service => service.GetApplicationList(It.IsAny<string>())).ReturnsAsync(applicationListDtos);
-        var result = await _controller.GetApplications();
+        _mockApplicationService.Setup(service => service.GetApplications(It.IsAny<string>())).ReturnsAsync(applicationListDtos);
+        var result = await _controller.FindApplications(_xEmail);
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
     }
 
     [Fact]
-    public async Task ActivateApplicationNullRequestReturnsBadRequest()
-    {
-        var result = await _controller.ActivateApplication(null);
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(400, badRequestResult.StatusCode);
-    }
-
-    [Fact]
-    public async Task ActivateApplicationEmptyAppIdReturnsBadRequest()
-    {
-        var request = new ApplicationDetailsRequest { appId = "" };
-        var result = await _controller.ActivateApplication(request);
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(400, badRequestResult.StatusCode);
-    }
-
-    [Fact]
     public async Task ActivateApplicationAppDoesNotBelongToUserReturnsForbid()
     {
-        var request = new ApplicationDetailsRequest { appId = "valid-app-id" };
+        Guid appId = Guid.NewGuid();
+
         _mockApplicationService
-            .Setup(s => s.ValidateAppBelongsToUser("test-user-id", "valid-app-id"))
+            .Setup(s => s.ValidateAppBelongsToUser(_xEmail, appId))
             .ReturnsAsync(false);
 
-        var result = await _controller.ActivateApplication(request);
+        var result = await _controller.ActivateApplication(_xEmail, appId);
         Assert.IsType<ForbidResult>(result);
     }
 
     [Fact]
     public async Task ActivateApplicationSuccessfulActivationReturnsOk()
     {
-        var request = new ApplicationDetailsRequest { appId = "valid-app-id" };
+        Guid appId = Guid.NewGuid();
+
         _mockApplicationService
-            .Setup(s => s.ValidateAppBelongsToUser("user@test.com", "valid-app-id"))
+            .Setup(s => s.ValidateAppBelongsToUser(_xEmail, appId))
             .ReturnsAsync(true);
         _mockApplicationService
-            .Setup(s => s.ActivateApplicationById("valid-app-id"))
+            .Setup(s => s.ActivateApplicationById(appId))
             .ReturnsAsync(true);
 
-        var result = await _controller.ActivateApplication(request);
+        var result = await _controller.ActivateApplication(_xEmail, appId);
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
     }
@@ -168,15 +138,16 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
     [Fact]
     public async Task ActivateApplicationInvalidOperationExceptionReturnsInternalServerError()
     {
-        var request = new ApplicationDetailsRequest { appId = "valid-app-id" };
+        Guid appId = Guid.NewGuid();
+
         _mockApplicationService
-            .Setup(s => s.ValidateAppBelongsToUser("user@test.com", "valid-app-id"))
+            .Setup(s => s.ValidateAppBelongsToUser(_xEmail, appId))
             .ReturnsAsync(true);
         _mockApplicationService
-            .Setup(s => s.ActivateApplicationById("valid-app-id"))
+            .Setup(s => s.ActivateApplicationById(appId))
             .ThrowsAsync(new InvalidOperationException("Database error"));
 
-        var result = await _controller.ActivateApplication(request);
+        var result = await _controller.ActivateApplication(_xEmail, appId);
         var objectResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, objectResult.StatusCode);
     }
@@ -184,25 +155,78 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
     [Fact]
     public async Task ActivateApplicationUnexpectedExceptionReturnsInternalServerError()
     {
-        var userId = _controller.ControllerContext.HttpContext.Items["UserId"] as string;
+        Guid appId = Guid.NewGuid();
 
-        var mockHttpContext = new Mock<HttpContext>();
-        mockHttpContext.Setup(ctx => ctx.Items["UserId"]).Returns(userId);
-        _controller.ControllerContext = new ControllerContext()
-        {
-            HttpContext = mockHttpContext.Object
-        };
-
-        var request = new ApplicationDetailsRequest { appId = "valid-app-id" };
         _mockApplicationService
-            .Setup(s => s.ValidateAppBelongsToUser("user@test.com", "valid-app-id"))
+            .Setup(s => s.ValidateAppBelongsToUser(_xEmail, appId))
             .ReturnsAsync(true);
         _mockApplicationService
-            .Setup(s => s.ActivateApplicationById("valid-app-id"))
+            .Setup(s => s.ActivateApplicationById(appId))
             .ThrowsAsync(new Exception("Something went wrong"));
 
-        var result = await _controller.ActivateApplication(request);
+        var result = await _controller.ActivateApplication(_xEmail, appId);
         var objectResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, objectResult.StatusCode);
+    }
+    
+    [Fact]
+    public async Task GetInactiveApplicationsValidUserReturnsOk()
+    {
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+
+        var applications = new List<ApplicationInactiveListDto>
+        {
+            new() { TraName = "TraName", Type = "Type", UserEmail = "UserEmail", UserName = "UserName" }
+        };
+
+        _mockApplicationService
+            .Setup(it => it.GetInactiveApplications(request))
+            .ReturnsAsync(() => new PaginatedResponse<ApplicationInactiveListDto>(applications, 1, applications.Count));
+
+        var actual = await _controller.FindInactiveApplications(request);
+        var okResult = Assert.IsType<OkObjectResult>(actual.Result);
+        Assert.Equal(200, okResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetPendingApplicationsThrowsArgumentNullException()
+    {
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+
+        _mockApplicationService
+            .Setup(service => service.GetInactiveApplications(request))
+            .ThrowsAsync(new ArgumentNullException());
+
+        var actual = await _controller.FindInactiveApplications(request);
+        var requestResult = Assert.IsType<BadRequestObjectResult>(actual.Result);
+        Assert.Equal(400, requestResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task  GetPendingApplicationsThrowsInvalidOperationException()
+    {
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+
+        _mockApplicationService
+            .Setup(service => service.GetInactiveApplications(request))
+            .ThrowsAsync(new InvalidOperationException());
+
+        var actual = await _controller.FindInactiveApplications(request);
+        var requestResult = Assert.IsType<ObjectResult>(actual.Result);
+        Assert.Equal(500, requestResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetPendingApplicationsThrowsException()
+    {
+        var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+
+        _mockApplicationService
+            .Setup(service => service.GetInactiveApplications(request))
+            .ThrowsAsync(new Exception());
+
+        var actual = await _controller.FindInactiveApplications(request);
+        var requestResult = Assert.IsType<ObjectResult>(actual.Result);
+        Assert.Equal(500, requestResult.StatusCode);
     }
 }

@@ -1,3 +1,5 @@
+using DfT.DTRO.Models.Pagination;
+
 namespace Dft.DTRO.Tests.DALTests
 {
     public class ApplicationDalTests : IDisposable
@@ -114,7 +116,7 @@ namespace Dft.DTRO.Tests.DALTests
         public async Task GetApplicationDetailsShouldReturnApplicationDetailsWhenAppExists()
         {
             var app = _context.Applications.First();
-            var appId = app.Id.ToString();
+            var appId = app.Id;
 
             var details = await _applicationDal.GetApplicationDetails(appId);
             Assert.NotNull(details);
@@ -125,7 +127,8 @@ namespace Dft.DTRO.Tests.DALTests
         [Fact]
         public async Task GetApplicationDetailsShouldReturnNullWhenInvalidAppId()
         {
-            var details = await _applicationDal.GetApplicationDetails("invalid-guid");
+            Guid appId = Guid.NewGuid();
+            var details = await _applicationDal.GetApplicationDetails(appId);
             Assert.Null(details);
         }
 
@@ -185,6 +188,14 @@ namespace Dft.DTRO.Tests.DALTests
 
             var result = await _applicationDal.ActivateApplicationById(application.Id);
             Assert.False(result);
+        }
+
+        [Fact]
+        public async Task GetInactiveApplications_ShouldReturnInactiveApplicationForUserAdminUser()
+        {
+            var request = new PaginatedRequest { Page = 1, PageSize = 1 };
+            var apps = await _applicationDal.GetInactiveApplications(request);
+            Assert.Equal(1, apps.TotalCount);
         }
 
         public void Dispose()
