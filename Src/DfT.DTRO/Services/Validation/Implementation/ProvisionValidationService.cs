@@ -1,10 +1,10 @@
-﻿using static Google.Rpc.Context.AttributeContext.Types;
-
-namespace DfT.DTRO.Services.Validation.Implementation;
+﻿namespace DfT.DTRO.Services.Validation.Implementation;
 
 /// <inheritdoc cref="IProvisionValidationService"/>
 public class ProvisionValidationService : IProvisionValidationService
 {
+    private readonly SystemClock _clock = new();
+
     /// <inheritdoc cref="IProvisionValidationService"/>
     public List<SemanticValidationError> Validate(DtroSubmit dtroSubmit)
     {
@@ -54,7 +54,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 validationErrors.Add(error);
             }
 
-            if (validDate > DateOnly.FromDateTime(DateTime.UtcNow))
+            if (validDate > DateOnly.FromDateTime(_clock.UtcNow.DateTime))
             {
                 var error = new SemanticValidationError
                 {
@@ -113,7 +113,7 @@ public class ProvisionValidationService : IProvisionValidationService
         if (anyTemporaryOrderReportingPoints)
         {
             var actualStartOrStops = provisions
-                .Select(provision => provision.GetValueOrDefault<IList<object>>(Constants.ActualStartOrStop))
+                .SelectMany(provision => provision.GetValueOrDefault<IList<object>>(Constants.ActualStartOrStop))
                 .Cast<ExpandoObject>()
                 .ToList();
 
@@ -134,7 +134,8 @@ public class ProvisionValidationService : IProvisionValidationService
                 .Select(actualStartOrStop => actualStartOrStop.GetValueOrDefault<string>(Constants.EventAt))
                 .ToList();
 
-            var areValidEventAts = eventAts.TrueForAll(eventAt => DateTime.TryParse(eventAt, out var dateTime));
+            DateTime dateTime = default;
+            var areValidEventAts = eventAts.TrueForAll(eventAt => DateTime.TryParse(eventAt, out dateTime));
             if (!areValidEventAts)
             {
                 var error = new SemanticValidationError
@@ -142,6 +143,20 @@ public class ProvisionValidationService : IProvisionValidationService
                     Name = $"Invalid '{Constants.EventAt}'",
                     Message = "Indicates the date / time of the related event",
                     Rule = $"'{Constants.EventAt}' must be of type '{typeof(string)}' and formatted as date-time",
+                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventAt}"
+                };
+
+                validationErrors.Add(error);
+            }
+
+            var isInTheFuture = dateTime > _clock.UtcNow;
+            if (isInTheFuture)
+            {
+                var error = new SemanticValidationError
+                {
+                    Name = $"Invalid '{Constants.EventAt}'",
+                    Message = "Indicates the date / time of the related event",
+                    Rule = $"'{Constants.EventAt}' can not be in the future",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventAt}"
                 };
 

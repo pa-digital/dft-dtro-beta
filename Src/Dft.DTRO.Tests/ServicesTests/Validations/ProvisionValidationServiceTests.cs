@@ -1,4 +1,6 @@
-﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
+﻿using DfT.DTRO.Enums;
+
+namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
 public class ProvisionValidationServiceTests
 {
@@ -31,7 +33,7 @@ public class ProvisionValidationServiceTests
                         ""actionType"": ""{actionType}"",
                         ""comingIntoForceDate"": ""2020-01-01"",
                         ""expectedOccupancyDuration"": 10,
-                        ""orderReportingPoint"": ""ttroTtmoRevocation"",
+                        ""orderReportingPoint"": ""specialEventOrderNoticeOfMaking"",
                         ""provisionDescription"": ""some free text"",
                         ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E""
                     }}
@@ -58,7 +60,7 @@ public class ProvisionValidationServiceTests
                         ""actionType"": ""new"",
                         ""comingIntoForceDate"": ""{comingIntoForceDate}"",
                         ""expectedOccupancyDuration"": 10,
-                        ""orderReportingPoint"": ""ttroTtmoRevocation"",
+                        ""orderReportingPoint"": ""specialEventOrderNoticeOfMaking"",
                         ""provisionDescription"": ""some free text"",
                         ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E""
                     }}
@@ -88,7 +90,7 @@ public class ProvisionValidationServiceTests
                         ""actionType"": ""new"",
                         ""comingIntoForceDate"": ""2020-01-01"",
                         ""expectedOccupancyDuration"": {expectedOccupancyDuration},
-                        ""orderReportingPoint"": ""ttroTtmoRevocation"",
+                        ""orderReportingPoint"": ""specialEventOrderNoticeOfMaking"",
                         ""provisionDescription"": ""some free text"",
                         ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E""
                     }}
@@ -148,7 +150,21 @@ public class ProvisionValidationServiceTests
                         ""expectedOccupancyDuration"": 10,
                         ""orderReportingPoint"": ""{orderReportingPointType}"",
                         ""provisionDescription"": ""some free text"",
-                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E""
+                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E"",
+                        ""ActualStartOrStop"": [
+                            {{
+                                ""eventAt"": ""2024-10-03 20:00:00"",
+                                ""eventType"": ""start""
+                            }}
+                        ],
+                        ""ExperimentalVariation"": {{
+                            ""effectOfChange"": ""some free text"",
+                            ""expectedDuration"": 10
+                        }},
+                        ""ExperimentalCessation"": {{
+                            ""actualDateOfCessation"": ""2024-10-03 10:00:00"",
+                            ""natureOfCessation"": ""free text""
+                        }}
                     }}
                 ]
 
@@ -221,7 +237,7 @@ public class ProvisionValidationServiceTests
     [InlineData(new[] { "D5E7FBE5-5A7A-4A81-8E27-CDB008EC729D", "0EE20392-DD08-416F-A5E6-3013DB40728C" }, "3.4.0",0)]
     [InlineData(new[] { "A69D75A3-FCCC-4967-A0E5-7DCB82AFBE13", "A69D75A3-FCCC-4967-A0E5-7DCB82AFBE13" }, "3.4.0",1)]
     [InlineData(new[] { "9C88081C-FB1B-4E14-8E20-903DD9F08590", "" }, "3.4.0",1)]
-    public void ValidateMultipleProvisionReferencesForSchema330(string[] references, string version, int errorCount)
+    public void ValidateMultipleProvisionReferences(string[] references, string version, int errorCount)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -244,6 +260,166 @@ public class ProvisionValidationServiceTests
                         ""reference"": ""{references.ElementAt(1)}""                        
                     }}
                 ]
+            }}
+        }}", new SchemaVersion(version));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData("ttroTtmoByNotice","3.3.0", 0)]
+    [InlineData("ttroTtmoExtension","3.3.0", 0)]
+    [InlineData("ttroTtmoNoticeAfterMaking","3.3.0", 0)]
+    [InlineData("ttroTtmoNoticeOfIntention","3.3.0", 0)]
+    [InlineData("ttroTtmoRevocation","3.3.0", 0)]
+    [InlineData("ttroTtmoByNotice","3.4.0", 0)]
+    [InlineData("ttroTtmoExtension","3.4.0", 0)]
+    [InlineData("ttroTtmoNoticeAfterMaking","3.4.0", 0)]
+    [InlineData("ttroTtmoNoticeOfIntention","3.4.0", 0)]
+    [InlineData("ttroTtmoRevocation","3.4.0", 0)]
+    public void ValidateActualStartOrStopWhenOrderReportingPointIsTemporary(string orderReportingPointType, string version, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""actionType"": ""new"",
+                        ""comingIntoForceDate"": ""2020-01-01"",
+                        ""expectedOccupancyDuration"": 10,
+                        ""orderReportingPoint"": ""{orderReportingPointType}"",
+                        ""provisionDescription"": ""some free text"",
+                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E"",
+                        ""ActualStartOrStop"": [
+                            {{
+                                ""eventAt"": ""2024-10-03 20:00:00"",
+                                ""eventType"": ""start""
+                            }}
+                        ]
+                    }}
+                ]
+
+            }}
+        }}", new SchemaVersion(version));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData("2024-10-03 20:00:00","3.3.0", 0)]
+    [InlineData("3024-10-03 20:00:00","3.3.0", 1)]
+    [InlineData("wrongDateFormat","3.3.0", 1)]
+    [InlineData("","3.3.0", 1)]
+    [InlineData(null,"3.3.0", 1)]
+    [InlineData("2024-10-03 20:00:00","3.4.0", 0)]
+    [InlineData("3024-10-03 20:00:00","3.4.0", 1)]
+    [InlineData("wrongDateFormat","3.4.0", 1)]
+    [InlineData("","3.4.0", 1)]
+    [InlineData(null,"3.4.0", 1)]
+    public void ValidateEventAtWithinActualStartOrStop(string eventAt, string version, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""actionType"": ""new"",
+                        ""comingIntoForceDate"": ""2020-01-01"",
+                        ""expectedOccupancyDuration"": 10,
+                        ""orderReportingPoint"": ""ttroTtmoByNotice"",
+                        ""provisionDescription"": ""some free text"",
+                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E"",
+                        ""ActualStartOrStop"": [
+                            {{
+                                ""eventAt"": ""{eventAt}"",
+                                ""eventType"": ""start""
+                            }}
+                        ]
+                    }}
+                ]
+
+            }}
+        }}", new SchemaVersion(version));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData("start","3.3.0", 0)]
+    [InlineData("stop","3.3.0", 0)]
+    [InlineData("wrong","3.3.0", 1)]
+    [InlineData("","3.3.0", 1)]
+    [InlineData(null,"3.3.0", 1)]
+    [InlineData("start","3.4.0", 0)]
+    [InlineData("stop","3.4.0", 0)]
+    [InlineData("wrong","3.4.0", 1)]
+    [InlineData("","3.4.0", 1)]
+    [InlineData(null,"3.4.0", 1)]
+    public void ValidateEventTypeWithinActualStartOrStop(string eventType, string version, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""actionType"": ""new"",
+                        ""comingIntoForceDate"": ""2020-01-01"",
+                        ""expectedOccupancyDuration"": 10,
+                        ""orderReportingPoint"": ""ttroTtmoByNotice"",
+                        ""provisionDescription"": ""some free text"",
+                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E"",
+                        ""ActualStartOrStop"": [
+                            {{
+                                ""eventAt"": ""2024-10-03 10:00:00"",
+                                ""eventType"": ""{eventType}""
+                            }}
+                        ]
+                    }}
+                ]
+
+            }}
+        }}", new SchemaVersion(version));
+
+        var actual = _sut.Validate(dtroSubmit);
+        Assert.Equal(errorCount, actual.Count);
+    }
+
+    [Theory]
+    [InlineData("experimentalAmendment","3.3.0", 0)]
+    [InlineData("experimentalMakingPermanent","3.3.0", 0)]
+    [InlineData("experimentalNoticeOfMaking","3.3.0", 0)]
+    [InlineData("experimentalRevocation","3.3.0", 0)]
+    [InlineData("experimentalAmendment","3.4.0", 0)]
+    [InlineData("experimentalMakingPermanent","3.4.0", 0)]
+    [InlineData("experimentalNoticeOfMaking","3.4.0", 0)]
+    [InlineData("experimentalRevocation","3.4.0", 0)]
+    public void ValidateExperimentalVariationWhenOrderReportingPointIsExperimental(string orderReportingPointType, string version, int errorCount)
+    {
+        var dtroSubmit = Utils.PrepareDtro($@"
+        {{
+            ""Source"": {{
+                ""Provision"": [
+                    {{
+                        ""actionType"": ""new"",
+                        ""comingIntoForceDate"": ""2020-01-01"",
+                        ""expectedOccupancyDuration"": 10,
+                        ""orderReportingPoint"": ""{orderReportingPointType}"",
+                        ""provisionDescription"": ""some free text"",
+                        ""reference"": ""006A10CE-C4B3-4713-BAA0-35D66450893E"",
+                        ""ExperimentalVariation"": {{
+                            ""effectOfChange"": ""free text"",
+                            ""expectedDuration"": 10
+                        }},
+                        ""ExperimentalCessation"": {{
+                            ""actualDateOfCessation"": ""2020-12-31"",
+                            ""natureOfCessation"": ""free text""
+                        }}
+                    }}
+                ]
+
             }}
         }}", new SchemaVersion(version));
 
