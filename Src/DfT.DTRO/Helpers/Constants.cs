@@ -45,6 +45,8 @@ public static class Constants
 
     public static IEnumerable<string> EventTypes => typeof(EventType).GetDisplayNames<EventType>().ToList();
 
+    public static IEnumerable<string> BywayTypes => typeof(BywayType).GetDisplayNames<BywayType>().ToList();
+    
     public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
 
     public static List<int> MphValues => new() { 10, 20, 30, 40, 50, 60, 70 };
@@ -177,4 +179,16 @@ public static class Constants
     public static string ActualDateOfCessation => "actualDateOfCessation";
 
     public static string NatureOfCessation => "natureOfCessation";
+
+    public static string RegulatedPlace => "RegulatedPlace";
+
+    public static string Assignment => "assignment";
+
+    public static string BusRoute => "busRoute";
+
+    public static string BywayType => "bywayType";
+
+    public static string Concession => "concession";
+
+    public static string TramCar => "tramCar";
 }
