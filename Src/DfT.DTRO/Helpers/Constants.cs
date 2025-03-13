@@ -36,6 +36,8 @@ public static class Constants
 
     public static IEnumerable<string> SpeedLimitProfileTypes => typeof(SpeedLimitBasedType).GetDisplayNames<SpeedLimitBasedType>().ToList();
 
+    public static IEnumerable<string> SpeedLimitNatureTypes => typeof(SpeedLimitNatureType).GetDisplayNames<SpeedLimitNatureType>().ToList();
+
     public static IEnumerable<string> RateTypes => typeof(RateType).GetDisplayNames<RateType>().ToList();
 
     public static IEnumerable<string> CurrencyTypes => typeof(CurrencyType).GetDisplayNames<CurrencyType>().ToList();
@@ -113,6 +115,8 @@ public static class Constants
     public static string Polygon => "polygon";
 
     public static string DirectedLineString => "directedLineString";
+
+    public static string Nature => "nature";
 
     public static readonly HashSet<string> KeysToConvert = new HashSet<string> { "source", "provision", "regulatedplace", "geometry", "lineargeometry", "pointgeometry", "polygon", "directedlinear", "externalreference", "uniquestreetreferencenumber", "elementarystreetunit", "regulation", "speedlimitvaluebased", "speedlimitprofilebased", "generalregulation", "offlistregulation", "condition", "temporaryregulation", "roadcondition", "numberofoccupants", "occupantcondition", "drivercondition", "accesscondition", "timevalidity", "nonvehicularroadusercondition", "permitcondition", "vehiclecharacteristics", "conditionset", "authority", "permitsubjecttofee", "specialday", "publicholiday", "changeabletimeperiodstart", "changeabletimeperiodend", "calendarweekinmonth", "weekofmonth", "instanceofdaywithinmonth", "changeabletimeperiodsource", "changeabletimeperiodentry", "maximumgrossweightcharacteristic", "maximumheightcharacteristic", "maximumlengthcharacteristic", "maximumwidthcharacteristic", "heaviestaxleweightcharacteristic", "numberofaxlescharacteristic", "emissions", "ratetable", "ratelinecollection", "rateline" };
 }
