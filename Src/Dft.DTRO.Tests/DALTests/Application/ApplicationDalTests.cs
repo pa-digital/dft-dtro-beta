@@ -35,7 +35,7 @@ namespace Dft.DTRO.Tests.DALTests
             var purposeC = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeC" };
 
             var statusA = new ApplicationStatus { Id = Guid.NewGuid(), Status = "Active" };
-            var statusB = new ApplicationStatus { Id = Guid.NewGuid(), Status = "pending" };
+            var statusB = new ApplicationStatus { Id = Guid.NewGuid(), Status = "Inactive" };
 
             _context.Users.AddRange(user1, user2);
             _context.TrafficRegulationAuthorities.AddRange(tra1, tra2);
@@ -191,10 +191,10 @@ namespace Dft.DTRO.Tests.DALTests
         }
 
         [Fact]
-        public async Task GetPendingApplications_ShouldReturnPendingApplicationForUserAdminUser()
+        public async Task GetInactiveApplications_ShouldReturnInactiveApplicationForUserAdminUser()
         {
             var request = new PaginatedRequest { Page = 1, PageSize = 1 };
-            var apps = await _applicationDal.GetPendingApplications(request);
+            var apps = await _applicationDal.GetInactiveApplications(request);
             Assert.Equal(1, apps.TotalCount);
         }
 

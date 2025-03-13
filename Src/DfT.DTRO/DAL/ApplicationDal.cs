@@ -50,25 +50,25 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
             .ToListAsync();
     }
 
-    public async Task<PaginatedResult<ApplicationPendingListDto>> GetPendingApplications(PaginatedRequest paginatedRequest)
+    public async Task<PaginatedResult<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest)
     {
-        IQueryable<ApplicationPendingListDto> query = _context.Applications
+        IQueryable<ApplicationInactiveListDto> query = _context.Applications
             .Include(a => a.User)
             .Include(a => a.TrafficRegulationAuthority)
             .Include(a => a.Status)
             .Include(a => a.ApplicationType)
-            .Where(application => application.Status.Status == "pending")
-            .Select(a => new ApplicationPendingListDto
+            .Where(application => application.Status.Status == "Inactive")
+            .Select(a => new ApplicationInactiveListDto
             {
                 TraName = a.TrafficRegulationAuthority.Name,
                 Type = a.ApplicationType.Name,
                 UserEmail = a.User.Email,
                 UserName = $"{a.User.Forename} {a.User.Surname}",
             });
-        IQueryable<ApplicationPendingListDto> paginatedQuery = query
+        IQueryable<ApplicationInactiveListDto> paginatedQuery = query
             .Skip((paginatedRequest.Page - 1) * paginatedRequest.PageSize)
             .Take(paginatedRequest.PageSize);
-        return new PaginatedResult<ApplicationPendingListDto>(paginatedQuery.ToList(), paginatedQuery.Count());
+        return new PaginatedResult<ApplicationInactiveListDto>(paginatedQuery.ToList(), paginatedQuery.Count());
     }
 
     public async Task<bool> ActivateApplicationById(Guid appId)

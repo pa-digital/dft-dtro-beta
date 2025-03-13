@@ -199,13 +199,13 @@ public class ApplicationController : ControllerBase
     /// <response code="200">Valid user ID</response>
     /// <response code="400">Invalid or empty parameters, or no matching user</response>
     /// <response code="500">Invalid operation or other exception</response>
-    [HttpGet(RouteTemplates.ApplicationsFindAllPending)]
+    [HttpGet(RouteTemplates.ApplicationsFindAllInactive)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<ActionResult<PaginatedResponse<ApplicationPendingListDto>>> FindPendingApplications([FromQuery] PaginatedRequest paginatedRequest)
+    public async Task<ActionResult<PaginatedResponse<ApplicationInactiveListDto>>> FindInactiveApplications([FromQuery] PaginatedRequest paginatedRequest)
     {
         try
         {
-            var result = await _applicationService.GetPendingApplications(paginatedRequest);
+            var result = await _applicationService.GetInactiveApplications(paginatedRequest);
             return Ok(result);
         }
         catch (ArgumentNullException ex)

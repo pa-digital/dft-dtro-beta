@@ -95,25 +95,25 @@ public class ApplicationServiceTests
     }
     
     [Fact]
-    public async Task GetPendingApplicationsShouldReturnPendingApplications()
+    public async Task GetInactiveApplicationsShouldReturnInactiveApplications()
     {
         
         var request = new PaginatedRequest { Page = 1, PageSize = 1 };
 
-        var expectedList = new List<ApplicationPendingListDto> {
+        var expectedList = new List<ApplicationInactiveListDto> {
             new() { TraName = "TraName", Type = "Type", UserEmail = "UserEmail", UserName = "UserName" },
             new() { TraName = "TraName2", Type = "Type2", UserEmail = "UserEmail2", UserName = "UserName2" }
         };
         
-        var paginatedResult = new PaginatedResult<ApplicationPendingListDto>(expectedList, 2);
+        var paginatedResult = new PaginatedResult<ApplicationInactiveListDto>(expectedList, 2);
 
-        var paginatedResponse = new PaginatedResponse<ApplicationPendingListDto>(expectedList, 1, 2);
+        var paginatedResponse = new PaginatedResponse<ApplicationInactiveListDto>(expectedList, 1, 2);
 
         _applicationDalMock
-            .Setup(dal => dal.GetPendingApplications(request))
+            .Setup(dal => dal.GetInactiveApplications(request))
             .ReturnsAsync(paginatedResult);
 
-        var result = await _applicationService.GetPendingApplications(request);
+        var result = await _applicationService.GetInactiveApplications(request);
         Assert.Equal(paginatedResponse.TotalCount, result.TotalCount);
     }
 

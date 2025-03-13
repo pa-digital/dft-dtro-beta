@@ -33,9 +33,9 @@ public class ApplicationService : IApplicationService
         return await _applicationDal.GetApplicationList(email);
     }
 
-    public async Task<PaginatedResponse<ApplicationPendingListDto>> GetPendingApplications(PaginatedRequest paginatedRequest)
+    public async Task<PaginatedResponse<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest)
     {
-        PaginatedResult<ApplicationPendingListDto> paginatedResult =  await _applicationDal.GetPendingApplications(paginatedRequest);
+        PaginatedResult<ApplicationInactiveListDto> paginatedResult =  await _applicationDal.GetInactiveApplications(paginatedRequest);
         return new(paginatedResult.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResult.TotalCount);
     }
 

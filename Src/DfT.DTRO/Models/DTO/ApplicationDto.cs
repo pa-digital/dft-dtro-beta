@@ -13,7 +13,7 @@ public class ApplicationListDto
     public string Tra { get; set; }
 }
 
-public class ApplicationPendingListDto
+public class ApplicationInactiveListDto
 {
     public string TraName { get; set; }
     public string Type { get; set; }
