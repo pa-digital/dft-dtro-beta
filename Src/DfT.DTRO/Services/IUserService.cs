@@ -3,5 +3,7 @@ namespace DfT.DTRO.Services;
 public interface IUserService
 {
 
-    Task DeleteUser(string userId);
+    Task<PaginatedResponse<UserListDto>> GetUsers(PaginatedRequest paginatedRequest);
+
+    Task DeleteUser(Guid userId);
 }

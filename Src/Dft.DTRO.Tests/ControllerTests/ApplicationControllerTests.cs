@@ -1,22 +1,18 @@
 using DfT.DTRO.Models.Pagination;
-using Dft.DTRO.Tests.Fixtures;
 
-public class ApplicationControllerTests : IClassFixture<ApplicationControllerTestFixture>
+public class ApplicationControllerTests
 {
     private readonly Mock<IApplicationService> _mockApplicationService;
     private readonly ApplicationController _controller;
-    private readonly ApplicationControllerTestFixture _fixture;
     private readonly string _xEmail;
 
-    public ApplicationControllerTests(ApplicationControllerTestFixture fixture)
+    public ApplicationControllerTests()
     {
         ILogger<ApplicationController> mockLogger = MockLogger.Setup<ApplicationController>();
         var mockLoggingExtension = new Mock<LoggingExtension>();
 
         _mockApplicationService = new Mock<IApplicationService>();
         _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, mockLoggingExtension.Object);
-        _fixture = fixture;
-        _controller.ControllerContext = _fixture.ControllerContext;
         _xEmail = "user@test.com";
     }
 
@@ -176,7 +172,7 @@ public class ApplicationControllerTests : IClassFixture<ApplicationControllerTes
 
         var applications = new List<ApplicationInactiveListDto>
         {
-            new() { TraName = "TraName", Type = "Type", UserEmail = "UserEmail", UserName = "UserName" }
+            new() { TraName = "TraName", Type = "Type", UserEmail = "UserEmail", Username = "Username" }
         };
 
         _mockApplicationService

@@ -101,8 +101,8 @@ public class ApplicationServiceTests
         var request = new PaginatedRequest { Page = 1, PageSize = 1 };
 
         var expectedList = new List<ApplicationInactiveListDto> {
-            new() { TraName = "TraName", Type = "Type", UserEmail = "UserEmail", UserName = "UserName" },
-            new() { TraName = "TraName2", Type = "Type2", UserEmail = "UserEmail2", UserName = "UserName2" }
+            new() { TraName = "TraName", Type = "Type", UserEmail = "UserEmail", Username = "Username" },
+            new() { TraName = "TraName2", Type = "Type2", UserEmail = "UserEmail2", Username = "Username2" }
         };
         
         var paginatedResult = new PaginatedResult<ApplicationInactiveListDto>(expectedList, 2);
