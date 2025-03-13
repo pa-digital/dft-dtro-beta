@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage name="AM-Set-Email-Header">
+  <Set>
+    <Headers>
+      <Header name="x-email">{developer.email}</Header>
+    </Headers>
+  </Set>
+  <AssignTo>request</AssignTo>
+</AssignMessage>

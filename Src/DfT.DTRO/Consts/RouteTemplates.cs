@@ -6,9 +6,10 @@ public static class RouteTemplates
     public const string ApplicationsBase = "/applications";
     public const string ApplicationsCreate = ApplicationsBase;
     public const string ValidateApplicationName = ApplicationsBase + "/validateName";
-    public const string GetApplicationDetails = ApplicationsBase + "/details";
-    public const string GetApplications = ApplicationsBase + "/list";
-    public const string ActivateApplication = ApplicationsBase + "/activate";
+    public const string ApplicationsFindById = ApplicationsBase + "/{appId:guid}";
+    public const string ApplicationsFindAll = ApplicationsBase;
+    public const string ApplicationsFindAllInactive = ApplicationsBase + "/inactive";
+    public const string ActivateApplication = ApplicationsBase + "/{appId:guid}" + "/activate";
 
     // Auth
     public const string AuthBase = "/oauth";
