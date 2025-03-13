@@ -49,24 +49,17 @@ public class ApplicationController : ControllerBase
     /// <summary>
     /// Activates an application by app ID
     /// </summary>
-    /// <param name="parameters"></param>
+    /// <param name="email">Developer email linked to access token.</param>
     /// <response code="200">Valid application ID</response>
     /// <response code="400">Invalid or empty parameters, or no matching application</response>
     /// <response code="500">Invalid operation or other exception</response>
     [HttpPost(RouteTemplates.ActivateApplication)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> ActivateApplication([FromBody] ApplicationDetailsRequest request)
+    public async Task<IActionResult> ActivateApplication([FromHeader(Name = "x-email")][Required] string email, [FromRoute] Guid appId)
     {
         try
         {
-            if (request == null || string.IsNullOrEmpty(request.appId))
-            {
-                return BadRequest(new { message = "Application ID is required" });
-            }
-
-            string appId = request.appId;
-            var userId = HttpContext.Items["UserId"] as string;
-            bool appBelongsToUser = await _applicationService.ValidateAppBelongsToUser(userId, appId);
+            bool appBelongsToUser = await _applicationService.ValidateAppBelongsToUser(email, appId);
             if (!appBelongsToUser)
             {
                 return Forbid();
@@ -97,9 +90,9 @@ public class ApplicationController : ControllerBase
     /// <response code="200">Valid or invalid application name</response>
     /// <response code="400">Invalid or empty parameters</response>
     /// <response code="500">Invalid operation or other exception</response>
-    [HttpPost(RouteTemplates.ValidateApplicationName)]
+    [HttpGet(RouteTemplates.ValidateApplicationName)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> ValidateApplicationName([FromBody] ApplicationNameQueryParameters parameters)
+    public async Task<IActionResult> ValidateApplicationName([FromQuery] ApplicationNameQueryParameters parameters)
     {
         try
         {
@@ -130,30 +123,23 @@ public class ApplicationController : ControllerBase
     /// <summary>
     /// Retrieves application details by ID
     /// </summary>
-    /// <param name="parameters"></param>
+    /// <param name="email">Developer email linked to access token.</param>
     /// <response code="200">Valid application ID</response>
     /// <response code="400">Invalid or empty parameters, or no matching application</response>
     /// <response code="500">Invalid operation or other exception</response>
-    [HttpPost(RouteTemplates.GetApplicationDetails)]
+    [HttpGet(RouteTemplates.ApplicationsFindById)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> GetApplicationDetails([FromBody] ApplicationDetailsRequest request)
+    public async Task<IActionResult> FindApplicationById([FromHeader(Name = "x-email")][Required] string email, [FromRoute] Guid appId)
     {
         try
         {
-            if (request == null || string.IsNullOrEmpty(request.appId))
-            {
-                return BadRequest(new { message = "Application ID is required" });
-            }
-
-            string appId = request.appId;
-            var userId = HttpContext.Items["UserId"] as string;
-            bool appBelongsToUser = await _applicationService.ValidateAppBelongsToUser(userId, appId);
+            bool appBelongsToUser = await _applicationService.ValidateAppBelongsToUser(email, appId);
             if (!appBelongsToUser)
             {
                 return Forbid();
             }
 
-            var result = await _applicationService.GetApplicationDetails(appId);
+            var result = await _applicationService.GetApplication(appId);
             if (result != null)
             {
                 // TODO: fetch API key and secret from Apigee
@@ -180,25 +166,47 @@ public class ApplicationController : ControllerBase
     /// <summary>
     /// Retrieves application list for user
     /// </summary>
-    /// <param name="parameters"></param>
+    /// <param name="email">Developer email linked to access token.</param>
     /// <response code="200">Valid user ID</response>
     /// <response code="400">Invalid or empty parameters, or no matching user</response>
     /// <response code="500">Invalid operation or other exception</response>
-    [HttpPost(RouteTemplates.GetApplications)]
+    [HttpGet(RouteTemplates.ApplicationsFindAll)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> GetApplications()
+    public async Task<IActionResult> FindApplications([FromHeader(Name = "x-email")][Required] string email)
     {
         try
         {
-            var userId = HttpContext.Items["UserId"] as string;
-            var result = await _applicationService.GetApplicationList(userId);
-            if (result != null)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(new { message = "No applications found for this user ID" });
-
+            var result = await _applicationService.GetApplications(email);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(new { message = "Invalid input parameters", error = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while fetching the applications", error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An unexpected error occurred.", error = ex.Message });
+        }
+    }
+    
+    /// <summary>
+    /// Retrieves application list for user
+    /// </summary>
+    /// <response code="200">Valid user ID</response>
+    /// <response code="400">Invalid or empty parameters, or no matching user</response>
+    /// <response code="500">Invalid operation or other exception</response>
+    [HttpGet(RouteTemplates.ApplicationsFindAllInactive)]
+    [FeatureGate(FeatureNames.ReadOnly)]
+    public async Task<ActionResult<PaginatedResponse<ApplicationInactiveListDto>>> FindInactiveApplications([FromQuery] PaginatedRequest paginatedRequest)
+    {
+        try
+        {
+            var result = await _applicationService.GetInactiveApplications(paginatedRequest);
+            return Ok(result);
         }
         catch (ArgumentNullException ex)
         {
