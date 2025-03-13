@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace DfT.DTRO.Helpers;
 
 public static class Constants
@@ -34,6 +34,8 @@ public static class Constants
     public static IEnumerable<string> SpeedLimitValueTypes => typeof(SpeedLimitValueType).GetDisplayNames<SpeedLimitValueType>().ToList();
 
     public static IEnumerable<string> SpeedLimitProfileTypes => typeof(SpeedLimitBasedType).GetDisplayNames<SpeedLimitBasedType>().ToList();
+
+    public static IEnumerable<string> SpeedLimitNatureTypes => typeof(SpeedLimitNatureType).GetDisplayNames<SpeedLimitNatureType>().ToList();
 
     public static IEnumerable<string> RateTypes => typeof(RateType).GetDisplayNames<RateType>().ToList();
 
@@ -116,7 +118,7 @@ public static class Constants
     public static string Polygon => "polygon";
 
     public static string DirectedLineString => "directedLineString";
-
+  
     public static readonly HashSet<string> KeysToConvert =
     [
         "source", "provision", "regulatedplace", "geometry", "lineargeometry", "pointgeometry", "polygon",
@@ -191,4 +193,6 @@ public static class Constants
     public static string Concession => "concession";
 
     public static string TramCar => "tramCar";
+
+    public static string Nature => "nature";
 }
