@@ -212,7 +212,7 @@ jobs:
               print $0 "\n        <Policy>AM-Set-App-Id-Header</Policy>";
               print $0 "\n        <Policy>AM-Set-Email-Header</Policy>";
               next
-          } 1' apiproxy/dtro-${{ env.env }}-server.xml
+          } 1' apiproxy/dtro-${env}-server.xml
           
           cp policies/AM-Set-Http-Security-Header.xml apiproxy/policies/AM-Set-Http-Security-Header.xml
           gawk -i inplace '/<PostFlow name="PostFlow">/,/<\/PostFlow>/ { if (/^ *<Response><\/Response>/) { print "  <Response>\n      <Step>\n        <Name>AM-Set-Http-Security-Header</Name>\n      </Step>\n   </Response>"; next } } 1' apiproxy/proxies/default.xml
