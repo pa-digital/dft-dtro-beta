@@ -23,14 +23,16 @@
               "directedLinear": {
                 "version": 1,
                 "directedLineString": "SRID=27700;LINESTRING(323544 124622, 323464 124595)",
-                "origin": {
-                  "lastUpdateDate": "2024-10-01T00:00:00",
-                  "uniqueStreetReferenceNumber": [
-                    {
-                      "usrn": 39608173
-                    }
-                  ]
-                }
+                "origin": [
+                  {
+                    "lastUpdateDate": "2024-10-01T00:00:00",
+                    "uniqueStreetReferenceNumber": [
+                      {
+                        "usrn": 39608173
+                      }
+                    ]
+                  }
+                ]
               }
             },
             {

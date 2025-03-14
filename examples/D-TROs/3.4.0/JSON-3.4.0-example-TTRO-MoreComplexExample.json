@@ -21,14 +21,16 @@
               "description": "East Reach, Taunton, bi-directional",
               "directedLinear": {
                 "directedLineString": "SRID=27700;LINESTRING(323544 124622, 323464 124595)",
-                "origin": {
-                  "lastUpdateDate": "2024-10-01T00:00:00",
-                  "uniqueStreetReferenceNumber": [
-                    {
-                      "usrn": 39608173
-                    }
-                  ]
-                },
+                "origin": [
+                  {
+                    "lastUpdateDate": "2024-10-01T00:00:00",
+                    "uniqueStreetReferenceNumber": [
+                      {
+                        "usrn": 39608173
+                      }
+                    ]
+                  }
+                ],
                 "version": 1
               },
               "type": "regulationLocation"
@@ -143,14 +145,16 @@
               "description": "East Reach, Taunton, northside / eastbound, between 10 metres east from the junction with Tancred Street to 15 metres west of the junction with South Street {approximate - linear}",
               "directedLinear": {
                 "directedLineString": "SRID=27700;LINESTRING(323158 124529,323252 124546)",
-                "origin": {
-                  "lastUpdateDate": "2024-10-01T00:00:00",
-                  "uniqueStreetReferenceNumber": [
-                    {
-                      "usrn": 39608173
-                    }
-                  ]
-                },
+                "origin": [
+                  {
+                    "lastUpdateDate": "2024-10-01T00:00:00",
+                    "uniqueStreetReferenceNumber": [
+                      {
+                        "usrn": 39608173
+                      }
+                    ]
+                  }
+                ],
                 "version": 1
               },
               "type": "regulationLocation"
@@ -555,14 +559,16 @@
             {
               "description": "Collett Road, from 125 metres to 158 metres from the junction with Great Western Way Roundabout {approximate - notational point of effect}",
               "pointGeometry": {
-                "externalReference": {
-                  "lastUpdateDate": "2024-10-01T00:00:00",
-                  "uniqueStreetReferenceNumber": [
-                    {
-                      "usrn": 39609234
-                    }
-                  ]
-                },
+                "externalReference": [
+                  {
+                    "lastUpdateDate": "2024-10-01T00:00:00",
+                    "uniqueStreetReferenceNumber": [
+                      {
+                        "usrn": 39609234
+                      }
+                    ]
+                  }
+                ],
                 "point": "SRID=27700;POINT(320329 126155)",
                 "representation": "centreLinePoint",
                 "version": 2
@@ -627,69 +633,71 @@
                       ]
                     }
                   ],
-                  "condition": {
-                    "negate": false,
-                    "timeValidity": {
-                      "start": "2024-09-22T08:00:00",
-                      "validPeriod": [
-                        {
-                          "recurringDayWeekMonthPeriod": [
-                            {
-                              "applicableDay": [
-                                "monday",
-                                "tuesday",
-                                "wednesday",
-                                "thursday",
-                                "friday"
-                              ]
+                  "condition": [
+                    {
+                      "negate": false,
+                      "timeValidity": {
+                        "start": "2024-09-22T08:00:00",
+                        "validPeriod": [
+                          {
+                            "recurringDayWeekMonthPeriod": [
+                              {
+                                "applicableDay": [
+                                  "monday",
+                                  "tuesday",
+                                  "wednesday",
+                                  "thursday",
+                                  "friday"
+                                ]
+                              }
+                            ],
+                            "recurringTimePeriodOfDay": [
+                              {
+                                "startTimeOfPeriod": "08:00:00",
+                                "endTimeOfPeriod": "09:30:00"
+                              },
+                              {
+                                "startTimeOfPeriod": "16:30:00:00",
+                                "endTimeOfPeriod": "18:30:00"
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptionPeriod": [
+                          {
+                            "recurringSpecialDay": [
+                              {
+                                "intersectWithApplicableDays": true,
+                                "specialDayType": "publicHoliday"
+                              },
+                              {
+                                "intersectWithApplicableDays": true,
+                                "specialDayType": "matchDay"
+                              }
+                            ]
+                          },
+                          {
+                            "periodStart": {
+                              "startType": "external",
+                              "changeableTimePeriodSource": {
+                                "definition": "Source of start of non-school day periods, in 'Any' county",
+                                "sourceLocator": "http://www.schooldiaries.com"
+                              }
                             }
-                          ],
-                          "recurringTimePeriodOfDay": [
-                            {
-                              "startTimeOfPeriod": "08:00:00",
-                              "endTimeOfPeriod": "09:30:00"
-                            },
-                            {
-                              "startTimeOfPeriod": "16:30:00:00",
-                              "endTimeOfPeriod": "18:30:00"
-                            }
-                          ]
-                        }
-                      ],
-                      "exceptionPeriod": [
-                        {
-                          "recurringSpecialDay": [
-                            {
-                              "intersectWithApplicableDays": true,
-                              "specialDayType": "publicHoliday"
-                            },
-                            {
-                              "intersectWithApplicableDays": true,
-                              "specialDayType": "matchDay"
-                            }
-                          ]
-                        },
-                        {
-                          "periodStart": {
-                            "startType": "external",
-                            "changeableTimePeriodSource": {
-                              "definition": "Source of start of non-school day periods, in 'Any' county",
-                              "sourceLocator": "http://www.schooldiaries.com"
+                          },
+                          {
+                            "periodEnd": {
+                              "endType": "external",
+                              "changeableTimePeriodSource": {
+                                "definition": "Source of end of non-school day periods, in 'Any' county",
+                                "sourceLocator": "http://www.schooldiaries.com"
+                              }
                             }
                           }
-                        },
-                        {
-                          "periodEnd": {
-                            "endType": "external",
-                            "changeableTimePeriodSource": {
-                              "definition": "Source of end of non-school day periods, in 'Any' county",
-                              "sourceLocator": "http://www.schooldiaries.com"
-                            }
-                          }
-                        }
-                      ]
+                        ]
+                      }
                     }
-                  }
+                  ]
                 }
               ],
               "generalRegulation": {
@@ -782,70 +790,72 @@
                       ]
                     }
                   ],
-                  "condition": {
-                    "negate": false,
-                    "timeValidity": {
-                      "end": "2024-10-30T20:00:00",
-                      "start": "2024-09-22T08:00:00",
-                      "validPeriod": [
-                        {
-                          "recurringDayWeekMonthPeriod": [
-                            {
-                              "applicableDay": [
-                                "monday",
-                                "tuesday",
-                                "wednesday",
-                                "thursday",
-                                "friday"
-                              ]
+                  "condition": [
+                    {
+                      "negate": false,
+                      "timeValidity": {
+                        "end": "2024-10-30T20:00:00",
+                        "start": "2024-09-22T08:00:00",
+                        "validPeriod": [
+                          {
+                            "recurringDayWeekMonthPeriod": [
+                              {
+                                "applicableDay": [
+                                  "monday",
+                                  "tuesday",
+                                  "wednesday",
+                                  "thursday",
+                                  "friday"
+                                ]
+                              }
+                            ],
+                            "recurringTimePeriodOfDay": [
+                              {
+                                "startTimeOfPeriod": "08:00:00",
+                                "endTimeOfPeriod": "09:30:00"
+                              },
+                              {
+                                "startTimeOfPeriod": "16:30:00:00",
+                                "endTimeOfPeriod": "18:30:00"
+                              }
+                            ]
+                          }
+                        ],
+                        "exceptionPeriod": [
+                          {
+                            "recurringSpecialDay": [
+                              {
+                                "intersectWithApplicableDays": true,
+                                "specialDayType": "publicHoliday"
+                              },
+                              {
+                                "intersectWithApplicableDays": true,
+                                "specialDayType": "matchDay"
+                              }
+                            ]
+                          },
+                          {
+                            "periodStart": {
+                              "startType": "external",
+                              "changeableTimePeriodSource": {
+                                "definition": "Source of start of non-school day periods, in 'Any' county",
+                                "sourceLocator": "http://www.schooldiaries.com"
+                              }
                             }
-                          ],
-                          "recurringTimePeriodOfDay": [
-                            {
-                              "startTimeOfPeriod": "08:00:00",
-                              "endTimeOfPeriod": "09:30:00"
-                            },
-                            {
-                              "startTimeOfPeriod": "16:30:00:00",
-                              "endTimeOfPeriod": "18:30:00"
-                            }
-                          ]
-                        }
-                      ],
-                      "exceptionPeriod": [
-                        {
-                          "recurringSpecialDay": [
-                            {
-                              "intersectWithApplicableDays": true,
-                              "specialDayType": "publicHoliday"
-                            },
-                            {
-                              "intersectWithApplicableDays": true,
-                              "specialDayType": "matchDay"
-                            }
-                          ]
-                        },
-                        {
-                          "periodStart": {
-                            "startType": "external",
-                            "changeableTimePeriodSource": {
-                              "definition": "Source of start of non-school day periods, in 'Any' county",
-                              "sourceLocator": "http://www.schooldiaries.com"
+                          },
+                          {
+                            "periodEnd": {
+                              "endType": "external",
+                              "changeableTimePeriodSource": {
+                                "definition": "Source of end of non-school day periods, in 'Any' county",
+                                "sourceLocator": "http://www.schooldiaries.com"
+                              }
                             }
                           }
-                        },
-                        {
-                          "periodEnd": {
-                            "endType": "external",
-                            "changeableTimePeriodSource": {
-                              "definition": "Source of end of non-school day periods, in 'Any' county",
-                              "sourceLocator": "http://www.schooldiaries.com"
-                            }
-                          }
-                        }
-                      ]
+                        ]
+                      }
                     }
-                  }
+                  ]
                 }
               ],
               "offListRegulation": {

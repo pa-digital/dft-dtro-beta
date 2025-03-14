@@ -148,9 +148,9 @@ public class GeometrySchemaValidationTests : IDisposable
     }
 
     [Fact]
-    public void PointGeometryExternalReferenceShouldFailWhenArray()
+    public void PointGeometryExternalReferenceShouldFailWhenObject()
     {
-        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Geometry", "invalid", "PointGeometryExternalReferenceArray.json");
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Geometry", "invalid", "PointGeometryExternalReferenceObject.json");
         JObject json = JObject.Parse(File.ReadAllText(path));
         bool isValid = json.IsValid(_schema, out IList<string> errors);
         Assert.False(isValid);
@@ -166,9 +166,9 @@ public class GeometrySchemaValidationTests : IDisposable
     }
 
     [Fact]
-    public void DirectedLinearGeometryDestinationShouldFailWhenArray()
+    public void DirectedLinearGeometryDestinationShouldFailWhenObject()
     {
-        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Geometry", "invalid", "DirectedLinearDestinationArray.json");
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Geometry", "invalid", "DirectedLinearDestinationObject.json");
         JObject json = JObject.Parse(File.ReadAllText(path));
         bool isValid = json.IsValid(_schema, out IList<string> errors);
         Assert.False(isValid);
@@ -184,9 +184,9 @@ public class GeometrySchemaValidationTests : IDisposable
     }
 
     [Fact]
-    public void DirectedLinearGeometryOriginShouldFailWhenArray()
+    public void DirectedLinearGeometryOriginShouldFailWhenObject()
     {
-        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Geometry", "invalid", "DirectedLinearOriginArray.json");
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Geometry", "invalid", "DirectedLinearOriginObject.json");
         JObject json = JObject.Parse(File.ReadAllText(path));
         bool isValid = json.IsValid(_schema, out IList<string> errors);
         Assert.False(isValid);

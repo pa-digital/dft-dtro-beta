@@ -686,7 +686,12 @@
                         "$ref": "#/$defs/conditions"
                     },
                     "condition": {
-                        "$ref": "#/$defs/condition"
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 1,
+                        "items": {
+                            "$ref": "#/$defs/condition"
+                        }
                     }
                 },
                 "additionalProperties": false
@@ -798,7 +803,11 @@
                     "pattern": "^SRID=27700.*"
                 },
                 "destination": {
-                    "$ref": "#/$defs/externalReference"
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/$defs/externalReference"
+                    }
                 },
                 "intermediateLocation": {
                     "type": "array",
@@ -808,7 +817,11 @@
                     }
                 },
                 "origin": {
-                    "$ref": "#/$defs/externalReference"
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/$defs/externalReference"
+                    }
                 }
             }
         },
@@ -1614,7 +1627,11 @@
                     "$ref": "#/$defs/diversionType"
                 },
                 "externalReference": {
-                    "$ref": "#/$defs/externalReference"
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/$defs/externalReference"
+                    }
                 },
                 "point": {
                     "type": "string",

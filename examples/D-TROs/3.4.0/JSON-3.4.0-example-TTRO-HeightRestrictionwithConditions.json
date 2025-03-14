@@ -21,14 +21,16 @@
               "description": "East Reach - Taunton",
               "type": "regulationLocation",
               "pointGeometry": {
-                "externalReference": {
-                  "lastUpdateDate": "2024-08-01T00:00:00",
-                  "uniqueStreetReferenceNumber": [
-                    {
-                      "usrn": 39608173
-                    }
-                  ]
-                },
+                "externalReference": [
+                  {
+                    "lastUpdateDate": "2024-08-01T00:00:00",
+                    "uniqueStreetReferenceNumber": [
+                      {
+                        "usrn": 39608173
+                      }
+                    ]
+                  }
+                ],
                 "point": "SRID=27700;POINT(323544 124622)",
                 "representation": "centreLinePoint",
                 "version": 1
