@@ -1,6 +1,6 @@
 // using Newtonsoft.Json;
 // using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
-// using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelper;
+// using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 // using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 // namespace DfT.DTRO.IntegrationTests.IntegrationTests.UpdateDtroTests.Schema_3_3_0
@@ -32,7 +32,7 @@
 //             TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
 //             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
 //             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-//             string userGuid = await GetIdFromResponseJsonAsync(createUserResponse);
+//             string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
 //             // Avoid files being overwritten by using a unique prefix in file names for each test
 //             string uniquePrefixOnFileName = userGuid.Substring(0, 5);
 
@@ -59,7 +59,7 @@
 //             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfUpdateCopyFile, updateJsonWithModifiedActionTypeAndTroName);
 
 //             // Send DTRO update
-//             string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
+//             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
 //             HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromFileAsync(tempUpdateFilePath, dtroId, publisher);
 //             Assert.Equal(HttpStatusCode.BadRequest, updateDtroResponse.StatusCode);
 
@@ -100,7 +100,7 @@
 //             string updateJsonWithModifiedActionTypeAndTroName = Dtros.UpdateActionTypeAndTroName(updateDtroJsonWithSchemaVersionUpdated, schemaVersionOfFilesWithInvalidCamelCase);
 
 //             // Send DTRO update
-//             string dtroId = await GetIdFromResponseJsonAsync(createDtroResponse);
+//             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
 //             HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromJsonBodyAsync(updateJsonWithModifiedActionTypeAndTroName, dtroId, publisher);
 //             Assert.Equal(HttpStatusCode.BadRequest, updateDtroResponse.StatusCode);
 
