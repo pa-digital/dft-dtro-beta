@@ -834,7 +834,10 @@
             }
           ],
           "offListRegulation": {
-            "legislationCrossReference": ["regulation no.1", "regulation no.2"],
+            "legislationCrossReference": [
+              "regulation no.1",
+              "regulation no.2"
+            ],
             "regulationFullText": "e-scooter regs",
             "regulationShortName": "Regulations for the use of e-scooters in Anytown"
           },
@@ -845,7 +848,9 @@
     ],
     "reference": "abc",
     "section": "All sections",
-    "traAffected": [9001],
+    "traAffected": [
+      9001
+    ],
     "traCreator": 9001,
     "troName": "DfT Example - More complex v2, Jan. 2025"
   }
