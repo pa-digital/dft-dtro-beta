@@ -585,7 +585,9 @@
                             "type": "object",
                             "additionalProperties": false,
                             "amountDue": {
-                                "type": "number"
+                                "type": "number",
+                                "exclusiveMinimum": 0,
+                                "multipleOf": 0.01
                             },
                             "paymentInformation": {
                                 "type": "string",
