@@ -10,7 +10,6 @@ public class EventsController : ControllerBase
     private readonly IEventSearchService _eventSearchService;
     private readonly IMetricsService _metricsService;
     private readonly ILogger<EventsController> _logger;
-    private readonly IAppIdMapperService _appIdMapperService;
     private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
@@ -23,13 +22,11 @@ public class EventsController : ControllerBase
     public EventsController(
         IEventSearchService eventSearchService,
         IMetricsService metricsService,
-          IAppIdMapperService appIdMapperService,
         ILogger<EventsController> logger,
          LoggingExtension loggingExtension)
     {
         _eventSearchService = eventSearchService;
         _metricsService = metricsService;
-        _appIdMapperService = appIdMapperService;
         _logger = logger;
         _loggingExtension = loggingExtension;
     }
@@ -54,7 +51,6 @@ public class EventsController : ControllerBase
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
             DtroEventSearchResult response = await _eventSearchService.SearchAsync(search);
             await _metricsService.IncrementMetric(MetricType.Event, appId);
             _logger.LogInformation($"'{nameof(Events)}' method called '{search}'");

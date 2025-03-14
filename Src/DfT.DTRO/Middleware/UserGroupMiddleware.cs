@@ -44,42 +44,6 @@
         return false;
     }
 
-    private async Task<bool> CheckAppIdHeaderAsync(HttpContext context, IServiceProvider serviceProvider)
-    {
-
-        Guid appId;
-
-        context.Request.Headers.TryGetValue(RequestHeaderNames.AppId, out var appIdString);
-        
-        Guid.TryParse(appIdString, out var appIdValue);
-
-        if (appIdValue == Guid.Empty)
-        {
-            throw new Exception($"Middleware, access denied: {RequestHeaderNames.AppId} not in header");
-        }
-        else
-        {
-            appId = appIdValue;
-        }
-
-        using (var scope = serviceProvider.CreateScope())
-        {
-            var dtroUserDal = scope.ServiceProvider.GetRequiredService<IDtroUserDal>();
-
-            var anyAdminExists = await dtroUserDal.AnyAdminUserExistsAsync();
-            if (anyAdminExists)
-            {
-                var dtroUser = await dtroUserDal.GetDtroUserOnAppIdAsync(appId);
-                if (dtroUser == null)
-                {
-                    throw new Exception($"Middleware, access denied: Dtro user for ({appId}) not found");
-                }
-            }
-            return true;
-        }
-
-    }
-
     public bool ApiHasFeatureGate(HttpContext context)
     {
         // Check if the request has a FeatureGate attribute
@@ -116,7 +80,6 @@
 
             //var isConsumerApi = await ApiIsFeatureAsync(context, FeatureNames.Consumer);
 
-            await CheckAppIdHeaderAsync(context, serviceProvider);
             await _next(context);
         }
         catch (Exception ex)

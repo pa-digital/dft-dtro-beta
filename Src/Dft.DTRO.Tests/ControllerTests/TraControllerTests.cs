@@ -4,7 +4,6 @@ public class TraControllerTests
 {
     private readonly Mock<ITraService> _mockTraService = new();
     private readonly Mock<IRequestCorrelationProvider> _mockRequestCorrelationProvider = new();
-    private readonly Mock<IAppIdMapperService> _mockXAppIdMapperService = new();
 
     private readonly TraController _sut;
 
@@ -15,16 +14,12 @@ public class TraControllerTests
 
         _sut = new TraController(_mockTraService.Object, mockLogger, mockLoggingExtension.Object);
 
-        Guid xAppId = Guid.NewGuid();
+        Guid appId = Guid.NewGuid();
         Mock<HttpContext> mockContext = MockHttpContext.Setup();
-
-        _mockXAppIdMapperService
-            .Setup(it => it.GetAppId(mockContext.Object))
-            .ReturnsAsync(() => xAppId);
 
         _mockRequestCorrelationProvider
             .SetupGet(provider => provider.CorrelationId)
-            .Returns(() => xAppId.ToString());
+            .Returns(() => appId.ToString());
     }
 
     [Fact]
