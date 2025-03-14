@@ -2,7 +2,7 @@
 <AssignMessage name="AM-Set-App-Id-Header">
   <Set>
     <Headers>
-      <Header name="x-app-id">{developer.app.id}</Header>
+      <Header name="App-Id">{developer.app.id}</Header>
     </Headers>
   </Set>
   <AssignTo>request</AssignTo>
