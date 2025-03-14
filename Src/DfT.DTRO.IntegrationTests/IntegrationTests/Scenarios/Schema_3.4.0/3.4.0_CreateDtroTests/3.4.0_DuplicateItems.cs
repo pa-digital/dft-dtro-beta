@@ -4,7 +4,7 @@
 // using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 // using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.ErrorJsonResponseProcessor;
 
-// namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_4_0
+// namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTests
 // {
 //     public class DuplicateItems : BaseTest
 //     {

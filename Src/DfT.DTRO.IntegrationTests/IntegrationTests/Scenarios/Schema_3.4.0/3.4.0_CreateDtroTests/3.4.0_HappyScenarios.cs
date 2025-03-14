@@ -3,7 +3,7 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_4_0
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTests
 {
     public class HappyScenarios : BaseTest
     {
