@@ -78,7 +78,7 @@
                       "type": "diversionRoute",
                       "polygon": {
                         "version": 1,
-                        "polygon": "text"
+                        "polygon": "SRID=27700"
                       }
                     }
                   ],

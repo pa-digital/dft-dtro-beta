@@ -116,7 +116,7 @@
                     "description": "text",
                     "type": "regulationLocation",
                     "polygon": {
-                      "polygon": "text",
+                      "polygon": "SRID=27700",
                       "version": 1
                     }
                   }
