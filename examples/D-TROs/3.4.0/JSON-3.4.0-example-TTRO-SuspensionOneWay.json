@@ -3,18 +3,26 @@
   "data": {
     "source": {
       "actionType": "new",
-      "currentTraOwner": 9001,
+      "currentTraOwner": 3300,
       "provision": [
         {
           "actionType": "new",
-          "orderReportingPoint": "permanentNoticeOfMaking",
-          "provisionDescription": "Parking restrictions, East Reach, Pay & Display Parking Places - Monday to Sunday 9.00 am to 8.00 pm",
-          "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
+          "orderReportingPoint": "ttroTtmoNoticeOfIntention",
+          "provisionDescription": "Temporary full road closure, for combined utility works and carriageway repair",
+          "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
+          "actualStartOrStop": [
+            {
+              "eventAt": "2025-01-01T09:00:00",
+              "eventType": "start"
+            }
+          ],
           "regulatedPlace": [
             {
-              "description": "East Reach, Taunton, northside / eastbound, between 10 metres east from the junction with Tancred Street to 15 metres west of the junction with South Street {approximate - linear}",
+              "description": "East Reach, Taunton, both directions",
+              "type": "regulationLocation",
               "directedLinear": {
-                "directedLineString": "SRID=27700;LINESTRING(323158 124529,323252 124546)",
+                "version": 1,
+                "directedLineString": "SRID=27700;LINESTRING(323544 124622, 323464 124595)",
                 "origin": {
                   "lastUpdateDate": "2024-10-01T00:00:00",
                   "uniqueStreetReferenceNumber": [
@@ -22,276 +30,87 @@
                       "usrn": 39608173
                     }
                   ]
-                },
-                "version": 1
-              },
-              "type": "regulationLocation"
-            }
-          ],
-          "regulation": {
-            "conditionSet": [
-              {
-                "operator": "and",
-                "conditionSet": [
-                  {
-                    "operator": "or",
-                    "conditions": [
-                      {
-                        "negate": false,
-                        "vehicleCharacteristics": {
-                          "vehicleType": "car"
-                        }
-                      },
-                      {
-                        "negate": true,
-                        "vehicleCharacteristics": {
-                          "vehicleType": "caravan"
-                        }
-                      },
-                      {
-                        "negate": true,
-                        "vehicleCharacteristics": {
-                          "vehicleType": "vehicleWithTrailer"
-                        }
-                      }
-                    ]
-                  }
-                ],
-                "condition": {
-                  "negate": false,
-                  "timeValidity": {
-                    "start": "2024-09-22T08:00:00",
-                    "validPeriod": [
-                      {
-                        "recurringDayWeekMonthPeriod": [
-                          {
-                            "applicableDay": [
-                              "monday",
-                              "tuesday",
-                              "wednesday",
-                              "thursday",
-                              "friday",
-                              "saturday",
-                              "sunday"
-                            ]
-                          }
-                        ],
-                        "recurringTimePeriodOfDay": [
-                          {
-                            "startTimeOfPeriod": "09:00:00",
-                            "endTimeOfPeriod": "20:00:00"
-                          }
-                        ]
-                      }
-                    ],
-                    "exceptionPeriod": [
-                      {
-                        "recurringSpecialDay": [
-                          {
-                            "intersectWithApplicableDays": true,
-                            "specialDayType": "publicHoliday"
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  "rateTable": {
-                    "additionalInformation": "http://www.somewhere.something.gov.uk",
-                    "type": "hourly",
-                    "rateLineCollection": [
-                      {
-                        "applicableCurrency": "GBP",
-                        "maxTime": 660,
-                        "maxValueCollection": 7.2,
-                        "minTime": 60,
-                        "minValueCollection": 1.0,
-                        "rateLine": [
-                          {
-                            "durationEnd": "00:00:00",
-                            "durationStart": "00:30:00",
-                            "incrementPeriod": 58,
-                            "maxValue": 7.2,
-                            "minValue": 1,
-                            "sequence": 1,
-                            "type": "flatRateTier",
-                            "usageCondition": "fixedDuration",
-                            "value": 1
-                          },
-                          {
-                            "durationEnd": "00:00:00",
-                            "durationStart": "00:30:00",
-                            "incrementPeriod": 59,
-                            "maxValue": 7.2,
-                            "minValue": 2,
-                            "sequence": 2,
-                            "type": "flatRateTier",
-                            "usageCondition": "fixedDuration",
-                            "value": 1
-                          },
-                          {
-                            "durationEnd": "00:00:00",
-                            "durationStart": "00:30:00",
-                            "incrementPeriod": 540,
-                            "maxValue": 7.2,
-                            "minValue": 2,
-                            "sequence": 3,
-                            "type": "flatRateTier",
-                            "usageCondition": "fixedDuration",
-                            "value": 5.2
-                          }
-                        ],
-                        "resetTime": "20:00:00",
-                        "sequence": 1,
-                        "startValidUsagePeriod": "2024-12-10T09:00:00"
-                      }
-                    ]
-                  }
                 }
               }
-            ],
-            "generalRegulation": {
-              "regulationType": "kerbsidePaymentParkingPlace"
             },
-            "isDynamic": false,
-            "timeZone": "Europe/London"
-          }
-        },
-        {
-          "actionType": "new",
-          "orderReportingPoint": "permanentNoticeOfMaking",
-          "provisionDescription": "Parking restrictions, East Reach, southside / westbound, Pay & Display Parking Places - Monday to Friday 8.00 am to 6.00 pm",
-          "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c098",
-          "regulatedPlace": [
             {
-              "description": "East Reach, Taunton, southside / westbound, between 15 metres west from the junction with Victoria Street to 23 metres east of the junction with Haydon Road {approximate - linear}",
+              "description": "Diversion Route - through traffic - Toneway Wickes roundabout (A38) - Priory Avenue (A3038) - Trenchard Way (A3087) - Staplegrove Road (A3027/A338) - Silk Mills Road (A3065) - Galmington Roundabout (A38) - bi-directional",
+              "type": "diversionRoute",
               "linearGeometry": {
-                "direction": "startToEnd",
+                "version": 1,
+                "linestring": "SRID=27700;LINESTRING(323589 125149, 323340 125227, 321986 125569, 320737 126347, 320715 124191)",
+                "representation": "linear",
+                "direction": "bidirectional",
+                "lateralPosition": "centreline",
                 "externalReference": [
                   {
                     "lastUpdateDate": "2024-10-01T00:00:00",
                     "uniqueStreetReferenceNumber": [
                       {
-                        "nsgStreetName": "East Reach",
-                        "nsgStreetNumber": "A38",
-                        "usrn": 39608173
+                        "usrn": 39609331
+                      },
+                      {
+                        "usrn": 39605119
+                      },
+                      {
+                        "usrn": 39609519
+                      },
+                      {
+                        "usrn": 39609406
+                      },
+                      {
+                        "usrn": 39605180
+                      },
+                      {
+                        "usrn": 39609179
+                      },
+                      {
+                        "usrn": 39605082
+                      },
+                      {
+                        "usrn": 39605158
+                      },
+                      {
+                        "usrn": 39607389
+                      },
+                      {
+                        "usrn": 39605156
+                      },
+                      {
+                        "usrn": 39606013
                       }
                     ]
                   }
-                ],
-                "lateralPosition": "onKerb",
-                "linestring": "SRID=27700;LINESTRING(323549 124618,323478 124594,323381 124569)",
-                "representation": "linear",
-                "version": 1
-              },
-              "type": "regulationLocation"
+                ]
+              }
             }
           ],
-          "regulation": {
-            "condition": [
-              {
-                "negate": false,
-                "timeValidity": {
-                  "start": "2024-09-22T08:00:00",
-                  "validPeriod": [
-                    {
-                      "recurringDayWeekMonthPeriod": [
-                        {
-                          "applicableDay": [
-                            "monday",
-                            "tuesday",
-                            "wednesday",
-                            "thursday",
-                            "friday"
-                          ]
-                        }
-                      ],
-                      "recurringTimePeriodOfDay": [
-                        {
-                          "startTimeOfPeriod": "08:00:00",
-                          "endTimeOfPeriod": "18:00:00"
-                        }
-                      ]
-                    }
-                  ],
-                  "exceptionPeriod": [
-                    {
-                      "recurringSpecialDay": [
-                        {
-                          "intersectWithApplicableDays": true,
-                          "specialDayType": "publicHoliday"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                "rateTable": {
-                  "additionalInformation": "http://www.somewhere.something.gov.uk",
-                  "type": "hourly",
-                  "rateLineCollection": [
-                    {
-                      "applicableCurrency": "GBP",
-                      "maxTime": 660,
-                      "maxValueCollection": 7.2,
-                      "minTime": 60,
-                      "minValueCollection": 1.0,
-                      "rateLine": [
-                        {
-                          "durationEnd": "00:00:00",
-                          "durationStart": "00:30:00",
-                          "incrementPeriod": 58,
-                          "maxValue": 7.2,
-                          "minValue": 1,
-                          "sequence": 1,
-                          "type": "flatRateTier",
-                          "usageCondition": "fixedDuration",
-                          "value": 1
-                        },
-                        {
-                          "durationEnd": "00:00:00",
-                          "durationStart": "00:30:00",
-                          "incrementPeriod": 59,
-                          "maxValue": 7.2,
-                          "minValue": 2,
-                          "sequence": 2,
-                          "type": "flatRateTier",
-                          "usageCondition": "fixedDuration",
-                          "value": 1
-                        },
-                        {
-                          "durationEnd": "00:00:00",
-                          "durationStart": "00:30:00",
-                          "incrementPeriod": 540,
-                          "maxValue": 7.2,
-                          "minValue": 2,
-                          "sequence": 3,
-                          "type": "flatRateTier",
-                          "usageCondition": "fixedDuration",
-                          "value": 5.2
-                        }
-                      ],
-                      "resetTime": "18:00:00",
-                      "sequence": 1,
-                      "startValidUsagePeriod": "2024-12-10T08:00:00"
-                    }
-                  ]
+          "regulation": [
+            {
+              "condition": [
+                {
+                  "timeValidity": {
+                    "start": "2024-10-22T06:00:00",
+                    "end": "2024-10-24T20:00:00"
+                  }
                 }
-              }
-            ],
-            "generalRegulation": {
-              "regulationType": "kerbsidePaymentParkingPlace"
-            },
-            "isDynamic": false,
-            "timeZone": "Europe/London"
-          }
+              ],
+              "generalRegulation": {
+                "regulationType": "miscRoadClosure"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
         }
       ],
-      "reference": "abc",
+      "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
       "section": "All sections",
       "traAffected": [
-        9001
+        3300
       ],
-      "traCreator": 9001,
-      "troName": "DfT Example - Rates example v1, Jan. 2025"
+      "traCreator": 3300,
+      "troName": "DfT Example - TTRO road closure v2, Jan. 2025"
     }
   }
 }

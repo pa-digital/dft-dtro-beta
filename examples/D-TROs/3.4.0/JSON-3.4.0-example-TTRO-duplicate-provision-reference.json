@@ -33,42 +33,44 @@
               }
             }
           ],
-          "regulation": {
-            "condition": [
-              {
-                "timeValidity": {
-                  "start": "2024-08-01T08:00:00",
-                  "validPeriod": [
-                    {
-                      "recurringDayWeekMonthPeriod": [
-                        {
-                          "applicableDay": [
-                            "friday",
-                            "monday",
-                            "saturday",
-                            "thursday",
-                            "tuesday",
-                            "wednesday"
-                          ]
-                        }
-                      ],
-                      "recurringTimePeriodOfDay": [
-                        {
-                          "endTimeOfPeriod": "18:00:00",
-                          "startTimeOfPeriod": "08:00:00"
-                        }
-                      ]
-                    }
-                  ]
+          "regulation": [
+            {
+              "condition": [
+                {
+                  "timeValidity": {
+                    "start": "2024-08-01T08:00:00",
+                    "validPeriod": [
+                      {
+                        "recurringDayWeekMonthPeriod": [
+                          {
+                            "applicableDay": [
+                              "friday",
+                              "monday",
+                              "saturday",
+                              "thursday",
+                              "tuesday",
+                              "wednesday"
+                            ]
+                          }
+                        ],
+                        "recurringTimePeriodOfDay": [
+                          {
+                            "endTimeOfPeriod": "18:00:00",
+                            "startTimeOfPeriod": "08:00:00"
+                          }
+                        ]
+                      }
+                    ]
+                  }
                 }
-              }
-            ],
-            "generalRegulation": {
-              "regulationType": "kerbsideLimitedWaiting"
-            },
-            "isDynamic": false,
-            "timeZone": "Europe/London"
-          }
+              ],
+              "generalRegulation": {
+                "regulationType": "kerbsideLimitedWaiting"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
         },
         {
           "actionType": "new",
@@ -98,42 +100,44 @@
               }
             }
           ],
-          "regulation": {
-            "condition": [
-              {
-                "timeValidity": {
-                  "start": "2024-08-01T08:00:00",
-                  "validPeriod": [
-                    {
-                      "recurringDayWeekMonthPeriod": [
-                        {
-                          "applicableDay": [
-                            "friday",
-                            "monday",
-                            "saturday",
-                            "thursday",
-                            "tuesday",
-                            "wednesday"
-                          ]
-                        }
-                      ],
-                      "recurringTimePeriodOfDay": [
-                        {
-                          "endTimeOfPeriod": "18:00:00",
-                          "startTimeOfPeriod": "08:00:00"
-                        }
-                      ]
-                    }
-                  ]
+          "regulation": [
+            {
+              "condition": [
+                {
+                  "timeValidity": {
+                    "start": "2024-08-01T08:00:00",
+                    "validPeriod": [
+                      {
+                        "recurringDayWeekMonthPeriod": [
+                          {
+                            "applicableDay": [
+                              "friday",
+                              "monday",
+                              "saturday",
+                              "thursday",
+                              "tuesday",
+                              "wednesday"
+                            ]
+                          }
+                        ],
+                        "recurringTimePeriodOfDay": [
+                          {
+                            "endTimeOfPeriod": "18:00:00",
+                            "startTimeOfPeriod": "08:00:00"
+                          }
+                        ]
+                      }
+                    ]
+                  }
                 }
-              }
-            ],
-            "generalRegulation": {
-              "regulationType": "kerbsideLimitedWaiting"
-            },
-            "isDynamic": false,
-            "timeZone": "Europe/London"
-          }
+              ],
+              "generalRegulation": {
+                "regulationType": "kerbsideLimitedWaiting"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
         }
       ],
       "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",

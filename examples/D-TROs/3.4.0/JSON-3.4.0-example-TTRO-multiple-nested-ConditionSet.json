@@ -34,20 +34,22 @@
               "type": "regulationLocation"
             }
           ],
-          "regulation": {
-            "condition": [
-              {
-                "roadCondition": {
-                  "roadType": "other"
+          "regulation": [
+            {
+              "condition": [
+                {
+                  "roadCondition": {
+                    "roadType": "other"
+                  }
                 }
-              }
-            ],
-            "generalRegulation": {
-              "regulationType": "mandatoryDirectionOneWay"
-            },
-            "isDynamic": false,
-            "timeZone": "Europe/London"
-          }
+              ],
+              "generalRegulation": {
+                "regulationType": "mandatoryDirectionOneWay"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
         }
       ],
       "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
