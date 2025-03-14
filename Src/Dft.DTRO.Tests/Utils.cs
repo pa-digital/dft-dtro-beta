@@ -37,8 +37,6 @@ public static class Utils
             SchemaVersion = schemaVersion,
             Created = DateTime.Now,
             LastUpdated = DateTime.Now,
-            CreatedCorrelationId = Guid.NewGuid().ToString(),
-            LastUpdatedCorrelationId = Guid.NewGuid().ToString(),
             IsActive = true,
             Template = schemaData
         };

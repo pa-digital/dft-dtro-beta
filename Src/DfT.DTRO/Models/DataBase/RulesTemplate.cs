@@ -43,21 +43,6 @@ public class RuleTemplate
     public DateTime? LastUpdated { get; set; }
 
     /// <summary>
-    /// Correlation ID of the request with which this DTRO was created.
-    /// </summary>
-    [DataMember(Name = "createdCorrelationId")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public string CreatedCorrelationId { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request with which this DTRO was last updated.
-    /// </summary>
-    [DataMember(Name = "lastUpdatedCorrelationId")]
-    [SwaggerSchema(ReadOnly = true)]
-    public string LastUpdatedCorrelationId { get; set; }
-
-    /// <summary>
     /// The Rule data model being submitted.
     /// </summary>
     [Required(ErrorMessage = "Template field must be included")]
