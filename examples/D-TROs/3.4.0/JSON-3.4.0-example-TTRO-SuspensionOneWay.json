@@ -1,4 +1,6 @@
 {
+  "schemaVersion": "3.4.0",
+  "data": {
     "source": {
       "actionType": "new",
       "currentTraOwner": 9001,
@@ -285,9 +287,11 @@
       ],
       "reference": "abc",
       "section": "All sections",
-      "traAffected": [9001],
+      "traAffected": [
+        9001
+      ],
       "traCreator": 9001,
       "troName": "DfT Example - Rates example v1, Jan. 2025"
     }
   }
-  
+}

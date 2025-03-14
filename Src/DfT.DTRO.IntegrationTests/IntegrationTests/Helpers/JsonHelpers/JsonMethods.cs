@@ -3,9 +3,9 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
 {
-    public static class JsonHelper
+    public static class JsonMethods
     {
         public static async Task<string> GetIdFromResponseJsonAsync(HttpResponseMessage httpResponseMessage)
         {
