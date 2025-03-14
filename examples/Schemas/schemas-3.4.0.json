@@ -802,7 +802,7 @@
                 },
                 "intermediateLocation": {
                     "type": "array",
-                    "minItems": 0,
+                    "minItems": 1,
                     "items": {
                         "$ref": "#/$defs/externalReference"
                     }
@@ -1173,6 +1173,7 @@
                 },
                 "externalReference": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
                         "$ref": "#/$defs/externalReference"
                     }
@@ -1659,6 +1660,7 @@
                 },
                 "externalReference": {
                     "type": "array",
+                    "minItems": 1,
                     "items": {
                         "$ref": "#/$defs/externalReference"
                     }
@@ -2106,82 +2108,86 @@
         },
         "regulation": {
             "description": "Object indicating the characteristics of a regulation",
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "isDynamic": {
-                    "description": "Indicates if the regulation is dynamic in nature",
-                    "type": "boolean"
-                },
-                "timeZone": {
-                    "description": "IANA time-zone (see http://www.iana.org/time-zones)",
-                    "type": "string",
-                    "minLength": 1
-                },
-                "conditionSet": {
-                    "$ref": "#/$defs/conditionSet"
-                },
-                "condition": {
-                    "type": "array",
-                    "minItems": 1,
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/$defs/condition"
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+                "additionalProperties": false,
+                "properties": {
+                    "isDynamic": {
+                        "description": "Indicates if the regulation is dynamic in nature",
+                        "type": "boolean"
+                    },
+                    "timeZone": {
+                        "description": "IANA time-zone (see http://www.iana.org/time-zones)",
+                        "type": "string",
+                        "minLength": 1
+                    },
+                    "conditionSet": {
+                        "$ref": "#/$defs/conditionSet"
+                    },
+                    "condition": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 1,
+                        "items": {
+                            "$ref": "#/$defs/condition"
+                        }
+                    },
+                    "conditions": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                            "$ref": "#/$defs/condition"
+                        }
+                    },
+                    "generalRegulation": {
+                        "$ref": "#/$defs/generalRegulation"
+                    },
+                    "offListRegulation": {
+                        "$ref": "#/$defs/offListRegulation"
+                    },
+                    "speedLimitValueBased": {
+                        "$ref": "#/$defs/speedLimitValueBased"
+                    },
+                    "speedLimitProfileBased": {
+                        "$ref": "#/$defs/speedLimitProfileBased"
+                    },
+                    "temporaryProvision": {
+                        "type": "array",
+                        "minItems": 0,
+                        "items": {
+                            "$ref": "#/$defs/temporaryProvision"
+                        }
                     }
                 },
-                "conditions": {
-                    "type": "array",
-                    "minItems": 1,
-                    "items": {
-                        "$ref": "#/$defs/condition"
+                "required": [
+                    "isDynamic",
+                    "timeZone"
+                ],
+                "oneOf": [
+                    {
+                        "required": [
+                            "generalRegulation"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "offListRegulation"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "speedLimitValueBased"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "speedLimitProfileBased"
+                        ]
                     }
-                },
-                "generalRegulation": {
-                    "$ref": "#/$defs/generalRegulation"
-                },
-                "offListRegulation": {
-                    "$ref": "#/$defs/offListRegulation"
-                },
-                "speedLimitValueBased": {
-                    "$ref": "#/$defs/speedLimitValueBased"
-                },
-                "speedLimitProfileBased": {
-                    "$ref": "#/$defs/speedLimitProfileBased"
-                },
-                "temporaryProvision": {
-                    "type": "array",
-                    "minItems": 0,
-                    "items": {
-                        "$ref": "#/$defs/temporaryProvision"
-                    }
-                }
-            },
-            "required": [
-                "isDynamic",
-                "timeZone"
-            ],
-            "oneOf": [
-                {
-                    "required": [
-                        "generalRegulation"
-                    ]
-                },
-                {
-                    "required": [
-                        "offListRegulation"
-                    ]
-                },
-                {
-                    "required": [
-                        "speedLimitValueBased"
-                    ]
-                },
-                {
-                    "required": [
-                        "speedLimitProfileBased"
-                    ]
-                }
-            ]
+                ]
+            }
         },
         "regulationType": {
             "enum": [

@@ -85,49 +85,53 @@
               }
             }
           ],
-          "regulation": {
-            "condition": [
-              {
-                "timeValidity": {
-                  "end": "2024-10-24T20:00:00",
-                  "start": "2024-10-22T06:00:00"
+          "regulation": [
+            {
+              "condition": [
+                {
+                  "timeValidity": {
+                    "end": "2024-10-24T20:00:00",
+                    "start": "2024-10-22T06:00:00"
+                  }
                 }
-              }
-            ],
-            "generalRegulation": {
-              "regulationType": "miscRoadClosure"
-            },
-            "isDynamic": false,
-            "temporaryProvision": [
-              {
-                "temporaryOverriddenProvision": {
-                  "actionType": "new",
-                  "orderReportingPoint": "permanentNoticeOfMaking",
-                  "provisionDescription": "Speed Limit, East Reach",
-                  "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A",
-                  "regulation": {
-                    "isDynamic": false,
-                    "timeZone": "Europe/London",
-                    "offListRegulation": {
-                      "regulationFullText": "text",
-                      "regulationShortName": "text"
-                    }
-                  },
-                  "regulatedPlace": [
-                    {
-                      "description": "text",
-                      "type": "regulationLocation",
-                      "polygon": {
-                        "polygon": "SRID=27700",
-                        "version": 1
+              ],
+              "generalRegulation": {
+                "regulationType": "miscRoadClosure"
+              },
+              "isDynamic": false,
+              "temporaryProvision": [
+                {
+                  "temporaryOverriddenProvision": {
+                    "actionType": "new",
+                    "orderReportingPoint": "permanentNoticeOfMaking",
+                    "provisionDescription": "Speed Limit, East Reach",
+                    "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A",
+                    "regulation": [
+                      {
+                        "isDynamic": false,
+                        "timeZone": "Europe/London",
+                        "offListRegulation": {
+                          "regulationFullText": "text",
+                          "regulationShortName": "text"
+                        }
                       }
-                    }
-                  ]
+                    ],
+                    "regulatedPlace": [
+                      {
+                        "description": "text",
+                        "type": "regulationLocation",
+                        "polygon": {
+                          "polygon": "SRID=27700",
+                          "version": 1
+                        }
+                      }
+                    ]
+                  }
                 }
-              }
-            ],
-            "timeZone": "Europe/London"
-          }
+              ],
+              "timeZone": "Europe/London"
+            }
+          ]
         },
         {
           "actionType": "new",
@@ -201,141 +205,143 @@
               "type": "regulationLocation"
             }
           ],
-          "regulation": {
-            "condition": [
-              {
-                "negate": false,
-                "timeValidity": {
-                  "start": "2024-12-10T09:00:00",
-                  "validPeriod": [
-                    {
-                      "recurringDayWeekMonthPeriod": [
-                        {
-                          "applicableDay": [
-                            "friday",
-                            "monday",
-                            "saturday",
-                            "sunday",
-                            "thursday",
-                            "tuesday",
-                            "wednesday"
-                          ]
-                        }
-                      ],
-                      "recurringTimePeriodOfDay": [
-                        {
-                          "endTimeOfPeriod": "20:00:00",
-                          "startTimeOfPeriod": "09:00:00"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                "rateTable": {
-                  "additionalInformation": "http://www.somewhere.something.gov.uk",
-                  "type": "hourly",
-                  "rateLineCollection": [
-                    {
-                      "applicableCurrency": "GBP",
-                      "maxTime": 660,
-                      "maxValueCollection": 7.2,
-                      "minTime": 60,
-                      "minValueCollection": 1.0,
-                      "rateLine": [
-                        {
-                          "durationEnd": "00:00:00",
-                          "durationStart": "00:30:00",
-                          "incrementPeriod": 58,
-                          "maxValue": 7.2,
-                          "minValue": 1.0,
-                          "sequence": 1,
-                          "type": "flatRateTier",
-                          "usageCondition": "fixedDuration",
-                          "value": 1.0
-                        },
-                        {
-                          "durationEnd": "00:00:00",
-                          "durationStart": "00:30:00",
-                          "incrementPeriod": 59,
-                          "maxValue": 7.2,
-                          "minValue": 2.0,
-                          "sequence": 2,
-                          "type": "flatRateTier",
-                          "usageCondition": "fixedDuration",
-                          "value": 1.0
-                        },
-                        {
-                          "durationEnd": "00:00:00",
-                          "durationStart": "00:30:00",
-                          "incrementPeriod": 540,
-                          "maxValue": 7.2,
-                          "minValue": 2.02,
-                          "sequence": 3,
-                          "type": "flatRateTier",
-                          "usageCondition": "fixedDuration",
-                          "value": 5.2
-                        }
-                      ],
-                      "resetTime": "23:59:59",
-                      "sequence": 1,
-                      "startValidUsagePeriod": "2024-08-10T09:00:00",
-                      "endValidUsagePeriod": "2024-12-31T20:00:00"
-                    },
-                    {
-                      "applicableCurrency": "GBP",
-                      "maxTime": 660,
-                      "maxValueCollection": 7.2,
-                      "minTime": 60,
-                      "minValueCollection": 1.0,
-                      "rateLine": [
-                        {
-                          "durationEnd": "00:00:00",
-                          "durationStart": "00:30:00",
-                          "incrementPeriod": 58,
-                          "maxValue": 7.3,
-                          "minValue": 1.0,
-                          "sequence": 1,
-                          "type": "flatRateTier",
-                          "usageCondition": "fixedDuration",
-                          "value": 1.0
-                        },
-                        {
-                          "durationEnd": "00:00:00",
-                          "durationStart": "00:30:00",
-                          "incrementPeriod": 59,
-                          "maxValue": 7.3,
-                          "minValue": 2.0,
-                          "sequence": 2,
-                          "type": "flatRateTier",
-                          "usageCondition": "fixedDuration",
-                          "value": 1.0
-                        },
-                        {
-                          "durationEnd": "00:00:00",
-                          "durationStart": "00:30:00",
-                          "incrementPeriod": 540,
-                          "maxValue": 7.3,
-                          "minValue": 2.0,
-                          "sequence": 3,
-                          "type": "flatRateTier",
-                          "usageCondition": "fixedDuration",
-                          "value": 5.3
-                        }
-                      ],
-                      "resetTime": "23:59:59",
-                      "sequence": 2,
-                      "startValidUsagePeriod": "2025-01-01T09:00:00"
-                    }
-                  ]
+          "regulation": [
+            {
+              "condition": [
+                {
+                  "negate": false,
+                  "timeValidity": {
+                    "start": "2024-12-10T09:00:00",
+                    "validPeriod": [
+                      {
+                        "recurringDayWeekMonthPeriod": [
+                          {
+                            "applicableDay": [
+                              "friday",
+                              "monday",
+                              "saturday",
+                              "sunday",
+                              "thursday",
+                              "tuesday",
+                              "wednesday"
+                            ]
+                          }
+                        ],
+                        "recurringTimePeriodOfDay": [
+                          {
+                            "endTimeOfPeriod": "20:00:00",
+                            "startTimeOfPeriod": "09:00:00"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "rateTable": {
+                    "additionalInformation": "http://www.somewhere.something.gov.uk",
+                    "type": "hourly",
+                    "rateLineCollection": [
+                      {
+                        "applicableCurrency": "GBP",
+                        "maxTime": 660,
+                        "maxValueCollection": 7.2,
+                        "minTime": 60,
+                        "minValueCollection": 1.0,
+                        "rateLine": [
+                          {
+                            "durationEnd": "00:00:00",
+                            "durationStart": "00:30:00",
+                            "incrementPeriod": 58,
+                            "maxValue": 7.2,
+                            "minValue": 1.0,
+                            "sequence": 1,
+                            "type": "flatRateTier",
+                            "usageCondition": "fixedDuration",
+                            "value": 1.0
+                          },
+                          {
+                            "durationEnd": "00:00:00",
+                            "durationStart": "00:30:00",
+                            "incrementPeriod": 59,
+                            "maxValue": 7.2,
+                            "minValue": 2.0,
+                            "sequence": 2,
+                            "type": "flatRateTier",
+                            "usageCondition": "fixedDuration",
+                            "value": 1.0
+                          },
+                          {
+                            "durationEnd": "00:00:00",
+                            "durationStart": "00:30:00",
+                            "incrementPeriod": 540,
+                            "maxValue": 7.2,
+                            "minValue": 2.02,
+                            "sequence": 3,
+                            "type": "flatRateTier",
+                            "usageCondition": "fixedDuration",
+                            "value": 5.2
+                          }
+                        ],
+                        "resetTime": "23:59:59",
+                        "sequence": 1,
+                        "startValidUsagePeriod": "2024-08-10T09:00:00",
+                        "endValidUsagePeriod": "2024-12-31T20:00:00"
+                      },
+                      {
+                        "applicableCurrency": "GBP",
+                        "maxTime": 660,
+                        "maxValueCollection": 7.2,
+                        "minTime": 60,
+                        "minValueCollection": 1.0,
+                        "rateLine": [
+                          {
+                            "durationEnd": "00:00:00",
+                            "durationStart": "00:30:00",
+                            "incrementPeriod": 58,
+                            "maxValue": 7.3,
+                            "minValue": 1.0,
+                            "sequence": 1,
+                            "type": "flatRateTier",
+                            "usageCondition": "fixedDuration",
+                            "value": 1.0
+                          },
+                          {
+                            "durationEnd": "00:00:00",
+                            "durationStart": "00:30:00",
+                            "incrementPeriod": 59,
+                            "maxValue": 7.3,
+                            "minValue": 2.0,
+                            "sequence": 2,
+                            "type": "flatRateTier",
+                            "usageCondition": "fixedDuration",
+                            "value": 1.0
+                          },
+                          {
+                            "durationEnd": "00:00:00",
+                            "durationStart": "00:30:00",
+                            "incrementPeriod": 540,
+                            "maxValue": 7.3,
+                            "minValue": 2.0,
+                            "sequence": 3,
+                            "type": "flatRateTier",
+                            "usageCondition": "fixedDuration",
+                            "value": 5.3
+                          }
+                        ],
+                        "resetTime": "23:59:59",
+                        "sequence": 2,
+                        "startValidUsagePeriod": "2025-01-01T09:00:00"
+                      }
+                    ]
+                  }
                 }
-              }
-            ],
-            "generalRegulation": {
-              "regulationType": "kerbsidePaymentParkingPlace"
-            },
-            "isDynamic": false,
-            "timeZone": "Europe/London"
-          }
+              ],
+              "generalRegulation": {
+                "regulationType": "kerbsidePaymentParkingPlace"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
         },
         {
           "actionType": "fullAmendment",
@@ -410,23 +416,25 @@
               "type": "regulationLocation"
             }
           ],
-          "regulation": {
-            "condition": [
-              {
-                "negate": false,
-                "timeValidity": {
-                  "start": "2024-12-01T00:00:00"
+          "regulation": [
+            {
+              "condition": [
+                {
+                  "negate": false,
+                  "timeValidity": {
+                    "start": "2024-12-01T00:00:00"
+                  }
                 }
-              }
-            ],
-            "isDynamic": false,
-            "speedLimitValueBased": {
-              "type": "maximumSpeedLimit",
-              "mphValue": 40,
-              "nature": "permanent"
-            },
-            "timeZone": "Europe/London"
-          }
+              ],
+              "isDynamic": false,
+              "speedLimitValueBased": {
+                "type": "maximumSpeedLimit",
+                "mphValue": 40,
+                "nature": "permanent"
+              },
+              "timeZone": "Europe/London"
+            }
+          ]
         },
         {
           "actionType": "new",
@@ -498,21 +506,23 @@
               "type": "regulationLocation"
             }
           ],
-          "regulation": {
-            "condition": [
-              {
-                "negate": false,
-                "timeValidity": {
-                  "start": "2024-12-12T00:00:00"
+          "regulation": [
+            {
+              "condition": [
+                {
+                  "negate": false,
+                  "timeValidity": {
+                    "start": "2024-12-12T00:00:00"
+                  }
                 }
-              }
-            ],
-            "isDynamic": false,
-            "speedLimitProfileBased": {
-              "type": "nationalSpeedLimitSingleCarriageway"
-            },
-            "timeZone": "Europe/London"
-          }
+              ],
+              "isDynamic": false,
+              "speedLimitProfileBased": {
+                "type": "nationalSpeedLimitSingleCarriageway"
+              },
+              "timeZone": "Europe/London"
+            }
+          ]
         },
         {
           "actionType": "new",
@@ -560,133 +570,135 @@
               "type": "regulationLocation"
             }
           ],
-          "regulation": {
-            "conditionSet": [
-              {
-                "operator": "and",
-                "conditionSet": [
-                  {
-                    "operator": "or",
-                    "conditions": [
-                      {
-                        "negate": true,
-                        "vehicleCharacteristics": {
-                          "vehicleType": "anyVehicle"
+          "regulation": [
+            {
+              "conditionSet": [
+                {
+                  "operator": "and",
+                  "conditionSet": [
+                    {
+                      "operator": "or",
+                      "conditions": [
+                        {
+                          "negate": true,
+                          "vehicleCharacteristics": {
+                            "vehicleType": "anyVehicle"
+                          }
+                        },
+                        {
+                          "negate": false,
+                          "vehicleCharacteristics": {
+                            "vehicleType": "bus"
+                          }
+                        },
+                        {
+                          "negate": false,
+                          "vehicleCharacteristics": {
+                            "vehicleType": "pedalCycle"
+                          }
+                        },
+                        {
+                          "negate": false,
+                          "occupantCondition": {
+                            "disabledWithPermit": true
+                          }
+                        },
+                        {
+                          "negate": false,
+                          "occupantCondition": {
+                            "numberOfOccupants": [
+                              {
+                                "operator": "greaterThan",
+                                "value": 2
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "negate": false,
+                          "permitCondition": {
+                            "schemeIdentifier": "ABC123",
+                            "type": "resident",
+                            "authority": {
+                              "name": "Somerset Council"
+                            }
+                          }
                         }
-                      },
-                      {
-                        "negate": false,
-                        "vehicleCharacteristics": {
-                          "vehicleType": "bus"
-                        }
-                      },
-                      {
-                        "negate": false,
-                        "vehicleCharacteristics": {
-                          "vehicleType": "pedalCycle"
-                        }
-                      },
-                      {
-                        "negate": false,
-                        "occupantCondition": {
-                          "disabledWithPermit": true
-                        }
-                      },
-                      {
-                        "negate": false,
-                        "occupantCondition": {
-                          "numberOfOccupants": [
+                      ]
+                    }
+                  ],
+                  "condition": {
+                    "negate": false,
+                    "timeValidity": {
+                      "start": "2024-09-22T08:00:00",
+                      "validPeriod": [
+                        {
+                          "recurringDayWeekMonthPeriod": [
                             {
-                              "operator": "greaterThan",
-                              "value": 2
+                              "applicableDay": [
+                                "monday",
+                                "tuesday",
+                                "wednesday",
+                                "thursday",
+                                "friday"
+                              ]
+                            }
+                          ],
+                          "recurringTimePeriodOfDay": [
+                            {
+                              "startTimeOfPeriod": "08:00:00",
+                              "endTimeOfPeriod": "09:30:00"
+                            },
+                            {
+                              "startTimeOfPeriod": "16:30:00:00",
+                              "endTimeOfPeriod": "18:30:00"
                             }
                           ]
                         }
-                      },
-                      {
-                        "negate": false,
-                        "permitCondition": {
-                          "schemeIdentifier": "ABC123",
-                          "type": "resident",
-                          "authority": {
-                            "name": "Somerset Council"
+                      ],
+                      "exceptionPeriod": [
+                        {
+                          "recurringSpecialDay": [
+                            {
+                              "intersectWithApplicableDays": true,
+                              "specialDayType": "publicHoliday"
+                            },
+                            {
+                              "intersectWithApplicableDays": true,
+                              "specialDayType": "matchDay"
+                            }
+                          ]
+                        },
+                        {
+                          "periodStart": {
+                            "startType": "external",
+                            "changeableTimePeriodSource": {
+                              "definition": "Source of start of non-school day periods, in 'Any' county",
+                              "sourceLocator": "http://www.schooldiaries.com"
+                            }
+                          }
+                        },
+                        {
+                          "periodEnd": {
+                            "endType": "external",
+                            "changeableTimePeriodSource": {
+                              "definition": "Source of end of non-school day periods, in 'Any' county",
+                              "sourceLocator": "http://www.schooldiaries.com"
+                            }
                           }
                         }
-                      }
-                    ]
-                  }
-                ],
-                "condition": {
-                  "negate": false,
-                  "timeValidity": {
-                    "start": "2024-09-22T08:00:00",
-                    "validPeriod": [
-                      {
-                        "recurringDayWeekMonthPeriod": [
-                          {
-                            "applicableDay": [
-                              "monday",
-                              "tuesday",
-                              "wednesday",
-                              "thursday",
-                              "friday"
-                            ]
-                          }
-                        ],
-                        "recurringTimePeriodOfDay": [
-                          {
-                            "startTimeOfPeriod": "08:00:00",
-                            "endTimeOfPeriod": "09:30:00"
-                          },
-                          {
-                            "startTimeOfPeriod": "16:30:00:00",
-                            "endTimeOfPeriod": "18:30:00"
-                          }
-                        ]
-                      }
-                    ],
-                    "exceptionPeriod": [
-                      {
-                        "recurringSpecialDay": [
-                          {
-                            "intersectWithApplicableDays": true,
-                            "specialDayType": "publicHoliday"
-                          },
-                          {
-                            "intersectWithApplicableDays": true,
-                            "specialDayType": "matchDay"
-                          }
-                        ]
-                      },
-                      {
-                        "periodStart": {
-                          "startType": "external",
-                          "changeableTimePeriodSource": {
-                            "definition": "Source of start of non-school day periods, in 'Any' county",
-                            "sourceLocator": "http://www.schooldiaries.com"
-                          }
-                        }
-                      },
-                      {
-                        "periodEnd": {
-                          "endType": "external",
-                          "changeableTimePeriodSource": {
-                            "definition": "Source of end of non-school day periods, in 'Any' county",
-                            "sourceLocator": "http://www.schooldiaries.com"
-                          }
-                        }
-                      }
-                    ]
+                      ]
+                    }
                   }
                 }
-              }
-            ],
-            "generalRegulation": {
-              "regulationType": "miscBusGate"
-            },
-            "isDynamic": false,
-            "timeZone": "Europe/London"
-          }
+              ],
+              "generalRegulation": {
+                "regulationType": "miscBusGate"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
         },
         {
           "actionType": "new",
@@ -717,135 +729,137 @@
               "type": "regulationLocation"
             }
           ],
-          "regulation": {
-            "conditionSet": [
-              {
-                "operator": "and",
-                "conditionSet": [
-                  {
-                    "operator": "or",
-                    "conditions": [
-                      {
-                        "negate": true,
-                        "vehicleCharacteristics": {
-                          "maximumWidthCharacteristic": {
-                            "vehicleWidth": 12.1
+          "regulation": [
+            {
+              "conditionSet": [
+                {
+                  "operator": "and",
+                  "conditionSet": [
+                    {
+                      "operator": "or",
+                      "conditions": [
+                        {
+                          "negate": true,
+                          "vehicleCharacteristics": {
+                            "maximumWidthCharacteristic": {
+                              "vehicleWidth": 12.1
+                            }
+                          }
+                        },
+                        {
+                          "negate": true,
+                          "vehicleCharacteristics": {
+                            "maximumHeightCharacteristic": {
+                              "vehicleHeight": 15.19
+                            }
+                          }
+                        },
+                        {
+                          "negate": true,
+                          "vehicleCharacteristics": {
+                            "maximumLengthCharacteristic": {
+                              "vehicleLength": 55.2
+                            }
+                          }
+                        },
+                        {
+                          "negate": true,
+                          "vehicleCharacteristics": {
+                            "maximumGrossWeightCharacteristic": {
+                              "grossVehicleWeight": 78.0,
+                              "typeOfWeight": "actual"
+                            }
+                          }
+                        },
+                        {
+                          "negate": true,
+                          "vehicleCharacteristics": {
+                            "heaviestAxleWeightCharacteristic": {
+                              "heaviestAxleWeight": 72.5
+                            }
                           }
                         }
-                      },
-                      {
-                        "negate": true,
-                        "vehicleCharacteristics": {
-                          "maximumHeightCharacteristic": {
-                            "vehicleHeight": 15.19
+                      ]
+                    }
+                  ],
+                  "condition": {
+                    "negate": false,
+                    "timeValidity": {
+                      "end": "2024-10-30T20:00:00",
+                      "start": "2024-09-22T08:00:00",
+                      "validPeriod": [
+                        {
+                          "recurringDayWeekMonthPeriod": [
+                            {
+                              "applicableDay": [
+                                "monday",
+                                "tuesday",
+                                "wednesday",
+                                "thursday",
+                                "friday"
+                              ]
+                            }
+                          ],
+                          "recurringTimePeriodOfDay": [
+                            {
+                              "startTimeOfPeriod": "08:00:00",
+                              "endTimeOfPeriod": "09:30:00"
+                            },
+                            {
+                              "startTimeOfPeriod": "16:30:00:00",
+                              "endTimeOfPeriod": "18:30:00"
+                            }
+                          ]
+                        }
+                      ],
+                      "exceptionPeriod": [
+                        {
+                          "recurringSpecialDay": [
+                            {
+                              "intersectWithApplicableDays": true,
+                              "specialDayType": "publicHoliday"
+                            },
+                            {
+                              "intersectWithApplicableDays": true,
+                              "specialDayType": "matchDay"
+                            }
+                          ]
+                        },
+                        {
+                          "periodStart": {
+                            "startType": "external",
+                            "changeableTimePeriodSource": {
+                              "definition": "Source of start of non-school day periods, in 'Any' county",
+                              "sourceLocator": "http://www.schooldiaries.com"
+                            }
+                          }
+                        },
+                        {
+                          "periodEnd": {
+                            "endType": "external",
+                            "changeableTimePeriodSource": {
+                              "definition": "Source of end of non-school day periods, in 'Any' county",
+                              "sourceLocator": "http://www.schooldiaries.com"
+                            }
                           }
                         }
-                      },
-                      {
-                        "negate": true,
-                        "vehicleCharacteristics": {
-                          "maximumLengthCharacteristic": {
-                            "vehicleLength": 55.2
-                          }
-                        }
-                      },
-                      {
-                        "negate": true,
-                        "vehicleCharacteristics": {
-                          "maximumGrossWeightCharacteristic": {
-                            "grossVehicleWeight": 78.0,
-                            "typeOfWeight": "actual"
-                          }
-                        }
-                      },
-                      {
-                        "negate": true,
-                        "vehicleCharacteristics": {
-                          "heaviestAxleWeightCharacteristic": {
-                            "heaviestAxleWeight": 72.5
-                          }
-                        }
-                      }
-                    ]
-                  }
-                ],
-                "condition": {
-                  "negate": false,
-                  "timeValidity": {
-                    "end": "2024-10-30T20:00:00",
-                    "start": "2024-09-22T08:00:00",
-                    "validPeriod": [
-                      {
-                        "recurringDayWeekMonthPeriod": [
-                          {
-                            "applicableDay": [
-                              "monday",
-                              "tuesday",
-                              "wednesday",
-                              "thursday",
-                              "friday"
-                            ]
-                          }
-                        ],
-                        "recurringTimePeriodOfDay": [
-                          {
-                            "startTimeOfPeriod": "08:00:00",
-                            "endTimeOfPeriod": "09:30:00"
-                          },
-                          {
-                            "startTimeOfPeriod": "16:30:00:00",
-                            "endTimeOfPeriod": "18:30:00"
-                          }
-                        ]
-                      }
-                    ],
-                    "exceptionPeriod": [
-                      {
-                        "recurringSpecialDay": [
-                          {
-                            "intersectWithApplicableDays": true,
-                            "specialDayType": "publicHoliday"
-                          },
-                          {
-                            "intersectWithApplicableDays": true,
-                            "specialDayType": "matchDay"
-                          }
-                        ]
-                      },
-                      {
-                        "periodStart": {
-                          "startType": "external",
-                          "changeableTimePeriodSource": {
-                            "definition": "Source of start of non-school day periods, in 'Any' county",
-                            "sourceLocator": "http://www.schooldiaries.com"
-                          }
-                        }
-                      },
-                      {
-                        "periodEnd": {
-                          "endType": "external",
-                          "changeableTimePeriodSource": {
-                            "definition": "Source of end of non-school day periods, in 'Any' county",
-                            "sourceLocator": "http://www.schooldiaries.com"
-                          }
-                        }
-                      }
-                    ]
+                      ]
+                    }
                   }
                 }
-              }
-            ],
-            "offListRegulation": {
-              "legislationCrossReference": [
-                "regulation no.1",
-                "regulation no.2"
               ],
-              "regulationFullText": "e-scooter regs",
-              "regulationShortName": "Regulations for the use of e-scooters in Anytown"
-            },
-            "isDynamic": false,
-            "timeZone": "Europe/London"
-          }
+              "offListRegulation": {
+                "legislationCrossReference": [
+                  "regulation no.1",
+                  "regulation no.2"
+                ],
+                "regulationFullText": "e-scooter regs",
+                "regulationShortName": "Regulations for the use of e-scooters in Anytown"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
         }
       ],
       "reference": "abc",

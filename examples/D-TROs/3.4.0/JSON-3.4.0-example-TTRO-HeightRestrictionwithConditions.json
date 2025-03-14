@@ -35,35 +35,37 @@
               }
             }
           ],
-          "regulation": {
-            "conditionSet": [
-              {
-                "operator": "and",
-                "conditions": [
-                  {
-                    "negate": false,
-                    "timeValidity": {
-                      "start": "2024-08-22T08:00:00",
-                      "end": "2024-08-22T20:00:00"
-                    }
-                  },
-                  {
-                    "negate": false,
-                    "vehicleCharacteristics": {
-                      "maximumHeightCharacteristic": {
-                        "vehicleHeight": 2.5
+          "regulation": [
+            {
+              "conditionSet": [
+                {
+                  "operator": "and",
+                  "conditions": [
+                    {
+                      "negate": false,
+                      "timeValidity": {
+                        "start": "2024-08-22T08:00:00",
+                        "end": "2024-08-22T20:00:00"
+                      }
+                    },
+                    {
+                      "negate": false,
+                      "vehicleCharacteristics": {
+                        "maximumHeightCharacteristic": {
+                          "vehicleHeight": 2.5
+                        }
                       }
                     }
-                  }
-                ]
-              }
-            ],
-            "generalRegulation": {
-              "regulationType": "dimensionMaximumHeightWithTRO"
-            },
-            "isDynamic": false,
-            "timeZone": "Europe/London"
-          }
+                  ]
+                }
+              ],
+              "generalRegulation": {
+                "regulationType": "dimensionMaximumHeightWithTRO"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
         }
       ],
       "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",

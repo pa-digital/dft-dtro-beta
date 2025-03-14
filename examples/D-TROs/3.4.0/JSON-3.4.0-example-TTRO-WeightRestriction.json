@@ -39,21 +39,23 @@
               "type": "regulationLocation"
             }
           ],
-          "regulation": {
-            "condition": [
-              {
-                "timeValidity": {
-                  "start": "2024-10-23T08:00:00",
-                  "end": "2024-10-23T20:00:00"
+          "regulation": [
+            {
+              "condition": [
+                {
+                  "timeValidity": {
+                    "start": "2024-10-23T08:00:00",
+                    "end": "2024-10-23T20:00:00"
+                  }
                 }
-              }
-            ],
-            "generalRegulation": {
-              "regulationType": "miscSuspensionOfOneWay"
-            },
-            "isDynamic": false,
-            "timeZone": "Europe/London"
-          }
+              ],
+              "generalRegulation": {
+                "regulationType": "miscSuspensionOfOneWay"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
         }
       ],
       "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
