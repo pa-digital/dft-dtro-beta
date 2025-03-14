@@ -10,7 +10,6 @@ namespace DfT.DTRO.Controllers;
 public class RulesController : ControllerBase
 {
     private readonly IRuleTemplateService _ruleTemplateService;
-    private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<RulesController> _logger;
     private readonly LoggingExtension _loggingExtension;
 
@@ -18,17 +17,14 @@ public class RulesController : ControllerBase
     /// Default constructor.
     /// </summary>
     /// <param name="ruleTemplateService">An <see cref="IRuleTemplateService"/> instance.</param>
-    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{RulesController}"/> instance.</param>
     /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
     public RulesController(
         IRuleTemplateService ruleTemplateService,
-        IRequestCorrelationProvider correlationProvider,
         ILogger<RulesController> logger,
          LoggingExtension loggingExtension)
     {
         _ruleTemplateService = ruleTemplateService;
-        _correlationProvider = correlationProvider;
         _logger = logger;
         _loggingExtension = loggingExtension;
     }
@@ -274,7 +270,7 @@ public class RulesController : ControllerBase
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
-                dynamic response = await _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
+                dynamic response = await _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, fileContent);
                 _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using version '{version}' and file '{file.Name}'");
                 _loggingExtension.LogInformation(
                     nameof(CreateFromFile),
@@ -374,7 +370,7 @@ public class RulesController : ControllerBase
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
-                GuidResponse response = await _ruleTemplateService.UpdateRuleTemplateAsJsonAsync(version, fileContent, _correlationProvider.CorrelationId);
+                GuidResponse response = await _ruleTemplateService.UpdateRuleTemplateAsJsonAsync(version, fileContent);
                 _logger.LogInformation($"'{nameof(UpdateFromFile)}' method called using version '{version}' and file '{file.Name}'");
                 _loggingExtension.LogInformation(
                     nameof(UpdateFromFile),

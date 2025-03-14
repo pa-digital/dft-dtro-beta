@@ -3,7 +3,6 @@ namespace Dft.DTRO.Tests.ControllerTests;
 public class AuthControllerTests
 {
     private readonly Mock<IAuthService> _mockAuthService = new();
-    private readonly Mock<IRequestCorrelationProvider> _mockRequestCorrelationProvider = new();
 
     private readonly AuthController _sut;
 
@@ -16,10 +15,6 @@ public class AuthControllerTests
 
         Guid appId = Guid.NewGuid();
         Mock<HttpContext> mockContext = MockHttpContext.Setup();
-
-        _mockRequestCorrelationProvider
-            .SetupGet(provider => provider.CorrelationId)
-            .Returns(() => appId.ToString());
     }
 
     [Fact]

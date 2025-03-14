@@ -3,7 +3,6 @@ namespace Dft.DTRO.Tests.ControllerTests;
 public class TraControllerTests
 {
     private readonly Mock<ITraService> _mockTraService = new();
-    private readonly Mock<IRequestCorrelationProvider> _mockRequestCorrelationProvider = new();
 
     private readonly TraController _sut;
 
@@ -16,10 +15,6 @@ public class TraControllerTests
 
         Guid appId = Guid.NewGuid();
         Mock<HttpContext> mockContext = MockHttpContext.Setup();
-
-        _mockRequestCorrelationProvider
-            .SetupGet(provider => provider.CorrelationId)
-            .Returns(() => appId.ToString());
     }
 
     [Fact]

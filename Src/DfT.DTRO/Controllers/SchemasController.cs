@@ -12,7 +12,6 @@ namespace DfT.DTRO.Controllers;
 public class SchemasController : ControllerBase
 {
     private readonly ISchemaTemplateService _schemaTemplateService;
-    private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<SchemasController> _logger;
     private readonly LoggingExtension _loggingExtension;
 
@@ -20,17 +19,14 @@ public class SchemasController : ControllerBase
     /// Default Constructor.
     /// </summary>
     /// <param name="schemaTemplateService">An <see cref="ISchemaTemplateService"/> instance.</param>
-    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{SchemaController}"/> instance.</param>
     /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
     public SchemasController(
         ISchemaTemplateService schemaTemplateService,
-        IRequestCorrelationProvider correlationProvider,
         ILogger<SchemasController> logger,
          LoggingExtension loggingExtension)
     {
         _schemaTemplateService = schemaTemplateService;
-        _correlationProvider = correlationProvider;
         _logger = logger;
         _loggingExtension = loggingExtension;
     }
@@ -284,7 +280,7 @@ public class SchemasController : ControllerBase
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 var payload = JsonConvert.DeserializeObject<ExpandoObject>(fileContent);
-                dynamic response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, payload, _correlationProvider.CorrelationId);
+                dynamic response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, payload);
                 _logger.LogInformation($"'{nameof(CreateFromFileByVersion)}' method called using version '{version}' and file '{file.Name}'");
                 _loggingExtension.LogInformation(
                     nameof(CreateFromFileByVersion),
@@ -367,7 +363,7 @@ public class SchemasController : ControllerBase
     {
         try
         {
-            GuidResponse response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, body, _correlationProvider.CorrelationId);
+            GuidResponse response = await _schemaTemplateService.SaveSchemaTemplateAsJsonAsync(version, body);
             _logger.LogInformation($"'{nameof(CreateFromBodyByVersion)}' method called using version '{version}' and body '{body}'");
             _loggingExtension.LogInformation(
                 nameof(CreateFromBodyByVersion),
@@ -457,7 +453,7 @@ public class SchemasController : ControllerBase
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 dynamic expand = JsonConvert.DeserializeObject<ExpandoObject>(fileContent);
-                dynamic response = await _schemaTemplateService.UpdateSchemaTemplateAsJsonAsync(version, expand, _correlationProvider.CorrelationId);
+                dynamic response = await _schemaTemplateService.UpdateSchemaTemplateAsJsonAsync(version, expand);
                 _logger.LogInformation($"'{nameof(UpdateFromFileByVersion)}' method called using version '{version}' and file '{file.Name}'");
                 _loggingExtension.LogInformation(
                     nameof(UpdateFromFileByVersion),
@@ -556,7 +552,7 @@ public class SchemasController : ControllerBase
     {
         try
         {
-            GuidResponse response = await _schemaTemplateService.UpdateSchemaTemplateAsJsonAsync(version, body, _correlationProvider.CorrelationId);
+            GuidResponse response = await _schemaTemplateService.UpdateSchemaTemplateAsJsonAsync(version, body);
             _logger.LogInformation($"'{nameof(UpdateFromBodyByVersion)}' method called using version '{version}' and body '{body}'");
             _loggingExtension.LogInformation(
                 nameof(UpdateFromBodyByVersion),

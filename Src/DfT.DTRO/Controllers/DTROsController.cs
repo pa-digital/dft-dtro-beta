@@ -14,7 +14,6 @@ public class DTROsController : ControllerBase
 {
     private readonly IDtroService _dtroService;
     private readonly IMetricsService _metricsService;
-    private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<DTROsController> _logger;
     private readonly LoggingExtension _loggingExtension;
 
@@ -23,19 +22,16 @@ public class DTROsController : ControllerBase
     /// </summary>
     /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
     /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
-    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{DTROsController}"/> instance.</param>
     /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
     public DTROsController(
          IDtroService dtroService,
          IMetricsService metricsService,
-         IRequestCorrelationProvider correlationProvider,
          ILogger<DTROsController> logger,
          LoggingExtension loggingExtension)
     {
         _dtroService = dtroService;
         _metricsService = metricsService;
-        _correlationProvider = correlationProvider;
         _logger = logger;
         _loggingExtension = loggingExtension;
     }
@@ -69,7 +65,7 @@ public class DTROsController : ControllerBase
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
 
-                GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, appId);
+                GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, appId);
                 await _metricsService.IncrementMetric(MetricType.Submission, appId);
                 _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using appId: '{appId}' and file '{file.Name}'");
                 _loggingExtension.LogInformation(
@@ -183,7 +179,7 @@ public class DTROsController : ControllerBase
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
-                GuidResponse response = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, _correlationProvider.CorrelationId, appId);
+                GuidResponse response = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, appId);
                 await _metricsService.IncrementMetric(MetricType.Submission, appId);
                 _logger.LogInformation($"'{nameof(UpdateFromFile)}' method called using {RequestHeaderNames.AppId} Id: '{appId}', unique identifier: '{dtroId}' and file: '{file.Name}'");
                 _loggingExtension.LogInformation(
@@ -276,7 +272,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, appId);
+            GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, appId);
             await _metricsService.IncrementMetric(MetricType.Submission, appId);
             _logger.LogInformation($"'{nameof(CreateFromBody)}' method called using appId: '{appId}' and body '{dtroSubmit}'");
             _loggingExtension.LogInformation(
@@ -385,7 +381,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, _correlationProvider.CorrelationId, appId);
+            GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, appId);
             await _metricsService.IncrementMetric(MetricType.Submission, appId);
             _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using appId: '{appId}', unique identifier: '{dtroId}' and body: '{dtroSubmit}'");
             _loggingExtension.LogInformation(
@@ -708,7 +704,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            await _dtroService.AssignOwnershipAsync(dtroId, appId, assignToTraId, _correlationProvider.CorrelationId);
+            await _dtroService.AssignOwnershipAsync(dtroId, appId, assignToTraId);
             _logger.LogInformation($"'{nameof(AssignOwnership)}' method called using appId '{appId}', unique identifier '{dtroId}' and new assigned TRA Id '{assignToTraId}'");
             _loggingExtension.LogInformation(
                 nameof(AssignOwnership),

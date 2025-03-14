@@ -50,18 +50,16 @@ public interface ISchemaTemplateDal
     /// </summary>
     /// <param name="version">Schema version to get schema template by.</param>
     /// <param name="expandoObject">Expando object representing a schema template.</param>
-    /// <param name="correlationId">Correlation ID passed when submitting the schema template.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
-    Task<GuidResponse> SaveSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId);
+    Task<GuidResponse> SaveSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject);
 
     /// <summary>
     /// Update an existing schema template by its <paramref name="version"/>
     /// </summary>
     /// <param name="version">Schema version to get schema template by.</param>
     /// <param name="expandoObject">Expando object representing a schema template.</param>
-    /// <param name="correlationId">Correlation ID passed when submitting the schema template.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
-    Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId);
+    Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject);
 
     /// <summary>
     /// Check if schema template exists by <paramref name="schemaVersion"/>

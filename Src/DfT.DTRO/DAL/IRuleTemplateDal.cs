@@ -63,16 +63,14 @@ public interface IRuleTemplateDal
     /// </summary>
     /// <param name="version">Rule version to get rule template by.</param>
     /// <param name="rule">JSON object representing a rule template.</param>
-    /// <param name="correlationId">Correlation ID passed when submitting the rule template.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
-    Task<GuidResponse> SaveRuleTemplateAsJsonAsync(string version, string rule, string correlationId);
+    Task<GuidResponse> SaveRuleTemplateAsJsonAsync(string version, string rule);
 
     /// <summary>
     /// Update an existing rule template by its <paramref name="version"/>
     /// </summary>
     /// <param name="version">Rule version to get rule template by.</param>
     /// <param name="rule">JSON object representing a rule template.</param>
-    /// <param name="correlationId">Correlation ID passed when submitting the rule template.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
-    Task<GuidResponse> UpdateRuleTemplateAsJsonAsync(string version, string rule, string correlationId);
+    Task<GuidResponse> UpdateRuleTemplateAsJsonAsync(string version, string rule);
 }

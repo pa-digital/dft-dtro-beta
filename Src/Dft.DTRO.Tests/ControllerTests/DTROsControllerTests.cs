@@ -4,7 +4,6 @@ public class DTROsControllerTests
 {
     private readonly Mock<IDtroService> _mockDtroService = new();
     private readonly Mock<IMetricsService> _mockMetricsService = new();
-    private readonly Mock<IRequestCorrelationProvider> _mockRequestCorrelationProvider = new();
 
     private readonly DTROsController _sut;
     private readonly Guid _appId;
@@ -17,7 +16,6 @@ public class DTROsControllerTests
         _sut = new DTROsController(
             _mockDtroService.Object,
             _mockMetricsService.Object,
-            _mockRequestCorrelationProvider.Object,
             mockLogger,
             mockLoggingExtension.Object);
 
@@ -27,17 +25,13 @@ public class DTROsControllerTests
         _mockMetricsService
             .Setup(it => it.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<Guid>()))
             .ReturnsAsync(() => true);
-
-        _mockRequestCorrelationProvider
-            .SetupGet(provider => provider.CorrelationId)
-            .Returns(() => _appId.ToString());
     }
 
     [Fact]
     public async Task CreateFromFileReturnsCreated()
     {
         _mockDtroService
-            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<Guid>()))
             .ReturnsAsync(() => MockTestObjects.GuidResponse);
 
         IActionResult? actual = await _sut.CreateFromFile(_appId, MockTestObjects.TestFile);
@@ -51,7 +45,7 @@ public class DTROsControllerTests
     public async Task CreateFromFileThrowDtroValidationException()
     {
         _mockDtroService
-            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<Guid>()))
             .Throws<DtroValidationException>();
 
         IActionResult? actual = await _sut.CreateFromFile(_appId, MockTestObjects.TestFile);
@@ -64,7 +58,7 @@ public class DTROsControllerTests
     public async Task CreateFromFileThrowsNotFoundException()
     {
         _mockDtroService
-            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<Guid>()))
             .Throws<NotFoundException>();
 
         IActionResult? actual = await _sut.CreateFromFile(_appId, MockTestObjects.TestFile);
@@ -77,7 +71,7 @@ public class DTROsControllerTests
     public async Task CreateFromFileThrowsInvalidOperationException()
     {
         _mockDtroService
-            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<Guid>()))
             .Throws<InvalidOperationException>();
 
         IActionResult? actual = await _sut.CreateFromFile(_appId, MockTestObjects.TestFile);
@@ -90,7 +84,7 @@ public class DTROsControllerTests
     public async Task CreateFromFileThrowsException()
     {
         _mockDtroService
-            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<Guid>()))
             .Throws<Exception>();
 
         IActionResult? actual = await _sut.CreateFromFile(_appId, MockTestObjects.TestFile);
@@ -104,7 +98,7 @@ public class DTROsControllerTests
     {
         _mockDtroService
             .Setup(it =>
-                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(),
+                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(),
                     It.IsAny<Guid>()))
             .ReturnsAsync(() => MockTestObjects.GuidResponse);
 
@@ -120,7 +114,7 @@ public class DTROsControllerTests
     {
         _mockDtroService
             .Setup(it =>
-                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(),
+                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(),
                     It.IsAny<Guid>()))
             .Throws<DtroValidationException>();
 
@@ -135,7 +129,7 @@ public class DTROsControllerTests
     {
         _mockDtroService
             .Setup(it =>
-                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(),
+                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(),
                     It.IsAny<Guid>()))
             .Throws<NotFoundException>();
 
@@ -150,7 +144,7 @@ public class DTROsControllerTests
     {
         _mockDtroService
             .Setup(it =>
-                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(),
+                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(),
                     It.IsAny<Guid>()))
             .Throws<InvalidOperationException>();
 
@@ -165,7 +159,7 @@ public class DTROsControllerTests
     {
         _mockDtroService
             .Setup(it =>
-                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(),
+                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(),
                     It.IsAny<Guid>()))
             .Throws<Exception>();
 

@@ -6,7 +6,6 @@ namespace DfT.DTRO.Tests.CodeiumTests.Integration;
 public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly Mock<IDtroService> _mockDtroService;
-    private readonly Mock<IRequestCorrelationProvider> _correlationProviderMock;
     private readonly DTROsController _controller;
     private readonly WebApplicationFactory<Program> _factory;
 
@@ -19,7 +18,6 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
         _factory = factory;
         _mockDtroService = new Mock<IDtroService>();
 
-        _correlationProviderMock = new Mock<IRequestCorrelationProvider>();
         Mock<ILogger<DTROsController>> loggerMock = new();
         Mock<IMetricsService> metricsMock = new();
         Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
@@ -29,12 +27,11 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
 
 
         _controller = new DTROsController(_mockDtroService.Object, metricsMock.Object,
-            _correlationProviderMock.Object, loggerMock.Object, mockLoggingExtension.Object);
+            loggerMock.Object, mockLoggingExtension.Object);
 
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
             services.AddSingleton(_mockDtroService.Object);
-            services.AddSingleton(_correlationProviderMock.Object);
             services.AddSingleton(loggerMock.Object);
         }));
 
@@ -54,7 +51,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     public async Task CreateDtro_Returns_OK()
     {
         var response = new GuidResponse { Id = Guid.NewGuid() };
-        _mockDtroService.Setup(x => x.SaveDtroAsJsonAsync(_dtroSubmit, It.IsAny<string>(), _appIdForTest)).ReturnsAsync(response);
+        _mockDtroService.Setup(x => x.SaveDtroAsJsonAsync(_dtroSubmit, _appIdForTest)).ReturnsAsync(response);
 
         var result = await _controller.CreateFromBody(_appIdForTest, _dtroSubmit);
 
@@ -69,7 +66,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
     public async Task CreateDtro_UnexpectedException_ReturnsInternalServerError()
     {
         var dtroBadSubmit = new DtroSubmit();
-        _mockDtroService.Setup(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _appIdForTest))
+        _mockDtroService.Setup(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _appIdForTest))
             .ThrowsAsync(new Exception("Unexpected error"));
 
         var response = await _controller.CreateFromBody(_appIdForTest, dtroBadSubmit);
@@ -78,26 +75,26 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
         var objectResult = (ObjectResult)response;
         Assert.Equal(500, objectResult.StatusCode);
 
-        _mockDtroService.Verify(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _correlationProviderMock.Object.CorrelationId, _appIdForTest), Times.Once);
+        _mockDtroService.Verify(s => s.SaveDtroAsJsonAsync(dtroBadSubmit, _appIdForTest), Times.Once);
     }
 
     [Fact]
     public async Task UpdateDtro_ReturnsOk_ForExistingDtro()
     {
-        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _appIdForTest))
+        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), _appIdForTest))
             .Returns(Task.FromResult(new GuidResponse()));
 
         var result = await _controller.UpdateFromBody(_appIdForTest, Guid.NewGuid(), _dtroSubmit);
 
         Assert.IsType<OkObjectResult>(result);
-        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _appIdForTest), Times.Once);
+        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), _appIdForTest), Times.Once);
     }
 
 
     [Fact]
     public async Task UpdateDtro_ReturnsNotFound_ForNonExistentDtro()
     {
-        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _appIdForTest))
+        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), _appIdForTest))
             .ThrowsAsync(new NotFoundException());
 
         var dtroBadSubmit = new DtroSubmit
@@ -106,13 +103,13 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
         var result = await _controller.UpdateFromBody(_appIdForTest, Guid.NewGuid(), dtroBadSubmit);
 
         Assert.IsType<NotFoundObjectResult>(result);
-        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _appIdForTest), Times.Once);
+        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), _appIdForTest), Times.Once);
     }
 
     [Fact]
     public async Task UpdateDtro_ReturnsInternalServerError_ForUnexpectedException()
     {
-        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _appIdForTest))
+        _mockDtroService.Setup(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), _appIdForTest))
             .ThrowsAsync(new Exception());
 
         var dtroBadSubmit = new DtroSubmit
@@ -123,7 +120,7 @@ public class DTROsController_Codeium_Tests : IClassFixture<WebApplicationFactory
         Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, result?.StatusCode);
 
-        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(), _appIdForTest), Times.Once);
+        _mockDtroService.Verify(s => s.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), _appIdForTest), Times.Once);
     }
 
     [Fact]
