@@ -13,7 +13,7 @@ public class DtroUserResponse
     /// <summary>
     /// App-Id header unique identifier
     /// </summary>
-    public Guid xAppId { get; set; }
+    public Guid AppId { get; set; }
 
     /// <summary>
     /// Traffic regulation authority code

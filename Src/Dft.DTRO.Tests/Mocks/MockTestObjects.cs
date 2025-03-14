@@ -26,7 +26,7 @@ public static class MockTestObjects
             TraId = 3300,
             Prefix = "LG",
             UserGroup = UserGroup.Tra,
-            xAppId = Guid.NewGuid()
+            AppId = Guid.NewGuid()
         },
         new DtroUserResponse
         {
@@ -35,7 +35,7 @@ public static class MockTestObjects
             TraId = 1050,
             Prefix = "DJ",
             UserGroup = UserGroup.Tra,
-            xAppId = Guid.NewGuid()
+            AppId = Guid.NewGuid()
         },
         new DtroUserResponse
         {
@@ -44,7 +44,7 @@ public static class MockTestObjects
             TraId = 4,
             Prefix = "AP",
             UserGroup = UserGroup.Tra,
-            xAppId = Guid.NewGuid()
+            AppId = Guid.NewGuid()
         }
     };
 

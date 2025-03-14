@@ -138,9 +138,9 @@ public class DtroService : IDtroService
         return _dtroMappingService.MapToDtroResponse(dtro);
     }
 
-    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
+    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid appId)
     {
-        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
         var errors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, user.TraId);
 
         if (errors is not null)
@@ -151,9 +151,9 @@ public class DtroService : IDtroService
         return await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
     }
 
-    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
+    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, Guid appId)
     {
-        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
         var errors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, user.TraId);
 
         if (errors is not null)
