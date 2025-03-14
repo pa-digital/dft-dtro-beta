@@ -9,7 +9,7 @@
 //     public class DuplicateItems : BaseTest
 //     {
 //         readonly static string schemaVersionToTest = "3.4.0";
-//         readonly string fileName = "JSON-3.4.0-example-TTRO-duplicate-provision-reference.json";
+//         readonly string fileName = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
 
 //         [Fact]
 //         public async Task DtroSubmittedFromFileWithDuplicateProvisionReferenceShouldBeRejected()

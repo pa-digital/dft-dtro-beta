@@ -162,5 +162,39 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
             using JsonDocument doc = JsonDocument.Parse(json);
             return System.Text.Json.JsonSerializer.Serialize(doc.RootElement);
         }
+
+        public static string CloneFirstItemInArrayAndAppend(string jsonString, string arrayPath)
+        {
+            try
+            {
+                JObject jsonObject = JObject.Parse(jsonString);
+                JToken arrayToken = jsonObject.SelectToken(arrayPath);
+
+                if (arrayToken == null || arrayToken.Type != JTokenType.Array)
+                {
+                    throw new ArgumentException("Invalid array path or array not found.");
+                }
+
+                JArray jsonArray = (JArray)arrayToken;
+
+                if (jsonArray.Count == 0)
+                {
+                    return jsonString; // No items to copy, return original JSON
+                }
+
+                JToken firstItem = jsonArray[0].DeepClone(); // Deep clone to avoid reference issues
+                jsonArray.Add(firstItem);
+
+                return jsonObject.ToString();
+            }
+            catch (Newtonsoft.Json.JsonReaderException ex)
+            {
+                throw new ArgumentException("Invalid JSON string.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error processing JSON: {ex.Message}", ex);
+            }
+        }
     }
 }
