@@ -23,9 +23,14 @@ public class ApplicationService : IApplicationService
         return await _applicationDal.CheckApplicationNameDoesNotExist(appName);
     }
 
-    public async Task<ApplicationDetailsDto> GetApplication(Guid appId)
+    public async Task<ApplicationResponse> GetApplication(string email, Guid appId)
     {
-        return await _applicationDal.GetApplicationDetails(appId);
+        var application = await _applicationDal.GetApplicationDetails(appId);
+        var name = application.Name;
+        var developerApp = await _apigeeAppRepository.GetApp(email, name);
+        var applicationResponse = JsonHelper.ConvertObject<ApigeeDeveloperApp, ApplicationResponse>(developerApp);
+        applicationResponse.Purpose = application.Purpose;
+        return applicationResponse;
     }
 
     public async Task<List<ApplicationListDto>> GetApplications(string email)

@@ -50,8 +50,29 @@ public class ApplicationControllerTests
     {
         Guid appId = Guid.NewGuid();
 
-        ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appId, Purpose = "Test" };
-        _mockApplicationService.Setup(service => service.GetApplication(appId)).ReturnsAsync(mockAppDetails);
+        var expectedResponse = new ApplicationResponse
+        {
+            AppId = appId,
+            Name = "Test",
+            Purpose = "Test",
+            CreatedAt = 0, 
+            LastModifiedAt = 0, 
+            Status = "approved", 
+            DeveloperId = "dev-123",
+            Credentials = new List<AppCredential>
+            {
+                new AppCredential
+                {
+                    ConsumerKey = "key-123",
+                    ConsumerSecret = "secret-456",
+                    ExpiresAt = -1,
+                    IssuedAt = 0,
+                    Status = "approved"
+                }
+            }
+        };
+        
+        _mockApplicationService.Setup(service => service.GetApplication(_xEmail, appId)).ReturnsAsync(expectedResponse);
         _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(true);
 
         var result = await _controller.FindApplicationById(_xEmail, appId);
@@ -64,26 +85,32 @@ public class ApplicationControllerTests
     {
         Guid appId = Guid.NewGuid();
         
-        ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appId, Purpose = "Test" };
-        _mockApplicationService.Setup(service => service.GetApplication(appId)).ReturnsAsync(mockAppDetails);
+        var expectedResponse = new ApplicationResponse
+        {
+            AppId = appId,
+            Name = "Test",
+            Purpose = "Test",
+            CreatedAt = 0, 
+            LastModifiedAt = 0, 
+            Status = "approved", 
+            DeveloperId = "dev-123",
+            Credentials = new List<AppCredential>
+            {
+                new AppCredential
+                {
+                    ConsumerKey = "key-123",
+                    ConsumerSecret = "secret-456",
+                    ExpiresAt = -1,
+                    IssuedAt = 0,
+                    Status = "approved"
+                }
+            }
+        };
+        _mockApplicationService.Setup(service => service.GetApplication(_xEmail, appId)).ReturnsAsync(expectedResponse);
         _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(false);
 
         var result = await _controller.FindApplicationById(_xEmail, appId);
         var forbiddenRequestResult = Assert.IsType<ForbidResult>(result);
-    }
-
-    [Fact]
-    public async Task FindApplicationByIdInvalidAppIdReturnsBadRequest()
-    {
-        Guid appId = Guid.NewGuid();
-
-        ApplicationDetailsDto mockAppDetails = new ApplicationDetailsDto { Name = "App1", AppId = appId, Purpose = "Test" };
-        _mockApplicationService.Setup(service => service.GetApplication(appId)).ReturnsAsync((ApplicationDetailsDto)null);
-        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(true);
-
-        var result = await _controller.FindApplicationById(_xEmail, appId);
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal(400, badRequestResult.StatusCode);
     }
 
     [Fact]

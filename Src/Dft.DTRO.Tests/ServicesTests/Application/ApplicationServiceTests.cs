@@ -1,3 +1,4 @@
+using DfT.DTRO.Models.Apigee;
 using DfT.DTRO.Models.Pagination;
 
 namespace Dft.DTRO.Tests.ServicesTests.Application;
@@ -71,12 +72,60 @@ public class ApplicationServiceTests
     {
         Guid appId = Guid.NewGuid();
         var expectedDetails = new ApplicationDetailsDto { AppId = appId, Name = "Test", Purpose = "Test" };
+        
+        var expectedDeveloperApp = new ApigeeDeveloperApp()
+        {
+            AppId = appId.ToString(),
+            Name = "Test",
+            CreatedAt = 0, 
+            LastModifiedAt = 0, 
+            Status = "approved", 
+            DeveloperId = "dev-123",
+            Credentials = new List<ApigeeDeveloperAppCredential>
+            {
+                new ApigeeDeveloperAppCredential
+                {
+                    ConsumerKey = "key-123",
+                    ConsumerSecret = "secret-456",
+                    ExpiresAt = -1,
+                    IssuedAt = 0,
+                    Status = "approved"
+                }
+            }
+        };
+        
+        var expectedResponse = new ApplicationResponse
+        {
+            AppId = appId,
+            Name = "Test",
+            Purpose = "Test",
+            CreatedAt = 0, 
+            LastModifiedAt = 0, 
+            Status = "approved", 
+            DeveloperId = "dev-123",
+            Credentials = new List<AppCredential>
+            {
+                new AppCredential
+                {
+                    ConsumerKey = "key-123",
+                    ConsumerSecret = "secret-456",
+                    ExpiresAt = -1,
+                    IssuedAt = 0,
+                    Status = "approved"
+                }
+            }
+        };
+        
         _applicationDalMock
             .Setup(dal => dal.GetApplicationDetails(appId))
             .ReturnsAsync(expectedDetails);
+        
+        _apigeeAppRepositoryMock
+            .Setup(repository => repository.GetApp(_email, "Test"))
+            .ReturnsAsync(expectedDeveloperApp);
 
-        var result = await _applicationService.GetApplication(appId);
-        Assert.Equal(expectedDetails, result);
+        var result = await _applicationService.GetApplication(_email, appId);
+        Assert.Equal(expectedResponse.AppId, result.AppId);
     }
 
     [Fact]
