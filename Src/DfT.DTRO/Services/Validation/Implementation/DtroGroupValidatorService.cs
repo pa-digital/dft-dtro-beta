@@ -85,12 +85,6 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         //     return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
         // }
 
-        var errors = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
-        if (errors.Count > 0)
-        {
-            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
-        }
-
         // Validation of camel case for schemas >= 3.3.2
         CasingValidationService casingValidationService = new();
         if (casingValidationService.SchemaVersionEnforcesCamelCase(dtroSubmit.SchemaVersion))
@@ -113,6 +107,12 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
                 string message = $"All property names must conform to pascal case naming conventions. The following properties violate this: [{string.Join(", ", invalidProperties)}]";
                 throw new CaseException(message);
             }
+        }
+
+        var errors = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
+        if (errors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
         errors = _sourceValidationService.Validate(dtroSubmit, traCode);
