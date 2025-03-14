@@ -2,6 +2,7 @@
 // using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 // using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 // using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
+// using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.ErrorJsonResponseProcessor;
 
 // namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_4_0
 // {
@@ -34,23 +35,9 @@
 //             Assert.Equal(HttpStatusCode.BadRequest, createDtroResponse.StatusCode);
 
 //             // Check JSON response
-//             var jsonErrorResponse = await JsonErrorResponseProcessor.GetErrorJson(createDtroResponse);
+//             ErrorJson jsonErrorResponse = await ErrorJsonResponseProcessor.GetErrorJson(createDtroResponse);
 //             Assert.Equal("Error", jsonErrorResponse.Error);
 //             Assert.Equal("Message", jsonErrorResponse.Message);
-
-//             // // Get created DTRO
-//             // string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-//             // HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
-//             // Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
-//             // string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
-
-//             // // Add ID to sent DTRO for comparison purposes
-//             // JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
-//             // createJsonObject["id"] = dtroId;
-
-//             // // Check retrieved DTRO matches sent DTRO
-//             // string sentCreateJsonWithId = createJsonObject.ToString();
-//             // CompareJson(sentCreateJsonWithId, dtroResponseJson);
 //         }
 
 //         [Fact]
@@ -68,21 +55,12 @@
 
 //             // Send DTRO
 //             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
-//             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
+//             Assert.Equal(HttpStatusCode.BadRequest, createDtroResponse.StatusCode);
 
-//             // Get created DTRO
-//             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-//             HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
-//             Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
-//             string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
-
-//             // Add ID to sent DTRO for comparison purposes
-//             JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
-//             createJsonObject["id"] = dtroId;
-
-//             // Check retrieved DTRO matches sent DTRO
-//             string sentCreateJsonWithId = createJsonObject.ToString();
-//             JsonMethods.CompareJson(sentCreateJsonWithId, dtroResponseJson);
+//             // Check JSON response
+//             ErrorJson jsonErrorResponse = await ErrorJsonResponseProcessor.GetErrorJson(createDtroResponse);
+//             Assert.Equal("Error", jsonErrorResponse.Error);
+//             Assert.Equal("Message", jsonErrorResponse.Message);
 //         }
 //     }
 // }

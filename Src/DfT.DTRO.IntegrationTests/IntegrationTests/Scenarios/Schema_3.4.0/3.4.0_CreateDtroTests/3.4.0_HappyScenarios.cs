@@ -61,39 +61,39 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.CreateDtroTests.Schema_3_4_
             JsonMethods.CompareJson(sentCreateJsonWithId, dtroResponseJson);
         }
 
-        // [Theory]
-        // [MemberData(nameof(GetDtroFileNames))]
-        // public async Task DtroSubmittedFromJsonBodyShouldBeSavedCorrectly(string fileName)
-        // {
-        //     Console.WriteLine($"\nTesting with file {fileName}...");
+        [Theory]
+        [MemberData(nameof(GetDtroFileNames))]
+        public async Task DtroSubmittedFromJsonBodyShouldBeSavedCorrectly(string fileName)
+        {
+            Console.WriteLine($"\nTesting with file {fileName}...");
 
-        //     // Generate user to send DTRO and read it back
-        //     TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
-        //     HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-        //     Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            // Generate user to send DTRO and read it back
+            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
+            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
-        //     // Prepare DTRO
-        //     string createDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionToTest}/{fileName}";
-        //     string createDtroJson = File.ReadAllText(createDtroFile);
-        //     string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
+            // Prepare DTRO
+            string createDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionToTest}/{fileName}";
+            string createDtroJson = File.ReadAllText(createDtroFile);
+            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
 
-        //     // Send DTRO
-        //     HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
-        //     Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
+            // Send DTRO
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
+            Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
-        //     // Get created DTRO
-        //     string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-        //     HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
-        //     Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
-        //     string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
+            // Get created DTRO
+            string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
+            HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
+            Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
+            string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
 
-        //     // Add ID to sent DTRO for comparison purposes
-        //     JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
-        //     createJsonObject["id"] = dtroId;
+            // Add ID to sent DTRO for comparison purposes
+            JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
+            createJsonObject["id"] = dtroId;
 
-        //     // Check retrieved DTRO matches sent DTRO
-        //     string sentCreateJsonWithId = createJsonObject.ToString();
-        //     JsonMethods.CompareJson(sentCreateJsonWithId, dtroResponseJson);
-        // }
+            // Check retrieved DTRO matches sent DTRO
+            string sentCreateJsonWithId = createJsonObject.ToString();
+            JsonMethods.CompareJson(sentCreateJsonWithId, dtroResponseJson);
+        }
     }
 }

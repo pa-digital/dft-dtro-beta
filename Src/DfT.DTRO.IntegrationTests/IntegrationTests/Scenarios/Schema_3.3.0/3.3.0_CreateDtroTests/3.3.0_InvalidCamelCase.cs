@@ -4,11 +4,11 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.ErrorJsonResponseProcessor;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.CreateDtroTests
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.CreateDtroTests
 {
     public class InvalidCamelCase : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.3.1";
+        readonly static string schemaVersionToTest = "3.3.0";
         readonly static string filesWithInvalidCamelCase = "3.3.2";
 
         public static IEnumerable<object[]> GetDtroFileNames()

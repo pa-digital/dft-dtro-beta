@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
 {
-    public static class JsonErrorResponseProcessor
+    public static class ErrorJsonResponseProcessor
     {
         public static async Task<ErrorJson> GetErrorJson(HttpResponseMessage response)
         {
