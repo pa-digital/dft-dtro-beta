@@ -97,6 +97,25 @@ public class RegulationValidation : IRegulationValidation
                             errors.Add(newError);
                         }
 
+                        var hasNature = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0");
+                        if (hasNature)
+                        {
+                            var nature = selectedRegulation.GetValueOrDefault<string>(Constants.Nature);
+                            var isValidNature = Constants.SpeedLimitNatureTypes.Any(nature.Equals);
+                            if (!isValidNature)
+                            {
+                                SemanticValidationError newError = new()
+                                {
+                                    Name = $"Invalid '{Constants.Nature}'",
+                                    Message = "Nature of speed limit value indicated",
+                                    Path = $"Source -> Provision -> Regulation -> SpeedLimitValueBased -> {Constants.Nature}",
+                                    Rule = $"'{Constants.Nature}' must be one of '{string.Join(",", Constants.SpeedLimitNatureTypes)}'",
+                                };
+
+                                errors.Add(newError);
+                            }
+                        }
+
                         passedInType = selectedRegulation.GetValueOrDefault<string>(Constants.Type);
                         isValidType = Constants.SpeedLimitValueTypes.Any(passedInType.Equals);
                         if (!isValidType)

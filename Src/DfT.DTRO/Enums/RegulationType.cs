@@ -6,392 +6,422 @@
 public enum RegulationType
 {
     /// <summary>
-    /// Dimension Maximum Height Structural.
-    /// </summary>
-    [Display(Name = "dimensionMaximumHeightStructural")]
-    DimensionMaximumHeightStructural,
-
-    /// <summary>
-    /// Dimension Maximum Height With TRO.
-    /// </summary>
-    [Display(Name = "dimensionMaximumHeightWithTRO")]
-    DimensionMaximumHeightWithTRO,
-
-    /// <summary>
-    /// Dimension Maximum Length.
-    /// </summary>
-    [Display(Name = "dimensionMaximumLength")]
-    DimensionMaximumLength,
-
-    /// <summary>
-    /// Dimension Maximum Weight Environmental.
-    /// </summary>
-    [Display(Name = "dimensionMaximumWeightEnvironmental")]
-    DimensionMaximumWeightEnvironmental,
-
-    /// <summary>
-    /// Dimension Maximum Weight Structural.
-    /// </summary>
-    [Display(Name = "dimensionMaximumWeightStructural")]
-    DimensionMaximumWeightStructural,
-
-    /// <summary>
-    /// Dimension Maximum Width.
-    /// </summary>
-    [Display(Name = "dimensionMaximumWidth")]
-    DimensionMaximumWidth,
-
-    /// <summary>
-    /// Banned Movement No Entry.
+    /// Banned movement: No entry.
     /// </summary>
     [Display(Name = "bannedMovementNoEntry")]
     BannedMovementNoEntry,
 
     /// <summary>
-    /// Banned Movement No Left Turn.
+    /// Banned movement: No left turn.
     /// </summary>
     [Display(Name = "bannedMovementNoLeftTurn")]
     BannedMovementNoLeftTurn,
 
     /// <summary>
-    /// Banned Movement No Right Turn.
+    /// Banned movement: No right turn.
     /// </summary>
     [Display(Name = "bannedMovementNoRightTurn")]
     BannedMovementNoRightTurn,
 
     /// <summary>
-    /// Banned Movement No U-Turn.
+    /// Banned movement: No U-turn.
     /// </summary>
     [Display(Name = "bannedMovementNoUTurn")]
     BannedMovementNoUTurn,
 
     /// <summary>
-    /// Mandatory Direction Ahead Only.
+    /// Maximum height (structural).
     /// </summary>
-    [Display(Name = "mandatoryDirectionAheadOnly")]
-    MandatoryDirectionAheadOnly,
+    [Display(Name = "dimensionMaximumHeightStructural")]
+    DimensionMaximumHeightStructural,
 
     /// <summary>
-    /// Mandatory Direction Left Turn Only.
+    /// Maximum height with TRO.
     /// </summary>
-    [Display(Name = "mandatoryDirectionLeftTurnOnly")]
-    MandatoryDirectionLeftTurnOnly,
+    [Display(Name = "dimensionMaximumHeightWithTRO")]
+    DimensionMaximumHeightWithTRO,
 
     /// <summary>
-    /// Mandatory Direction One Way.
+    /// Maximum length.
     /// </summary>
-    [Display(Name = "mandatoryDirectionOneWay")]
-    MandatoryDirectionOneWay,
+    [Display(Name = "dimensionMaximumLength")]
+    DimensionMaximumLength,
 
     /// <summary>
-    /// Mandatory Direction Right Turn Only.
+    /// Maximum weight (environmental).
     /// </summary>
-    [Display(Name = "mandatoryDirectionRightTurnOnly")]
-    MandatoryDirectionRightTurnOnly,
+    [Display(Name = "dimensionMaximumWeightEnvironmental")]
+    DimensionMaximumWeightEnvironmental,
 
     /// <summary>
-    /// Movement Order No Overtaking.
+    /// Maximum weight (structural).
     /// </summary>
-    [Display(Name = "movementOrderNoOvertaking")]
-    MovementOrderNoOvertaking,
+    [Display(Name = "dimensionMaximumWeightStructural")]
+    DimensionMaximumWeightStructural,
 
     /// <summary>
-    /// Movement Order Priority Over Oncoming Traffic.
+    /// Maximum width.
     /// </summary>
-    [Display(Name = "movementOrderPriorityOverOncomingTraffic")]
-    MovementOrderPriorityOverOncomingTraffic,
+    [Display(Name = "dimensionMaximumWidth")]
+    DimensionMaximumWidth,
 
     /// <summary>
-    /// Movement Order Prohibited Access.
+    /// Kerbside loading place: Passenger set down permitted.
     /// </summary>
-    [Display(Name = "movementOrderProhibitedAccess")]
-    MovementOrderProhibitedAccess,
+    [Display(Name = "kerbsideLoadingPlacePassengerSetDownPermitted")]
+    KerbsideLoadingPlacePassengerSetDownPermitted,
 
     /// <summary>
-    /// Kerbside Disabled Badge Holders Only.
+    /// Kerbside loading place: Passenger set down prohibited.
     /// </summary>
-    [Display(Name = "kerbsideDisabledBadgeHoldersOnly")]
-    KerbsideDisabledBadgeHoldersOnly,
+    [Display(Name = "kerbsideLoadingPlacePassengerSetDownProhibited")]
+    KerbsideLoadingPlacePassengerSetDownProhibited,
 
     /// <summary>
-    /// Kerbside Rural Clearway.
+    /// Kerbside no loading: Passenger set down permitted.
     /// </summary>
-    [Display(Name = "kerbsideRuralClearway")]
-    KerbsideRuralClearway,
+    [Display(Name = "kerbsideNoLoadingPassengerSetDownPermitted")]
+    KerbsideNoLoadingPassengerSetDownPermitted,
 
     /// <summary>
-    /// Kerbside Limited Waiting.
+    /// Kerbside no loading: Passenger set down prohibited.
     /// </summary>
-    [Display(Name = "kerbsideLimitedWaiting")]
-    KerbsideLimitedWaiting,
+    [Display(Name = "kerbsideNoLoadingPassengerSetDownProhibited")]
+    KerbsideNoLoadingPassengerSetDownProhibited,
 
     /// <summary>
-    /// Kerbside Loading Place.
+    /// Kerbside loading bay: Passenger set down permitted.
     /// </summary>
-    [Display(Name = "kerbsideLoadingPlace")]
-    KerbsideLoadingPlace,
+    [Display(Name = "kerbsideLoadingBayPassengerSetDownPermitted")]
+    KerbsideLoadingBayPassengerSetDownPermitted,
 
     /// <summary>
-    /// Kerbside Motorcycle Parking Place.
+    /// Kerbside loading bay: Passenger set down prohibited.
     /// </summary>
-    [Display(Name = "kerbsideMotorcycleParkingPlace")]
-    KerbsideMotorcycleParkingPlace,
+    [Display(Name = "kerbsideLoadingBayPassengerSetDownProhibited")]
+    KerbsideLoadingBayPassengerSetDownProhibited,
 
     /// <summary>
-    /// Kerbside No Loading.
-    /// </summary>
-    [Display(Name = "kerbsideNoLoading")]
-    KerbsideNoLoading,
-
-    /// <summary>
-    /// Kerbside No Stopping.
-    /// </summary>
-    [Display(Name = "kerbsideNoStopping")]
-    KerbsideNoStopping,
-
-    /// <summary>
-    /// Kerbside No Waiting.
-    /// </summary>
-    [Display(Name = "kerbsideNoWaiting")]
-    KerbsideNoWaiting,
-
-    /// <summary>
-    /// Kerbside Taxi Rank.
-    /// </summary>
-    [Display(Name = "kerbsideTaxiRank")]
-    KerbsideTaxiRank,
-
-    /// <summary>
-    /// Kerbside School Keep Clear Yellow Zig Zag Mandatory.
-    /// </summary>
-    [Display(Name = "kerbsideSchoolKeepClearYellowZigZagMandatory")]
-    KerbsideSchoolKeepClearYellowZigZagMandatory,
-
-    /// <summary>
-    /// Kerbside Loading Bay.
-    /// </summary>
-    [Display(Name = "kerbsideLoadingBay")]
-    KerbsideLoadingBay,
-
-    /// <summary>
-    /// Kerbside Other Yellow Zig Zag Mandatory.
-    /// </summary>
-    [Display(Name = "kerbsideOtherYellowZigZagMandatory")]
-    KerbsideOtherYellowZigZagMandatory,
-
-    /// <summary>
-    /// Kerbside Permit Parking Area.
-    /// </summary>
-    [Display(Name = "kerbsidePermitParkingArea")]
-    KerbsidePermitParkingArea,
-
-    /// <summary>
-    /// Kerbside Parking Place.
-    /// </summary>
-    [Display(Name = "kerbsideParkingPlace")]
-    KerbsideParkingPlace,
-
-    /// <summary>
-    /// Kerbside Urban Clearway.
-    /// </summary>
-    [Display(Name = "kerbsideUrbanClearway")]
-    KerbsideUrbanClearway,
-
-    /// <summary>
-    /// Kerbside Red Route Clearway.
-    /// </summary>
-    [Display(Name = "kerbsideRedRouteClearway")]
-    KerbsideRedRouteClearway,
-
-    /// <summary>
-    /// Kerbside Payment Parking Place.
-    /// </summary>
-    [Display(Name = "kerbsidePaymentParkingPlace")]
-    KerbsidePaymentParkingPlace,
-
-    /// <summary>
-    /// Kerbside Permit Parking Place.
-    /// </summary>
-    [Display(Name = "kerbsidePermitParkingPlace")]
-    KerbsidePermitParkingPlace,
-
-    /// <summary>
-    /// Kerbside Footway Parking.
-    /// </summary>
-    [Display(Name = "kerbsideFootwayParking")]
-    KerbsideFootwayParking,
-
-    /// <summary>
-    /// Kerbside Controlled Parking Zone.
+    /// Kerbside controlled parking zone.
     /// </summary>
     [Display(Name = "kerbsideControlledParkingZone")]
     KerbsideControlledParkingZone,
 
     /// <summary>
-    /// Kerbside Restricted Parking Zone.
+    /// Kerbside disabled badge holders only.
     /// </summary>
-    [Display(Name = "kerbsideRestrictedParkingZone")]
-    KerbsideRestrictedParkingZone,
+    [Display(Name = "kerbsideDisabledBadgeHoldersOnly")]
+    KerbsideDisabledBadgeHoldersOnly,
 
     /// <summary>
-    /// Kerbside Double Red Lines
+    /// Kerbside double red lines.
     /// </summary>
     [Display(Name = "kerbsideDoubleRedLines")]
     KerbsideDoubleRedLines,
 
     /// <summary>
-    /// Kerbside Single Reg Lines
+    /// Kerbside footway parking.
+    /// </summary>
+    [Display(Name = "kerbsideFootwayParking")]
+    KerbsideFootwayParking,
+
+    /// <summary>
+    /// Kerbside limited waiting.
+    /// </summary>
+    [Display(Name = "kerbsideLimitedWaiting")]
+    KerbsideLimitedWaiting,
+
+    /// <summary>
+    /// Kerbside loading bay.
+    /// </summary>
+    [Display(Name = "kerbsideLoadingBay")] 
+    KerbsideLoadingBay,
+
+    /// <summary>
+    /// Kerbside loading place.
+    /// </summary>
+    [Display(Name = "kerbsideLoadingPlace")]
+    KerbsideLoadingPlace,
+
+    /// <summary>
+    /// Kerbside motorcycle parking place.
+    /// </summary>
+    [Display(Name = "kerbsideMotorcycleParkingPlace")]
+    KerbsideMotorcycleParkingPlace,
+
+    /// <summary>
+    /// Kerbside no loading.
+    /// </summary>
+    [Display(Name = "kerbsideNoLoading")] 
+    KerbsideNoLoading,
+
+    /// <summary>
+    /// Kerbside no stopping.
+    /// </summary>
+    [Display(Name = "kerbsideNoStopping")] 
+    KerbsideNoStopping,
+
+    /// <summary>
+    /// Kerbside no waiting.
+    /// </summary>
+    [Display(Name = "kerbsideNoWaiting")] 
+    KerbsideNoWaiting,
+
+    /// <summary>
+    /// Kerbside other yellow zigzag mandatory.
+    /// </summary>
+    [Display(Name = "kerbsideOtherYellowZigZagMandatory")]
+    KerbsideOtherYellowZigZagMandatory,
+
+    /// <summary>
+    /// Kerbside parking place.
+    /// </summary>
+    [Display(Name = "kerbsideParkingPlace")]
+    KerbsideParkingPlace,
+
+    /// <summary>
+    /// Kerbside payment parking place.
+    /// </summary>
+    [Display(Name = "kerbsidePaymentParkingPlace")]
+    KerbsidePaymentParkingPlace,
+
+    /// <summary>
+    /// Kerbside permit parking area.
+    /// </summary>
+    [Display(Name = "kerbsidePermitParkingArea")]
+    KerbsidePermitParkingArea,
+
+    /// <summary>
+    /// Kerbside permit parking place.
+    /// </summary>
+    [Display(Name = "kerbsidePermitParkingPlace")]
+    KerbsidePermitParkingPlace,
+
+    /// <summary>
+    /// Kerbside red route clearway.
+    /// </summary>
+    [Display(Name = "kerbsideRedRouteClearway")]
+    KerbsideRedRouteClearway,
+
+    /// <summary>
+    /// Kerbside restricted parking zone.
+    /// </summary>
+    [Display(Name = "kerbsideRestrictedParkingZone")]
+    KerbsideRestrictedParkingZone,
+
+    /// <summary>
+    /// Kerbside rural clearway.
+    /// </summary>
+    [Display(Name = "kerbsideRuralClearway")]
+    KerbsideRuralClearway,
+
+    /// <summary>
+    /// Kerbside school keep clear yellow zigzag mandatory.
+    /// </summary>
+    [Display(Name = "kerbsideSchoolKeepClearYellowZigZagMandatory")]
+    KerbsideSchoolKeepClearYellowZigZagMandatory,
+
+    /// <summary>
+    /// Kerbside single red lines.
     /// </summary>
     [Display(Name = "kerbsideSingleRedLines")]
     KerbsideSingleRedLines,
 
     /// <summary>
-    /// Non-Order Movement Box Junction.
+    /// Kerbside taxi rank.
     /// </summary>
-    [Display(Name = "nonOrderMovementBoxJunction")]
-    NonOrderMovementBoxJunction,
+    [Display(Name = "kerbsideTaxiRank")] 
+    KerbsideTaxiRank,
 
     /// <summary>
-    /// Non-Order Kerbside Bus Stop.
+    /// Kerbside urban clearway.
     /// </summary>
-    [Display(Name = "nonOrderKerbsideBusStop")]
-    NonOrderKerbsideBusStop,
+    [Display(Name = "kerbsideUrbanClearway")]
+    KerbsideUrbanClearway,
 
     /// <summary>
-    /// Non-Order Kerbside Pedestrian Crossing.
+    /// Mandatory direction: Ahead only.
     /// </summary>
-    [Display(Name = "nonOrderKerbsidePedestrianCrossing")]
-    NonOrderKerbsidePedestrianCrossing,
+    [Display(Name = "mandatoryDirectionAheadOnly")]
+    MandatoryDirectionAheadOnly,
 
     /// <summary>
-    /// Misc Bus Gate.
+    /// Mandatory direction: Left turn only.
     /// </summary>
-    [Display(Name = "miscBusGate")]
+    [Display(Name = "mandatoryDirectionLeftTurnOnly")]
+    MandatoryDirectionLeftTurnOnly,
+
+    /// <summary>
+    /// Mandatory direction: One way.
+    /// </summary>
+    [Display(Name = "mandatoryDirectionOneWay")]
+    MandatoryDirectionOneWay,
+
+    /// <summary>
+    /// Mandatory direction: Right turn only.
+    /// </summary>
+    [Display(Name = "mandatoryDirectionRightTurnOnly")]
+    MandatoryDirectionRightTurnOnly,
+
+    /// <summary>
+    /// Miscellaneous: Bay suspension.
+    /// </summary>
+    [Display(Name = "miscBaySuspension")] 
+    MiscBaySuspension,
+
+    /// <summary>
+    /// Miscellaneous: Bus gate.
+    /// </summary>
+    [Display(Name = "miscBusGate")] 
     MiscBusGate,
 
     /// <summary>
-    /// Misc Bus Lane With Traffic Flow.
+    /// Miscellaneous: Bus lane with traffic flow.
     /// </summary>
     [Display(Name = "miscBusLaneWithTrafficFlow")]
     MiscBusLaneWithTrafficFlow,
 
     /// <summary>
-    /// Misc Bus Only Street.
+    /// Miscellaneous: Bus only street.
     /// </summary>
     [Display(Name = "miscBusOnlyStreet")]
     MiscBusOnlyStreet,
 
     /// <summary>
-    /// Misc Contraflow Bus Lane.
-    /// </summary>
-    [Display(Name = "miscContraflowBusLane")]
-    MiscContraflowBusLane,
-
-    /// <summary>
-    /// Misc Congestion Low Emission Zone.
+    /// Miscellaneous: Congestion low emission zone.
     /// </summary>
     [Display(Name = "miscCongestionLowEmissionZone")]
     MiscCongestionLowEmissionZone,
 
     /// <summary>
-    /// Misc Cycle Lane.
-    /// </summary>
-    [Display(Name = "miscCycleLane")]
-    MiscCycleLane,
-
-    /// <summary>
-    /// Misc Pedestrian Zone.
-    /// </summary>
-    [Display(Name = "miscPedestrianZone")]
-    MiscPedestrianZone,
-
-    /// <summary>
-    /// Misc Road Closure.
-    /// </summary>
-    [Display(Name = "miscRoadClosure")]
-    MiscRoadClosure,
-
-    /// <summary>
-    /// Misc Lane Closure.
-    /// </summary>
-    [Display(Name = "miscLaneClosure")]
-    MiscLaneClosure,
-
-    /// <summary>
-    /// Misc Contraflow.
+    /// Miscellaneous: Contraflow.
     /// </summary>
     [Display(Name = "miscContraflow")]
     MiscContraflow,
 
     /// <summary>
-    /// Misc Footway Closure.
+    /// Miscellaneous: Contraflow bus lane.
     /// </summary>
-    [Display(Name = "miscFootwayClosure")]
-    MiscFootwayClosure,
+    [Display(Name = "miscContraflowBusLane")]
+    MiscContraflowBusLane,
 
     /// <summary>
-    /// Misc Cycle Lane Closure
+    /// Miscellaneous: Cycle lane.
+    /// </summary>
+    [Display(Name = "miscCycleLane")]
+    MiscCycleLane,
+
+    /// <summary>
+    /// Miscellaneous: Cycle lane closure.
     /// </summary>
     [Display(Name = "miscCycleLaneClosure")]
     MiscCycleLaneClosure,
 
     /// <summary>
-    /// Misc Temporary Parking Restriction
+    /// Miscellaneous: Footway closure.
     /// </summary>
-    [Display(Name = "miscTemporaryParkingRestriction")]
-    MiscTemporaryParkingRestriction,
+    [Display(Name = "miscFootwayClosure")]
+    MiscFootwayClosure,
 
     /// <summary>
-    /// Misc Suspension of One Way
+    /// Miscellaneous: Lane closure.
     /// </summary>
-    [Display(Name = "miscSuspensionOfOneWay")]
-    MiscSuspensionOfOneWay,
+    [Display(Name = "miscLaneClosure")]
+    MiscLaneClosure,
 
     /// <summary>
-    /// Misc Suspension Of Parking Restriction
+    /// Miscellaneous: Pedestrian zone.
     /// </summary>
-    [Display(Name = "miscSuspensionOfParkingRestriction")]
-    MiscSuspensionOfParkingRestriction,
+    [Display(Name = "miscPedestrianZone")]
+    MiscPedestrianZone,
 
     /// <summary>
-    /// Misc Suspension Of Weight Restriction
+    /// Miscellaneous: Public right of way closure.
     /// </summary>
-    [Display(Name = "miscSuspensionOfWeightRestriction")]
-    MiscSuspensionOfWeightRestriction,
+    [Display(Name = "miscPROWClosure")]
+    MiscPROWClosure,
 
     /// <summary>
-    /// Misc Suspension Of Bus way
+    /// Miscellaneous: Road closure.
     /// </summary>
-    [Display(Name = "miscSuspensionOfBusway")]
-    MiscSuspensionOfBusway,
+    [Display(Name = "miscRoadClosure")]
+    MiscRoadClosure,
 
     /// <summary>
-    /// Misc Temporary Speed Limit
-    /// </summary>
-    [Display(Name = "miscTemporarySpeedLimit")]
-    MiscTemporarySpeedLimit,
-
-    /// <summary>
-    /// 
+    /// Miscellaneous: Road closure crossing point.
     /// </summary>
     [Display(Name = "miscRoadClosureCrossingPoint")]
     MiscRoadClosureCrossingPoint,
 
     /// <summary>
-    /// Misc Bay Suspension
+    /// Miscellaneous: Suspension of busway.
     /// </summary>
-    [Display(Name = "miscBaySuspension")]
-    MiscBaySuspension,
+    [Display(Name = "miscSuspensionOfBusway")]
+    MiscSuspensionOfBusway,
 
     /// <summary>
-    /// Misc Temporary Parking Bay
+    /// Miscellaneous: Suspension of one way.
+    /// </summary>
+    [Display(Name = "miscSuspensionOfOneWay")]
+    MiscSuspensionOfOneWay,
+
+    /// <summary>
+    /// Miscellaneous: Suspension of parking restriction.
+    /// </summary>
+    [Display(Name = "miscSuspensionOfParkingRestriction")]
+    MiscSuspensionOfParkingRestriction,
+
+    /// <summary>
+    /// Miscellaneous: Suspension of weight restriction.
+    /// </summary>
+    [Display(Name = "miscSuspensionOfWeightRestriction")]
+    MiscSuspensionOfWeightRestriction,
+
+    /// <summary>
+    /// Miscellaneous: Temporary parking bay.
     /// </summary>
     [Display(Name = "miscTemporaryParkingBay")]
     MiscTemporaryParkingBay,
 
     /// <summary>
-    /// Misc PROW Closure
+    /// Miscellaneous: Temporary parking restriction.
     /// </summary>
-    [Display(Name = "miscPROWClosure")]
-    MiscPROWClosure
+    [Display(Name = "miscTemporaryParkingRestriction")]
+    MiscTemporaryParkingRestriction,
+
+    /// <summary>
+    /// Movement order: No overtaking.
+    /// </summary>
+    [Display(Name = "movementOrderNoOvertaking")]
+    MovementOrderNoOvertaking,
+
+    /// <summary>
+    /// Movement order: Priority over oncoming traffic.
+    /// </summary>
+    [Display(Name = "movementOrderPriorityOverOncomingTraffic")]
+    MovementOrderPriorityOverOncomingTraffic,
+
+    /// <summary>
+    /// Movement order: Prohibited access.
+    /// </summary>
+    [Display(Name = "movementOrderProhibitedAccess")]
+    MovementOrderProhibitedAccess,
+
+    /// <summary>
+    /// Non-order: Kerbside bus stop.
+    /// </summary>
+    [Display(Name = "nonOrderKerbsideBusStop")]
+    NonOrderKerbsideBusStop,
+
+    /// <summary>
+    /// Non-order: Kerbside pedestrian crossing.
+    /// </summary>
+    [Display(Name = "nonOrderKerbsidePedestrianCrossing")]
+    NonOrderKerbsidePedestrianCrossing,
+
+    /// <summary>
+    /// Non-order: Movement box junction.
+    /// </summary>
+    [Display(Name = "nonOrderMovementBoxJunction")]
+    NonOrderMovementBoxJunction
 }
