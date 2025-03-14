@@ -20,12 +20,13 @@
 //             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 //             string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
 //             // Avoid files being overwritten by using a unique prefix in file names for each test
-//             string uniquePrefixOnFileName = userGuid.Substring(0, 5);
+//             string uniquePrefixOnFileName = $"{userGuid.Substring(0, 5)}-";
 
 //             // Prepare DTRO
 //             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{fileName}";
 //             string createDtroJson = File.ReadAllText(createDtroFile);
-//             string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
+//             string createDtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(createDtroJson, "data.source.provision");
+//             string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroWithDuplicateProvisionReference, publisher.TraId);
 //             string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
 //             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
 //             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
@@ -51,7 +52,8 @@
 //             // Prepare DTRO
 //             string createDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionToTest}/{fileName}";
 //             string createDtroJson = File.ReadAllText(createDtroFile);
-//             string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
+//             string createDtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(createDtroJson, "data.source.provision");
+//             string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroWithDuplicateProvisionReference, publisher.TraId);
 
 //             // Send DTRO
 //             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);

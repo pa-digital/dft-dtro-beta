@@ -34,7 +34,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.CreateDtroTest
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
             string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
             // Avoid files being overwritten by using a unique prefix in file names for each test
-            string uniquePrefixOnFileName = userGuid.Substring(0, 5);
+            string uniquePrefixOnFileName = $"{userGuid.Substring(0, 5)}-";
 
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{filesWithInvalidPascalCase}/{fileName}";
