@@ -4,18 +4,15 @@ public class AppIdMapperService : IAppIdMapperService
 {
     public async Task<Guid> GetAppId(HttpContext context)
     {
-        context.Request.Headers.TryGetValue("x-app-id", out var appId);
-        context.Request.Headers.TryGetValue("x-app-id-override", out var appIdOverride);
+        context.Request.Headers.TryGetValue(RequestHeaderNames.AppId, out var appId);
+        
+        Guid.TryParse(appId, out var appIdValue);
 
-
-        Guid.TryParse(appId, out var xAppIdValue);
-        Guid.TryParse(appIdOverride, out var xAppIdOverrideValue);
-
-        if (xAppIdValue == Guid.Empty && xAppIdOverrideValue == Guid.Empty)
+        if (appIdValue == Guid.Empty)
         {
-            throw new Exception("Middleware, access denied: x-App-Id (or x-App-Id-Override) not in header");
+            throw new Exception($"Middleware, access denied: {RequestHeaderNames.AppId} not in header");
         }
-
-        return xAppIdOverrideValue == Guid.Empty ? xAppIdValue : xAppIdOverrideValue;
+        
+        return appIdValue;
     }
 }

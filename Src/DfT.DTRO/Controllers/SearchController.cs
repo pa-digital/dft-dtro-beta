@@ -50,7 +50,7 @@ public class SearchController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Consumer)]
     [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]
-    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromBody] DtroSearch body)
+    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, [FromBody] DtroSearch body)
     {
         try
         {

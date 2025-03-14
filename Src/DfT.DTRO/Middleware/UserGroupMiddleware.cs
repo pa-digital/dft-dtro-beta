@@ -47,26 +47,19 @@
     private async Task<bool> CheckAppIdHeaderAsync(HttpContext context, IServiceProvider serviceProvider)
     {
 
-        Guid xAppId;
+        Guid appId;
 
-        context.Request.Headers.TryGetValue("x-app-id", out var appId);
-        context.Request.Headers.TryGetValue("x-app-id-override", out var appIdOverride);
+        context.Request.Headers.TryGetValue(RequestHeaderNames.AppId, out var appIdString);
+        
+        Guid.TryParse(appIdString, out var appIdValue);
 
-
-        Guid.TryParse(appId, out var xAppIdValue);
-        Guid.TryParse(appIdOverride, out var appIdOverrideValue);
-
-        if (xAppIdValue == Guid.Empty && appIdOverrideValue == Guid.Empty)
+        if (appIdValue == Guid.Empty)
         {
-            throw new Exception("Middleware, access denied: x-App-Id (or x-App-Id-Override) not in header");
-        }
-        if (appIdOverrideValue == Guid.Empty)
-        {
-            xAppId = xAppIdValue;
+            throw new Exception($"Middleware, access denied: {RequestHeaderNames.AppId} not in header");
         }
         else
         {
-            xAppId = appIdOverrideValue;
+            appId = appIdValue;
         }
 
         using (var scope = serviceProvider.CreateScope())
@@ -76,10 +69,10 @@
             var anyAdminExists = await dtroUserDal.AnyAdminUserExistsAsync();
             if (anyAdminExists)
             {
-                var dtroUser = await dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+                var dtroUser = await dtroUserDal.GetDtroUserOnAppIdAsync(appId);
                 if (dtroUser == null)
                 {
-                    throw new Exception($"Middleware, access denied: Dtro user for ({xAppId}) not found");
+                    throw new Exception($"Middleware, access denied: Dtro user for ({appId}) not found");
                 }
             }
             return true;

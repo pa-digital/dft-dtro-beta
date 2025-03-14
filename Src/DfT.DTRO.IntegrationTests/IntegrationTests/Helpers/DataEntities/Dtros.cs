@@ -16,7 +16,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId },
+                { RequestHeaderNames.AppId, testUser.AppId },
                 { "Content-Type", "multipart/form-data" }
             };
 
@@ -28,7 +28,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId },
+                { RequestHeaderNames.AppId, testUser.AppId },
                 { "Content-Type", "multipart/form-data" }
             };
 
@@ -40,7 +40,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId },
+                { RequestHeaderNames.AppId, testUser.AppId },
                 { "Content-Type", "application/json" }
             };
 
@@ -52,7 +52,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId },
+                { RequestHeaderNames.AppId, testUser.AppId },
                 { "Content-Type", "application/json" }
             };
 
@@ -64,7 +64,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId }
+                { RequestHeaderNames.AppId, testUser.AppId }
             };
 
             HttpResponseMessage getDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtrosBase}/{dtroId}", headers);

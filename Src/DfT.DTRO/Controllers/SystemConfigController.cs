@@ -41,7 +41,7 @@ public class SystemConfigController : ControllerBase
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "System name retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
-    public async Task<ActionResult<SystemConfigResponse>> GetSystemConfig([FromHeader(Name = "x-app-id")][Required] Guid appId)
+    public async Task<ActionResult<SystemConfigResponse>> GetSystemConfig([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId)
     {
         try
         {

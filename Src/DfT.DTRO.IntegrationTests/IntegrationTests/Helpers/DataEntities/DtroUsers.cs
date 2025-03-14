@@ -21,7 +21,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId }
+                { RequestHeaderNames.AppId, testUser.AppId }
             };
 
             HttpResponseMessage getAllUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtroUsersBase}", headers);
@@ -52,7 +52,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId },
+                { RequestHeaderNames.AppId, testUser.AppId },
                 { "Content-Type", "application/json" }
             };
 
@@ -66,7 +66,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId },
+                { RequestHeaderNames.AppId, testUser.AppId },
                 { "Content-Type", "application/json" }
             };
 

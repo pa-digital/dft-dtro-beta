@@ -58,7 +58,7 @@ public class DTROsController : ControllerBase
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [FeatureGate(FeatureNames.Publish)]
-    public async Task<IActionResult> CreateFromFile([FromHeader(Name = "x-app-id")][Required] Guid appId, IFormFile file)
+    public async Task<IActionResult> CreateFromFile([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -174,7 +174,7 @@ public class DTROsController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
-    public async Task<IActionResult> UpdateFromFile([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId, IFormFile file)
+    public async Task<IActionResult> UpdateFromFile([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, Guid dtroId, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -191,7 +191,7 @@ public class DTROsController : ControllerBase
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
                 GuidResponse response = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, _correlationProvider.CorrelationId, appId);
                 await _metricsService.IncrementMetric(MetricType.Submission, appId);
-                _logger.LogInformation($"'{nameof(UpdateFromFile)}' method called using x-app-id Id: '{appId}', unique identifier: '{dtroId}' and file: '{file.Name}'");
+                _logger.LogInformation($"'{nameof(UpdateFromFile)}' method called using {RequestHeaderNames.AppId} Id: '{appId}', unique identifier: '{dtroId}' and file: '{file.Name}'");
                 _loggingExtension.LogInformation(
                     nameof(UpdateFromFile),
                     $"/dtros/UpdateFromFile/{dtroId}",
@@ -278,7 +278,7 @@ public class DTROsController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
-    public async Task<IActionResult> CreateFromBody([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromBody] DtroSubmit dtroSubmit)
+    public async Task<IActionResult> CreateFromBody([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, [FromBody] DtroSubmit dtroSubmit)
     {
         try
         {
@@ -388,7 +388,7 @@ public class DTROsController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Ok")]
-    public async Task<IActionResult> UpdateFromBody([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromRoute] Guid dtroId, [FromBody] DtroSubmit dtroSubmit)
+    public async Task<IActionResult> UpdateFromBody([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, [FromRoute] Guid dtroId, [FromBody] DtroSubmit dtroSubmit)
     {
         try
         {
@@ -557,7 +557,7 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> Delete([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId)
+    public async Task<IActionResult> Delete([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, Guid dtroId)
     {
         try
         {
@@ -713,7 +713,7 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> AssignOwnership([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId, Guid assignToTraId)
+    public async Task<IActionResult> AssignOwnership([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, Guid dtroId, Guid assignToTraId)
     {
         try
         {

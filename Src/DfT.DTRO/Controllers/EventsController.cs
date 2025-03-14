@@ -50,7 +50,7 @@ public class EventsController : ControllerBase
     [SwaggerResponse(statusCode: 200, description: "Successfully received the event list")]
     [SwaggerResponse(statusCode: 400, description: "The request was malformed.")]
     [SwaggerResponse(statusCode: 404, description: "Event(s) not found.")]
-    public async Task<ActionResult<DtroEventSearchResult>> Events([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromBody] DtroEventSearch search)
+    public async Task<ActionResult<DtroEventSearchResult>> Events([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, [FromBody] DtroEventSearch search)
     {
         try
         {
