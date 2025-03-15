@@ -2480,7 +2480,7 @@ components:
           nullable: true
         userGroup:
           $ref: "#/components/schemas/UserGroup"
-        xAppId:
+        appId:
           type: string
           format: uuid
       additionalProperties: false

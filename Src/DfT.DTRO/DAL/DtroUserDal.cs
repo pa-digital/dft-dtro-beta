@@ -28,7 +28,7 @@ public class DtroUserDal : IDtroUserDal
                 Name = dtroUser.Name,
                 Prefix = dtroUser.Prefix,
                 UserGroup = (UserGroup)dtroUser.UserGroup,
-                AppId = dtroUser.xAppId
+                AppId = dtroUser.AppId
             })
             .FirstOrDefaultAsync();
 
@@ -45,7 +45,7 @@ public class DtroUserDal : IDtroUserDal
                 Id = user.Id,
                 Name = user.Name,
                 TraId = user.TraId,
-                AppId = user.xAppId
+                AppId = user.AppId
             }).ToListAsync();
 
     ///<inheritdoc cref="IDtroUserDal"/>
@@ -60,7 +60,7 @@ public class DtroUserDal : IDtroUserDal
                   Name = dtroUser.Name,
                   Prefix = dtroUser.Prefix,
                   UserGroup = (UserGroup)dtroUser.UserGroup,
-                  AppId = dtroUser.xAppId
+                  AppId = dtroUser.AppId
               }).Where(x => x.UserGroup == UserGroup.Admin)
               .ToListAsync();
 
@@ -73,7 +73,7 @@ public class DtroUserDal : IDtroUserDal
                 Name = dtroUser.Name,
                 Prefix = dtroUser.Prefix,
                 UserGroup = (UserGroup)dtroUser.UserGroup,
-                AppId = dtroUser.xAppId
+                AppId = dtroUser.AppId
             }).Where(x => x.UserGroup != UserGroup.Admin)
             .ToListAsync();
         admins.AddRange(nonAdmins);
@@ -91,7 +91,7 @@ public class DtroUserDal : IDtroUserDal
                 Name = dtroUser.Name,
                 Prefix = dtroUser.Prefix,
                 UserGroup = (UserGroup)dtroUser.UserGroup,
-                AppId = dtroUser.xAppId
+                AppId = dtroUser.AppId
             })
             .FirstOrDefaultAsync();
 
@@ -115,7 +115,7 @@ public class DtroUserDal : IDtroUserDal
              Name = dtroUser.Name,
              Prefix = dtroUser.Prefix,
              UserGroup = (UserGroup)dtroUser.UserGroup,
-             AppId = dtroUser.xAppId
+             AppId = dtroUser.AppId
          })
          .ToListAsync();
 
@@ -125,7 +125,7 @@ public class DtroUserDal : IDtroUserDal
 
     public async Task<bool> AnyAdminUserExistsAsync()
     {
-        var exists = await _dtroContext.DtroUsers.AnyAsync(it => it.xAppId != Guid.Empty && it.UserGroup == (int)UserGroup.Admin);
+        var exists = await _dtroContext.DtroUsers.AnyAsync(it => it.AppId != Guid.Empty && it.UserGroup == (int)UserGroup.Admin);
         return exists;
     }
 
@@ -153,7 +153,7 @@ public class DtroUserDal : IDtroUserDal
     ///<inheritdoc cref="IDtroUserDal"/>
     public async Task<DtroUser> GetDtroUserOnAppIdAsync(Guid appid)
     {
-        var ret = await _dtroContext.DtroUsers.FirstOrDefaultAsync(b => b.xAppId == appid);
+        var ret = await _dtroContext.DtroUsers.FirstOrDefaultAsync(b => b.AppId == appid);
         return ret;
     }
 
@@ -183,7 +183,7 @@ public class DtroUserDal : IDtroUserDal
         dtroUser.Name = dtroUserRequest.Name;
         dtroUser.Prefix = dtroUserRequest.Prefix ?? "";
         dtroUser.UserGroup = (int)dtroUserRequest.UserGroup;
-        dtroUser.xAppId = dtroUserRequest.AppId;
+        dtroUser.AppId = dtroUserRequest.AppId;
 
         await _dtroContext.DtroUsers.AddAsync(dtroUser);
 
@@ -205,7 +205,7 @@ public class DtroUserDal : IDtroUserDal
         existing.Name = dtroUserRequest.Name;
         existing.Prefix = dtroUserRequest.Prefix ?? "";
         existing.UserGroup = (int)dtroUserRequest.UserGroup;
-        existing.xAppId = dtroUserRequest.AppId;
+        existing.AppId = dtroUserRequest.AppId;
 
         await _dtroContext.SaveChangesAsync();
         return new GuidResponse() { Id = existing.Id };

@@ -77,7 +77,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 "name": "{{testUser.Name}}",
                 "prefix": "AB",
                 "userGroup": {{testUser.UserGroup}},
-                "xAppId": "{{testUser.AppId}}"
+                "appId": "{{testUser.AppId}}"
             }
             """;
 
