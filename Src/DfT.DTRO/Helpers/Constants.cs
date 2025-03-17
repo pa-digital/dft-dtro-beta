@@ -195,4 +195,24 @@ public static class Constants
     public static string TramCar => "tramCar";
 
     public static string Nature => "nature";
+
+    public static string ConsultationName => "consultationName";
+
+    public static string EndOfConsultation => "endOfConsultation";
+
+    public static string HowToComment => "howToComment";
+
+    public static string LocalReference => "localReference";
+
+    public static string Consultation => "Consultation";
+
+    public static string PointOfContactAddress => "pointOfContactAddress";
+
+    public static string PointOfContactEmail => "pointOfContactEmail";
+
+    public static string StartOfConsultation => "startOfConsultation";
+
+    public static string StatementOfReason => "statementOfReason";
+
+    public static string UrlAdditionalInformation => "urlAdditionalInformation";
 }
