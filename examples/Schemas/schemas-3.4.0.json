@@ -728,7 +728,7 @@
                 "pointOfContactEmail": {
                     "description": "Email address location to support receipt of comments / objections to consultation proposals.",
                     "type": "string",
-                    "minLength": 1
+                    "format": "email"
                 },
                 "startOfConsultation": {
                     "description": "Time and date of the start of the consultation period",

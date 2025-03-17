@@ -3,7 +3,7 @@
         "consultationName": "some consultation name",
         "endOfConsultation": "2025-01-01T00:00:00",
         "statementOfReason": "some statement of reason",
-        "pointOfContactEmail": "user@test.com",
+        "pointOfContactEmail": "invalid email",
         "source": [
             {
                 "actionType": "new",

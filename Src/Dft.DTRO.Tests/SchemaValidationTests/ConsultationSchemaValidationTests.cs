@@ -49,6 +49,16 @@ public class ConsultationSchemaValidationTests : IDisposable
         Assert.False(isValid);
     }
 
+    [Fact]
+    public void ConsultationPointOfContactEmailInvalidFormatDoesNotValidate()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Consultation", "invalid", "InvalidPointOfContactEmail.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        string s = json.ToString();
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.False(isValid);
+    }
+
     public void Dispose() { }
 
 }
