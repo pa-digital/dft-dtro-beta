@@ -30,8 +30,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
             }
             catch (Newtonsoft.Json.JsonException)
             {
-                // Handle JSON parsing errors (e.g., invalid JSON)
-                return new ErrorJson { Error = null, Message = $"Error parsing JSON from response: {jsonContent}" };
+                throw new Exception($"Error parsing error JSON from response: {jsonContent}");
             }
         }
 

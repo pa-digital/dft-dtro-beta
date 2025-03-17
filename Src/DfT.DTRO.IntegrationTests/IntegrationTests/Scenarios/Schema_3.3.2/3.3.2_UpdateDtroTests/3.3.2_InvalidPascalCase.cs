@@ -30,7 +30,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             Console.WriteLine($"\nTesting with file {nameOfFileWithPascalCaseVersion3_3_1}...");
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
             string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
@@ -77,7 +77,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             Console.WriteLine($"\nTesting with file {nameOfFileWithPascalCaseVersion3_3_1}...");
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 

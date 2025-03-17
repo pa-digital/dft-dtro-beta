@@ -27,7 +27,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             Console.WriteLine($"\nTesting with file {fileName}...");
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
             string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
@@ -78,7 +78,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             Console.WriteLine($"\nTesting with file {fileName}...");
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
@@ -121,7 +121,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             string updateFileWithSchema3_3_2 = "JSON-3.3.2-example-Derbyshire 2024 DJ388 partial.json";
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
             string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
@@ -176,7 +176,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             string updateFileWithSchema3_3_2 = "JSON-3.3.2-example-Derbyshire 2024 DJ388 partial.json";
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUser(UserGroup.Tra);
+            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 

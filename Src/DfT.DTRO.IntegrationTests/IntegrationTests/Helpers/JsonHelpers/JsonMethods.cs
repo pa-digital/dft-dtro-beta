@@ -256,10 +256,19 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
 
         public static string GetJsonFromFileAndModifyTra(string schemaVersion, string fileName, string traId)
         {
-            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
-            string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersion, createDtroJson, traId);
-            return createDtroJsonWithTraUpdated;
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersion, dtroJson, traId);
+            return dtroJsonWithTraUpdated;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(string schemaVersion, string fileName, string traId)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersion, dtroJson, traId);
+            string dtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(dtroJsonWithTraUpdated, "data.source.provision");
+            return dtroWithDuplicateProvisionReference;
         }
     }
 }

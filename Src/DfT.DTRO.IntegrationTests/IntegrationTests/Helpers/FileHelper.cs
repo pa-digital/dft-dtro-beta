@@ -1,4 +1,5 @@
 using System.Linq;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
@@ -49,6 +50,19 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
+            return tempFilePath;
+        }
+
+        public static string CreateTempFileWithTraUpdatedAndProvisionReferenceDuplicated(string schemaVersion, string fileName, string userGuid, string traId)
+        {
+            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string createDtroJson = File.ReadAllText(createDtroFile);
+            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersion, createDtroJson, traId);
+            string createDtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(createDtroJsonWithTraUpdated, "data.source.provision");
+            string uniquePrefixOnFileName = $"{userGuid.Substring(0, 5)}-";
+            string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroWithDuplicateProvisionReference);
             return tempFilePath;
         }
     }
