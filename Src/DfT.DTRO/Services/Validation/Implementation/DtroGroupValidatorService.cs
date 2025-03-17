@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace DfT.DTRO.Services.Validation.Implementation;
+﻿namespace DfT.DTRO.Services.Validation.Implementation;
 
 /// <inheritdoc cref="IDtroGroupValidatorService"/>
 public class DtroGroupValidatorService : IDtroGroupValidatorService
@@ -9,6 +7,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly ISchemaTemplateService _schemaTemplateService;
     private readonly ISemanticValidationService _semanticValidationService;
     private readonly IRulesValidation _rulesValidation;
+    private readonly IConsultationValidationService _consultationValidationService;
     private readonly ISourceValidationService _sourceValidationService;
     private readonly IProvisionValidationService _provisionValidationService;
     private readonly IRegulatedPlaceValidationService _regulatedPlaceValidationService;
@@ -28,6 +27,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         ISemanticValidationService semanticValidationService,
         ISchemaTemplateService schemaTemplateService,
         IRulesValidation rulesValidation,
+        IConsultationValidationService consultationValidationService,
         ISourceValidationService sourceValidationService,
         IProvisionValidationService provisionValidationService,
         IRegulatedPlaceValidationService regulatedPlaceValidationService,
@@ -45,7 +45,9 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         _semanticValidationService = semanticValidationService;
         _schemaTemplateService = schemaTemplateService;
         _rulesValidation = rulesValidation;
+        _conditionValidationService = conditionValidationService;
         _sourceValidationService = sourceValidationService;
+        _consultationValidationService = consultationValidationService;
         _provisionValidationService = provisionValidationService;
         _regulatedPlaceValidationService = regulatedPlaceValidationService;
         _geometryValidationService = geometryValidationService;
@@ -109,7 +111,13 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             }
         }
 
-        var errors = _sourceValidationService.Validate(dtroSubmit, traCode);
+        var errors = _consultationValidationService.Validate(dtroSubmit);
+        if (errors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
+        }
+
+        errors = _sourceValidationService.Validate(dtroSubmit, traCode);
         if (errors.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
