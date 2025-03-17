@@ -1,5 +1,4 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": false,
     "description": "DTRO v3.4.0 Data Specification JSON schema",
     "type": "object",
@@ -758,7 +757,6 @@
                 "consultationName",
                 "endOfConsultation",
                 "statementOfReason",
-                "urlAdditionalInformation",
                 "source"
             ]
         },
