@@ -137,7 +137,7 @@ public class ProvisionValidationService : IProvisionValidationService
             }
 
             var eventAts = actualStartOrStops
-                .Select(actualStartOrStop => actualStartOrStop.GetValueOrDefault<string>(Constants.EventAt))
+                .Select(actualStartOrStop => ((IDictionary<string, object>)actualStartOrStop)[Constants.EventAt].ToString())
                 .ToList();
 
             DateTime eventAtValidDate = default;
