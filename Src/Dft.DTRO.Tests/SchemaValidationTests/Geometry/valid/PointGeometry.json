@@ -14,14 +14,16 @@
             "type": "regulationLocation",
             "pointGeometry": {
               "point": "SRID=27700",
-              "externalReference": {
-                "lastUpdateDate": "2024-10-01T08:00:00",
-                "uniqueStreetReferenceNumber": [
-                  {
-                    "usrn": 14000759
-                  }
-                ]
-              },
+              "externalReference": [
+                {
+                  "lastUpdateDate": "2024-10-01T08:00:00",
+                  "uniqueStreetReferenceNumber": [
+                    {
+                      "usrn": 14000759
+                    }
+                  ]
+                }
+              ],
               "representation": "centreLinePoint",
               "version": 1
             }
