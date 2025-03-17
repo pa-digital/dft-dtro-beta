@@ -2,6 +2,7 @@ using System.Linq;
 using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
 {
@@ -195,6 +196,70 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
             {
                 throw new Exception($"Error processing JSON: {ex.Message}", ex);
             }
+        }
+
+        public static async Task<string> GetJsonFromHttpResponseMessageAsync(HttpResponseMessage httpResponseMessage)
+        {
+            string json = await httpResponseMessage.Content.ReadAsStringAsync();
+            return json;
+        }
+
+        public static async Task<string> GetDtroResponseJsonAsync(string dtroId, TestUser testUser)
+        {
+            HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, testUser);
+            Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
+            string getDtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
+            return getDtroResponseJson;
+        }
+
+        public static string ModifyCreateJsonWithinFileForComparison(string schemaVersion, string filePath, string dtroId)
+        {
+            JObject createJsonObject = JObject.Parse(File.ReadAllText(filePath));
+            createJsonObject["id"] = dtroId;
+            string sentCreateJsonWithId = createJsonObject.ToString();
+
+            int schemaVersionAsInt = int.Parse(schemaVersion.Replace(".", ""));
+
+            if (schemaVersionAsInt >= 332)
+            {
+                // New schema versions
+                return sentCreateJsonWithId;
+            }
+            else
+            {
+                // Convert JSON relating to older schema versions to camel case
+                string sentCreateJsonWithIdToCamelCase = JsonMethods.ConvertJsonKeysToCamelCase(sentCreateJsonWithId);
+                return sentCreateJsonWithIdToCamelCase;
+            }
+        }
+
+        public static string ModifyCreateJsonForComparison(string schemaVersion, string jsonString, string dtroId)
+        {
+            JObject createJsonObject = JObject.Parse(jsonString);
+            createJsonObject["id"] = dtroId;
+            string sentCreateJsonWithId = createJsonObject.ToString();
+
+            int schemaVersionAsInt = int.Parse(schemaVersion.Replace(".", ""));
+
+            if (schemaVersionAsInt >= 332)
+            {
+                // New schema versions
+                return sentCreateJsonWithId;
+            }
+            else
+            {
+                // Convert JSON relating to older schema versions to camel case
+                string sentCreateJsonWithIdToCamelCase = JsonMethods.ConvertJsonKeysToCamelCase(sentCreateJsonWithId);
+                return sentCreateJsonWithIdToCamelCase;
+            }
+        }
+
+        public static string GetJsonFromFileAndModifyTra(string schemaVersion, string fileName, string traId)
+        {
+            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string createDtroJson = File.ReadAllText(createDtroFile);
+            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersion, createDtroJson, traId);
+            return createDtroJsonWithTraUpdated;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Linq;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
@@ -37,6 +38,18 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             {
                 throw new DirectoryNotFoundException($"The directory '{directoryPath}' does not exist.");
             }
+        }
+
+        public static string CreateTempFileWithTraUpdated(string schemaVersion, string fileName, string userGuid, string traId)
+        {
+            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string createDtroJson = File.ReadAllText(createDtroFile);
+            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersion, createDtroJson, traId);
+            string uniquePrefixOnFileName = $"{userGuid.Substring(0, 5)}-";
+            string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
+            return tempFilePath;
         }
     }
 }

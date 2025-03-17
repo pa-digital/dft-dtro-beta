@@ -1,6 +1,7 @@
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using Newtonsoft.Json.Linq;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.JsonMethods;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.CreateDtroTests
@@ -31,35 +32,22 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.CreateDtroTest
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
             string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
-            // Avoid files being overwritten by using a unique prefix in file names for each test
-            string uniquePrefixOnFileName = $"{userGuid.Substring(0, 5)}-";
 
             // Prepare DTRO
-            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{fileName}";
-            string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
-            string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
+            string tempFilePath = CreateTempFileWithTraUpdated(schemaVersionToTest, fileName, userGuid, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
-            Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
+            string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.Created == createDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePath)}: expected status code is {HttpStatusCode.Created} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Get created DTRO
             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-            HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
-            Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
-            string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
+            string getDtroResponseJson = await GetDtroResponseJsonAsync(dtroId, publisher);
 
-            // Add ID to sent DTRO for comparison purposes
-            JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
-            createJsonObject["id"] = dtroId;
-
-            // Check retrieved DTRO matches sent DTRO
-            string sentCreateJsonWithId = createJsonObject.ToString();
-            string sentCreateJsonWithIdToCamelCase = JsonMethods.ConvertJsonKeysToCamelCase(sentCreateJsonWithId);
-            JsonMethods.CompareJson(sentCreateJsonWithIdToCamelCase, dtroResponseJson);
+            // Add ID to sent DTRO and compare
+            string modifiedCreateJson = ModifyCreateJsonWithinFileForComparison(schemaVersionToTest, tempFilePath, dtroId);
+            JsonMethods.CompareJson(modifiedCreateJson, getDtroResponseJson);
         }
 
         [Theory]
@@ -74,28 +62,20 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.CreateDtroTest
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
             // Prepare DTRO
-            string createDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionToTest}/{fileName}";
-            string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
+            string createDtroJsonWithTraModified = GetJsonFromFileAndModifyTra(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
-            Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModified, publisher);
+            string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.Created == createDtroResponse.StatusCode, $"File {fileName}: expected status code is {HttpStatusCode.Created} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Get created DTRO
             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-            HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, publisher);
-            Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
-            string dtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
+            string getDtroResponseJson = await GetDtroResponseJsonAsync(dtroId, publisher);
 
-            // Add ID to sent DTRO for comparison purposes
-            JObject createJsonObject = JObject.Parse(createDtroJsonWithTraUpdated);
-            createJsonObject["id"] = dtroId;
-
-            // Check retrieved DTRO matches sent DTRO
-            string sentCreateJsonWithId = createJsonObject.ToString();
-            string sentCreateJsonWithIdToCamelCase = JsonMethods.ConvertJsonKeysToCamelCase(sentCreateJsonWithId);
-            JsonMethods.CompareJson(sentCreateJsonWithIdToCamelCase, dtroResponseJson);
+            // Add ID to sent DTRO and compare
+            string modifiedCreateJson = ModifyCreateJsonForComparison(schemaVersionToTest, createDtroJsonWithTraModified, dtroId);
+            JsonMethods.CompareJson(modifiedCreateJson, getDtroResponseJson);
         }
     }
 }
