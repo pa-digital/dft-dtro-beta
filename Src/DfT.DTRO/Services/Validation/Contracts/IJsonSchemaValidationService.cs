@@ -6,6 +6,13 @@ namespace DfT.DTRO.Services.Validation.Contracts;
 public interface IJsonSchemaValidationService
 {
     /// <summary>
+    /// Determine whether schema version supports schema validation
+    /// </summary>
+    /// <param name="schemaVersion">Schema version</param>
+    /// <returns>bool</returns>
+    bool SchemaVersionSupportsValidation(SchemaVersion schemaVersion);
+
+    /// <summary>
     /// Validate schema
     /// </summary>
     /// <param name="jsonSchemaAsString">Schema to validate</param>

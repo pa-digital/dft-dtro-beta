@@ -1,5 +1,3 @@
-﻿using Newtonsoft.Json;
-
 namespace DfT.DTRO.Services.Validation.Implementation;
 
 /// <inheritdoc cref="IDtroGroupValidatorService"/>
@@ -9,6 +7,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly ISchemaTemplateService _schemaTemplateService;
     private readonly ISemanticValidationService _semanticValidationService;
     private readonly IRulesValidation _rulesValidation;
+    private readonly IConsultationValidationService _consultationValidationService;
     private readonly ISourceValidationService _sourceValidationService;
     private readonly IProvisionValidationService _provisionValidationService;
     private readonly IRegulatedPlaceValidationService _regulatedPlaceValidationService;
@@ -28,6 +27,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         ISemanticValidationService semanticValidationService,
         ISchemaTemplateService schemaTemplateService,
         IRulesValidation rulesValidation,
+        IConsultationValidationService consultationValidationService,
         ISourceValidationService sourceValidationService,
         IProvisionValidationService provisionValidationService,
         IRegulatedPlaceValidationService regulatedPlaceValidationService,
@@ -45,7 +45,9 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         _semanticValidationService = semanticValidationService;
         _schemaTemplateService = schemaTemplateService;
         _rulesValidation = rulesValidation;
+        _conditionValidationService = conditionValidationService;
         _sourceValidationService = sourceValidationService;
+        _consultationValidationService = consultationValidationService;
         _provisionValidationService = provisionValidationService;
         _regulatedPlaceValidationService = regulatedPlaceValidationService;
         _geometryValidationService = geometryValidationService;
@@ -76,14 +78,17 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToSchemaVersion = error };
         }
 
-        // Temporarily remove schema validation logic while we improve it
-        // var jsonSchemaAsString = schema.Template.ToIndentedJsonString();
-        // var dtroSubmitJson = dtroSubmit.Data.ToIndentedJsonString();
-        // var requestComparedToSchema = _jsonSchemaValidationService.ValidateSchema(jsonSchemaAsString, dtroSubmitJson);
-        // if (requestComparedToSchema.Count > 0)
-        // {
-        //     return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
-        // }
+        // Schema validation logic is only supported for schemas 3.4.0 and above
+        if (_jsonSchemaValidationService.SchemaVersionSupportsValidation(dtroSubmit.SchemaVersion))
+        {
+            string jsonSchemaString = schema.Template.ToIndentedJsonString();
+            string payloadString = dtroSubmit.Data.ToIndentedJsonString();
+            var requestComparedToSchema = _jsonSchemaValidationService.ValidateSchema(jsonSchemaString, payloadString);
+            if (requestComparedToSchema.Count > 0)
+            {
+                return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
+            }
+        }
 
         // Validation of camel case for schemas >= 3.3.2
         CasingValidationService casingValidationService = new();
@@ -109,7 +114,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             }
         }
 
-        var errors = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
+        var errors = _consultationValidationService.Validate(dtroSubmit);
         if (errors.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
@@ -191,6 +196,12 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         if (tuple.Item2.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = tuple.Item2.MapFrom() };
+        }
+
+        errors = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
+        if (errors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
         return null;
