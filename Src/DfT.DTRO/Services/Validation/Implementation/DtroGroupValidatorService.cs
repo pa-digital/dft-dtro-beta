@@ -92,7 +92,10 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
 
         // Here, we turn all the Dtro object keys into Pascal case
         CasingValidationService casingValidationService = new();
-        dtroSubmit.Data = casingValidationService.ConvertKeysToPascalCase(dtroSubmit.Data);
+        if (casingValidationService.SchemaVersionEnforcesCamelCase(schemaVersion))
+        {
+            dtroSubmit.Data = casingValidationService.ConvertKeysToPascalCase(dtroSubmit.Data);
+        }
 
         var errors = _consultationValidationService.Validate(dtroSubmit);
         if (errors.Count > 0)
