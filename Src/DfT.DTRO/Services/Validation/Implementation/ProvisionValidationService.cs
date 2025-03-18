@@ -52,7 +52,7 @@ public class ProvisionValidationService : IProvisionValidationService
                     Name = $"Invalid '{Constants.ComingIntoForceDate}'",
                     Message = "The date that the provision is coming into force",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ComingIntoForceDate}",
-                    Rule = $"{Constants.ComingIntoForceDate} if present, must be of type {typeof(string)} and formatted as {typeof(DateOnly)}"
+                    Rule = $"{Constants.ComingIntoForceDate} if present, must be of type string and formatted as {typeof(DateOnly)}"
                 };
 
                 validationErrors.Add(error);
@@ -87,7 +87,7 @@ public class ProvisionValidationService : IProvisionValidationService
                     Name = $"Invalid '{Constants.ExpectedOccupancyDuration}'",
                     Message = "Expected duration (in integer days) of the provision occupancy",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExpectedOccupancyDuration}",
-                    Rule = $"{Constants.ExpectedOccupancyDuration} if present, must be of type '{typeof(int)}' and can not be less or equal to 0"
+                    Rule = $"{Constants.ExpectedOccupancyDuration} if present, must be of type 'int' and cannot be less or equal to 0"
                 };
 
                 validationErrors.Add(error);
@@ -149,7 +149,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 {
                     Name = $"Invalid '{Constants.EventAt}'",
                     Message = "Indicates the date / time of the related event",
-                    Rule = $"'{Constants.EventAt}' must be of type '{typeof(string)}' and formatted as date-time",
+                    Rule = $"'{Constants.EventAt}' must be of type 'string' and formatted as date-time",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventAt}"
                 };
 
@@ -220,7 +220,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 {
                     Name = $"Invalid '{Constants.EffectOfChange}'",
                     Message = "Description of the effect of the change of the Experimental Order",
-                    Rule = $"'{Constants.EffectOfChange}' must be present and of type '{typeof(string)}'",
+                    Rule = $"'{Constants.EffectOfChange}' must be present and of type 'string'",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalVariation} -> {Constants.EffectOfChange}"
                 };
 
@@ -236,7 +236,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 {
                     Name = $"Invalid '{Constants.ExpectedDuration}'",
                     Message = "Duration (in integer days) of the change of effect of the Experimental Order",
-                    Rule = $"'{Constants.ExpectedDuration}' must be present and of type '{typeof(int)}'",
+                    Rule = $"'{Constants.ExpectedDuration}' must be present and of type 'int'",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalVariation} -> {Constants.ExpectedDuration}"
                 };
 
@@ -269,7 +269,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 {
                     Name = $"Invalid '{Constants.ActualDateOfCessation}'",
                     Message = "Description of the effect of the change of the Experimental Order",
-                    Rule = $"'{Constants.ActualDateOfCessation}' must be present and of type '{typeof(string)}' and formatted as date-time",
+                    Rule = $"'{Constants.ActualDateOfCessation}' must be present and of type 'string' and formatted as date-time",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalCessation} -> {Constants.ActualDateOfCessation}"
                 };
 
@@ -286,7 +286,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 {
                     Name = $"Invalid '{Constants.ActualDateOfCessation}'",
                     Message = "The date that the Experimental Order was ceased",
-                    Rule = $"'{Constants.ActualDateOfCessation}' must be of type '{typeof(string)}' and formatted as date-time",
+                    Rule = $"'{Constants.ActualDateOfCessation}' must be of type 'string' and formatted as date-time",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalCessation} -> {Constants.ActualDateOfCessation}"
                 };
 
@@ -318,7 +318,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 {
                     Name = $"Invalid '{Constants.NatureOfCessation}'",
                     Message = "Description of the reason for the cessation of the Experimental Order",
-                    Rule = $"'{Constants.NatureOfCessation}' must be present and of type '{typeof(string)}'",
+                    Rule = $"'{Constants.NatureOfCessation}' must be present and of type 'string'",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ExperimentalCessation} -> {Constants.NatureOfCessation}"
                 };
 
@@ -335,7 +335,7 @@ public class ProvisionValidationService : IProvisionValidationService
             {
                 Name = $"Invalid '{Constants.ProvisionDescription}'",
                 Message = "Free text description of the referenced provision",
-                Rule = $"Provision '{Constants.ProvisionDescription}' must be of type '{typeof(string)}'",
+                Rule = $"Provision '{Constants.ProvisionDescription}' must be of type 'string'",
                 Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ProvisionDescription}"
             };
 
@@ -369,7 +369,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 {
                     Name = $"'{kv.Value}' duplication {Constants.Reference}",
                     Message = $"{Constants.Provision} {Constants.Reference} '{kv.Key}' is present {kv.Value} times.",
-                    Rule = $"Each provision '{Constants.Reference}' must be unique and of type '{typeof(string)}'",
+                    Rule = $"Each provision '{Constants.Reference}' must be unique and of type 'string'",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.Reference}"
                 };
 
