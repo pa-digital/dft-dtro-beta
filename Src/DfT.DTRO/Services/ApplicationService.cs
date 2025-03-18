@@ -30,6 +30,7 @@ public class ApplicationService : IApplicationService
         var developerApp = await _apigeeAppRepository.GetApp(email, name);
         var applicationResponse = JsonHelper.ConvertObject<ApigeeDeveloperApp, ApplicationResponse>(developerApp);
         applicationResponse.Purpose = application.Purpose;
+        applicationResponse.SwaCode = application.SwaCode;
         return applicationResponse;
     }
 

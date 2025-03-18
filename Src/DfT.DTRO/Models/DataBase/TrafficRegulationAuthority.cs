@@ -35,6 +35,11 @@ public class TrafficRegulationAuthority
     /// Traffic Regulation Authority status
     /// </summary>
     public string Status { get; set; }
+    
+    /// <summary>
+    /// Traffic Regulation Authority SWA code
+    /// </summary>
+    public string SwaCode { get; set; }
 
     /// <summary>
     /// Traffic Regulation Authority applications

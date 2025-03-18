@@ -3,6 +3,7 @@ public class ApplicationDetailsDto
     public string Name { get; set; }
     public Guid AppId { get; set; }
     public string Purpose { get; set; }
+    public string SwaCode { get; set; }
 }
 
 public class ApplicationListDto
