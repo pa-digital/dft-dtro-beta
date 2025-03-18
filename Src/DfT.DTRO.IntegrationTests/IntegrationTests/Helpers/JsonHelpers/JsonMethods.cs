@@ -282,5 +282,43 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
 
             return jsonObj.ToString();
         }
+
+        public static string ModifyExternalReferenceLastUpdateDate(string jsonString, string newDate)
+        {
+            JObject jsonObj = JObject.Parse(jsonString);
+            ModifyExternalReferenceLastUpdateDateRecursive(jsonObj, newDate);
+            return jsonObj.ToString();
+        }
+
+        private static void ModifyExternalReferenceLastUpdateDateRecursive(JToken token, string newDate)
+        {
+            if (token is JObject obj)
+            {
+                foreach (var property in obj.Properties())
+                {
+                    if (property.Value is JArray array && (property.Name == "externalReference" || property.Name == "origin"))
+                    {
+                        foreach (var item in array.Children<JObject>())
+                        {
+                            if (item.ContainsKey("lastUpdateDate"))
+                            {
+                                item["lastUpdateDate"] = newDate;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ModifyExternalReferenceLastUpdateDateRecursive(property.Value, newDate);
+                    }
+                }
+            }
+            else if (token is JArray array)
+            {
+                foreach (var item in array)
+                {
+                    ModifyExternalReferenceLastUpdateDateRecursive(item, newDate);
+                }
+            }
+        }
     }
 }

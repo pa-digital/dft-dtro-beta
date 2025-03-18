@@ -1,5 +1,6 @@
 using System.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.JsonMethods;
 using Newtonsoft.Json.Linq;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
@@ -67,21 +68,22 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             return tempFilePath;
         }
 
-        // public static string CreateTempFileWithTraModifiedAndExternalReferenceLastUpdateDateInFuture(string schemaVersion, string fileName, string userGuidToGenerateFileNamePrefix, string traId)
-        // {
-        //     string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
-        //     string dtroJson = File.ReadAllText(dtroFile);
-        //     string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+        public static string CreateTempFileWithTraModifiedAndExternalReferenceLastUpdateDateInFuture(string schemaVersion, string fileName, string userGuidToGenerateFileNamePrefix, string traId)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
 
-        //     JObject jsonObj = JObject.Parse(dtroJsonWithTraModified);
-        //     jsonObj["data"]["source"]["provision"][0]["regulatedPlace"][0]["pointGeometry"]["point"] = pointGeometryString;
+            DateTime dateTomorrow = DateTime.Now.AddDays(1);
+            string dateTomorrowFormatted = dateTomorrow.ToString("yyyy-MM-ddTHH:00:00");
+            string dtroJsonWithFutureExternalReferenceLastUpdateDate = ModifyExternalReferenceLastUpdateDate(dtroJsonWithTraModified, dateTomorrowFormatted);
 
-        //     string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
-        //     string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
-        //     string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-        //     WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, jsonObj.ToString());
-        //     return tempFilePath;
-        // }
+            string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
+            string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithFutureExternalReferenceLastUpdateDate);
+            return tempFilePath;
+        }
 
         public static string CreateTempFileWithTraAndPointGeometryModified(string schemaVersion, string fileName, string userGuidToGenerateFileNamePrefix, string traId, string pointGeometryString)
         {
