@@ -114,24 +114,6 @@ public class ProvisionValidationService : IProvisionValidationService
             validationErrors.Add(error);
         }
 
-        // Check that we don't have a mixture of permanent and temporary order reporting points
-        bool hasPermanent = orderReportingPoints.Any(o => o.StartsWith("permanent"));
-        bool hasTemporary = orderReportingPoints.Any(o => o.StartsWith("ttro"));
-        if (hasPermanent && hasTemporary)
-        {
-            var error = new SemanticValidationError
-                {
-                    Name = $"Invalid '{Constants.OrderReportingPoint}'",
-                    Message = "Nature of the traffic regulation measure (TRO &amp; notice) process Reporting Point represented in this record",
-                    Rule = $"Multiple provisions cannot contain a mixture of permanent and temporary order reporting points",
-                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.OrderReportingPoint}"
-                };
-
-                validationErrors.Add(error);
-                return validationErrors;
-        }
-
-
         var anyTemporaryOrderReportingPoints = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
                                                orderReportingPoints.Any(orderReportingPoint => orderReportingPoint.StartsWith("ttro"));
         if (anyTemporaryOrderReportingPoints)
