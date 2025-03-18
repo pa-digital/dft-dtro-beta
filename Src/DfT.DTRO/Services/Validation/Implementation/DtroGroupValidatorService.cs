@@ -90,9 +90,20 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             }
         }
 
-        // Here, we turn all the Dtro object keys into Pascal case
         CasingValidationService casingValidationService = new();
-        dtroSubmit.Data = casingValidationService.ConvertKeysToPascalCase(dtroSubmit.Data);
+        if (casingValidationService.SchemaVersionEnforcesCamelCase(dtroSubmit.SchemaVersion))
+        {
+            dtroSubmit.Data = casingValidationService.ConvertKeysToPascalCase(dtroSubmit.Data);
+        }
+        else
+        {
+            List<string> invalidProperties = casingValidationService.ValidatePascalCase(dtroSubmit.Data);
+            if (invalidProperties.Count > 0)
+            {
+                string message = $"All property names must conform to pascal case naming conventions. The following properties violate this: [{string.Join(", ", invalidProperties)}]";
+                throw new CaseException(message);
+            }
+        }
 
         var errors = _consultationValidationService.Validate(dtroSubmit);
         if (errors.Count > 0)

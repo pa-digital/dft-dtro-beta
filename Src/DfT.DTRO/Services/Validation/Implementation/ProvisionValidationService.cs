@@ -119,6 +119,7 @@ public class ProvisionValidationService : IProvisionValidationService
         if (anyTemporaryOrderReportingPoints)
         {
             var actualStartOrStops = provisions
+                .Where(provision => ((IDictionary<string, object>)provision).ContainsKey(Constants.ActualStartOrStop))
                 .SelectMany(provision => provision.GetValueOrDefault<IList<object>>(Constants.ActualStartOrStop))
                 .Cast<ExpandoObject>()
                 .ToList();
