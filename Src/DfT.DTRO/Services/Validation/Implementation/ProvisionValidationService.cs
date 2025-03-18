@@ -369,7 +369,7 @@ public class ProvisionValidationService : IProvisionValidationService
                 {
                     Name = $"'{kv.Value}' duplication {Constants.Reference}",
                     Message = $"{Constants.Provision} {Constants.Reference} '{kv.Key}' is present {kv.Value} times.",
-                    Rule = $"Each provision '{Constants.Reference}' must be unique and of type '{typeof(string)}'",
+                    Rule = $"Each provision '{Constants.Reference}' must be unique and of type 'string'",
                     Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.Reference}"
                 };
 
