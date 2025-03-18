@@ -1,5 +1,6 @@
 using System.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
+using Newtonsoft.Json.Linq;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
@@ -41,28 +42,44 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             }
         }
 
-        public static string CreateTempFileWithTraUpdated(string schemaVersion, string fileName, string userGuid, string traId)
+        public static string CreateTempFileWithTraModified(string schemaVersion, string fileName, string userGuidToGenerateFileNamePrefix, string traId)
         {
-            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
-            string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersion, createDtroJson, traId);
-            string uniquePrefixOnFileName = $"{userGuid.Substring(0, 5)}-";
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+            string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
             string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithTraModified);
             return tempFilePath;
         }
 
-        public static string CreateTempFileWithTraUpdatedAndProvisionReferenceDuplicated(string schemaVersion, string fileName, string userGuid, string traId)
+        public static string CreateTempFileWithTraModifiedAndProvisionReferenceDuplicated(string schemaVersion, string fileName, string userGuidToGenerateFileNamePrefix, string traId)
         {
-            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
-            string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersion, createDtroJson, traId);
-            string createDtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(createDtroJsonWithTraUpdated, "data.source.provision");
-            string uniquePrefixOnFileName = $"{userGuid.Substring(0, 5)}-";
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+            string dtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(dtroJsonWithTraModified, "data.source.provision");
+            string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
             string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroWithDuplicateProvisionReference);
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroWithDuplicateProvisionReference);
+            return tempFilePath;
+        }
+
+        public static string CreateTempFileWithTraAndPointGeometryModified(string schemaVersion, string fileName, string userGuidToGenerateFileNamePrefix, string traId, string pointGeometryString)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+
+            JObject jsonObj = JObject.Parse(dtroJsonWithTraModified);
+            jsonObj["data"]["source"]["provision"][0]["regulatedPlace"][0]["pointGeometry"]["point"] = pointGeometryString;
+
+            string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
+            string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, jsonObj.ToString());
             return tempFilePath;
         }
     }

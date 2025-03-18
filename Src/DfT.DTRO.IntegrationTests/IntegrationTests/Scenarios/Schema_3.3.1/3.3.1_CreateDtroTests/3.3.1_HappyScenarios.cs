@@ -31,10 +31,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.CreateDtroTest
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-            string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
+            string userGuidToGenerateFileNamePrefix = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
 
             // Prepare DTRO
-            string tempFilePath = CreateTempFileWithTraUpdated(schemaVersionToTest, fileName, userGuid, publisher.TraId);
+            string tempFilePath = CreateTempFileWithTraModified(schemaVersionToTest, fileName, userGuidToGenerateFileNamePrefix, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);

@@ -71,7 +71,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return getDtroResponse;
         }
 
-        public static string UpdateTraIdInDtro(string schemaVersion, string jsonString, string traId)
+        public static string ModifyTraIdInDtro(string schemaVersion, string jsonString, string traId)
         {
             JObject jsonObj = JObject.Parse(jsonString);
             int tradIdAsInt = int.Parse(traId);
@@ -96,14 +96,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return jsonObj.ToString();
         }
 
-        public static string UpdateSchemaVersionInDtro(string jsonString, string schemaVersion)
+        public static string ModifySchemaVersionInDtro(string jsonString, string schemaVersion)
         {
             JObject jsonObj = JObject.Parse(jsonString);
             jsonObj["schemaVersion"] = schemaVersion;
             return jsonObj.ToString();
         }
 
-        public static string UpdateActionTypeAndTroName(string jsonString, string schemaVersion)
+        public static string ModifyActionTypeAndTroName(string jsonString, string schemaVersion)
         {
             JObject jsonObj = JObject.Parse(jsonString);
             int schemaVersionAsInt = int.Parse(schemaVersion.Replace(".", ""));

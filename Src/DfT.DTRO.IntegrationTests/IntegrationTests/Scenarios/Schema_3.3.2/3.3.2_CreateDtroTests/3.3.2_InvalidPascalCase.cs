@@ -32,15 +32,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.CreateDtroTest
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-            string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
+            string userGuidToGenerateFileNamePrefix = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
             // Avoid files being overwritten by using a unique prefix in file names for each test
-            string uniquePrefixOnFileName = $"{userGuid.Substring(0, 5)}-";
+            string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
 
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{filesWithInvalidPascalCase}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(filesWithInvalidPascalCase, createDtroJson, publisher.TraId);
-            string createDtroJsonWithSchemaVersionUpdated = Dtros.UpdateSchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
+            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(filesWithInvalidPascalCase, createDtroJson, publisher.TraId);
+            string createDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
             string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithSchemaVersionUpdated);
@@ -69,8 +69,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.CreateDtroTest
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{filesWithInvalidPascalCase}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(filesWithInvalidPascalCase, createDtroJson, publisher.TraId);
-            string createDtroJsonWithSchemaVersionUpdated = Dtros.UpdateSchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
+            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(filesWithInvalidPascalCase, createDtroJson, publisher.TraId);
+            string createDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithSchemaVersionUpdated, publisher);

@@ -34,7 +34,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
 
             // Prepare DTRO
-            string tempFilePath = CreateTempFileWithTraUpdated(schemaVersionToTest, fileName, userGuid, publisher.TraId);
+            string tempFilePath = CreateTempFileWithTraModified(schemaVersionToTest, fileName, userGuid, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);

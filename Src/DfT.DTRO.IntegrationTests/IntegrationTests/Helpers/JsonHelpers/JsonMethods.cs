@@ -10,8 +10,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
     {
         public static async Task<string> GetIdFromResponseJsonAsync(HttpResponseMessage httpResponseMessage)
         {
-            string createDtroResponseJson = await httpResponseMessage.Content.ReadAsStringAsync();
-            dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(createDtroResponseJson)!;
+            string responseJson = await httpResponseMessage.Content.ReadAsStringAsync();
+            dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(responseJson)!;
             string id = jsonDeserialised.id.ToString();
             return id;
         }
@@ -258,17 +258,29 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
         {
             string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
             string dtroJson = File.ReadAllText(dtroFile);
-            string dtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersion, dtroJson, traId);
-            return dtroJsonWithTraUpdated;
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+            return dtroJsonWithTraModified;
         }
 
         public static string GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(string schemaVersion, string fileName, string traId)
         {
             string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
             string dtroJson = File.ReadAllText(dtroFile);
-            string dtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersion, dtroJson, traId);
-            string dtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(dtroJsonWithTraUpdated, "data.source.provision");
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+            string dtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(dtroJsonWithTraModified, "data.source.provision");
             return dtroWithDuplicateProvisionReference;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndPointGeometry(string schemaVersion, string fileName, string traId, string pointGeometryString)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+
+            JObject jsonObj = JObject.Parse(dtroJsonWithTraModified);
+            jsonObj["data"]["source"]["provision"][0]["regulatedPlace"][0]["pointGeometry"]["point"] = pointGeometryString;
+
+            return jsonObj.ToString();
         }
     }
 }

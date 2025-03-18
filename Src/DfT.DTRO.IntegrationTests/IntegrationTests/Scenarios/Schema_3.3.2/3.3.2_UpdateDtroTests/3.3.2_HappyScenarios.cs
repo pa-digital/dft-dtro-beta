@@ -30,14 +30,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-            string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
+            string userGuidToGenerateFileNamePrefix = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
             // Avoid files being overwritten by using a unique prefix in file names for each test
-            string uniquePrefixOnFileName = $"{userGuid.Substring(0, 5)}-";
+            string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
 
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
+            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
             string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
@@ -47,7 +47,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
             // Prepare DTRO update
-            string updateJson = Dtros.UpdateActionTypeAndTroName(createDtroJsonWithTraUpdated, schemaVersionToTest);
+            string updateJson = Dtros.ModifyActionTypeAndTroName(createDtroJsonWithTraUpdated, schemaVersionToTest);
             string nameOfUpdateJsonFile = $"updated{nameOfCopyFile}";
             string tempUpdateFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfUpdateJsonFile}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfUpdateJsonFile, updateJson);
@@ -85,14 +85,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionToTest}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
+            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
             Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
 
             // Prepare DTRO update
-            string updateJson = Dtros.UpdateActionTypeAndTroName(createDtroJsonWithTraUpdated, schemaVersionToTest);
+            string updateJson = Dtros.ModifyActionTypeAndTroName(createDtroJsonWithTraUpdated, schemaVersionToTest);
 
             // Send DTRO update
             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
@@ -124,14 +124,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-            string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
+            string userGuidToGenerateFileNamePrefix = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
             // Avoid files being overwritten by using a unique prefix in file names for each test
-            string uniquePrefixOnFileName = $"{userGuid.Substring(0, 5)}-";
+            string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
 
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{oldSchemaVersion}/{createFileWithSchema3_3_1}";
             string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(oldSchemaVersion, createDtroJson, publisher.TraId);
+            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(oldSchemaVersion, createDtroJson, publisher.TraId);
             string nameOfCopyFile = $"{uniquePrefixOnFileName}{createFileWithSchema3_3_1}";
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
@@ -143,10 +143,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             // Prepare DTRO update
             string updateDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{updateFileWithSchema3_3_2}";
             string updateDtroJson = File.ReadAllText(updateDtroFile);
-            string updateDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, updateDtroJson, publisher.TraId);
+            string updateDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionToTest, updateDtroJson, publisher.TraId);
             string nameOfCopyUpdateFile = $"update{uniquePrefixOnFileName}{updateFileWithSchema3_3_2}";
             string tempUpdateFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyUpdateFile}";
-            string updateJson = Dtros.UpdateActionTypeAndTroName(updateDtroJsonWithTraUpdated, schemaVersionToTest);
+            string updateJson = Dtros.ModifyActionTypeAndTroName(updateDtroJsonWithTraUpdated, schemaVersionToTest);
             WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyUpdateFile, updateJson);
 
             // Send DTRO update
@@ -183,7 +183,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             // Prepare DTRO
             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{oldSchemaVersion}/{createFileWithSchema3_3_1}";
             string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(oldSchemaVersion, createDtroJson, publisher.TraId);
+            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(oldSchemaVersion, createDtroJson, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
@@ -192,8 +192,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_2.UpdateDtroTest
             // Prepare DTRO update
             string updateDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{updateFileWithSchema3_3_2}";
             string updateDtroJson = File.ReadAllText(updateDtroFile);
-            string updateDtroJsonWithTraUpdated = Dtros.UpdateTraIdInDtro(schemaVersionToTest, updateDtroJson, publisher.TraId);
-            string updateJson = Dtros.UpdateActionTypeAndTroName(updateDtroJsonWithTraUpdated, schemaVersionToTest);
+            string updateDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionToTest, updateDtroJson, publisher.TraId);
+            string updateJson = Dtros.ModifyActionTypeAndTroName(updateDtroJsonWithTraUpdated, schemaVersionToTest);
 
             // Send DTRO update
             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
