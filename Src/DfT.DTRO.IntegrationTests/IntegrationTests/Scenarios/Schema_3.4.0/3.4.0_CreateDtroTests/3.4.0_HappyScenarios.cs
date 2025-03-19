@@ -1,7 +1,5 @@
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.JsonMethods;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTests
@@ -31,10 +29,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-            string userGuid = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
 
             // Prepare DTRO
-            string tempFilePath = CreateTempFileWithTraModified(schemaVersionToTest, fileName, userGuid, publisher.TraId);
+            string tempFilePath = FileHelper.CreateTempFileWithTraModified(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
@@ -43,10 +40,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
 
             // Get created DTRO
             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-            string getDtroResponseJson = await GetDtroResponseJsonAsync(dtroId, publisher);
+            string getDtroResponseJson = await JsonMethods.GetDtroResponseJsonAsync(dtroId, publisher);
 
             // Add ID to sent DTRO and compare
-            string modifiedCreateJson = ModifyCreateJsonWithinFileForComparison(schemaVersionToTest, tempFilePath, dtroId);
+            string modifiedCreateJson = JsonMethods.ModifyCreateJsonWithinFileForComparison(schemaVersionToTest, tempFilePath, dtroId);
             JsonMethods.CompareJson(modifiedCreateJson, getDtroResponseJson);
         }
 
@@ -62,7 +59,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
             // Prepare DTRO
-            string createDtroJsonWithTraModified = GetJsonFromFileAndModifyTra(schemaVersionToTest, fileName, publisher.TraId);
+            string createDtroJsonWithTraModified = JsonMethods.GetJsonFromFileAndModifyTra(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModified, publisher);
@@ -71,10 +68,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
 
             // Get created DTRO
             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-            string getDtroResponseJson = await GetDtroResponseJsonAsync(dtroId, publisher);
+            string getDtroResponseJson = await JsonMethods.GetDtroResponseJsonAsync(dtroId, publisher);
 
             // Add ID to sent DTRO and compare
-            string modifiedCreateJson = ModifyCreateJsonForComparison(schemaVersionToTest, createDtroJsonWithTraModified, dtroId);
+            string modifiedCreateJson = JsonMethods.ModifyCreateJsonForComparison(schemaVersionToTest, createDtroJsonWithTraModified, dtroId);
             JsonMethods.CompareJson(modifiedCreateJson, getDtroResponseJson);
         }
     }

@@ -1,10 +1,8 @@
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 using Newtonsoft.Json;
 using Microsoft.Extensions.DependencyInjection;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.JsonMethods;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTests
 {
@@ -20,10 +18,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-            string userGuidToGenerateFileNamePrefix = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
 
             // Prepare DTRO
-            string tempFilePath = CreateTempFileWithTraModifiedAndProvisionReferenceDuplicated(schemaVersionToTest, fileName, userGuidToGenerateFileNamePrefix, publisher.TraId);
+            string tempFilePath = FileHelper.CreateTempFileWithTraModifiedAndProvisionReferenceDuplicated(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
@@ -58,7 +55,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
             // Prepare DTRO
-            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(schemaVersionToTest, fileName, publisher.TraId);
+            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = JsonMethods.GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModifiedAndDuplicateProvisionReference, publisher);

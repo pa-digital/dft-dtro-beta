@@ -1,5 +1,4 @@
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
@@ -16,7 +15,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(UserWithAllPermissions);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
-            DeleteFilesInDirectory(AbsolutePathToDtroExamplesTempDirectory);
+            FileHelper.DeleteFilesInDirectory(AbsolutePathToDtroExamplesTempDirectory);
 
             if (EnvironmentName == EnvironmentType.Local)
             {

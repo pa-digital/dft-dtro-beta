@@ -1,10 +1,8 @@
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 using Newtonsoft.Json;
 using Microsoft.Extensions.DependencyInjection;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.JsonMethods;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTests
 {
@@ -40,7 +38,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             string userGuidToGenerateFileNamePrefix = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
 
             // Prepare DTRO
-            string tempFilePath = CreateTempFileWithTraAndPointGeometryModified(schemaVersionToTest, fileName, userGuidToGenerateFileNamePrefix, publisher.TraId, pointGeometryString);
+            string tempFilePath = FileHelper.CreateTempFileWithTraAndPointGeometryModified(schemaVersionToTest, fileName, userGuidToGenerateFileNamePrefix, publisher.TraId, pointGeometryString);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
@@ -77,7 +75,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
             // Prepare DTRO
-            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = GetJsonFromFileAndModifyTraAndPointGeometry(schemaVersionToTest, fileName, publisher.TraId, pointGeometryString);
+            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = JsonMethods.GetJsonFromFileAndModifyTraAndPointGeometry(schemaVersionToTest, fileName, publisher.TraId, pointGeometryString);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModifiedAndDuplicateProvisionReference, publisher);
