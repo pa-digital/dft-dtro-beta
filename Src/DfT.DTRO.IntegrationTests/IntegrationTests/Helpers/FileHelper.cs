@@ -98,16 +98,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             return tempFilePath;
         }
 
-        public static string CreateTempFileToFailSchemaValidation(string schemaVersion, string fileName, string traId)
-        {
-            string dtroJsonWithTraModified = GetJsonFromFileAndModifyToFailSchemaValidation(schemaVersion, fileName, traId);
-
-            string nameOfCopyFile = $"{traId}-{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithTraModified);
-            return tempFilePath;
-        }
-
         public static string GetJsonFromFileAndModifyToFailSchemaValidation(string schemaVersion, string fileName, string traId)
         {
             string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
@@ -137,6 +127,43 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             jsonObj["data"]["apples"] = "bananas";
 
             return jsonObj.ToString();
+        }
+
+        public static string CreateTempFileToFailSchemaValidation(string schemaVersion, string fileName, string traId)
+        {
+            string dtroJsonWithTraModified = GetJsonFromFileAndModifyToFailSchemaValidation(schemaVersion, fileName, traId);
+
+            string nameOfCopyFile = $"{traId}-{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithTraModified);
+            return tempFilePath;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndSchemaVersion(string schemaVersionToTest, string schemaVersionOfFilesToUse, string fileName, string traId)
+        {
+            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionOfFilesToUse}/{fileName}";
+            string createDtroJson = File.ReadAllText(createDtroFile);
+            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionOfFilesToUse, createDtroJson, traId);
+            string createDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
+            return createDtroJsonWithSchemaVersionUpdated;
+            // string nameOfCopyFile = $"{traId}-{fileName}";
+            // string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            // FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithSchemaVersionUpdated);
+            // return tempFilePath;
+        }
+
+        public static string CreateTempFileWithTraAndSchemaVersionModified(string schemaVersionToTest, string schemaVersionOfFilesToUse, string fileName, string traId)
+        {
+            // string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionOfFilesToUse}/{fileName}";
+            // string createDtroJson = File.ReadAllText(createDtroFile);
+            // string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionOfFilesToUse, createDtroJson, traId);
+            // string createDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
+
+            string createDtroJsonWithSchemaVersionUpdated = GetJsonFromFileAndModifyTraAndSchemaVersion(schemaVersionToTest, schemaVersionOfFilesToUse, fileName, traId);
+            string nameOfCopyFile = $"{traId}-{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithSchemaVersionUpdated);
+            return tempFilePath;
         }
     }
 }

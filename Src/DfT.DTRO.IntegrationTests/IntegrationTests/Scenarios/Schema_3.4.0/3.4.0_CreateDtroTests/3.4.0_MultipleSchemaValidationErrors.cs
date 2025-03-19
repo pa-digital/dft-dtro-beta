@@ -29,7 +29,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
 
             // Evaluate response JSON rule failures
             string expectedErrorJson = JsonMethods.GetSchemaValidationErrorJson(publisher.TraId);
-
             JsonMethods.CompareJson(expectedErrorJson, createDtroResponseJson);
         }
 
@@ -51,7 +50,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
 
             // Evaluate response JSON rule failures
             string expectedErrorJson = JsonMethods.GetSchemaValidationErrorJson(publisher.TraId);
-
             JsonMethods.CompareJson(expectedErrorJson, createDtroResponseJson);
         }
     }

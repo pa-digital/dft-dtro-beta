@@ -9,6 +9,22 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
     {
         readonly static string schemaVersionToTest = "3.4.0";
         readonly static string filesWithInvalidPascalCase = "3.3.1";
+        readonly string expectedErrorJson = """
+            {
+                "ruleError_0": {
+                    "message": "Property 'Source' has not been defined and the schema does not allow additional properties.",
+                    "path": "Source",
+                    "value": "Source",
+                    "errorType": "AdditionalProperties"
+                },
+                "ruleError_1": {
+                    "message": "JSON is valid against no schemas from 'oneOf'.",
+                    "path": "",
+                    "value": null,
+                    "errorType": "OneOf"
+                }
+            }
+            """;
 
         public static IEnumerable<object[]> GetDtroFileNames()
         {
@@ -31,27 +47,17 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-            string userGuidToGenerateFileNamePrefix = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
-            // Avoid files being overwritten by using a unique prefix in file names for each test
-            string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
 
             // Prepare DTRO
-            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{filesWithInvalidPascalCase}/{fileName}";
-            string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(filesWithInvalidPascalCase, createDtroJson, publisher.TraId);
-            string createDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
-            string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithSchemaVersionUpdated);
+            string tempFilePath = FileHelper.CreateTempFileWithTraAndSchemaVersionModified(schemaVersionToTest, filesWithInvalidPascalCase, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
-            Assert.Equal(HttpStatusCode.BadRequest, createDtroResponse.StatusCode);
+            string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePath)}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Check DTRO response JSON
-            ErrorJson jsonErrorResponse = await ErrorJsonResponseProcessor.GetErrorJson(createDtroResponse);
-            Assert.Equal("Case naming convention exception", jsonErrorResponse.Message);
-            Assert.StartsWith("All property names must conform to camel case naming conventions. The following properties violate this: [Source, Provision, RegulatedPlace", jsonErrorResponse.Error);
+            JsonMethods.CompareJson(expectedErrorJson, createDtroResponseJson);
         }
 
         [Theory]
@@ -66,19 +72,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
             // Prepare DTRO
-            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{filesWithInvalidPascalCase}/{fileName}";
-            string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(filesWithInvalidPascalCase, createDtroJson, publisher.TraId);
-            string createDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
+            string createDtroJsonWithTraAndSchemaVersionModified = FileHelper.GetJsonFromFileAndModifyTraAndSchemaVersion(schemaVersionToTest, filesWithInvalidPascalCase, fileName, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithSchemaVersionUpdated, publisher);
-            Assert.Equal(HttpStatusCode.BadRequest, createDtroResponse.StatusCode);
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraAndSchemaVersionModified, publisher);
+            string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {fileName}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Check DTRO response JSON
-            ErrorJson jsonErrorResponse = await ErrorJsonResponseProcessor.GetErrorJson(createDtroResponse);
-            Assert.Equal("Case naming convention exception", jsonErrorResponse.Message);
-            Assert.StartsWith("All property names must conform to camel case naming conventions. The following properties violate this: [Source, Provision, RegulatedPlace", jsonErrorResponse.Error);
+            JsonMethods.CompareJson(expectedErrorJson, createDtroResponseJson);
         }
     }
 }
