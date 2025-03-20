@@ -2278,7 +2278,8 @@
                 "traAffected",
                 "traCreator",
                 "troName",
-                "provision"
+                "provision",
+                "statementDescription"
             ]
         },
         "specialDayType": {

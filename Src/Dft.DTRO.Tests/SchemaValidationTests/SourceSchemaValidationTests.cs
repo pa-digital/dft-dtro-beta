@@ -28,7 +28,7 @@ public class SourceSchemaValidationTests : IDisposable
     public void SourceValidateRequiredProperties()
     {
         string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Source", "valid", "Source.json");
-        string[] requiredProperties = { "actionType", "currentTraOwner", "reference", "section", "traAffected", "traCreator", "troName", "provision" };
+        string[] requiredProperties = { "actionType", "currentTraOwner", "reference", "section", "traAffected", "traCreator", "troName", "provision", "statementDescription" };
         foreach (string property in requiredProperties)
         {
             JObject json = JObject.Parse(File.ReadAllText(path));

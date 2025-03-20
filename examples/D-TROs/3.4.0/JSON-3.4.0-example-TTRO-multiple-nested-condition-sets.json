@@ -109,7 +109,8 @@
         3300
       ],
       "traCreator": 3300,
-      "troName": "DfT Example - TTRO weight restriction v2, Jan. 2025"
+      "troName": "DfT Example - TTRO weight restriction v2, Jan. 2025",
+      "statementDescription": "Some description"
     }
   }
 }
