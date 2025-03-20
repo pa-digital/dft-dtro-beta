@@ -1,4 +1,5 @@
 using DfT.DTRO.Consts;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
@@ -123,6 +124,170 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             }
 
             return jsonObj.ToString();
+        }
+        public static async Task<string> GetIdFromResponseJsonAsync(HttpResponseMessage httpResponseMessage)
+        {
+            string responseJson = await httpResponseMessage.Content.ReadAsStringAsync();
+            dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(responseJson)!;
+            string id = jsonDeserialised.id.ToString();
+            return id;
+        }
+
+        public static async Task<string> GetDtroResponseJsonAsync(string dtroId, TestUser testUser)
+        {
+            HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, testUser);
+            Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
+            string getDtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
+            return getDtroResponseJson;
+        }
+
+        public static string ModifySentJsonWithinFileForComparison(string schemaVersion, string filePath, string dtroId)
+        {
+            string jsonString = File.ReadAllText(filePath);
+            string modifiedSentJson = ModifySentJsonForComparison(schemaVersion, jsonString, dtroId);
+            return modifiedSentJson;
+        }
+
+        public static string ModifySentJsonForComparison(string schemaVersion, string jsonString, string dtroId)
+        {
+            JObject createJsonObject = JObject.Parse(jsonString);
+            createJsonObject["id"] = dtroId;
+            string sentCreateJsonWithId = createJsonObject.ToString();
+
+            int schemaVersionAsInt = int.Parse(schemaVersion.Replace(".", ""));
+
+            if (schemaVersionAsInt >= 332)
+            {
+                // New schema versions
+                return sentCreateJsonWithId;
+            }
+            else
+            {
+                // Convert JSON relating to older schema versions to camel case
+                string sentCreateJsonWithIdToCamelCase = JsonMethods.ConvertJsonKeysToCamelCase(sentCreateJsonWithId);
+                return sentCreateJsonWithIdToCamelCase;
+            }
+        }
+
+        public static string GetJsonFromFileAndModifyTra(string schemaVersion, string fileName, string traId)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+            return dtroJsonWithTraModified;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(string schemaVersion, string fileName, string traId)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+            string dtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(dtroJsonWithTraModified, "data.source.provision");
+            return dtroWithDuplicateProvisionReference;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(string schemaVersion, string fileName, string traId)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+
+            DateTime dateTomorrow = DateTime.Now.AddDays(1);
+            string dateTomorrowFormatted = dateTomorrow.ToString("yyyy-MM-ddTHH:00:00");
+            string dtroJsonWithFutureExternalReferenceLastUpdateDate = ModifyExternalReferenceLastUpdateDate(dtroJsonWithTraModified, dateTomorrowFormatted);
+            return dtroJsonWithFutureExternalReferenceLastUpdateDate;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndPointGeometry(string schemaVersion, string fileName, string traId, string pointGeometryString)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+
+            JObject jsonObj = JObject.Parse(dtroJsonWithTraModified);
+            jsonObj["data"]["source"]["provision"][0]["regulatedPlace"][0]["pointGeometry"]["point"] = pointGeometryString;
+
+            return jsonObj.ToString();
+        }
+
+        public static string ModifyExternalReferenceLastUpdateDate(string jsonString, string newDate)
+        {
+            JObject jsonObj = JObject.Parse(jsonString);
+            ModifyExternalReferenceLastUpdateDateRecursive(jsonObj, newDate);
+            return jsonObj.ToString();
+        }
+
+        private static void ModifyExternalReferenceLastUpdateDateRecursive(JToken token, string newDate)
+        {
+            if (token is JObject obj)
+            {
+                foreach (var property in obj.Properties())
+                {
+                    if (property.Value is JArray array && (property.Name == "externalReference" || property.Name == "origin"))
+                    {
+                        foreach (var item in array.Children<JObject>())
+                        {
+                            if (item.ContainsKey("lastUpdateDate"))
+                            {
+                                item["lastUpdateDate"] = newDate;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ModifyExternalReferenceLastUpdateDateRecursive(property.Value, newDate);
+                    }
+                }
+            }
+            else if (token is JArray array)
+            {
+                foreach (var item in array)
+                {
+                    ModifyExternalReferenceLastUpdateDateRecursive(item, newDate);
+                }
+            }
+        }
+
+        public static string GetSchemaValidationErrorJson(string traId)
+        {
+            string expectedErrorJson = """
+            {
+                "ruleError_0": {
+                    "message": "Invalid type. Expected Integer but got String.",
+                    "path": "source.currentTraOwner",
+                    "value": "993344436",
+                    "errorType": "Type"
+                },
+                "ruleError_1": {
+                    "message": "Invalid type. Expected Array but got Integer.",
+                    "path": "source.traAffected",
+                    "value": 993344436,
+                    "errorType": "Type"
+                },
+                "ruleError_2": {
+                    "message": "Required properties are missing from object: actionType.",
+                    "path": "source",
+                    "value": [
+                        "actionType"
+                    ],
+                    "errorType": "Required"
+                },
+                "ruleError_3": {
+                    "message": "Property 'apples' has not been defined and the schema does not allow additional properties.",
+                    "path": "apples",
+                    "value": "apples",
+                    "errorType": "AdditionalProperties"
+                },
+                "ruleError_4": {
+                    "message": "JSON is valid against no schemas from 'oneOf'.",
+                    "path": "",
+                    "value": null,
+                    "errorType": "OneOf"
+                }
+            }
+            """.Replace("993344436", traId);
+
+            return expectedErrorJson;
         }
     }
 }

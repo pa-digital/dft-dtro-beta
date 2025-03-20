@@ -72,7 +72,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = JsonMethods.GetJsonFromFileAndModifyTraAndPointGeometry(schemaVersionToTest, fileName, publisher.TraId, pointGeometryString);
+            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = Dtros.GetJsonFromFileAndModifyTraAndPointGeometry(schemaVersionToTest, fileName, publisher.TraId, pointGeometryString);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModifiedAndDuplicateProvisionReference, publisher);

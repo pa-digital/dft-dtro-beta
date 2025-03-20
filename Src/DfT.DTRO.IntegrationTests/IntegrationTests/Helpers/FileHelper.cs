@@ -70,7 +70,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         public static string CreateJsonForDtroUpdate(string schemaVersion, string fileName, string traId)
         {
-            string dtroJsonWithModifiedTra = JsonMethods.GetJsonFromFileAndModifyTra(schemaVersion, fileName, traId);
+            string dtroJsonWithModifiedTra = Dtros.GetJsonFromFileAndModifyTra(schemaVersion, fileName, traId);
             string updateDtroJson = Dtros.ModifyActionTypeAndTroNameForUpdate(schemaVersion, dtroJsonWithModifiedTra);
             return updateDtroJson;
         }
@@ -108,7 +108,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             DateTime dateTomorrow = DateTime.Now.AddDays(1);
             string dateTomorrowFormatted = dateTomorrow.ToString("yyyy-MM-ddTHH:00:00");
-            string dtroJsonWithFutureExternalReferenceLastUpdateDate = JsonMethods.ModifyExternalReferenceLastUpdateDate(dtroJsonWithTraModified, dateTomorrowFormatted);
+            string dtroJsonWithFutureExternalReferenceLastUpdateDate = Dtros.ModifyExternalReferenceLastUpdateDate(dtroJsonWithTraModified, dateTomorrowFormatted);
 
             string nameOfCopyFile = $"{traId}-{fileName}";
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";

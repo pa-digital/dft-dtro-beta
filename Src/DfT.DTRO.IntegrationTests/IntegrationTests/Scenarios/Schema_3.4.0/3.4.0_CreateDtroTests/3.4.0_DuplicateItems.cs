@@ -53,7 +53,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = JsonMethods.GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(schemaVersionToTest, fileName, publisher.TraId);
+            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = Dtros.GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModifiedAndDuplicateProvisionReference, publisher);

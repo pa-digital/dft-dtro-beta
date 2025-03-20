@@ -27,7 +27,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePath)}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Evaluate response JSON rule failures
-            string expectedErrorJson = JsonMethods.GetSchemaValidationErrorJson(publisher.TraId);
+            string expectedErrorJson = Dtros.GetSchemaValidationErrorJson(publisher.TraId);
             JsonMethods.CompareJson(expectedErrorJson, createDtroResponseJson);
         }
 
@@ -47,7 +47,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {fileName}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Evaluate response JSON rule failures
-            string expectedErrorJson = JsonMethods.GetSchemaValidationErrorJson(publisher.TraId);
+            string expectedErrorJson = Dtros.GetSchemaValidationErrorJson(publisher.TraId);
             JsonMethods.CompareJson(expectedErrorJson, createDtroResponseJson);
         }
     }

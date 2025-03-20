@@ -41,7 +41,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroTest
             string tempFilePathForDtroUpdate = FileHelper.CreateTempFileForDtroUpdateBasedOnCreationFile(schemaVersionToTest, tempFilePathForDtroCreation);
 
             // Send DTRO update
-            string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
+            string dtroId = await Dtros.GetIdFromResponseJsonAsync(createDtroResponse);
             HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromFileAsync(tempFilePathForDtroUpdate, dtroId, publisher);
             string updateDtroResponseJson = await updateDtroResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.OK == updateDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePathForDtroUpdate)}: expected status code is {HttpStatusCode.OK} but actual status code was {updateDtroResponse.StatusCode}, with response body\n{updateDtroResponseJson}");
@@ -52,7 +52,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroTest
             Assert.True(HttpStatusCode.OK == getDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePathForDtroUpdate)}: expected status code is {HttpStatusCode.OK} but actual status code was {getDtroResponse.StatusCode}, with response body\n{dtroResponseJson}");
 
             // Add ID to DTRO update and compare
-            string modifiedUpdateJson = JsonMethods.ModifySentJsonWithinFileForComparison(schemaVersionToTest, tempFilePathForDtroUpdate, dtroId);
+            string modifiedUpdateJson = Dtros.ModifySentJsonWithinFileForComparison(schemaVersionToTest, tempFilePathForDtroUpdate, dtroId);
             JsonMethods.CompareJson(modifiedUpdateJson, dtroResponseJson);
         }
 
@@ -67,7 +67,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroJsonWithTraModified = JsonMethods.GetJsonFromFileAndModifyTra(schemaVersionToTest, fileName, publisher.TraId);
+            string createDtroJsonWithTraModified = Dtros.GetJsonFromFileAndModifyTra(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModified, publisher);
@@ -78,7 +78,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroTest
             string dtroUpdateJson = Dtros.ModifyActionTypeAndTroNameForUpdate(schemaVersionToTest, createDtroJsonWithTraModified);
 
             // Send DTRO update
-            string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
+            string dtroId = await Dtros.GetIdFromResponseJsonAsync(createDtroResponse);
             HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromJsonBodyAsync(dtroUpdateJson, dtroId, publisher);
             string updateDtroResponseJson = await updateDtroResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.OK == updateDtroResponse.StatusCode, $"File {fileName}: expected status code is {HttpStatusCode.OK} but actual status code was {updateDtroResponse.StatusCode}, with response body\n{updateDtroResponseJson}");
@@ -89,7 +89,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroTest
             Assert.True(HttpStatusCode.OK == getDtroResponse.StatusCode, $"File {fileName}: expected status code is {HttpStatusCode.OK} but actual status code was {getDtroResponse.StatusCode}, with response body\n{dtroResponseJson}");
 
             // Add ID to DTRO update and compare
-            string modifiedUpdateJson = JsonMethods.ModifySentJsonForComparison(schemaVersionToTest, dtroUpdateJson, dtroId);
+            string modifiedUpdateJson = Dtros.ModifySentJsonForComparison(schemaVersionToTest, dtroUpdateJson, dtroId);
             JsonMethods.CompareJson(modifiedUpdateJson, dtroResponseJson);
         }
     }

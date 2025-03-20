@@ -38,11 +38,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.CreateDtroTest
             Assert.True(HttpStatusCode.Created == createDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePath)}: expected status code is {HttpStatusCode.Created} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Get created DTRO
-            string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-            string getDtroResponseJson = await JsonMethods.GetDtroResponseJsonAsync(dtroId, publisher);
+            string dtroId = await Dtros.GetIdFromResponseJsonAsync(createDtroResponse);
+            string getDtroResponseJson = await Dtros.GetDtroResponseJsonAsync(dtroId, publisher);
 
             // Add ID to sent DTRO and compare
-            string modifiedCreateJson = JsonMethods.ModifySentJsonWithinFileForComparison(schemaVersionToTest, tempFilePath, dtroId);
+            string modifiedCreateJson = Dtros.ModifySentJsonWithinFileForComparison(schemaVersionToTest, tempFilePath, dtroId);
             JsonMethods.CompareJson(modifiedCreateJson, getDtroResponseJson);
         }
 
@@ -57,7 +57,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.CreateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroJsonWithTraModified = JsonMethods.GetJsonFromFileAndModifyTra(schemaVersionToTest, fileName, publisher.TraId);
+            string createDtroJsonWithTraModified = Dtros.GetJsonFromFileAndModifyTra(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModified, publisher);
@@ -65,11 +65,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.CreateDtroTest
             Assert.True(HttpStatusCode.Created == createDtroResponse.StatusCode, $"File {fileName}: expected status code is {HttpStatusCode.Created} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Get created DTRO
-            string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-            string getDtroResponseJson = await JsonMethods.GetDtroResponseJsonAsync(dtroId, publisher);
+            string dtroId = await Dtros.GetIdFromResponseJsonAsync(createDtroResponse);
+            string getDtroResponseJson = await Dtros.GetDtroResponseJsonAsync(dtroId, publisher);
 
             // Add ID to sent DTRO and compare
-            string modifiedCreateJson = JsonMethods.ModifySentJsonForComparison(schemaVersionToTest, createDtroJsonWithTraModified, dtroId);
+            string modifiedCreateJson = Dtros.ModifySentJsonForComparison(schemaVersionToTest, createDtroJsonWithTraModified, dtroId);
             JsonMethods.CompareJson(modifiedCreateJson, getDtroResponseJson);
         }
     }

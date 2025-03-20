@@ -63,7 +63,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroJsonWithTraModifiedAndExternalReferenceLastUpdatedDateInFuture = JsonMethods.GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(schemaVersionToTest, fileName, publisher.TraId);
+            string createDtroJsonWithTraModifiedAndExternalReferenceLastUpdatedDateInFuture = Dtros.GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModifiedAndExternalReferenceLastUpdatedDateInFuture, publisher);
