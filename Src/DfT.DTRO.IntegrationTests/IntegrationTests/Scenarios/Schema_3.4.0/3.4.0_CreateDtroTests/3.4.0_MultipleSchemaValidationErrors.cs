@@ -19,7 +19,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string tempFilePath = FileHelper.CreateTempFileToFailSchemaValidation(schemaVersionToTest, fileName, publisher.TraId);
+            string tempFilePath = Dtros.CreateTempFileToFailSchemaValidation(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
@@ -39,7 +39,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = FileHelper.GetJsonFromFileAndModifyToFailSchemaValidation(schemaVersionToTest, fileName, publisher.TraId);
+            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = Dtros.GetJsonFromFileAndModifyToFailSchemaValidation(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModifiedAndDuplicateProvisionReference, publisher);

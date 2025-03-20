@@ -30,7 +30,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.UpdateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string tempFilePathForDtroCreation = FileHelper.CreateTempFileWithTraModified(schemaVersionToTest, fileName, publisher.TraId);
+            string tempFilePathForDtroCreation = Dtros.CreateTempFileWithTraModified(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePathForDtroCreation, publisher);
@@ -38,7 +38,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.UpdateDtroTest
             Assert.True(HttpStatusCode.Created == createDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePathForDtroCreation)}: expected status code is {HttpStatusCode.Created} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Prepare DTRO update
-            string tempFilePathForDtroUpdate = FileHelper.CreateTempFileForDtroUpdateBasedOnCreationFile(schemaVersionToTest, tempFilePathForDtroCreation);
+            string tempFilePathForDtroUpdate = Dtros.CreateTempFileForDtroUpdateBasedOnCreationFile(schemaVersionToTest, tempFilePathForDtroCreation);
 
             // Send DTRO update
             string dtroId = await Dtros.GetIdFromResponseJsonAsync(createDtroResponse);

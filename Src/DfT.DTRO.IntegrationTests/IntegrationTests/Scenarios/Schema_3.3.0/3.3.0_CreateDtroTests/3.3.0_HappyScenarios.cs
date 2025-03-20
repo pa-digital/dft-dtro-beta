@@ -30,7 +30,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.CreateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string tempFilePath = FileHelper.CreateTempFileWithTraModified(schemaVersionToTest, fileName, publisher.TraId);
+            string tempFilePath = Dtros.CreateTempFileWithTraModified(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);

@@ -36,7 +36,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string tempFilePath = FileHelper.CreateTempFileWithTraAndPointGeometryModified(schemaVersionToTest, fileName, publisher.TraId, pointGeometryString);
+            string tempFilePath = Dtros.CreateTempFileWithTraAndPointGeometryModified(schemaVersionToTest, fileName, publisher.TraId, pointGeometryString);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);

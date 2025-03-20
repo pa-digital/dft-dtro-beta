@@ -169,47 +169,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             }
         }
 
-        public static string GetJsonFromFileAndModifyTra(string schemaVersion, string fileName, string traId)
-        {
-            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
-            string dtroJson = File.ReadAllText(dtroFile);
-            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
-            return dtroJsonWithTraModified;
-        }
-
-        public static string GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(string schemaVersion, string fileName, string traId)
-        {
-            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
-            string dtroJson = File.ReadAllText(dtroFile);
-            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
-            string dtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(dtroJsonWithTraModified, "data.source.provision");
-            return dtroWithDuplicateProvisionReference;
-        }
-
-        public static string GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(string schemaVersion, string fileName, string traId)
-        {
-            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
-            string dtroJson = File.ReadAllText(dtroFile);
-            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
-
-            DateTime dateTomorrow = DateTime.Now.AddDays(1);
-            string dateTomorrowFormatted = dateTomorrow.ToString("yyyy-MM-ddTHH:00:00");
-            string dtroJsonWithFutureExternalReferenceLastUpdateDate = ModifyExternalReferenceLastUpdateDate(dtroJsonWithTraModified, dateTomorrowFormatted);
-            return dtroJsonWithFutureExternalReferenceLastUpdateDate;
-        }
-
-        public static string GetJsonFromFileAndModifyTraAndPointGeometry(string schemaVersion, string fileName, string traId, string pointGeometryString)
-        {
-            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
-            string dtroJson = File.ReadAllText(dtroFile);
-            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
-
-            JObject jsonObj = JObject.Parse(dtroJsonWithTraModified);
-            jsonObj["data"]["source"]["provision"][0]["regulatedPlace"][0]["pointGeometry"]["point"] = pointGeometryString;
-
-            return jsonObj.ToString();
-        }
-
         public static string ModifyExternalReferenceLastUpdateDate(string jsonString, string newDate)
         {
             JObject jsonObj = JObject.Parse(jsonString);
@@ -288,6 +247,177 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             """.Replace("993344436", traId);
 
             return expectedErrorJson;
+        }
+
+        public static string GetJsonFromFileAndModifyTra(string schemaVersion, string fileName, string traId)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+            return dtroJsonWithTraModified;
+        }
+
+        public static string CreateTempFileWithTraModified(string schemaVersion, string fileName, string traId)
+        {
+            string dtroJsonWithTraModified = GetJsonFromFileAndModifyTra(schemaVersion, fileName, traId);
+            string nameOfCopyFile = $"{traId}-{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithTraModified);
+            return tempFilePath;
+        }
+
+        public static string CreateTempFileForDtroUpdateBasedOnCreationFile(string schemaVersion, string pathOfCreateDtroFile)
+        {
+            string createDtroJson = File.ReadAllText(pathOfCreateDtroFile);
+            string updateDtroJson = Dtros.ModifyActionTypeAndTroNameForUpdate(schemaVersion, createDtroJson);
+
+            string directory = Path.GetDirectoryName(pathOfCreateDtroFile);
+            string createDtroFileName = Path.GetFileName(pathOfCreateDtroFile);
+            string updateDtroFileName = "update-" + createDtroFileName;
+            string newFilePath = Path.Combine(directory, updateDtroFileName);
+
+            FileHelper.WriteStringToFile(directory, updateDtroFileName, updateDtroJson);
+
+            return newFilePath;
+        }
+
+        public static string CreateJsonForDtroUpdate(string schemaVersion, string fileName, string traId)
+        {
+            string dtroJsonWithModifiedTra = Dtros.GetJsonFromFileAndModifyTra(schemaVersion, fileName, traId);
+            string updateDtroJson = Dtros.ModifyActionTypeAndTroNameForUpdate(schemaVersion, dtroJsonWithModifiedTra);
+            return updateDtroJson;
+        }
+
+        public static string CreateTempFileForDtroUpdate(string schemaVersion, string fileName, string traId)
+        {
+            string updateDtroJson = CreateJsonForDtroUpdate(schemaVersion, fileName, traId);
+
+            string directory = $"{TestConfig.AbsolutePathToDtroExamplesTempDirectory}";
+            string updateDtroFileName = $"update-{traId}-{fileName}";
+            string newFilePath = Path.Combine(directory, updateDtroFileName);
+
+            FileHelper.WriteStringToFile(directory, updateDtroFileName, updateDtroJson);
+
+            return newFilePath;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(string schemaVersion, string fileName, string traId)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+            string dtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(dtroJsonWithTraModified, "data.source.provision");
+            return dtroWithDuplicateProvisionReference;
+        }
+
+        public static string CreateTempFileWithTraModifiedAndProvisionReferenceDuplicated(string schemaVersion, string fileName, string traId)
+        {
+            string dtroWithDuplicateProvisionReference = GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(schemaVersion, fileName, traId);
+            string nameOfCopyFile = $"{traId}-{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroWithDuplicateProvisionReference);
+            return tempFilePath;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(string schemaVersion, string fileName, string traId)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+
+            DateTime dateTomorrow = DateTime.Now.AddDays(1);
+            string dateTomorrowFormatted = dateTomorrow.ToString("yyyy-MM-ddTHH:00:00");
+            string dtroJsonWithFutureExternalReferenceLastUpdateDate = ModifyExternalReferenceLastUpdateDate(dtroJsonWithTraModified, dateTomorrowFormatted);
+            return dtroJsonWithFutureExternalReferenceLastUpdateDate;
+        }
+
+        public static string CreateTempFileWithTraModifiedAndExternalReferenceLastUpdateDateInFuture(string schemaVersion, string fileName, string traId)
+        {
+            string dtroJsonWithFutureExternalReferenceLastUpdateDate = GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(schemaVersion, fileName, traId);
+            string nameOfCopyFile = $"{traId}-{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithFutureExternalReferenceLastUpdateDate);
+            return tempFilePath;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndPointGeometry(string schemaVersion, string fileName, string traId, string pointGeometryString)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+
+            JObject jsonObj = JObject.Parse(dtroJsonWithTraModified);
+            jsonObj["data"]["source"]["provision"][0]["regulatedPlace"][0]["pointGeometry"]["point"] = pointGeometryString;
+
+            return jsonObj.ToString();
+        }
+
+        public static string CreateTempFileWithTraAndPointGeometryModified(string schemaVersion, string fileName, string traId, string pointGeometryString)
+        {
+            string jsonWithTraAndPointGeometryModified = GetJsonFromFileAndModifyTraAndPointGeometry(schemaVersion, fileName, traId, pointGeometryString);
+            string nameOfCopyFile = $"{traId}-{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, jsonWithTraAndPointGeometryModified);
+            return tempFilePath;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndSchemaVersion(string schemaVersionToTest, string schemaVersionOfFilesToUse, string fileName, string traId)
+        {
+            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionOfFilesToUse}/{fileName}";
+            string createDtroJson = File.ReadAllText(createDtroFile);
+            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionOfFilesToUse, createDtroJson, traId);
+            string createDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
+            return createDtroJsonWithSchemaVersionUpdated;
+        }
+
+        public static string GetJsonFromFileAndModifyToFailSchemaValidation(string schemaVersion, string fileName, string traId)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+
+            var jsonObj = JObject.Parse(dtroJsonWithTraModified);
+
+            // Remove "data.source.actionType"
+            jsonObj.SelectToken("data.source.actionType")?.Parent.Remove();
+
+            // Convert "data.source.currentTraOwner" to a string by wrapping it in quotes
+            var currentTraOwner = jsonObj.SelectToken("data.source.currentTraOwner");
+            if (currentTraOwner != null && currentTraOwner.Type == JTokenType.Integer)
+            {
+                jsonObj["data"]["source"]["currentTraOwner"] = currentTraOwner.ToString();
+            }
+
+            // Extract first element from "data.source.traAffected" array and replace "traAffected" key with that value
+            var traAffectedArray = jsonObj.SelectToken("data.source.traAffected") as JArray;
+            if (traAffectedArray != null && traAffectedArray.Count > 0)
+            {
+                jsonObj["data"]["source"]["traAffected"] = traAffectedArray[0];
+            }
+
+            // Add undefined new field
+            jsonObj["data"]["apples"] = "bananas";
+
+            return jsonObj.ToString();
+        }
+
+        public static string CreateTempFileToFailSchemaValidation(string schemaVersion, string fileName, string traId)
+        {
+            string dtroJsonWithTraModified = GetJsonFromFileAndModifyToFailSchemaValidation(schemaVersion, fileName, traId);
+
+            string nameOfCopyFile = $"{traId}-{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithTraModified);
+            return tempFilePath;
+        }
+
+        public static string CreateTempFileWithTraAndSchemaVersionModified(string schemaVersionToTest, string schemaVersionOfFilesToUse, string fileName, string traId)
+        {
+            string createDtroJsonWithSchemaVersionUpdated = GetJsonFromFileAndModifyTraAndSchemaVersion(schemaVersionToTest, schemaVersionOfFilesToUse, fileName, traId);
+            string nameOfCopyFile = $"{traId}-{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithSchemaVersionUpdated);
+            return tempFilePath;
         }
     }
 }
