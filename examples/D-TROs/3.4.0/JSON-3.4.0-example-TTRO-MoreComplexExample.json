@@ -106,6 +106,7 @@
                   "temporaryOverriddenProvision": {
                     "actionType": "new",
                     "orderReportingPoint": "permanentNoticeOfMaking",
+                    "comingIntoForceDate": "2025-01-01",
                     "provisionDescription": "Speed Limit, East Reach",
                     "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A",
                     "regulation": [
@@ -121,6 +122,11 @@
                     "regulatedPlace": [
                       {
                         "description": "text",
+                        "concession": false,
+                        "assignment": false,
+                        "tramcar": false,
+                        "busRoute": false,
+                        "bywayType": "road",
                         "type": "regulationLocation",
                         "polygon": {
                           "polygon": "SRID=27700",
@@ -138,11 +144,17 @@
         {
           "actionType": "new",
           "orderReportingPoint": "permanentNoticeOfMaking",
+          "comingIntoForceDate": "2025-01-01",
           "provisionDescription": "Parking restrictions, East Reach, Pay & Display Parking Places - Monday to Sunday 9.00 am to 8.00 pm",
           "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
           "regulatedPlace": [
             {
               "description": "East Reach, Taunton, northside / eastbound, between 10 metres east from the junction with Tancred Street to 15 metres west of the junction with South Street {approximate - linear}",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "directedLinear": {
                 "directedLineString": "SRID=27700;LINESTRING(323158 124529,323252 124546)",
                 "origin": [
@@ -161,6 +173,11 @@
             },
             {
               "description": "East Reach, Taunton, northside / eastbound, between 10 metres east from the junction with Tancred Street to 15 metres west of the junction with South Street {approximate - polygon}",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "polygon": {
                 "polygon": "SRID=27700;POLYGON((323158 124529, 323156 124529, 323587 125149,323589 125149,323158 124529))",
                 "version": 2,
@@ -179,6 +196,11 @@
             },
             {
               "description": "East Reach, Taunton, southside / westbound, between 15 metres west from the junction with Victoria Street to 23 metres east of the junction with Haydon Road {approximate - linear}",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "linearGeometry": {
                 "direction": "startToEnd",
                 "externalReference": [
@@ -350,11 +372,17 @@
         {
           "actionType": "fullAmendment",
           "orderReportingPoint": "permanentNoticeOfMaking",
+          "comingIntoForceDate": "2025-01-01",
           "provisionDescription": "Speed limit, Toneway, Taunton",
           "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c089",
           "regulatedPlace": [
             {
               "description": "Toneway Eastbound (A38, A358) {approximate - linear}",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "linearGeometry": {
                 "direction": "startToEnd",
                 "externalReference": [
@@ -388,6 +416,11 @@
             },
             {
               "description": "Toneway Westbound (A38, A358) {approximate - linear}",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "linearGeometry": {
                 "direction": "endToStart",
                 "externalReference": [
@@ -443,11 +476,17 @@
         {
           "actionType": "new",
           "orderReportingPoint": "permanentNoticeOfMaking",
+          "comingIntoForceDate": "2025-01-01",
           "provisionDescription": "Speed limit, national speed limit, A38 between Boome Lane and 147 metres north of the northern boundary of Bell House {approximate}",
           "reference": "c962b51f-e1aa-416e-8f0b-bcfe39a4d089",
           "regulatedPlace": [
             {
               "description": "A38 between Boome Lane and 147 metres north of the northern boundary of Bell House {approximate - linear}",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "linearGeometry": {
                 "direction": "startToEnd",
                 "externalReference": [
@@ -478,6 +517,11 @@
             },
             {
               "description": "Toneway Westbound (A38, A358) {approximate - linear}",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "linearGeometry": {
                 "direction": "endToStart",
                 "externalReference": [
@@ -531,11 +575,17 @@
         {
           "actionType": "new",
           "orderReportingPoint": "permanentNoticeOfMaking",
+          "comingIntoForceDate": "2025-01-01",
           "provisionDescription": "Bus Lane restriction, Collett Road, Norton Fitzwarren {approximate} with fictitious time restrictions",
           "reference": "c962b51f-e1aa-416e-8f0b-bcfd09a4d089",
           "regulatedPlace": [
             {
               "description": "Collett Road, from 125 metres to 158 metres from the junction with Great Western Way Roundabout {approximate - linear}",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "linearGeometry": {
                 "direction": "startToEnd",
                 "externalReference": [
@@ -558,6 +608,11 @@
             },
             {
               "description": "Collett Road, from 125 metres to 158 metres from the junction with Great Western Way Roundabout {approximate - notational point of effect}",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "pointGeometry": {
                 "externalReference": [
                   {
@@ -711,11 +766,17 @@
         {
           "actionType": "new",
           "orderReportingPoint": "permanentNoticeOfMaking",
+          "comingIntoForceDate": "2025-01-01",
           "provisionDescription": "Use of e-scooter restriction, Collett Road, Norton Fitzwarren",
           "reference": "c962b51f-e1aa-416e-8f0b-bcfd09a4d060",
           "regulatedPlace": [
             {
               "description": "Collett Road, from 125 metres to 158 metres from the junction with Great Western Way Roundabout {approximate - linear}",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "linearGeometry": {
                 "direction": "startToEnd",
                 "externalReference": [
