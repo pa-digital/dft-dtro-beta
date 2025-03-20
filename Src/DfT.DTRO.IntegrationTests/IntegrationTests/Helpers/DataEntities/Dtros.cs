@@ -104,7 +104,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return jsonObj.ToString();
         }
 
-        public static string ModifyActionTypeAndTroName(string schemaVersion, string jsonString)
+        public static string ModifyActionTypeAndTroNameForUpdate(string schemaVersion, string jsonString)
         {
             JObject jsonObj = JObject.Parse(jsonString);
             int schemaVersionAsInt = int.Parse(schemaVersion.Replace(".", ""));

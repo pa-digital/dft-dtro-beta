@@ -53,14 +53,34 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             return tempFilePath;
         }
 
-        public static string CreateTempFileForDtroUpdate(string schemaVersion, string pathOfCreateDtroFile)
+        public static string CreateTempFileForDtroUpdateBasedOnCreationFile(string schemaVersion, string pathOfCreateDtroFile)
         {
             string createDtroJson = File.ReadAllText(pathOfCreateDtroFile);
-            string updateDtroJson = Dtros.ModifyActionTypeAndTroName(schemaVersion, createDtroJson);
+            string updateDtroJson = Dtros.ModifyActionTypeAndTroNameForUpdate(schemaVersion, createDtroJson);
 
             string directory = Path.GetDirectoryName(pathOfCreateDtroFile);
             string createDtroFileName = Path.GetFileName(pathOfCreateDtroFile);
             string updateDtroFileName = "update-" + createDtroFileName;
+            string newFilePath = Path.Combine(directory, updateDtroFileName);
+
+            FileHelper.WriteStringToFile(directory, updateDtroFileName, updateDtroJson);
+
+            return newFilePath;
+        }
+
+        public static string CreateJsonForDtroUpdate(string schemaVersion, string fileName, string traId)
+        {
+            string dtroJsonWithModifiedTra = JsonMethods.GetJsonFromFileAndModifyTra(schemaVersion, fileName, traId);
+            string updateDtroJson = Dtros.ModifyActionTypeAndTroNameForUpdate(schemaVersion, dtroJsonWithModifiedTra);
+            return updateDtroJson;
+        }
+
+        public static string CreateTempFileForDtroUpdate(string schemaVersion, string fileName, string traId)
+        {
+            string updateDtroJson = CreateJsonForDtroUpdate(schemaVersion, fileName, traId);
+
+            string directory = $"{TestConfig.AbsolutePathToDtroExamplesTempDirectory}";
+            string updateDtroFileName = $"update-{traId}-{fileName}";
             string newFilePath = Path.Combine(directory, updateDtroFileName);
 
             FileHelper.WriteStringToFile(directory, updateDtroFileName, updateDtroJson);

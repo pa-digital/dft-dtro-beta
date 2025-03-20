@@ -38,7 +38,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroTest
             Assert.True(HttpStatusCode.Created == createDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePathForDtroCreation)}: expected status code is {HttpStatusCode.Created} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Prepare DTRO update
-            string tempFilePathForDtroUpdate = FileHelper.CreateTempFileForDtroUpdate(schemaVersionToTest, tempFilePathForDtroCreation);
+            string tempFilePathForDtroUpdate = FileHelper.CreateTempFileForDtroUpdateBasedOnCreationFile(schemaVersionToTest, tempFilePathForDtroCreation);
 
             // Send DTRO update
             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
@@ -75,7 +75,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroTest
             Assert.True(HttpStatusCode.Created == createDtroResponse.StatusCode, $"File {fileName}: expected status code is {HttpStatusCode.Created} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Prepare DTRO update
-            string dtroUpdateJson = Dtros.ModifyActionTypeAndTroName(schemaVersionToTest, createDtroJsonWithTraModified);
+            string dtroUpdateJson = Dtros.ModifyActionTypeAndTroNameForUpdate(schemaVersionToTest, createDtroJsonWithTraModified);
 
             // Send DTRO update
             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
