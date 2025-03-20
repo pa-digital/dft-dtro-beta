@@ -60,7 +60,8 @@
         3300
       ],
       "traCreator": 3300,
-      "troName": "DfT Example - TTRO temporary one way v2, Jan. 2025"
+      "troName": "DfT Example - TTRO temporary one way v2, Jan. 2025",
+      "statementDescription": "Some description"
     }
   }
 }

@@ -64,7 +64,8 @@
         3300
       ],
       "traCreator": 3300,
-      "troName": "DfT Example - TTRO suspension of one way v3, Jan. 2025"
+      "troName": "DfT Example - TTRO suspension of one way v3, Jan. 2025",
+      "statementDescription": "Some description"
     }
   }
 }

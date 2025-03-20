@@ -110,7 +110,8 @@
         3300
       ],
       "traCreator": 3300,
-      "troName": "DfT Example - TTRO height restriction and length with multiple conditions v2, Nov. 2024"
+      "troName": "DfT Example - TTRO height restriction and length with multiple conditions v2, Nov. 2024",
+      "statementDescription": "Some description"
     }
   }
 }
