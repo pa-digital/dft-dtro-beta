@@ -59,11 +59,11 @@ public class ApplicationController : ControllerBase
     {
         try
         {
-            // bool appBelongsToUser = await _applicationService.ValidateAppBelongsToUser(email, appId);
-            // if (!appBelongsToUser)
-            // {
-            //     return Forbid();
-            // }
+            bool appBelongsToUser = await _applicationService.ValidateAppBelongsToUser(email, appId);
+            if (!appBelongsToUser)
+            {
+                return Forbid();
+            }
 
             bool result = await _applicationService.ActivateApplicationById(email, appId);
             return Ok(new { id = appId, status = "Active" });
