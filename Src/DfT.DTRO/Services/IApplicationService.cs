@@ -10,5 +10,5 @@ public interface IApplicationService
     Task<ApplicationResponse> GetApplication(string email, Guid appId);
     Task<List<ApplicationListDto>> GetApplications(string email);
     Task<PaginatedResponse<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest);
-    Task<bool> ActivateApplicationById(Guid appId);
+    Task<bool> ActivateApplicationById(string email, Guid appId);
 }

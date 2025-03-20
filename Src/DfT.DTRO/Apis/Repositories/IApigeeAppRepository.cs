@@ -18,4 +18,12 @@ public interface IApigeeAppRepository
     /// <param name="name">app name</param>
     /// <returns>App</returns>
     Task<ApigeeDeveloperApp> GetApp(string developerEmail, string name);
+    
+    /// <summary>
+    /// Update app status
+    /// </summary>
+    /// <param name="developerEmail">Developer email parameter passed</param>
+    /// <param name="name">app name</param>
+    /// <returns>App</returns>
+    Task<ApigeeDeveloperApp> UpdateAppStatus(string developerEmail, string name);
 }

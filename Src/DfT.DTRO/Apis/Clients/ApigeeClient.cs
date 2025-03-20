@@ -4,6 +4,7 @@ using DfT.DTRO.Apis.Consts;
 using DfT.DTRO.Models.Apigee;
 using Google.Apis.Auth.OAuth2;
 using Newtonsoft.Json;
+using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
 
 namespace DfT.DTRO.Apis.Clients;
 
@@ -23,16 +24,23 @@ public class ApigeeClient : IApigeeClient
     public async Task<HttpResponseMessage> CreateApp(string developerEmail, ApigeeDeveloperAppInput developerAppInput)
     {
         var requestUrl = $"developers/{developerEmail}/apps";
-        return await SendRequest(HttpMethod.Post, requestUrl, developerAppInput);
+        return await SendRequest(HttpMethod.Post, requestUrl, developerAppInput, "application/json");
     }
     
     public async Task<HttpResponseMessage> GetApp(string developerEmail, string name)
     {
         var requestUrl = $"developers/{developerEmail}/apps/{name}";
-        return await SendRequest(HttpMethod.Get, requestUrl, "");
+        return await SendRequest(HttpMethod.Get, requestUrl, "", "application/json");
+    }
+    
+    public async Task<HttpResponseMessage> UpdateAppStatus(string developerEmail, string name)
+    {
+        var requestUrl = $"developers/{developerEmail}/apps/{name}?action=approve";
+        ApigeeDeveloperAppInput developerAppInput = new ApigeeDeveloperAppInput{ Name = "Test App"};
+        return await SendRequest(HttpMethod.Post, requestUrl, developerAppInput, "application/octet-stream");
     }
 
-    private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string requestUrl, object requestMessageContent)
+    private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string requestUrl, object requestMessageContent, string mediaType)
     {
         string secret = _secretManagerClient.GetSecret(ApiConsts.SaExecutionPrivateKeySecretName);
         GoogleCredential credential = GoogleCredential.FromJson(secret).CreateScoped(ApiConsts.GoogleApisAuthScope);
@@ -41,12 +49,13 @@ public class ApigeeClient : IApigeeClient
         var requestUri = $"{apiUrl}{requestUrl}";
         var requestMessage = new HttpRequestMessage(method, requestUri);
         requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        if (method != HttpMethod.Get && method != HttpMethod.Delete)
+        if (method == HttpMethod.Get)
         {
             var content = JsonConvert.SerializeObject(requestMessageContent);
-            requestMessage.Content = new StringContent(content, Encoding.UTF8, "application/json");
+            requestMessage.Content = new StringContent(content, Encoding.UTF8, mediaType);
         }
+        requestMessage.Content = new ByteArrayContent(new byte[0]);
+        requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
         return await _httpClient.SendAsync(requestMessage);
     }
-
 }

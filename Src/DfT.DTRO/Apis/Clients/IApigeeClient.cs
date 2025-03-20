@@ -14,10 +14,18 @@ public interface IApigeeClient
     Task<HttpResponseMessage> CreateApp(string developerEmail, ApigeeDeveloperAppInput developerAppInput);
 
     /// <summary>
-    /// Update app status
+    /// Get app
     /// </summary>
     /// <param name="developerEmail">Developer email parameter passed</param>
     /// <param name="name">App name</param>
     /// <returns>App</returns>
     Task<HttpResponseMessage> GetApp(string developerEmail, string name);
+    
+    /// <summary>
+    /// Update app status
+    /// </summary>
+    /// <param name="developerEmail">Developer email parameter passed</param>
+    /// <param name="name">App name</param>
+    /// <returns>App</returns>
+    Task<HttpResponseMessage> UpdateAppStatus(string developerEmail, string name);
 }

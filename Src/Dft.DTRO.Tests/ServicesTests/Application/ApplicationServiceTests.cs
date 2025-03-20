@@ -175,7 +175,7 @@ public class ApplicationServiceTests
             .Setup(dal => dal.ActivateApplicationById(It.IsAny<Guid>()))
             .ReturnsAsync(true);
 
-        var result = await _applicationService.ActivateApplicationById(appId);
+        var result = await _applicationService.ActivateApplicationById(_email, appId);
         Assert.True(result);
     }
 
@@ -187,7 +187,7 @@ public class ApplicationServiceTests
             .Setup(dal => dal.ActivateApplicationById(It.IsAny<Guid>()))
             .ReturnsAsync(false);
 
-        var result = await _applicationService.ActivateApplicationById(appId);
+        var result = await _applicationService.ActivateApplicationById(_email, appId);
         Assert.False(result);
     }
 
@@ -199,7 +199,7 @@ public class ApplicationServiceTests
             .Setup(dal => dal.ActivateApplicationById(It.IsAny<Guid>()))
             .ThrowsAsync(new Exception("Unexpected error"));
 
-        var ex = await Assert.ThrowsAsync<Exception>(() => _applicationService.ActivateApplicationById(appId));
+        var ex = await Assert.ThrowsAsync<Exception>(() => _applicationService.ActivateApplicationById(_email, appId));
         Assert.Equal("Unexpected error", ex.Message);
     }
 }
