@@ -16,8 +16,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
             string tempFilePath = FileHelper.CreateTempFileToFailSchemaValidation(schemaVersionToTest, fileName, publisher.TraId);
@@ -37,8 +36,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
             string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = FileHelper.GetJsonFromFileAndModifyToFailSchemaValidation(schemaVersionToTest, fileName, publisher.TraId);

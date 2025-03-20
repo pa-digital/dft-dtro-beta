@@ -33,12 +33,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-            string userGuidToGenerateFileNamePrefix = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string tempFilePath = FileHelper.CreateTempFileWithTraAndPointGeometryModified(schemaVersionToTest, fileName, userGuidToGenerateFileNamePrefix, publisher.TraId, pointGeometryString);
+            string tempFilePath = FileHelper.CreateTempFileWithTraAndPointGeometryModified(schemaVersionToTest, fileName, publisher.TraId, pointGeometryString);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
@@ -71,8 +69,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
             string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = JsonMethods.GetJsonFromFileAndModifyTraAndPointGeometry(schemaVersionToTest, fileName, publisher.TraId, pointGeometryString);

@@ -8,7 +8,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
     public class InvalidPascalCase : BaseTest
     {
         readonly static string schemaVersionToTest = "3.4.0";
-        readonly static string filesWithInvalidPascalCase = "3.3.1";
+        readonly static string schemaVersionWithInvalidPascalCase = "3.3.1";
         readonly string expectedErrorJson = """
             {
                 "ruleError_0": {
@@ -28,7 +28,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
 
         public static IEnumerable<object[]> GetDtroFileNames()
         {
-            DirectoryInfo directoryPath = new DirectoryInfo($"{AbsolutePathToDtroExamplesDirectory}/{filesWithInvalidPascalCase}");
+            DirectoryInfo directoryPath = new DirectoryInfo($"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionWithInvalidPascalCase}");
             FileInfo[] files = directoryPath.GetFiles();
 
             foreach (FileInfo file in files)
@@ -45,11 +45,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
 
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string tempFilePath = FileHelper.CreateTempFileWithTraAndSchemaVersionModified(schemaVersionToTest, filesWithInvalidPascalCase, fileName, publisher.TraId);
+            string tempFilePath = FileHelper.CreateTempFileWithTraAndSchemaVersionModified(schemaVersionToTest, schemaVersionWithInvalidPascalCase, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
@@ -68,14 +67,13 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
 
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroJsonWithTraAndSchemaVersionModified = FileHelper.GetJsonFromFileAndModifyTraAndSchemaVersion(schemaVersionToTest, filesWithInvalidPascalCase, fileName, publisher.TraId);
+            string createDtroJsonWithTraModifiedAndInvalidPascalCase = FileHelper.GetJsonFromFileAndModifyTraAndSchemaVersion(schemaVersionToTest, schemaVersionWithInvalidPascalCase, fileName, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraAndSchemaVersionModified, publisher);
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModifiedAndInvalidPascalCase, publisher);
             string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {fileName}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 

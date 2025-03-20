@@ -8,12 +8,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.UpdateDtroTest
     public class InvalidCamelCase : BaseTest
     {
         readonly static string schemaVersionToTest = "3.3.0";
-        readonly static string schemaVersionOfFilesWithInvalidCamelCase = "3.3.2";
-        string fileToUseWithPascalCaseVersion3_3_0 = "JSON-3.3.0-example-Derbyshire 2024 DJ388 partial.json";
+        readonly static string schemaVersionWithInvalidCamelCase = "3.3.2";
+        readonly string fileToCreateDtroWithValidPascalCase = "JSON-3.3.0-example-Derbyshire 2024 DJ388 partial.json";
 
-        public static IEnumerable<object[]> GetDtroFileNames()
+        public static IEnumerable<object[]> GetDtroNamesOfFilesWithInvalidCamelCase()
         {
-            DirectoryInfo directoryPath = new DirectoryInfo($"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionOfFilesWithInvalidCamelCase}");
+            DirectoryInfo directoryPath = new DirectoryInfo($"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionWithInvalidCamelCase}");
             FileInfo[] files = directoryPath.GetFiles();
 
             foreach (FileInfo file in files)
@@ -23,45 +23,31 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.UpdateDtroTest
         }
 
         [Theory]
-        [MemberData(nameof(GetDtroFileNames))]
-        public async Task DtroUpdatedFromFileWithCamelCaseShouldBeRejected(string nameOfFileWithCamelCaseVersion3_3_2)
+        [MemberData(nameof(GetDtroNamesOfFilesWithInvalidCamelCase))]
+        public async Task DtroUpdatedFromFileWithCamelCaseShouldBeRejected(string nameOfFileWithInvalidCamelCase)
         {
-            Console.WriteLine($"\nTesting with file {nameOfFileWithCamelCaseVersion3_3_2}...");
+            Console.WriteLine($"\nTesting with file {nameOfFileWithInvalidCamelCase}...");
 
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-            string userGuidToGenerateFileNamePrefix = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
-            // Avoid files being overwritten by using a unique prefix in file names for each test
-            string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{fileToUseWithPascalCaseVersion3_3_0}";
-            string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
-            string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileToUseWithPascalCaseVersion3_3_0}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithTraUpdated);
+            string tempFilePathForDtroCreation = FileHelper.CreateTempFileWithTraModified(schemaVersionToTest, fileToCreateDtroWithValidPascalCase, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
-            Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePathForDtroCreation, publisher);
+            string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.Created == createDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePathForDtroCreation)}: expected status code is {HttpStatusCode.Created} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Prepare DTRO update
-            string updateDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionOfFilesWithInvalidCamelCase}/{nameOfFileWithCamelCaseVersion3_3_2}";
-            string updateDtroJson = File.ReadAllText(updateDtroFile);
-            string updateDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionOfFilesWithInvalidCamelCase, updateDtroJson, publisher.TraId);
-            string updateDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(updateDtroJsonWithTraUpdated, schemaVersionToTest);
-            string updateJsonWithModifiedActionTypeAndTroName = Dtros.ModifyActionTypeAndTroName(updateDtroJsonWithSchemaVersionUpdated, schemaVersionOfFilesWithInvalidCamelCase);
-            string nameOfUpdateCopyFile = $"update{uniquePrefixOnFileName}{nameOfFileWithCamelCaseVersion3_3_2}";
-            string tempUpdateFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfUpdateCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfUpdateCopyFile, updateJsonWithModifiedActionTypeAndTroName);
+            string tempFilePathForDtroUpdate = FileHelper.CreateTempFileWithTraAndSchemaVersionModified(schemaVersionToTest, schemaVersionWithInvalidCamelCase, nameOfFileWithInvalidCamelCase, publisher.TraId);
 
             // Send DTRO update
             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-            HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromFileAsync(tempUpdateFilePath, dtroId, publisher);
-            Assert.Equal(HttpStatusCode.BadRequest, updateDtroResponse.StatusCode);
+            HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromFileAsync(tempFilePathForDtroUpdate, dtroId, publisher);
+            string updateDtroResponseJson = await updateDtroResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.BadRequest == updateDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePathForDtroUpdate)}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {updateDtroResponse.StatusCode}, with response body\n{updateDtroResponseJson}");
 
             // Check DTRO response JSON
             ErrorJson jsonErrorResponse = await ErrorJsonResponseProcessor.GetErrorJson(updateDtroResponse);
@@ -70,36 +56,31 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.UpdateDtroTest
         }
 
         [Theory]
-        [MemberData(nameof(GetDtroFileNames))]
-        public async Task DtroUpdatedFromJsonBodyWithCamelCaseShouldBeRejected(string nameOfFileWithCamelCaseVersion3_3_2)
+        [MemberData(nameof(GetDtroNamesOfFilesWithInvalidCamelCase))]
+        public async Task DtroUpdatedFromJsonBodyWithCamelCaseShouldBeRejected(string nameOfFileWithInvalidCamelCase)
         {
-            Console.WriteLine($"\nTesting with file {nameOfFileWithCamelCaseVersion3_3_2}...");
+            Console.WriteLine($"\nTesting with file {nameOfFileWithInvalidCamelCase}...");
 
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionToTest}/{fileToUseWithPascalCaseVersion3_3_0}";
-            string createDtroJson = File.ReadAllText(createDtroFile);
-            string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionToTest, createDtroJson, publisher.TraId);
+            string createDtroJsonWithTraModified = JsonMethods.GetJsonFromFileAndModifyTra(schemaVersionToTest, fileToCreateDtroWithValidPascalCase, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraUpdated, publisher);
-            Assert.Equal(HttpStatusCode.Created, createDtroResponse.StatusCode);
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModified, publisher);
+            string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.Created == createDtroResponse.StatusCode, $"File {fileToCreateDtroWithValidPascalCase}: expected status code is {HttpStatusCode.Created} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Prepare DTRO update
-            string updateDtroFile = $"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionOfFilesWithInvalidCamelCase}/{nameOfFileWithCamelCaseVersion3_3_2}";
-            string updateDtroJson = File.ReadAllText(updateDtroFile);
-            string updateDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionOfFilesWithInvalidCamelCase, updateDtroJson, publisher.TraId);
-            string updateDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(updateDtroJsonWithTraUpdated, schemaVersionToTest);
-            string updateJsonWithModifiedActionTypeAndTroName = Dtros.ModifyActionTypeAndTroName(updateDtroJsonWithSchemaVersionUpdated, schemaVersionOfFilesWithInvalidCamelCase);
+            string dtroUpdateJson = FileHelper.GetJsonFromFileAndModifyTraAndSchemaVersion(schemaVersionToTest, schemaVersionWithInvalidCamelCase, nameOfFileWithInvalidCamelCase, publisher.TraId);
 
             // Send DTRO update
             string dtroId = await JsonMethods.GetIdFromResponseJsonAsync(createDtroResponse);
-            HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromJsonBodyAsync(updateJsonWithModifiedActionTypeAndTroName, dtroId, publisher);
-            Assert.Equal(HttpStatusCode.BadRequest, updateDtroResponse.StatusCode);
+            HttpResponseMessage updateDtroResponse = await Dtros.UpdateDtroFromJsonBodyAsync(dtroUpdateJson, dtroId, publisher);
+            string updateDtroResponseJson = await updateDtroResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.BadRequest == updateDtroResponse.StatusCode, $"File {nameOfFileWithInvalidCamelCase}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {updateDtroResponse.StatusCode}, with response body\n{updateDtroResponseJson}");
 
             // Check DTRO response JSON
             ErrorJson jsonErrorResponse = await ErrorJsonResponseProcessor.GetErrorJson(updateDtroResponse);

@@ -25,12 +25,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
-            string userGuidToGenerateFileNamePrefix = await JsonMethods.GetIdFromResponseJsonAsync(createUserResponse);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string tempFilePath = FileHelper.CreateTempFileWithTraModifiedAndExternalReferenceLastUpdateDateInFuture(schemaVersionToTest, fileName, userGuidToGenerateFileNamePrefix, publisher.TraId);
+            string tempFilePath = FileHelper.CreateTempFileWithTraModifiedAndExternalReferenceLastUpdateDateInFuture(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
@@ -62,8 +60,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
             string createDtroJsonWithTraModifiedAndExternalReferenceLastUpdatedDateInFuture = JsonMethods.GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(schemaVersionToTest, fileName, publisher.TraId);

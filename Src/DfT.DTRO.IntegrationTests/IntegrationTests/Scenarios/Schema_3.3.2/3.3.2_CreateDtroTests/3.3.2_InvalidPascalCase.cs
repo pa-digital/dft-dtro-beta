@@ -8,11 +8,11 @@
 //     public class InvalidPascalCase : BaseTest
 //     {
 //         readonly static string schemaVersionToTest = "3.3.2";
-//         readonly static string filesWithInvalidPascalCase = "3.3.1";
+//         readonly static string schemaVersionWithInvalidPascalCase = "3.3.1";
 
 //         public static IEnumerable<object[]> GetDtroFileNames()
 //         {
-//             DirectoryInfo directoryPath = new DirectoryInfo($"{AbsolutePathToDtroExamplesDirectory}/{filesWithInvalidPascalCase}");
+//             DirectoryInfo directoryPath = new DirectoryInfo($"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionWithInvalidPascalCase}");
 //             FileInfo[] files = directoryPath.GetFiles();
 
 //             foreach (FileInfo file in files)
@@ -36,9 +36,9 @@
 //             string uniquePrefixOnFileName = $"{userGuidToGenerateFileNamePrefix.Substring(0, 5)}-";
 
 //             // Prepare DTRO
-//             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{filesWithInvalidPascalCase}/{fileName}";
+//             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionWithInvalidPascalCase}/{fileName}";
 //             string createDtroJson = File.ReadAllText(createDtroFile);
-//             string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(filesWithInvalidPascalCase, createDtroJson, publisher.TraId);
+//             string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionWithInvalidPascalCase, createDtroJson, publisher.TraId);
 //             string createDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
 //             string nameOfCopyFile = $"{uniquePrefixOnFileName}{fileName}";
 //             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
@@ -66,9 +66,9 @@
 //             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
 //             // Prepare DTRO
-//             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{filesWithInvalidPascalCase}/{fileName}";
+//             string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionWithInvalidPascalCase}/{fileName}";
 //             string createDtroJson = File.ReadAllText(createDtroFile);
-//             string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(filesWithInvalidPascalCase, createDtroJson, publisher.TraId);
+//             string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionWithInvalidPascalCase, createDtroJson, publisher.TraId);
 //             string createDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
 
 //             // Send DTRO

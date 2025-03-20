@@ -84,5 +84,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             HttpResponseMessage createUserResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.DtroUsersCreateFromBody}", headers, jsonBody);
             return createUserResponse;
         }
+
+        public static async Task CreateUserForDataSetUpAsync(TestUser publisher)
+        {
+            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
+            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+        }
     }
 }

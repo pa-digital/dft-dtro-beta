@@ -27,8 +27,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.CreateDtroTest
 
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
             string tempFilePath = FileHelper.CreateTempFileWithTraModified(schemaVersionToTest, fileName, publisher.TraId);
@@ -43,7 +42,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.CreateDtroTest
             string getDtroResponseJson = await JsonMethods.GetDtroResponseJsonAsync(dtroId, publisher);
 
             // Add ID to sent DTRO and compare
-            string modifiedCreateJson = JsonMethods.ModifyCreateJsonWithinFileForComparison(schemaVersionToTest, tempFilePath, dtroId);
+            string modifiedCreateJson = JsonMethods.ModifySentJsonWithinFileForComparison(schemaVersionToTest, tempFilePath, dtroId);
             JsonMethods.CompareJson(modifiedCreateJson, getDtroResponseJson);
         }
 
@@ -55,8 +54,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.CreateDtroTest
 
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
             string createDtroJsonWithTraModified = JsonMethods.GetJsonFromFileAndModifyTra(schemaVersionToTest, fileName, publisher.TraId);
@@ -71,7 +69,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.CreateDtroTest
             string getDtroResponseJson = await JsonMethods.GetDtroResponseJsonAsync(dtroId, publisher);
 
             // Add ID to sent DTRO and compare
-            string modifiedCreateJson = JsonMethods.ModifyCreateJsonForComparison(schemaVersionToTest, createDtroJsonWithTraModified, dtroId);
+            string modifiedCreateJson = JsonMethods.ModifySentJsonForComparison(schemaVersionToTest, createDtroJsonWithTraModified, dtroId);
             JsonMethods.CompareJson(modifiedCreateJson, getDtroResponseJson);
         }
     }

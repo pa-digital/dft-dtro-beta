@@ -212,7 +212,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
             return getDtroResponseJson;
         }
 
-        public static string ModifyCreateJsonWithinFileForComparison(string schemaVersion, string filePath, string dtroId)
+        public static string ModifySentJsonWithinFileForComparison(string schemaVersion, string filePath, string dtroId)
         {
             JObject createJsonObject = JObject.Parse(File.ReadAllText(filePath));
             createJsonObject["id"] = dtroId;
@@ -233,7 +233,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
             }
         }
 
-        public static string ModifyCreateJsonForComparison(string schemaVersion, string jsonString, string dtroId)
+        public static string ModifySentJsonForComparison(string schemaVersion, string jsonString, string dtroId)
         {
             JObject createJsonObject = JObject.Parse(jsonString);
             createJsonObject["id"] = dtroId;
