@@ -246,7 +246,7 @@
                     "rateLineCollection": [
                       {
                         "applicableCurrency": "GBP",
-                        "maxTime": "PT11H",
+                        "maxTime": 660,
                         "maxValueCollection": 7.2,
                         "minTime": "PT1H",
                         "minValueCollection": 1.0,

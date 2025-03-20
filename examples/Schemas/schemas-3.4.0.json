@@ -176,109 +176,7 @@
                     "$ref": "#/$defs/conditionOperatorType"
                 },
                 "rateTable": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "type": {
-                            "$ref": "#/$defs/rateType"
-                        },
-                        "additionalInformation": {
-                            "type": "string",
-                            "format": "uri"
-                        },
-                        "rateLineCollection": {
-                            "type": "array",
-                            "minItems": 1,
-                            "items": {
-                                "required": [
-                                    "applicableCurrency",
-                                    "sequence",
-                                    "startValidUsagePeriod",
-                                    "rateLine"
-                                ],
-                                "properties": {
-                                    "applicableCurrency": {
-                                        "$ref": "#/$defs/currencyType"
-                                    },
-                                    "startValidUsagePeriod": {
-                                        "type": "string",
-                                        "format": "date-time"
-                                    },
-                                    "endValidUsagePeriod": {
-                                        "type": "string",
-                                        "format": "date-time"
-                                    },
-                                    "maxTime": {
-                                        "type": "integer",
-                                        "minimum": 1
-                                    },
-                                    "minTime": {
-                                        "type": "integer",
-                                        "minimum": 1
-                                    },
-                                    "maximumCollection": {
-                                        "type": "number"
-                                    },
-                                    "minimumCollection": {
-                                        "type": "number"
-                                    },
-                                    "resetTime": {
-                                        "type": "string",
-                                        "format": "time"
-                                    },
-                                    "sequence": {
-                                        "type": "integer"
-                                    },
-                                    "rateLine": {
-                                        "type": "array",
-                                        "minItems": 1,
-                                        "items": {
-                                            "required": [
-                                                "sequence",
-                                                "type",
-                                                "value"
-                                            ],
-                                            "properties": {
-                                                "description": {
-                                                    "type": "string",
-                                                    "minLength": 1
-                                                },
-                                                "durationEnd": {
-                                                    "type": "string",
-                                                    "format": "time"
-                                                },
-                                                "durationStart": {
-                                                    "type": "string",
-                                                    "format": "time"
-                                                },
-                                                "incrementPeriod": {
-                                                    "type": "integer"
-                                                },
-                                                "maximum": {
-                                                    "type": "number"
-                                                },
-                                                "minimum": {
-                                                    "type": "number"
-                                                },
-                                                "sequence": {
-                                                    "type": "integer"
-                                                },
-                                                "type": {
-                                                    "$ref": "#/$defs/rateLineType"
-                                                },
-                                                "usageCondition": {
-                                                    "$ref": "#/$defs/rateUsageConditionsType"
-                                                },
-                                                "value": {
-                                                    "type": "number"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    "$ref": "#/$defs/rateTable"
                 },
                 "vehicleCharacteristics": {
                     "type": "object",
@@ -1885,7 +1783,8 @@
                 },
                 "incrementPeriod": {
                     "description": "The time period for incrementing the rate line charge. If set to the same as the duration of the period between the duration start and duration end the increment will occur once per period, i.e. a flat rate time-based tier charge rate. The duration is defined in integer minutes.",
-                    "type": "integer"
+                    "type": "string",
+                    "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
                 },
                 "maxValue": {
                     "description": "The maximum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places.",
@@ -1924,10 +1823,11 @@
             "description": "Group of rate line elements that logically group together within one rate table, e.g. such as the rate lines for the different tiers of a time based tier rate table",
             "type": "object",
             "additionalProperties": false,
-            "required": [
+        "required": [
                 "applicableCurrency",
                 "sequence",
-                "rateLine"
+                "rateLine",
+                "startValidUsagePeriod"
             ],
             "properties": {
                 "applicableCurrency": {
@@ -1946,13 +1846,13 @@
                 },
                 "maxTime": {
                     "description": "A maximum session duration to be applied to this rate line collection, specified in integer minutes.",
-                    "type": "integer",
-                    "minimum": 1
+                    "type": "string",
+                    "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
                 },
                 "minTime": {
                     "description": "A minimum session duration to be applied to this rate line collection. Defined in integer minutes.",
-                    "type": "integer",
-                    "minimum": 1
+                    "type": "string",
+                    "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
                 },
                 "maxValueCollection": {
                     "description": "The maximum monetary amount to be applied in conjunction with use of this rate line collection.  Defined in applicable currency with 2 decimal places.",
@@ -1999,6 +1899,9 @@
             "description": "Specific set of rate charges relating to one or more locations and optionally one set of eligibility criteria",
             "type": "object",
             "additionalProperties": false,
+            "required": [
+                "rateLineCollection"
+            ],
             "properties": {
                 "type": {
                     "description": "Defines the type of rate in use. [Defined by APDS - ISO/TS 5206-1]",
@@ -2016,10 +1919,7 @@
                         "$ref": "#/$defs/rateLineCollection"
                     }
                 }
-            },
-            "required": [
-                "rateLineCollection"
-            ]
+            }
         },
         "rateType": {
             "description": "List of rate types",
