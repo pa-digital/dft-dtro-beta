@@ -24,38 +24,49 @@ public class ApigeeClient : IApigeeClient
     public async Task<HttpResponseMessage> CreateApp(string developerEmail, ApigeeDeveloperAppInput developerAppInput)
     {
         var requestUrl = $"developers/{developerEmail}/apps";
-        return await SendRequest(HttpMethod.Post, requestUrl, developerAppInput, "application/json");
+        return await SendRequest(HttpMethod.Post, requestUrl, developerAppInput);
     }
     
     public async Task<HttpResponseMessage> GetApp(string developerEmail, string name)
     {
         var requestUrl = $"developers/{developerEmail}/apps/{name}";
-        return await SendRequest(HttpMethod.Get, requestUrl, "", "application/json");
+        return await SendRequest(HttpMethod.Get, requestUrl, "");
     }
     
-    public async Task<HttpResponseMessage> UpdateAppStatus(string developerEmail, string name)
+    public async Task<HttpResponseMessage> UpdateAppStatus(string developerEmail, string name, string action)
     {
-        var requestUrl = $"developers/{developerEmail}/apps/{name}?action=approve";
-        ApigeeDeveloperAppInput developerAppInput = new ApigeeDeveloperAppInput{ Name = "Test App"};
-        return await SendRequest(HttpMethod.Post, requestUrl, developerAppInput, "application/octet-stream");
+        var requestUrl = $"developers/{developerEmail}/apps/{name}?action={action}";
+        return await SendOctetStreamRequest(HttpMethod.Post, requestUrl);
     }
 
-    private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string requestUrl, object requestMessageContent, string mediaType)
+    private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string requestUrl, object requestMessageContent)
     {
-        string secret = _secretManagerClient.GetSecret(ApiConsts.SaExecutionPrivateKeySecretName);
-        GoogleCredential credential = GoogleCredential.FromJson(secret).CreateScoped(ApiConsts.GoogleApisAuthScope);
-        var accessToken = await credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
-        var apiUrl = _configuration.GetValue<string>("ApiSettings:ApigeeApiUrl");
-        var requestUri = $"{apiUrl}{requestUrl}";
-        var requestMessage = new HttpRequestMessage(method, requestUri);
-        requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        if (method == HttpMethod.Get)
+        HttpRequestMessage requestMessage = await GetRequestMessage(method, requestUrl);
+        if (method != HttpMethod.Get && method != HttpMethod.Delete)
         {
             var content = JsonConvert.SerializeObject(requestMessageContent);
-            requestMessage.Content = new StringContent(content, Encoding.UTF8, mediaType);
+            requestMessage.Content = new StringContent(content, Encoding.UTF8, "application/json");
         }
+        return await _httpClient.SendAsync(requestMessage);
+    }
+    
+    private async Task<HttpResponseMessage> SendOctetStreamRequest(HttpMethod method, string requestUrl)
+    {
+        HttpRequestMessage requestMessage = await GetRequestMessage(method, requestUrl);
         requestMessage.Content = new ByteArrayContent(new byte[0]);
         requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
         return await _httpClient.SendAsync(requestMessage);
+    }
+
+    private async Task<HttpRequestMessage> GetRequestMessage(HttpMethod method, string requestUrl)
+    {
+        var apiUrl = _configuration.GetValue<string>("ApiSettings:ApigeeApiUrl");
+        var requestUri = $"{apiUrl}{requestUrl}";
+        var requestMessage = new HttpRequestMessage(method, requestUri);
+        string secret = _secretManagerClient.GetSecret(ApiConsts.SaExecutionPrivateKeySecretName);
+        GoogleCredential credential = GoogleCredential.FromJson(secret).CreateScoped(ApiConsts.GoogleApisAuthScope);
+        string accessToken = await credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
+        requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        return requestMessage;
     }
 }

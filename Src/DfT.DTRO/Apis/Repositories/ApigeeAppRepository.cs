@@ -27,9 +27,9 @@ public class ApigeeAppRepository : IApigeeAppRepository
             : throw new Exception(responseMessageContent);
     }
     
-    public async Task<ApigeeDeveloperApp> UpdateAppStatus(string developerEmail, string name)
+    public async Task<ApigeeDeveloperApp> UpdateAppStatus(string developerEmail, string name, string action)
     {
-        var responseMessage = await _apigeeClient.UpdateAppStatus(developerEmail, name);
+        var responseMessage = await _apigeeClient.UpdateAppStatus(developerEmail, name, action);
         var responseMessageContent = await responseMessage.Content.ReadAsStringAsync();
         return responseMessage.IsSuccessStatusCode ? JsonConvert.DeserializeObject<ApigeeDeveloperApp>(responseMessageContent)
             : throw new Exception(responseMessageContent);

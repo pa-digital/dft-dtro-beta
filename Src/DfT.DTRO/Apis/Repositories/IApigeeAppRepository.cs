@@ -25,5 +25,5 @@ public interface IApigeeAppRepository
     /// <param name="developerEmail">Developer email parameter passed</param>
     /// <param name="name">app name</param>
     /// <returns>App</returns>
-    Task<ApigeeDeveloperApp> UpdateAppStatus(string developerEmail, string name);
+    Task<ApigeeDeveloperApp> UpdateAppStatus(string developerEmail, string name, string action);
 }

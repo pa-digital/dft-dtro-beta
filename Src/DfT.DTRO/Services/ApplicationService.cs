@@ -49,7 +49,7 @@ public class ApplicationService : IApplicationService
     {
         var application = await _applicationDal.GetApplicationDetails(appId);
         var name = application.Name;
-        var developerApp = await _apigeeAppRepository.UpdateAppStatus(email, name);
+        var developerApp = await _apigeeAppRepository.UpdateAppStatus(email, name, "approve");
         return await _applicationDal.ActivateApplicationById(appId);
     }
 
