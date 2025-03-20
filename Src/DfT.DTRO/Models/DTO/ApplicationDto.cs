@@ -18,5 +18,5 @@ public class ApplicationInactiveListDto
     public string TraName { get; set; }
     public string Type { get; set; }
     public string UserEmail { get; set; }
-    public string UserName { get; set; }
+    public string Username { get; set; }
 }

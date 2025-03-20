@@ -138,16 +138,8 @@ public class ApplicationController : ControllerBase
             {
                 return Forbid();
             }
-
-            var result = await _applicationService.GetApplication(appId);
-            if (result != null)
-            {
-                // TODO: fetch API key and secret from Apigee
-                return Ok(new { name = result.Name, appId = result.AppId, purpose = result.Purpose, apiKey = "thisismyapikey", apiSecret = "thisismyapisecret" });
-            }
-
-            return BadRequest(new { message = "No app found for this app ID" });
-
+            var result = await _applicationService.GetApplication(email, appId);
+            return Ok(result);
         }
         catch (ArgumentNullException ex)
         {

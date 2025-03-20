@@ -22,20 +22,30 @@ public class ApigeeClient : IApigeeClient
 
     public async Task<HttpResponseMessage> CreateApp(string developerEmail, ApigeeDeveloperAppInput developerAppInput)
     {
-        var requestUri = $"developers/{developerEmail}/apps";
-        return await SendRequest(HttpMethod.Post, requestUri, developerAppInput);
+        var requestUrl = $"developers/{developerEmail}/apps";
+        return await SendRequest(HttpMethod.Post, requestUrl, developerAppInput);
+    }
+    
+    public async Task<HttpResponseMessage> GetApp(string developerEmail, string name)
+    {
+        var requestUrl = $"developers/{developerEmail}/apps/{name}";
+        return await SendRequest(HttpMethod.Get, requestUrl, "");
     }
 
-    private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string requestUri, object requestMessageContent)
+    private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string requestUrl, object requestMessageContent)
     {
         string secret = _secretManagerClient.GetSecret(ApiConsts.SaExecutionPrivateKeySecretName);
         GoogleCredential credential = GoogleCredential.FromJson(secret).CreateScoped(ApiConsts.GoogleApisAuthScope);
         var accessToken = await credential.UnderlyingCredential.GetAccessTokenForRequestAsync();
         var apiUrl = _configuration.GetValue<string>("ApiSettings:ApigeeApiUrl");
-        var requestMessage = new HttpRequestMessage(method, $"{apiUrl}{requestUri}");
+        var requestUri = $"{apiUrl}{requestUrl}";
+        var requestMessage = new HttpRequestMessage(method, requestUri);
         requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-        var content = JsonConvert.SerializeObject(requestMessageContent);
-        requestMessage.Content = new StringContent(content, Encoding.UTF8, "application/json");
+        if (method != HttpMethod.Get && method != HttpMethod.Delete)
+        {
+            var content = JsonConvert.SerializeObject(requestMessageContent);
+            requestMessage.Content = new StringContent(content, Encoding.UTF8, "application/json");
+        }
         return await _httpClient.SendAsync(requestMessage);
     }
 

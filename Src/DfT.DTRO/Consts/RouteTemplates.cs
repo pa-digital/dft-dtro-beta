@@ -83,7 +83,8 @@ public static class RouteTemplates
     public const string TrasFindAll = TrasBase;
 
     // Users
-    public const string UserBase = "/users";
-    public const string UserDelete = UserBase + "/delete";
+    public const string UsersBase = "/users";
+    public const string UsersFindAll = UsersBase;
+    public const string UsersDelete = UsersBase + "/{userId:guid}";
 
 }
