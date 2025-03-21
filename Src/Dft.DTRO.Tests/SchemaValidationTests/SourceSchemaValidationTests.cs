@@ -39,6 +39,24 @@ public class SourceSchemaValidationTests : IDisposable
         }
     }
 
+    [Fact]
+    public void MissingMadeDateAndComingIntoForceDateFailsValidation()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Source", "invalid", "MissingMadeDateAndComingIntoForceDate.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.False(isValid);
+    }
+
+    [Fact]
+    public void PresentMadeDateAndComingIntoForceDateWithWrongOrderReportingPointFailsValidation()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Source", "invalid", "MadeDateAndComingIntoForceDateWithWrongOrderReportingPoint.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.False(isValid);
+    }
+
     public void Dispose() { }
 
 }
