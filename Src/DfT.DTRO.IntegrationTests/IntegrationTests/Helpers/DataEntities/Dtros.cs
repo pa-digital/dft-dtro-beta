@@ -351,6 +351,23 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return tempFilePath;
         }
 
+        public static string GetJsonAndCreateUpdateFileWithTraModifiedAndDuplicateProvisionReference(string schemaVersion, string fileName, string traId)
+        {
+            string dtroWithDuplicateProvisionReference = GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(schemaVersion, fileName, traId);
+            string updateJson = ModifyActionTypeAndTroNameForUpdate(schemaVersion, dtroWithDuplicateProvisionReference);
+            return updateJson;
+        }
+
+        public static string CreateTempUpdateFileWithTraModifiedAndProvisionReferenceDuplicated(string schemaVersion, string fileName, string traId)
+        {
+            string updateJson = GetJsonAndCreateUpdateFileWithTraModifiedAndDuplicateProvisionReference(schemaVersion, fileName, traId);
+
+            string nameOfCopyFile = $"update-{traId}-{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, updateJson);
+            return tempFilePath;
+        }
+
         public static string GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(string schemaVersion, string fileName, string traId)
         {
             string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
