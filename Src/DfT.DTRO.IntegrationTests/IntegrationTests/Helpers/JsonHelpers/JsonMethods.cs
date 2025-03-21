@@ -56,7 +56,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
             }
             else
             {
-                throw new Exception("Actual JSON doesn't match expected JSON!");
+                throw new Exception($"Actual JSON doesn't match expected JSON! Actual JSON was:\n\n{actualJson}");
             }
         }
 

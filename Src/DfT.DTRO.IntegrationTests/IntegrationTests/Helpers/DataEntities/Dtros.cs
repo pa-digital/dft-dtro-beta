@@ -209,18 +209,18 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static string GetSchemaValidationErrorJson(string traId)
         {
-            string expectedErrorJson = """
+            string expectedErrorJson = $$"""
             {
                 "ruleError_0": {
                     "message": "Invalid type. Expected Integer but got String.",
                     "path": "source.currentTraOwner",
-                    "value": "993344436",
+                    "value": "{{traId}}",
                     "errorType": "Type"
                 },
                 "ruleError_1": {
                     "message": "Invalid type. Expected Array but got Integer.",
                     "path": "source.traAffected",
-                    "value": 993344436,
+                    "value": {{traId}},
                     "errorType": "Type"
                 },
                 "ruleError_2": {
@@ -244,7 +244,39 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                     "errorType": "OneOf"
                 }
             }
-            """.Replace("993344436", traId);
+            """;
+
+            return expectedErrorJson;
+        }
+
+        public static string GetPointGeolocationErrorJson(string pointGeometryString)
+        {
+            string expectedErrorJson = $$"""
+            {
+                "ruleError_0": {
+                    "name": "Invalid coordinates",
+                    "message": "Geometry grid linked to 'PointGeometry'",
+                    "path": "Source -> Provision -> RegulatedPlace -> PointGeometry -> point",
+                    "rule": "Coordinates '{{pointGeometryString}}' are incorrect or not within Great Britain"
+                }
+            }
+            """;
+
+            return expectedErrorJson;
+        }
+
+        public static string GetLinearGeolocationErrorJson(string linearGeometryString)
+        {
+            string expectedErrorJson = $$"""
+            {
+                "ruleError_0": {
+                    "name": "Invalid coordinates",
+                    "message": "Geometry grid linked to 'LinearGeometry'",
+                    "path": "Source -> Provision -> RegulatedPlace -> LinearGeometry -> linestring",
+                    "rule": "Coordinates '{{linearGeometryString}}' are incorrect or not within Great Britain"
+                }
+            }
+            """;
 
             return expectedErrorJson;
         }
@@ -355,6 +387,27 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         public static string CreateTempFileWithTraAndPointGeometryModified(string schemaVersion, string fileName, string traId, string pointGeometryString)
         {
             string jsonWithTraAndPointGeometryModified = GetJsonFromFileAndModifyTraAndPointGeometry(schemaVersion, fileName, traId, pointGeometryString);
+            string nameOfCopyFile = $"{traId}-{fileName}";
+            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, jsonWithTraAndPointGeometryModified);
+            return tempFilePath;
+        }
+
+        public static string GetJsonFromFileAndModifyTraAndLinearGeometry(string schemaVersion, string fileName, string traId, string linearGeometryString)
+        {
+            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroJson = File.ReadAllText(dtroFile);
+            string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
+
+            JObject jsonObj = JObject.Parse(dtroJsonWithTraModified);
+            jsonObj["data"]["source"]["provision"][0]["regulatedPlace"][0]["linearGeometry"]["linestring"] = linearGeometryString;
+
+            return jsonObj.ToString();
+        }
+
+        public static string CreateTempFileWithTraAndLinearGeometryModified(string schemaVersion, string fileName, string traId, string linearGeometryString)
+        {
+            string jsonWithTraAndPointGeometryModified = GetJsonFromFileAndModifyTraAndLinearGeometry(schemaVersion, fileName, traId, linearGeometryString);
             string nameOfCopyFile = $"{traId}-{fileName}";
             string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, jsonWithTraAndPointGeometryModified);

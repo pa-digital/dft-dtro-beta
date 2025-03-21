@@ -39,10 +39,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroJsonWithTraModifiedAndDuplicateProvisionReference = Dtros.GetJsonFromFileAndModifyToFailSchemaValidation(schemaVersionToTest, fileName, publisher.TraId);
+            string createDtroJsonWithTraModifiedAndSchemaValidationToFail = Dtros.GetJsonFromFileAndModifyToFailSchemaValidation(schemaVersionToTest, fileName, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModifiedAndDuplicateProvisionReference, publisher);
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModifiedAndSchemaValidationToFail, publisher);
             string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {fileName}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
