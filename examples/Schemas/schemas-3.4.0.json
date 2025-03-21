@@ -416,13 +416,7 @@
                     }
                 },
                 "nonVehicularRoadUserCondition": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                        "nonVehicularRoadUser"
-                    ],
-                    "$ref": "#/$defs/nonVehicularRoadUserType",
-                    "properties": {}
+                    "$ref": "#/$defs/nonVehicularRoadUserType"
                 },
                 "permitCondition": {
                     "type": "object",
