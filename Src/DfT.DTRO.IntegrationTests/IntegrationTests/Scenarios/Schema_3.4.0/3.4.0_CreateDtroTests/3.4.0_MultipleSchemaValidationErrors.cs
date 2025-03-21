@@ -12,7 +12,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
         readonly string fileName = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
 
         [Fact]
-        public async Task DtroSubmittedFromFileWithDuplicateProvisionReferenceShouldBeRejected()
+        public async Task DtroSubmittedFromFileWithMultipleSchemaErrorsShouldBeRejected()
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
@@ -32,7 +32,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
         }
 
         [Fact]
-        public async Task DtroSubmittedFromJsonBodyWithDuplicateProvisionReferenceShouldBeRejected()
+        public async Task DtroSubmittedFromJsonBodyWithWithMultipleSchemaErrorsShouldBeRejected()
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
