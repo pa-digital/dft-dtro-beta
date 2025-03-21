@@ -416,7 +416,7 @@
                     }
                 },
                 "nonVehicularRoadUserCondition": {
-                    "$ref": "#/$defs/nonVehicularRoadUserType"
+                    "$ref": "#/$defs/nonVehicularRoadUserCondition"
                 },
                 "permitCondition": {
                     "type": "object",
