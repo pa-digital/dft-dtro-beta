@@ -85,7 +85,7 @@ jobs:
           ./Src/DfT.DTRO.IntegrationTests/ci_scripts/run_integration_tests_against_localhost_on_ci.sh
 
       - name: Upload integration test results
-        if: steps.integration-tests.outcome != 'skipped'
+        if: always() && steps.step1.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
           name: Integration test results
