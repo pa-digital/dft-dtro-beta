@@ -108,4 +108,6 @@ public interface IDtroDal
     /// <returns>A <see cref="Task"/> representing operation.</returns>
     Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId);
 
+    Task<int> GetDtroSubmissionCount();
+
 }
