@@ -4,15 +4,23 @@
     "source": {
       "actionType": "new",
       "currentTraOwner": 1050,
+      "madeDate": "2025-01-01",
+      "comingIntoForceDate": "2025-01-01",
       "provision": [
         {
           "actionType": "new",
+          "comingIntoForceDate": "2025-01-01",
           "orderReportingPoint": "permanentNoticeOfMaking",
           "provisionDescription": "Schedule 1: No Waiting Monday to Saturday, 8am to 6pm",
           "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
           "regulatedPlace": [
             {
               "description": "West side, Market Street, Draycott",
+              "concession": false,
+              "assignment": false,
+              "tramcar": false,
+              "busRoute": false,
+              "bywayType": "road",
               "type": "regulationLocation",
               "linearGeometry": {
                 "direction": "bidirectional",

@@ -416,13 +416,7 @@
                     }
                 },
                 "nonVehicularRoadUserCondition": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": [
-                        "nonVehicularRoadUser"
-                    ],
-                    "$ref": "#/$defs/nonVehicularRoadUserType",
-                    "properties": {}
+                    "$ref": "#/$defs/nonVehicularRoadUserCondition"
                 },
                 "permitCondition": {
                     "type": "object",
@@ -1687,6 +1681,68 @@
                             ]
                         }
                     }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "orderReportingPoint": {
+                                "$ref": "#/$defs/conditionalOrderReportingPoints"
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "comingIntoForceDate"
+                        ]
+                    },
+                    "else": {
+                        "not": {
+                            "required": [
+                                "comingIntoForceDate"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "orderReportingPoint": {
+                                "$ref": "#/$defs/conditionalOrderReportingPoints"
+                            }
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "regulatedPlace": {
+                                "items": {
+                                    "required": [
+                                        "concession",
+                                        "assignment",
+                                        "tramcar",
+                                        "busRoute",
+                                        "bywayType"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "else": {
+                        "not": {
+                            "properties": {
+                                "regulatedPlace": {
+                                    "items": {
+                                        "required": [
+                                            "concession",
+                                            "assignment",
+                                            "tramcar",
+                                            "busRoute",
+                                            "bywayType"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             ]
         },
@@ -1823,7 +1879,7 @@
             "description": "Group of rate line elements that logically group together within one rate table, e.g. such as the rate lines for the different tiers of a time based tier rate table",
             "type": "object",
             "additionalProperties": false,
-        "required": [
+            "required": [
                 "applicableCurrency",
                 "sequence",
                 "rateLine",
@@ -2280,6 +2336,37 @@
                 "troName",
                 "provision",
                 "statementDescription"
+            ],
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "provision": {
+                                "items": {
+                                    "properties": {
+                                        "orderReportingPoint": {
+                                            "$ref": "#/$defs/conditionalOrderReportingPoints"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "madeDate",
+                            "comingIntoForceDate"
+                        ]
+                    },
+                    "else": {
+                        "not": {
+                            "required": [
+                                "madeDate",
+                                "comingIntoForceDate"
+                            ]
+                        }
+                    }
+                }
             ]
         },
         "specialDayType": {
@@ -2699,6 +2786,19 @@
                     "$ref": "#/$defs/specialDayType"
                 }
             }
+        },
+        "conditionalOrderReportingPoints": {
+            "type": "string",
+            "enum": [
+                "experimentalAmendment",
+                "experimentalMakingPermanent",
+                "experimentalNoticeOfMaking",
+                "experimentalRevocation",
+                "permanentAmendment",
+                "permanentNoticeOfMaking",
+                "permanentRevocation",
+                "specialEventOrderNoticeOfMaking"
+            ]
         }
     }
 }
