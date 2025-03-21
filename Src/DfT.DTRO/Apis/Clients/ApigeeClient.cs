@@ -30,7 +30,7 @@ public class ApigeeClient : IApigeeClient
     public async Task<HttpResponseMessage> GetApp(string developerEmail, string name)
     {
         var requestUrl = $"developers/{developerEmail}/apps/{name}";
-        return await SendRequest(HttpMethod.Get, requestUrl, "");
+        return await SendRequest(HttpMethod.Get, requestUrl, null);
     }
     
     public async Task<HttpResponseMessage> UpdateAppStatus(string developerEmail, string name, string action)
@@ -38,11 +38,17 @@ public class ApigeeClient : IApigeeClient
         var requestUrl = $"developers/{developerEmail}/apps/{name}?action={action}";
         return await SendOctetStreamRequest(HttpMethod.Post, requestUrl);
     }
+    
+    public async Task<HttpResponseMessage> DeleteDeveloper(string developerEmail)
+    {
+        var requestUrl = $"developers/{developerEmail}";
+        return await SendRequest(HttpMethod.Delete, requestUrl, null);
+    }
 
     private async Task<HttpResponseMessage> SendRequest(HttpMethod method, string requestUrl, object requestMessageContent)
     {
         HttpRequestMessage requestMessage = await GetRequestMessage(method, requestUrl);
-        if (method != HttpMethod.Get && method != HttpMethod.Delete)
+        if (requestMessageContent is not null)
         {
             var content = JsonConvert.SerializeObject(requestMessageContent);
             requestMessage.Content = new StringContent(content, Encoding.UTF8, "application/json");
