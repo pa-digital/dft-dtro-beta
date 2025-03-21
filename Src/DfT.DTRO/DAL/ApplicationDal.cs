@@ -63,7 +63,7 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
                 TraName = a.TrafficRegulationAuthority.Name,
                 Type = a.ApplicationType.Name,
                 UserEmail = a.User.Email,
-                UserName = $"{a.User.Forename} {a.User.Surname}",
+                Username = $"{a.User.Forename} {a.User.Surname}",
             });
         IQueryable<ApplicationInactiveListDto> paginatedQuery = query
             .Skip((paginatedRequest.Page - 1) * paginatedRequest.PageSize)

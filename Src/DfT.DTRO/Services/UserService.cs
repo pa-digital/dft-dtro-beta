@@ -8,10 +8,15 @@ public class UserService : IUserService
     {
         _userDal = userDal;
     }
-
-    public async Task DeleteUser(string userId)
+    
+    public async Task<PaginatedResponse<UserListDto>> GetUsers(PaginatedRequest paginatedRequest)
     {
-        Guid userGuid = Guid.Parse(userId);
-        await _userDal.DeleteUser(userGuid);
+        var paginatedResult = await _userDal.GetUsers(paginatedRequest);
+        return new(paginatedResult.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResult.TotalCount);
+    }
+
+    public async Task DeleteUser(Guid userId)
+    {
+        await _userDal.DeleteUser(userId);
     }
 }

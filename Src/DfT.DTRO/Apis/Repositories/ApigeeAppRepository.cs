@@ -18,4 +18,12 @@ public class ApigeeAppRepository : IApigeeAppRepository
         return responseMessage.IsSuccessStatusCode ? JsonConvert.DeserializeObject<ApigeeDeveloperApp>(responseMessageContent)
             : throw new Exception(responseMessageContent);
     }
+    
+    public async Task<ApigeeDeveloperApp> GetApp(string developerEmail, string name)
+    {
+        var responseMessage = await _apigeeClient.GetApp(developerEmail, name);
+        var responseMessageContent = await responseMessage.Content.ReadAsStringAsync();
+        return responseMessage.IsSuccessStatusCode ? JsonConvert.DeserializeObject<ApigeeDeveloperApp>(responseMessageContent)
+            : throw new Exception(responseMessageContent);
+    }
 }

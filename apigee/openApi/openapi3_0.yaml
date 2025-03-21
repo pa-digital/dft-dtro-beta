@@ -51,13 +51,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Valid user ID
@@ -87,13 +81,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Valid application ID
@@ -115,13 +103,7 @@ paths:
           in: query
           schema:
             type: string
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Valid or invalid application name
@@ -147,13 +129,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Valid application ID
@@ -161,7 +137,7 @@ paths:
           description: Invalid or empty parameters, or no matching application
         '500':
           description: Invalid operation or other exception
-  /applications/pending:
+  /applications/inactive:
     get:
       tags:
         - Applications
@@ -183,13 +159,7 @@ paths:
             minimum: 1
             type: integer
             format: int32
-        - name: X-Correlation-ID
-          in: header
-          required: true
-          schema:
-            type: string
-            description: UUID formatted string to track the request through the enquiries stack.
-            default: 41ae0471-d7de-4737-907f-cab2f0089796
+        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Valid user ID
@@ -317,7 +287,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '404':
@@ -342,14 +312,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroDtos.DtroSubmit
+              $ref: "#/components/schemas/DfT.DTRO.Models.DtroDtos.DtroSubmit"
       responses:
         '201':
           description: Created
           content:
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '404':
@@ -381,14 +351,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroDtos.DtroSubmit
+              $ref: "#/components/schemas/DfT.DTRO.Models.DtroDtos.DtroSubmit"
       responses:
         '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.DtroDtos.DtroResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.DtroDtos.DtroResponse"
         '400':
           description: Bad Request.
         '404':
@@ -517,7 +487,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistorySourceResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistorySourceResponse"
         '400':
           description: Bad Request.
         '404':
@@ -552,7 +522,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistoryProvisionResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.DtroHistory.DtroHistoryProvisionResponse"
         '400':
           description: Bad Request.
         '404':
@@ -613,27 +583,27 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
             application/json:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
             text/json:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
             text/xml:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
         '404':
           description: Not found.
         '500':
@@ -663,27 +633,27 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
             application/json:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
             text/json:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
             text/xml:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse
+                  $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserResponse"
         '400':
           description: Bad Request.
         '404':
@@ -706,25 +676,25 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           text/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           application/*+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           application/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           text/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           application/*+xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
       responses:
         '200':
           description: OK.
@@ -733,19 +703,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             text/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             application/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             text/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '500':
@@ -766,44 +736,44 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           text/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           application/*+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           application/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           text/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
           application/*+xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SwaCode.DtroUserRequest"
       responses:
         '200':
           description: Ok
           content:
             text/plain:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             text/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             application/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             text/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '404':
@@ -834,19 +804,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             text/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             application/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             text/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '404':
           description: Not Found.
         '500':
@@ -867,25 +837,25 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: #/components/schemas/DeleteDtroUsersRequest
+              $ref: "#/components/schemas/DeleteDtroUsersRequest"
           application/json:
             schema:
-              $ref: #/components/schemas/DeleteDtroUsersRequest
+              $ref: "#/components/schemas/DeleteDtroUsersRequest"
           text/json:
             schema:
-              $ref: #/components/schemas/DeleteDtroUsersRequest
+              $ref: "#/components/schemas/DeleteDtroUsersRequest"
           application/*+json:
             schema:
-              $ref: #/components/schemas/DeleteDtroUsersRequest
+              $ref: "#/components/schemas/DeleteDtroUsersRequest"
           application/xml:
             schema:
-              $ref: #/components/schemas/DeleteDtroUsersRequest
+              $ref: "#/components/schemas/DeleteDtroUsersRequest"
           text/xml:
             schema:
-              $ref: #/components/schemas/DeleteDtroUsersRequest
+              $ref: "#/components/schemas/DeleteDtroUsersRequest"
           application/*+xml:
             schema:
-              $ref: #/components/schemas/DeleteDtroUsersRequest
+              $ref: "#/components/schemas/DeleteDtroUsersRequest"
       responses:
         '200':
           description: Ok
@@ -928,44 +898,47 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
           text/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
           application/*+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
           application/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
           text/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
           application/*+xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch
+              $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearch"
       responses:
         '200':
           description: Successfully received the event list
           content:
             text/plain:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult"
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult"
+
             text/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult"
+
             application/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult"
+
             text/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult
+                $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventSearchResult"
         '400':
           description: The request was malformed.
         '404':
@@ -1060,44 +1033,44 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           text/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           application/*+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           application/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           text/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           application/*+xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
       responses:
         '200':
           description: Metrics retrieved successfully.
           content:
             text/plain:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
+                $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary"
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
+                $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary"
             text/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
+                $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary"
             application/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
+                $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary"
             text/xml:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary
+                $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricSummary"
         '400':
           description: Dates Incorrect.
         '404':
@@ -1122,25 +1095,25 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           application/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           text/json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           application/*+json:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           application/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           text/xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
           application/*+xml:
             schema:
-              $ref: #/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.MetricRequest"
       responses:
         '200':
           description: Metrics retrieved successfully.
@@ -1149,27 +1122,27 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary
+                  $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary"
             application/json:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary
+                  $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary"
             text/json:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary
+                  $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary"
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary
+                  $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary"
             text/xml:
               schema:
                 type: array
                 items:
-                  $ref:       #/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary
+                  $ref: "#/components/schemas/DfT.DTRO.Models.Metrics.FullMetricSummary"
         '400':
           description: Dates Incorrect.
         '404':
@@ -1372,7 +1345,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '201':
           description: Created.
         '400':
@@ -1475,7 +1448,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '404':
@@ -1591,7 +1564,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '404':
@@ -1643,7 +1616,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '404':
@@ -1680,7 +1653,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '404':
@@ -1710,7 +1683,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '404':
@@ -1740,7 +1713,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '404':
@@ -1773,7 +1746,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: #/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse"
         '400':
           description: Bad Request.
         '404':
@@ -1798,19 +1771,19 @@ paths:
           content:
             text/plain:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse"
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse"
             text/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse"
             application/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse"
             text/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigResponse"
         '500':
           description: Internal server error.
   /systemConfig/updateFromBody:
@@ -1829,44 +1802,44 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref:   #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
           application/json:
             schema:
-              $ref:   #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
           text/json:
             schema:
-              $ref:   #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
           application/*+json:
             schema:
-              $ref:   #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
           application/xml:
             schema:
-              $ref:   #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
           text/xml:
             schema:
-              $ref:   #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
           application/*+xml:
             schema:
-              $ref:   #/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest
+              $ref: "#/components/schemas/DfT.DTRO.Models.SystemConfig.SystemConfigRequest"
       responses:
         '200':
           description: Ok
           content:
             text/plain:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             application/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             text/json:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             application/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
             text/xml:
               schema:
-                $ref:     #/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse
+                $ref: "#/components/schemas/DfT.DTRO.Models.SharedResponse.GuidResponse"
         '400':
           description: Bad Request.
         '500':
@@ -1894,6 +1867,73 @@ paths:
           description: Could not found any TRA records.
         '500':
           description: Internal Server Error
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Retrieve user list for user
+      parameters:
+        - name: Page
+          in: query
+          required: true
+          schema:
+            maximum: 2147483647
+            minimum: 1
+            type: integer
+            format: int32
+        - name: PageSize
+          in: query
+          required: true
+          schema:
+            maximum: 50
+            minimum: 1
+            type: integer
+            format: int32
+        - $ref: "#/components/parameters/XCorrelationId"
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DfT.DTRO.Models.Pagination.PaginatedResponse.Users'
+        '400':
+          description: No users found for this user ID
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Could not found any users
+          content:
+            application/json:
+              schema: {}
+        '500':
+          description: An unexpected error occurred
+          content:
+            application/json:
+              schema: {}
+  /users/{userId}:
+    delete:
+      tags:
+        - Users
+      summary: Deletes a user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: "#/components/parameters/XCorrelationId"
+      responses:
+        '200':
+          description: OK
+        '204':
+          description: User successfully deleted
+        '400':
+          description: Invalid or empty parameters
+        '500':
+          description: Invalid operation or other exception
 components:
   parameters:
     XAppId:
@@ -1918,9 +1958,9 @@ components:
       description: Developer email linked to access token.
       required: true
       schema:
-        type: string      
+        type: string
   schemas:
-    ApplicationPendingListDto:
+    ApplicationInactiveListDto:
       type: object
       properties:
         traName:
@@ -1935,7 +1975,7 @@ components:
         userName:
           type: string
           nullable: true
-      additionalProperties: false    
+      additionalProperties: false
     ApplicationDetailsRequest:
       type: object
       properties:
@@ -1990,7 +2030,7 @@ components:
           description: D-TRO unique identifier.
           format: uuid
         schemaVersion:
-          $ref: #/components/schemas/DfT.DTRO.Models.SchemaTemplate.SchemaVersion
+          $ref: "#/components/schemas/DfT.DTRO.Models.SchemaTemplate.SchemaVersion"
         data:
           type: object
           additionalProperties: {}
@@ -2005,7 +2045,7 @@ components:
       type: object
       properties:
         schemaVersion:
-          $ref: #/components/schemas/DfT.DTRO.Models.SchemaTemplate.SchemaVersion
+          $ref: "#/components/schemas/DfT.DTRO.Models.SchemaTemplate.SchemaVersion"
         data:
           type: object
           additionalProperties: {}
@@ -2070,7 +2110,7 @@ components:
             format: date-time
           nullable: true
         eventType:
-          $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventType
+          $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEventType"
         eventTime:
           type: string
           format: date-time
@@ -2126,9 +2166,9 @@ components:
           type: string
           nullable: true
         regulationStart:
-          $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
+          $ref: "#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition"
         regulationEnd:
-          $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
+          $ref: "#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition"
       additionalProperties: false
     DfT.DTRO.Models.DtroEvent.DtroEventSearchResult:
       type: object
@@ -2136,7 +2176,7 @@ components:
         events:
           type: array
           items:
-            $ref: #/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEvent
+            $ref: "#/components/schemas/DfT.DTRO.Models.DtroEvent.DtroEvent"
           nullable: true
         page:
           type: integer
@@ -2230,7 +2270,7 @@ components:
           minItems: 1
           type: array
           items:
-            $ref: #/components/schemas/DfT.DTRO.Models.Filtering.SearchQuery
+            $ref: "#/components/schemas/DfT.DTRO.Models.Filtering.SearchQuery"
           nullable: true
         page:
           maximum: 2147483647
@@ -2292,9 +2332,9 @@ components:
           type: string
           nullable: true
         regulationStart:
-          $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
+          $ref: "#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition"
         regulationEnd:
-          $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition'
+          $ref: "#/components/schemas/DfT.DTRO.Models.Filtering.ValueCondition"
       additionalProperties: false
     DfT.DTRO.Models.Filtering.ValueCondition:
       required:
@@ -2303,7 +2343,7 @@ components:
       type: object
       properties:
         operator:
-          $ref: #/components/schemas/DfT.DTRO.Models.Filtering.ComparisonOperator
+          $ref: "#/components/schemas/DfT.DTRO.Models.Filtering.ComparisonOperator"
         value:
           type: string
           format: date-time
@@ -2350,7 +2390,7 @@ components:
           type: string
           format: date-time
         userGroup:
-          $ref: #/components/schemas/UserGroup
+          $ref: "#/components/schemas/UserGroup"
       additionalProperties: false
     DfT.DTRO.Models.Metrics.MetricSummary:
       type: object
@@ -2380,7 +2420,25 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/ApplicationPendingListDto'
+            $ref: '#/components/schemas/ApplicationInactiveListDto'
+          nullable: true
+        page:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        totalCount:
+          type: integer
+          format: int32
+      additionalProperties: false
+    DfT.DTRO.Models.Pagination.PaginatedResponse.Users:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserListDto'
           nullable: true
         page:
           type: integer
@@ -2398,7 +2456,7 @@ components:
         results:
           type: array
           items:
-            $ref: #/components/schemas/DfT.DTRO.Models.Search.DtroSearchResult
+            $ref: "#/components/schemas/DfT.DTRO.Models.Search.DtroSearchResult"
           nullable: true
         page:
           type: integer
@@ -2495,7 +2553,7 @@ components:
           type: string
           nullable: true
         userGroup:
-          $ref: #/components/schemas/UserGroup
+          $ref: "#/components/schemas/UserGroup"
         xAppId:
           type: string
           format: uuid
@@ -2525,7 +2583,7 @@ components:
           description: User prefix
           nullable: true
         userGroup:
-          $ref: #/components/schemas/UserGroup
+          $ref: "#/components/schemas/UserGroup"
       additionalProperties: false
       description: D-TRO User data transfer object response
     DfT.DTRO.Models.SystemConfig.SystemConfigRequest:
@@ -2565,6 +2623,19 @@ components:
           type: boolean
         isActive:
           type: boolean
+      additionalProperties: false
+    UserListDto:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        created:
+          type: string
+          nullable: true
       additionalProperties: false
   securitySchemes:
     oAuth:
