@@ -8,7 +8,7 @@ To execute the integration tests locally against localhost:
 ./run_integration_tests.sh
 
 # Windows:
-dotnet test --logger "trx;LogFileName=test-results.trx"
+dotnet test --logger "html;LogFileName=test-results.html"
 ```
 
-You can view the test results at Src/DfT.DTRO.IntegrationTests/TestResults/test-results.trx (in Visual Studio only).
+You can view the test results at Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html

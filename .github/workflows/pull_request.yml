@@ -89,4 +89,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Integration test results
-          path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.trx
+          path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html
