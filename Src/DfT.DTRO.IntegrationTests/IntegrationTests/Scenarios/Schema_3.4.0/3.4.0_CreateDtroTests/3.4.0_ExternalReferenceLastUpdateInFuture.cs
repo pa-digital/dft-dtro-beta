@@ -21,7 +21,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
 
         [Theory]
         [MemberData(nameof(GetDtroFileNames))]
-        public async Task DtroSubmittedFromFileWithDuplicateProvisionReferenceShouldBeRejected(string fileName)
+        public async Task DtroSubmittedFromFileWithExternalReferenceLastUpdateDateInFutureShouldBeRejected(string fileName)
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
@@ -56,7 +56,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
 
         [Theory]
         [MemberData(nameof(GetDtroFileNames))]
-        public async Task DtroSubmittedFromJsonBodyWithDuplicateProvisionReferenceShouldBeRejected(string fileName)
+        public async Task DtroSubmittedFromJsonBodyWithExternalReferenceLastUpdateDateInFutureShouldBeRejected(string fileName)
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
