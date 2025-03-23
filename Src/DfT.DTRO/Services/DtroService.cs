@@ -309,4 +309,9 @@ public class DtroService : IDtroService
 
         return true;
     }
+
+    public async Task<int> GetDtroSubmissionCount()
+    {
+        return await _dtroDal.GetDtroSubmissionCount();
+    }
 }
