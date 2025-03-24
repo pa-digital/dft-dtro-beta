@@ -144,4 +144,12 @@ public static class DtroExtensions
         string dtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(jsonString, "data.source.provision");
         return dtroWithDuplicateProvisionReference;
     }
+
+    public static string PutExternalReferenceLastUpdatedDateInFuture(this string jsonString)
+    {
+        DateTime dateTomorrow = DateTime.Now.AddDays(1);
+        string dateTomorrowFormatted = dateTomorrow.ToString("yyyy-MM-ddTHH:00:00");
+        string dtroJsonWithFutureExternalReferenceLastUpdateDate = Dtros.ModifyExternalReferenceLastUpdateDate(jsonString, dateTomorrowFormatted);
+        return dtroJsonWithFutureExternalReferenceLastUpdateDate;
+    }
 }

@@ -297,6 +297,23 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return expectedErrorJson;
         }
 
+        public static string GetExternalReferenceLastUpdateDateErrorJson(string fileName)
+        {
+            string geometryType = fileName.Contains("Derbyshire") ? "LinearGeometry" : "PointGeometry";
+            string expectedErrorJson = $$"""
+            {
+                "ruleError_0": {
+                    "name": "Invalid last update date",
+                    "message": "Indicates the date the USRN reference was last updated",
+                    "path": "Source -> Provision -> RegulatedPlace -> {{geometryType}} -> ExternalReference -> lastUpdateDate",
+                    "rule": "'lastUpdateDate' cannot be in the future"
+                }
+            }
+            """;
+
+            return expectedErrorJson;
+        }
+
         public static string GetJsonFromFileAndModifyTra(string schemaVersion, string fileName, string traId)
         {
             string dtroFile = $"{PathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";

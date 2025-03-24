@@ -31,7 +31,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
                 $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
 
-            // Evaluate response JSON rule failures
+            // Evaluate response JSON
             string provisionReference = JsonMethods.GetValueAtJsonPath(dtroCreationJson, "data.source.provision[0].reference").ToString();
             string expectedErrorJson = Dtros.GetDuplicateProvisionReferenceErrorJson(provisionReference);
             JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
@@ -58,7 +58,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
                 $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
 
-            // Evaluate response JSON rule failures
+            // Evaluate response JSON
             string provisionReference = JsonMethods.GetValueAtJsonPath(dtroCreationJson, "data.source.provision[0].reference").ToString();
             string expectedErrorJson = Dtros.GetDuplicateProvisionReferenceErrorJson(provisionReference);
             JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);

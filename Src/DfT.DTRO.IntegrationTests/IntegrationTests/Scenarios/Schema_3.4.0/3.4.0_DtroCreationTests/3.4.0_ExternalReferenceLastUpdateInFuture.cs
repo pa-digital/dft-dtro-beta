@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
@@ -21,72 +22,58 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
 
         [Theory]
         [MemberData(nameof(GetDtroFileNames))]
-        public async Task DtroSubmittedFromFileWithExternalReferenceLastUpdateDateInFutureShouldBeRejected(string fileName)
+        public async Task DtroSubmittedFromJsonBodyWithExternalReferenceLastUpdateDateInFutureShouldBeRejected(string fileName)
         {
+            Console.WriteLine($"\nTesting with file {fileName}...");
+
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
+            await publisher.CreateUserForDataSetUpAsync();
 
             // Prepare DTRO
-            string tempFilePath = Dtros.CreateTempFileWithTraModifiedAndExternalReferenceLastUpdateDateInFuture(schemaVersionToTest, fileName, publisher.TraId);
+            string dtroCreationJson = fileName
+                                    .GetJsonFromFile(schemaVersionToTest)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .PutExternalReferenceLastUpdatedDateInFuture();
 
             // Send DTRO
-            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
-            string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
-            Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePath)}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
+            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
+            string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
+                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
 
-            // Evaluate response JSON rule failures
-            dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(createDtroResponseJson)!;
-
-            string expectedName = "Invalid last update date";
-            string actualName = jsonDeserialised.ruleError_0.name.ToString();
-            Assert.True(expectedName == actualName, $"File {Path.GetFileName(tempFilePath)}: expected is '{expectedName}' but actual was '{actualName}', with response body\n{createDtroResponseJson}");
-
-            string expectedMessage = "Indicates the date the USRN reference was last updated";
-            string actualMessage = jsonDeserialised.ruleError_0.message.ToString();
-            Assert.True(expectedMessage == actualMessage, $"File {Path.GetFileName(tempFilePath)}: expected is '{expectedMessage}' but actual was '{actualMessage}', with response body\n{createDtroResponseJson}");
-
-            string actualPath = jsonDeserialised.ruleError_0.path.ToString();
-            Assert.True(actualPath.StartsWith("Source -> Provision -> RegulatedPlace -> ") && actualPath.EndsWith(" -> ExternalReference -> lastUpdateDate"), $"File {Path.GetFileName(tempFilePath)}: actual was '{actualPath}', with response body\n{createDtroResponseJson}");
-
-            string expectedRule = "'lastUpdateDate' cannot be in the future";
-            string actualRule = jsonDeserialised.ruleError_0.rule.ToString();
-            Assert.True(expectedRule == actualRule, $"File {Path.GetFileName(tempFilePath)}: expected is '{expectedRule}' but actual was '{actualRule}', with response body\n{createDtroResponseJson}");
+            // Evaluate response JSON
+            string expectedErrorJson = Dtros.GetExternalReferenceLastUpdateDateErrorJson(fileName);
+            JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
         }
 
         [Theory]
         [MemberData(nameof(GetDtroFileNames))]
-        public async Task DtroSubmittedFromJsonBodyWithExternalReferenceLastUpdateDateInFutureShouldBeRejected(string fileName)
+        public async Task DtroSubmittedFromFileWithExternalReferenceLastUpdateDateInFutureShouldBeRejected(string fileName)
         {
+            Console.WriteLine($"\nTesting with file {fileName}...");
+
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
+            await publisher.CreateUserForDataSetUpAsync();
 
             // Prepare DTRO
-            string createDtroJsonWithTraModifiedAndExternalReferenceLastUpdatedDateInFuture = Dtros.GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(schemaVersionToTest, fileName, publisher.TraId);
+            string dtroCreationJson = fileName
+                                    .GetJsonFromFile(schemaVersionToTest)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .PutExternalReferenceLastUpdatedDateInFuture();
+
+            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraModifiedAndExternalReferenceLastUpdatedDateInFuture, publisher);
-            string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
-            Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {fileName}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
+            HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher.AppId);
+            string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
+                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
 
-            // Evaluate response JSON rule failures
-            dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(createDtroResponseJson)!;
-
-            string expectedName = "Invalid last update date";
-            string actualName = jsonDeserialised.ruleError_0.name.ToString();
-            Assert.True(expectedName == actualName, $"File {fileName}: expected is '{expectedName}' but actual was '{actualName}', with response body\n{createDtroResponseJson}");
-
-            string expectedMessage = "Indicates the date the USRN reference was last updated";
-            string actualMessage = jsonDeserialised.ruleError_0.message.ToString();
-            Assert.True(expectedMessage == actualMessage, $"File {fileName}: expected is '{expectedMessage}' but actual was '{actualMessage}', with response body\n{createDtroResponseJson}");
-
-            string actualPath = jsonDeserialised.ruleError_0.path.ToString();
-            Assert.True(actualPath.StartsWith("Source -> Provision -> RegulatedPlace -> ") && actualPath.EndsWith(" -> ExternalReference -> lastUpdateDate"), $"File {fileName}: actual was '{actualPath}', with response body\n{createDtroResponseJson}");
-
-            string expectedRule = "'lastUpdateDate' cannot be in the future";
-            string actualRule = jsonDeserialised.ruleError_0.rule.ToString();
-            Assert.True(expectedRule == actualRule, $"File {fileName}: expected is '{expectedRule}' but actual was '{actualRule}', with response body\n{createDtroResponseJson}");
+            // Evaluate response JSON
+            string expectedErrorJson = Dtros.GetExternalReferenceLastUpdateDateErrorJson(fileName);
+            JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
         }
     }
 }
