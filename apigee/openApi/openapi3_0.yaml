@@ -348,8 +348,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: TraCode
           in: query
@@ -915,8 +913,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
       responses:
         '200':
@@ -948,8 +944,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
       responses:
         '200':
@@ -983,8 +977,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
       requestBody:
         description: Object containing a metric request.
@@ -1044,8 +1036,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
       requestBody:
         description: Object containing a metric request.
@@ -1115,8 +1105,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
       responses:
         '200':
@@ -1136,8 +1124,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
       responses:
         '200':
@@ -1157,8 +1143,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: version
           in: path
@@ -1184,8 +1168,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: ruleId
           in: path
@@ -1411,8 +1393,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: schemaId
           in: path
@@ -1808,6 +1788,10 @@ paths:
       tags:
         - Users
       summary: Retrieve user list for user
+      operationId: get-users
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: Page
           in: query
@@ -1852,6 +1836,10 @@ paths:
       tags:
         - Users
       summary: Deletes a user
+      operationId: delete-user
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: userId
           in: path
