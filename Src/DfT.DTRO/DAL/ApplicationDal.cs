@@ -23,12 +23,14 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
     {
         return await _context.Applications
             .Include(a => a.Purpose)
+            .Include(a => a.TrafficRegulationAuthority)
             .Where(a => a.Id == appId)
             .Select(a => new ApplicationDetailsDto
             {
                 Name = a.Nickname,
                 AppId = a.Id,
-                Purpose = a.Purpose.Description
+                Purpose = a.Purpose.Description,
+                SwaCode = a.TrafficRegulationAuthority.SwaCode
             })
             .FirstOrDefaultAsync();
     }

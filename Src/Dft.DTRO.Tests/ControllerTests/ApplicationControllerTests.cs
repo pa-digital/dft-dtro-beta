@@ -55,6 +55,7 @@ public class ApplicationControllerTests
             AppId = appId,
             Name = "Test",
             Purpose = "Test",
+            SwaCode = 123,
             CreatedAt = 0, 
             LastModifiedAt = 0, 
             Status = "approved", 
@@ -90,6 +91,7 @@ public class ApplicationControllerTests
             AppId = appId,
             Name = "Test",
             Purpose = "Test",
+            SwaCode = 123,
             CreatedAt = 0, 
             LastModifiedAt = 0, 
             Status = "approved", 
@@ -150,7 +152,7 @@ public class ApplicationControllerTests
             .Setup(s => s.ValidateAppBelongsToUser(_email, appId))
             .ReturnsAsync(true);
         _mockApplicationService
-            .Setup(s => s.ActivateApplicationById(appId))
+            .Setup(s => s.ActivateApplicationById(_email, appId))
             .ReturnsAsync(true);
 
         var result = await _controller.ActivateApplication(_email, appId);
@@ -167,7 +169,7 @@ public class ApplicationControllerTests
             .Setup(s => s.ValidateAppBelongsToUser(_email, appId))
             .ReturnsAsync(true);
         _mockApplicationService
-            .Setup(s => s.ActivateApplicationById(appId))
+            .Setup(s => s.ActivateApplicationById(_email, appId))
             .ThrowsAsync(new InvalidOperationException("Database error"));
 
         var result = await _controller.ActivateApplication(_email, appId);
@@ -184,7 +186,7 @@ public class ApplicationControllerTests
             .Setup(s => s.ValidateAppBelongsToUser(_email, appId))
             .ReturnsAsync(true);
         _mockApplicationService
-            .Setup(s => s.ActivateApplicationById(appId))
+            .Setup(s => s.ActivateApplicationById(_email, appId))
             .ThrowsAsync(new Exception("Something went wrong"));
 
         var result = await _controller.ActivateApplication(_email, appId);

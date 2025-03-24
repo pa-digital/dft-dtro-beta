@@ -65,7 +65,7 @@ public class ApplicationController : ControllerBase
                 return Forbid();
             }
 
-            bool result = await _applicationService.ActivateApplicationById(appId);
+            bool result = await _applicationService.ActivateApplicationById(email, appId);
             return Ok(new { id = appId, status = "Active" });
 
         }
