@@ -10,7 +10,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.CreateDtroTest
 
         public static IEnumerable<object[]> GetDtroFileNames()
         {
-            DirectoryInfo directoryPath = new DirectoryInfo($"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionToTest}");
+            DirectoryInfo directoryPath = new DirectoryInfo($"{PathToDtroExamplesDirectory}/{schemaVersionToTest}");
             FileInfo[] files = directoryPath.GetFiles();
 
             foreach (FileInfo file in files)

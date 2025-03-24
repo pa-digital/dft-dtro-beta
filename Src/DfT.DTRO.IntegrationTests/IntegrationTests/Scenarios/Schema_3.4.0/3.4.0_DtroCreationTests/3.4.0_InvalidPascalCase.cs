@@ -3,7 +3,7 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.ErrorJsonResponseProcessor;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTests
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTests
 {
     public class InvalidPascalCase : BaseTest
     {
@@ -28,7 +28,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroTest
 
         public static IEnumerable<object[]> GetDtroFileNames()
         {
-            DirectoryInfo directoryPath = new DirectoryInfo($"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionWithInvalidPascalCase}");
+            DirectoryInfo directoryPath = new DirectoryInfo($"{PathToDtroExamplesDirectory}/{schemaVersionWithInvalidPascalCase}");
             FileInfo[] files = directoryPath.GetFiles();
 
             foreach (FileInfo file in files)

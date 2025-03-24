@@ -15,7 +15,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(UserWithAllPermissions);
             Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
 
-            FileHelper.DeleteFilesInDirectory(AbsolutePathToDtroExamplesTempDirectory);
+            FileHelper.DeleteFilesInDirectory(PathToDtroExamplesTempDirectory);
 
             if (EnvironmentName == EnvironmentType.Local)
             {

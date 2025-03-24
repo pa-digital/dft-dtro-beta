@@ -283,7 +283,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static string GetJsonFromFileAndModifyTra(string schemaVersion, string fileName, string traId)
         {
-            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroFile = $"{PathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
             string dtroJson = File.ReadAllText(dtroFile);
             string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
             return dtroJsonWithTraModified;
@@ -293,8 +293,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             string dtroJsonWithTraModified = GetJsonFromFileAndModifyTra(schemaVersion, fileName, traId);
             string nameOfCopyFile = $"{traId}-{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithTraModified);
+            string tempFilePath = $"{PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(PathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithTraModified);
             return tempFilePath;
         }
 
@@ -324,7 +324,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             string updateDtroJson = CreateJsonForDtroUpdate(schemaVersion, fileName, traId);
 
-            string directory = $"{TestConfig.AbsolutePathToDtroExamplesTempDirectory}";
+            string directory = $"{TestConfig.PathToDtroExamplesTempDirectory}";
             string updateDtroFileName = $"update-{traId}-{fileName}";
             string newFilePath = Path.Combine(directory, updateDtroFileName);
 
@@ -335,7 +335,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static string GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(string schemaVersion, string fileName, string traId)
         {
-            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroFile = $"{PathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
             string dtroJson = File.ReadAllText(dtroFile);
             string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
             string dtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(dtroJsonWithTraModified, "data.source.provision");
@@ -346,8 +346,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             string dtroWithDuplicateProvisionReference = GetJsonFromFileAndModifyTraAndDuplicateProvisionReference(schemaVersion, fileName, traId);
             string nameOfCopyFile = $"{traId}-{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroWithDuplicateProvisionReference);
+            string tempFilePath = $"{PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(PathToDtroExamplesTempDirectory, nameOfCopyFile, dtroWithDuplicateProvisionReference);
             return tempFilePath;
         }
 
@@ -363,8 +363,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             string updateJson = GetJsonAndCreateUpdateJsonWithTraModifiedAndDuplicateProvisionReference(schemaVersion, fileName, traId);
 
             string nameOfCopyFile = $"update-{traId}-{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, updateJson);
+            string tempFilePath = $"{PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(PathToDtroExamplesTempDirectory, nameOfCopyFile, updateJson);
             return tempFilePath;
         }
 
@@ -380,14 +380,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             string updateJson = GetJsonAndCreateUpdateJsonWithTraModifiedAndExternalReferenceLastUpdateDateInFuture(schemaVersion, fileName, traId);
 
             string nameOfCopyFile = $"update-{traId}-{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, updateJson);
+            string tempFilePath = $"{PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(PathToDtroExamplesTempDirectory, nameOfCopyFile, updateJson);
             return tempFilePath;
         }
 
         public static string GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(string schemaVersion, string fileName, string traId)
         {
-            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroFile = $"{PathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
             string dtroJson = File.ReadAllText(dtroFile);
             string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
 
@@ -401,14 +401,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             string dtroJsonWithFutureExternalReferenceLastUpdateDate = GetJsonFromFileAndModifyTraAndSetExternalReferenceLastUpdateDateToFuture(schemaVersion, fileName, traId);
             string nameOfCopyFile = $"{traId}-{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithFutureExternalReferenceLastUpdateDate);
+            string tempFilePath = $"{PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(PathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithFutureExternalReferenceLastUpdateDate);
             return tempFilePath;
         }
 
         public static string GetJsonFromFileAndModifyTraAndPointGeometry(string schemaVersion, string fileName, string traId, string pointGeometryString)
         {
-            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroFile = $"{PathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
             string dtroJson = File.ReadAllText(dtroFile);
             string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
 
@@ -422,14 +422,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             string jsonWithTraAndPointGeometryModified = GetJsonFromFileAndModifyTraAndPointGeometry(schemaVersion, fileName, traId, pointGeometryString);
             string nameOfCopyFile = $"{traId}-{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, jsonWithTraAndPointGeometryModified);
+            string tempFilePath = $"{PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonWithTraAndPointGeometryModified);
             return tempFilePath;
         }
 
         public static string GetJsonFromFileAndModifyTraAndLinearGeometry(string schemaVersion, string fileName, string traId, string linearGeometryString)
         {
-            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroFile = $"{PathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
             string dtroJson = File.ReadAllText(dtroFile);
             string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
 
@@ -443,14 +443,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             string jsonWithTraAndPointGeometryModified = GetJsonFromFileAndModifyTraAndLinearGeometry(schemaVersion, fileName, traId, linearGeometryString);
             string nameOfCopyFile = $"{traId}-{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, jsonWithTraAndPointGeometryModified);
+            string tempFilePath = $"{PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonWithTraAndPointGeometryModified);
             return tempFilePath;
         }
 
         public static string GetJsonFromFileAndModifyTraAndSchemaVersion(string schemaVersionToTest, string schemaVersionOfFilesToUse, string fileName, string traId)
         {
-            string createDtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersionOfFilesToUse}/{fileName}";
+            string createDtroFile = $"{PathToExamplesDirectory}/D-TROs/{schemaVersionOfFilesToUse}/{fileName}";
             string createDtroJson = File.ReadAllText(createDtroFile);
             string createDtroJsonWithTraUpdated = Dtros.ModifyTraIdInDtro(schemaVersionOfFilesToUse, createDtroJson, traId);
             string createDtroJsonWithSchemaVersionUpdated = Dtros.ModifySchemaVersionInDtro(createDtroJsonWithTraUpdated, schemaVersionToTest);
@@ -459,7 +459,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static string GetJsonFromFileAndModifyToFailSchemaValidation(string schemaVersion, string fileName, string traId)
         {
-            string dtroFile = $"{AbsolutePathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
+            string dtroFile = $"{PathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
             string dtroJson = File.ReadAllText(dtroFile);
             string dtroJsonWithTraModified = Dtros.ModifyTraIdInDtro(schemaVersion, dtroJson, traId);
 
@@ -493,8 +493,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             string dtroJsonWithTraModified = GetJsonFromFileAndModifyToFailSchemaValidation(schemaVersion, fileName, traId);
 
             string nameOfCopyFile = $"{traId}-{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithTraModified);
+            string tempFilePath = $"{PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(PathToDtroExamplesTempDirectory, nameOfCopyFile, dtroJsonWithTraModified);
             return tempFilePath;
         }
 
@@ -502,8 +502,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             string createDtroJsonWithSchemaVersionUpdated = GetJsonFromFileAndModifyTraAndSchemaVersion(schemaVersionToTest, schemaVersionOfFilesToUse, fileName, traId);
             string nameOfCopyFile = $"{traId}-{fileName}";
-            string tempFilePath = $"{AbsolutePathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
-            FileHelper.WriteStringToFile(AbsolutePathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithSchemaVersionUpdated);
+            string tempFilePath = $"{PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
+            FileHelper.WriteStringToFile(PathToDtroExamplesTempDirectory, nameOfCopyFile, createDtroJsonWithSchemaVersionUpdated);
             return tempFilePath;
         }
     }

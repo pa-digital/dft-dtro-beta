@@ -115,7 +115,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "Content-Type", "multipart/form-data" }
             };
 
-            HttpResponseMessage createSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.SchemasBase}/createFromFile/{schemaVersion}", headers, pathToJsonFile: $"{AbsolutePathToSchemaExamplesDirectory}/schemas-{schemaVersion}.json");
+            HttpResponseMessage createSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.SchemasBase}/createFromFile/{schemaVersion}", headers, pathToJsonFile: $"{PathToSchemaExamplesDirectory}/schemas-{schemaVersion}.json");
             return createSchemaResponse;
         }
 

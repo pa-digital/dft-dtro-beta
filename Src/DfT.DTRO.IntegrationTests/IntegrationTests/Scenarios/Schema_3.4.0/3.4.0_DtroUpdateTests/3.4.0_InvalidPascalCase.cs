@@ -29,7 +29,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.UpdateDtroTest
 
         public static IEnumerable<object[]> GetDtroNamesOfFilesWithInvalidCamelCase()
         {
-            DirectoryInfo directoryPath = new DirectoryInfo($"{AbsolutePathToDtroExamplesDirectory}/{schemaVersionWithInvalidPascalCase}");
+            DirectoryInfo directoryPath = new DirectoryInfo($"{PathToDtroExamplesDirectory}/{schemaVersionWithInvalidPascalCase}");
             FileInfo[] files = directoryPath.GetFiles();
 
             foreach (FileInfo file in files)

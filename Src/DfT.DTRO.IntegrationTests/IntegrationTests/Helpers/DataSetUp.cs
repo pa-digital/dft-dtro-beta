@@ -14,7 +14,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         public static async Task CreateRulesAndSchema(TestUser testUser)
         {
-            string[] schemaFiles = FileHelper.GetFileNames(AbsolutePathToSchemaExamplesDirectory);
+            string[] schemaFiles = FileHelper.GetFileNames(PathToSchemaExamplesDirectory);
             string[] schemaVersions = Schemas.GetSchemaVersions(schemaFiles);
 
             foreach (string schemaVersion in schemaVersions)
@@ -27,7 +27,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         public static async Task CreateRulesAndSchemaIfDoNotExist(TestUser testUser)
         {
-            string[] schemaFiles = FileHelper.GetFileNames(AbsolutePathToSchemaExamplesDirectory);
+            string[] schemaFiles = FileHelper.GetFileNames(PathToSchemaExamplesDirectory);
             string[] schemaVersions = Schemas.GetSchemaVersions(schemaFiles);
 
             foreach (string schemaVersion in schemaVersions)
