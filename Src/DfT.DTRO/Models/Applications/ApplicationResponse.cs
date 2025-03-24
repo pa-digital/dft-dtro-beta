@@ -58,5 +58,5 @@ public class ApplicationResponse
     /// The SWA code of the app.
     /// </summary>
     [DataMember(Name = "swaCode")]
-    public string SwaCode { get; set; }
+    public int SwaCode { get; set; }
 }

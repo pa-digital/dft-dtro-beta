@@ -99,7 +99,7 @@ public class ApplicationServiceTests
             AppId = appId,
             Name = "Test",
             Purpose = "Test",
-            SwaCode = "SwaCode",
+            SwaCode = 123,
             CreatedAt = 0, 
             LastModifiedAt = 0, 
             Status = "approved", 

@@ -418,8 +418,8 @@ namespace DfT.DTRO.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("text");
 
-                    b.Property<string>("SwaCode")
-                        .HasColumnType("text");
+                    b.Property<int>("SwaCode")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

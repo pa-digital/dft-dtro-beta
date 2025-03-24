@@ -10,11 +10,12 @@ namespace DfT.DTRO.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
+            migrationBuilder.AddColumn<int>(
                 name: "SwaCode",
                 table: "TrafficRegulationAuthorities",
-                type: "text",
-                nullable: true);
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
         }
 
         /// <inheritdoc />

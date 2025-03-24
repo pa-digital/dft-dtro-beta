@@ -14,7 +14,7 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    [Migration("20250318102335_AddSwaCodeColumnToTraTable")]
+    [Migration("20250324111520_AddSwaCodeColumnToTraTable")]
     partial class AddSwaCodeColumnToTraTable
     {
         /// <inheritdoc />
@@ -421,8 +421,8 @@ namespace DfT.DTRO.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("text");
 
-                    b.Property<string>("SwaCode")
-                        .HasColumnType("text");
+                    b.Property<int>("SwaCode")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

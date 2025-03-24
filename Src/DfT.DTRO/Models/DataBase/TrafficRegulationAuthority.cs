@@ -39,7 +39,7 @@ public class TrafficRegulationAuthority
     /// <summary>
     /// Traffic Regulation Authority SWA code
     /// </summary>
-    public string SwaCode { get; set; }
+    public int SwaCode { get; set; }
 
     /// <summary>
     /// Traffic Regulation Authority applications
