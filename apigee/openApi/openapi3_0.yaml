@@ -159,7 +159,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       requestBody:
         description: Properties passed by body
         content:
@@ -539,7 +538,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       responses:
         '200':
           description: Dtro Users retrieved successfully.
@@ -633,7 +631,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       requestBody:
         description: Object containing the dtro Users details.
         content:
@@ -692,7 +689,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       requestBody:
         description: Object containing the Dtro User details.
         content:
@@ -791,7 +787,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       requestBody:
         description: List of D-TRO User ID, comma separated
         content:
@@ -913,7 +908,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       responses:
         '200':
           description: The API is up and running.
@@ -944,7 +938,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       responses:
         '200':
           description: Database is available.
@@ -977,7 +970,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       requestBody:
         description: Object containing a metric request.
         content:
@@ -1036,7 +1028,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       requestBody:
         description: Object containing a metric request.
         content:
@@ -1105,7 +1096,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       responses:
         '200':
           description: OK.
@@ -1124,7 +1114,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       responses:
         '200':
           description: OK.
@@ -1298,7 +1287,6 @@ paths:
             - cso
             - dsp
             - dc
-      parameters:
       responses:
         '200':
           description: OK.
@@ -1319,7 +1307,6 @@ paths:
             - cso
             - dsp
             - dc
-      parameters:
       responses:
         '200':
           description: OK.
@@ -1713,7 +1700,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
       requestBody:
         description: Object containing System Config details.
         content:
@@ -1841,6 +1827,7 @@ paths:
         - oAuth:
             - cso
       parameters:
+        - $ref: "#/components/parameters/Email"
         - name: userId
           in: path
           required: true
