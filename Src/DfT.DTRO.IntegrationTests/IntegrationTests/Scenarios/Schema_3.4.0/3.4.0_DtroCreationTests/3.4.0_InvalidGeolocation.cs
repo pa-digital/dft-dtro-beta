@@ -43,6 +43,27 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
 
         [Theory]
         [MemberData(nameof(GetPointGeolocationStrings))]
+        public async Task DtroSubmittedFromJsonBodyWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
+        {
+            // Generate user to send DTRO and read it back
+            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
+            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
+
+            // Prepare DTRO
+            string createDtroJsonWithTraAndPointGeometryModified = Dtros.GetJsonFromFileAndModifyTraAndPointGeometry(schemaVersionToTest, pointGeometryFileName, publisher.TraId, pointGeometryString);
+
+            // Send DTRO
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraAndPointGeometryModified, publisher);
+            string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {pointGeometryFileName}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
+
+            // Evaluate response JSON rule failures
+            string expectedErrorJson = Dtros.GetPointGeolocationErrorJson(pointGeometryString);
+            JsonMethods.CompareJson(expectedErrorJson, createDtroResponseJson);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetPointGeolocationStrings))]
         public async Task DtroSubmittedFromFileWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
         {
             // Generate user to send DTRO and read it back
@@ -63,25 +84,26 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
         }
 
         [Theory]
-        [MemberData(nameof(GetPointGeolocationStrings))]
-        public async Task DtroSubmittedFromJsonBodyWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
+        [MemberData(nameof(GetLinearGeolocationStrings))]
+        public async Task DtroSubmittedFromJsonBodyWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
-            string createDtroJsonWithTraAndPointGeometryModified = Dtros.GetJsonFromFileAndModifyTraAndPointGeometry(schemaVersionToTest, pointGeometryFileName, publisher.TraId, pointGeometryString);
+            string createDtroJsonWithTraAndLinearGeometryModified = Dtros.GetJsonFromFileAndModifyTraAndLinearGeometry(schemaVersionToTest, linearGeometryFileName, publisher.TraId, linearGeometryString);
 
             // Send DTRO
-            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraAndPointGeometryModified, publisher);
+            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraAndLinearGeometryModified, publisher);
             string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
-            Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {pointGeometryFileName}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
+            Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {linearGeometryFileName}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Evaluate response JSON rule failures
-            string expectedErrorJson = Dtros.GetPointGeolocationErrorJson(pointGeometryString);
+            string expectedErrorJson = Dtros.GetLinearGeolocationErrorJson(linearGeometryString);
             JsonMethods.CompareJson(expectedErrorJson, createDtroResponseJson);
         }
+
         [Theory]
         [MemberData(nameof(GetLinearGeolocationStrings))]
         public async Task DtroSubmittedFromFileWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
@@ -97,27 +119,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
             HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromFileAsync(tempFilePath, publisher);
             string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {Path.GetFileName(tempFilePath)}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
-
-            // Evaluate response JSON rule failures
-            string expectedErrorJson = Dtros.GetLinearGeolocationErrorJson(linearGeometryString);
-            JsonMethods.CompareJson(expectedErrorJson, createDtroResponseJson);
-        }
-
-        [Theory]
-        [MemberData(nameof(GetLinearGeolocationStrings))]
-        public async Task DtroSubmittedFromJsonBodyWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
-        {
-            // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            await DtroUsers.CreateUserForDataSetUpAsync(publisher);
-
-            // Prepare DTRO
-            string createDtroJsonWithTraAndLinearGeometryModified = Dtros.GetJsonFromFileAndModifyTraAndLinearGeometry(schemaVersionToTest, linearGeometryFileName, publisher.TraId, linearGeometryString);
-
-            // Send DTRO
-            HttpResponseMessage createDtroResponse = await Dtros.CreateDtroFromJsonBodyAsync(createDtroJsonWithTraAndLinearGeometryModified, publisher);
-            string createDtroResponseJson = await createDtroResponse.Content.ReadAsStringAsync();
-            Assert.True(HttpStatusCode.BadRequest == createDtroResponse.StatusCode, $"File {linearGeometryFileName}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {createDtroResponse.StatusCode}, with response body\n{createDtroResponseJson}");
 
             // Evaluate response JSON rule failures
             string expectedErrorJson = Dtros.GetLinearGeolocationErrorJson(linearGeometryString);

@@ -34,7 +34,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
-                                    .PutExternalReferenceLastUpdatedDateInFuture();
+                                    .SetExternalReferenceLastUpdatedDateInFuture();
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
@@ -61,7 +61,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
-                                    .PutExternalReferenceLastUpdatedDateInFuture();
+                                    .SetExternalReferenceLastUpdatedDateInFuture();
 
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher.TraId);
 

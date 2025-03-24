@@ -145,7 +145,7 @@ public static class DtroExtensions
         return dtroWithDuplicateProvisionReference;
     }
 
-    public static string PutExternalReferenceLastUpdatedDateInFuture(this string jsonString)
+    public static string SetExternalReferenceLastUpdatedDateInFuture(this string jsonString)
     {
         DateTime dateTomorrow = DateTime.Now.AddDays(1);
         string dateTomorrowFormatted = dateTomorrow.ToString("yyyy-MM-ddTHH:00:00");
