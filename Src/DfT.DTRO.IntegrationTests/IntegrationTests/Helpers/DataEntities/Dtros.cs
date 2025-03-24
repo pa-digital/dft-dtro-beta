@@ -281,6 +281,22 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return expectedErrorJson;
         }
 
+        public static string GetDuplicateProvisionReferenceErrorJson(string provisionReference)
+        {
+            string expectedErrorJson = $$"""
+            {
+                "ruleError_0": {
+                    "name": "'2' duplication reference",
+                    "message": "Provision reference '{{provisionReference}}' is present 2 times.",
+                    "path": "Source -> Provision -> reference",
+                    "rule": "Each provision 'reference' must be unique and of type 'string'"
+                }
+            }
+            """;
+
+            return expectedErrorJson;
+        }
+
         public static string GetJsonFromFileAndModifyTra(string schemaVersion, string fileName, string traId)
         {
             string dtroFile = $"{PathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";

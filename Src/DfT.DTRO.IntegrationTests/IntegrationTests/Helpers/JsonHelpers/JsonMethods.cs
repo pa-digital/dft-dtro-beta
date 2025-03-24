@@ -195,5 +195,20 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
             string json = await httpResponseMessage.Content.ReadAsStringAsync();
             return json;
         }
+
+        public static object GetValueAtJsonPath(string jsonString, string jsonPath)
+        {
+            try
+            {
+                JObject jsonObject = JObject.Parse(jsonString);
+                JToken token = jsonObject.SelectToken(jsonPath);
+
+                return token?.ToString() ?? null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error accessing JSON path: {jsonPath}. Exception: {ex.Message}");
+            }
+        }
     }
 }

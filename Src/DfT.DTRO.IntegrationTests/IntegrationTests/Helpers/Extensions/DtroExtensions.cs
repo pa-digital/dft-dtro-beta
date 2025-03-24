@@ -1,6 +1,7 @@
-using DfT.DTRO.Consts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.Consts;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 
@@ -136,5 +137,11 @@ public static class DtroExtensions
         string tempFilePath = $"{TestConfig.PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
         FileHelper.WriteStringToFile(TestConfig.PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonString);
         return tempFilePath;
+    }
+
+    public static string DuplicateProvisionReferenceInDtro(this string jsonString)
+    {
+        string dtroWithDuplicateProvisionReference = JsonMethods.CloneFirstItemInArrayAndAppend(jsonString, "data.source.provision");
+        return dtroWithDuplicateProvisionReference;
     }
 }
