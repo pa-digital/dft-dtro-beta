@@ -83,6 +83,7 @@ public class RegulatedPlaceValidationService : IRegulatedPlaceValidationService
         if (hasByways)
         {
             var byways = regulatedPlaces
+                .Where(regulatedPlace => regulatedPlace.HasField(Constants.BywayType))
                 .Select(regulatedPlace => 
                     regulatedPlace.GetValueOrDefault<string>(Constants.BywayType))
                 .ToList();

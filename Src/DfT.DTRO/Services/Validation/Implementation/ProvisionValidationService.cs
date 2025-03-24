@@ -39,7 +39,9 @@ public class ProvisionValidationService : IProvisionValidationService
                                       provisions.Any(provision => provision.HasField(Constants.ComingIntoForceDate));
         if (hasComingIntoForceDates)
         {
-            var comingIntoForceDates = provisions.Select(provision =>
+            var comingIntoForceDates = provisions.
+                Where(provision => provision.HasField(Constants.ComingIntoForceDate))
+                .Select(provision =>
                 provision.GetValueOrDefault<string>(Constants.ComingIntoForceDate))
                 .ToList();
             var areValidDates = comingIntoForceDates
