@@ -518,4 +518,9 @@ public class DtroDal : IDtroDal
         await _dtroContext.SaveChangesAsync();
         return true;
     }
+
+    public async Task<int> GetDtroSubmissionCount()
+    {
+        return await _dtroContext.Dtros.CountAsync();
+    }
 }

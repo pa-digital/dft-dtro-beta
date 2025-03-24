@@ -759,4 +759,26 @@ public class DTROsController : ControllerBase
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
+
+    /// <summary>
+    /// Return a count of submitted D-TROs
+    /// </summary>
+    /// <response code="200">Success</response>
+    /// <response code="500">Internal Server Error.</response>
+    [HttpGet(RouteTemplates.DtrosCount)]
+    [SwaggerResponse(statusCode: 200, description: "Successfully retrieved DTRO count")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error")]
+    public async Task<IActionResult> GetDTROSubmissionCount()
+    {
+        try
+        {
+            int count = await _dtroService.GetDtroSubmissionCount();
+            return Ok(new DtroCountResponse { Count = count });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
+        }
+    }
+
 }

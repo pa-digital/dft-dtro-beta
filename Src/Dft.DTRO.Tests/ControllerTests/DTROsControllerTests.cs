@@ -188,4 +188,30 @@ public class DTROsControllerTests
 
         Assert.Equal(200, ((ObjectResult)actual).StatusCode);
     }
+
+    [Fact]
+    public async Task GetDTROSubmissionCountReturnsOkWithCorrectCount()
+    {
+        int expectedCount = 5;
+        _mockDtroService.Setup(s => s.GetDtroSubmissionCount()).ReturnsAsync(expectedCount);
+
+        var result = await _sut.GetDTROSubmissionCount();
+
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var responseData = Assert.IsType<DtroCountResponse>(okResult.Value);
+        Assert.Equal(expectedCount, responseData.Count);
+    }
+
+    [Fact]
+    public async Task GetDTROSubmissionCountReturns500OnException()
+    {
+        _mockDtroService.Setup(s => s.GetDtroSubmissionCount()).ThrowsAsync(new Exception("Database error"));
+
+        var result = await _sut.GetDTROSubmissionCount();
+        var statusResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, statusResult.StatusCode);
+
+        var errorResponse = Assert.IsType<ApiErrorResponse>(statusResult.Value);
+        Assert.Equal("Internal Server Error", errorResponse.Message);
+    }
 }
