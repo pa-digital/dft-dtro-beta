@@ -22,6 +22,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
     private readonly IRateLineValidationService _rateLineValidationService;
     private readonly IVehicleCharacteristicsValidationService _vehicleCharacteristicsValidationService;
     private readonly IPermitConditionValidationService _permitConditionValidationService;
+    private readonly IEmissionValidationService _emissionsValidationService;
 
     /// <inheritdoc cref="IDtroGroupValidatorService"/>
     public DtroGroupValidatorService(
@@ -43,7 +44,8 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         IRateLineCollectionValidationService rateLineCollectionValidationService,
         IRateLineValidationService rateLineValidationService,
         IVehicleCharacteristicsValidationService vehicleCharacteristicsValidationService,
-        IPermitConditionValidationService permitConditionValidationService)
+        IPermitConditionValidationService permitConditionValidationService,
+        IEmissionValidationService emissionsValidationService)
     {
         _jsonSchemaValidationService = jsonSchemaValidationService;
         _semanticValidationService = semanticValidationService;
@@ -65,6 +67,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         _rateLineValidationService = rateLineValidationService;
         _vehicleCharacteristicsValidationService = vehicleCharacteristicsValidationService;
         _permitConditionValidationService = permitConditionValidationService;
+        _emissionsValidationService = emissionsValidationService;
     }
 
     /// <inheritdoc cref="IDtroGroupValidatorService"/>
@@ -208,6 +211,12 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         }
 
         errors = _permitConditionValidationService.Validate(dtroSubmit);
+        if (errors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
+        }
+
+        errors = _emissionsValidationService.Validate(dtroSubmit);
         if (errors.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };

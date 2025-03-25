@@ -55,6 +55,8 @@ public static class Constants
 
     public static IEnumerable<string> PermitTypes => typeof(PermitType).GetDisplayNames<PermitType>();
 
+    public static IEnumerable<string> EmissionClassificationEuroTypes =>
+        typeof(EmissionClassificationEuroType).GetDisplayNames<EmissionClassificationEuroType>();
     public static List<string> PossibleConditions => ["conditions", "Condition", "ConditionSet"];
 
     public static List<int> MphValues => [10, 20, 30, 40, 50, 60, 70];
@@ -236,9 +238,15 @@ public static class Constants
 
     public static string PermitCondition => "PermitCondition";
 
+    public static string Emissions => "Emissions";
+
+    public static string EmissionClassificationEuro => "emissionClassificationEuro";
+
     public static string VehicleUsageTypeExtension => "VehicleUsageTypeExtension";
 
     public static string PermitTypeExtension => "PermitTypeExtension";
+
+    public static string EmissionClasificationEuroTypeExtension => "EmissionClassificationEuroTypeExtension";
 
     public static string Definition => "definition";
 
