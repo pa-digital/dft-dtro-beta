@@ -15,7 +15,7 @@ To execute the integration tests locally against localhost:
 dotnet test --logger "html;LogFileName=test-results.html"
 ```
 
-You can view the test results at Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html
+You can view the test results at `Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html`.
 
 # Debugging
 If a test is failing on a particular HTTP request and you require further information (for example, if a request is returning an internal server error with no body), do the following:
