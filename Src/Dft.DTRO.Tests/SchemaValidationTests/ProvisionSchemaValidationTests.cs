@@ -84,6 +84,15 @@ public class ProvisionSchemaValidationTests : IDisposable
         Assert.False(isValid);
     }
 
+    [Fact]
+    public void InvalidExpectedOccupancyDurationShouldFail()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "ExpectedOccupancyDurationInvalidFormat.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.False(isValid);
+    }
+
     public void Dispose() { }
 
 }
