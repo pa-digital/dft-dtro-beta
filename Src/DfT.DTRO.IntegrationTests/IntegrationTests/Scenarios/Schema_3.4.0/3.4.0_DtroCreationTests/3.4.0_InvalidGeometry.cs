@@ -8,13 +8,13 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTests
 {
     // DPPB-1235
-    public class InvalidGeolocation : BaseTest
+    public class InvalidGeometry : BaseTest
     {
         readonly static string schemaVersionToTest = "3.4.0";
         readonly string pointGeometryFileName = "JSON-3.4.0-example-TTRO-HeightRestrictionwithConditions.json";
         readonly string linearGeometryFileName = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
 
-        public static IEnumerable<object[]> GetPointGeolocationStrings()
+        public static IEnumerable<object[]> GetPointGeometryStrings()
         {
             return new List<object[]>
             {
@@ -27,7 +27,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
             };
         }
 
-        public static IEnumerable<object[]> GetLinearGeolocationStrings()
+        public static IEnumerable<object[]> GetLinearGeometryStrings()
         {
             return new List<object[]>
             {
@@ -43,7 +43,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
         }
 
         [Theory]
-        [MemberData(nameof(GetPointGeolocationStrings))]
+        [MemberData(nameof(GetPointGeometryStrings))]
         public async Task DtroSubmittedFromJsonBodyWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
         {
             // Generate user to send DTRO and read it back
@@ -63,12 +63,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
                 $"Response JSON for file {pointGeometryFileName}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON
-            string expectedErrorJson = Dtros.GetPointGeolocationErrorJson(pointGeometryString);
+            string expectedErrorJson = Dtros.GetPointGeometryErrorJson(pointGeometryString);
             JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
         }
 
         [Theory]
-        [MemberData(nameof(GetPointGeolocationStrings))]
+        [MemberData(nameof(GetPointGeometryStrings))]
         public async Task DtroSubmittedFromFileWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
         {
             // Generate user to send DTRO and read it back
@@ -90,12 +90,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
                 $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON rule failures
-            string expectedErrorJson = Dtros.GetPointGeolocationErrorJson(pointGeometryString);
+            string expectedErrorJson = Dtros.GetPointGeometryErrorJson(pointGeometryString);
             JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
         }
 
         [Theory]
-        [MemberData(nameof(GetLinearGeolocationStrings))]
+        [MemberData(nameof(GetLinearGeometryStrings))]
         public async Task DtroSubmittedFromJsonBodyWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
         {
             // Generate user to send DTRO and read it back
@@ -115,12 +115,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
                 $"Response JSON for file {linearGeometryFileName}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON rule failures
-            string expectedErrorJson = Dtros.GetLinearGeolocationErrorJson(linearGeometryString);
+            string expectedErrorJson = Dtros.GetLinearGeometryErrorJson(linearGeometryString);
             JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
         }
 
         [Theory]
-        [MemberData(nameof(GetLinearGeolocationStrings))]
+        [MemberData(nameof(GetLinearGeometryStrings))]
         public async Task DtroSubmittedFromFileWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
         {
             // Generate user to send DTRO and read it back
@@ -142,7 +142,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode, $"File {Path.GetFileName(dtroTempFilePath)}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {dtroCreationResponse.StatusCode}, with response body\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON rule failures
-            string expectedErrorJson = Dtros.GetLinearGeolocationErrorJson(linearGeometryString);
+            string expectedErrorJson = Dtros.GetLinearGeometryErrorJson(linearGeometryString);
             JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
         }
     }

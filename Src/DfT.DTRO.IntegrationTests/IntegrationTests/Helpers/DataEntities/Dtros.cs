@@ -252,7 +252,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return expectedErrorJson;
         }
 
-        public static string GetPointGeolocationErrorJson(string pointGeometryString)
+        public static string GetPointGeometryErrorJson(string pointGeometryString)
         {
             string expectedErrorJson = $$"""
             {
@@ -268,7 +268,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return expectedErrorJson;
         }
 
-        public static string GetLinearGeolocationErrorJson(string linearGeometryString)
+        public static string GetLinearGeometryErrorJson(string linearGeometryString)
         {
             string expectedErrorJson = $$"""
             {
