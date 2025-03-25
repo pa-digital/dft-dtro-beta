@@ -2,11 +2,11 @@ using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.UpdateDtroTests
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroScenarios
 {
     public class HappyScenarios : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.3.0";
+        readonly static string schemaVersionToTest = "3.3.1";
 
         public static IEnumerable<object[]> GetDtroFileNames()
         {

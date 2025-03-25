@@ -3,13 +3,13 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.ErrorJsonResponseProcessor;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroTests
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.UpdateDtroScenarios
 {
     public class InvalidCamelCase : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.3.1";
+        readonly static string schemaVersionToTest = "3.3.0";
         readonly static string schemaVersionWithInvalidCamelCase = "3.3.2";
-        readonly string fileToCreateDtroWithValidPascalCase = "JSON-3.3.1-example-Derbyshire 2024 DJ388 partial.json";
+        readonly string fileToCreateDtroWithValidPascalCase = "JSON-3.3.0-example-Derbyshire 2024 DJ388 partial.json";
 
         public static IEnumerable<object[]> GetDtroNamesOfFilesWithInvalidCamelCase()
         {

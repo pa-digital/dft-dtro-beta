@@ -2,7 +2,7 @@ using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.CreateDtroTests
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.CreateDtroScenarios
 {
     public class HappyScenarios : BaseTest
     {
