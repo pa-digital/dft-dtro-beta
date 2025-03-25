@@ -210,5 +210,30 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
                 throw new Exception($"Error accessing JSON path: {jsonPath}. Exception: {ex.Message}");
             }
         }
+
+        public static string SetValueAtJsonPath(string jsonString, string jsonPath, object newValue)
+        {
+            try
+            {
+                JObject jsonObject = JObject.Parse(jsonString);
+                JToken token = jsonObject.SelectToken(jsonPath);
+
+                if (token != null)
+                {
+                    token.Replace(JToken.FromObject(newValue));
+                    return jsonObject.ToString(Formatting.Indented);
+                }
+                else
+                {
+                    Console.WriteLine($"Path '{jsonPath}' not found in JSON.");
+                    return jsonString;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error modifying JSON at path: {jsonPath}. Exception: {ex.Message}");
+                return jsonString;
+            }
+        }
     }
 }

@@ -152,4 +152,16 @@ public static class DtroExtensions
         string dtroJsonWithFutureExternalReferenceLastUpdateDate = Dtros.ModifyExternalReferenceLastUpdateDate(jsonString, dateTomorrowFormatted);
         return dtroJsonWithFutureExternalReferenceLastUpdateDate;
     }
+
+    public static string ModifyPointGeometry(this string jsonString, string pointGeometryString)
+    {
+        string updatedPointGeometry = JsonMethods.SetValueAtJsonPath(jsonString, "data.source.provision[0].regulatedPlace[0].pointGeometry.point", pointGeometryString);
+        return updatedPointGeometry;
+    }
+
+    public static string ModifyLinearGeometry(this string jsonString, string linearGeometryString)
+    {
+        string updatedLinearGeometry = JsonMethods.SetValueAtJsonPath(jsonString, "data.source.provision[0].regulatedPlace[0].linearGeometry.linestring", linearGeometryString);
+        return updatedLinearGeometry;
+    }
 }

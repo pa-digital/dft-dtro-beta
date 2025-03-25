@@ -69,7 +69,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationTe
             HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher.AppId);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
+                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON
             string expectedErrorJson = Dtros.GetExternalReferenceLastUpdateDateErrorJson(fileName);
