@@ -63,7 +63,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
 
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
-                                    .ModifyPointGeometry(pointGeometryString);
+                                        .ModifyPointGeometry(pointGeometryString)
+                                        .ModifySourceActionType(schemaVersionToTest, "amendment")
+                                        .ModifyTroNameForUpdate(schemaVersionToTest);
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
@@ -79,7 +81,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
 
         [Theory]
         [MemberData(nameof(GetPointGeometryStrings))]
-        public async Task DtroSubmittedFromFileWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
+        public async Task DtroUpdatedFromFileWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
@@ -100,7 +102,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
 
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
-                                    .ModifyPointGeometry(pointGeometryString);
+                                        .ModifyPointGeometry(pointGeometryString)
+                                        .ModifySourceActionType(schemaVersionToTest, "amendment")
+                                        .ModifyTroNameForUpdate(schemaVersionToTest);
 
             string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFile(pointGeometryFileName, publisher.TraId);
 
@@ -118,7 +122,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
 
         [Theory]
         [MemberData(nameof(GetLinearGeometryStrings))]
-        public async Task DtroSubmittedFromJsonBodyWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
+        public async Task DtroUpdatedFromJsonBodyWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
@@ -137,7 +141,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
 
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
-                                    .ModifyLinearGeometry(linearGeometryString);
+                                        .ModifyLinearGeometry(linearGeometryString)
+                                        .ModifySourceActionType(schemaVersionToTest, "amendment")
+                                        .ModifyTroNameForUpdate(schemaVersionToTest);
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
@@ -153,7 +159,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
 
         [Theory]
         [MemberData(nameof(GetLinearGeometryStrings))]
-        public async Task DtroSubmittedFromFileWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
+        public async Task DtroUpdatedFromFileWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
@@ -174,7 +180,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
 
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
-                                    .ModifyLinearGeometry(linearGeometryString);
+                                        .ModifyLinearGeometry(linearGeometryString)
+                                        .ModifySourceActionType(schemaVersionToTest, "amendment")
+                                        .ModifyTroNameForUpdate(schemaVersionToTest);
 
             string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFile(linearGeometryFileName, publisher.TraId);
 
