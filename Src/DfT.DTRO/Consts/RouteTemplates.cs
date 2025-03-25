@@ -28,6 +28,8 @@ public static class RouteTemplates
     public const string DtrosFindProvisionHistory = DtrosBase + "/provisionHistory/{dtroId:guid}";
     public const string DtrosAssignOwnership = DtrosBase + "/ownership/{dtroId:guid}/{assignToTraId}";
 
+    public const string DtrosCount = DtrosBase + "/count";
+
     // Dtro Users
     public const string DtroUsersBase = "/dtroUsers";
     public const string DtroUsersFindAll = DtroUsersBase;
