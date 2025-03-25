@@ -30,6 +30,33 @@ public static class DtroExtensions
         return jsonObj.ToString();
     }
 
+    public static string ModifyToFailSchemaValidation(this string jsonString)
+    {
+        var jsonObj = JObject.Parse(jsonString);
+
+        // Remove "data.source.actionType"
+        jsonObj.SelectToken("data.source.actionType")?.Parent.Remove();
+
+        // Convert "data.source.currentTraOwner" to a string by wrapping it in quotes
+        var currentTraOwner = jsonObj.SelectToken("data.source.currentTraOwner");
+        if (currentTraOwner != null && currentTraOwner.Type == JTokenType.Integer)
+        {
+            jsonObj["data"]["source"]["currentTraOwner"] = currentTraOwner.ToString();
+        }
+
+        // Extract first element from "data.source.traAffected" array and replace "traAffected" key with that value
+        var traAffectedArray = jsonObj.SelectToken("data.source.traAffected") as JArray;
+        if (traAffectedArray != null && traAffectedArray.Count > 0)
+        {
+            jsonObj["data"]["source"]["traAffected"] = traAffectedArray[0];
+        }
+
+        // Add undefined new field
+        jsonObj["data"]["apples"] = "bananas";
+
+        return jsonObj.ToString();
+    }
+
     public static string ModifySourceActionType(this string jsonString, string schemaVersion, string actionType)
     {
         JObject jsonObj = JObject.Parse(jsonString);
