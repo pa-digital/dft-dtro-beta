@@ -1590,7 +1590,8 @@
                 },
                 "expectedOccupancyDuration": {
                     "description": "expected duration (in integer days) of the provision occupancy",
-                    "type": "integer"
+                    "type": "string",
+                    "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
                 },
                 "orderReportingPoint": {
                     "$ref": "#/$defs/orderReportingPointType"
