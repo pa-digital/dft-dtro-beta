@@ -25,5 +25,5 @@ If a test is failing on a particular HTTP request and you require further inform
 4. Continue test execution to the second breakpoint.
 5. Copy the value of `curlString`.
 6. Add a third breakpoint to a relevant line in the production code.
-7. Execute the copied curl.
+7. Execute the copied cURL.
 8. Step through the code from the third breakpoint.
