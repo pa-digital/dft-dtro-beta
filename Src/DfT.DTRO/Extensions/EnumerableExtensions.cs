@@ -30,11 +30,8 @@ public static class EnumerableExtensions
                 .GetField(enumValue.ToString())?
                 .GetCustomAttribute<DisplayAttribute>();
 
-        return displayAttribute?.Name ?? enumValue.ToString().ToLower();
+        return displayAttribute?.Name ?? enumValue.ToString();
     }
-
-    //public static string GetDisplayName(this Enum enumToDisplay) =>
-    //    enumToDisplay.GetAttribute<DisplayAttribute>().Name;
 
     private static TAttribute GetAttribute<TAttribute>(this Enum enumValue) where TAttribute : Attribute =>
         enumValue

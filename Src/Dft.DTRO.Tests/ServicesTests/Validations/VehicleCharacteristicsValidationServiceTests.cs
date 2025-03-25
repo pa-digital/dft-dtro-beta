@@ -30,10 +30,8 @@ public class VehicleCharacteristicsValidationServiceTests
                             {{
                                 ""ConditionSet"": [
                                     {{
-                                        ""operator"": ""and"",
                                         ""conditions"": [
                                             {{
-                                                ""negate"": false,
                                                 ""VehicleCharacteristics"": {{
                                                     ""vehicleUsage"": ""{vehicleUsageType}"",
                                                     ""VehicleUsageTypeExtension"": {{
@@ -57,17 +55,17 @@ public class VehicleCharacteristicsValidationServiceTests
     }
 
     [Theory]
-    [InlineData("access", "3.4.0", 1)]
-    [InlineData("accessToOffStreetPremises", "3.4.0", 1)]
-    [InlineData("authorisedVehicle", "3.4.0", 1)]
-    [InlineData("guidedBuses", "3.4.0", 1)]
-    [InlineData("highwayAuthorityPurpose", "3.4.0", 1)]
-    [InlineData("localBuses", "3.4.0", 1)]
-    [InlineData("localRegisteredPrivateHireVehicle", "3.4.0", 1)]
-    [InlineData("privateHireVehicle", "3.4.0", 1)]
-    [InlineData("busOperationPurpose", "3.4.0", 1)]
-    [InlineData("statutoryUndertakerPurpose", "3.4.0", 1)]
-    [InlineData("military", "3.4.0", 1)]
+    [InlineData("access", "3.4.0", 0)]
+    [InlineData("accessToOffStreetPremises", "3.4.0", 0)]
+    [InlineData("authorisedVehicle", "3.4.0", 0)]
+    [InlineData("guidedBuses", "3.4.0", 0)]
+    [InlineData("highwayAuthorityPurpose", "3.4.0", 0)]
+    [InlineData("localBuses", "3.4.0", 0)]
+    [InlineData("localRegisteredPrivateHireVehicle", "3.4.0", 0)]
+    [InlineData("privateHireVehicle", "3.4.0", 0)]
+    [InlineData("busOperationPurpose", "3.4.0", 0)]
+    [InlineData("statutoryUndertakerPurpose", "3.4.0", 0)]
+    [InlineData("military", "3.4.0", 0)]
     [InlineData("other", "3.4.0", 0)]
     public void ValidateVehicleUsageTypeWhenCondition(string vehicleUsageType, string version, int errorCount)
     {

@@ -10,32 +10,48 @@ public class VehicleCharacteristicsValidationService : IVehicleCharacteristicsVa
 
         var regulations = dtroSubmit
             .Data
-            .GetValueOrDefault<IList<object>>($"{Constants.Source}.{Constants.Provision}".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+            .GetValueOrDefault<IList<object>>($"{Constants.Source}.{Constants.Provision}"
+                .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
             .OfType<ExpandoObject>()
             .SelectMany(provision => provision
-                .GetValueOrDefault<IList<object>>($"{Constants.Regulation}".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                .GetValueOrDefault<IList<object>>(Constants.Regulation
+                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                 .OfType<ExpandoObject>())
             .ToList();
 
         foreach (var regulation in regulations)
         {
-            var hasConditionSet = regulation.HasField($"{Constants.ConditionSet}".ToBackwardCompatibility(dtroSubmit.SchemaVersion));
+            var hasConditionSet = regulation.HasField(Constants.ConditionSet
+                .ToBackwardCompatibility(dtroSubmit.SchemaVersion));
             if (hasConditionSet)
             {
                 var conditionSets = regulation
-                    .GetValueOrDefault<IList<object>>(Constants.ConditionSet.ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                    .GetValueOrDefault<IList<object>>(Constants.ConditionSet
+                        .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .OfType<ExpandoObject>()
                     .ToList();
 
-                var conditions = conditionSets
-                    .SelectMany(condition => condition
-                        .GetValueOrDefault<IList<object>>(Constants.Conditions
-                            .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                        .Cast<ExpandoObject>())
-                    .ToList();
+                List<ExpandoObject> conditions = [];
+                foreach (var possibleCondition in Constants.PossibleConditions)
+                {
+                    List<ExpandoObject> result = [];
+                    var hasPossibleCondition = regulation.HasField(possibleCondition);
+                    if (hasPossibleCondition)
+                    {
+                        result = conditionSets
+                            .SelectMany(condition => condition
+                                .GetValueOrDefault<IList<object>>(possibleCondition
+                                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                                .Cast<ExpandoObject>())
+                            .ToList();
+                    }
+
+                    conditions.AddRange(result);
+                }
 
                 var vechicleCharacteristics = conditions
                     .Select(condition => condition.GetExpandoOrDefault(Constants.VehicleCharacteristics))
+                    .Where(condition => condition != null)
                     .ToList();
 
                 if (vechicleCharacteristics.Any())
@@ -43,7 +59,11 @@ public class VehicleCharacteristicsValidationService : IVehicleCharacteristicsVa
                     var vehicleUsages = vechicleCharacteristics
                         .Select(vehicleCharacteristic => 
                             vehicleCharacteristic.GetValueOrDefault<string>(Constants.VehicleUsage))
+                        .Where(vehicleCharacteristic => !string.IsNullOrEmpty(vehicleCharacteristic))
                         .ToList();
+
+                    if (!vehicleUsages.Any())
+                        continue;
 
                     var areValidVehicleUsageTypes =
                         vehicleUsages.Any(vehicleUsage => Constants.VehicleUsageTypes.Contains(vehicleUsage));
@@ -129,23 +149,29 @@ public class VehicleCharacteristicsValidationService : IVehicleCharacteristicsVa
             else
             {
                 var conditions = regulation
-                    .GetValueOrDefault<IList<object>>(Constants.Condition.ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                    .GetValueOrDefault<IList<object>>(Constants.Condition
+                        .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .OfType<ExpandoObject>()
                     .ToList();
 
-                var vechicleCharacteristics = conditions
+                var vehicleCharacteristics = conditions
                     .Select(condition => condition.GetExpandoOrDefault(Constants.VehicleCharacteristics))
+                    .Where(condition => condition != null)
                     .ToList();
 
-                if (vechicleCharacteristics.Any())
+                if (vehicleCharacteristics.Any())
                 {
-                    var vehicleUsages = vechicleCharacteristics
+                    var vehicleUsages = vehicleCharacteristics
                         .Select(vehicleCharacteristic => 
                             vehicleCharacteristic.GetValueOrDefault<string>(Constants.VehicleUsage))
+                        .Where(vehicleCharacteristic => !string.IsNullOrEmpty(vehicleCharacteristic))
                         .ToList();
 
+                    if (!vehicleUsages.Any())
+                        continue;
+
                     var areValidVehicleUsageTypes = vehicleUsages
-                        .Any(Constants.VehicleUsageTypes.Equals);
+                        .Any(Constants.VehicleUsageTypes.Contains);
 
                     if (!areValidVehicleUsageTypes)
                     {
@@ -163,7 +189,7 @@ public class VehicleCharacteristicsValidationService : IVehicleCharacteristicsVa
                     {
                         if (vehicleUsage.Equals(VehicleUsageType.Other.GetDisplayName()))
                         {
-                            var vehicleUsageTypeExtension = vechicleCharacteristics
+                            var vehicleUsageTypeExtension = vehicleCharacteristics
                                 .Select(vehicleCharacteristic => vehicleCharacteristic
                                         .GetExpandoOrDefault(Constants.VehicleUsageTypeExtension))
                                 .FirstOrDefault();
