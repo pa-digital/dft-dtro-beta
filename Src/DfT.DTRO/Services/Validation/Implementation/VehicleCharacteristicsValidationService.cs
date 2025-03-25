@@ -32,21 +32,23 @@ public class VehicleCharacteristicsValidationService : IVehicleCharacteristicsVa
                     .ToList();
 
                 List<ExpandoObject> conditions = [];
-                foreach (var possibleCondition in Constants.PossibleConditions)
+                foreach (var conditionSet in conditionSets)
                 {
-                    List<ExpandoObject> result = [];
-                    var hasPossibleCondition = regulation.HasField(possibleCondition);
-                    if (hasPossibleCondition)
+                    foreach (var possibleCondition in Constants.PossibleConditions)
                     {
-                        result = conditionSets
-                            .SelectMany(condition => condition
+                        List<ExpandoObject> result = [];
+                        var hasPossibleCondition = conditionSet.HasField(possibleCondition);
+                        if (hasPossibleCondition)
+                        {
+                            result = conditionSet
                                 .GetValueOrDefault<IList<object>>(possibleCondition
-                                    .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
-                                .Cast<ExpandoObject>())
-                            .ToList();
-                    }
+                                        .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                                .Cast<ExpandoObject>()
+                                .ToList();
+                        }
 
-                    conditions.AddRange(result);
+                        conditions.AddRange(result);
+                    }
                 }
 
                 var vechicleCharacteristics = conditions

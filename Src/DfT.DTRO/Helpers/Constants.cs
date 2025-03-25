@@ -1,3 +1,5 @@
+using DfT.DTRO.Models.Conditions;
+
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace DfT.DTRO.Helpers;
 
@@ -50,6 +52,8 @@ public static class Constants
     public static IEnumerable<string> BywayTypes => typeof(BywayType).GetDisplayNames<BywayType>();
 
     public static IEnumerable<string> VehicleUsageTypes => typeof(VehicleUsageType).GetDisplayNames<VehicleUsageType>();
+
+    public static IEnumerable<string> PermitTypes => typeof(PermitType).GetDisplayNames<PermitType>();
 
     public static List<string> PossibleConditions => ["conditions", "Condition", "ConditionSet"];
 
@@ -230,7 +234,11 @@ public static class Constants
 
     public static string VehicleUsage => "vehicleUsage";
 
+    public static string PermitCondition => "PermitCondition";
+
     public static string VehicleUsageTypeExtension => "VehicleUsageTypeExtension";
+
+    public static string PermitTypeExtension => "PermitTypeExtension";
 
     public static string Definition => "definition";
 
