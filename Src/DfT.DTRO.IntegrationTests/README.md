@@ -21,7 +21,7 @@ You can view the test results at Src/DfT.DTRO.IntegrationTests/TestResults/test-
 If a test is failing on a particular HTTP request and you require further information (for example, if a request is returning an internal server error with no body), do the following:
 1. Put a breakpoint in the test code at a known failure point.
 2. Run the test in debug mode as far as the breakpoint.
-3. Add a second breakpoint to Src/DfT.DTRO.IntegrationTests/IntegrationTests/Helpers/HttpRequestHelper.cs just after the comment "Put breakpoint here to read curlString to debug a request".
+3. Add a second breakpoint to `Src/DfT.DTRO.IntegrationTests/IntegrationTests/Helpers/HttpRequestHelper.cs` just after the comment "Put breakpoint here to read curlString to debug a request".
 4. Continue test execution to the second breakpoint.
 5. Copy the value of `curlString`.
 6. Add a third breakpoint to a relevant line in the production code.
