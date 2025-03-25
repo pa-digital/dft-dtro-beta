@@ -7,15 +7,17 @@ public class ApplicationService : IApplicationService
     private readonly ITraDal _traDal;
     private readonly IUserDal _userDal;
     private readonly DtroContext _dtroContext;
+    private readonly IDtroUserDal _dtroUserDal;
 
 
-    public ApplicationService(IApplicationDal applicationDal, IApigeeAppRepository apigeeAppRepository, ITraDal traDal, IUserDal userDal, DtroContext dtroContext )
+    public ApplicationService(IApplicationDal applicationDal, IApigeeAppRepository apigeeAppRepository, ITraDal traDal, IUserDal userDal, DtroContext dtroContext, IDtroUserDal dtroUserDal)
     {
         _applicationDal = applicationDal;
         _apigeeAppRepository = apigeeAppRepository;
         _traDal = traDal;
         _userDal = userDal;
         _dtroContext = dtroContext;
+        _dtroUserDal = dtroUserDal;
     }
 
     public async Task<bool> ValidateAppBelongsToUser(string email, Guid appId)
@@ -71,14 +73,14 @@ public class ApplicationService : IApplicationService
                 // Create app in database
                 var appId = Guid.Parse(developerApp.AppId);
                 var typeId = appInput.Type == "Publish" ? ApplicationTypeType.Publish : ApplicationTypeType.Consume;
-                var userId = await _userDal.GetUserIdFromEmail(email);
+                var user = await _userDal.GetUserFromEmail(email);
 
                 Application application = new Application
                 {
                     Id = appId,
                     Nickname = appInput.Name,
                     ApplicationTypeId = typeId,
-                    UserId = userId,
+                    UserId = user.Id,
                     StatusId = ApplicationStatusType.Inactive,
                     TrafficRegulationAuthorityId = tra.Id,
                     Purpose = appInput.Purpose,
@@ -89,10 +91,26 @@ public class ApplicationService : IApplicationService
                 };
 
                 await _applicationDal.CreateApplication(application);
+
+                // Also create in DtroUsers table
+                DtroUserRequest dtroUser = new DtroUserRequest
+                {
+                    Id = Guid.NewGuid(),
+                    xAppId = appId,
+                    // TODO: when the table contains SWA code, update this to use tra.SwaCode
+                    TraId = 1,
+                    Name = user.Forename + " " + user.Surname,
+                    Prefix = appInput.Purpose == "Publish" ? "PUB" : "CON",
+                    UserGroup = appInput.Purpose == "Publish" ? UserGroup.All : UserGroup.Consumer,
+                };
+                await _dtroUserDal.SaveDtroUserAsync(dtroUser);
+                await transaction.CommitAsync();
+
                 return JsonHelper.ConvertObject<ApigeeDeveloperApp, App>(developerApp);
             }
             catch (Exception)
             {
+                // TODO: Delete app from Apigee
                 await transaction.RollbackAsync();
                 throw;
             }

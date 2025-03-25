@@ -6,5 +6,5 @@ public interface IUserDal
 
     Task DeleteUser(Guid userId);
 
-    Task<Guid> GetUserIdFromEmail(string email);
+    Task<User> GetUserFromEmail(string email);
 }

@@ -11,6 +11,7 @@ public class ApplicationServiceTests
     private readonly Mock<IUserDal> _userDalMock;
     private readonly ApplicationService _applicationService;
     private readonly DtroContext _dtroContext;
+    private readonly Mock<IDtroUserDal> _dtroUserDalMock;
     private readonly string _email;
 
     public ApplicationServiceTests()
@@ -19,6 +20,7 @@ public class ApplicationServiceTests
         _apigeeAppRepositoryMock = new Mock<IApigeeAppRepository>();
         _traDalMock = new Mock<ITraDal>();
         _userDalMock = new Mock<IUserDal>();
+        _dtroUserDalMock = new Mock<IDtroUserDal>();
 
         var options = new DbContextOptionsBuilder<DtroContext>()
             .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -31,7 +33,8 @@ public class ApplicationServiceTests
             _apigeeAppRepositoryMock.Object,
             _traDalMock.Object,
             _userDalMock.Object,
-            _dtroContext
+            _dtroContext,
+            _dtroUserDalMock.Object
         );
         _email = "user@test.com";
     }

@@ -31,12 +31,12 @@ public class UserDal(DtroContext context) : IUserDal
         }
     }
 
-    public async Task<Guid> GetUserIdFromEmail(string email)
+    public async Task<User> GetUserFromEmail(string email)
     {
         User user = await _context.Users
             .Where(u => u.Email == email)
             .SingleOrDefaultAsync();
         
-        return user?.Id ?? throw new Exception("User ID not found");
+        return user ?? throw new Exception("No matching user found");
     }
 }
