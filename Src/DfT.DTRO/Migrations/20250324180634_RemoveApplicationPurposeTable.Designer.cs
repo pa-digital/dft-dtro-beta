@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    partial class DtroContextModelSnapshot : ModelSnapshot
+    [Migration("20250324180634_RemoveApplicationPurposeTable")]
+    partial class RemoveApplicationPurposeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,20 +32,11 @@ namespace DfT.DTRO.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Activity")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AdditionalInformation")
-                        .HasColumnType("text");
-
                     b.Property<Guid>("ApplicationTypeId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DataType")
-                        .HasColumnType("text");
 
                     b.Property<Guid?>("DigitalServiceProviderId")
                         .HasColumnType("uuid");
@@ -54,9 +48,6 @@ namespace DfT.DTRO.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Purpose")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Regions")
                         .HasColumnType("text");
 
                     b.Property<Guid>("StatusId")

@@ -4,12 +4,18 @@ public class ApplicationService : IApplicationService
 {
     private readonly IApplicationDal _applicationDal;
     private readonly IApigeeAppRepository _apigeeAppRepository;
+    private readonly ITraDal _traDal;
+    private readonly IUserDal _userDal;
+    private readonly DtroContext _dtroContext;
 
 
-    public ApplicationService(IApplicationDal applicationDal, IApigeeAppRepository apigeeAppRepository)
+    public ApplicationService(IApplicationDal applicationDal, IApigeeAppRepository apigeeAppRepository, ITraDal traDal, IUserDal userDal, DtroContext dtroContext )
     {
         _applicationDal = applicationDal;
         _apigeeAppRepository = apigeeAppRepository;
+        _traDal = traDal;
+        _userDal = userDal;
+        _dtroContext = dtroContext;
     }
 
     public async Task<bool> ValidateAppBelongsToUser(string email, Guid appId)
@@ -40,7 +46,7 @@ public class ApplicationService : IApplicationService
 
     public async Task<PaginatedResponse<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest)
     {
-        PaginatedResult<ApplicationInactiveListDto> paginatedResult =  await _applicationDal.GetInactiveApplications(paginatedRequest);
+        PaginatedResult<ApplicationInactiveListDto> paginatedResult = await _applicationDal.GetInactiveApplications(paginatedRequest);
         return new(paginatedResult.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResult.TotalCount);
     }
 
@@ -54,6 +60,42 @@ public class ApplicationService : IApplicationService
     {
         var developerAppInput = JsonHelper.ConvertObject<AppInput, ApigeeDeveloperAppInput>(appInput);
         var developerApp = await _apigeeAppRepository.CreateApp(email, developerAppInput);
-        return JsonHelper.ConvertObject<ApigeeDeveloperApp, App>(developerApp);
+
+        using (var transaction = await _dtroContext.Database.BeginTransactionAsync())
+        {
+            try
+            {
+                // In integration, we need to make a dummy TRA for the application
+                TrafficRegulationAuthority tra = await _traDal.CreateTra();
+
+                // Create app in database
+                var appId = Guid.Parse(developerApp.AppId);
+                var typeId = appInput.Type == "Publish" ? ApplicationTypeType.Publish : ApplicationTypeType.Consume;
+                var userId = await _userDal.GetUserIdFromEmail(email);
+
+                Application application = new Application
+                {
+                    Id = appId,
+                    Nickname = appInput.Name,
+                    ApplicationTypeId = typeId,
+                    UserId = userId,
+                    StatusId = ApplicationStatusType.Inactive,
+                    TrafficRegulationAuthorityId = tra.Id,
+                    Purpose = appInput.Purpose,
+                    AdditionalInformation = appInput.AdditionalInformation,
+                    Activity = appInput.Activity,
+                    Regions = appInput.Regions,
+                    DataType = appInput.DataType
+                };
+
+                await _applicationDal.CreateApplication(application);
+                return JsonHelper.ConvertObject<ApigeeDeveloperApp, App>(developerApp);
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
     }
 }

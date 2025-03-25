@@ -5,4 +5,6 @@ public interface IUserDal
     Task<PaginatedResult<UserListDto>> GetUsers(PaginatedRequest paginatedRequest);
 
     Task DeleteUser(Guid userId);
+
+    Task<Guid> GetUserIdFromEmail(string email);
 }

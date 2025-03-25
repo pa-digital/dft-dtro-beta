@@ -54,8 +54,11 @@ public class Application
     /// </summary>
     public List<DTRO> Dtros { get; set; }
 
-    public Guid PurposeId { get; set; }
-    public ApplicationPurpose Purpose { get; set; }
+    public string? Purpose { get; set; }
+    public string? AdditionalInformation { get; set; }
+    public string? Activity { get; set; }
+    public string? Regions { get; set; }
+    public string? DataType { get; set; }
 
     public Guid UserId { get; set; }
     public User User { get; set; }

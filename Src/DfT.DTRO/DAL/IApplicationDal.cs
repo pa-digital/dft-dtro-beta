@@ -8,4 +8,5 @@ public interface IApplicationDal
     Task<List<ApplicationListDto>> GetApplicationList(string email);
     Task<PaginatedResult<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest);
     Task<bool> ActivateApplicationById(Guid appId);
+    Task CreateApplication(Application application);
 }
