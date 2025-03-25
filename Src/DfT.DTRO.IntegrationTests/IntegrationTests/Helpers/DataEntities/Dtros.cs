@@ -22,8 +22,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "Content-Type", "multipart/form-data" }
             };
 
-            HttpResponseMessage createDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: filePath);
-            return createDtroResponse;
+            HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: filePath);
+            return dtroCreationResponse;
         }
 
         public static async Task<HttpResponseMessage> UpdateDtroFromFileAsync(string filePath, string dtroId, TestUser testUser)
@@ -46,8 +46,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "Content-Type", "application/json" }
             };
 
-            HttpResponseMessage createDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonBody);
-            return createDtroResponse;
+            HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonBody);
+            return dtroCreationResponse;
         }
 
         public static async Task<HttpResponseMessage> UpdateDtroFromJsonBodyAsync(string jsonBody, string dtroId, TestUser testUser)

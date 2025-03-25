@@ -130,8 +130,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                 curl.Append($" --form 'file=@\"{pathToJsonFile}\"'");
             }
 
+            string curlString = curl.ToString();
+
+            // Put breakpoint here to read curlString to debug a request
+
             Console.WriteLine("\n========= cURL request =========");
-            Console.WriteLine(curl.ToString());
+            Console.WriteLine(curlString);
             Console.WriteLine("================================\n");
         }
 
