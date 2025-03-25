@@ -135,9 +135,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<string> GetDtroResponseJsonAsync(string dtroId, TestUser testUser)
         {
-            HttpResponseMessage getDtroResponse = await Dtros.GetDtroAsync(dtroId, testUser);
-            Assert.Equal(HttpStatusCode.OK, getDtroResponse.StatusCode);
-            string getDtroResponseJson = await getDtroResponse.Content.ReadAsStringAsync();
+            HttpResponseMessage dtroGetResponse = await Dtros.GetDtroAsync(dtroId, testUser);
+            string dtroGetResponseJson = await dtroGetResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.OK == dtroGetResponse.StatusCode,
+                $"Response JSON:\n\n{dtroGetResponseJson}");
+
+            string getDtroResponseJson = await dtroGetResponse.Content.ReadAsStringAsync();
             return getDtroResponseJson;
         }
 

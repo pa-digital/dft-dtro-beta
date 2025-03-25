@@ -8,7 +8,9 @@ public static class UserExtensions
 {
     public static async Task CreateUserForDataSetUpAsync(this TestUser publisher)
     {
-        HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(publisher);
-        Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+        HttpResponseMessage userCreationResponse = await DtroUsers.CreateUserAsync(publisher);
+        string userCreationResponseJson = await userCreationResponse.Content.ReadAsStringAsync();
+        Assert.True(HttpStatusCode.Created == userCreationResponse.StatusCode,
+            $"Response JSON:\n\n{userCreationResponseJson}");
     }
 }
