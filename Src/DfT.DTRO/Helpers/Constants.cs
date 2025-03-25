@@ -31,7 +31,7 @@ public static class Constants
 
     public static IEnumerable<string> OperatorTypes => typeof(OperatorType).GetDisplayNames<OperatorType>();
 
-    public static IEnumerable<string> SpeedLimitValueTypes => typeof(SpeedLimitValueType).GetDisplayNames<SpeedLimitValueType>().ToList();
+    public static IEnumerable<string> SpeedLimitValueTypes => typeof(SpeedLimitValueType).GetDisplayNames<SpeedLimitValueType>();
 
     public static IEnumerable<string> SpeedLimitProfileTypes => typeof(SpeedLimitBasedType).GetDisplayNames<SpeedLimitBasedType>();
 
@@ -43,7 +43,7 @@ public static class Constants
 
     public static IEnumerable<string> RateUsageConditionsTypes => typeof(RateUsageConditionsType).GetDisplayNames<RateUsageConditionsType>();
 
-    public static IEnumerable<string> RateLineTypes => typeof(RateLineType).GetDisplayNames<RateLineType>().ToList();
+    public static IEnumerable<string> RateLineTypes => typeof(RateLineType).GetDisplayNames<RateLineType>();
 
     public static IEnumerable<string> EventTypes => typeof(EventType).GetDisplayNames<EventType>();
 
@@ -110,6 +110,8 @@ public static class Constants
     public static string ConditionSet => "ConditionSet";
 
     public static string Condition => "Condition";
+
+    public static string Conditions => "conditions";
 
     public static string Operator => "operator";
 

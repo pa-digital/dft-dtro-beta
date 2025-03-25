@@ -23,13 +23,19 @@ public class VehicleCharacteristicsValidationService : IVehicleCharacteristicsVa
             if (hasConditionSet)
             {
                 var conditionSets = regulation
-                    .GetValueOrDefault<IList<object>>(
-                        $"{Constants.ConditionSet}".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                    .GetValueOrDefault<IList<object>>(Constants.ConditionSet.ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .OfType<ExpandoObject>()
                     .ToList();
 
-                var vechicleCharacteristics = conditionSets
-                    .Select(conditionSet => conditionSet.GetExpandoOrDefault(Constants.VehicleCharacteristics))
+                var conditions = conditionSets
+                    .SelectMany(condition => condition
+                        .GetValueOrDefault<IList<object>>(Constants.Conditions
+                            .ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                        .Cast<ExpandoObject>())
+                    .ToList();
+
+                var vechicleCharacteristics = conditions
+                    .Select(condition => condition.GetExpandoOrDefault(Constants.VehicleCharacteristics))
                     .ToList();
 
                 if (vechicleCharacteristics.Any())
@@ -39,15 +45,15 @@ public class VehicleCharacteristicsValidationService : IVehicleCharacteristicsVa
                             vehicleCharacteristic.GetValueOrDefault<string>(Constants.VehicleUsage))
                         .ToList();
 
-                    var areValidVehicleUsageTypes = vehicleUsages
-                        .Any(Constants.VehicleUsageTypes.Equals);
+                    var areValidVehicleUsageTypes =
+                        vehicleUsages.Any(vehicleUsage => Constants.VehicleUsageTypes.Contains(vehicleUsage));
 
                     if (!areValidVehicleUsageTypes)
                     {
                         SemanticValidationError newError = new()
                         {
                             Name = "Vehicle Usage Type",
-                            Message = $"Invalid '{Constants.VehicleUsageTypes}'",
+                            Message = $"Invalid '{Constants.VehicleUsage}'",
                             Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.Regulation} -> {Constants.ConditionSet} -> {Constants.VehicleCharacteristics}",
                             Rule = $"One of '{string.Join(", ", Constants.VehicleUsageTypes)}' vehicle usage type must be present",
                         };
@@ -123,8 +129,7 @@ public class VehicleCharacteristicsValidationService : IVehicleCharacteristicsVa
             else
             {
                 var conditions = regulation
-                    .GetValueOrDefault<IList<object>>(
-                        $"{Constants.Condition}".ToBackwardCompatibility(dtroSubmit.SchemaVersion))
+                    .GetValueOrDefault<IList<object>>(Constants.Condition.ToBackwardCompatibility(dtroSubmit.SchemaVersion))
                     .OfType<ExpandoObject>()
                     .ToList();
 
