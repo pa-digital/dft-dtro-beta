@@ -1,4 +1,4 @@
-﻿namespace DfT.DTRO.Services.Validation.Implementation;
+namespace DfT.DTRO.Services.Validation.Implementation;
 
 /// <inheritdoc cref="IDtroGroupValidatorService"/>
 public class DtroGroupValidatorService : IDtroGroupValidatorService
@@ -78,27 +78,21 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToSchemaVersion = error };
         }
 
-        // Temporarily remove schema validation logic while we improve it
-        // var jsonSchemaAsString = schema.Template.ToIndentedJsonString();
-        // var dtroSubmitJson = dtroSubmit.Data.ToIndentedJsonString();
-        // var requestComparedToSchema = _jsonSchemaValidationService.ValidateSchema(jsonSchemaAsString, dtroSubmitJson);
-        // if (requestComparedToSchema.Count > 0)
-        // {
-        //     return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
-        // }
+        // Schema validation logic is only supported for schemas 3.4.0 and above
+        if (_jsonSchemaValidationService.SchemaVersionSupportsValidation(dtroSubmit.SchemaVersion))
+        {
+            string jsonSchemaString = schema.Template.ToIndentedJsonString();
+            string payloadString = dtroSubmit.Data.ToIndentedJsonString();
+            var requestComparedToSchema = _jsonSchemaValidationService.ValidateSchema(jsonSchemaString, payloadString);
+            if (requestComparedToSchema.Count > 0)
+            {
+                return new DtroValidationException { RequestComparedToSchema = requestComparedToSchema.ToList() };
+            }
+        }
 
-        // Validation of camel case for schemas >= 3.3.2
         CasingValidationService casingValidationService = new();
         if (casingValidationService.SchemaVersionEnforcesCamelCase(dtroSubmit.SchemaVersion))
         {
-            List<string> invalidProperties = casingValidationService.ValidateCamelCase(dtroSubmit.Data);
-            if (invalidProperties.Count > 0)
-            {
-                string message = $"All property names must conform to camel case naming conventions. The following properties violate this: [{string.Join(", ", invalidProperties)}]";
-                throw new CaseException(message);
-            }
-
-            // Here, we turn all the Dtro object keys into Pascal case
             dtroSubmit.Data = casingValidationService.ConvertKeysToPascalCase(dtroSubmit.Data);
         }
         else
@@ -159,12 +153,6 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
-        errors = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
-        if (errors.Count > 0)
-        {
-            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
-        }
-
         errors = _regulationValidation.ValidateRegulation(dtroSubmit, schemaVersion);
         if (errors.Count > 0)
         {
@@ -199,6 +187,12 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
         if (tuple.Item2.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = tuple.Item2.MapFrom() };
+        }
+
+        errors = await _rulesValidation.ValidateRules(dtroSubmit, schemaVersion.ToString());
+        if (errors.Count > 0)
+        {
+            return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
         return null;

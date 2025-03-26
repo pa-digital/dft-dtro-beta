@@ -14,39 +14,49 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         public static async Task CreateRulesAndSchema(TestUser testUser)
         {
-            string[] schemaFiles = FileHelper.GetFileNames(AbsolutePathToSchemaExamplesDirectory);
+            string[] schemaFiles = FileHelper.GetFileNames(PathToSchemaExamplesDirectory);
             string[] schemaVersions = Schemas.GetSchemaVersions(schemaFiles);
 
             foreach (string schemaVersion in schemaVersions)
             {
-                HttpResponseMessage createRuleResponse = await Rules.CreateRuleSetFromFileAsync(schemaVersion, testUser);
-                Assert.Equal(HttpStatusCode.Created, createRuleResponse.StatusCode);
+                HttpResponseMessage ruleCreationResponse = await Rules.CreateRuleSetFromFileAsync(schemaVersion, testUser);
+                string ruleCreationResponseJson = await ruleCreationResponse.Content.ReadAsStringAsync();
+                Assert.True(HttpStatusCode.Created == ruleCreationResponse.StatusCode,
+                    $"Response JSON:\n\n{ruleCreationResponseJson}");
+
                 await Schemas.CreateAndActivateSchemaAsync(schemaVersion, testUser);
             }
         }
 
         public static async Task CreateRulesAndSchemaIfDoNotExist(TestUser testUser)
         {
-            string[] schemaFiles = FileHelper.GetFileNames(AbsolutePathToSchemaExamplesDirectory);
+            string[] schemaFiles = FileHelper.GetFileNames(PathToSchemaExamplesDirectory);
             string[] schemaVersions = Schemas.GetSchemaVersions(schemaFiles);
 
             foreach (string schemaVersion in schemaVersions)
             {
-                HttpResponseMessage getRulesResponse = await Rules.GetRuleSetAsync(schemaVersion, testUser);
-                if (getRulesResponse.StatusCode == HttpStatusCode.NotFound)
+                HttpResponseMessage rulesGetResponse = await Rules.GetRuleSetAsync(schemaVersion, testUser);
+                if (rulesGetResponse.StatusCode == HttpStatusCode.NotFound)
                 {
-                    HttpResponseMessage createRuleResponse = await Rules.CreateRuleSetFromFileAsync(schemaVersion, testUser);
-                    Assert.Equal(HttpStatusCode.Created, createRuleResponse.StatusCode);
+                    HttpResponseMessage ruleCreationResponse = await Rules.CreateRuleSetFromFileAsync(schemaVersion, testUser);
+                    string dtroCreationResponseJson = await ruleCreationResponse.Content.ReadAsStringAsync();
+                    Assert.True(HttpStatusCode.Created == ruleCreationResponse.StatusCode,
+                        $"Response JSON:\n\n{dtroCreationResponseJson}");
                 }
 
                 HttpResponseMessage getSchemaResponse = await Schemas.GetSchemaAsync(schemaVersion, testUser);
                 if (getSchemaResponse.StatusCode == HttpStatusCode.NotFound)
                 {
-                    HttpResponseMessage createSchemaResponse = await Schemas.CreateSchemaFromFileAsync(schemaVersion, testUser);
-                    Assert.Equal(HttpStatusCode.Created, createSchemaResponse.StatusCode);
+                    HttpResponseMessage schemaCreationResponse = await Schemas.CreateSchemaFromFileAsync(schemaVersion, testUser);
+                    string schemaCreationResponseJson = await schemaCreationResponse.Content.ReadAsStringAsync();
+                    Assert.True(HttpStatusCode.Created == schemaCreationResponse.StatusCode,
+                        $"Response JSON:\n\n{schemaCreationResponseJson}");
                 }
-                HttpResponseMessage activateSchemaResponse = await Schemas.ActivateSchemaAsync(schemaVersion, testUser);
-                Assert.Equal(HttpStatusCode.OK, activateSchemaResponse.StatusCode);
+
+                HttpResponseMessage schemaActivationResponse = await Schemas.ActivateSchemaAsync(schemaVersion, testUser);
+                string schemaActivationResponseJson = await schemaActivationResponse.Content.ReadAsStringAsync();
+                Assert.True(HttpStatusCode.OK == schemaActivationResponse.StatusCode,
+                    $"Response JSON:\n\n{schemaActivationResponseJson}");
             }
         }
     }
