@@ -75,7 +75,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
                                         .ModifyTroNameForUpdate(schemaVersionToTest)
                                         .ModifyToFailSchemaValidation();
 
-            string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFile(fileName, publisher.TraId);
+            string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(fileName, publisher.TraId);
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
