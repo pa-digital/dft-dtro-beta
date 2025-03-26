@@ -64,9 +64,13 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
                 UserEmail = a.User.Email,
                 Username = $"{a.User.Forename} {a.User.Surname}",
             });
-        IQueryable<ApplicationInactiveListDto> paginatedQuery = query
+        
+        int totalCount = await query.CountAsync();
+        List<ApplicationInactiveListDto> paginatedQuery = await query
             .Skip((paginatedRequest.Page - 1) * paginatedRequest.PageSize)
-            .Take(paginatedRequest.PageSize);
+            .Take(paginatedRequest.PageSize)
+            .ToListAsync();
+
         return new PaginatedResult<ApplicationInactiveListDto>(paginatedQuery.ToList(), paginatedQuery.Count());
     }
 

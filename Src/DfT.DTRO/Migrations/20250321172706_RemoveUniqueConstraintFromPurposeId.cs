@@ -19,7 +19,10 @@ namespace DfT.DTRO.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.CreateIndex(
+                    name: "IX_Applications_PurposeId",
+                    table: "Applications",
+                    column: "PurposeId");
         }
     }
 }
