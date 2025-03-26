@@ -67,21 +67,6 @@ public class Metric
     public int EventCount { get; set; }
 
     /// <summary>
-    /// Correlation ID of the request with which this metric document was created.
-    /// </summary>
-    [DataMember(Name = "createdCorrelationId")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public string CreatedCorrelationId { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request witch which this metric document was updated.
-    /// </summary>
-    [DataMember(Name = "lastUpdatedCorrelationId")]
-    [SwaggerSchema(ReadOnly = true)]
-    public string LastUpdatedCorrelationId { get; set; }
-
-    /// <summary>
     /// The user group
     /// </summary>
     [DataMember(Name = "userGroup")]

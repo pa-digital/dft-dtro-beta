@@ -53,4 +53,10 @@ public class ApplicationResponse
     /// </summary>
     [DataMember(Name = "purpose")]
     public string Purpose { get; set; }
+    
+    /// <summary>
+    /// The SWA code of the app.
+    /// </summary>
+    [DataMember(Name = "swaCode")]
+    public int SwaCode { get; set; }
 }

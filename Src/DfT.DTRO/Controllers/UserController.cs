@@ -58,11 +58,11 @@ public class UserController : ControllerBase
     /// <response code="500">Invalid operation or other exception</response>
     [HttpDelete(RouteTemplates.UsersDelete)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> DeleteUser([FromRoute] Guid userId)
+    public async Task<IActionResult> DeleteUser([FromHeader(Name = RequestHeaderNames.Email)][Required] string email, [FromRoute] Guid userId)
     {
         try
         {
-            await _userService.DeleteUser(userId);
+            await _userService.DeleteUser(email, userId);
             return NoContent();
         }
         catch (ArgumentNullException ex)

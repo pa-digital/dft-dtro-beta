@@ -25,13 +25,12 @@ fi
 if [ "$IS_PUBLISHER" = true ]; then
   # Add Publisher user (tra) to D-TRO
   RESPONSE=$(curl -X POST "https://${DOMAIN}.dft.gov.uk/v1/dtroUsers/createFromBody" \
-    -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
     -H "Authorization: Bearer ${access_token}" \
     -d '{
        "id": "'"${uuid}"'",
-       "xAppId": "'"${APP_ID}"'",
+       "appId": "'"${APP_ID}"'",
        "traId": '${TRA_ID}',
        "name": "'"${APP_NAME}"'",
        "prefix": "PUB",
@@ -53,13 +52,12 @@ if [ "$IS_PUBLISHER" = true ]; then
 else
   # Add Consumer user to D-TRO
   RESPONSE=$(curl -X POST "https://${DOMAIN}.dft.gov.uk/v1/dtroUsers/createFromBody" \
-    -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
     -H 'Content-Type: application/json' \
     -H 'Accept: text/plain' \
     -H "Authorization: Bearer ${access_token}" \
     -d '{
        "id": "'"${uuid}"'",
-       "xAppId": "'"${APP_ID}"'",
+       "appId": "'"${APP_ID}"'",
        "name": "'"${APP_NAME}"'",
        "prefix": "CON",
       "userGroup": "consumer"

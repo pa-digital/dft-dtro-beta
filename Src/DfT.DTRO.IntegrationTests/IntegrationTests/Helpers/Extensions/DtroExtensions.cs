@@ -84,7 +84,7 @@ public static class DtroExtensions
     {
         Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", appId },
+                { "App-Id", appId },
                 { "Content-Type", "application/json" }
             };
 
@@ -96,7 +96,7 @@ public static class DtroExtensions
     {
         Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", appId },
+                { "App-Id", appId },
                 { "Content-Type", "application/json" }
             };
 
@@ -108,7 +108,7 @@ public static class DtroExtensions
     {
         Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", appId },
+                { "App-Id", appId },
                 { "Content-Type", "multipart/form-data" }
             };
 
@@ -120,7 +120,7 @@ public static class DtroExtensions
     {
         Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", appId },
+                { "App-Id", appId },
                 { "Content-Type", "multipart/form-data" }
             };
 

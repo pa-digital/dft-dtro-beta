@@ -30,7 +30,6 @@ global using DfT.DTRO.Models.SwaCode;
 global using DfT.DTRO.Models.SystemConfig;
 global using DfT.DTRO.Models.Tra;
 global using DfT.DTRO.Models.Validation;
-global using DfT.DTRO.RequestCorrelation;
 global using DfT.DTRO.Services;
 global using DfT.DTRO.Services.Conversion;
 global using DfT.DTRO.Services.Mapping;

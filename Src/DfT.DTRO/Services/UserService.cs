@@ -3,10 +3,12 @@ namespace DfT.DTRO.Services;
 public class UserService : IUserService
 {
     private readonly IUserDal _userDal;
+    private readonly IApigeeDeveloperRepository _apigeeDeveloperRepository;
 
-    public UserService(IUserDal userDal)
+    public UserService(IUserDal userDal, IApigeeDeveloperRepository apigeeDeveloperRepository)
     {
         _userDal = userDal;
+        _apigeeDeveloperRepository = apigeeDeveloperRepository;
     }
     
     public async Task<PaginatedResponse<UserListDto>> GetUsers(PaginatedRequest paginatedRequest)
@@ -15,8 +17,9 @@ public class UserService : IUserService
         return new(paginatedResult.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResult.TotalCount);
     }
 
-    public async Task DeleteUser(Guid userId)
+    public async Task DeleteUser(string email, Guid userId)
     {
         await _userDal.DeleteUser(userId);
+        await _apigeeDeveloperRepository.DeleteDeveloper(email);
     }
 }

@@ -30,6 +30,7 @@ public class ApplicationService : IApplicationService
         var developerApp = await _apigeeAppRepository.GetApp(email, name);
         var applicationResponse = JsonHelper.ConvertObject<ApigeeDeveloperApp, ApplicationResponse>(developerApp);
         applicationResponse.Purpose = application.Purpose;
+        applicationResponse.SwaCode = application.SwaCode;
         return applicationResponse;
     }
 
@@ -44,9 +45,11 @@ public class ApplicationService : IApplicationService
         return new(paginatedResult.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResult.TotalCount);
     }
 
-    public async Task<bool> ActivateApplicationById(Guid appId)
+    public async Task<bool> ActivateApplicationById(string email, Guid appId)
     {
-        // TODO: approve application on Apigee
+        var application = await _applicationDal.GetApplicationDetails(appId);
+        var name = application.Name;
+        await _apigeeAppRepository.UpdateAppStatus(email, name, "approve");
         return await _applicationDal.ActivateApplicationById(appId);
     }
 

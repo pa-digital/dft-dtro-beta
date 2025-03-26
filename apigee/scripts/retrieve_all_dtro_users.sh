@@ -21,7 +21,6 @@ fi
 
 ## Get
 RESPONSE=$(curl -X GET "https://${DOMAIN}.dft.gov.uk/v1/dtroUsers" \
-  -H 'X-Correlation-ID: 41ae0471-d7de-4737-907f-cab2f0089796' \
   -H 'Accept: text/plain' \
   -H "Authorization: Bearer ${access_token}"
 )

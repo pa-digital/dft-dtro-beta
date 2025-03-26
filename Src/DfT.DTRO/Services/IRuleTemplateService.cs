@@ -12,9 +12,9 @@ public interface IRuleTemplateService
 
     Task<List<RuleTemplateOverview>> GetRuleTemplatesVersionsAsync();
 
-    Task<GuidResponse> SaveRuleTemplateAsJsonAsync(string version, string rule, string correlationId);
+    Task<GuidResponse> SaveRuleTemplateAsJsonAsync(string version, string rule);
 
-    Task<GuidResponse> UpdateRuleTemplateAsJsonAsync(string version, string rule, string correlationId);
+    Task<GuidResponse> UpdateRuleTemplateAsJsonAsync(string version, string rule);
 
     Task<bool> RuleTemplateExistsAsync(SchemaVersion schemaVersion);
 }

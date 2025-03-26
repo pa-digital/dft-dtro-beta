@@ -96,7 +96,7 @@ public class SchemaTemplateService : ISchemaTemplateService
         return await _schemaTemplateDal.GetSchemaTemplatesVersionsAsync();
     }
 
-    public async Task<GuidResponse> SaveSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId)
+    public async Task<GuidResponse> SaveSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject)
     {
         var schemaTemplateExists = await _schemaTemplateDal.SchemaTemplateExistsAsync(version);
         if (schemaTemplateExists)
@@ -104,10 +104,10 @@ public class SchemaTemplateService : ISchemaTemplateService
             throw new InvalidOperationException("Schema Template already Exists");
         }
 
-        return await _schemaTemplateDal.SaveSchemaTemplateAsJsonAsync(version, expandoObject, correlationId);
+        return await _schemaTemplateDal.SaveSchemaTemplateAsJsonAsync(version, expandoObject);
     }
 
-    public async Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId)
+    public async Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject)
     {
         var schemaTemplateExists = await _schemaTemplateDal.SchemaTemplateExistsAsync(version);
         if (!schemaTemplateExists)
@@ -115,6 +115,6 @@ public class SchemaTemplateService : ISchemaTemplateService
             throw new NotFoundException();
         }
 
-        return await _schemaTemplateDal.UpdateSchemaTemplateAsJsonAsync(version, expandoObject, correlationId);
+        return await _schemaTemplateDal.UpdateSchemaTemplateAsJsonAsync(version, expandoObject);
     }
 }

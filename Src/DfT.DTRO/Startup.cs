@@ -60,16 +60,13 @@ public class Startup
         services.AddHttpClient();
         services.AddStorage(Configuration);
         services.AddValidationServices();
-        services.AddRequestCorrelation();
         services.AddCache(Configuration);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
         app.UseRouting();
-
-        app.UseRequestCorrelation();
-
+        
         // 
 
         app.UseAuthorization();

@@ -43,21 +43,6 @@ public class SchemaTemplate
     public DateTime? LastUpdated { get; set; }
 
     /// <summary>
-    /// Correlation ID of the request with which this Schema document was created.
-    /// </summary>
-    [DataMember(Name = "createdCorrelationId")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public string CreatedCorrelationId { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request witch which Schema document was updated.
-    /// </summary>
-    [DataMember(Name = "lastUpdatedCorrelationId")]
-    [SwaggerSchema(ReadOnly = true)]
-    public string LastUpdatedCorrelationId { get; set; }
-
-    /// <summary>
     /// Flag representing whether the Schema is available.
     /// </summary>
     [DataMember(Name = "isActive")]

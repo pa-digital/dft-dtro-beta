@@ -13,9 +13,9 @@ public class MetricsService : IMetricsService
         _dtroUserDal = dtroUserDal;
     }
 
-    public async Task<bool> IncrementMetric(MetricType type, Guid xAppId)
+    public async Task<bool> IncrementMetric(MetricType type, Guid appId)
     {
-        var dtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var dtroUser = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
         var result = await _metricDal.IncrementMetric(type, dtroUser.Id, (UserGroup)dtroUser.UserGroup);
         return result;
     }

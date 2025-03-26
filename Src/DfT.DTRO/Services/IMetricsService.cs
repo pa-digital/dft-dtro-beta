@@ -9,5 +9,5 @@ public interface IMetricsService
     Task<MetricSummary> GetMetrics(MetricRequest metricRequest);
     Task<List<FullMetricSummary>> GetFullMetrics(MetricRequest metricRequest);
 
-    Task<bool> IncrementMetric(MetricType type, Guid xAppId);
+    Task<bool> IncrementMetric(MetricType type, Guid appId);
 }

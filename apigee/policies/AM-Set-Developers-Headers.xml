@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage name="AM-Set-Developer-Headers">
+    <Set>
+        <Headers>
+            <Header name="App-Id">{developer.app.id}</Header>
+            <Header name="Email">{developer.email}</Header>
+        </Headers>
+    </Set>
+    <AssignTo>request</AssignTo>
+</AssignMessage>
