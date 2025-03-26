@@ -35,7 +35,7 @@ public class SemanticValidationServiceTests
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
-        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = sut.ValidateCreationRequest(dtro);
 
         Assert.Empty(result.Item2);
     }
@@ -52,7 +52,7 @@ public class SemanticValidationServiceTests
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
-        Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? actual = sut.ValidateCreationRequest(dtro);
 
         BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529200, NorthLatitude = 529200 };
         Assert.Equal(expected, actual.Item1);
@@ -70,7 +70,7 @@ public class SemanticValidationServiceTests
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
-        Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? actual = sut.ValidateCreationRequest(dtro);
 
         BoundingBox expected = new() { WestLongitude = 178805, SouthLatitude = 178805, EastLongitude = 529157, NorthLatitude = 529157 };
         Assert.Equal(expected, actual.Item1);
@@ -88,7 +88,7 @@ public class SemanticValidationServiceTests
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
-        Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? actual = sut.ValidateCreationRequest(dtro);
 
         BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529250, NorthLatitude = 529250 };
         Assert.Equal(expected, actual.Item1);
@@ -106,7 +106,7 @@ public class SemanticValidationServiceTests
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
-        Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? actual = sut.ValidateCreationRequest(dtro);
 
         BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529250, NorthLatitude = 529250 };
         Assert.Equal(expected, actual.Item1);
@@ -125,7 +125,7 @@ public class SemanticValidationServiceTests
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
-        Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? actual = sut.ValidateCreationRequest(dtro);
         Assert.Empty(actual.Item2);
     }
 
@@ -142,7 +142,7 @@ public class SemanticValidationServiceTests
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
-        Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? actual = sut.ValidateCreationRequest(dtro);
         Assert.NotEmpty(actual.Item2);
     }
 
@@ -159,7 +159,7 @@ public class SemanticValidationServiceTests
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
-        Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? actual = sut.ValidateCreationRequest(dtro);
         Assert.NotEmpty(actual.Item2);
     }
 
@@ -175,7 +175,7 @@ public class SemanticValidationServiceTests
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
-        Tuple<BoundingBox, List<SemanticValidationError>>? actual = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? actual = sut.ValidateCreationRequest(dtro);
         Assert.NotEmpty(actual.Item2);
     }
 
@@ -188,7 +188,7 @@ public class SemanticValidationServiceTests
         SemanticValidationService sut = new(_mockClock.Object, _mockDtroDal.Object,
             _mockConditionValidationService.Object, _geometryValidation, _loggingExtension);
 
-        Tuple<BoundingBox, List<SemanticValidationError>>? result = await sut.ValidateCreationRequest(dtro);
+        Tuple<BoundingBox, List<SemanticValidationError>>? result = sut.ValidateCreationRequest(dtro);
 
         Assert.NotEmpty(result.Item2);
     }

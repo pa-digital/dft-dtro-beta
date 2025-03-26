@@ -195,7 +195,7 @@ public class DtroGroupValidatorService : IDtroGroupValidatorService
             return new DtroValidationException { RequestComparedToRules = errors.MapFrom() };
         }
 
-        var tuple = await _semanticValidationService.ValidateCreationRequest(dtroSubmit);
+        var tuple = _semanticValidationService.ValidateCreationRequest(dtroSubmit);
         if (tuple.Item2.Count > 0)
         {
             return new DtroValidationException { RequestComparedToRules = tuple.Item2.MapFrom() };

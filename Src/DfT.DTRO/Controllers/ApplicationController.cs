@@ -184,7 +184,7 @@ public class ApplicationController : ControllerBase
             return StatusCode(500, new { message = "An unexpected error occurred.", error = ex.Message });
         }
     }
-    
+
     /// <summary>
     /// Retrieves application list for user
     /// </summary>
@@ -193,11 +193,11 @@ public class ApplicationController : ControllerBase
     /// <response code="500">Invalid operation or other exception</response>
     [HttpGet(RouteTemplates.ApplicationsFindAllInactive)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<ActionResult<PaginatedResponse<ApplicationInactiveListDto>>> FindInactiveApplications([FromQuery] PaginatedRequest paginatedRequest)
+    public ActionResult<PaginatedResponse<ApplicationInactiveListDto>> FindInactiveApplications([FromQuery] PaginatedRequest paginatedRequest)
     {
         try
         {
-            var result = await _applicationService.GetInactiveApplications(paginatedRequest);
+            var result = _applicationService.GetInactiveApplications(paginatedRequest);
             return Ok(result);
         }
         catch (ArgumentNullException ex)

@@ -45,7 +45,7 @@ public class SystemConfigController : ControllerBase
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
+            appId = _appIdMapperService.GetAppId(HttpContext);
             var res = await _systemConfigService.GetSystemConfigAsync(appId);
             _logger.LogInformation($"'{nameof(GetSystemConfig)}' method called");
             _loggingExtension.LogInformation(

@@ -17,7 +17,7 @@ public class SystemConfigControllerTests
         _mockLoggingExtension = new Mock<LoggingExtension>();
 
         _mockXappIdMapperService = new Mock<IAppIdMapperService>();
-        _mockXappIdMapperService.Setup(service => service.GetAppId(It.IsAny<HttpContext>())).ReturnsAsync(Guid.NewGuid());
+        _mockXappIdMapperService.Setup(service => service.GetAppId(It.IsAny<HttpContext>())).Returns(Guid.NewGuid());
 
 
         _controller = new SystemConfigController(

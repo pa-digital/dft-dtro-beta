@@ -50,7 +50,7 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
             .ToListAsync();
     }
 
-    public async Task<PaginatedResult<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest)
+    public PaginatedResult<ApplicationInactiveListDto> GetInactiveApplications(PaginatedRequest paginatedRequest)
     {
         IQueryable<ApplicationInactiveListDto> query = _context.Applications
             .Include(a => a.User)
@@ -95,7 +95,7 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
 
             return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }

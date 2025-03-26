@@ -72,14 +72,14 @@ public class ApplicationServiceTests
     {
         Guid appId = Guid.NewGuid();
         var expectedDetails = new ApplicationDetailsDto { AppId = appId, Name = "Test", Purpose = "Test" };
-        
+
         var expectedDeveloperApp = new ApigeeDeveloperApp()
         {
             AppId = appId.ToString(),
             Name = "Test",
-            CreatedAt = 0, 
-            LastModifiedAt = 0, 
-            Status = "approved", 
+            CreatedAt = 0,
+            LastModifiedAt = 0,
+            Status = "approved",
             DeveloperId = "dev-123",
             Credentials = new List<ApigeeDeveloperAppCredential>
             {
@@ -93,15 +93,15 @@ public class ApplicationServiceTests
                 }
             }
         };
-        
+
         var expectedResponse = new ApplicationResponse
         {
             AppId = appId,
             Name = "Test",
             Purpose = "Test",
-            CreatedAt = 0, 
-            LastModifiedAt = 0, 
-            Status = "approved", 
+            CreatedAt = 0,
+            LastModifiedAt = 0,
+            Status = "approved",
             DeveloperId = "dev-123",
             Credentials = new List<AppCredential>
             {
@@ -115,11 +115,11 @@ public class ApplicationServiceTests
                 }
             }
         };
-        
+
         _applicationDalMock
             .Setup(dal => dal.GetApplicationDetails(appId))
             .ReturnsAsync(expectedDetails);
-        
+
         _apigeeAppRepositoryMock
             .Setup(repository => repository.GetApp(_email, "Test"))
             .ReturnsAsync(expectedDeveloperApp);
@@ -142,27 +142,27 @@ public class ApplicationServiceTests
         var result = await _applicationService.GetApplications(_email);
         Assert.Equal(expectedList, result);
     }
-    
+
     [Fact]
     public async Task GetInactiveApplicationsShouldReturnInactiveApplications()
     {
-        
+
         var request = new PaginatedRequest { Page = 1, PageSize = 1 };
 
         var expectedList = new List<ApplicationInactiveListDto> {
             new() { TraName = "TraName", Type = "Type", UserEmail = "UserEmail", Username = "Username" },
             new() { TraName = "TraName2", Type = "Type2", UserEmail = "UserEmail2", Username = "Username2" }
         };
-        
+
         var paginatedResult = new PaginatedResult<ApplicationInactiveListDto>(expectedList, 2);
 
         var paginatedResponse = new PaginatedResponse<ApplicationInactiveListDto>(expectedList, 1, 2);
 
         _applicationDalMock
             .Setup(dal => dal.GetInactiveApplications(request))
-            .ReturnsAsync(paginatedResult);
+            .Returns(paginatedResult);
 
-        var result = await _applicationService.GetInactiveApplications(request);
+        var result = _applicationService.GetInactiveApplications(request);
         Assert.Equal(paginatedResponse.TotalCount, result.TotalCount);
     }
 

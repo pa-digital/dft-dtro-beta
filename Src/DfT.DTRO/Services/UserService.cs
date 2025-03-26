@@ -8,10 +8,10 @@ public class UserService : IUserService
     {
         _userDal = userDal;
     }
-    
-    public async Task<PaginatedResponse<UserListDto>> GetUsers(PaginatedRequest paginatedRequest)
+
+    public PaginatedResponse<UserListDto> GetUsers(PaginatedRequest paginatedRequest)
     {
-        var paginatedResult = await _userDal.GetUsers(paginatedRequest);
+        var paginatedResult = _userDal.GetUsers(paginatedRequest);
         return new(paginatedResult.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResult.TotalCount);
     }
 

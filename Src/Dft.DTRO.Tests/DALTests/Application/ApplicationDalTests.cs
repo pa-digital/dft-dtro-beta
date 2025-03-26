@@ -194,7 +194,7 @@ namespace Dft.DTRO.Tests.DALTests
         public async Task GetInactiveApplications_ShouldReturnInactiveApplicationForUserAdminUser()
         {
             var request = new PaginatedRequest { Page = 1, PageSize = 1 };
-            var apps = await _applicationDal.GetInactiveApplications(request);
+            var apps = _applicationDal.GetInactiveApplications(request);
             Assert.Equal(1, apps.TotalCount);
         }
 

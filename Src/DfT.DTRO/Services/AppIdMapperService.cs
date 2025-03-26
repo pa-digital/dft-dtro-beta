@@ -2,7 +2,7 @@
 
 public class AppIdMapperService : IAppIdMapperService
 {
-    public async Task<Guid> GetAppId(HttpContext context)
+    public Guid GetAppId(HttpContext context)
     {
         context.Request.Headers.TryGetValue("x-app-id", out var appId);
         context.Request.Headers.TryGetValue("x-app-id-override", out var appIdOverride);

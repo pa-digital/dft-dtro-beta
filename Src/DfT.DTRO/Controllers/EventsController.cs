@@ -54,7 +54,7 @@ public class EventsController : ControllerBase
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
+            appId = _appIdMapperService.GetAppId(HttpContext);
             DtroEventSearchResult response = await _eventSearchService.SearchAsync(search);
             await _metricsService.IncrementMetric(MetricType.Event, appId);
             _logger.LogInformation($"'{nameof(Events)}' method called '{search}'");

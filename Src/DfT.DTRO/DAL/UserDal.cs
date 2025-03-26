@@ -4,7 +4,7 @@ public class UserDal(DtroContext context) : IUserDal
 {
     private readonly DtroContext _context = context;
 
-    public async Task<PaginatedResult<UserListDto>> GetUsers(PaginatedRequest paginatedRequest)
+    public PaginatedResult<UserListDto> GetUsers(PaginatedRequest paginatedRequest)
     {
         IQueryable<UserListDto> query = _context.Users
             .Select(u => new UserListDto()
@@ -18,7 +18,7 @@ public class UserDal(DtroContext context) : IUserDal
             .Take(paginatedRequest.PageSize);
         return new PaginatedResult<UserListDto>(paginatedQuery.ToList(), paginatedQuery.Count());
     }
-    
+
     public async Task DeleteUser(Guid userId)
     {
         User user = await _context.Users.FindAsync(userId);

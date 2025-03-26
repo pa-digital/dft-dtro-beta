@@ -28,7 +28,7 @@ public class DTROsControllerTests
 
         _mockXAppIdMapperService
             .Setup(it => it.GetAppId(mockContext.Object))
-            .ReturnsAsync(() => _xAppId);
+            .Returns(() => _xAppId);
 
         _mockMetricsService
             .Setup(it => it.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<Guid>()))

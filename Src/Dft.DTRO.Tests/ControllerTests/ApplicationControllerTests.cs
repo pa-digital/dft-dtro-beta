@@ -55,9 +55,9 @@ public class ApplicationControllerTests
             AppId = appId,
             Name = "Test",
             Purpose = "Test",
-            CreatedAt = 0, 
-            LastModifiedAt = 0, 
-            Status = "approved", 
+            CreatedAt = 0,
+            LastModifiedAt = 0,
+            Status = "approved",
             DeveloperId = "dev-123",
             Credentials = new List<AppCredential>
             {
@@ -71,7 +71,7 @@ public class ApplicationControllerTests
                 }
             }
         };
-        
+
         _mockApplicationService.Setup(service => service.GetApplication(_xEmail, appId)).ReturnsAsync(expectedResponse);
         _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(true);
 
@@ -84,15 +84,15 @@ public class ApplicationControllerTests
     public async Task FindApplicationByIdNotUsersAppReturnsForbidden()
     {
         Guid appId = Guid.NewGuid();
-        
+
         var expectedResponse = new ApplicationResponse
         {
             AppId = appId,
             Name = "Test",
             Purpose = "Test",
-            CreatedAt = 0, 
-            LastModifiedAt = 0, 
-            Status = "approved", 
+            CreatedAt = 0,
+            LastModifiedAt = 0,
+            Status = "approved",
             DeveloperId = "dev-123",
             Credentials = new List<AppCredential>
             {
@@ -191,7 +191,7 @@ public class ApplicationControllerTests
         var objectResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, objectResult.StatusCode);
     }
-    
+
     [Fact]
     public async Task GetInactiveApplicationsValidUserReturnsOk()
     {
@@ -204,9 +204,9 @@ public class ApplicationControllerTests
 
         _mockApplicationService
             .Setup(it => it.GetInactiveApplications(request))
-            .ReturnsAsync(() => new PaginatedResponse<ApplicationInactiveListDto>(applications, 1, applications.Count));
+            .Returns(() => new PaginatedResponse<ApplicationInactiveListDto>(applications, 1, applications.Count));
 
-        var actual = await _controller.FindInactiveApplications(request);
+        var actual = _controller.FindInactiveApplications(request);
         var okResult = Assert.IsType<OkObjectResult>(actual.Result);
         Assert.Equal(200, okResult.StatusCode);
     }
@@ -218,23 +218,23 @@ public class ApplicationControllerTests
 
         _mockApplicationService
             .Setup(service => service.GetInactiveApplications(request))
-            .ThrowsAsync(new ArgumentNullException());
+            .Throws(new ArgumentNullException());
 
-        var actual = await _controller.FindInactiveApplications(request);
+        var actual = _controller.FindInactiveApplications(request);
         var requestResult = Assert.IsType<BadRequestObjectResult>(actual.Result);
         Assert.Equal(400, requestResult.StatusCode);
     }
 
     [Fact]
-    public async Task  GetPendingApplicationsThrowsInvalidOperationException()
+    public async Task GetPendingApplicationsThrowsInvalidOperationException()
     {
         var request = new PaginatedRequest { Page = 1, PageSize = 1 };
 
         _mockApplicationService
             .Setup(service => service.GetInactiveApplications(request))
-            .ThrowsAsync(new InvalidOperationException());
+            .Throws(new InvalidOperationException());
 
-        var actual = await _controller.FindInactiveApplications(request);
+        var actual = _controller.FindInactiveApplications(request);
         var requestResult = Assert.IsType<ObjectResult>(actual.Result);
         Assert.Equal(500, requestResult.StatusCode);
     }
@@ -246,9 +246,9 @@ public class ApplicationControllerTests
 
         _mockApplicationService
             .Setup(service => service.GetInactiveApplications(request))
-            .ThrowsAsync(new Exception());
+            .Throws(new Exception());
 
-        var actual = await _controller.FindInactiveApplications(request);
+        var actual = _controller.FindInactiveApplications(request);
         var requestResult = Assert.IsType<ObjectResult>(actual.Result);
         Assert.Equal(500, requestResult.StatusCode);
     }

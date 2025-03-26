@@ -52,7 +52,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build /p:TreatWarningsAsErrors=true --no-restore
 
       - name: Unit tests
         id: unit-tests

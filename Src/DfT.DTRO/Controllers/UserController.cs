@@ -14,7 +14,7 @@ public class UserController : ControllerBase
     {
         _userService = userService;
     }
-    
+
     /// <summary>
     /// Retrieve user list for user
     /// </summary>
@@ -28,11 +28,11 @@ public class UserController : ControllerBase
     [SwaggerResponse(statusCode: 404, type: typeof(ArgumentNullException), description: "Could not found any users")]
     [SwaggerResponse(statusCode: 500, type: typeof(InvalidOperationException), description: "An error occurred while fetching users")]
     [SwaggerResponse(statusCode: 500, type: typeof(Exception), description: "An unexpected error occurred")]
-    public async Task<ActionResult<PaginatedResponse<UserListDto>>> findUsers([FromQuery] PaginatedRequest request)
+    public ActionResult<PaginatedResponse<UserListDto>> findUsers([FromQuery] PaginatedRequest request)
     {
         try
         {
-            var result = await _userService.GetUsers(request);
+            var result = _userService.GetUsers(request);
             return Ok(result);
         }
         catch (ArgumentNullException ex)

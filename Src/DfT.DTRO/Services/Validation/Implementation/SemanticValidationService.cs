@@ -28,10 +28,10 @@ public class SemanticValidationService : ISemanticValidationService
         _loggingExtension = loggingExtension;
     }
 
-    public Task<Tuple<BoundingBox, List<SemanticValidationError>>> ValidateCreationRequest(DtroSubmit dtroSubmit) =>
+    public Tuple<BoundingBox, List<SemanticValidationError>> ValidateCreationRequest(DtroSubmit dtroSubmit) =>
         Validate(dtroSubmit.Data.ToIndentedJsonString(), dtroSubmit.SchemaVersion);
 
-    private async Task<Tuple<BoundingBox, List<SemanticValidationError>>> Validate(
+    private Tuple<BoundingBox, List<SemanticValidationError>> Validate(
         string dtroDataString, SchemaVersion dtroSchemaVersion)
     {
         List<SemanticValidationError> validationErrors = new();

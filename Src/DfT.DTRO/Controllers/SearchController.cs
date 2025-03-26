@@ -54,7 +54,7 @@ public class SearchController : ControllerBase
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
+            appId = _appIdMapperService.GetAppId(HttpContext);
             var response = await _searchService.SearchAsync(body);
             await _metricsService.IncrementMetric(MetricType.Search, appId);
             _logger.LogInformation($"'{nameof(SearchDtros)}' method called and body '{body}'");

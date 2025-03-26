@@ -9,6 +9,6 @@ public interface IApplicationService
     Task<bool> ValidateApplicationName(string appName);
     Task<ApplicationResponse> GetApplication(string email, Guid appId);
     Task<List<ApplicationListDto>> GetApplications(string email);
-    Task<PaginatedResponse<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest);
+    PaginatedResponse<ApplicationInactiveListDto> GetInactiveApplications(PaginatedRequest paginatedRequest);
     Task<bool> ActivateApplicationById(Guid appId);
 }

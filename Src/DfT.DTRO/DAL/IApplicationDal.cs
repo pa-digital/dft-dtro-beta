@@ -6,6 +6,6 @@ public interface IApplicationDal
     Task<bool> CheckApplicationNameDoesNotExist(string appName);
     Task<ApplicationDetailsDto> GetApplicationDetails(Guid appId);
     Task<List<ApplicationListDto>> GetApplicationList(string email);
-    Task<PaginatedResult<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest);
+    PaginatedResult<ApplicationInactiveListDto> GetInactiveApplications(PaginatedRequest paginatedRequest);
     Task<bool> ActivateApplicationById(Guid appId);
 }

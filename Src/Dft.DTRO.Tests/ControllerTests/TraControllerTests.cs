@@ -20,7 +20,7 @@ public class TraControllerTests
 
         _mockXAppIdMapperService
             .Setup(it => it.GetAppId(mockContext.Object))
-            .ReturnsAsync(() => xAppId);
+            .Returns(() => xAppId);
 
         _mockRequestCorrelationProvider
             .SetupGet(provider => provider.CorrelationId)

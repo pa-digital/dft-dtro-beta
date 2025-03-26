@@ -67,7 +67,7 @@ public class DTROsController : ControllerBase
 
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
+            appId = _appIdMapperService.GetAppId(HttpContext);
             using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
@@ -183,7 +183,7 @@ public class DTROsController : ControllerBase
 
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
+            appId = _appIdMapperService.GetAppId(HttpContext);
             using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
@@ -282,7 +282,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
+            appId = _appIdMapperService.GetAppId(HttpContext);
             GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, appId);
             await _metricsService.IncrementMetric(MetricType.Submission, appId);
             _logger.LogInformation($"'{nameof(CreateFromBody)}' method called using appId: '{appId}' and body '{dtroSubmit}'");
@@ -392,7 +392,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
+            appId = _appIdMapperService.GetAppId(HttpContext);
             GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, _correlationProvider.CorrelationId, appId);
             await _metricsService.IncrementMetric(MetricType.Submission, appId);
             _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using appId: '{appId}', unique identifier: '{dtroId}' and body: '{dtroSubmit}'");
@@ -561,7 +561,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
+            appId = _appIdMapperService.GetAppId(HttpContext);
             await _dtroService.DeleteDtroAsync(dtroId);
             await _metricsService.IncrementMetric(MetricType.Deletion, appId);
             _logger.LogInformation($"'{nameof(Delete)}' method called using appId: '{appId}' and unique identifier '{dtroId}'");
@@ -717,7 +717,7 @@ public class DTROsController : ControllerBase
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
+            appId = _appIdMapperService.GetAppId(HttpContext);
             await _dtroService.AssignOwnershipAsync(dtroId, appId, assignToTraId, _correlationProvider.CorrelationId);
             _logger.LogInformation($"'{nameof(AssignOwnership)}' method called using appId '{appId}', unique identifier '{dtroId}' and new assigned TRA Id '{assignToTraId}'");
             _loggingExtension.LogInformation(
