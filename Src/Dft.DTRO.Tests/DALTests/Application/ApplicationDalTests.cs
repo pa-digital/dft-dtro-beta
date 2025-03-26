@@ -129,23 +129,38 @@ namespace Dft.DTRO.Tests.DALTests
         [Fact]
         public async Task GetApplicationListShouldReturnApplicationForUserWithSingleApp()
         {
-            var apps = await _applicationDal.GetApplicationList("anotheruser@test.com");
-            Assert.Single(apps);
-            Assert.Equal("TestApp2", apps[0].Name);
+            var email = "anotheruser@test.com";
+            var paginatedRequest = new PaginatedRequest { Page = 1, PageSize = 10 };
+
+            var result = await _applicationDal.GetApplicationList(email, paginatedRequest);
+            Assert.NotNull(result);
+            Assert.Equal(1, result.TotalCount);
+            Assert.Single(result.Results);
+            Assert.Equal("TestApp2", result.Results.First().Name);
         }
 
         [Fact]
         public async Task GetApplicationListShouldReturnApplicationsForUserWithMultipleApps()
         {
-            var apps = await _applicationDal.GetApplicationList("user@test.com");
-            Assert.Equal(2, apps.Count);
+            var email = "user@test.com";
+            var paginatedRequest = new PaginatedRequest { Page = 1, PageSize = 10 };
+
+            var result = await _applicationDal.GetApplicationList(email, paginatedRequest);
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Results.Count);
+            Assert.Equal(1, result.TotalCount);
         }
 
         [Fact]
         public async Task GetApplicationList_ShouldReturnEmptyListWhenNoAppsForUser()
         {
-            var apps = await _applicationDal.GetApplicationList("nonexistent@test.com");
-            Assert.Empty(apps);
+            var email = "nonexistent@test.com";
+            var paginatedRequest = new PaginatedRequest { Page = 1, PageSize = 10 };
+
+            var result = await _applicationDal.GetApplicationList(email, paginatedRequest);
+            Assert.NotNull(result);
+            Assert.Empty(result.Results);
+            Assert.Equal(0, result.TotalCount);
         }
 
         [Fact]

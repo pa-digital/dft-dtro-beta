@@ -8,7 +8,7 @@ public interface IApplicationService
     Task<bool> ValidateAppBelongsToUser(string email, Guid appId);
     Task<bool> ValidateApplicationName(string appName);
     Task<ApplicationResponse> GetApplication(string email, Guid appId);
-    Task<List<ApplicationListDto>> GetApplications(string email);
+    Task<PaginatedResponse<ApplicationListDto>> GetApplications(string email, PaginatedRequest paginatedRequest);
     Task<PaginatedResponse<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest);
     Task<bool> ActivateApplicationById(Guid appId);
 }

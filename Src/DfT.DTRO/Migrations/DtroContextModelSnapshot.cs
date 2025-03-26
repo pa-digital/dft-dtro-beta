@@ -62,7 +62,7 @@ namespace DfT.DTRO.Migrations
                     b.Property<Guid>("StatusId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("TrafficRegulationAuthorityId")
+                    b.Property<Guid?>("TrafficRegulationAuthorityId")
                         .HasColumnType("uuid")
                         .HasColumnName("TrafficRegulationAuthorityId");
 
@@ -96,24 +96,8 @@ namespace DfT.DTRO.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationStatus", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6e563a53-05b6-4521-8323-896aecc27cc1"),
-                            Status = "Active"
-                        },
-                        new
-                        {
-                            Id = new Guid("3153c4a8-6434-46bf-99ff-98500c02e983"),
-                            Status = "Pending"
-                        },
-                        new
-                        {
-                            Id = new Guid("c47cc91d-0d20-47b0-8fc8-ec51fb5aae94"),
-                            Status = "Inactive"
-                        });
-                });
+                }
+            );
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationType", b =>
                 {
@@ -570,8 +554,7 @@ namespace DfT.DTRO.Migrations
                     b.HasOne("DfT.DTRO.Models.DataBase.TrafficRegulationAuthority", "TrafficRegulationAuthority")
                         .WithMany("Applications")
                         .HasForeignKey("TrafficRegulationAuthorityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("DfT.DTRO.Models.DataBase.User", "User")
                         .WithMany("Applications")

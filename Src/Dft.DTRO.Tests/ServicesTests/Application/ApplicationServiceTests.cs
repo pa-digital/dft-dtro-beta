@@ -156,12 +156,21 @@ public class ApplicationServiceTests
             new ApplicationListDto{ Id = Guid.NewGuid(), Name = "Test", Tra = "Test", Type = "Test" },
             new ApplicationListDto{ Id = Guid.NewGuid(), Name = "Another Test", Tra = "test TRA", Type = "Publish" }
         };
-        _applicationDalMock
-            .Setup(dal => dal.GetApplicationList(_email))
-            .ReturnsAsync(expectedList);
 
-        var result = await _applicationService.GetApplications(_email);
-        Assert.Equal(expectedList, result);
+        var paginatedRequest = new PaginatedRequest { Page = 1, PageSize = 10 };
+
+        var expectedResponse = new PaginatedResponse<ApplicationListDto>(
+            expectedList.AsReadOnly(), paginatedRequest.Page, expectedList.Count);
+
+        _applicationDalMock
+            .Setup(dal => dal.GetApplicationList(_email, paginatedRequest))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _applicationService.GetApplications(_email, paginatedRequest);
+        Assert.NotNull(result);
+        Assert.Equal(expectedResponse.Page, result.Page);
+        Assert.Equal(expectedResponse.TotalCount, result.TotalCount);
+        Assert.Equal(expectedResponse.Results, result.Results);
     }
     
     [Fact]

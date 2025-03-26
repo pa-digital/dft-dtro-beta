@@ -116,16 +116,31 @@ public class ApplicationControllerTests
     [Fact]
     public async Task FindApplicationsValidUserReturnsOk()
     {
+        var paginatedRequest = new PaginatedRequest { Page = 1, PageSize = 10 };
         var applicationListDtos = new List<ApplicationListDto>
         {
             new ApplicationListDto { Id = Guid.NewGuid(), Name = "App 1", Type = "Test", Tra = "Test" },
             new ApplicationListDto { Id = Guid.NewGuid(), Name = "App 2", Type = "Test", Tra = "Test" },
             new ApplicationListDto { Id = Guid.NewGuid(), Name = "App 3", Type = "Test", Tra = "Test" }
         };
-        _mockApplicationService.Setup(service => service.GetApplications(It.IsAny<string>())).ReturnsAsync(applicationListDtos);
-        var result = await _controller.FindApplications(_xEmail);
-        var okResult = Assert.IsType<OkObjectResult>(result);
-        Assert.Equal(200, okResult.StatusCode);
+
+        var paginatedResponse = new PaginatedResponse<ApplicationListDto>(
+            applicationListDtos.AsReadOnly(), paginatedRequest.Page, applicationListDtos.Count);
+
+        _mockApplicationService
+            .Setup(service => service.GetApplications(It.IsAny<string>(), It.IsAny<PaginatedRequest>()))
+            .ReturnsAsync(paginatedResponse);
+
+        var result = await _controller.FindApplications(_xEmail, paginatedRequest);
+
+        var actionResult = Assert.IsType<ActionResult<PaginatedResponse<ApplicationListDto>>>(result);
+        var okObjectResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+
+        Assert.Equal(200, okObjectResult.StatusCode);
+
+        var responseValue = Assert.IsType<PaginatedResponse<ApplicationListDto>>(okObjectResult.Value);
+        Assert.Equal(paginatedResponse.TotalCount, responseValue.TotalCount);
+        Assert.Equal(paginatedResponse.Results.Count(), responseValue.Results.Count());
     }
 
     [Fact]
