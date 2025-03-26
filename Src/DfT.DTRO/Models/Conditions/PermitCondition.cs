@@ -1,4 +1,20 @@
-﻿namespace DfT.DTRO.Models.Conditions;
+﻿using System.Text.Json.Serialization;
+using DfT.DTRO.Models.Conditions.Base;
+using DfT.DTRO.Models.Conditions.Internal;
+
+namespace DfT.DTRO.Models.Conditions;
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum PermitType
+{
+    Doctor,
+
+    Business,
+
+    Resident,
+
+    Other
+}
 
 public class PermitCondition : Condition
 {
