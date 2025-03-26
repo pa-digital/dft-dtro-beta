@@ -86,5 +86,3 @@ global using Microsoft.OpenApi.Models;
 global using Npgsql;
 global using NpgsqlTypes;
 global using Swashbuckle.AspNetCore.Annotations;
-global using DfT.DTRO.Models.Conditions.Base;
-global using DfT.DTRO.Models.Conditions.Internal;

@@ -1,25 +1,23 @@
-using DfT.DTRO.Models.Conditions;
-
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace DfT.DTRO.Helpers;
 
 public static class Constants
 {
-    public static IEnumerable<string> SourceActionTypes => typeof(SourceActionType).GetDisplayNames<SourceActionType>();
+    public static IEnumerable<string> SourceActionTypes => typeof(SourceActionType).GetDisplayNames<SourceActionType>().ToList();
 
-    public static IEnumerable<string> ProvisionActionTypes => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>();
+    public static IEnumerable<string> ProvisionActionTypes => typeof(ProvisionActionType).GetDisplayNames<ProvisionActionType>().ToList();
 
-    public static IEnumerable<string> OrderReportingPointTypes => typeof(OrderReportingPointType).GetDisplayNames<OrderReportingPointType>();
+    public static IEnumerable<string> OrderReportingPointTypes => typeof(OrderReportingPointType).GetDisplayNames<OrderReportingPointType>().ToList();
 
     public static IEnumerable<string> RegulatedPlaceTypes => typeof(RegulatedPlaceType).GetDisplayNames<RegulatedPlaceType>();
 
-    public static IEnumerable<string> PointTypes => typeof(PointType).GetDisplayNames<PointType>();
+    public static IEnumerable<string> PointTypes => typeof(PointType).GetDisplayNames<PointType>().ToList();
 
-    public static IEnumerable<string> LinearDirectionTypes => typeof(LinearDirectionType).GetDisplayNames<LinearDirectionType>();
+    public static IEnumerable<string> LinearDirectionTypes => typeof(LinearDirectionType).GetDisplayNames<LinearDirectionType>().ToList();
 
-    public static IEnumerable<string> LinearLateralPositionTypes => typeof(LinearLateralPositionType).GetDisplayNames<LinearLateralPositionType>();
+    public static IEnumerable<string> LinearLateralPositionTypes => typeof(LinearLateralPositionType).GetDisplayNames<LinearLateralPositionType>().ToList();
 
-    public static IEnumerable<string> LinearTypes => typeof(LinearType).GetDisplayNames<LinearType>();
+    public static IEnumerable<string> LinearTypes => typeof(LinearType).GetDisplayNames<LinearType>().ToList();
 
     public static IEnumerable<string> ConcreteGeometries => typeof(GeometryType).GetDisplayNames<GeometryType>();
 
@@ -27,39 +25,33 @@ public static class Constants
 
     public static IEnumerable<string> RegulationInstances => typeof(RegulationInstanceType).GetDisplayNames<RegulationInstanceType>();
 
-    public static IEnumerable<string> RegulationTypes => typeof(RegulationType).GetDisplayNames<RegulationType>();
+    public static IEnumerable<string> RegulationTypes => typeof(RegulationType).GetDisplayNames<RegulationType>().ToList();
 
     public static IEnumerable<string> PreviousConditionTypes => ConditionTypes.Select(conditionType => conditionType.ToBackwardCompatibility(new SchemaVersion("3.2.4")));
 
-    public static IEnumerable<string> OperatorTypes => typeof(OperatorType).GetDisplayNames<OperatorType>();
+    public static IEnumerable<string> OperatorTypes => typeof(OperatorType).GetDisplayNames<OperatorType>().ToList();
 
-    public static IEnumerable<string> SpeedLimitValueTypes => typeof(SpeedLimitValueType).GetDisplayNames<SpeedLimitValueType>();
+    public static IEnumerable<string> SpeedLimitValueTypes => typeof(SpeedLimitValueType).GetDisplayNames<SpeedLimitValueType>().ToList();
 
-    public static IEnumerable<string> SpeedLimitProfileTypes => typeof(SpeedLimitBasedType).GetDisplayNames<SpeedLimitBasedType>();
+    public static IEnumerable<string> SpeedLimitProfileTypes => typeof(SpeedLimitBasedType).GetDisplayNames<SpeedLimitBasedType>().ToList();
 
-    public static IEnumerable<string> SpeedLimitNatureTypes => typeof(SpeedLimitNatureType).GetDisplayNames<SpeedLimitNatureType>();
+    public static IEnumerable<string> SpeedLimitNatureTypes => typeof(SpeedLimitNatureType).GetDisplayNames<SpeedLimitNatureType>().ToList();
 
-    public static IEnumerable<string> RateTypes => typeof(RateType).GetDisplayNames<RateType>();
+    public static IEnumerable<string> RateTypes => typeof(RateType).GetDisplayNames<RateType>().ToList();
 
-    public static IEnumerable<string> CurrencyTypes => typeof(CurrencyType).GetDisplayNames<CurrencyType>();
+    public static IEnumerable<string> CurrencyTypes => typeof(CurrencyType).GetDisplayNames<CurrencyType>().ToList();
 
-    public static IEnumerable<string> RateUsageConditionsTypes => typeof(RateUsageConditionsType).GetDisplayNames<RateUsageConditionsType>();
+    public static IEnumerable<string> RateUsageConditionsTypes => typeof(RateUsageConditionsType).GetDisplayNames<RateUsageConditionsType>().ToList();
 
-    public static IEnumerable<string> RateLineTypes => typeof(RateLineType).GetDisplayNames<RateLineType>();
+    public static IEnumerable<string> RateLineTypes => typeof(RateLineType).GetDisplayNames<RateLineType>().ToList();
 
-    public static IEnumerable<string> EventTypes => typeof(EventType).GetDisplayNames<EventType>();
+    public static IEnumerable<string> EventTypes => typeof(EventType).GetDisplayNames<EventType>().ToList();
 
-    public static IEnumerable<string> BywayTypes => typeof(BywayType).GetDisplayNames<BywayType>();
+    public static IEnumerable<string> BywayTypes => typeof(BywayType).GetDisplayNames<BywayType>().ToList();
+    
+    public static List<string> PossibleConditions => new() { "conditions", "Condition", "ConditionSet" };
 
-    public static IEnumerable<string> VehicleUsageTypes => typeof(VehicleUsageType).GetDisplayNames<VehicleUsageType>();
-
-    public static IEnumerable<string> PermitTypes => typeof(PermitType).GetDisplayNames<PermitType>();
-
-    public static IEnumerable<string> EmissionClassificationEuroTypes =>
-        typeof(EmissionClassificationEuroType).GetDisplayNames<EmissionClassificationEuroType>();
-    public static List<string> PossibleConditions => ["conditions", "Condition", "ConditionSet"];
-
-    public static List<int> MphValues => [10, 20, 30, 40, 50, 60, 70];
+    public static List<int> MphValues => new() { 10, 20, 30, 40, 50, 60, 70 };
 
     public static string Value => "value";
 
@@ -107,17 +99,9 @@ public static class Constants
 
     public static string Type => "type";
 
-    public static string Regulation => "Regulation";
-
     public static string IsDynamic => "isDynamic";
 
     public static string TimeZone => "timeZone";
-
-    public static string ConditionSet => "ConditionSet";
-
-    public static string Condition => "Condition";
-
-    public static string Conditions => "conditions";
 
     public static string Operator => "operator";
 
@@ -231,24 +215,4 @@ public static class Constants
     public static string StatementOfReason => "statementOfReason";
 
     public static string UrlAdditionalInformation => "urlAdditionalInformation";
-
-    public static string VehicleCharacteristics => "VehicleCharacteristics";
-
-    public static string VehicleUsage => "vehicleUsage";
-
-    public static string PermitCondition => "PermitCondition";
-
-    public static string Emissions => "Emissions";
-
-    public static string EmissionClassificationEuro => "emissionClassificationEuro";
-
-    public static string VehicleUsageTypeExtension => "VehicleUsageTypeExtension";
-
-    public static string PermitTypeExtension => "PermitTypeExtension";
-
-    public static string EmissionClasificationEuroTypeExtension => "EmissionClassificationEuroTypeExtension";
-
-    public static string Definition => "definition";
-
-    public static string EnumeratedList => "enumeratedList";
 }
