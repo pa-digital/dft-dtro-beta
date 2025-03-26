@@ -106,7 +106,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
                                         .ModifyTroNameForUpdate(schemaVersionToTest);
 
-            string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFile(pointGeometryFileName, publisher.TraId);
+            string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(pointGeometryFileName, publisher.TraId);
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
@@ -184,7 +184,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
                                         .ModifyTroNameForUpdate(schemaVersionToTest);
 
-            string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFile(linearGeometryFileName, publisher.TraId);
+            string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(linearGeometryFileName, publisher.TraId);
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
