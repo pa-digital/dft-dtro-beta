@@ -18,7 +18,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 { "Content-Type", "multipart/form-data" }
             };
 
-            HttpResponseMessage createRuleResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.RulesBase}/createFromFile/{schemaVersion}", headers, pathToJsonFile: $"{AbsolutePathToRuleExamplesDirectory}/rules-{schemaVersion}.json");
+            HttpResponseMessage createRuleResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.RulesBase}/createFromFile/{schemaVersion}", headers, pathToJsonFile: $"{PathToRuleExamplesDirectory}/rules-{schemaVersion}.json");
             return createRuleResponse;
         }
 

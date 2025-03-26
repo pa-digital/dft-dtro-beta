@@ -2,7 +2,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class TestUsers
     {
-        public static TestUser GenerateUser(UserGroup userGroup)
+        public static TestUser GenerateUserDetails(UserGroup userGroup)
         {
             string appId = Guid.NewGuid().ToString();
 
