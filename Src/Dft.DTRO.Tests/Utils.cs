@@ -183,4 +183,14 @@ public static class Utils
             Prefix = "DP"
         }
     };
+
+    public static string GetProjectRoot()
+    {
+        return Directory.GetParent(AppContext.BaseDirectory).Parent.Parent.Parent.Parent.Parent.FullName;
+    }
+
+    public static string GetSchema340()
+    {
+        return Path.Combine(GetProjectRoot(), "examples", "Schemas", "schemas-3.4.0.json");
+    }    
 }

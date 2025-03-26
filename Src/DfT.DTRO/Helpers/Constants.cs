@@ -131,7 +131,7 @@ public static class Constants
         "changeabletimeperiodsource", "changeabletimeperiodentry", "maximumgrossweightcharacteristic",
         "maximumheightcharacteristic", "maximumlengthcharacteristic", "maximumwidthcharacteristic",
         "heaviestaxleweightcharacteristic", "numberofaxlescharacteristic", "emissions", "ratetable",
-        "ratelinecollection", "rateline"
+        "ratelinecollection", "rateline", "consultation", "actualstartorstop", "experimentalvariation", "experimentalcessation"
     ];
 
     public static string Source => "Source";
