@@ -71,36 +71,7 @@
               "temporaryProvision": [
                 {
                   "temporaryOverriddenProvision": {
-                    "actionType": "new",
-                    "orderReportingPoint": "permanentNoticeOfMaking",
-                    "comingIntoForceDate": "2025-01-01",
-                    "provisionDescription": "3 Tonnes Structural Weight Limit, Netherclay Bridge",
-                    "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A",
-                    "regulatedPlace": [
-                      {
-                        "description": "text",
-                        "type": "diversionRoute",
-                        "concession": false,
-                        "assignment": false,
-                        "tramcar": false,
-                        "busRoute": false,
-                        "bywayType": "road",
-                        "polygon": {
-                          "version": 1,
-                          "polygon": "SRID=27700"
-                        }
-                      }
-                    ],
-                    "regulation": [
-                      {
-                        "isDynamic": false,
-                        "timeZone": "Europe/London",
-                        "offListRegulation": {
-                          "regulationFullText": "text",
-                          "regulationShortName": "text"
-                        }
-                      }
-                    ]
+                    "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A"
                   }
                 }
               ],

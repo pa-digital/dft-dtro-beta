@@ -1840,8 +1840,8 @@
                 },
                 "incrementPeriod": {
                     "description": "The time period for incrementing the rate line charge. If set to the same as the duration of the period between the duration start and duration end the increment will occur once per period, i.e. a flat rate time-based tier charge rate. The duration is defined in integer minutes.",
-                    "type": "string",
-                    "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
+                    "type": "integer",
+                    "minValue": 1
                 },
                 "maxValue": {
                     "description": "The maximum monetary amount to be applied in conjunction with use of this rate line collection, regardless of the actual calculated value of the rate line. Defined in applicable currency with 2 decimal places.",
@@ -1902,12 +1902,12 @@
                     "format": "date-time"
                 },
                 "maxTime": {
-                    "description": "A maximum session duration to be applied to this rate line collection, specified in integer minutes.",
+                    "description": "A maximum session duration to be applied to this rate line collection, represented as an ISO 8601-compliant duration",
                     "type": "string",
                     "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
                 },
                 "minTime": {
-                    "description": "A minimum session duration to be applied to this rate line collection. Defined in integer minutes.",
+                    "description": "A minimum session duration to be applied to this rate line collection, represented as an ISO 8601-compliant duration",
                     "type": "string",
                     "pattern": "^P(?!$)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
                 },
@@ -2466,7 +2466,17 @@
             "additionalProperties": false,
             "properties": {
                 "temporaryOverriddenProvision": {
-                    "$ref": "#/$defs/provision"
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                        "reference"
+                    ],
+                    "properties": {
+                        "reference": {
+                            "type": "string",
+                            "minLength": 1
+                        }
+                    }
                 }
             }
         },

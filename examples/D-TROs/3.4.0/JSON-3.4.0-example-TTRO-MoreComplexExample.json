@@ -104,36 +104,7 @@
               "temporaryProvision": [
                 {
                   "temporaryOverriddenProvision": {
-                    "actionType": "new",
-                    "orderReportingPoint": "permanentNoticeOfMaking",
-                    "comingIntoForceDate": "2025-01-01",
-                    "provisionDescription": "Speed Limit, East Reach",
-                    "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A",
-                    "regulation": [
-                      {
-                        "isDynamic": false,
-                        "timeZone": "Europe/London",
-                        "offListRegulation": {
-                          "regulationFullText": "text",
-                          "regulationShortName": "text"
-                        }
-                      }
-                    ],
-                    "regulatedPlace": [
-                      {
-                        "description": "text",
-                        "concession": false,
-                        "assignment": false,
-                        "tramcar": false,
-                        "busRoute": false,
-                        "bywayType": "road",
-                        "type": "regulationLocation",
-                        "polygon": {
-                          "polygon": "SRID=27700",
-                          "version": 1
-                        }
-                      }
-                    ]
+                    "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A"
                   }
                 }
               ],
@@ -276,7 +247,7 @@
                           {
                             "durationEnd": "00:00:00",
                             "durationStart": "00:30:00",
-                            "incrementPeriod": "PT58M",
+                            "incrementPeriod": 58,
                             "maxValue": 7.2,
                             "minValue": 1.0,
                             "sequence": 1,
@@ -287,7 +258,7 @@
                           {
                             "durationEnd": "00:00:00",
                             "durationStart": "00:30:00",
-                            "incrementPeriod": "PT59M",
+                            "incrementPeriod": 59,
                             "maxValue": 7.2,
                             "minValue": 2.0,
                             "sequence": 2,
@@ -298,7 +269,7 @@
                           {
                             "durationEnd": "00:00:00",
                             "durationStart": "00:30:00",
-                            "incrementPeriod": "PT9H",
+                            "incrementPeriod": 540,
                             "maxValue": 7.2,
                             "minValue": 2.02,
                             "sequence": 3,
@@ -322,7 +293,7 @@
                           {
                             "durationEnd": "00:00:00",
                             "durationStart": "00:30:00",
-                            "incrementPeriod": "PT58M",
+                            "incrementPeriod": 58,
                             "maxValue": 7.3,
                             "minValue": 1.0,
                             "sequence": 1,
@@ -333,7 +304,7 @@
                           {
                             "durationEnd": "00:00:00",
                             "durationStart": "00:30:00",
-                            "incrementPeriod": "PT59M",
+                            "incrementPeriod": 59,
                             "maxValue": 7.3,
                             "minValue": 2.0,
                             "sequence": 2,
@@ -344,7 +315,7 @@
                           {
                             "durationEnd": "00:00:00",
                             "durationStart": "00:30:00",
-                            "incrementPeriod": "PT9H",
+                            "incrementPeriod": 540,
                             "maxValue": 7.3,
                             "minValue": 2.0,
                             "sequence": 3,
