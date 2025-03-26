@@ -7,12 +7,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
     {
         public static EnvironmentType EnvironmentName { get; }
         public static string BaseUri { get; }
-        public static string AbsolutePathToProjectDirectory { get; }
-        public static string AbsolutePathToExamplesDirectory { get; }
-        public static string AbsolutePathToDtroExamplesDirectory { get; }
-        public static string AbsolutePathToDtroExamplesTempDirectory { get; }
-        public static string AbsolutePathToSchemaExamplesDirectory { get; }
-        public static string AbsolutePathToRuleExamplesDirectory { get; }
+        public static string PathToProjectDirectory { get; }
+        public static string PathToExamplesDirectory { get; }
+        public static string PathToDtroExamplesDirectory { get; }
+        public static string PathToDtroExamplesTempDirectory { get; }
+        public static string PathToSchemaExamplesDirectory { get; }
+        public static string PathToRuleExamplesDirectory { get; }
         public static string RulesJsonFile { get; }
         public static string SchemaJsonFile { get; }
         public static string DatabaseHostName { get; }
@@ -41,7 +41,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
         private static string GetDatabaseConnectionString()
         {
-            string envFilePath = $"{AbsolutePathToProjectDirectory}/docker/dev/.env";
+            string envFilePath = $"{PathToProjectDirectory}/docker/dev/.env";
             if (File.Exists(envFilePath))
             {
                 string[] lines = File.ReadAllLines(envFilePath);
@@ -75,12 +75,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                     throw new Exception($"Environment {EnvironmentName} not recognised!");
             }
 
-            AbsolutePathToProjectDirectory = GetAbsolutePathToProjectDirectory();
-            AbsolutePathToExamplesDirectory = $"{GetAbsolutePathToProjectDirectory()}/examples";
-            AbsolutePathToDtroExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/D-TROs";
-            AbsolutePathToDtroExamplesTempDirectory = $"{AbsolutePathToExamplesDirectory}/temp_integration_tests";
-            AbsolutePathToSchemaExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/Schemas";
-            AbsolutePathToRuleExamplesDirectory = $"{AbsolutePathToExamplesDirectory}/Rules";
+            PathToProjectDirectory = GetAbsolutePathToProjectDirectory();
+            PathToExamplesDirectory = $"{GetAbsolutePathToProjectDirectory()}/examples";
+            PathToDtroExamplesDirectory = $"{PathToExamplesDirectory}/D-TROs";
+            PathToDtroExamplesTempDirectory = $"{PathToExamplesDirectory}/temp_integration_tests";
+            PathToSchemaExamplesDirectory = $"{PathToExamplesDirectory}/Schemas";
+            PathToRuleExamplesDirectory = $"{PathToExamplesDirectory}/Rules";
             DatabaseConnectionString = GetDatabaseConnectionString();
         }
     }
