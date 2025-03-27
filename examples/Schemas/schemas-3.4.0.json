@@ -1618,6 +1618,24 @@
                             }
                         }
                     }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "orderReportingPoint": {
+                                "not": {
+                                    "pattern": "^ttro.*$"
+                                }
+                            }
+                        }
+                    },
+                    "then": {
+                        "not": {
+                            "required": [
+                                "actualStartOrStop"
+                            ]
+                        }
+                    }
                 }
             ]
         },

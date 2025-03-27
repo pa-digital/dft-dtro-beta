@@ -2,11 +2,14 @@
   "source": {
     "actionType": "new",
     "currentTraOwner": 9001,
+    "comingIntoForceDate": "2025-01-01",
+    "madeDate": "2025-01-01",
     "provision": [
       {
         "actionType": "new",
         "orderReportingPoint": "ttroTtmoNoticeOfIntention",
         "provisionDescription": "Temporary full road closure, for combined utility works and carriageway repair",
+        "comingIntoForceDate": "2025-01-01",
         "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
         "actualStartOrStop": [
           {
@@ -102,36 +105,7 @@
             "temporaryProvision": [
               {
                 "temporaryOverriddenProvision": {
-                  "actionType": "new",
-                  "orderReportingPoint": "permanentNoticeOfMaking",
-                  "comingIntoForceDate": "2025-01-01",
-                  "provisionDescription": "Speed Limit, East Reach",
-                  "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A",
-                  "regulation": [
-                    {
-                      "isDynamic": false,
-                      "timeZone": "Europe/London",
-                      "offListRegulation": {
-                        "regulationFullText": "text",
-                        "regulationShortName": "text"
-                      }
-                    }
-                  ],
-                  "regulatedPlace": [
-                    {
-                      "description": "text",
-                      "type": "regulationLocation",
-                      "concession": false,
-                      "assignment": false,
-                      "tramcar": false,
-                      "busRoute": false,
-                      "bywayType": "road",
-                      "polygon": {
-                        "polygon": "SRID=27700",
-                        "version": 1
-                      }
-                    }
-                  ]
+                  "reference": "DA3C3631-7710-4EA5-B654-62CD316D487A"
                 }
               }
             ],
@@ -266,7 +240,7 @@
                   "rateLineCollection": [
                     {
                       "applicableCurrency": "GBP",
-                      "maxTime": 660,
+                      "maxTime": 540,
                       "maxValueCollection": 7.2,
                       "minTime": "PT1H",
                       "minValueCollection": 1.0,
