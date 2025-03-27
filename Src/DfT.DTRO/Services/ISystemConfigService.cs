@@ -6,6 +6,6 @@ namespace DfT.DTRO.Services;
 
 public interface ISystemConfigService
 {
-    Task<SystemConfigResponse> GetSystemConfigAsync(Guid xAppId);
+    Task<SystemConfigResponse> GetSystemConfigAsync(Guid appId);
     Task<bool> UpdateSystemConfigAsync(SystemConfigRequest systemConfigRequest);
 }

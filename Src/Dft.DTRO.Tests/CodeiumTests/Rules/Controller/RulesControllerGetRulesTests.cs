@@ -10,14 +10,12 @@ public class RulesControllerTests
     public RulesControllerTests()
     {
         _mockRuleTemplateService = new Mock<IRuleTemplateService>();
-        Mock<IRequestCorrelationProvider> mockCorrelationProvider = new();
         Mock<ILogger<RulesController>> mockLogger = new();
         _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
         _mockLoggingExtension = new Mock<LoggingExtension>();
 
         _controller = new RulesController(
             _mockRuleTemplateService.Object,
-            mockCorrelationProvider.Object,
             mockLogger.Object,
             _mockLoggingExtension.Object);
     }

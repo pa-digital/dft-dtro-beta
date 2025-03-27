@@ -3,7 +3,6 @@
 public class RulesControllerGetRuleByIdTests
 {
     private readonly RulesController _controller;
-    private readonly Mock<IRequestCorrelationProvider> _mockCorrelationProvider;
     private readonly Mock<ILogger<RulesController>> _mockLogger;
     private readonly Mock<IRuleTemplateService> _mockRuleTemplateService;
     private readonly Mock<LoggingExtension.Builder> _mockLoggingBuilder;
@@ -12,14 +11,12 @@ public class RulesControllerGetRuleByIdTests
     public RulesControllerGetRuleByIdTests()
     {
         _mockRuleTemplateService = new Mock<IRuleTemplateService>();
-        _mockCorrelationProvider = new Mock<IRequestCorrelationProvider>();
         _mockLogger = new Mock<ILogger<RulesController>>();
         _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
         _mockLoggingExtension = new Mock<LoggingExtension>();
 
         _controller = new RulesController(
             _mockRuleTemplateService.Object,
-            _mockCorrelationProvider.Object,
             _mockLogger.Object,
             _mockLoggingExtension.Object);
     }

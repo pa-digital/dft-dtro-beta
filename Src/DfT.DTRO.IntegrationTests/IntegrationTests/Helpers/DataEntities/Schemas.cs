@@ -35,7 +35,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId }
+                { RequestHeaderNames.AppId, testUser.AppId }
             };
 
             HttpResponseMessage deleteSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Delete, $"{BaseUri}{RouteTemplates.SchemasBase}/{schemaVersion}", headers);
@@ -57,7 +57,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId }
+                { RequestHeaderNames.AppId, testUser.AppId }
             };
 
             HttpResponseMessage deactivateSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Patch, $"{BaseUri}{RouteTemplates.SchemasBase}/deactivate/{schemaVersion}", headers);
@@ -68,7 +68,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId }
+                { RequestHeaderNames.AppId, testUser.AppId }
             };
 
             HttpResponseMessage activateSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Patch, $"{BaseUri}{RouteTemplates.SchemasBase}/activate/{schemaVersion}", headers);
@@ -96,7 +96,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId }
+                { RequestHeaderNames.AppId, testUser.AppId }
             };
 
             HttpResponseMessage getAllSchemasResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.SchemasFindVersions}", headers);
@@ -120,7 +120,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId },
+                { RequestHeaderNames.AppId, testUser.AppId },
                 { "Content-Type", "multipart/form-data" }
             };
 
@@ -132,7 +132,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId }
+                { RequestHeaderNames.AppId, testUser.AppId }
             };
 
             HttpResponseMessage getSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.SchemasBase}/{schemaVersion}", headers);

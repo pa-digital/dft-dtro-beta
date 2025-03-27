@@ -136,7 +136,7 @@ public class DtroDal : IDtroDal
     }
 
     ///<inheritdoc cref="IDtroDal"/>
-    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId)
+    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit)
     {
         var dtro = new Models.DataBase.DTRO();
         var response = new GuidResponse();
@@ -150,8 +150,6 @@ public class DtroDal : IDtroDal
 
         dtro.LastUpdated = utcNow;
         dtro.Created = utcNow;
-        dtro.LastUpdatedCorrelationId = correlationId;
-        dtro.CreatedCorrelationId = dtro.LastUpdatedCorrelationId;
 
         try
         {
@@ -170,11 +168,11 @@ public class DtroDal : IDtroDal
     }
 
     ///<inheritdoc cref="IDtroDal"/>
-    public async Task<bool> TryUpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId)
+    public async Task<bool> TryUpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit)
     {
         try
         {
-            await UpdateDtroAsJsonAsync(guid, dtroSubmit, correlationId);
+            await UpdateDtroAsJsonAsync(guid, dtroSubmit);
             return true;
         }
         catch (Exception)
@@ -184,7 +182,7 @@ public class DtroDal : IDtroDal
     }
 
     ///<inheritdoc cref="IDtroDal"/>
-    public async Task UpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId)
+    public async Task UpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit)
     {
         if (await _dtroContext.Dtros.FindAsync(id) is not { } existing || existing.Deleted)
         {
@@ -196,7 +194,6 @@ public class DtroDal : IDtroDal
 
         var lastUpdated = DateTime.UtcNow.ToDateTimeTruncated();
         existing.LastUpdated = lastUpdated;
-        existing.LastUpdatedCorrelationId = correlationId;
 
         _dtroContext.Entry(existing).Property(e => e.Data).IsModified = true;
 
@@ -206,7 +203,7 @@ public class DtroDal : IDtroDal
     }
 
     ///<inheritdoc cref="IDtroDal"/>
-    public async Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId)
+    public async Task AssignDtroOwnership(Guid id, int assignToTraId)
     {
         if (await _dtroContext.Dtros.FindAsync(id) is not { } existing || existing.Deleted)
         {
@@ -218,7 +215,6 @@ public class DtroDal : IDtroDal
 
         var lastUpdated = DateTime.UtcNow.ToDateTimeTruncated();
         existing.LastUpdated = lastUpdated;
-        existing.LastUpdatedCorrelationId = correlationId;
 
         _dtroMappingService.InferIndexFields(ref existing);
         await _dtroCache.RemoveDtro(id);

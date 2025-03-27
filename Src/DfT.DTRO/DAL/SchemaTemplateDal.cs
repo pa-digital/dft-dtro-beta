@@ -102,7 +102,7 @@ public class SchemaTemplateDal : ISchemaTemplateDal
     }
 
     ///<inheritdoc cref="ISchemaTemplateDal"/>
-    public async Task<GuidResponse> SaveSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId)
+    public async Task<GuidResponse> SaveSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject)
     {
         var schemaTemplate = new SchemaTemplate();
         var response = new GuidResponse();
@@ -112,9 +112,7 @@ public class SchemaTemplateDal : ISchemaTemplateDal
         schemaTemplate.SchemaVersion = version;
         schemaTemplate.LastUpdated = DateTime.UtcNow;
         schemaTemplate.Created = schemaTemplate.LastUpdated;
-
-        schemaTemplate.LastUpdatedCorrelationId = correlationId;
-        schemaTemplate.CreatedCorrelationId = schemaTemplate.LastUpdatedCorrelationId;
+        ;
         if (await SchemaTemplateExistsAsync(version))
         {
             throw new InvalidOperationException($"There is an existing Schema Template with Schema Version {version}");
@@ -127,7 +125,7 @@ public class SchemaTemplateDal : ISchemaTemplateDal
     }
 
     ///<inheritdoc cref="ISchemaTemplateDal"/>
-    public async Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId)
+    public async Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject)
     {
         if (!await SchemaTemplateExistsAsync(version))
         {
@@ -137,7 +135,6 @@ public class SchemaTemplateDal : ISchemaTemplateDal
         var existing = await GetSchemaTemplateAsync(version);
         existing.Template = expandoObject;
         existing.LastUpdated = DateTime.UtcNow;
-        existing.LastUpdatedCorrelationId = correlationId;
 
         await _dtroContext.SaveChangesAsync();
         return new GuidResponse() { Id = existing.Id };
