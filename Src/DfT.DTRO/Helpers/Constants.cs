@@ -134,7 +134,7 @@ public static class Constants
     public static string Polygon => "polygon";
 
     public static string DirectedLineString => "directedLineString";
-  
+
     public static readonly HashSet<string> KeysToConvert =
     [
         "source", "provision", "regulatedplace", "geometry", "lineargeometry", "pointgeometry", "polygon",
@@ -147,7 +147,8 @@ public static class Constants
         "changeabletimeperiodsource", "changeabletimeperiodentry", "maximumgrossweightcharacteristic",
         "maximumheightcharacteristic", "maximumlengthcharacteristic", "maximumwidthcharacteristic",
         "heaviestaxleweightcharacteristic", "numberofaxlescharacteristic", "emissions", "ratetable",
-        "ratelinecollection", "rateline", "consultation", "actualstartorstop", "experimentalvariation", "experimentalcessation"
+        "ratelinecollection", "rateline", "consultation", "actualstartorstop", "experimentalvariation",
+        "experimentalcessation", "permittypeextension", "vehicleusagetypeextension", "emissionclassificationeurotypeextension"
     ];
 
     public static string Source => "Source";
