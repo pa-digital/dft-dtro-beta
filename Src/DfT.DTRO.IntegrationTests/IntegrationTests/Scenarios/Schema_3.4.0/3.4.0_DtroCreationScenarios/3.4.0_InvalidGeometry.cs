@@ -47,7 +47,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
         public async Task DtroSubmittedFromJsonBodyWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
         {
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GetUserForTest(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
             await publisher.CreateUserForDataSetUpAsync();
 
             // Prepare DTRO
@@ -72,7 +72,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
         public async Task DtroSubmittedFromFileWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
         {
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GetUserForTest(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
             await publisher.CreateUserForDataSetUpAsync();
 
             // Prepare DTRO
@@ -99,7 +99,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
         public async Task DtroSubmittedFromJsonBodyWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
         {
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GetUserForTest(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
             await publisher.CreateUserForDataSetUpAsync();
 
             // Prepare DTRO
@@ -124,7 +124,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
         public async Task DtroSubmittedFromFileWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
         {
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GetUserForTest(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
             await publisher.CreateUserForDataSetUpAsync();
 
             // Prepare DTRO

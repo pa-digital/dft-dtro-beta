@@ -1,11 +1,12 @@
 #nullable enable
+using System.Threading.Tasks;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class TestUsers
     {
-        public static TestUser GetUserForTest(UserGroup userGroup)
+        public static async Task<TestUser> GetUser(UserGroup userGroup)
         {
             // If we're running the tests on dev, test, integration, the user already exists - we just need to return it
             if (TestConfig.EnvironmentName != EnvironmentType.Local && userGroup == UserGroup.Tra)
@@ -59,7 +60,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                     UserGroup = (int)userGroup
                 };
 
-                DtroUsers.CreateUserForDataSetUpAsync(testUser);
+                await DtroUsers.CreateUserForDataSetUpAsync(testUser);
                 return testUser;
             }
         }

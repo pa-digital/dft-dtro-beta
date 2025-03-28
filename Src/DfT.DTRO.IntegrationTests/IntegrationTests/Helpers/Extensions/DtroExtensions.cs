@@ -166,7 +166,8 @@ public static class DtroExtensions
 
     public static string CreateDtroTempFile(this string jsonString, string fileName, string traId)
     {
-        string nameOfCopyFile = $"{traId}-{fileName}";
+        string uniquePrefix = traId == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : traId;
+        string nameOfCopyFile = $"{uniquePrefix}-{fileName}";
         string tempFilePath = $"{TestConfig.PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
         FileHelper.WriteStringToFile(TestConfig.PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonString);
         return tempFilePath;

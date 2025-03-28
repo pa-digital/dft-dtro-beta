@@ -26,7 +26,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroScen
             Console.WriteLine($"\nTesting with file {fileName}...");
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GetUserForTest(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
@@ -63,7 +63,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_1.UpdateDtroScen
             Console.WriteLine($"\nTesting with file {fileName}...");
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GetUserForTest(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO

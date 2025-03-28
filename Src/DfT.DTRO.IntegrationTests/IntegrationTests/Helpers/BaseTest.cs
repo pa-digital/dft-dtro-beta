@@ -11,7 +11,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         private static async Task SetUpBeforeTestRunAsync()
         {
             Console.WriteLine("Do once before each test run...");
-            UserWithAllPermissions = TestUsers.GetUserForTest(UserGroup.All);
+            UserWithAllPermissions = await TestUsers.GetUser(UserGroup.All);
             HttpResponseMessage userCreationResponse = await DtroUsers.CreateUserAsync(UserWithAllPermissions);
 
             string userCreationResponseJson = await userCreationResponse.Content.ReadAsStringAsync();

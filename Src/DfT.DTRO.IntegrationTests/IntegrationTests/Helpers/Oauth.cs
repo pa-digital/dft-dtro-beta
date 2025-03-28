@@ -45,7 +45,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             KeyValuePair<string, string> formUrlEncodedBody = new KeyValuePair<string, string>("grant_type", "client_credentials");
 
-            HttpResponseMessage oauthResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}/oauth-generator", headers, formUrlEncodedBody: formUrlEncodedBody);
+            // Make sure to set printCurl to false so we don't leak any secrets
+            HttpResponseMessage oauthResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}/oauth-generator", headers, formUrlEncodedBody: formUrlEncodedBody, printCurl: false);
             string responseJson = await oauthResponse.Content.ReadAsStringAsync();
             string token = JsonMethods.GetValueAtJsonPath(responseJson, "access_token").ToString();
             return token;

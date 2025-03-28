@@ -67,11 +67,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             switch (environmentFromBashCommand)
             {
                 case "local":
-                    EnvironmentName = EnvironmentType.Local;
-                    BaseUri = "https://localhost:5001";
-                    DatabaseHostName = "localhost";
-                    break;
-                case "dev":
+                    //     EnvironmentName = EnvironmentType.Local;
+                    //     BaseUri = "https://localhost:5001";
+                    //     DatabaseHostName = "localhost";
+                    //     break;
+                    // case "dev":
                     EnvironmentName = EnvironmentType.Dev;
                     BaseUri = "https://dtro-dev.dft.gov.uk/v1";
                     break;
