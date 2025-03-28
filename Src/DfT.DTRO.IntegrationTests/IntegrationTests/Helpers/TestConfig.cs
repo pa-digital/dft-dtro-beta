@@ -71,6 +71,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                     BaseUri = "https://localhost:5001";
                     DatabaseHostName = "localhost";
                     break;
+                case "dev":
+                    EnvironmentName = EnvironmentType.Dev;
+                    BaseUri = "https://dtro-dev.dft.gov.uk/v1";
+                    break;
+                case "test":
+                    EnvironmentName = EnvironmentType.Test;
+                    BaseUri = "https://dtro-test.dft.gov.uk/v1";
+                    break;
                 default:
                     throw new Exception($"Environment {EnvironmentName} not recognised!");
             }

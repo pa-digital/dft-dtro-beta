@@ -41,5 +41,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                 throw new DirectoryNotFoundException($"The directory '{directoryPath}' does not exist.");
             }
         }
+
+        public static string GetValueFromDotEnv(string key)
+        {
+            string envFilePath = $"{PathToProjectDirectory}/docker/dev/.env";
+            string[] lines = File.ReadAllLines(envFilePath);
+            string line = lines.First(line => line.StartsWith($"{key}="));
+            string configValue = line.Split('=')[1];
+            return configValue;
+        }
     }
 }

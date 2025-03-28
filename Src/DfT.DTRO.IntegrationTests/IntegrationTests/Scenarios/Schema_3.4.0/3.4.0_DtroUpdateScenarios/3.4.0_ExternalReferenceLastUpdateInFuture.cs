@@ -15,7 +15,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.UpdateDtroScen
         public async Task DtroUpdatedFromFileWithExternalReferenceLastUpdateDateInFutureShouldBeRejected()
         {
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
+            TestUser publisher = TestUsers.GetUserForTest(UserGroup.Tra);
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO
@@ -58,7 +58,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.UpdateDtroScen
         public async Task DtroUpdatedFromJsonBodyWithExternalReferenceLastUpdateDateInFutureShouldBeRejected()
         {
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
+            TestUser publisher = TestUsers.GetUserForTest(UserGroup.Tra);
             await DtroUsers.CreateUserForDataSetUpAsync(publisher);
 
             // Prepare DTRO

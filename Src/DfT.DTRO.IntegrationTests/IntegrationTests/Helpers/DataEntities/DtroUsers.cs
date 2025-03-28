@@ -2,6 +2,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.Consts;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
+using DfT.DTRO.Models.DataBase;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
@@ -21,10 +23,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> GetAllUsersAsync(TestUser testUser)
         {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { RequestHeaderNames.AppId, testUser.AppId }
-            };
+            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            // {
+            //     { RequestHeaderNames.AppId, testUser.AppId }
+            // };            
+
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
 
             HttpResponseMessage getAllUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtroUsersBase}", headers);
             return getAllUsersResponse;
@@ -54,11 +60,16 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> DeleteUsersAsync(List<string> ids, TestUser testUser)
         {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { RequestHeaderNames.AppId, testUser.AppId },
-                { "Content-Type", "application/json" }
-            };
+            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            // {
+            //     { RequestHeaderNames.AppId, testUser.AppId },
+            //     { "Content-Type", "application/json" }
+            // };
+
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add("Content-Type", "application/json");
+
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
 
             JObject requestBody = new JObject { ["ids"] = JArray.FromObject(ids) };
 
@@ -68,11 +79,16 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> CreateUserAsync(TestUser testUser)
         {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { RequestHeaderNames.AppId, testUser.AppId },
-                { "Content-Type", "application/json" }
-            };
+            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            // {
+            //     { RequestHeaderNames.AppId, testUser.AppId },
+            //     { "Content-Type", "application/json" }
+            // };
+
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add("Content-Type", "application/json");
+
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
 
             string jsonBody = $$"""
             {
