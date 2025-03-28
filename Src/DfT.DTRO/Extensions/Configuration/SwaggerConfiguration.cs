@@ -75,7 +75,6 @@ public static class SwaggerConfiguration
             options.CustomSchemaIds(type => type.FullName);
             options.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{environment.ApplicationName}.xml");
             options.OperationFilter<GeneratePathParamsValidationFilter>();
-            options.OperationFilter<CorrelationIdHeaderParameterFilter>();
             options.EnableAnnotations();
             options.DocumentFilter<FeatureGateFilter>();
             options.SchemaFilter<BoundingBoxSchemaFilter>();

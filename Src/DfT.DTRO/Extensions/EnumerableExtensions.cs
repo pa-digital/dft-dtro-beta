@@ -33,9 +33,6 @@ public static class EnumerableExtensions
         return displayAttribute?.Name ?? enumValue.ToString();
     }
 
-    //public static string GetDisplayName(this Enum enumToDisplay) =>
-    //    enumToDisplay.GetAttribute<DisplayAttribute>().Name;
-
     private static TAttribute GetAttribute<TAttribute>(this Enum enumValue) where TAttribute : Attribute =>
         enumValue
             .GetType()

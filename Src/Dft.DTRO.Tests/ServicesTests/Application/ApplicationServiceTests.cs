@@ -120,6 +120,7 @@ public class ApplicationServiceTests
             AppId = appId,
             Name = "Test",
             Purpose = "Test",
+            SwaCode = 123,
             CreatedAt = 0, 
             LastModifiedAt = 0, 
             Status = "approved", 
@@ -200,23 +201,92 @@ public class ApplicationServiceTests
     public async Task ActivateApplicationByIdSuccessfulActivationReturnsTrue()
     {
         Guid appId = Guid.NewGuid();
+        
+        var expectedDetails = new ApplicationDetailsDto { AppId = appId, Name = "Test", Purpose = "Test" };
+        
+        var expectedDeveloperApp = new ApigeeDeveloperApp()
+        {
+            AppId = appId.ToString(),
+            Name = "Test",
+            CreatedAt = 0, 
+            LastModifiedAt = 0, 
+            Status = "approved", 
+            DeveloperId = "dev-123",
+            Credentials = new List<ApigeeDeveloperAppCredential>
+            {
+                new ApigeeDeveloperAppCredential
+                {
+                    ConsumerKey = "key-123",
+                    ConsumerSecret = "secret-456",
+                    ExpiresAt = -1,
+                    IssuedAt = 0,
+                    Status = "approved"
+                }
+            }
+        };
+        
+        _applicationDalMock
+            .Setup(dal => dal.GetApplicationDetails(appId))
+            .ReturnsAsync(expectedDetails);
+        
         _applicationDalMock
             .Setup(dal => dal.ActivateApplicationById(It.IsAny<Guid>()))
             .ReturnsAsync(true);
+        
+        _applicationDalMock
+            .Setup(dal => dal.ActivateApplicationById(It.IsAny<Guid>()))
+            .ReturnsAsync(true);
+        
+        _apigeeAppRepositoryMock
+            .Setup(repository => repository.UpdateAppStatus(_email, "Test", "approve"))
+            .ReturnsAsync(expectedDeveloperApp);
 
-        var result = await _applicationService.ActivateApplicationById(appId);
+        var result = await _applicationService.ActivateApplicationById(_email, appId);
         Assert.True(result);
     }
 
     [Fact]
     public async Task ActivateApplicationByIdActivationFailsReturnsFalse()
     {
+        
         Guid appId = Guid.NewGuid();
+        
+        var expectedDetails = new ApplicationDetailsDto { AppId = appId, Name = "Test", Purpose = "Test" };
+
+        var expectedDeveloperApp = new ApigeeDeveloperApp()
+        {
+            AppId = appId.ToString(),
+            Name = "Test",
+            CreatedAt = 0, 
+            LastModifiedAt = 0, 
+            Status = "approved", 
+            DeveloperId = "dev-123",
+            Credentials = new List<ApigeeDeveloperAppCredential>
+            {
+                new ApigeeDeveloperAppCredential
+                {
+                    ConsumerKey = "key-123",
+                    ConsumerSecret = "secret-456",
+                    ExpiresAt = -1,
+                    IssuedAt = 0,
+                    Status = "approved"
+                }
+            }
+        };
+        
+        _applicationDalMock
+            .Setup(dal => dal.GetApplicationDetails(appId))
+            .ReturnsAsync(expectedDetails);
+        
         _applicationDalMock
             .Setup(dal => dal.ActivateApplicationById(It.IsAny<Guid>()))
             .ReturnsAsync(false);
+        
+        _apigeeAppRepositoryMock
+            .Setup(repository => repository.UpdateAppStatus(_email, "Test", "approve"))
+            .ReturnsAsync(expectedDeveloperApp);
 
-        var result = await _applicationService.ActivateApplicationById(appId);
+        var result = await _applicationService.ActivateApplicationById(_email, appId);
         Assert.False(result);
     }
 
@@ -224,11 +294,43 @@ public class ApplicationServiceTests
     public async Task ActivateApplicationByIdUnexpectedExceptionThrowsException()
     {
         Guid appId = Guid.NewGuid();
+        
+        var expectedDetails = new ApplicationDetailsDto { AppId = appId, Name = "Test", Purpose = "Test" };
+
+        var expectedDeveloperApp = new ApigeeDeveloperApp()
+        {
+            AppId = appId.ToString(),
+            Name = "Test",
+            CreatedAt = 0, 
+            LastModifiedAt = 0, 
+            Status = "approved", 
+            DeveloperId = "dev-123",
+            Credentials = new List<ApigeeDeveloperAppCredential>
+            {
+                new ApigeeDeveloperAppCredential
+                {
+                    ConsumerKey = "key-123",
+                    ConsumerSecret = "secret-456",
+                    ExpiresAt = -1,
+                    IssuedAt = 0,
+                    Status = "approved"
+                }
+            }
+        };
+        
+        _applicationDalMock
+            .Setup(dal => dal.GetApplicationDetails(appId))
+            .ReturnsAsync(expectedDetails);
+        
         _applicationDalMock
             .Setup(dal => dal.ActivateApplicationById(It.IsAny<Guid>()))
             .ThrowsAsync(new Exception("Unexpected error"));
+        
+        _apigeeAppRepositoryMock
+            .Setup(repository => repository.UpdateAppStatus(_email, "Test", "approve"))
+            .ReturnsAsync(expectedDeveloperApp);
 
-        var ex = await Assert.ThrowsAsync<Exception>(() => _applicationService.ActivateApplicationById(appId));
+        var ex = await Assert.ThrowsAsync<Exception>(() => _applicationService.ActivateApplicationById(_email, appId));
         Assert.Equal("Unexpected error", ex.Message);
     }
 }

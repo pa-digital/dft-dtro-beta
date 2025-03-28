@@ -1,5 +1,4 @@
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.FileHelper;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
@@ -12,11 +11,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         private static async Task SetUpBeforeTestRunAsync()
         {
             Console.WriteLine("Do once before each test run...");
-            UserWithAllPermissions = TestUsers.GenerateUser(UserGroup.All);
-            HttpResponseMessage createUserResponse = await DtroUsers.CreateUserAsync(UserWithAllPermissions);
-            Assert.Equal(HttpStatusCode.Created, createUserResponse.StatusCode);
+            UserWithAllPermissions = TestUsers.GenerateUserDetails(UserGroup.All);
+            HttpResponseMessage userCreationResponse = await DtroUsers.CreateUserAsync(UserWithAllPermissions);
 
-            DeleteFilesInDirectory(AbsolutePathToDtroExamplesTempDirectory);
+            string userCreationResponseJson = await userCreationResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.Created == userCreationResponse.StatusCode,
+                $"Response JSON:\n\n{userCreationResponseJson}");
+
+            FileHelper.DeleteFilesInDirectory(PathToDtroExamplesTempDirectory);
 
             if (EnvironmentName == EnvironmentType.Local)
             {

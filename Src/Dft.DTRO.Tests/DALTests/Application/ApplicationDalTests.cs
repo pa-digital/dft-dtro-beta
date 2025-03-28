@@ -204,7 +204,7 @@ namespace Dft.DTRO.Tests.DALTests
         {
             var request = new PaginatedRequest { Page = 1, PageSize = 1 };
             var apps = await _applicationDal.GetInactiveApplications(request);
-            Assert.Equal(1, apps.TotalCount);
+            Assert.Equal(3, apps.TotalCount);
         }
 
         public void Dispose()

@@ -5,5 +5,5 @@ public interface IUserService
 
     Task<PaginatedResponse<UserListDto>> GetUsers(PaginatedRequest paginatedRequest);
 
-    Task DeleteUser(Guid userId);
+    Task DeleteUser(string email, Guid userId);
 }

@@ -12,7 +12,6 @@ public class SearchController : ControllerBase
     private readonly ISearchService _searchService;
     private readonly IMetricsService _metricsService;
     private readonly ILogger<SearchController> _logger;
-    private readonly IAppIdMapperService _appIdMapperService;
     private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
@@ -25,13 +24,11 @@ public class SearchController : ControllerBase
     public SearchController(
         ISearchService searchService,
         IMetricsService metricsService,
-        IAppIdMapperService appIdMapperService,
         ILogger<SearchController> logger,
         LoggingExtension loggingExtension)
     {
         _searchService = searchService;
         _metricsService = metricsService;
-        _appIdMapperService = appIdMapperService;
         _logger = logger;
         _loggingExtension = loggingExtension;
     }
@@ -50,11 +47,10 @@ public class SearchController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Consumer)]
     [SwaggerResponse(200, type: typeof(PaginatedResponse<DtroSearchResult>), description: "Ok")]
-    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromBody] DtroSearch body)
+    public async Task<ActionResult<PaginatedResponse<DtroSearchResult>>> SearchDtros([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, [FromBody] DtroSearch body)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
             var response = await _searchService.SearchAsync(body);
             await _metricsService.IncrementMetric(MetricType.Search, appId);
             _logger.LogInformation($"'{nameof(SearchDtros)}' method called and body '{body}'");

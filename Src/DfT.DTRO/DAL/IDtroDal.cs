@@ -27,9 +27,8 @@ public interface IDtroDal
     /// to a storage device after converting it to a JSON string.
     /// </summary>
     /// <param name="dtroSubmit">Object representing a full D-TRO.</param>
-    /// <param name="correlationId">Correlation ID passed when submitting the D-TRO.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous save operation.</returns>
-    Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId);
+    Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit);
 
     /// <summary>
     /// Gets D-TRO records.
@@ -56,18 +55,16 @@ public interface IDtroDal
     /// </summary>
     /// <param name="guid">D-TRO ID.</param>
     /// <param name="dtroSubmit">Object containing a full D-TRO details.</param>
-    /// <param name="correlationId">Correlation ID passed when updating the D-TRO.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous update operation.</returns>
-    Task UpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId);
+    Task UpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit);
 
     /// <summary>
     /// Try updating an existing D-TRO by its <paramref name="guid"/>.
     /// </summary>
     /// <param name="guid">D-TRO ID.</param>
     /// <param name="dtroSubmit">Object containing a full D-TRO details.</param>
-    /// <param name="correlationId">Correlation ID passed when updating the D-TRO.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous update operation.</returns>
-    Task<bool> TryUpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit, string correlationId);
+    Task<bool> TryUpdateDtroAsJsonAsync(Guid guid, DtroSubmit dtroSubmit);
 
     /// <summary>
     /// Mark D-TRO as delete by its <paramref name="id"/>
@@ -104,9 +101,8 @@ public interface IDtroDal
     /// </summary>
     /// <param name="id">D-TRO ID.</param>
     /// <param name="assignToTraId">Traffic regulation authority ID.</param>
-    /// <param name="correlationId">Correlation ID passed when updating the D-TRO.</param>
     /// <returns>A <see cref="Task"/> representing operation.</returns>
-    Task AssignDtroOwnership(Guid id, int assignToTraId, string correlationId);
+    Task AssignDtroOwnership(Guid id, int assignToTraId);
 
     Task<int> GetDtroSubmissionCount();
 

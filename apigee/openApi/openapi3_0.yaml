@@ -23,8 +23,7 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - $ref: "#/components/parameters/XEmail"
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/Email"
       requestBody:
         description: Properties passed by body
         content:
@@ -45,13 +44,7 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - name: x-email
-          in: header
-          description: Developer email linked to access token.
-          required: true
-          schema:
-            type: string
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/Email"
       responses:
         '200':
           description: Valid user ID
@@ -69,19 +62,13 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - name: x-email
-          in: header
-          description: Developer email linked to access token.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/Email"
         - name: appId
           in: path
           required: true
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Valid application ID
@@ -103,7 +90,6 @@ paths:
           in: query
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Valid or invalid application name
@@ -117,19 +103,13 @@ paths:
         - Applications
       summary: Retrieves application details by ID
       parameters:
-        - name: x-email
-          in: header
-          description: Developer email linked to access token.
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/Email"
         - name: appId
           in: path
           required: true
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Valid application ID
@@ -159,7 +139,6 @@ paths:
             minimum: 1
             type: integer
             format: int32
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Valid user ID
@@ -180,8 +159,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Properties passed by body
         content:
@@ -204,8 +181,7 @@ paths:
             - cso
             - dsp
       parameters:
-        - $ref: "#/components/parameters/XAppId"
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/AppId"
       requestBody:
         content:
           multipart/form-data:
@@ -257,8 +233,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XAppId"
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/AppId"
       requestBody:
         content:
           multipart/form-data:
@@ -305,8 +280,7 @@ paths:
             - cso
             - dsp
       parameters:
-        - $ref: "#/components/parameters/XAppId"
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/AppId"
       requestBody:
         description: Object containing a full D-TRO details.
         content:
@@ -344,8 +318,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XAppId"
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/AppId"
       requestBody:
         description: Object containing a full D-TRO details.
         content:
@@ -374,8 +347,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: TraCode
           in: query
@@ -395,7 +366,6 @@ paths:
           schema:
             type: string
             format: date-time
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Ok
@@ -422,7 +392,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -448,8 +417,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XAppId"
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/AppId"
       responses:
         '204':
           description: Successfully deleted the DTRO.
@@ -478,7 +446,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -513,7 +480,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -553,8 +519,7 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XAppId"
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/AppId"
       responses:
         '201':
           description: Successfully assigned the DTRO.
@@ -573,8 +538,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Dtro Users retrieved successfully.
@@ -624,7 +587,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Dtro User retrieved successfully.
@@ -669,8 +631,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing the dtro Users details.
         content:
@@ -729,8 +689,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing the Dtro User details.
         content:
@@ -797,7 +755,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Ok
@@ -830,8 +787,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: List of D-TRO User ID, comma separated
         content:
@@ -891,8 +846,7 @@ paths:
             - dsp
             - dc
       parameters:
-        - $ref: "#/components/parameters/XAppId"
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/AppId"
       requestBody:
         description: A search query object
         content:
@@ -954,10 +908,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: The API is up and running.
@@ -988,10 +938,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Database is available.
@@ -1024,10 +970,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing a metric request.
         content:
@@ -1086,10 +1028,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing a metric request.
         content:
@@ -1158,10 +1096,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1180,10 +1114,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1202,8 +1132,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: version
           in: path
@@ -1211,7 +1139,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1230,8 +1157,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: ruleId
           in: path
@@ -1240,7 +1165,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1266,7 +1190,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         content:
           multipart/form-data:
@@ -1316,7 +1239,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         content:
           multipart/form-data:
@@ -1365,8 +1287,6 @@ paths:
             - cso
             - dsp
             - dc
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1387,8 +1307,6 @@ paths:
             - cso
             - dsp
             - dc
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1416,7 +1334,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1441,7 +1358,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Successfully deleted schema template.
@@ -1464,8 +1380,6 @@ paths:
       security:
         - oAuth:
             - cso
-            - dsp
-            - dc
       parameters:
         - name: schemaId
           in: path
@@ -1474,7 +1388,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK.
@@ -1500,7 +1413,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         content:
           multipart/form-data:
@@ -1550,7 +1462,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing a full schema template.
         content:
@@ -1587,7 +1498,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         content:
           multipart/form-data:
@@ -1639,7 +1549,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing a full schema template.
         content:
@@ -1676,7 +1585,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Ok
@@ -1706,7 +1614,6 @@ paths:
           required: true
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Ok
@@ -1732,8 +1639,7 @@ paths:
             - dsp
             - dc
       parameters:
-        - $ref: "#/components/parameters/XAppId"
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/AppId"
       requestBody:
         description: A D-TRO object search criteria.
         content:
@@ -1763,8 +1669,7 @@ paths:
         - oAuth:
             - cso
       parameters:
-        - $ref: "#/components/parameters/XAppId"
-        - $ref: "#/components/parameters/XCorrelationId"
+        - $ref: "#/components/parameters/AppId"
       responses:
         '200':
           description: System name retrieved successfully.
@@ -1795,8 +1700,6 @@ paths:
       security:
         - oAuth:
             - cso
-      parameters:
-        - $ref: "#/components/parameters/XCorrelationId"
       requestBody:
         description: Object containing System Config details.
         content:
@@ -1859,7 +1762,6 @@ paths:
           description: TRA name
           schema:
             type: string
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Ok
@@ -1872,6 +1774,10 @@ paths:
       tags:
         - Users
       summary: Retrieve user list for user
+      operationId: get-users
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: Page
           in: query
@@ -1889,7 +1795,6 @@ paths:
             minimum: 1
             type: integer
             format: int32
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: Ok
@@ -1917,14 +1822,18 @@ paths:
       tags:
         - Users
       summary: Deletes a user
+      operationId: delete-user
+      security:
+        - oAuth:
+            - cso
       parameters:
+        - $ref: "#/components/parameters/Email"
         - name: userId
           in: path
           required: true
           schema:
             type: string
             format: uuid
-        - $ref: "#/components/parameters/XCorrelationId"
       responses:
         '200':
           description: OK
@@ -1936,26 +1845,18 @@ paths:
           description: Invalid operation or other exception
 components:
   parameters:
-    XAppId:
-      name: x-app-id
+    AppId:
+      name: App-Id
       in: header
-      description: AppId identification.
-      required: true
+      description: Apigee automatically injects this header. Clients do not need to send it.
+      required: false
       schema:
         type: string
         format: uuid
-    XCorrelationId:
-      name: X-Correlation-ID
+    Email:
+      name: Email
       in: header
-      required: true
-      schema:
-        type: string
-        description: UUID formatted string to track the request through the enquiries stack.
-        default: 41ae0471-d7de-4737-907f-cab2f0089796
-    XEmail:
-      name: x-email
-      in: header
-      description: Developer email linked to access token.
+      description: Apigee automatically injects this header. Clients do not need to send it.
       required: true
       schema:
         type: string
@@ -2554,7 +2455,7 @@ components:
           nullable: true
         userGroup:
           $ref: "#/components/schemas/UserGroup"
-        xAppId:
+        appId:
           type: string
           format: uuid
       additionalProperties: false
@@ -2565,9 +2466,9 @@ components:
           type: string
           description: Unique identification
           format: uuid
-        xAppId:
+        appId:
           type: string
-          description: x-app-id header unique identifier
+          description: App-Id header unique identifier
           format: uuid
         traId:
           type: integer

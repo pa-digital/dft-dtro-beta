@@ -78,7 +78,7 @@ public class RuleTemplateDal : IRuleTemplateDal
     }
 
     ///<inheritdoc cref="IRuleTemplateDal"/>
-    public async Task<GuidResponse> SaveRuleTemplateAsJsonAsync(string version, string rule, string correlationId)
+    public async Task<GuidResponse> SaveRuleTemplateAsJsonAsync(string version, string rule)
     {
         var ruleTemplate = new RuleTemplate();
         var response = new GuidResponse();
@@ -88,9 +88,7 @@ public class RuleTemplateDal : IRuleTemplateDal
         ruleTemplate.SchemaVersion = version;
         ruleTemplate.LastUpdated = DateTime.UtcNow;
         ruleTemplate.Created = ruleTemplate.LastUpdated;
-
-        ruleTemplate.LastUpdatedCorrelationId = correlationId;
-        ruleTemplate.CreatedCorrelationId = ruleTemplate.LastUpdatedCorrelationId;
+        
         if (await RuleTemplateExistsAsync(version))
         {
             throw new InvalidOperationException($"There is an existing Schema Template with Schema Version {version}");
@@ -103,7 +101,7 @@ public class RuleTemplateDal : IRuleTemplateDal
     }
 
     ///<inheritdoc cref="IRuleTemplateDal"/>
-    public async Task<GuidResponse> UpdateRuleTemplateAsJsonAsync(string version, string rule, string correlationId)
+    public async Task<GuidResponse> UpdateRuleTemplateAsJsonAsync(string version, string rule)
     {
         if (!await RuleTemplateExistsAsync(version))
         {
@@ -113,7 +111,6 @@ public class RuleTemplateDal : IRuleTemplateDal
         var existing = await GetRuleTemplateAsync(version);
         existing.Template = rule;
         existing.LastUpdated = DateTime.UtcNow;
-        existing.LastUpdatedCorrelationId = correlationId;
 
         await _dtroContext.SaveChangesAsync();
         return new GuidResponse() { Id = existing.Id };

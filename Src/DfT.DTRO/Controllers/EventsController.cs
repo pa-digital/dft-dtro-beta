@@ -10,7 +10,6 @@ public class EventsController : ControllerBase
     private readonly IEventSearchService _eventSearchService;
     private readonly IMetricsService _metricsService;
     private readonly ILogger<EventsController> _logger;
-    private readonly IAppIdMapperService _appIdMapperService;
     private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
@@ -23,13 +22,11 @@ public class EventsController : ControllerBase
     public EventsController(
         IEventSearchService eventSearchService,
         IMetricsService metricsService,
-          IAppIdMapperService appIdMapperService,
         ILogger<EventsController> logger,
          LoggingExtension loggingExtension)
     {
         _eventSearchService = eventSearchService;
         _metricsService = metricsService;
-        _appIdMapperService = appIdMapperService;
         _logger = logger;
         _loggingExtension = loggingExtension;
     }
@@ -50,11 +47,10 @@ public class EventsController : ControllerBase
     [SwaggerResponse(statusCode: 200, description: "Successfully received the event list")]
     [SwaggerResponse(statusCode: 400, description: "The request was malformed.")]
     [SwaggerResponse(statusCode: 404, description: "Event(s) not found.")]
-    public async Task<ActionResult<DtroEventSearchResult>> Events([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromBody] DtroEventSearch search)
+    public async Task<ActionResult<DtroEventSearchResult>> Events([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, [FromBody] DtroEventSearch search)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
             DtroEventSearchResult response = await _eventSearchService.SearchAsync(search);
             await _metricsService.IncrementMetric(MetricType.Event, appId);
             _logger.LogInformation($"'{nameof(Events)}' method called '{search}'");

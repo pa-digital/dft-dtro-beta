@@ -4,7 +4,7 @@ public class ApplicationControllerTests
 {
     private readonly Mock<IApplicationService> _mockApplicationService;
     private readonly ApplicationController _controller;
-    private readonly string _xEmail;
+    private readonly string _email;
 
     public ApplicationControllerTests()
     {
@@ -13,7 +13,7 @@ public class ApplicationControllerTests
 
         _mockApplicationService = new Mock<IApplicationService>();
         _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, mockLoggingExtension.Object);
-        _xEmail = "user@test.com";
+        _email = "user@test.com";
     }
 
     [Fact]
@@ -55,6 +55,7 @@ public class ApplicationControllerTests
             AppId = appId,
             Name = "Test",
             Purpose = "Test",
+            SwaCode = 123,
             CreatedAt = 0, 
             LastModifiedAt = 0, 
             Status = "approved", 
@@ -72,10 +73,10 @@ public class ApplicationControllerTests
             }
         };
         
-        _mockApplicationService.Setup(service => service.GetApplication(_xEmail, appId)).ReturnsAsync(expectedResponse);
-        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(true);
+        _mockApplicationService.Setup(service => service.GetApplication(_email, appId)).ReturnsAsync(expectedResponse);
+        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_email, appId)).ReturnsAsync(true);
 
-        var result = await _controller.FindApplicationById(_xEmail, appId);
+        var result = await _controller.FindApplicationById(_email, appId);
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
     }
@@ -90,6 +91,7 @@ public class ApplicationControllerTests
             AppId = appId,
             Name = "Test",
             Purpose = "Test",
+            SwaCode = 123,
             CreatedAt = 0, 
             LastModifiedAt = 0, 
             Status = "approved", 
@@ -106,10 +108,10 @@ public class ApplicationControllerTests
                 }
             }
         };
-        _mockApplicationService.Setup(service => service.GetApplication(_xEmail, appId)).ReturnsAsync(expectedResponse);
-        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_xEmail, appId)).ReturnsAsync(false);
+        _mockApplicationService.Setup(service => service.GetApplication(_email, appId)).ReturnsAsync(expectedResponse);
+        _mockApplicationService.Setup(service => service.ValidateAppBelongsToUser(_email, appId)).ReturnsAsync(false);
 
-        var result = await _controller.FindApplicationById(_xEmail, appId);
+        var result = await _controller.FindApplicationById(_email, appId);
         var forbiddenRequestResult = Assert.IsType<ForbidResult>(result);
     }
 
@@ -131,7 +133,7 @@ public class ApplicationControllerTests
             .Setup(service => service.GetApplications(It.IsAny<string>(), It.IsAny<PaginatedRequest>()))
             .ReturnsAsync(paginatedResponse);
 
-        var result = await _controller.FindApplications(_xEmail, paginatedRequest);
+        var result = await _controller.FindApplications(_email, paginatedRequest);
 
         var actionResult = Assert.IsType<ActionResult<PaginatedResponse<ApplicationListDto>>>(result);
         var okObjectResult = Assert.IsType<OkObjectResult>(actionResult.Result);
@@ -149,10 +151,10 @@ public class ApplicationControllerTests
         Guid appId = Guid.NewGuid();
 
         _mockApplicationService
-            .Setup(s => s.ValidateAppBelongsToUser(_xEmail, appId))
+            .Setup(s => s.ValidateAppBelongsToUser(_email, appId))
             .ReturnsAsync(false);
 
-        var result = await _controller.ActivateApplication(_xEmail, appId);
+        var result = await _controller.ActivateApplication(_email, appId);
         Assert.IsType<ForbidResult>(result);
     }
 
@@ -162,13 +164,13 @@ public class ApplicationControllerTests
         Guid appId = Guid.NewGuid();
 
         _mockApplicationService
-            .Setup(s => s.ValidateAppBelongsToUser(_xEmail, appId))
+            .Setup(s => s.ValidateAppBelongsToUser(_email, appId))
             .ReturnsAsync(true);
         _mockApplicationService
-            .Setup(s => s.ActivateApplicationById(appId))
+            .Setup(s => s.ActivateApplicationById(_email, appId))
             .ReturnsAsync(true);
 
-        var result = await _controller.ActivateApplication(_xEmail, appId);
+        var result = await _controller.ActivateApplication(_email, appId);
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(200, okResult.StatusCode);
     }
@@ -179,13 +181,13 @@ public class ApplicationControllerTests
         Guid appId = Guid.NewGuid();
 
         _mockApplicationService
-            .Setup(s => s.ValidateAppBelongsToUser(_xEmail, appId))
+            .Setup(s => s.ValidateAppBelongsToUser(_email, appId))
             .ReturnsAsync(true);
         _mockApplicationService
-            .Setup(s => s.ActivateApplicationById(appId))
+            .Setup(s => s.ActivateApplicationById(_email, appId))
             .ThrowsAsync(new InvalidOperationException("Database error"));
 
-        var result = await _controller.ActivateApplication(_xEmail, appId);
+        var result = await _controller.ActivateApplication(_email, appId);
         var objectResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, objectResult.StatusCode);
     }
@@ -196,13 +198,13 @@ public class ApplicationControllerTests
         Guid appId = Guid.NewGuid();
 
         _mockApplicationService
-            .Setup(s => s.ValidateAppBelongsToUser(_xEmail, appId))
+            .Setup(s => s.ValidateAppBelongsToUser(_email, appId))
             .ReturnsAsync(true);
         _mockApplicationService
-            .Setup(s => s.ActivateApplicationById(appId))
+            .Setup(s => s.ActivateApplicationById(_email, appId))
             .ThrowsAsync(new Exception("Something went wrong"));
 
-        var result = await _controller.ActivateApplication(_xEmail, appId);
+        var result = await _controller.ActivateApplication(_email, appId);
         var objectResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, objectResult.StatusCode);
     }

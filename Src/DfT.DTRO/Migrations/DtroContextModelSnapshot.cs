@@ -125,9 +125,6 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedCorrelationId")
-                        .HasColumnType("text");
-
                     b.Property<string>("Data")
                         .IsRequired()
                         .HasColumnType("jsonb");
@@ -140,9 +137,6 @@ namespace DfT.DTRO.Migrations
 
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastUpdatedCorrelationId")
-                        .HasColumnType("text");
 
                     b.Property<NpgsqlBox>("Location")
                         .HasColumnType("box");
@@ -258,6 +252,10 @@ namespace DfT.DTRO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("AppId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(2147483647)
@@ -273,10 +271,6 @@ namespace DfT.DTRO.Migrations
                     b.Property<int>("UserGroup")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("xAppId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.ToTable("DtroUsers");
@@ -287,9 +281,6 @@ namespace DfT.DTRO.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<string>("CreatedCorrelationId")
-                        .HasColumnType("text");
 
                     b.Property<int>("DeletionCount")
                         .HasColumnType("integer");
@@ -303,9 +294,6 @@ namespace DfT.DTRO.Migrations
 
                     b.Property<DateOnly>("ForDate")
                         .HasColumnType("date");
-
-                    b.Property<string>("LastUpdatedCorrelationId")
-                        .HasColumnType("text");
 
                     b.Property<int>("SearchCount")
                         .HasColumnType("integer");
@@ -339,14 +327,8 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedCorrelationId")
-                        .HasColumnType("text");
-
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastUpdatedCorrelationId")
-                        .HasColumnType("text");
 
                     b.Property<string>("SchemaVersion")
                         .IsRequired()
@@ -375,17 +357,11 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedCorrelationId")
-                        .HasColumnType("text");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastUpdatedCorrelationId")
-                        .HasColumnType("text");
 
                     b.Property<string>("SchemaVersion")
                         .IsRequired()
@@ -438,6 +414,9 @@ namespace DfT.DTRO.Migrations
 
                     b.Property<string>("Status")
                         .HasColumnType("text");
+
+                    b.Property<int>("SwaCode")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

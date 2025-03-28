@@ -56,7 +56,7 @@ public class RuleTemplateService : IRuleTemplateService
         return await _ruleTemplateDal.GetRuleTemplatesVersionsAsync();
     }
 
-    public async Task<GuidResponse> SaveRuleTemplateAsJsonAsync(string version, string rule, string correlationId)
+    public async Task<GuidResponse> SaveRuleTemplateAsJsonAsync(string version, string rule)
     {
         var ruleTemplateExists = await _ruleTemplateDal.RuleTemplateExistsAsync(version);
         if (ruleTemplateExists)
@@ -64,10 +64,10 @@ public class RuleTemplateService : IRuleTemplateService
             throw new InvalidOperationException("Rule Template already Exists");
         }
 
-        return await _ruleTemplateDal.SaveRuleTemplateAsJsonAsync(version, rule, correlationId);
+        return await _ruleTemplateDal.SaveRuleTemplateAsJsonAsync(version, rule);
     }
 
-    public async Task<GuidResponse> UpdateRuleTemplateAsJsonAsync(string version, string rule, string correlationId)
+    public async Task<GuidResponse> UpdateRuleTemplateAsJsonAsync(string version, string rule)
     {
         var ruleTemplateExists = await _ruleTemplateDal.RuleTemplateExistsAsync(version);
         if (!ruleTemplateExists)
@@ -75,6 +75,6 @@ public class RuleTemplateService : IRuleTemplateService
             throw new NotFoundException();
         }
 
-        return await _ruleTemplateDal.UpdateRuleTemplateAsJsonAsync(version, rule, correlationId);
+        return await _ruleTemplateDal.UpdateRuleTemplateAsJsonAsync(version, rule);
     }
 }
