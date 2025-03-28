@@ -35,7 +35,9 @@ public class JsonSchemaValidationService : IJsonSchemaValidationService
             yield return new DtroJsonValidationErrorResponse
             {
                 Path = string.IsNullOrEmpty(fullPath) ? "root" : fullPath,
-                Message = error.Message
+                Message = error.Message,
+                ErrorType = error.ErrorType.ToString(),
+                Value = error.Value,
             };
 
             if (error.ChildErrors?.Count > 0)
