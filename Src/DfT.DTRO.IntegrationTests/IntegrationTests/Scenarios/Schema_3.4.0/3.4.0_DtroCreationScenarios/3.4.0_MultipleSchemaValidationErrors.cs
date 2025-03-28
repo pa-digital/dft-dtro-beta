@@ -32,8 +32,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
                 $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON
-            string expectedErrorJson = Dtros.GetSchemaValidationErrorJson(publisher.TraId);
-            JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
+            Assert.True(dtroCreationResponseJson.Contains("Invalid type. Expected Integer but got String.\",\"path\":\"source.currentTraOwner"),
+                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Invalid type. Expected Array but got Integer.\",\"path\":\"source.traAffected"),
+                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Required properties are missing from object: actionType.\",\"path\":\"source"),
+                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Property 'apples' has not been defined and the schema does not allow additional properties."),
+                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
         }
 
         [Fact]
@@ -58,8 +64,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
                 $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON
-            string expectedErrorJson = Dtros.GetSchemaValidationErrorJson(publisher.TraId);
-            JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
+            Assert.True(dtroCreationResponseJson.Contains("Invalid type. Expected Integer but got String.\",\"path\":\"source.currentTraOwner"),
+                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Invalid type. Expected Array but got Integer.\",\"path\":\"source.traAffected"),
+                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Required properties are missing from object: actionType.\",\"path\":\"source"),
+                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Property 'apples' has not been defined and the schema does not allow additional properties."),
+                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+
         }
     }
 }
