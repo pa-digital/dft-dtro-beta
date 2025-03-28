@@ -22,8 +22,29 @@ public class JsonSchemaValidationService : IJsonSchemaValidationService
 
         parsedBody.IsValid(parsedSchema, out IList<ValidationError> validationErrors);
 
-        var validationErrorsList = validationErrors.ToList().MapFrom();
+        var validationErrorsList = ExtractValidationErrors(validationErrors).ToList();
 
         return validationErrorsList;
+    }
+
+    private IEnumerable<DtroJsonValidationErrorResponse> ExtractValidationErrors(IEnumerable<ValidationError> errors, string parentPath = "")
+    {
+        foreach (var error in errors)
+        {
+            string fullPath = string.IsNullOrEmpty(error.Path) ? parentPath : $"{parentPath}.{error.Path}".Trim('.');
+            yield return new DtroJsonValidationErrorResponse
+            {
+                Path = string.IsNullOrEmpty(fullPath) ? "root" : fullPath,
+                Message = error.Message
+            };
+
+            if (error.ChildErrors?.Count > 0)
+            {
+                foreach (var childError in ExtractValidationErrors(error.ChildErrors, fullPath))
+                {
+                    yield return childError;
+                }
+            }
+        }
     }
 }
