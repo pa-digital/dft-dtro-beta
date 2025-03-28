@@ -102,7 +102,7 @@ public static class DtroExtensions
         Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         headers.Add("Content-Type", "application/json");
 
-        await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, appId);
+        await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, appId);
 
         HttpResponseMessage updateDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromBody/{dtroId}", headers, jsonString);
         return updateDtroResponse;
@@ -119,7 +119,7 @@ public static class DtroExtensions
         Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         headers.Add("Content-Type", "multipart/form-data");
 
-        await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, appId);
+        await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, appId);
 
         HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: dtroFilePath);
         return dtroCreationResponse;
@@ -136,7 +136,7 @@ public static class DtroExtensions
         Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         headers.Add("Content-Type", "multipart/form-data");
 
-        await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, appId);
+        await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, appId);
 
         HttpResponseMessage dtroUpdateResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromFile/{dtroId}", headers, pathToJsonFile: dtroFilePath);
         return dtroUpdateResponse;
@@ -164,9 +164,10 @@ public static class DtroExtensions
         return sentCreateJsonWithId;
     }
 
-    public static string CreateDtroTempFile(this string jsonString, string fileName, string traId)
+    public static string CreateDtroTempFile(this string jsonString, string fileName, TestUser testUser)
     {
-        string uniquePrefix = traId == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : traId;
+        // If the name is null, we're using a pre-existing user on dev / test / integration, so we have to create a unique file name prefix rather than use the TRA ID as a prefix
+        string uniquePrefix = testUser.Name == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : testUser.TraId;
         string nameOfCopyFile = $"{uniquePrefix}-{fileName}";
         string tempFilePath = $"{TestConfig.PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
         FileHelper.WriteStringToFile(TestConfig.PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonString);

@@ -61,7 +61,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
                                     .GetJsonFromFile(schemaVersionToTest)
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
 
-            string tempFilePathForDtroCreation = dtroCreationJson.CreateDtroTempFile(fileName, publisher.TraId);
+            string tempFilePathForDtroCreation = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await tempFilePathForDtroCreation.SendFileInDtroCreationRequestAsync(publisher.AppId);

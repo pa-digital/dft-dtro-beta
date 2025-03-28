@@ -26,7 +26,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "multipart/form-data");
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: filePath);
             return dtroCreationResponse;
@@ -43,7 +43,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "multipart/form-data");
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
 
             HttpResponseMessage updateDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{BaseUri}{RouteTemplates.DtrosBase}/updateFromFile/{dtroId}", headers, pathToJsonFile: filePath);
             return updateDtroResponse;
@@ -60,7 +60,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonBody);
             return dtroCreationResponse;
@@ -77,7 +77,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
 
             HttpResponseMessage updateDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{BaseUri}{RouteTemplates.DtrosBase}/updateFromBody/{dtroId}", headers, jsonBody);
             return updateDtroResponse;
@@ -92,7 +92,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
 
             HttpResponseMessage getDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtrosBase}/{dtroId}", headers);
             return getDtroResponse;

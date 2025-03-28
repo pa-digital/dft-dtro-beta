@@ -81,7 +81,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
                                     .ModifyPointGeometry(pointGeometryString);
 
-            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(pointGeometryFileName, publisher.TraId);
+            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(pointGeometryFileName, publisher);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher.AppId);
@@ -134,7 +134,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
                                     .ModifyLinearGeometry(linearGeometryString);
 
             // Prepare DTRO
-            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(linearGeometryFileName, publisher.TraId);
+            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(linearGeometryFileName, publisher);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await Dtros.CreateDtroFromFileAsync(dtroTempFilePath, publisher);

@@ -49,7 +49,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
                                     .ModifyToFailSchemaValidation();
 
-            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher.TraId);
+            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher.AppId);
