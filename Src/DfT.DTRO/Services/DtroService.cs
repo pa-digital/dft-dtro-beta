@@ -191,7 +191,7 @@ public class DtroService : IDtroService
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
-        if (dtroHistories.Any())
+        if (dtroHistories.Count==0)
         {
             throw new NotFoundException($"History for Dtro '{dtroId}' cannot be found.");
         }
