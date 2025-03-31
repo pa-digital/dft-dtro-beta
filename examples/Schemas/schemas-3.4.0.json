@@ -1534,24 +1534,63 @@
             "allOf": [
                 {
                     "if": {
+                        "allOf": [
+                            {
+                                "contains": {
+                                    "properties": {
+                                        "orderReportingPoint": {
+                                            "enum": [
+                                                "troOnRoadActiveStatus",
+                                                "permanentNoticeOfProposal"
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "contains": {
+                                    "properties": {
+                                        "orderReportingPoint": {
+                                            "enum": [
+                                                "experimentalAmendment",
+                                                "experimentalMakingPermanent",
+                                                "experimentalNoticeOfMaking",
+                                                "experimentalRevocation",
+                                                "permanentAmendment",
+                                                "permanentNoticeOfMaking",
+                                                "permanentRevocation",
+                                                "specialEventOrderNoticeOfMaking",
+                                                "ttroTtmoByNotice",
+                                                "ttroTtmoExtension",
+                                                "ttroTtmoNoticeAfterMaking",
+                                                "ttroTtmoNoticeOfIntention",
+                                                "ttroTtmoRevocation",
+                                                "variationByNotice"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "then": {
+                        "errorMessage": {
+                            "allOf": "Mixing different types of orderReportingPoint is not allowed."
+                        }
+                    }
+                },
+                {
+                    "if": {
                         "properties": {
                             "orderReportingPoint": {
-                                "not": {
-                                    "type": "string",
-                                    "enum": [
-                                        "troOnRoadActiveStatus",
-                                        "permanentNoticeOfProposal"
-                                    ]
-                                }
+                                "enum": [
+                                    "troOnRoadActiveStatus",
+                                    "permanentNoticeOfProposal"
+                                ]
                             }
                         }
                     },
                     "then": {
-                        "required": [
-                            "comingIntoForceDate"
-                        ]
-                    },
-                    "else": {
                         "not": {
                             "required": [
                                 "comingIntoForceDate"

@@ -112,9 +112,9 @@ public class ProvisionSchemaValidationTests : IDisposable
     }
 
     [Fact]
-    public void MissingComingIntoForceDate()
+    public void MixedOrderReportingPointsShouldFailValidation()
     {
-        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "MissingComingIntoForceDate.json");
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "MixedOrderReportingPoints.json");
         JObject json = JObject.Parse(File.ReadAllText(path));
         bool isValid = json.IsValid(_schema, out IList<string> errors);
         Assert.False(isValid);
