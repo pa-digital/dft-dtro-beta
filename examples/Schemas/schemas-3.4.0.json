@@ -72,7 +72,7 @@
                 "throughTraffic"
             ]
         },
-        "actionType": {
+        "provisionActionType": {
             "description": "Indicates the nature of update between D-TRO records or their constituent parts",
             "type": "string",
             "enum": [
@@ -84,6 +84,15 @@
                 "noChange",
                 "partialAmendment",
                 "partialRevoke"
+            ]
+        },
+        "sourceActionType": {
+            "type": "string",
+            "enum": [
+                "amendment",
+                "errorFix",
+                "new",
+                "noChange"
             ]
         },
         "actualStartOrStop": {
@@ -1475,7 +1484,7 @@
             "additionalProperties": false,
             "properties": {
                 "actionType": {
-                    "$ref": "#/$defs/actionType"
+                    "$ref": "#/$defs/provisionActionType"
                 },
                 "comingIntoForceDate": {
                     "description": "the date that the provision is coming into force",
@@ -2199,7 +2208,7 @@
             "type": "object",
             "properties": {
                 "actionType": {
-                    "$ref": "#/$defs/actionType"
+                    "$ref": "#/$defs/sourceActionType"
                 },
                 "comingIntoForceDate": {
                     "description": "the date that the TRO is coming into force",

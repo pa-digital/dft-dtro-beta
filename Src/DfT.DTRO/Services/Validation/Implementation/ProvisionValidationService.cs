@@ -35,7 +35,7 @@ public class ProvisionValidationService : IProvisionValidationService
         }
 
         DateOnly validDate = default;
-        var hasComingIntoForceDates = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
+        var hasComingIntoForceDates = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") &&
                                       provisions.Any(provision => provision.HasField(Constants.ComingIntoForceDate));
         if (hasComingIntoForceDates)
         {
@@ -45,8 +45,8 @@ public class ProvisionValidationService : IProvisionValidationService
                 provision.GetValueOrDefault<string>(Constants.ComingIntoForceDate))
                 .ToList();
             var areValidDates = comingIntoForceDates
-                .TrueForAll(comingIntoForceDate => 
-                    DateOnly.TryParse(comingIntoForceDate,  out validDate));
+                .TrueForAll(comingIntoForceDate =>
+                    DateOnly.TryParse(comingIntoForceDate, out validDate));
             if (!areValidDates)
             {
                 var error = new SemanticValidationError
@@ -74,7 +74,7 @@ public class ProvisionValidationService : IProvisionValidationService
             }
         }
 
-        var hasExpectedOccupancyDurations = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
+        var hasExpectedOccupancyDurations = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") &&
                                             provisions.Any(provision => provision.HasField(Constants.ExpectedOccupancyDuration));
         if (hasExpectedOccupancyDurations)
         {
@@ -116,7 +116,7 @@ public class ProvisionValidationService : IProvisionValidationService
             validationErrors.Add(error);
         }
 
-        var anyTemporaryOrderReportingPoints = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
+        var anyTemporaryOrderReportingPoints = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") &&
                                                orderReportingPoints.Any(orderReportingPoint => orderReportingPoint.StartsWith("ttro"));
         if (anyTemporaryOrderReportingPoints)
         {
@@ -126,72 +126,75 @@ public class ProvisionValidationService : IProvisionValidationService
                 .Cast<ExpandoObject>()
                 .ToList();
 
-            if (actualStartOrStops.Count == 0)
+            // if (actualStartOrStops.Count == 0)
+            // {
+            //     var error = new SemanticValidationError
+            //     {
+            //         Name = $"Invalid '{Constants.ActualStartOrStop}'",
+            //         Message = "Object supporting the recording of actual start and stop dates and times",
+            //         Rule = $"'{Constants.ActualStartOrStop}' must be present if a temporary ordering reporting point exists",
+            //         Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop}"
+            //     };
+
+            //     validationErrors.Add(error);
+            // }
+
+            if (actualStartOrStops.Count > 0)
             {
-                var error = new SemanticValidationError
-                {
-                    Name = $"Invalid '{Constants.ActualStartOrStop}'",
-                    Message = "Object supporting the recording of actual start and stop dates and times",
-                    Rule = $"'{Constants.ActualStartOrStop}' must be present if a temporary ordering reporting point exists",
-                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop}"
-                };
-
-                validationErrors.Add(error);
-            }
-
-            var eventAts = actualStartOrStops
+                var eventAts = actualStartOrStops
                 .Select(actualStartOrStop => ((IDictionary<string, object>)actualStartOrStop)[Constants.EventAt].ToString())
                 .ToList();
 
-            DateTime eventAtValidDate = default;
-            var areValidEventAts = eventAts.TrueForAll(eventAt => DateTime.TryParse(eventAt, out eventAtValidDate));
-            if (!areValidEventAts)
-            {
-                var error = new SemanticValidationError
+                DateTime eventAtValidDate = default;
+                var areValidEventAts = eventAts.TrueForAll(eventAt => DateTime.TryParse(eventAt, out eventAtValidDate));
+                if (!areValidEventAts)
                 {
-                    Name = $"Invalid '{Constants.EventAt}'",
-                    Message = "Indicates the date / time of the related event",
-                    Rule = $"'{Constants.EventAt}' must be of type 'string' and formatted as date-time",
-                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventAt}"
-                };
+                    var error = new SemanticValidationError
+                    {
+                        Name = $"Invalid '{Constants.EventAt}'",
+                        Message = "Indicates the date / time of the related event",
+                        Rule = $"'{Constants.EventAt}' must be of type 'string' and formatted as date-time",
+                        Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventAt}"
+                    };
 
-                validationErrors.Add(error);
-            }
+                    validationErrors.Add(error);
+                }
 
-            var isInTheFuture = eventAtValidDate > _clock.UtcNow;
-            if (isInTheFuture)
-            {
-                var error = new SemanticValidationError
+                var isInTheFuture = eventAtValidDate > _clock.UtcNow;
+                if (isInTheFuture)
                 {
-                    Name = $"Invalid '{Constants.EventAt}'",
-                    Message = "Indicates the date / time of the related event",
-                    Rule = $"'{Constants.EventAt}' can not be in the future",
-                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventAt}"
-                };
+                    var error = new SemanticValidationError
+                    {
+                        Name = $"Invalid '{Constants.EventAt}'",
+                        Message = "Indicates the date / time of the related event",
+                        Rule = $"'{Constants.EventAt}' can not be in the future",
+                        Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventAt}"
+                    };
 
-                validationErrors.Add(error);
-            }
+                    validationErrors.Add(error);
+                }
 
-            var eventTypes = actualStartOrStops
-                .Select(actualStartOrStop => actualStartOrStop.GetValueOrDefault<string>(Constants.EventType))
-                .ToList();
+                var eventTypes = actualStartOrStops
+                    .Select(actualStartOrStop => actualStartOrStop.GetValueOrDefault<string>(Constants.EventType))
+                    .ToList();
 
-            var areValidEventTypes = eventTypes.TrueForAll(eventType => Constants.EventTypes.Any(eventType.Equals));
-            if (!areValidEventTypes)
-            {
-                var error = new SemanticValidationError
+                var areValidEventTypes = eventTypes.TrueForAll(eventType => Constants.EventTypes.Any(eventType.Equals));
+                if (!areValidEventTypes)
                 {
-                    Name = $"Invalid '{Constants.EventType}'",
-                    Message = "Indicates that the event represents an actual start or stop time",
-                    Rule = $"'{Constants.EventType}' must be one of '{string.Join(",", Constants.EventTypes)}'",
-                    Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventType}"
-                };
+                    var error = new SemanticValidationError
+                    {
+                        Name = $"Invalid '{Constants.EventType}'",
+                        Message = "Indicates that the event represents an actual start or stop time",
+                        Rule = $"'{Constants.EventType}' must be one of '{string.Join(",", Constants.EventTypes)}'",
+                        Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop} -> {Constants.EventType}"
+                    };
 
-                validationErrors.Add(error);
+                    validationErrors.Add(error);
+                }
             }
         }
 
-        var anyExperimentalOrderReportingPoints = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") && 
+        var anyExperimentalOrderReportingPoints = dtroSubmit.SchemaVersion >= new SchemaVersion("3.4.0") &&
                                                   orderReportingPoints.Any(orderReportingPoint => orderReportingPoint.StartsWith("experimental"));
         if (anyExperimentalOrderReportingPoints)
         {
@@ -217,7 +220,7 @@ public class ProvisionValidationService : IProvisionValidationService
 
             if (effectOfChanges.Any(string.IsNullOrEmpty))
             {
-                
+
                 var error = new SemanticValidationError
                 {
                     Name = $"Invalid '{Constants.EffectOfChange}'",
