@@ -72,7 +72,7 @@
                 "throughTraffic"
             ]
         },
-        "actionType": {
+        "provisionActionType": {
             "description": "Indicates the nature of update between D-TRO records or their constituent parts",
             "type": "string",
             "enum": [
@@ -84,6 +84,15 @@
                 "noChange",
                 "partialAmendment",
                 "partialRevoke"
+            ]
+        },
+        "sourceActionType": {
+            "type": "string",
+            "enum": [
+                "amendment",
+                "errorFix",
+                "new",
+                "noChange"
             ]
         },
         "actualStartOrStop": {
@@ -179,139 +188,7 @@
                     "$ref": "#/$defs/rateTable"
                 },
                 "vehicleCharacteristics": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "fuelType": {
-                            "type": "array",
-                            "minItems": 1,
-                            "items": {
-                                "$ref": "#/$defs/fuelType"
-                            }
-                        },
-                        "loadType": {
-                            "$ref": "#/$defs/payloadType"
-                        },
-                        "vehicleEquipment": {
-                            "$ref": "#/$defs/vehicleEquipmentType"
-                        },
-                        "vehicleType": {
-                            "$ref": "#/$defs/vehicleType"
-                        },
-                        "vehicleUsage": {
-                            "$ref": "#/$defs/vehicleUsageType"
-                        },
-                        "yearOfFirstRegistration": {
-                            "type": "integer",
-                            "minimum": 1
-                        },
-                        "maximumGrossWeightCharacteristic": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "grossVehicleWeight",
-                                "typeOfWeight"
-                            ],
-                            "properties": {
-                                "grossVehicleWeight": {
-                                    "type": "number",
-                                    "minimum": 0
-                                },
-                                "typeOfWeight": {
-                                    "$ref": "#/$defs/weightType"
-                                }
-                            }
-                        },
-                        "maximumHeightCharacteristic": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "vehicleHeight"
-                            ],
-                            "properties": {
-                                "vehicleHeight": {
-                                    "type": "number",
-                                    "minimum": 0
-                                }
-                            }
-                        },
-                        "maximumLengthCharacteristic": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "vehicleLength"
-                            ],
-                            "properties": {
-                                "vehicleLength": {
-                                    "type": "number",
-                                    "minimum": 0
-                                }
-                            }
-                        },
-                        "maximumWidthCharacteristic": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "vehicleWidth"
-                            ],
-                            "properties": {
-                                "vehicleWidth": {
-                                    "type": "number",
-                                    "minimum": 0
-                                }
-                            }
-                        },
-                        "heaviestAxleWeightCharacteristic": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "required": [
-                                "heaviestAxleWeight"
-                            ],
-                            "properties": {
-                                "heaviestAxleWeight": {
-                                    "type": "number",
-                                    "minimum": 0
-                                }
-                            }
-                        },
-                        "numberOfAxlesCharacteristic": {
-                            "type": "array",
-                            "maxItems": 2,
-                            "items": {
-                                "type": "object",
-                                "additionalProperties": false,
-                                "required": [
-                                    "numberOfAxles",
-                                    "comparisonOperator"
-                                ],
-                                "properties": {
-                                    "numberOfAxles": {
-                                        "type": "integer",
-                                        "minimum": 1
-                                    },
-                                    "comparisonOperator": {
-                                        "$ref": "#/$defs/comparisonOperatorType"
-                                    }
-                                }
-                            }
-                        },
-                        "emissions": {
-                            "type": "object",
-                            "additionalProperties": false,
-                            "properties": {
-                                "emissionClassificationEuro": {
-                                    "$ref": "#/$defs/emissionClassificationEuroType"
-                                },
-                                "emissionClassificationOther": {
-                                    "type": "array",
-                                    "minItems": 1,
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    "$ref": "#/$defs/vehicleCharacteristics"
                 },
                 "roadCondition": {
                     "type": "object",
@@ -326,33 +203,7 @@
                     }
                 },
                 "occupantCondition": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "properties": {
-                        "disabledWithPermit": {
-                            "type": "boolean"
-                        },
-                        "numberOfOccupants": {
-                            "type": "array",
-                            "maxItems": 2,
-                            "items": {
-                                "type": "object",
-                                "additionalProperties": false,
-                                "required": [
-                                    "operator",
-                                    "value"
-                                ],
-                                "properties": {
-                                    "operator": {
-                                        "$ref": "#/$defs/comparisonOperatorType"
-                                    },
-                                    "value": {
-                                        "type": "integer"
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    "$ref": "#/$defs/occupantCondition"
                 },
                 "driverCondition": {
                     "type": "object",
@@ -484,11 +335,36 @@
                                 "type": "string",
                                 "format": "uri"
                             }
+                        },
+                        "permitTypeExtension": {
+                            "$ref": "#/$defs/extensionEnumeration"
+                        }
+                    },
+                    "if": {
+                        "properties": {
+                            "type": {
+                                "const": "other"
+                            }
+                        },
+                        "required": [
+                            "type"
+                        ]
+                    },
+                    "then": {
+                        "required": [
+                            "permitTypeExtension"
+                        ]
+                    },
+                    "else": {
+                        "not": {
+                            "required": [
+                                "permitTypeExtension"
+                            ]
                         }
                     }
                 }
             },
-            "oneOf": [
+            "anyOf": [
                 {
                     "required": [
                         "roadCondition"
@@ -802,6 +678,31 @@
                     "items": {
                         "type": "string"
                     }
+                },
+                "emissionClassificationEuroTypeExtension": {
+                    "$ref": "#/$defs/extensionEnumeration"
+                }
+            },
+            "if": {
+                "properties": {
+                    "emissionClassificationEuro": {
+                        "const": "other"
+                    }
+                },
+                "required": [
+                    "emissionClassificationEuro"
+                ]
+            },
+            "then": {
+                "required": [
+                    "emissionClassificationEuroTypeExtension"
+                ]
+            },
+            "else": {
+                "not": {
+                    "required": [
+                        "emissionClassificationEuroTypeExtension"
+                    ]
                 }
             }
         },
@@ -859,7 +760,8 @@
             "properties": {
                 "definition": {
                     "description": "User defined definition for the new list entry",
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                 },
                 "enumeratedList": {
                     "description": "Enumeration list of the data model that the next list entry is to be applied to",
@@ -867,7 +769,8 @@
                 },
                 "value": {
                     "description": "The user-defined value for the extended enumeration literal entry.",
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                 }
             },
             "required": [
@@ -1131,7 +1034,8 @@
                 "vehicleHeight": {
                     "description": "Height of the highest part, excluding antennae, of an individual vehicle from the reference plane defined by the bottom of the wheels touching the ground, in metres, defined to two decimal places.",
                     "type": "number",
-                    "minimum": 0
+                    "minimum": 0,
+                    "multipleOf": 0.01
                 }
             }
         },
@@ -1580,7 +1484,7 @@
             "additionalProperties": false,
             "properties": {
                 "actionType": {
-                    "$ref": "#/$defs/actionType"
+                    "$ref": "#/$defs/provisionActionType"
                 },
                 "comingIntoForceDate": {
                     "description": "the date that the provision is coming into force",
@@ -1639,22 +1543,66 @@
             "allOf": [
                 {
                     "if": {
+                        "allOf": [
+                            {
+                                "contains": {
+                                    "properties": {
+                                        "orderReportingPoint": {
+                                            "enum": [
+                                                "troOnRoadActiveStatus",
+                                                "permanentNoticeOfProposal"
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "contains": {
+                                    "properties": {
+                                        "orderReportingPoint": {
+                                            "enum": [
+                                                "experimentalAmendment",
+                                                "experimentalMakingPermanent",
+                                                "experimentalNoticeOfMaking",
+                                                "experimentalRevocation",
+                                                "permanentAmendment",
+                                                "permanentNoticeOfMaking",
+                                                "permanentRevocation",
+                                                "specialEventOrderNoticeOfMaking",
+                                                "ttroTtmoByNotice",
+                                                "ttroTtmoExtension",
+                                                "ttroTtmoNoticeAfterMaking",
+                                                "ttroTtmoNoticeOfIntention",
+                                                "ttroTtmoRevocation",
+                                                "variationByNotice"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "then": {
+                        "errorMessage": {
+                            "allOf": "Mixing different types of orderReportingPoint is not allowed."
+                        }
+                    }
+                },
+                {
+                    "if": {
                         "properties": {
                             "orderReportingPoint": {
-                                "type": "string",
-                                "pattern": "^ttro.*$"
+                                "enum": [
+                                    "troOnRoadActiveStatus",
+                                    "permanentNoticeOfProposal"
+                                ]
                             }
                         }
                     },
                     "then": {
-                        "required": [
-                            "actualStartOrStop"
-                        ]
-                    },
-                    "else": {
                         "not": {
                             "required": [
-                                "actualStartOrStop"
+                                "comingIntoForceDate"
                             ]
                         }
                     }
@@ -1663,43 +1611,17 @@
                     "if": {
                         "properties": {
                             "orderReportingPoint": {
-                                "type": "string",
-                                "pattern": "^experimental.*$"
+                                "not": {
+                                    "pattern": "^experimental.*$"
+                                }
                             }
                         }
                     },
                     "then": {
-                        "required": [
-                            "experimentalCessation",
-                            "experimentalVariation"
-                        ]
-                    },
-                    "else": {
                         "not": {
                             "required": [
                                 "experimentalCessation",
                                 "experimentalVariation"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "if": {
-                        "properties": {
-                            "orderReportingPoint": {
-                                "$ref": "#/$defs/conditionalOrderReportingPoints"
-                            }
-                        }
-                    },
-                    "then": {
-                        "required": [
-                            "comingIntoForceDate"
-                        ]
-                    },
-                    "else": {
-                        "not": {
-                            "required": [
-                                "comingIntoForceDate"
                             ]
                         }
                     }
@@ -1742,6 +1664,25 @@
                                     }
                                 }
                             }
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "orderReportingPoint": {
+                                "not": {
+                                    "type": "string",
+                                    "const": "troOnRoadActiveStatus"
+                                }
+                            }
+                        }
+                    },
+                    "then": {
+                        "not": {
+                            "required": [
+                                "actualStartOrStop"
+                            ]
                         }
                     }
                 }
@@ -1924,7 +1865,7 @@
                     "multipleOf": 0.01
                 },
                 "resetTime": {
-                    "description": "Time that rate resets.  Example a rate table that charges \u00c2\u00a32 per hour with a max value collection of \u00c2\u00a310, resets at 2 am.  At 2 am the \u00c2\u00a32 per hour fee would start to charge until the \u00c2\u00a310 is reached.",
+                    "description": "Time that rate resets.  Example a rate table that charges Â£2 per hour with a max value collection of Â£10, resets at 2 am.  At 2 am the Â£2 per hour fee would start to charge until the Â£10 is reached.",
                     "type": "string",
                     "format": "time"
                 },
@@ -2267,7 +2208,7 @@
             "type": "object",
             "properties": {
                 "actionType": {
-                    "$ref": "#/$defs/actionType"
+                    "$ref": "#/$defs/sourceActionType"
                 },
                 "comingIntoForceDate": {
                     "description": "the date that the TRO is coming into force",
@@ -2346,7 +2287,12 @@
                                 "items": {
                                     "properties": {
                                         "orderReportingPoint": {
-                                            "$ref": "#/$defs/conditionalOrderReportingPoints"
+                                            "not": {
+                                                "enum": [
+                                                    "troOnRoadActiveStatus",
+                                                    "permanentNoticeOfProposal"
+                                                ]
+                                            }
                                         }
                                     }
                                 }
@@ -2595,6 +2541,31 @@
                 },
                 "emissions": {
                     "$ref": "#/$defs/emissions"
+                },
+                "vehicleUsageTypeExtension": {
+                    "$ref": "#/$defs/extensionEnumeration"
+                }
+            },
+            "if": {
+                "properties": {
+                    "vehicleUsage": {
+                        "const": "other"
+                    }
+                },
+                "required": [
+                    "vehicleUsage"
+                ]
+            },
+            "then": {
+                "required": [
+                    "vehicleUsageTypeExtension"
+                ]
+            },
+            "else": {
+                "not": {
+                    "required": [
+                        "vehicleUsageTypeExtension"
+                    ]
                 }
             }
         },
@@ -2641,7 +2612,8 @@
                 "policeVehicle",
                 "ambulance",
                 "coastguardVehicle",
-                "fireServiceVehicle"
+                "fireServiceVehicle",
+                "other"
             ]
         },
         "vehicleUsageType": {
