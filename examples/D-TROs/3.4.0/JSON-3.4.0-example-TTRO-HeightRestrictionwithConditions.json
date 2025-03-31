@@ -13,12 +13,6 @@
           "provisionDescription": "Temporary height restriction (2.5m)",
           "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
           "comingIntoForceDate": "2025-01-01",
-          "actualStartOrStop": [
-            {
-              "eventAt": "2025-01-01T09:00:00",
-              "eventType": "start"
-            }
-          ],
           "regulatedPlace": [
             {
               "description": "East Reach - Taunton",

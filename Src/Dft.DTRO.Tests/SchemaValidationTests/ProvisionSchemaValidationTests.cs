@@ -58,9 +58,9 @@ public class ProvisionSchemaValidationTests : IDisposable
     }
 
     [Fact]
-    public void ActualStartOrStopPresentWithNonTemporaryOrderReportingPointShouldFail()
+    public void ActualStartOrStopPresentWithNonTROOnRoadActiveStatusOrderReportingPointShouldFail()
     {
-        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "ActualStartOrStopPresentWithNonTemporaryOrderReportingPoint.json");
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "ActualStartOrStopPresentWithNonTROOnRoadActiveStatusOrderReportingPoint.json");
         JObject json = JObject.Parse(File.ReadAllText(path));
         bool isValid = json.IsValid(_schema, out IList<string> errors);
         Assert.False(isValid);
@@ -85,9 +85,9 @@ public class ProvisionSchemaValidationTests : IDisposable
     }
 
     [Fact]
-    public void ActualStartOrStopIsAllowedToBeMissingForTemporaryOrderReportingPoint()
+    public void ActualStartOrStopPresentWithTROOnRoadActiveStatusOrderReportingPoint()
     {
-        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "valid", "ActualStartOrStopIsAllowedToBeMissingForTemporaryOrderReportingPoint.json");
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "valid", "ActualStartOrStopPresentWithTroOnRoadActiveStatusOrderReportingPoint.json");
         JObject json = JObject.Parse(File.ReadAllText(path));
         bool isValid = json.IsValid(_schema, out IList<string> errors);
         Assert.True(isValid);
