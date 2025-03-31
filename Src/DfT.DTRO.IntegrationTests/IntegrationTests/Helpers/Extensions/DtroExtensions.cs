@@ -30,6 +30,12 @@ public static class DtroExtensions
         return jsonObj.ToString();
     }
 
+    public static string ModifySchemaVersion(this string jsonString, string schemaVersion)
+    {
+        string updatedJson = Dtros.ModifySchemaVersionInDtro(jsonString, schemaVersion);
+        return updatedJson;
+    }
+
     public static string ModifyToFailSchemaValidation(this string jsonString)
     {
         var jsonObj = JObject.Parse(jsonString);

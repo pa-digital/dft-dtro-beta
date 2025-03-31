@@ -111,7 +111,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
             {
-                curl.Append($" -H \"{header.Key}: {string.Join(", ", header.Value)}\"");
+                // TODO: Obfuscate bearer token
+                curl.Append($$""" -H "{{header.Key}}: {{string.Join(", ", header.Value)}}" """);
             }
 
             if (request.Content?.Headers != null)
@@ -122,7 +123,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                     string headerValue = string.Join(", ", contentHeader.Value);
                     // Strip out boundary, because cURL adds it automatically
                     string headerValueWithoutBoundard = Regex.Replace(headerValue, pattern, "");
-                    curl.Append($" -H \"{contentHeader.Key}: {headerValueWithoutBoundard}\"");
+                    curl.Append($$""" -H "{{contentHeader.Key}}: {{headerValueWithoutBoundard}}" """);
                 }
             }
 
@@ -135,7 +136,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             }
             else if (request.Content is MultipartFormDataContent)
             {
-                curl.Append($" --form 'file=@\"{pathToJsonFile}\"'");
+                curl.Append($$""" --form 'file=@"{{pathToJsonFile}}"'""");
             }
 
             string curlString = curl.ToString();
