@@ -8,12 +8,6 @@
                 "orderReportingPoint": "ttroTtmoByNotice",
                 "provisionDescription": "Schedule 1: No Waiting Monday to Saturday, 8am to 6pm",
                 "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
-                "actualStartOrStop": [
-                    {
-                        "eventAt": "2025-01-01T00:00:00",
-                        "eventType": "start"
-                    }
-                ],
                 "regulatedPlace": [
                     {
                         "description": "West side, Market Street, Draycott",

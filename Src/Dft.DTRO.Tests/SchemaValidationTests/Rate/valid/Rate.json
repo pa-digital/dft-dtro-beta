@@ -8,12 +8,6 @@
         "orderReportingPoint": "ttroTtmoNoticeOfIntention",
         "provisionDescription": "Temporary full road closure, for combined utility works and carriageway repair",
         "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
-        "actualStartOrStop": [
-          {
-            "eventAt": "2025-01-01T09:00:00",
-            "eventType": "start"
-          }
-        ],
         "regulatedPlace": [
           {
             "description": "East Reach, Taunton, bi-directional",

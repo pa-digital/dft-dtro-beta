@@ -1641,8 +1641,7 @@
                     "if": {
                         "properties": {
                             "orderReportingPoint": {
-                                "type": "string",
-                                "pattern": "^ttro.*$"
+                                "const": "troOnRoadActiveStatus"
                             }
                         }
                     },
@@ -2641,7 +2640,8 @@
                 "policeVehicle",
                 "ambulance",
                 "coastguardVehicle",
-                "fireServiceVehicle"
+                "fireServiceVehicle",
+                "other"
             ]
         },
         "vehicleUsageType": {

@@ -10,12 +10,6 @@
           "orderReportingPoint": "ttroTtmoNoticeAfterMaking",
           "provisionDescription": "Suspension of one way on Haydon Road, perhaps to be linked to placement of temporary traffic signals",
           "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
-          "actualStartOrStop": [
-            {
-              "eventAt": "2025-01-01T09:00:00",
-              "eventType": "start"
-            }
-          ],
           "regulatedPlace": [
             {
               "description": "Haydon Road",
