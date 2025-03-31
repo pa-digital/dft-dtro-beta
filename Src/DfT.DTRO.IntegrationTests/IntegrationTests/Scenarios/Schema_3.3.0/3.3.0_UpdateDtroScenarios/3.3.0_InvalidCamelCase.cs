@@ -3,7 +3,7 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.ErrorJsonResponseProcessor;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.UpdateDtroScenarios
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.DtroUpdateScenarios
 {
     public class InvalidCamelCase : BaseTest
     {

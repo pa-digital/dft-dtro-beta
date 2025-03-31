@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.UpdateDtroScenarios
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScenarios
 {
     public class ExternalReferenceLastUpdateInFuture : BaseTest
     {

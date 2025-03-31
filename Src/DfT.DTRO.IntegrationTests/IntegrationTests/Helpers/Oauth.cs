@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using DfT.DTRO.Consts;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using DfT.DTRO.Models.DataBase;
-using DotNetEnv;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
