@@ -213,4 +213,11 @@ public static class DtroExtensions
         string updatedLinearGeometry = JsonMethods.SetValueAtJsonPath(jsonString, "data.source.provision[0].regulatedPlace[0].linearGeometry.linestring", linearGeometryString);
         return updatedLinearGeometry;
     }
+
+    public static string ConvertJsonKeysToCamelCase(this string json)
+    {
+        JObject jsonObject = JObject.Parse(json);
+        JObject camelCasedObject = JsonMethods.ConvertKeysToCamelCase(jsonObject);
+        return JsonConvert.SerializeObject(camelCasedObject, Formatting.Indented);
+    }
 }
