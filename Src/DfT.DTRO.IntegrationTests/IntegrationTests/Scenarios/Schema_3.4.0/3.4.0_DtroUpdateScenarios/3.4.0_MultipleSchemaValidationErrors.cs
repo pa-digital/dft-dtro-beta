@@ -5,7 +5,7 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTests
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScenarios
 {
     // DPPB-1235
     public class MultipleSchemaValidationErrors : BaseTest
@@ -18,7 +18,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
-            await publisher.CreateUserForDataSetUpAsync();
 
             // Prepare DTRO
             string dtroCreationJson = fileName
@@ -54,7 +53,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateTest
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
-            await publisher.CreateUserForDataSetUpAsync();
 
             // Prepare DTRO
             string dtroCreationJson = fileName

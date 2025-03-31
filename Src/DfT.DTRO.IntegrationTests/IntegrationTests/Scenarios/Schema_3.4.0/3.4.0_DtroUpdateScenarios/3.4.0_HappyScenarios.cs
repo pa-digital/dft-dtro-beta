@@ -28,7 +28,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScen
 
             // Generate user to send DTRO and read it back
             TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
-            await publisher.CreateUserForDataSetUpAsync();
 
             // Prepare DTRO
             string dtroCreationJson = fileName
@@ -73,7 +72,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScen
 
             // Generate user to send DTRO and read it back
             TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
-            await publisher.CreateUserForDataSetUpAsync();
 
             // Prepare DTRO
             string dtroCreationJson = fileName
