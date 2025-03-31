@@ -3,6 +3,7 @@
 /// <summary>
 /// Wrapper for Street Work Manager codes.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class DtroUser
 {
@@ -11,14 +12,14 @@ public class DtroUser
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 
 
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
-    public Guid xAppId { get; set; }
+    public Guid AppId { get; set; }
 
     /// <summary>
     /// The ID of the traffic regulation authority

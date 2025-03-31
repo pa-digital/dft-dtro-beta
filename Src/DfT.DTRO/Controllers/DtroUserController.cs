@@ -1,15 +1,9 @@
-﻿using DfT.DTRO.Migrations;
-using DfT.DTRO.Models.DataBase;
-using Google.Protobuf.WellKnownTypes;
-using System;
-using System.Drawing;
-
-namespace DfT.DTRO.Controllers;
+﻿namespace DfT.DTRO.Controllers;
 
 /// <summary>
 /// Controller for capturing Dtro Users
 /// </summary>
-[Tags("DtroUser")]
+[Tags("DtroUsers")]
 [ApiController]
 public class DtroUserController : ControllerBase
 {
@@ -40,7 +34,7 @@ public class DtroUserController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>A list of Dtro Users</returns>
-    [HttpGet("/dtroUsers")]
+    [HttpGet(RouteTemplates.DtroUsersFindAll)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "Dtro Users retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
@@ -85,7 +79,7 @@ public class DtroUserController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>A List of Dtro Users</returns>
-    [HttpGet("/dtroUsers/search/{partialName}")]
+    [HttpGet(RouteTemplates.DtroUsersSearch)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "Dtro User retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
@@ -133,8 +127,7 @@ public class DtroUserController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted dtro User.</returns>
-    [HttpPost]
-    [Route("/dtroUsers/createFromBody")]
+    [HttpPost(RouteTemplates.DtroUsersCreateFromBody)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
@@ -195,7 +188,7 @@ public class DtroUserController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            _loggingExtension.LogError(nameof(CreateFromBody),"/dtroUsers/createFromBody", "", ex.Message);
+            _loggingExtension.LogError(nameof(CreateFromBody), "/dtroUsers/createFromBody", "", ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
@@ -209,8 +202,7 @@ public class DtroUserController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted DtroUser.</returns>
-    [HttpPut]
-    [Route("/dtroUsers/updateFromBody")]
+    [HttpPut(RouteTemplates.DtroUsersUpdateFromBody)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
@@ -299,7 +291,7 @@ public class DtroUserController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>A Dtro User</returns>
-    [HttpGet("/dtroUsers/{dtroUserId:guid}")]
+    [HttpGet(RouteTemplates.DtroUsersFindById)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
@@ -367,7 +359,7 @@ public class DtroUserController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>True if successful, False otherwise</returns>
-    [HttpDelete("/dtroUsers/redundant")]
+    [HttpDelete(RouteTemplates.DtroUsersDeleteRedundant)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(bool), description: "Ok")]

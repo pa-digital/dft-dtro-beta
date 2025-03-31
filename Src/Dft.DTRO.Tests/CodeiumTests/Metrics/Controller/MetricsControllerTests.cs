@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.Metrics.Controller;
 
-[ExcludeFromCodeCoverage]
 public class MetricsControllerTests
 {
     private readonly MetricsController _controller;

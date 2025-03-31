@@ -1,12 +1,10 @@
-﻿using DfT.DTRO.Models.DataBase;
-
-namespace DfT.DTRO.Controllers;
+﻿namespace DfT.DTRO.Controllers;
 
 /// <summary>
 /// Controller for capturing metric
 /// </summary>
-[Tags("Metrics")]
 [ApiController]
+[Tags("Metrics")]
 public class MetricsController : ControllerBase
 {
     private readonly IMetricsService _metricsService;
@@ -34,7 +32,7 @@ public class MetricsController : ControllerBase
     /// </summary>
     /// <response code="200">OK.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpGet("/healthApi")]
+    [HttpGet(RouteTemplates.HealthApi)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [ValidateModelState]
     [SwaggerResponse(statusCode: 200, description: "The API is up and running.")]
@@ -68,7 +66,7 @@ public class MetricsController : ControllerBase
     /// <response code="200">OK.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpGet("/healthDatabase")]
+    [HttpGet(RouteTemplates.HealthDatabase)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "Database is available.")]
     [SwaggerResponse(statusCode: 404, description: "Database is not available.")]
@@ -110,12 +108,11 @@ public class MetricsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Metric summary</returns>
-    [HttpPost("/metricsForDtroUser")]
+    [HttpPost(RouteTemplates.MetricsForDtroUser)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "Metrics retrieved successfully.")]
     [SwaggerResponse(statusCode: 400, description: "Dates Incorrect.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
-
     public async Task<ActionResult<MetricSummary>> GetMetricsForDtroUser([FromBody] MetricRequest metricRequest)
     {
         try
@@ -131,7 +128,7 @@ public class MetricsController : ControllerBase
         catch (ArgumentException aex)
         {
             _logger.LogError(aex.Message);
-            _loggingExtension.LogError( nameof(GetMetricsForDtroUser), "/metricsForDtroUser", "", aex.Message);
+            _loggingExtension.LogError(nameof(GetMetricsForDtroUser), "/metricsForDtroUser", "", aex.Message);
             return BadRequest(new ApiErrorResponse("Bad Request", aex.Message));
         }
         catch (Exception ex)
@@ -154,12 +151,11 @@ public class MetricsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>Metric summary</returns>
-    [HttpPost("/fullMetricsForDtroUser")]
+    [HttpPost(RouteTemplates.FullMetricsForDtroUser)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "Metrics retrieved successfully.")]
     [SwaggerResponse(statusCode: 400, description: "Dates Incorrect.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
-
     public async Task<ActionResult<List<FullMetricSummary>>> GetFullMetricsForDtroUser([FromBody] MetricRequest metricRequest)
     {
         var dtroUserId = metricRequest.DtroUserId;

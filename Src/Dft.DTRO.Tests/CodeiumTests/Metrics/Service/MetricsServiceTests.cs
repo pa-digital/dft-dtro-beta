@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.Metrics.Service;
 
-[ExcludeFromCodeCoverage]
 public class MetricsServiceTests
 {
     private readonly MetricRequest _metricRequest = new()

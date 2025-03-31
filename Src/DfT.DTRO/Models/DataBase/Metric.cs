@@ -3,6 +3,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for Metric
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class Metric
 {
@@ -11,14 +12,14 @@ public class Metric
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 
     /// <summary>
     /// Dtro User Id of the metric
     /// </summary>
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid DtroUserId { get; set; }
 
@@ -64,21 +65,6 @@ public class Metric
     /// </summary>
     [DataMember(Name = "eventCount ")]
     public int EventCount { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request with which this metric document was created.
-    /// </summary>
-    [DataMember(Name = "createdCorrelationId")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public string CreatedCorrelationId { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request witch which this metric document was updated.
-    /// </summary>
-    [DataMember(Name = "lastUpdatedCorrelationId")]
-    [SwaggerSchema(ReadOnly = true)]
-    public string LastUpdatedCorrelationId { get; set; }
 
     /// <summary>
     /// The user group

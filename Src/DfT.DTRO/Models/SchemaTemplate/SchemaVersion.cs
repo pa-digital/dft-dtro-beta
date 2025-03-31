@@ -6,11 +6,11 @@ public class SchemaVersion : IComparable<SchemaVersion>
 {
     private const string ValidationPattern = @"^\d+\.\d+\.\d+$";
 
-    private int Major { get; }
+    public int Major { get; }
 
-    private int Minor { get; }
+    public int Minor { get; }
 
-    private int Patch { get; }
+    public int Patch { get; }
 
     public SchemaVersion(string version)
     {

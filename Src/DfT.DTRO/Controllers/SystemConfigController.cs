@@ -1,32 +1,27 @@
-﻿using DfT.DTRO.Models.DataBase;
-using DfT.DTRO.Models.DtroDtos;
-using DfT.DTRO.Models.SystemConfig;
+﻿using DfT.DTRO.Models.SystemConfig;
 
 namespace DfT.DTRO.Controllers;
 
 [ApiController]
+[Tags("SystemConfig")]
 public class SystemConfigController : ControllerBase
 {
     private readonly ISystemConfigService _systemConfigService;
     private readonly ILogger<SystemConfigController> _logger;
-    private readonly IAppIdMapperService _appIdMapperService;
     private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
     /// Default constructor
     /// </summary>
     /// <param name="systemConfigService">An <see cref="ISystemConfigService"/> instance.</param>
-    /// <param name="appIdMapperService">An <see cref="IAppIdMapperService"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{SystemConfigController}"/> instance.</param>
     /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
     public SystemConfigController(
         ISystemConfigService systemConfigService,
-        IAppIdMapperService appIdMapperService,
         ILogger<SystemConfigController> logger,
         LoggingExtension loggingExtension)
     {
         _systemConfigService = systemConfigService;
-        _appIdMapperService = appIdMapperService;
         _logger = logger;
         _loggingExtension = loggingExtension;
     }
@@ -38,15 +33,14 @@ public class SystemConfigController : ControllerBase
     /// <response code="200">System name retrieved successfully.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>SystemConfigResponse</returns>
-    [HttpGet("/systemConfig")]
+    [HttpGet(RouteTemplates.SystemConfigFind)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, description: "System name retrieved successfully.")]
     [SwaggerResponse(statusCode: 500, description: "Internal server error.")]
-    public async Task<ActionResult<SystemConfigResponse>> GetSystemConfig([FromHeader(Name = "x-app-id")][Required] Guid appId)
+    public async Task<ActionResult<SystemConfigResponse>> GetSystemConfig([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
             var res = await _systemConfigService.GetSystemConfigAsync(appId);
             _logger.LogInformation($"'{nameof(GetSystemConfig)}' method called");
             _loggingExtension.LogInformation(
@@ -87,8 +81,7 @@ public class SystemConfigController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>SystemConfigResponse</returns>
-    [HttpPut]
-    [Route("/systemConfig/updateFromBody")]
+    [HttpPut(RouteTemplates.SystemConfigUpdateFromBody)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Admin)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]

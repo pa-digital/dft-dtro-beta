@@ -3,7 +3,6 @@ using Newtonsoft.Json.Converters;
 
 namespace DfT.DTRO.Tests.CodeiumTests.Integration;
 
-[ExcludeFromCodeCoverage]
 public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactory<Program>>
 {
     private const string SchemaVersion = "3.2.0";
@@ -13,9 +12,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     private readonly SchemasController _controller;
 
     private readonly WebApplicationFactory<Program> _factory;
-
-    private readonly Mock<IRequestCorrelationProvider> _mockCorrelationProvider;
-
+    
     private readonly Mock<ISchemaTemplateService> _mockSchemaTemplateService;
 
     private readonly ExpandoObject? _schemaTemplate;
@@ -23,13 +20,12 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     public SchemaController_Codeium_Tests(WebApplicationFactory<Program> factory)
     {
         _mockSchemaTemplateService = new Mock<ISchemaTemplateService>();
-        _mockCorrelationProvider = new Mock<IRequestCorrelationProvider>();
         Mock<ILogger<SchemasController>> mockLogger = new();
         Mock<LoggingExtension.Builder> _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
         var mockLoggingExtension = new Mock<LoggingExtension>();
 
         _controller = new SchemasController(_mockSchemaTemplateService.Object,
-            _mockCorrelationProvider.Object, mockLogger.Object, mockLoggingExtension.Object);
+            mockLogger.Object, mockLoggingExtension.Object);
 
         _schemaTemplate = new ExpandoObject();
         try
@@ -44,7 +40,6 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         _factory = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
             services.AddSingleton(_mockSchemaTemplateService.Object);
-            services.AddSingleton(_mockCorrelationProvider.Object);
             services.AddSingleton(mockLogger.Object);
         }));
     }
@@ -202,8 +197,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     public async Task CreateSchema_ReturnsCreated()
     {
         Guid guidId = Guid.NewGuid();
-        _mockSchemaTemplateService.Setup(mock => mock.SaveSchemaTemplateAsJsonAsync("3.2.0", _schemaTemplate,
-                _mockCorrelationProvider.Object.CorrelationId))
+        _mockSchemaTemplateService.Setup(mock => mock.SaveSchemaTemplateAsJsonAsync("3.2.0", _schemaTemplate))
             .ReturnsAsync(new GuidResponse { Id = guidId });
 
         CreatedAtActionResult? result =
@@ -220,8 +214,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     {
         ExpandoObject body = new ExpandoObject();
         _mockSchemaTemplateService.Setup(mock =>
-                mock.SaveSchemaTemplateAsJsonAsync(BadSchemaVersion, body,
-                    _mockCorrelationProvider.Object.CorrelationId))
+                mock.SaveSchemaTemplateAsJsonAsync(BadSchemaVersion, body))
             .Throws(new InvalidOperationException("Invalid schema"));
 
         BadRequestObjectResult? result =
@@ -238,7 +231,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     {
         ExpandoObject body = new ExpandoObject();
         _mockSchemaTemplateService.Setup(mock => mock.SaveSchemaTemplateAsJsonAsync(BadSchemaVersion,
-                body, _mockCorrelationProvider.Object.CorrelationId))
+                body))
             .Throws(new Exception("Unexpected error"));
 
         ObjectResult? result = await _controller.CreateFromBodyByVersion(BadSchemaVersion, body) as ObjectResult;
@@ -253,7 +246,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         GuidResponse guidResponse = new GuidResponse();
 
         _mockSchemaTemplateService.Setup(s => s.UpdateSchemaTemplateAsJsonAsync
-                (SchemaVersion, body, It.IsAny<string>()))
+                (SchemaVersion, body))
             .ReturnsAsync(guidResponse);
 
         ObjectResult? result = await _controller.UpdateFromBodyByVersion(SchemaVersion, body) as ObjectResult;
@@ -261,7 +254,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         Assert.IsType<OkObjectResult>(result);
         Assert.Equal(guidResponse, result.Value);
         _mockSchemaTemplateService.Verify(s => s.UpdateSchemaTemplateAsJsonAsync
-            (SchemaVersion, body, It.IsAny<string>()), Times.Once);
+            (SchemaVersion, body), Times.Once);
     }
 
     [Fact]
@@ -269,14 +262,14 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     {
         ExpandoObject body = new ExpandoObject();
         _mockSchemaTemplateService.Setup(s => s.UpdateSchemaTemplateAsJsonAsync
-                (BadSchemaVersion, body, It.IsAny<string>()))
+                (BadSchemaVersion, body))
             .ThrowsAsync(new NotFoundException());
 
         ObjectResult? result = await _controller.UpdateFromBodyByVersion(BadSchemaVersion, body) as ObjectResult;
 
         Assert.IsType<NotFoundObjectResult>(result);
         _mockSchemaTemplateService.Verify(s => s.UpdateSchemaTemplateAsJsonAsync
-            (BadSchemaVersion, body, It.IsAny<string>()), Times.Once);
+            (BadSchemaVersion, body), Times.Once);
     }
 
     [Fact]
@@ -284,7 +277,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
     {
         ExpandoObject body = new ExpandoObject();
         _mockSchemaTemplateService
-            .Setup(s => s.UpdateSchemaTemplateAsJsonAsync(BadSchemaVersion, body, It.IsAny<string>()))
+            .Setup(s => s.UpdateSchemaTemplateAsJsonAsync(BadSchemaVersion, body))
             .ThrowsAsync(new InvalidOperationException("Invalid schema version or body"));
 
         BadRequestObjectResult? result =
@@ -293,7 +286,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         Assert.NotNull(result);
         Assert.IsType<ApiErrorResponse>(result.Value);
         _mockSchemaTemplateService.Verify(
-            s => s.UpdateSchemaTemplateAsJsonAsync(BadSchemaVersion, body, It.IsAny<string>()), Times.Once);
+            s => s.UpdateSchemaTemplateAsJsonAsync(BadSchemaVersion, body), Times.Once);
     }
 
     [Fact]
@@ -302,7 +295,7 @@ public class SchemaController_Codeium_Tests : IClassFixture<WebApplicationFactor
         string version = "1.0.0";
         ExpandoObject body = new ExpandoObject();
         _mockSchemaTemplateService.Setup(s => s.UpdateSchemaTemplateAsJsonAsync
-            (version, body, It.IsAny<string>())).ThrowsAsync(new Exception());
+            (version, body)).ThrowsAsync(new Exception());
 
         ObjectResult? result = await _controller.UpdateFromBodyByVersion(version, body) as ObjectResult;
 

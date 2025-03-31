@@ -27,6 +27,3 @@ public class FullMetricSummary
     [DataMember(Name = "eventCount")]
     public int EventCount { get; set; } = 0;
 }
-
-
-

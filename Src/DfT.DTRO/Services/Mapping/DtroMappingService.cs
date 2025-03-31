@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DfT.DTRO.Models.Tra;
+using Newtonsoft.Json.Linq;
 
 namespace DfT.DTRO.Services.Mapping;
 
@@ -100,6 +101,13 @@ public class DtroMappingService : IDtroMappingService
             Id = dtro.Id,
             SchemaVersion = dtro.SchemaVersion,
             Data = dtro.Data
+        };
+
+    /// <inheritdoc cref="IDtroMappingService"/>
+    public TraFindAllResponse MapToTraFindAllResponse(TrafficRegulationAuthority tra) =>
+        new()
+        {
+            Name = tra.Name,
         };
 
     /// <inheritdoc cref="IDtroMappingService"/>

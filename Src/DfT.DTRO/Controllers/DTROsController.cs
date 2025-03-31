@@ -9,14 +9,12 @@ namespace DfT.DTRO.Controllers;
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
-
+[Tags("Dtros")]
 public class DTROsController : ControllerBase
 {
     private readonly IDtroService _dtroService;
     private readonly IMetricsService _metricsService;
-    private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<DTROsController> _logger;
-    private readonly IAppIdMapperService _appIdMapperService;
     private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
@@ -24,22 +22,16 @@ public class DTROsController : ControllerBase
     /// </summary>
     /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
     /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
-    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
-    /// <param name="appIdMapperService">An <see cref="IAppIdMapperService"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{DTROsController}"/> instance.</param>
     /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
     public DTROsController(
          IDtroService dtroService,
          IMetricsService metricsService,
-         IRequestCorrelationProvider correlationProvider,
-         IAppIdMapperService appIdMapperService,
          ILogger<DTROsController> logger,
          LoggingExtension loggingExtension)
     {
         _dtroService = dtroService;
         _metricsService = metricsService;
-        _correlationProvider = correlationProvider;
-        _appIdMapperService = appIdMapperService;
         _logger = logger;
         _loggingExtension = loggingExtension;
     }
@@ -54,12 +46,11 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
-    [HttpPost]
-    [Route("/dtros/createFromFile")]
+    [HttpPost(RouteTemplates.DtrosCreateFromFile)]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [FeatureGate(FeatureNames.Publish)]
-    public async Task<IActionResult> CreateFromFile([FromHeader(Name = "x-app-id")][Required] Guid appId, IFormFile file)
+    public async Task<IActionResult> CreateFromFile([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -68,14 +59,13 @@ public class DTROsController : ControllerBase
 
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
             using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
 
-                GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, appId);
+                GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, appId);
                 await _metricsService.IncrementMetric(MetricType.Submission, appId);
                 _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using appId: '{appId}' and file '{file.Name}'");
                 _loggingExtension.LogInformation(
@@ -84,6 +74,14 @@ public class DTROsController : ControllerBase
                     $"'{nameof(CreateFromFile)}' method called using appId: '{appId}' and file '{file.Name}'");
                 return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
+        }
+        catch (CaseException cex)
+        {
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
+
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(CreateFromFile), "/dtros/createFromFile", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
         }
         catch (DtroValidationException dvex)
         {
@@ -161,14 +159,13 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
-    [HttpPut]
-    [Route("/dtros/updateFromFile/{dtroId:guid}")]
+    [HttpPut(RouteTemplates.DtrosUpdateFromFile)]
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
-    public async Task<IActionResult> UpdateFromFile([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId, IFormFile file)
+    public async Task<IActionResult> UpdateFromFile([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, Guid dtroId, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -177,21 +174,28 @@ public class DTROsController : ControllerBase
 
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
             using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
-                GuidResponse response = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, _correlationProvider.CorrelationId, appId);
+                GuidResponse response = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, appId);
                 await _metricsService.IncrementMetric(MetricType.Submission, appId);
-                _logger.LogInformation($"'{nameof(UpdateFromFile)}' method called using x-app-id Id: '{appId}', unique identifier: '{dtroId}' and file: '{file.Name}'");
+                _logger.LogInformation($"'{nameof(UpdateFromFile)}' method called using {RequestHeaderNames.AppId} Id: '{appId}', unique identifier: '{dtroId}' and file: '{file.Name}'");
                 _loggingExtension.LogInformation(
                     nameof(UpdateFromFile),
                     $"/dtros/UpdateFromFile/{dtroId}",
                     $"'{nameof(UpdateFromFile)}' method called using appId: '{appId}', unique identifier: '{dtroId}' and file '{file.Name}'");
                 return Ok(response);
             }
+        }
+        catch (CaseException cex)
+        {
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
+
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(UpdateFromFile), "/dtros/updateFromFile", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
         }
         catch (DtroValidationException dvex)
         {
@@ -260,17 +264,15 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
-    [HttpPost]
-    [Route("/dtros/createFromBody")]
+    [HttpPost(RouteTemplates.DtrosCreateFromBody)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
-    public async Task<IActionResult> CreateFromBody([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromBody] DtroSubmit dtroSubmit)
+    public async Task<IActionResult> CreateFromBody([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, [FromBody] DtroSubmit dtroSubmit)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
-            GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, appId);
+            GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, appId);
             await _metricsService.IncrementMetric(MetricType.Submission, appId);
             _logger.LogInformation($"'{nameof(CreateFromBody)}' method called using appId: '{appId}' and body '{dtroSubmit}'");
             _loggingExtension.LogInformation(
@@ -278,6 +280,14 @@ public class DTROsController : ControllerBase
                 "/dtros/createFromBody",
                 $"'{nameof(CreateFromBody)}' method called using appId: '{appId}' and body '{dtroSubmit}'");
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
+        }
+        catch (CaseException cex)
+        {
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
+
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(CreateFromBody), "/dtros/createFromBody", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
         }
         catch (DtroValidationException dvex)
         {
@@ -363,17 +373,15 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>ID of the submitted D-TRO</returns>
-    [HttpPut]
-    [Route("/dtros/updateFromBody/{dtroId:guid}")]
+    [HttpPut(RouteTemplates.DtrosUpdateFromBody)]
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Ok")]
-    public async Task<IActionResult> UpdateFromBody([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromRoute] Guid dtroId, [FromBody] DtroSubmit dtroSubmit)
+    public async Task<IActionResult> UpdateFromBody([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, [FromRoute] Guid dtroId, [FromBody] DtroSubmit dtroSubmit)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
-            GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, _correlationProvider.CorrelationId, appId);
+            GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, appId);
             await _metricsService.IncrementMetric(MetricType.Submission, appId);
             _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using appId: '{appId}', unique identifier: '{dtroId}' and body: '{dtroSubmit}'");
             _loggingExtension.LogInformation(
@@ -381,6 +389,14 @@ public class DTROsController : ControllerBase
                 $"/dtros/updateFromBody/{dtroId}",
                 $"'{nameof(UpdateFromBody)}' method called using appId: '{appId}', unique identifier: '{dtroId}' and body: '{dtroSubmit}'");
             return Ok(guidResponse);
+        }
+        catch (CaseException cex)
+        {
+            await _metricsService.IncrementMetric(MetricType.SubmissionValidationFailure, appId);
+
+            _logger.LogError(cex.Message);
+            _loggingExtension.LogError(nameof(UpdateFromBody), "/dtros/updateFromBody", "Case naming convention exception", cex.Message);
+            return BadRequest(new ApiErrorResponse("Case naming convention exception", cex.Message));
         }
         catch (DtroValidationException dvex)
         {
@@ -448,8 +464,7 @@ public class DTROsController : ControllerBase
     /// </summary>
     /// <param name="parameters">Properties passed to query by</param>
     /// <returns>A list of D-TRO active records</returns>
-    [HttpGet]
-    [Route("/dtros")]
+    [HttpGet(RouteTemplates.DtrosFindAll)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
     [SwaggerResponse(statusCode: 404, description: "Could not found any D-TRO records.")]
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
@@ -489,8 +504,7 @@ public class DTROsController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>D-TRO object.</returns>
-    [HttpGet]
-    [Route("/dtros/{id:guid}")]
+    [HttpGet(RouteTemplates.DtrosFindById)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -527,15 +541,14 @@ public class DTROsController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpDelete("/dtros/{dtroId:guid}")]
+    [HttpDelete(RouteTemplates.DtrosDeleteById)]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> Delete([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId)
+    public async Task<IActionResult> Delete([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, Guid dtroId)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
             await _dtroService.DeleteDtroAsync(dtroId);
             await _metricsService.IncrementMetric(MetricType.Deletion, appId);
             _logger.LogInformation($"'{nameof(Delete)}' method called using appId: '{appId}' and unique identifier '{dtroId}'");
@@ -600,8 +613,7 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of D-TROs source history.</returns>
-    [HttpGet]
-    [Route("/dtros/sourceHistory/{dtroId:guid}")]
+    [HttpGet(RouteTemplates.DtrosFindSourceHistory)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<ActionResult<List<DtroHistorySourceResponse>>> GetSourceHistory(Guid dtroId)
     {
@@ -642,8 +654,7 @@ public class DTROsController : ControllerBase
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
     /// <returns>List of D-TROs provision history.</returns>
-    [HttpGet]
-    [Route("/dtros/provisionHistory/{dtroId:guid}")]
+    [HttpGet(RouteTemplates.DtrosFindProvisionHistory)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish)]
     public async Task<ActionResult<List<DtroHistoryProvisionResponse>>> GetProvisionHistory(Guid dtroId)
     {
@@ -685,16 +696,15 @@ public class DTROsController : ControllerBase
     /// <response code="400">Bad Request.</response>
     /// <response code="404">Not found.</response>
     /// <response code="500">Internal Server Error.</response>
-    [HttpPost("/dtros/ownership/{dtroId:guid}/{assignToTraId:guid}")]
+    [HttpPost(RouteTemplates.DtrosAssignOwnership)]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> AssignOwnership([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId, Guid assignToTraId)
+    public async Task<IActionResult> AssignOwnership([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, Guid dtroId, Guid assignToTraId)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
-            await _dtroService.AssignOwnershipAsync(dtroId, appId, assignToTraId, _correlationProvider.CorrelationId);
+            await _dtroService.AssignOwnershipAsync(dtroId, appId, assignToTraId);
             _logger.LogInformation($"'{nameof(AssignOwnership)}' method called using appId '{appId}', unique identifier '{dtroId}' and new assigned TRA Id '{assignToTraId}'");
             _loggingExtension.LogInformation(
                 nameof(AssignOwnership),
@@ -749,4 +759,26 @@ public class DTROsController : ControllerBase
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
+
+    /// <summary>
+    /// Return a count of submitted D-TROs
+    /// </summary>
+    /// <response code="200">Success</response>
+    /// <response code="500">Internal Server Error.</response>
+    [HttpGet(RouteTemplates.DtrosCount)]
+    [SwaggerResponse(statusCode: 200, description: "Successfully retrieved DTRO count")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error")]
+    public async Task<IActionResult> GetDTROSubmissionCount()
+    {
+        try
+        {
+            int count = await _dtroService.GetDtroSubmissionCount();
+            return Ok(new DtroCountResponse { Count = count });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
+        }
+    }
+
 }

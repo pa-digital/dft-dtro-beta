@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.UnitTests;
 
-[ExcludeFromCodeCoverage]
 public class Proj4SpatialProjectionTests
 {
     private const double ErrorMarginPercent = 1.2;

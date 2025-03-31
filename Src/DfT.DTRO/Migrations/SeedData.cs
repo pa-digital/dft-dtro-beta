@@ -14,7 +14,7 @@ public static class SeedData
                         new DtroUser
                         {
                             Id = new Guid("67d2adeb-31ac-4962-8025-c14ef2aa7236"),
-                            xAppId = Guid.Empty,
+                            AppId = Guid.Empty,
                             UserGroup = (int) UserGroup.Admin,
                             Name = "Department of Transport",
                             Prefix = "",
@@ -23,4 +23,3 @@ public static class SeedData
     };
 
 }
-

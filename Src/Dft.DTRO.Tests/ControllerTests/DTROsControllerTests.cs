@@ -1,15 +1,12 @@
 namespace Dft.DTRO.Tests.ControllerTests;
 
-[ExcludeFromCodeCoverage]
 public class DTROsControllerTests
 {
     private readonly Mock<IDtroService> _mockDtroService = new();
     private readonly Mock<IMetricsService> _mockMetricsService = new();
-    private readonly Mock<IRequestCorrelationProvider> _mockRequestCorrelationProvider = new();
-    private readonly Mock<IAppIdMapperService> _mockXAppIdMapperService = new();
 
     private readonly DTROsController _sut;
-    private readonly Guid _xAppId;
+    private readonly Guid _appId;
 
     public DTROsControllerTests()
     {
@@ -19,35 +16,25 @@ public class DTROsControllerTests
         _sut = new DTROsController(
             _mockDtroService.Object,
             _mockMetricsService.Object,
-            _mockRequestCorrelationProvider.Object,
-            _mockXAppIdMapperService.Object,
             mockLogger,
             mockLoggingExtension.Object);
 
-        _xAppId = Guid.NewGuid();
+        _appId = Guid.NewGuid();
         Mock<HttpContext> mockContext = MockHttpContext.Setup();
-
-        _mockXAppIdMapperService
-            .Setup(it => it.GetAppId(mockContext.Object))
-            .ReturnsAsync(() => _xAppId);
 
         _mockMetricsService
             .Setup(it => it.IncrementMetric(It.IsAny<MetricType>(), It.IsAny<Guid>()))
             .ReturnsAsync(() => true);
-
-        _mockRequestCorrelationProvider
-            .SetupGet(provider => provider.CorrelationId)
-            .Returns(() => _xAppId.ToString());
     }
 
     [Fact]
     public async Task CreateFromFileReturnsCreated()
     {
         _mockDtroService
-            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<Guid>()))
             .ReturnsAsync(() => MockTestObjects.GuidResponse);
 
-        IActionResult? actual = await _sut.CreateFromFile(_xAppId, MockTestObjects.TestFile);
+        IActionResult? actual = await _sut.CreateFromFile(_appId, MockTestObjects.TestFile);
 
         Assert.NotNull(actual);
 
@@ -58,10 +45,10 @@ public class DTROsControllerTests
     public async Task CreateFromFileThrowDtroValidationException()
     {
         _mockDtroService
-            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<Guid>()))
             .Throws<DtroValidationException>();
 
-        IActionResult? actual = await _sut.CreateFromFile(_xAppId, MockTestObjects.TestFile);
+        IActionResult? actual = await _sut.CreateFromFile(_appId, MockTestObjects.TestFile);
 
         Assert.NotNull(actual);
         Assert.Equal(400, ((BadRequestObjectResult)actual).StatusCode);
@@ -71,10 +58,10 @@ public class DTROsControllerTests
     public async Task CreateFromFileThrowsNotFoundException()
     {
         _mockDtroService
-            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<Guid>()))
             .Throws<NotFoundException>();
 
-        IActionResult? actual = await _sut.CreateFromFile(_xAppId, MockTestObjects.TestFile);
+        IActionResult? actual = await _sut.CreateFromFile(_appId, MockTestObjects.TestFile);
 
         Assert.NotNull(actual);
         Assert.Equal(404, ((NotFoundObjectResult)actual).StatusCode);
@@ -84,10 +71,10 @@ public class DTROsControllerTests
     public async Task CreateFromFileThrowsInvalidOperationException()
     {
         _mockDtroService
-            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<Guid>()))
             .Throws<InvalidOperationException>();
 
-        IActionResult? actual = await _sut.CreateFromFile(_xAppId, MockTestObjects.TestFile);
+        IActionResult? actual = await _sut.CreateFromFile(_appId, MockTestObjects.TestFile);
 
         Assert.NotNull(actual);
         Assert.Equal(400, ((BadRequestObjectResult)actual).StatusCode);
@@ -97,10 +84,10 @@ public class DTROsControllerTests
     public async Task CreateFromFileThrowsException()
     {
         _mockDtroService
-            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<string>(), It.IsAny<Guid>()))
+            .Setup(it => it.SaveDtroAsJsonAsync(It.IsAny<DtroSubmit>(), It.IsAny<Guid>()))
             .Throws<Exception>();
 
-        IActionResult? actual = await _sut.CreateFromFile(_xAppId, MockTestObjects.TestFile);
+        IActionResult? actual = await _sut.CreateFromFile(_appId, MockTestObjects.TestFile);
 
         Assert.NotNull(actual);
         Assert.Equal(500, ((ObjectResult)actual).StatusCode);
@@ -111,11 +98,11 @@ public class DTROsControllerTests
     {
         _mockDtroService
             .Setup(it =>
-                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(),
+                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(),
                     It.IsAny<Guid>()))
             .ReturnsAsync(() => MockTestObjects.GuidResponse);
 
-        IActionResult? actual = await _sut.UpdateFromFile(_xAppId, Guid.NewGuid(), MockTestObjects.TestFile);
+        IActionResult? actual = await _sut.UpdateFromFile(_appId, Guid.NewGuid(), MockTestObjects.TestFile);
 
         Assert.NotNull(actual);
 
@@ -127,11 +114,11 @@ public class DTROsControllerTests
     {
         _mockDtroService
             .Setup(it =>
-                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(),
+                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(),
                     It.IsAny<Guid>()))
             .Throws<DtroValidationException>();
 
-        IActionResult? actual = await _sut.UpdateFromFile(_xAppId, Guid.NewGuid(), MockTestObjects.TestFile);
+        IActionResult? actual = await _sut.UpdateFromFile(_appId, Guid.NewGuid(), MockTestObjects.TestFile);
 
         Assert.NotNull(actual);
         Assert.Equal(400, ((BadRequestObjectResult)actual).StatusCode);
@@ -142,11 +129,11 @@ public class DTROsControllerTests
     {
         _mockDtroService
             .Setup(it =>
-                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(),
+                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(),
                     It.IsAny<Guid>()))
             .Throws<NotFoundException>();
 
-        IActionResult? actual = await _sut.UpdateFromFile(_xAppId, Guid.NewGuid(), MockTestObjects.TestFile);
+        IActionResult? actual = await _sut.UpdateFromFile(_appId, Guid.NewGuid(), MockTestObjects.TestFile);
 
         Assert.NotNull(actual);
         Assert.Equal(404, ((NotFoundObjectResult)actual).StatusCode);
@@ -157,11 +144,11 @@ public class DTROsControllerTests
     {
         _mockDtroService
             .Setup(it =>
-                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(),
+                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(),
                     It.IsAny<Guid>()))
             .Throws<InvalidOperationException>();
 
-        IActionResult? actual = await _sut.UpdateFromFile(_xAppId, Guid.NewGuid(), MockTestObjects.TestFile);
+        IActionResult? actual = await _sut.UpdateFromFile(_appId, Guid.NewGuid(), MockTestObjects.TestFile);
 
         Assert.NotNull(actual);
         Assert.Equal(400, ((BadRequestObjectResult)actual).StatusCode);
@@ -172,11 +159,11 @@ public class DTROsControllerTests
     {
         _mockDtroService
             .Setup(it =>
-                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(), It.IsAny<string>(),
+                it.TryUpdateDtroAsJsonAsync(It.IsAny<Guid>(), It.IsAny<DtroSubmit>(),
                     It.IsAny<Guid>()))
             .Throws<Exception>();
 
-        IActionResult? actual = await _sut.UpdateFromFile(_xAppId, Guid.NewGuid(), MockTestObjects.TestFile);
+        IActionResult? actual = await _sut.UpdateFromFile(_appId, Guid.NewGuid(), MockTestObjects.TestFile);
 
         Assert.NotNull(actual);
         Assert.Equal(500, ((ObjectResult)actual).StatusCode);
@@ -200,5 +187,31 @@ public class DTROsControllerTests
         Assert.NotNull(actual);
 
         Assert.Equal(200, ((ObjectResult)actual).StatusCode);
+    }
+
+    [Fact]
+    public async Task GetDTROSubmissionCountReturnsOkWithCorrectCount()
+    {
+        int expectedCount = 5;
+        _mockDtroService.Setup(s => s.GetDtroSubmissionCount()).ReturnsAsync(expectedCount);
+
+        var result = await _sut.GetDTROSubmissionCount();
+
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var responseData = Assert.IsType<DtroCountResponse>(okResult.Value);
+        Assert.Equal(expectedCount, responseData.Count);
+    }
+
+    [Fact]
+    public async Task GetDTROSubmissionCountReturns500OnException()
+    {
+        _mockDtroService.Setup(s => s.GetDtroSubmissionCount()).ThrowsAsync(new Exception("Database error"));
+
+        var result = await _sut.GetDTROSubmissionCount();
+        var statusResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(500, statusResult.StatusCode);
+
+        var errorResponse = Assert.IsType<ApiErrorResponse>(statusResult.Value);
+        Assert.Equal("Internal Server Error", errorResponse.Message);
     }
 }

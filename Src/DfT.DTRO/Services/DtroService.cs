@@ -27,7 +27,7 @@ public class DtroService : IDtroService
         _schemaTemplateDal = schemaTemplateDal;
         _dtroMappingService = dtroMappingService;
         _dtroGroupValidatorService = dtroGroupValidatorService;
-        _fileDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Exported_Files");
+        _fileDirectory = OSHelper.GetOSAppDataPath();
         Directory.CreateDirectory(_fileDirectory);
     }
 
@@ -70,41 +70,35 @@ public class DtroService : IDtroService
 
         return dtros.Select(_dtroMappingService.MapToDtroResponse);
     }
-    
+
     public async Task<bool> GenerateDtrosAsZipAsync()
     {
-
         var existingZipFiles = Directory.GetFiles(_fileDirectory, "dtro_export_*.zip");
         foreach (var file in existingZipFiles)
         {
             File.Delete(file);
         }
 
-
         var dtros = await _dtroDal.GetDtrosAsync();
         if (dtros is null || !dtros.Any())
         {
-            throw new NotFoundException();;
+            throw new NotFoundException(); ;
         }
-
 
         var timestamp = DateTime.Now.ToString("s");
         var zipFileName = $"dtro_export_{timestamp}.zip";
         var zipFilePath = Path.Combine(_fileDirectory, zipFileName);
 
-        var fileIndex = 0;
-        int rowsPerFile = int.Parse(Environment.GetEnvironmentVariable("DTRO_PARTITION_SIZE") ?? "1000");
         var jsonFilePaths = new List<string>();
 
-        foreach (var chunk in dtros.Chunk(rowsPerFile))
+        foreach (var record in dtros)
         {
-            string jsonFilePath = Path.Combine(_fileDirectory, $"dtros_{fileIndex++}.json");
-            await WriteDtrosToJsonAsync(chunk, jsonFilePath);
+            string jsonFilePath = Path.Combine(_fileDirectory, $"{record.Id}.json");
+            await WriteDtroToJsonAsync(record, jsonFilePath);
             jsonFilePaths.Add(jsonFilePath);
         }
 
-
-        using (var zipStream = new FileStream(zipFilePath, FileMode.Create))
+        await using (var zipStream = new FileStream(zipFilePath, FileMode.Create))
         using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
         {
             foreach (var jsonFile in jsonFilePaths)
@@ -114,16 +108,15 @@ public class DtroService : IDtroService
             }
         }
 
-
         return true;
     }
 
 
-    private async Task WriteDtrosToJsonAsync(IEnumerable<Models.DataBase.DTRO> dtros, string filePath)
+    private async Task WriteDtroToJsonAsync(Models.DataBase.DTRO dtro, string filePath)
     {
-        using (var writer = new StreamWriter(filePath, append: false, encoding: Encoding.UTF8, bufferSize: 4096))
+        await using (var writer = new StreamWriter(filePath, append: false, encoding: Encoding.UTF8, bufferSize: 4096))
         {
-            var json = System.Text.Json.JsonSerializer.Serialize(dtros, new System.Text.Json.JsonSerializerOptions
+            var json = System.Text.Json.JsonSerializer.Serialize(dtro, new System.Text.Json.JsonSerializerOptions
             {
                 WriteIndented = true
             });
@@ -145,9 +138,9 @@ public class DtroService : IDtroService
         return _dtroMappingService.MapToDtroResponse(dtro);
     }
 
-    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
+    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, Guid appId)
     {
-        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
         var errors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, user.TraId);
 
         if (errors is not null)
@@ -155,12 +148,12 @@ public class DtroService : IDtroService
             throw errors;
         }
 
-        return await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
+        return await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit);
     }
 
-    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
+    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, Guid appId)
     {
-        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
         var errors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, user.TraId);
 
         if (errors is not null)
@@ -184,7 +177,7 @@ public class DtroService : IDtroService
             throw new DataException("Failed to write update to history table");
         }
 
-        await _dtroDal.UpdateDtroAsJsonAsync(id, dtroSubmit, correlationId);
+        await _dtroDal.UpdateDtroAsJsonAsync(id, dtroSubmit);
         return new GuidResponse { Id = id };
     }
 
@@ -198,7 +191,7 @@ public class DtroService : IDtroService
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
-        if (dtroHistories.Any())
+        if (dtroHistories.Count==0)
         {
             throw new NotFoundException($"History for Dtro '{dtroId}' cannot be found.");
         }
@@ -271,7 +264,7 @@ public class DtroService : IDtroService
     }
 
 
-    public async Task<bool> AssignOwnershipAsync(Guid dtroId, Guid appId, Guid assignToUser, string correlationId)
+    public async Task<bool> AssignOwnershipAsync(Guid dtroId, Guid appId, Guid assignToUser)
     {
         var dtroUserList = await _dtroUserDal.GetAllDtroUsersAsync();
 
@@ -312,8 +305,13 @@ public class DtroService : IDtroService
             throw new NotFoundException($"Invalid -assign To Id-: {assignToUser} , the User does not have a Traffic Authority Id");
         }
 
-        await _dtroDal.AssignDtroOwnership(dtroId, (int)assign.TraId, correlationId);
+        await _dtroDal.AssignDtroOwnership(dtroId, (int)assign.TraId);
 
         return true;
+    }
+
+    public async Task<int> GetDtroSubmissionCount()
+    {
+        return await _dtroDal.GetDtroSubmissionCount();
     }
 }

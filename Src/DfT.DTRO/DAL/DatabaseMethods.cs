@@ -3,6 +3,7 @@
 /// <summary>
 /// Extension class for database methods.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class DatabaseMethods
 {
     /// <summary>

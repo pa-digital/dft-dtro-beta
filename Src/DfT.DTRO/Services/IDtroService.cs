@@ -6,7 +6,7 @@ public interface IDtroService
 
     Task<bool> DtroExistsAsync(Guid id);
 
-    Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId);
+    Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, Guid appId);
 
     /// <summary>
     /// Get all D-TRO records withing parameters
@@ -14,7 +14,7 @@ public interface IDtroService
     /// <param name="parameters">Parameters passed</param>
     /// <returns>List of D-TRO records</returns>
     Task<IEnumerable<DtroResponse>> GetDtrosAsync(GetAllQueryParameters parameters);
-    
+
     /// <summary>
     /// Get all D-TRO records withing parameters
     /// </summary>
@@ -24,7 +24,7 @@ public interface IDtroService
 
     Task<DtroResponse> GetDtroByIdAsync(Guid id);
 
-    Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, Guid xAppId);
+    Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, Guid appId);
 
     Task<bool> DeleteDtroAsync(Guid dtroId, DateTime? deletionTime = null);
 
@@ -36,5 +36,7 @@ public interface IDtroService
 
     Task<List<DtroHistoryProvisionResponse>> GetDtroProvisionHistoryAsync(Guid dtroId);
 
-    Task<bool> AssignOwnershipAsync(Guid dtroId, Guid xAppId, Guid assignToUser, string correlationId);
+    Task<bool> AssignOwnershipAsync(Guid dtroId, Guid appId, Guid assignToUser);
+    
+    Task<int> GetDtroSubmissionCount();
 }

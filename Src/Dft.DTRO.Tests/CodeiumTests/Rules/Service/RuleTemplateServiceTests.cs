@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.Rules.Service;
 
-[ExcludeFromCodeCoverage]
 public class RuleTemplateServiceTests
 {
     private readonly Mock<IDtroDal> _mockDtroDal;
@@ -90,12 +89,11 @@ public class RuleTemplateServiceTests
         const string version = "1.0.0";
         SchemaVersion schemaVersion = new("1.0.0");
         const string rule = "{}";
-        const string correlationId = "test-correlation-id";
         GuidResponse guidResponse = new();
         _mockRuleTemplateDal.Setup(x => x.RuleTemplateExistsAsync(schemaVersion)).ReturnsAsync(false);
-        _mockRuleTemplateDal.Setup(x => x.SaveRuleTemplateAsJsonAsync(version, rule, correlationId))
+        _mockRuleTemplateDal.Setup(x => x.SaveRuleTemplateAsJsonAsync(version, rule))
             .ReturnsAsync(guidResponse);
-        GuidResponse? result = await _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, rule, correlationId);
+        GuidResponse? result = await _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, rule);
         Assert.Equal(guidResponse, result);
     }
 
@@ -104,15 +102,14 @@ public class RuleTemplateServiceTests
     {
         const string version = "1.0.0";
         const string rule = "{}";
-        const string correlationId = "test-correlation-id";
         GuidResponse guidResponse = new();
         SchemaVersion schemaVersion = new("1.0.0");
 
         _mockRuleTemplateDal.Setup(x => x.RuleTemplateExistsAsync(schemaVersion)).ReturnsAsync(true);
         _mockDtroDal.Setup(x => x.DtroCountForSchemaAsync(schemaVersion)).ReturnsAsync(0);
-        _mockRuleTemplateDal.Setup(x => x.UpdateRuleTemplateAsJsonAsync(version, rule, correlationId))
+        _mockRuleTemplateDal.Setup(x => x.UpdateRuleTemplateAsJsonAsync(version, rule))
             .ReturnsAsync(guidResponse);
-        GuidResponse? result = await _ruleTemplateService.UpdateRuleTemplateAsJsonAsync(version, rule, correlationId);
+        GuidResponse? result = await _ruleTemplateService.UpdateRuleTemplateAsJsonAsync(version, rule);
         Assert.Equal(guidResponse, result);
     }
 
@@ -122,10 +119,9 @@ public class RuleTemplateServiceTests
         const string version = "1.0.0";
         SchemaVersion schemaVersion = new("1.0.0");
         const string rule = "{}";
-        const string correlationId = "test-correlation-id";
         _mockRuleTemplateDal.Setup(x => x.RuleTemplateExistsAsync(schemaVersion)).ReturnsAsync(false);
         await Assert.ThrowsAsync<NotFoundException>(() =>
-            _ruleTemplateService.UpdateRuleTemplateAsJsonAsync(version, rule, correlationId));
+            _ruleTemplateService.UpdateRuleTemplateAsJsonAsync(version, rule));
     }
 
     [Fact]
@@ -142,11 +138,10 @@ public class RuleTemplateServiceTests
     {
         const string version = "1.0.0";
         const string rule = "{}";
-        const string correlationId = "test-correlation-id";
         SchemaVersion schemaVersion = new("1.0.0");
         _mockRuleTemplateDal.Setup(x => x.RuleTemplateExistsAsync(schemaVersion)).ReturnsAsync(true);
         await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, rule, correlationId));
+            _ruleTemplateService.SaveRuleTemplateAsJsonAsync(version, rule));
     }
 
     [Fact]

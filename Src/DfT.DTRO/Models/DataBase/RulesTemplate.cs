@@ -5,6 +5,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for a Rule.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class RuleTemplate
 {
@@ -13,7 +14,7 @@ public class RuleTemplate
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 
@@ -40,21 +41,6 @@ public class RuleTemplate
     [DataMember(Name = "lastUpdated")]
     [SwaggerSchema(ReadOnly = true)]
     public DateTime? LastUpdated { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request with which this DTRO was created.
-    /// </summary>
-    [DataMember(Name = "createdCorrelationId")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public string CreatedCorrelationId { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request with which this DTRO was last updated.
-    /// </summary>
-    [DataMember(Name = "lastUpdatedCorrelationId")]
-    [SwaggerSchema(ReadOnly = true)]
-    public string LastUpdatedCorrelationId { get; set; }
 
     /// <summary>
     /// The Rule data model being submitted.

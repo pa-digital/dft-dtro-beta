@@ -6,6 +6,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for D-TRO submission.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class DTRO
 {
@@ -14,7 +15,7 @@ public class DTRO
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 
@@ -70,21 +71,6 @@ public class DTRO
     /// Descriptive name of the D-TRO document.
     /// </summary>
     public string TroName { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request with which this D-TRO document was created.
-    /// </summary>
-    [DataMember(Name = "createdCorrelationId")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public string CreatedCorrelationId { get; set; }
-
-    /// <summary>
-    /// Request Correlation ID which D-TRO document was updated by.
-    /// </summary>
-    [DataMember(Name = "lastUpdatedCorrelationId")]
-    [SwaggerSchema(ReadOnly = true)]
-    public string LastUpdatedCorrelationId { get; set; }
 
     /// <summary>
     /// Flag representing a deletion of the D-TRO.

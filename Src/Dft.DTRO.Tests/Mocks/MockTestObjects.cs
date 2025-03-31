@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.Mocks;
 
-[ExcludeFromCodeCoverage]
 public static class MockTestObjects
 {
     public static IFormFile TestFile
@@ -27,7 +26,7 @@ public static class MockTestObjects
             TraId = 3300,
             Prefix = "LG",
             UserGroup = UserGroup.Tra,
-            xAppId = Guid.NewGuid()
+            AppId = Guid.NewGuid()
         },
         new DtroUserResponse
         {
@@ -36,7 +35,7 @@ public static class MockTestObjects
             TraId = 1050,
             Prefix = "DJ",
             UserGroup = UserGroup.Tra,
-            xAppId = Guid.NewGuid()
+            AppId = Guid.NewGuid()
         },
         new DtroUserResponse
         {
@@ -45,7 +44,7 @@ public static class MockTestObjects
             TraId = 4,
             Prefix = "AP",
             UserGroup = UserGroup.Tra,
-            xAppId = Guid.NewGuid()
+            AppId = Guid.NewGuid()
         }
     };
 
@@ -163,7 +162,45 @@ public static class MockTestObjects
 
         return dtros.ToList();
     }
-    
+
+    public static List<TrafficRegulationAuthority> Tras => new()
+    {
+        new TrafficRegulationAuthority()
+        {
+            Name = "tra1"
+        },
+        new TrafficRegulationAuthority()
+        {
+            Name = "tra2"
+        },
+        new TrafficRegulationAuthority()
+        {
+            Name = "tra3"
+        },
+        new TrafficRegulationAuthority()
+        {
+            Name = "tra4"
+        },
+        new TrafficRegulationAuthority()
+        {
+            Name = "tra5"
+        }
+    };
+
+    public static List<TrafficRegulationAuthority> GetTras(GetAllTrasQueryParameters queryParameters)
+    {
+        var tras = Tras;
+
+        if (queryParameters.TraName != null)
+        {
+            tras = tras
+                .Where(it => it.Name.Equals(queryParameters.TraName))
+                .ToList();
+        }
+
+        return tras.ToList();
+    }
+
     public static List<DfT.DTRO.Models.DataBase.DTRO> GetDtros()
     {
         var dtros = Dtros.Where(dtro => !dtro.Deleted);
@@ -197,4 +234,40 @@ public static class MockTestObjects
             Data = new ExpandoObject()
         }
     };
+
+    public static List<TraFindAllResponse> TraFindAllResponse => new()
+    {
+        new TraFindAllResponse
+        {
+            Name = "name"
+        }
+    };
+
+    public static AuthToken AuthToken => new()
+    {
+        AccessToken = "accessToken"
+    };
+
+    public static App App => new()
+    {
+        AppId = "appId",
+        CreatedAt = -1,
+        Credentials =
+           [
+               new AppCredential
+               {
+                   ConsumerKey = "consumerKey",
+                   ConsumerSecret = "consumerSecret",
+                   ExpiresAt = -1,
+                   IssuedAt = -1,
+                   Status = "status"
+               }
+           ],
+        DeveloperId = "developerId",
+        LastModifiedAt = -1,
+        Name = "name",
+        Status = "status",
+    };
+
+
 }

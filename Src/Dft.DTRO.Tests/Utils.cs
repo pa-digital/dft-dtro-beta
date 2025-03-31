@@ -3,7 +3,6 @@ using Newtonsoft.Json.Converters;
 
 namespace Dft.DTRO.Tests;
 
-[ExcludeFromCodeCoverage]
 public static class Utils
 {
     public static DtroSubmit PrepareDtro(string jsonData, SchemaVersion schemaVersion) =>
@@ -38,8 +37,6 @@ public static class Utils
             SchemaVersion = schemaVersion,
             Created = DateTime.Now,
             LastUpdated = DateTime.Now,
-            CreatedCorrelationId = Guid.NewGuid().ToString(),
-            LastUpdatedCorrelationId = Guid.NewGuid().ToString(),
             IsActive = true,
             Template = schemaData
         };
@@ -165,7 +162,7 @@ public static class Utils
         {
             TraId = 1002,
             UserGroup = UserGroup.Admin,
-            xAppId = Guid.NewGuid(),
+            AppId = Guid.NewGuid(),
             Name = "Department for Transport",
             Prefix = "DfT"
         },
@@ -173,7 +170,7 @@ public static class Utils
         {
             TraId = 1000,
             UserGroup = UserGroup.Tra,
-            xAppId = Guid.NewGuid(),
+            AppId = Guid.NewGuid(),
             Name = "Essex Council",
             Prefix = "GP"
         },
@@ -181,9 +178,19 @@ public static class Utils
         {
             TraId = 1001,
             UserGroup = UserGroup.Tra,
-            xAppId = Guid.NewGuid(),
+            AppId = Guid.NewGuid(),
             Name = "Cornwall Council",
             Prefix = "DP"
         }
     };
+
+    public static string GetProjectRoot()
+    {
+        return Directory.GetParent(AppContext.BaseDirectory).Parent.Parent.Parent.Parent.Parent.FullName;
+    }
+
+    public static string GetSchema340()
+    {
+        return Path.Combine(GetProjectRoot(), "examples", "Schemas", "schemas-3.4.0.json");
+    }    
 }

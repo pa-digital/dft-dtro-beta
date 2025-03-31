@@ -6,6 +6,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for a Schema.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class SchemaTemplate
 {
@@ -14,7 +15,7 @@ public class SchemaTemplate
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 
@@ -40,21 +41,6 @@ public class SchemaTemplate
     [DataMember(Name = "lastUpdated")]
     [SwaggerSchema(ReadOnly = true)]
     public DateTime? LastUpdated { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request with which this Schema document was created.
-    /// </summary>
-    [DataMember(Name = "createdCorrelationId")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public string CreatedCorrelationId { get; set; }
-
-    /// <summary>
-    /// Correlation ID of the request witch which Schema document was updated.
-    /// </summary>
-    [DataMember(Name = "lastUpdatedCorrelationId")]
-    [SwaggerSchema(ReadOnly = true)]
-    public string LastUpdatedCorrelationId { get; set; }
 
     /// <summary>
     /// Flag representing whether the Schema is available.

@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class ExternalReferenceValidationServiceTests
 {
     private readonly IExternalReferenceValidationService _sut = new ExternalReferenceValidationService();
@@ -65,7 +64,7 @@ public class ExternalReferenceValidationServiceTests
         ", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(0, actual.Count);
+        Assert.Empty(actual);
     }
 
     [Theory]
@@ -101,7 +100,7 @@ public class ExternalReferenceValidationServiceTests
         ", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(0, actual.Count);
+        Assert.Empty(actual);
     }
 
 
@@ -164,7 +163,7 @@ public class ExternalReferenceValidationServiceTests
         ", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(0, actual.Count);
+        Assert.Empty(actual);
     }
 
     [Fact]
@@ -194,6 +193,6 @@ public class ExternalReferenceValidationServiceTests
         ", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(0, actual.Count);
+        Assert.Empty(actual);
     }
 }

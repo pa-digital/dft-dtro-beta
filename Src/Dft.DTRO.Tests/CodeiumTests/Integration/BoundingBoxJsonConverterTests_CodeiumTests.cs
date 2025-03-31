@@ -2,7 +2,6 @@
 
 namespace Dft.DTRO.Tests.CodeiumTests.Integration;
 
-[ExcludeFromCodeCoverage]
 public class BoundingBoxJsonConverterTests
 {
     private readonly JsonSerializer _serializer;

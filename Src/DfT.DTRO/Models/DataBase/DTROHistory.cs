@@ -6,6 +6,7 @@ namespace DfT.DTRO.Models.DataBase;
 /// <summary>
 /// Wrapper for D-TRO history.
 /// </summary>
+[ExcludeFromCodeCoverage]
 [DataContract]
 public class DTROHistory
 {
@@ -14,7 +15,7 @@ public class DTROHistory
     /// </summary>
     [Key]
     [SwaggerSchema(ReadOnly = true)]
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Column(TypeName = "uuid")]
     public Guid Id { get; set; }
 

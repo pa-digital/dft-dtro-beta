@@ -1,10 +1,8 @@
 ﻿namespace Dft.DTRO.Tests.CodeiumTests.Rules.Controller;
 
-[ExcludeFromCodeCoverage]
 public class RulesControllerUpdateTests
 {
     private readonly RulesController _controller;
-    private readonly Mock<IRequestCorrelationProvider> _mockCorrelationProvider;
     private readonly Mock<IRuleTemplateService> _mockRuleTemplateService;
     private readonly Mock<LoggingExtension.Builder> _mockLoggingBuilder;
     private readonly Mock<LoggingExtension> _mockLoggingExtension;
@@ -12,14 +10,12 @@ public class RulesControllerUpdateTests
     public RulesControllerUpdateTests()
     {
         _mockRuleTemplateService = new Mock<IRuleTemplateService>();
-        _mockCorrelationProvider = new Mock<IRequestCorrelationProvider>();
         Mock<ILogger<RulesController>> mockLogger = new();
         _mockLoggingBuilder = new Mock<LoggingExtension.Builder>();
         _mockLoggingExtension = new Mock<LoggingExtension>();
 
         _controller = new RulesController(
             _mockRuleTemplateService.Object,
-            _mockCorrelationProvider.Object,
             mockLogger.Object,
             _mockLoggingExtension.Object);
     }
@@ -54,9 +50,8 @@ public class RulesControllerUpdateTests
         file.Setup(f => f.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
             .Callback<Stream, CancellationToken>((stream, _) => memoryStream.CopyTo(stream));
         GuidResponse response = new() { Id = Guid.NewGuid() };
-        _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
+        _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent))
             .ReturnsAsync(response);
-        _mockCorrelationProvider.Setup(c => c.CorrelationId).Returns("correlation-id");
         IActionResult? result = await _controller.UpdateFromFile(version, file.Object);
         Assert.IsType<OkObjectResult>(result);
     }
@@ -71,7 +66,7 @@ public class RulesControllerUpdateTests
         file.Setup(f => f.Length).Returns(memoryStream.Length);
         file.Setup(f => f.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
             .Callback<Stream, CancellationToken>((stream, _) => memoryStream.CopyTo(stream));
-        _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
+        _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent))
             .ThrowsAsync(new InvalidOperationException("Invalid operation"));
         IActionResult? result = await _controller.UpdateFromFile(version, file.Object);
         Assert.IsType<BadRequestObjectResult>(result);
@@ -87,7 +82,7 @@ public class RulesControllerUpdateTests
         file.Setup(f => f.Length).Returns(memoryStream.Length);
         file.Setup(f => f.CopyToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>()))
             .Callback<Stream, CancellationToken>((stream, _) => memoryStream.CopyTo(stream));
-        _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent, It.IsAny<string>()))
+        _mockRuleTemplateService.Setup(s => s.UpdateRuleTemplateAsJsonAsync(version, fileContent))
             .ThrowsAsync(new Exception("General exception"));
         IActionResult? result = await _controller.UpdateFromFile(version, file.Object);
         Assert.IsType<ObjectResult>(result);

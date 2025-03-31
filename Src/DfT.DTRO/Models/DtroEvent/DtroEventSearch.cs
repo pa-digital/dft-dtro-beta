@@ -17,6 +17,10 @@ public class DtroEventSearch
     [DataMember(Name = "since")]
     public DateTime? Since { get; set; }
 
+    [Required]
+    [DataMember(Name = "to")]
+    public DateTime? To { get; set; }
+
     public DateTime? DeletionTime { get; set; }
 
     public DateTime? ModificationTime { get; set; }
@@ -50,4 +54,7 @@ public class DtroEventSearch
 
     [DataMember(Name = "regulationEnd")]
     public ValueCondition<DateTime> RegulationEnd { get; set; }
+
+    [DataMember(Name = "eventType")]
+    public string EventType { get; set; }
 }

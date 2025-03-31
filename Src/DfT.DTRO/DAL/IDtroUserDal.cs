@@ -49,7 +49,7 @@ public interface IDtroUserDal
     /// <summary>
     /// Get DtroUser by <paramref name="appId"/>
     /// </summary>
-    /// <param name="appId">the x-app-id.</param>
+    /// <param name="appId">the App-Id.</param>
     /// <returns>A <see cref="Task"/> representing the asynchronous get operation.</returns>
     Task<DtroUser> GetDtroUserOnAppIdAsync(Guid appId);
 

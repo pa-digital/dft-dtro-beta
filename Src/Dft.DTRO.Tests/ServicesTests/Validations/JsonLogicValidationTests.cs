@@ -2,7 +2,6 @@
 
 namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class JsonLogicValidationTests
 {
     private readonly Mock<IRuleTemplateDal> _ruleDal = new();

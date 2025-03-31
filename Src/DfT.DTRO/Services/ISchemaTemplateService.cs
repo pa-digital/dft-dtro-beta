@@ -14,9 +14,9 @@ public interface ISchemaTemplateService
 
     Task<List<SchemaTemplateOverview>> GetSchemaTemplatesVersionsAsync();
 
-    Task<GuidResponse> SaveSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId);
+    Task<GuidResponse> SaveSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject);
 
-    Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject, string correlationId);
+    Task<GuidResponse> UpdateSchemaTemplateAsJsonAsync(string version, ExpandoObject expandoObject);
 
     Task<bool> SchemaTemplateExistsAsync(SchemaVersion schemaVersion);
 

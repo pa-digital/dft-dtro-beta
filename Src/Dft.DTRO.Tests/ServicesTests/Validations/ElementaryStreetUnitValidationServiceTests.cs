@@ -1,6 +1,5 @@
 ﻿namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class ElementaryStreetUnitValidationServiceTests
 {
     private readonly IElementaryStreetUnitValidationService _sut = new ElementaryStreetUnitValidationService();
@@ -91,7 +90,7 @@ public class ElementaryStreetUnitValidationServiceTests
         }}", new SchemaVersion("3.3.0"));
 
         var actual = _sut.Validate(dtroSubmit);
-        Assert.Equal(0, actual.Count);
+        Assert.Empty(actual);
     }
 
     [Fact]

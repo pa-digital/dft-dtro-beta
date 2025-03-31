@@ -2,7 +2,6 @@
 
 namespace Dft.DTRO.Tests.ServicesTests.Validations;
 
-[ExcludeFromCodeCoverage]
 public class GeometryValidationTests
 {
     private readonly IGeometryValidation _sut;
@@ -23,8 +22,6 @@ public class GeometryValidationTests
         BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529200, NorthLatitude = 529200 };
 
         var actual = _sut.ValidateGeometryAgainstCurrentSchemaVersion(JObject.Parse(payload), errors);
-
-        Assert.NotNull(actual);
         Assert.Equal(expected, actual);
     }
 
@@ -36,8 +33,6 @@ public class GeometryValidationTests
         var schemaVersion = new SchemaVersion("3.2.0");
         BoundingBox expected = new() { WestLongitude = 178750, SouthLatitude = 178750, EastLongitude = 529250, NorthLatitude = 529250 };
         var actual = _sut.ValidateGeometryAgainstPreviousSchemaVersions(JObject.Parse(payload), schemaVersion, errors);
-
-        Assert.NotNull(actual);
         Assert.Equal(expected, actual);
     }
 }

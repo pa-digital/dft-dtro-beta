@@ -1,12 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using DfT.DTRO.DAL;
-using DfT.DTRO.JsonLogic;
-using DfT.DTRO.Models.RuleTemplate;
-using DfT.DTRO.Models.SystemConfig;
-using Microsoft.EntityFrameworkCore;
-using SchemaVersion = DfT.DTRO.Models.SchemaTemplate.SchemaVersion;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.DAL;
 
 [ExcludeFromCodeCoverage]
 public class SystemConfigDal : ISystemConfigDal
@@ -26,7 +18,7 @@ public class SystemConfigDal : ISystemConfigDal
             return new SystemConfigResponse() { SystemName = "Not Set (record not found in database)" };
         }
 
-        return new SystemConfigResponse() { SystemName = config.SystemName , IsTest = config.IsTest};
+        return new SystemConfigResponse() { SystemName = config.SystemName, IsTest = config.IsTest };
     }
 
     public async Task<bool> UpdateSystemConfigAsync(SystemConfigRequest systemConfigRequest)
@@ -35,7 +27,7 @@ public class SystemConfigDal : ISystemConfigDal
         if (existing == null)
         {
             throw new NotFoundException();
-        }   
+        }
         existing.IsTest = systemConfigRequest.IsTest;
         existing.SystemName = systemConfigRequest.SystemName;
         await _dtroContext.SaveChangesAsync();
