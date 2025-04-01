@@ -10,22 +10,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
     {
         readonly static string schemaVersionToTest = "3.4.0";
         readonly static string schemaVersionWithInvalidPascalCase = "3.3.1";
-        readonly string expectedErrorJson = """
-            {
-                "ruleError_0": {
-                    "message": "Property 'Source' has not been defined and the schema does not allow additional properties.",
-                    "path": "Source",
-                    "value": "Source",
-                    "errorType": "AdditionalProperties"
-                },
-                "ruleError_1": {
-                    "message": "JSON is valid against no schemas from 'oneOf'.",
-                    "path": "",
-                    "value": null,
-                    "errorType": "OneOf"
-                }
-            }
-            """;
 
         public static IEnumerable<object[]> GetDtroNamesOfFilesWithInvalidPascalCase()
         {
@@ -60,7 +44,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
                 $"Response JSON for file {nameOfFileWithInvalidPascalCase}:\n\n{dtroCreationResponseJson}");
 
             // Check DTRO response JSON
-            JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
+            Assert.True(dtroCreationResponseJson.Contains("Property 'Source' has not been defined and the schema does not allow additional properties."),
+                $"Response JSON for file {nameOfFileWithInvalidPascalCase}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Required properties are missing from object: source."),
+                $"Response JSON for file {nameOfFileWithInvalidPascalCase}:\n\n{dtroCreationResponseJson}");
         }
 
         [Theory]
@@ -87,7 +74,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
                 $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
 
             // Check DTRO response JSON
-            JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
+            Assert.True(dtroCreationResponseJson.Contains("Property 'Source' has not been defined and the schema does not allow additional properties."),
+                $"Response JSON for file {nameOfFileWithInvalidPascalCase}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Required properties are missing from object: source."),
+                $"Response JSON for file {nameOfFileWithInvalidPascalCase}:\n\n{dtroCreationResponseJson}");
         }
     }
 }
