@@ -2078,25 +2078,48 @@
                     "isDynamic",
                     "timeZone"
                 ],
-                "oneOf": [
+                "allOf": [
                     {
-                        "required": [
-                            "generalRegulation"
+                        "oneOf": [
+                            {
+                                "required": [
+                                    "generalRegulation"
+                                ]
+                            },
+                            {
+                                "required": [
+                                    "offListRegulation"
+                                ]
+                            },
+                            {
+                                "required": [
+                                    "speedLimitValueBased"
+                                ]
+                            },
+                            {
+                                "required": [
+                                    "speedLimitProfileBased"
+                                ]
+                            }
                         ]
                     },
                     {
-                        "required": [
-                            "offListRegulation"
-                        ]
-                    },
-                    {
-                        "required": [
-                            "speedLimitValueBased"
-                        ]
-                    },
-                    {
-                        "required": [
-                            "speedLimitProfileBased"
+                        "oneOf": [
+                            {
+                                "required": [
+                                    "condition"
+                                ]
+                            },
+                            {
+                                "required": [
+                                    "conditions"
+                                ]
+                            },
+                            {
+                                "required": [
+                                    "conditionSet"
+                                ]
+                            }
                         ]
                     }
                 ]
