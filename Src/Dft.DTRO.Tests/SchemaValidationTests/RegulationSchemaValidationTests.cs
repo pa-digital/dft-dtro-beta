@@ -42,7 +42,25 @@ public class RegulationSchemaValidationTests : IDisposable
     [Fact]
     public void RegulationOneOfConstraintViolationShouldFail()
     {
-        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Regulation", "invalid", "ViolatesOneOfConstraint.json");
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Regulation", "invalid", "ViolatesRegulationOneOfConstraint.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.False(isValid);
+    }
+
+    [Fact]
+    public void MissingConditionConditionsOrConditionSetShouldFail()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Regulation", "invalid", "MissingConditionConditionsOrConditionSet.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.False(isValid);
+    }
+
+    [Fact]
+    public void ConditionOneOfConstraintViolationShouldFail()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Regulation", "invalid", "ViolatesConditionOneOfConstraint.json");
         JObject json = JObject.Parse(File.ReadAllText(path));
         bool isValid = json.IsValid(_schema, out IList<string> errors);
         Assert.False(isValid);
