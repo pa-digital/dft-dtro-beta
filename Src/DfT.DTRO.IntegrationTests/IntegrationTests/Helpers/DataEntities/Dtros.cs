@@ -36,6 +36,28 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return getDtroResponse;
         }
 
+        public static async Task<HttpResponseMessage> GetDtrosCountAsync(TestUser testUser)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
+
+            HttpResponseMessage getDtrosCountResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtrosCount}", headers);
+            return getDtrosCountResponse;
+        }
+
+        public static async Task PrintDtroCountAsync(TestUser testUser, string message)
+        {
+            HttpResponseMessage dtrosCountResponse = await Dtros.GetDtrosCountAsync(testUser);
+            string dtroCountResponseJson = await dtrosCountResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.OK == dtrosCountResponse.StatusCode,
+                $"Response JSON:\n\n{dtroCountResponseJson}");
+
+            dynamic jsonDeserialised = JsonConvert.DeserializeObject<dynamic>(dtroCountResponseJson)!;
+            string count = jsonDeserialised.count.ToString();
+            Console.WriteLine($"{message}: {count}");
+        }
+
         public static string ModifySchemaVersionInDtro(string jsonString, string schemaVersion)
         {
             JObject jsonObj = JObject.Parse(jsonString);
