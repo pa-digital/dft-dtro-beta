@@ -3,6 +3,7 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.ErrorJsonResponseProcessor;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.DtroCreationScenarios
 {
@@ -16,9 +17,16 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.DtroCreationSc
             DirectoryInfo directoryPath = new DirectoryInfo($"{PathToDtroExamplesDirectory}/{schemaVersionWithInvalidCamelCase}");
             FileInfo[] files = directoryPath.GetFiles();
 
-            foreach (FileInfo file in files)
+            if (EnvironmentName == EnvironmentType.Local)
             {
-                yield return new object[] { file.Name };
+                foreach (FileInfo file in files)
+                {
+                    yield return new object[] { file.Name };
+                }
+            }
+            else
+            {
+                yield return new object[] { files[0].Name };
             }
         }
 

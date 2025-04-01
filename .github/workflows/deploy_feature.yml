@@ -46,6 +46,23 @@ jobs:
       run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
       run-apigee: ${{ inputs.run-apigee }}
 
+  run-integration-tests-on-dev:
+    name: Run integration tests on dev after deployment to dev is complete
+    needs: deploy-feature-dev
+    runs-on: ubuntu-latest
+    steps:
+    - name: Integration tests
+      id: integration-tests
+      run: |
+        ./run_integration_tests.sh -e dev -ai ${{ secrets.CSO_CLIENT_ID_DEV }} -as ${{ secrets.CSO_CLIENT_SECRET_DEV }} -pi ${{ secrets.PUBLISHER_CLIENT_ID_DEV }} -ps ${{ secrets.PUBLISHER_CLIENT_SECRET_DEV }} -ti 8888
+
+    - name: Upload integration test results
+      if: always() && steps.integration-tests.outcome != 'skipped'
+      uses: actions/upload-artifact@v4
+      with:
+        name: Integration test results
+        path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html
+
   deploy-feature-test:
    if: ${{ inputs.deploy-to-test }}
    name: Deploy to Test

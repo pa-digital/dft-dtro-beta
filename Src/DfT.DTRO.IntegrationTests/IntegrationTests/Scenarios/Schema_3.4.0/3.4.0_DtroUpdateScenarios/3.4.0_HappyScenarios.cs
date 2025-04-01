@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScenarios
@@ -14,9 +15,16 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScen
             DirectoryInfo directoryPath = new DirectoryInfo($"{PathToDtroExamplesDirectory}/{schemaVersionToTest}");
             FileInfo[] files = directoryPath.GetFiles();
 
-            foreach (FileInfo file in files)
+            if (EnvironmentName == EnvironmentType.Local)
             {
-                yield return new object[] { file.Name };
+                foreach (FileInfo file in files)
+                {
+                    yield return new object[] { file.Name };
+                }
+            }
+            else
+            {
+                yield return new object[] { files[0].Name };
             }
         }
 

@@ -111,8 +111,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
             {
-                // TODO: Obfuscate bearer token
-                curl.Append($$""" -H "{{header.Key}}: {{string.Join(", ", header.Value)}}" """);
+                // Obfuscate bearer / access token
+                string headerValueToPrint = header.Key == "Authorization" ? "******" : header.Value.ToString();
+
+                curl.Append($$""" -H "{{header.Key}}: {{string.Join(", ", headerValueToPrint)}}" """);
             }
 
             if (request.Content?.Headers != null)

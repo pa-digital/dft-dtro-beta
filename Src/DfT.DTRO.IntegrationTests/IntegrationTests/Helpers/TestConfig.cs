@@ -91,7 +91,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                     BaseUri = "https://dtro-test.dft.gov.uk/v1";
                     break;
                 default:
-                    throw new Exception($"Environment {EnvironmentName} not recognised!");
+                    throw new Exception($"Environment {environmentFromBashCommand} not recognised!");
             }
 
             PathToProjectDirectory = GetAbsolutePathToProjectDirectory();
@@ -102,7 +102,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             PathToRuleExamplesDirectory = $"{PathToExamplesDirectory}/Rules";
             DatabaseConnectionString = GetDatabaseConnectionString();
 
-            // AdminClientId = Environment.GetEnvironmentVariable("ADMIN_CLIENT_ID");
             AdminClientId = EnvVariables.GetEnvValue("ADMIN_CLIENT_ID");
             AdminClientSecret = EnvVariables.GetEnvValue("ADMIN_CLIENT_SECRET");
             ConsumerClientId = EnvVariables.GetEnvValue("CONSUMER_CLIENT_ID");
