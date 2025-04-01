@@ -22,12 +22,14 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
     public async Task<ApplicationDetailsDto> GetApplicationDetails(Guid appId)
     {
         return await _context.Applications
+            .Include(a => a.TrafficRegulationAuthority)
             .Where(a => a.Id == appId)
             .Select(a => new ApplicationDetailsDto
             {
                 Name = a.Nickname,
                 AppId = a.Id,
-                Purpose = a.Purpose
+                Purpose = a.Purpose,
+                SwaCode = a.TrafficRegulationAuthority.SwaCode
             })
             .FirstOrDefaultAsync();
     }
@@ -64,14 +66,15 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
                 UserEmail = a.User.Email,
                 Username = $"{a.User.Forename} {a.User.Surname}",
             });
-        
+
         int totalCount = await query.CountAsync();
-        List<ApplicationInactiveListDto> paginatedQuery = await query
+
+        List<ApplicationInactiveListDto> paginatedList = await query
             .Skip((paginatedRequest.Page - 1) * paginatedRequest.PageSize)
             .Take(paginatedRequest.PageSize)
             .ToListAsync();
 
-        return new PaginatedResult<ApplicationInactiveListDto>(paginatedQuery.ToList(), paginatedQuery.Count());
+        return new PaginatedResult<ApplicationInactiveListDto>(paginatedList, totalCount);
     }
 
     public async Task<bool> ActivateApplicationById(Guid appId)

@@ -13,11 +13,11 @@ public class SystemConfigService : ISystemConfigService
         _dtroUserDal = dtroUserDal;
     }
 
-    public async Task<SystemConfigResponse> GetSystemConfigAsync(Guid xAppId)
+    public async Task<SystemConfigResponse> GetSystemConfigAsync(Guid appId)
     {
         var response = await _systemConfigDal.GetSystemConfigAsync();
 
-        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
 
         if (user != null)
         {

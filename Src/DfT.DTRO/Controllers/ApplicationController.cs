@@ -29,7 +29,7 @@ public class ApplicationController : ControllerBase
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
     [SwaggerResponse(statusCode: 200, description: "Ok")]
-    public async Task<IActionResult> CreateApplication([FromHeader(Name = "x-email")][Required] string email, [FromBody] AppInput appInput)
+    public async Task<IActionResult> CreateApplication([FromHeader(Name = RequestHeaderNames.Email)][Required] string email, [FromBody] AppInput appInput)
     {
         try
         {
@@ -55,7 +55,7 @@ public class ApplicationController : ControllerBase
     /// <response code="500">Invalid operation or other exception</response>
     [HttpPost(RouteTemplates.ActivateApplication)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> ActivateApplication([FromHeader(Name = "x-email")][Required] string email, [FromRoute] Guid appId)
+    public async Task<IActionResult> ActivateApplication([FromHeader(Name = RequestHeaderNames.Email)][Required] string email, [FromRoute] Guid appId)
     {
         try
         {
@@ -65,7 +65,7 @@ public class ApplicationController : ControllerBase
                 return Forbid();
             }
 
-            bool result = await _applicationService.ActivateApplicationById(appId);
+            bool result = await _applicationService.ActivateApplicationById(email, appId);
             return Ok(new { id = appId, status = "Active" });
 
         }
@@ -129,7 +129,7 @@ public class ApplicationController : ControllerBase
     /// <response code="500">Invalid operation or other exception</response>
     [HttpGet(RouteTemplates.ApplicationsFindById)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> FindApplicationById([FromHeader(Name = "x-email")][Required] string email, [FromRoute] Guid appId)
+    public async Task<IActionResult> FindApplicationById([FromHeader(Name = RequestHeaderNames.Email)][Required] string email, [FromRoute] Guid appId)
     {
         try
         {
@@ -164,7 +164,7 @@ public class ApplicationController : ControllerBase
     /// <response code="500">Invalid operation or other exception</response>
     [HttpGet(RouteTemplates.ApplicationsFindAll)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> FindApplications([FromHeader(Name = "x-email")][Required] string email)
+    public async Task<IActionResult> FindApplications([FromHeader(Name = RequestHeaderNames.Email)][Required] string email)
     {
         try
         {

@@ -14,11 +14,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId },
+                { RequestHeaderNames.AppId, testUser.AppId },
                 { "Content-Type", "multipart/form-data" }
             };
 
-            HttpResponseMessage createRuleResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.RulesBase}/createFromFile/{schemaVersion}", headers, pathToJsonFile: $"{AbsolutePathToRuleExamplesDirectory}/rules-{schemaVersion}.json");
+            HttpResponseMessage createRuleResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.RulesBase}/createFromFile/{schemaVersion}", headers, pathToJsonFile: $"{PathToRuleExamplesDirectory}/rules-{schemaVersion}.json");
             return createRuleResponse;
         }
 
@@ -26,7 +26,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId }
+                { RequestHeaderNames.AppId, testUser.AppId }
             };
 
             HttpResponseMessage getSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.RulesBase}/{schemaVersion}", headers);

@@ -138,9 +138,9 @@ public class DtroService : IDtroService
         return _dtroMappingService.MapToDtroResponse(dtro);
     }
 
-    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
+    public async Task<GuidResponse> SaveDtroAsJsonAsync(DtroSubmit dtroSubmit, Guid appId)
     {
-        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
         var errors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, user.TraId);
 
         if (errors is not null)
@@ -148,12 +148,12 @@ public class DtroService : IDtroService
             throw errors;
         }
 
-        return await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit, correlationId);
+        return await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit);
     }
 
-    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, string correlationId, Guid xAppId)
+    public async Task<GuidResponse> TryUpdateDtroAsJsonAsync(Guid id, DtroSubmit dtroSubmit, Guid appId)
     {
-        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(xAppId);
+        var user = await _dtroUserDal.GetDtroUserOnAppIdAsync(appId);
         var errors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, user.TraId);
 
         if (errors is not null)
@@ -177,7 +177,7 @@ public class DtroService : IDtroService
             throw new DataException("Failed to write update to history table");
         }
 
-        await _dtroDal.UpdateDtroAsJsonAsync(id, dtroSubmit, correlationId);
+        await _dtroDal.UpdateDtroAsJsonAsync(id, dtroSubmit);
         return new GuidResponse { Id = id };
     }
 
@@ -191,7 +191,7 @@ public class DtroService : IDtroService
     {
         List<DTROHistory> dtroHistories = await _dtroHistoryDal.GetDtroHistory(dtroId);
 
-        if (dtroHistories.Any())
+        if (dtroHistories.Count==0)
         {
             throw new NotFoundException($"History for Dtro '{dtroId}' cannot be found.");
         }
@@ -264,7 +264,7 @@ public class DtroService : IDtroService
     }
 
 
-    public async Task<bool> AssignOwnershipAsync(Guid dtroId, Guid appId, Guid assignToUser, string correlationId)
+    public async Task<bool> AssignOwnershipAsync(Guid dtroId, Guid appId, Guid assignToUser)
     {
         var dtroUserList = await _dtroUserDal.GetAllDtroUsersAsync();
 
@@ -305,7 +305,7 @@ public class DtroService : IDtroService
             throw new NotFoundException($"Invalid -assign To Id-: {assignToUser} , the User does not have a Traffic Authority Id");
         }
 
-        await _dtroDal.AssignDtroOwnership(dtroId, (int)assign.TraId, correlationId);
+        await _dtroDal.AssignDtroOwnership(dtroId, (int)assign.TraId);
 
         return true;
     }

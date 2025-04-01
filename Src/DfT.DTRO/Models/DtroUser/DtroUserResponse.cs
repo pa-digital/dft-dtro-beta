@@ -11,9 +11,9 @@ public class DtroUserResponse
     public Guid Id { get; set; }
 
     /// <summary>
-    /// x-app-id header unique identifier
+    /// App-Id header unique identifier
     /// </summary>
-    public Guid xAppId { get; set; }
+    public Guid AppId { get; set; }
 
     /// <summary>
     /// Traffic regulation authority code

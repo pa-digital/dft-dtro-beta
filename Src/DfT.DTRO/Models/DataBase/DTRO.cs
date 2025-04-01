@@ -73,21 +73,6 @@ public class DTRO
     public string TroName { get; set; }
 
     /// <summary>
-    /// Correlation ID of the request with which this D-TRO document was created.
-    /// </summary>
-    [DataMember(Name = "createdCorrelationId")]
-    [SaveOnce]
-    [SwaggerSchema(ReadOnly = true)]
-    public string CreatedCorrelationId { get; set; }
-
-    /// <summary>
-    /// Request Correlation ID which D-TRO document was updated by.
-    /// </summary>
-    [DataMember(Name = "lastUpdatedCorrelationId")]
-    [SwaggerSchema(ReadOnly = true)]
-    public string LastUpdatedCorrelationId { get; set; }
-
-    /// <summary>
     /// Flag representing a deletion of the D-TRO.
     /// </summary>
     [DataMember(Name = "deleted")]

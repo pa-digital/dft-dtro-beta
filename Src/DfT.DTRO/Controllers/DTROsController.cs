@@ -14,9 +14,7 @@ public class DTROsController : ControllerBase
 {
     private readonly IDtroService _dtroService;
     private readonly IMetricsService _metricsService;
-    private readonly IRequestCorrelationProvider _correlationProvider;
     private readonly ILogger<DTROsController> _logger;
-    private readonly IAppIdMapperService _appIdMapperService;
     private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
@@ -24,22 +22,16 @@ public class DTROsController : ControllerBase
     /// </summary>
     /// <param name="dtroService">An <see cref="IDtroService"/> instance.</param>
     /// <param name="metricsService">An <see cref="IMetricsService"/> instance.</param>
-    /// <param name="correlationProvider">An <see cref="IRequestCorrelationProvider"/> instance.</param>
-    /// <param name="appIdMapperService">An <see cref="IAppIdMapperService"/> instance.</param>
     /// <param name="logger">An <see cref="ILogger{DTROsController}"/> instance.</param>
     /// <param name="loggingExtension">An <see cref="LoggingExtension"/> instance.</param>
     public DTROsController(
          IDtroService dtroService,
          IMetricsService metricsService,
-         IRequestCorrelationProvider correlationProvider,
-         IAppIdMapperService appIdMapperService,
          ILogger<DTROsController> logger,
          LoggingExtension loggingExtension)
     {
         _dtroService = dtroService;
         _metricsService = metricsService;
-        _correlationProvider = correlationProvider;
-        _appIdMapperService = appIdMapperService;
         _logger = logger;
         _loggingExtension = loggingExtension;
     }
@@ -58,7 +50,7 @@ public class DTROsController : ControllerBase
     [Consumes("multipart/form-data")]
     [RequestFormLimits(ValueCountLimit = 1)]
     [FeatureGate(FeatureNames.Publish)]
-    public async Task<IActionResult> CreateFromFile([FromHeader(Name = "x-app-id")][Required] Guid appId, IFormFile file)
+    public async Task<IActionResult> CreateFromFile([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -67,14 +59,13 @@ public class DTROsController : ControllerBase
 
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
             using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
 
-                GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, appId);
+                GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, appId);
                 await _metricsService.IncrementMetric(MetricType.Submission, appId);
                 _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using appId: '{appId}' and file '{file.Name}'");
                 _loggingExtension.LogInformation(
@@ -174,7 +165,7 @@ public class DTROsController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(GuidResponse), description: "Ok")]
-    public async Task<IActionResult> UpdateFromFile([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId, IFormFile file)
+    public async Task<IActionResult> UpdateFromFile([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, Guid dtroId, IFormFile file)
     {
         if (file == null || file.Length == 0)
         {
@@ -183,15 +174,14 @@ public class DTROsController : ControllerBase
 
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
             using (MemoryStream memoryStream = new())
             {
                 await file.CopyToAsync(memoryStream);
                 string fileContent = Encoding.UTF8.GetString(memoryStream.ToArray());
                 DtroSubmit dtroSubmit = JsonConvert.DeserializeObject<DtroSubmit>(fileContent);
-                GuidResponse response = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, _correlationProvider.CorrelationId, appId);
+                GuidResponse response = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, appId);
                 await _metricsService.IncrementMetric(MetricType.Submission, appId);
-                _logger.LogInformation($"'{nameof(UpdateFromFile)}' method called using x-app-id Id: '{appId}', unique identifier: '{dtroId}' and file: '{file.Name}'");
+                _logger.LogInformation($"'{nameof(UpdateFromFile)}' method called using {RequestHeaderNames.AppId} Id: '{appId}', unique identifier: '{dtroId}' and file: '{file.Name}'");
                 _loggingExtension.LogInformation(
                     nameof(UpdateFromFile),
                     $"/dtros/UpdateFromFile/{dtroId}",
@@ -278,12 +268,11 @@ public class DTROsController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(201, type: typeof(GuidResponse), description: "Created")]
-    public async Task<IActionResult> CreateFromBody([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromBody] DtroSubmit dtroSubmit)
+    public async Task<IActionResult> CreateFromBody([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, [FromBody] DtroSubmit dtroSubmit)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
-            GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, _correlationProvider.CorrelationId, appId);
+            GuidResponse response = await _dtroService.SaveDtroAsJsonAsync(dtroSubmit, appId);
             await _metricsService.IncrementMetric(MetricType.Submission, appId);
             _logger.LogInformation($"'{nameof(CreateFromBody)}' method called using appId: '{appId}' and body '{dtroSubmit}'");
             _loggingExtension.LogInformation(
@@ -388,12 +377,11 @@ public class DTROsController : ControllerBase
     [ValidateModelState]
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 200, type: typeof(DtroResponse), description: "Ok")]
-    public async Task<IActionResult> UpdateFromBody([FromHeader(Name = "x-app-id")][Required] Guid appId, [FromRoute] Guid dtroId, [FromBody] DtroSubmit dtroSubmit)
+    public async Task<IActionResult> UpdateFromBody([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, [FromRoute] Guid dtroId, [FromBody] DtroSubmit dtroSubmit)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
-            GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, _correlationProvider.CorrelationId, appId);
+            GuidResponse guidResponse = await _dtroService.TryUpdateDtroAsJsonAsync(dtroId, dtroSubmit, appId);
             await _metricsService.IncrementMetric(MetricType.Submission, appId);
             _logger.LogInformation($"'{nameof(CreateFromFile)}' method called using appId: '{appId}', unique identifier: '{dtroId}' and body: '{dtroSubmit}'");
             _loggingExtension.LogInformation(
@@ -557,11 +545,10 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 204, description: "Successfully deleted the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> Delete([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId)
+    public async Task<IActionResult> Delete([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, Guid dtroId)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
             await _dtroService.DeleteDtroAsync(dtroId);
             await _metricsService.IncrementMetric(MetricType.Deletion, appId);
             _logger.LogInformation($"'{nameof(Delete)}' method called using appId: '{appId}' and unique identifier '{dtroId}'");
@@ -713,12 +700,11 @@ public class DTROsController : ControllerBase
     [FeatureGate(FeatureNames.Publish)]
     [SwaggerResponse(statusCode: 201, description: "Successfully assigned the DTRO.")]
     [SwaggerResponse(statusCode: 404, description: "Could not find a DTRO with the specified id.")]
-    public async Task<IActionResult> AssignOwnership([FromHeader(Name = "x-app-id")][Required] Guid appId, Guid dtroId, Guid assignToTraId)
+    public async Task<IActionResult> AssignOwnership([FromHeader(Name = RequestHeaderNames.AppId)][Required] Guid appId, Guid dtroId, Guid assignToTraId)
     {
         try
         {
-            appId = await _appIdMapperService.GetAppId(HttpContext);
-            await _dtroService.AssignOwnershipAsync(dtroId, appId, assignToTraId, _correlationProvider.CorrelationId);
+            await _dtroService.AssignOwnershipAsync(dtroId, appId, assignToTraId);
             _logger.LogInformation($"'{nameof(AssignOwnership)}' method called using appId '{appId}', unique identifier '{dtroId}' and new assigned TRA Id '{assignToTraId}'");
             _loggingExtension.LogInformation(
                 nameof(AssignOwnership),

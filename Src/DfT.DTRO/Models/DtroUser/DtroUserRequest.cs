@@ -12,5 +12,5 @@ public class DtroUserRequest
 
     public UserGroup UserGroup { get; set; }
 
-    public Guid xAppId { get; set; }
+    public Guid AppId { get; set; }
 }

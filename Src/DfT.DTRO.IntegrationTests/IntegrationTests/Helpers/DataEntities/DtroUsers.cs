@@ -1,6 +1,6 @@
-using DfT.DTRO.Consts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.Consts;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
@@ -12,8 +12,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             List<string> userIds = await GetAllUserIdsAsync(testUser);
             if (userIds.Count > 0)
             {
-                HttpResponseMessage deleteUsersResponse = await DeleteUsersAsync(userIds, testUser);
-                Assert.Equal(HttpStatusCode.OK, deleteUsersResponse.StatusCode);
+                HttpResponseMessage usersDeletionResponse = await DeleteUsersAsync(userIds, testUser);
+                string usersDeletionResponseJson = await usersDeletionResponse.Content.ReadAsStringAsync();
+                Assert.True(HttpStatusCode.OK == usersDeletionResponse.StatusCode,
+                    $"Response JSON:\n\n{usersDeletionResponseJson}");
             }
         }
 
@@ -21,7 +23,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId }
+                { RequestHeaderNames.AppId, testUser.AppId }
             };
 
             HttpResponseMessage getAllUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtroUsersBase}", headers);
@@ -30,10 +32,12 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         private static async Task<List<string>> GetAllUserIdsAsync(TestUser testUser)
         {
-            HttpResponseMessage getAllUsersResponse = await GetAllUsersAsync(testUser);
-            Assert.Equal(HttpStatusCode.OK, getAllUsersResponse.StatusCode);
+            HttpResponseMessage usersGetAllResponse = await GetAllUsersAsync(testUser);
+            string usersGetAllResponseJson = await usersGetAllResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.OK == usersGetAllResponse.StatusCode,
+                $"Response JSON:\n\n{usersGetAllResponseJson}");
 
-            string responseJson = await getAllUsersResponse.Content.ReadAsStringAsync();
+            string responseJson = await usersGetAllResponse.Content.ReadAsStringAsync();
 
             JArray jsonArray = JArray.Parse(responseJson);
 
@@ -52,7 +56,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId },
+                { RequestHeaderNames.AppId, testUser.AppId },
                 { "Content-Type", "application/json" }
             };
 
@@ -66,7 +70,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                { "x-App-Id", testUser.AppId },
+                { RequestHeaderNames.AppId, testUser.AppId },
                 { "Content-Type", "application/json" }
             };
 
@@ -77,12 +81,20 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
                 "name": "{{testUser.Name}}",
                 "prefix": "AB",
                 "userGroup": {{testUser.UserGroup}},
-                "xAppId": "{{testUser.AppId}}"
+                "appId": "{{testUser.AppId}}"
             }
             """;
 
             HttpResponseMessage createUserResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.DtroUsersCreateFromBody}", headers, jsonBody);
             return createUserResponse;
+        }
+
+        public static async Task CreateUserForDataSetUpAsync(TestUser publisher)
+        {
+            HttpResponseMessage userCreationResponse = await DtroUsers.CreateUserAsync(publisher);
+            string userCreationResponseJson = await userCreationResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.Created == userCreationResponse.StatusCode,
+                $"Response JSON:\n\n{userCreationResponseJson}");
         }
     }
 }
