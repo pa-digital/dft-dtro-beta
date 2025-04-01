@@ -91,8 +91,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             {
                 Console.WriteLine($"  {header.Key}: {string.Join(", ", header.Value)}");
             }
+            string responseBodyToPrint = responseBody.Contains("client_id") || responseBody.Contains("access_token") ? "Response body from oauth not printed" : responseBody;
             Console.WriteLine("\nResponse body:");
-            Console.WriteLine(PrettyFormatJson(responseBody));
+            Console.WriteLine(PrettyFormatJson(responseBodyToPrint));
             Console.WriteLine("=================================\n");
             return response;
         }

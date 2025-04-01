@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
+using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScenarios
 {
@@ -16,30 +17,51 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScen
 
         public static IEnumerable<object[]> GetPointGeometryStrings()
         {
-            return new List<object[]>
+            if (EnvironmentName == EnvironmentType.Local)
             {
-                new object[] { "SRID=27700;POINT(699999 1300001)" },
-                new object[] { "SRID=27700;POINT(700001 1299999)" },
-                new object[] { "SRID=27700;POINT(700001 1300001)" },
-                new object[] { "SRID=27700;POINT(1 -1)" },
-                new object[] { "SRID=27700;POINT(-1 1)" },
-                new object[] { "SRID=27700;POINT(-1 -1)" }
-            };
+                return new List<object[]>
+                {
+                    new object[] { "SRID=27700;POINT(699999 1300001)" },
+                    new object[] { "SRID=27700;POINT(700001 1299999)" },
+                    new object[] { "SRID=27700;POINT(700001 1300001)" },
+                    new object[] { "SRID=27700;POINT(1 -1)" },
+                    new object[] { "SRID=27700;POINT(-1 1)" },
+                    new object[] { "SRID=27700;POINT(-1 -1)" }
+                };
+            }
+            else
+            {
+                return new List<object[]>
+                {
+                    new object[] { "SRID=27700;POINT(699999 1300001)" }
+                };
+            }
         }
 
         public static IEnumerable<object[]> GetLinearGeometryStrings()
         {
-            return new List<object[]>
+            if (EnvironmentName == EnvironmentType.Local)
             {
-                new object[] { "SRID=27700;LINESTRING(699999 1299999, 700000 1300001)" },
-                new object[] { "SRID=27700;LINESTRING(699999 1299999, 700001 1300000)" },
-                new object[] { "SRID=27700;LINESTRING(699999 1300001, 700000 1300000)" },
-                new object[] { "SRID=27700;LINESTRING(700001 1299999, 700000 1300000)" },
-                new object[] { "SRID=27700;LINESTRING(1 1, 0 -1)" },
-                new object[] { "SRID=27700;LINESTRING(1 1, -1 0)" },
-                new object[] { "SRID=27700;LINESTRING(1 -1, 0 0)" },
-                new object[] { "SRID=27700;LINESTRING(-1 1, 0 0)" }
-            };
+                return new List<object[]>
+                {
+                    new object[] { "SRID=27700;LINESTRING(699999 1299999, 700000 1300001)" },
+                    new object[] { "SRID=27700;LINESTRING(699999 1299999, 700001 1300000)" },
+                    new object[] { "SRID=27700;LINESTRING(699999 1300001, 700000 1300000)" },
+                    new object[] { "SRID=27700;LINESTRING(700001 1299999, 700000 1300000)" },
+                    new object[] { "SRID=27700;LINESTRING(1 1, 0 -1)" },
+                    new object[] { "SRID=27700;LINESTRING(1 1, -1 0)" },
+                    new object[] { "SRID=27700;LINESTRING(1 -1, 0 0)" },
+                    new object[] { "SRID=27700;LINESTRING(-1 1, 0 0)" }
+                };
+            }
+            else
+            {
+                return new List<object[]>
+                {
+                    new object[] { "SRID=27700;LINESTRING(699999 1299999, 700000 1300001)" }
+                };
+            }
+
         }
 
         [Theory]

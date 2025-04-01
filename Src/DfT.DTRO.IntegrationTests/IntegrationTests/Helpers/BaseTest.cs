@@ -1,3 +1,4 @@
+using System.Threading;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
@@ -20,6 +21,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             FileHelper.DeleteFilesInDirectory(PathToDtroExamplesTempDirectory);
 
+            // Only delete data on local machine
             if (EnvironmentName == EnvironmentType.Local)
             {
                 await DataSetUp.ClearAllDataAsync(UserWithAllPermissions);
@@ -45,6 +47,13 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         public Task DisposeAsync()
         {
             Console.WriteLine("Global async teardown after each test...");
+
+            // To avoid hitting the rate limit in dev / test / integration, we need to wait before executing the next test
+            if (EnvironmentName != EnvironmentType.Local)
+            {
+                Thread.Sleep(10000);
+            }
+
             return Task.CompletedTask;
         }
     }

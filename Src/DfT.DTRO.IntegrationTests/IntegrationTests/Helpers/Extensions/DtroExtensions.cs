@@ -164,7 +164,9 @@ public static class DtroExtensions
 
     public static string CreateDtroTempFileForUpdate(this string jsonString, string fileName, TestUser testUser)
     {
-        string nameOfCopyFile = $"update-{testUser.TraId}-{fileName}";
+        // If the name is null, we're using a pre-existing user on dev / test / integration, so we have to create a unique file name prefix rather than use the TRA ID as a prefix
+        string uniquePrefix = testUser.Name == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : testUser.TraId;
+        string nameOfCopyFile = $"update-{uniquePrefix}-{fileName}";
         string tempFilePath = $"{TestConfig.PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
         FileHelper.WriteStringToFile(TestConfig.PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonString);
         return tempFilePath;
