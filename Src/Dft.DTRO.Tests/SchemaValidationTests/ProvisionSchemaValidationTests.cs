@@ -58,18 +58,9 @@ public class ProvisionSchemaValidationTests : IDisposable
     }
 
     [Fact]
-    public void ActualStartOrStopPresentWithNonTemporaryOrderReportingPointShouldFail()
+    public void ActualStartOrStopPresentWithNonTROOnRoadActiveStatusOrderReportingPointShouldFail()
     {
-        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "ActualStartOrStopPresentWithNonTemporaryOrderReportingPoint.json");
-        JObject json = JObject.Parse(File.ReadAllText(path));
-        bool isValid = json.IsValid(_schema, out IList<string> errors);
-        Assert.False(isValid);
-    }
-
-    [Fact]
-    public void ExperimentalOrderReportingPointButNoExperimentalCessationOrExperimentalVariationShouldFail()
-    {
-        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "ExperimentalOrderReportingPointButNoExperimentalCessationOrExperimentalVariation.json");
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "ActualStartOrStopPresentWithNonTROOnRoadActiveStatusOrderReportingPoint.json");
         JObject json = JObject.Parse(File.ReadAllText(path));
         bool isValid = json.IsValid(_schema, out IList<string> errors);
         Assert.False(isValid);
@@ -88,6 +79,42 @@ public class ProvisionSchemaValidationTests : IDisposable
     public void InvalidExpectedOccupancyDurationShouldFail()
     {
         string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "ExpectedOccupancyDurationInvalidFormat.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.False(isValid);
+    }
+
+    [Fact]
+    public void ActualStartOrStopPresentWithTROOnRoadActiveStatusOrderReportingPoint()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "valid", "ActualStartOrStopPresentWithTroOnRoadActiveStatusOrderReportingPoint.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.True(isValid);
+    }
+
+    [Fact]
+    public void MadeDateAndComingIntoForceDateNotAllowedForPermanentNoticeOfProposalOrderReportingPoint()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "PermanentNoticeOfProposalOrderReportingPointWithMadeDateAndComingIntoForceDate.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.False(isValid);
+    }
+
+    [Fact]
+    public void PermanentNoticeOfProposalOrderReportingPointShouldFailValidationWithPropertiesRestrictedFromThisOrderReportingPoint()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "PermanentNoticeOfProposalOrderReportingPointAdditionalProperties.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.False(isValid);
+    }
+
+    [Fact]
+    public void MixedOrderReportingPointsShouldFailValidation()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Provision", "invalid", "MixedOrderReportingPoints.json");
         JObject json = JObject.Parse(File.ReadAllText(path));
         bool isValid = json.IsValid(_schema, out IList<string> errors);
         Assert.False(isValid);

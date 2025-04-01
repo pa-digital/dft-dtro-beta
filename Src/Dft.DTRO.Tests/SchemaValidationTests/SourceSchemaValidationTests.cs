@@ -57,6 +57,15 @@ public class SourceSchemaValidationTests : IDisposable
         Assert.False(isValid);
     }
 
+    [Fact]
+    public void MissingConcessionAssignmentTramcarBusRouteAndByWayTypeFailsValidation()
+    {
+        string path = Path.Combine(GetProjectRoot(), "Src", "Dft.DTRO.Tests", "SchemaValidationTests", "Source", "invalid", "MissingConcessionAssignmentTramcarBusRouteAndByWayType.json");
+        JObject json = JObject.Parse(File.ReadAllText(path));
+        bool isValid = json.IsValid(_schema, out IList<string> errors);
+        Assert.False(isValid);
+    }
+
     public void Dispose() { }
 
 }

@@ -206,48 +206,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             }
         }
 
-        public static string GetSchemaValidationErrorJson(string traId)
-        {
-            string expectedErrorJson = $$"""
-            {
-                "ruleError_0": {
-                    "message": "Invalid type. Expected Integer but got String.",
-                    "path": "source.currentTraOwner",
-                    "value": "{{traId}}",
-                    "errorType": "Type"
-                },
-                "ruleError_1": {
-                    "message": "Invalid type. Expected Array but got Integer.",
-                    "path": "source.traAffected",
-                    "value": {{traId}},
-                    "errorType": "Type"
-                },
-                "ruleError_2": {
-                    "message": "Required properties are missing from object: actionType.",
-                    "path": "source",
-                    "value": [
-                        "actionType"
-                    ],
-                    "errorType": "Required"
-                },
-                "ruleError_3": {
-                    "message": "Property 'apples' has not been defined and the schema does not allow additional properties.",
-                    "path": "apples",
-                    "value": "apples",
-                    "errorType": "AdditionalProperties"
-                },
-                "ruleError_4": {
-                    "message": "JSON is valid against no schemas from 'oneOf'.",
-                    "path": "",
-                    "value": null,
-                    "errorType": "OneOf"
-                }
-            }
-            """;
-
-            return expectedErrorJson;
-        }
-
         public static string GetPointGeometryErrorJson(string pointGeometryString)
         {
             string expectedErrorJson = $$"""

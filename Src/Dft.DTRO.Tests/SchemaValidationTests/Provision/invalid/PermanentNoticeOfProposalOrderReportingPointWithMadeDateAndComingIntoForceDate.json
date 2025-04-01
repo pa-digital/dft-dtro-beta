@@ -2,13 +2,16 @@
   "source": {
     "actionType": "new",
     "currentTraOwner": 1050,
+    "madeDate": "2025-01-01",
+    "comingIntoForceDate": "2025-01-01",
     "provision": [
       {
         "actionType": "new",
-        "orderReportingPoint": "permanentNoticeOfMaking",
+        "orderReportingPoint": "permanentNoticeOfProposal",
         "comingIntoForceDate": "2025-01-01",
         "provisionDescription": "Schedule 1: No Waiting Monday to Saturday, 8am to 6pm",
         "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
+        "expectedOccupancyDuration": "PT1H",
         "regulatedPlace": [
           {
             "description": "West side, Market Street, Draycott",

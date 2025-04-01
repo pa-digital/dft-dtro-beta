@@ -2,6 +2,8 @@
   "source": {
     "actionType": "new",
     "currentTraOwner": 1050,
+    "madeDate": "2025-01-01",
+    "comingIntoForceDate": "2025-01-01",
     "provision": [
       {
         "actionType": "new",
@@ -9,6 +11,7 @@
         "comingIntoForceDate": "2025-01-01",
         "provisionDescription": "Schedule 1: No Waiting Monday to Saturday, 8am to 6pm",
         "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
+        "expectedOccupancyDuration": "PT1H",
         "regulatedPlace": [
           {
             "description": "West side, Market Street, Draycott",
@@ -18,6 +21,79 @@
             "tramcar": false,
             "busRoute": false,
             "bywayType": "road",
+            "linearGeometry": {
+              "direction": "bidirectional",
+              "externalReference": [
+                {
+                  "lastUpdateDate": "2024-10-01T08:00:00",
+                  "uniqueStreetReferenceNumber": [
+                    {
+                      "usrn": 14000759
+                    }
+                  ]
+                }
+              ],
+              "lateralPosition": "onKerb",
+              "linestring": "SRID=27700;LINESTRING(444284 333253, 444284 333253)",
+              "representation": "linear",
+              "version": 1
+            }
+          }
+        ],
+        "regulation": [
+          {
+            "condition": [
+              {
+                "timeValidity": {
+                  "start": "2024-08-01T08:00:00",
+                  "validPeriod": [
+                    {
+                      "recurringDayWeekMonthPeriod": [
+                        {
+                          "applicableDay": [
+                            "friday",
+                            "monday",
+                            "saturday",
+                            "thursday",
+                            "tuesday",
+                            "wednesday"
+                          ]
+                        }
+                      ],
+                      "recurringTimePeriodOfDay": [
+                        {
+                          "endTimeOfPeriod": "18:00:00",
+                          "startTimeOfPeriod": "08:00:00"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "generalRegulation": {
+              "regulationType": "kerbsideLimitedWaiting"
+            },
+            "isDynamic": false,
+            "timeZone": "Europe/London"
+          }
+        ]
+      },
+      {
+        "actionType": "new",
+        "orderReportingPoint": "troOnRoadActiveStatus",
+        "provisionDescription": "Schedule 1: No Waiting Monday to Saturday, 8am to 6pm",
+        "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
+        "actualStartOrStop": [
+          {
+            "eventAt": "2025-01-01T09:00:00",
+            "eventType": "start"
+          }
+        ],
+        "regulatedPlace": [
+          {
+            "description": "West side, Market Street, Draycott",
+            "type": "regulationLocation",
             "linearGeometry": {
               "direction": "bidirectional",
               "externalReference": [
