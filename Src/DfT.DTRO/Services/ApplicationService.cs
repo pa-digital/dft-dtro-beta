@@ -99,7 +99,7 @@ public class ApplicationService : IApplicationService
                 DtroUserRequest dtroUser = new DtroUserRequest
                 {
                     Id = Guid.NewGuid(),
-                    xAppId = appId,
+                    AppId = appId,
                     // TODO: when the table contains SWA code, update this to use tra.SwaCode
                     TraId = 1,
                     Name = user.Forename + " " + user.Surname,
