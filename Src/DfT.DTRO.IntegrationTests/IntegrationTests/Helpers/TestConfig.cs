@@ -1,4 +1,6 @@
 using System.Linq;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
@@ -6,6 +8,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
     public static class TestConfig
     {
         public static EnvironmentType EnvironmentName { get; }
+
+        public static string AdminClientId { get; }
+        public static string AdminClientSecret { get; }
+        public static string ConsumerClientId { get; }
+        public static string ConsumerClientSecret { get; }
+        public static string PublisherClientId { get; }
+        public static string PublisherClientSecret { get; }
+        public static string PublisherTraId { get; }
+
         public static string BaseUri { get; }
         public static string PathToProjectDirectory { get; }
         public static string PathToExamplesDirectory { get; }
@@ -67,11 +78,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             switch (environmentFromBashCommand)
             {
                 case "local":
-                    EnvironmentName = EnvironmentType.Local;
-                    BaseUri = "https://localhost:5001";
-                    DatabaseHostName = "localhost";
-                    break;
-                case "dev":
+                    //     EnvironmentName = EnvironmentType.Local;
+                    //     BaseUri = "https://localhost:5001";
+                    //     DatabaseHostName = "localhost";
+                    //     break;
+                    // case "dev":
                     EnvironmentName = EnvironmentType.Dev;
                     BaseUri = "https://dtro-dev.dft.gov.uk/v1";
                     break;
@@ -90,6 +101,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             PathToSchemaExamplesDirectory = $"{PathToExamplesDirectory}/Schemas";
             PathToRuleExamplesDirectory = $"{PathToExamplesDirectory}/Rules";
             DatabaseConnectionString = GetDatabaseConnectionString();
+
+            // AdminClientId = Environment.GetEnvironmentVariable("ADMIN_CLIENT_ID");
+            AdminClientId = EnvVariables.GetEnvValue("ADMIN_CLIENT_ID");
+            AdminClientSecret = EnvVariables.GetEnvValue("ADMIN_CLIENT_SECRET");
+            ConsumerClientId = EnvVariables.GetEnvValue("CONSUMER_CLIENT_ID");
+            ConsumerClientSecret = EnvVariables.GetEnvValue("CONSUMER_CLIENT_SECRET");
+            PublisherClientId = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID");
+            PublisherClientSecret = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET");
+            PublisherTraId = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID");
         }
     }
 }

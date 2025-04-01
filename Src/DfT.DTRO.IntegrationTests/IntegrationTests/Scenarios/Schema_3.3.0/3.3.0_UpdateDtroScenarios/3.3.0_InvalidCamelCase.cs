@@ -94,7 +94,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.DtroUpdateScen
                                     .ModifyTroNameForUpdate(schemaVersionWithInvalidCamelCase)
                                     .ModifySchemaVersion(schemaVersionToTest);
 
-            string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(nameOfFileWithInvalidCamelCase, publisher.TraId);
+            string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(nameOfFileWithInvalidCamelCase, publisher);
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();

@@ -23,11 +23,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> GetAllUsersAsync(TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId }
-            // };            
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
@@ -60,12 +55,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> DeleteUsersAsync(List<string> ids, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId },
-            //     { "Content-Type", "application/json" }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 
@@ -79,12 +68,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> CreateUserAsync(TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId },
-            //     { "Content-Type", "application/json" }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 

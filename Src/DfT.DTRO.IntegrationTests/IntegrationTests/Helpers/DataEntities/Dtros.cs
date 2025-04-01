@@ -17,12 +17,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> CreateDtroFromFileAsync(string filePath, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId },
-            //     { "Content-Type", "multipart/form-data" }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "multipart/form-data");
 
@@ -34,12 +28,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> UpdateDtroFromFileAsync(string filePath, string dtroId, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId },
-            //     { "Content-Type", "multipart/form-data" }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "multipart/form-data");
 
@@ -51,12 +39,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> CreateDtroFromJsonBodyAsync(string jsonBody, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId },
-            //     { "Content-Type", "application/json" }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 
@@ -68,12 +50,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> UpdateDtroFromJsonBodyAsync(string jsonBody, string dtroId, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId },
-            //     { "Content-Type", "application/json" }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 
@@ -85,11 +61,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> GetDtroAsync(string dtroId, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);

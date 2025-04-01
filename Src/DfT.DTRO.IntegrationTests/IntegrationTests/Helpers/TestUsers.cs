@@ -14,7 +14,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                 return new TestUser
                 {
                     AppId = null,
-                    TraId = "8888",
+                    TraId = TestConfig.PublisherTraId,
                     Name = null,
                     UserGroup = null
                 };

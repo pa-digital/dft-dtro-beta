@@ -99,12 +99,6 @@ public static class DtroExtensions
 
     public static async Task<HttpResponseMessage> SendJsonInDtroUpdateRequestAsync(this string jsonString, string dtroId, String appId)
     {
-        // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        //     {
-        //         { "App-Id", appId },
-        //         { "Content-Type", "application/json" }
-        //     };
-
         Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         headers.Add("Content-Type", "application/json");
 
@@ -116,12 +110,6 @@ public static class DtroExtensions
 
     public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestAsync(this string dtroFilePath, String appId)
     {
-        // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        //     {
-        //         { "App-Id", appId },
-        //         { "Content-Type", "multipart/form-data" }
-        //     };
-
         Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         headers.Add("Content-Type", "multipart/form-data");
 
@@ -133,12 +121,6 @@ public static class DtroExtensions
 
     public static async Task<HttpResponseMessage> SendFileInDtroUpdateRequestAsync(this string dtroFilePath, string dtroId, String appId)
     {
-        // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        //     {
-        //         { "App-Id", appId },
-        //         { "Content-Type", "multipart/form-data" }
-        //     };
-
         Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         headers.Add("Content-Type", "multipart/form-data");
 
@@ -180,9 +162,9 @@ public static class DtroExtensions
         return tempFilePath;
     }
 
-    public static string CreateDtroTempFileForUpdate(this string jsonString, string fileName, string traId)
+    public static string CreateDtroTempFileForUpdate(this string jsonString, string fileName, TestUser testUser)
     {
-        string nameOfCopyFile = $"update-{traId}-{fileName}";
+        string nameOfCopyFile = $"update-{testUser.TraId}-{fileName}";
         string tempFilePath = $"{TestConfig.PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
         FileHelper.WriteStringToFile(TestConfig.PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonString);
         return tempFilePath;

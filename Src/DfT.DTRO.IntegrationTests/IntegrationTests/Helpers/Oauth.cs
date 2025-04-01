@@ -10,26 +10,18 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
     {
         public static async Task<string> GetAccessToken(UserGroup userGroup)
         {
-            // string envFilePath = $"{TestConfig.PathToProjectDirectory}/docker/dev/.env";
-
-            // string[] lines = File.ReadAllLines(envFilePath);
-            // string clientIdLine = lines.First(line => line.StartsWith("CLIENT_ID="));
-            // string clientId = clientIdLine.Split('=')[1];
-            // string clientSecretLine = lines.First(line => line.StartsWith("CLIENT_SECRET="));
-            // string clientSecret = clientSecretLine.Split('=')[1];
-
             string clientId;
             string clientSecret;
 
             switch (userGroup)
             {
                 case UserGroup.Admin:
-                    clientId = FileHelper.GetValueFromDotEnv("CLIENT_ID_CSO_DEV");
-                    clientSecret = FileHelper.GetValueFromDotEnv("CLIENT_SECRET_CSO_DEV");
+                    clientId = TestConfig.AdminClientId;
+                    clientSecret = TestConfig.AdminClientSecret;
                     break;
                 case UserGroup.Tra:
-                    clientId = FileHelper.GetValueFromDotEnv("CLIENT_ID_PUBLISHER_DEV");
-                    clientSecret = FileHelper.GetValueFromDotEnv("CLIENT_SECRET_PUBLISHER_DEV");
+                    clientId = TestConfig.PublisherClientId;
+                    clientSecret = TestConfig.PublisherClientSecret;
                     break;
                 default:
                     throw new Exception($"{userGroup} not found!");

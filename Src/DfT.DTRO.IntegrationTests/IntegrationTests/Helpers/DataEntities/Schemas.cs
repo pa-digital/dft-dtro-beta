@@ -34,11 +34,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         private static async Task<HttpResponseMessage> DeleteSchemaAsync(string schemaVersion, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
@@ -60,11 +55,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         private static async Task<HttpResponseMessage> DeactivateSchemaAsync(string schemaVersion, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
@@ -75,11 +65,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> ActivateSchemaAsync(string schemaVersion, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
@@ -107,11 +92,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> GetAllSchemasAsync(TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
@@ -135,12 +115,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> CreateSchemaFromFileAsync(string schemaVersion, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId },
-            //     { "Content-Type", "multipart/form-data" }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "multipart/form-data");
 
@@ -152,11 +126,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> GetSchemaAsync(string schemaVersion, TestUser testUser)
         {
-            // Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            // {
-            //     { RequestHeaderNames.AppId, testUser.AppId }
-            // };
-
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
