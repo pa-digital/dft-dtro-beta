@@ -21,7 +21,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             FileHelper.DeleteFilesInDirectory(PathToDtroExamplesTempDirectory);
 
-            await Dtros.PrintDtroCountAsync(UserWithAllPermissions, "DTRO count before any data is deleted or any tests run");
+            // Only hit /count end point locally for the time being - because it's not yet been exposed via Apigee
+            if (EnvironmentName == EnvironmentType.Local)
+            {
+                await Dtros.PrintDtroCountAsync(UserWithAllPermissions, "DTRO count before any data is deleted or any tests run");
+            }
 
             // Only delete data on local machine
             if (EnvironmentName == EnvironmentType.Local)
@@ -51,8 +55,11 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         {
             Console.WriteLine("Global async teardown after each test...");
 
-            await Dtros.PrintDtroCountAsync(UserWithAllPermissions, "DTRO count after each test");
-
+            // Only hit /count end point locally for the time being - because it's not yet been exposed via Apigee
+            if (EnvironmentName == EnvironmentType.Local)
+            {
+                await Dtros.PrintDtroCountAsync(UserWithAllPermissions, "DTRO count after each test");
+            }
 
             // To avoid hitting the rate limit in dev / test / integration, we need to wait before executing the next test
             if (EnvironmentName != EnvironmentType.Local)
