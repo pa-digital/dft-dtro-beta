@@ -115,9 +115,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScen
 
             // Check DTRO response JSON
             Assert.True(dtroUpdateResponseJson.Contains("Property 'Source' has not been defined and the schema does not allow additional properties."),
-                $"Response JSON for file {nameOfFileWithInvalidPascalCase}:\n\n{dtroUpdateResponseJson}");
+                $"Response JSON for file {Path.GetFileName(tempFilePathForDtroUpdate)}:\n\n{dtroUpdateResponseJson}");
             Assert.True(dtroUpdateResponseJson.Contains("Required properties are missing from object: source."),
-                $"Response JSON for file {nameOfFileWithInvalidPascalCase}:\n\n{dtroUpdateResponseJson}");
+                $"Response JSON for file {Path.GetFileName(tempFilePathForDtroUpdate)}:\n\n{dtroUpdateResponseJson}");
         }
     }
 }

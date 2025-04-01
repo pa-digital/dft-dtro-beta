@@ -157,8 +157,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await Dtros.CreateDtroFromFileAsync(dtroTempFilePath, publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
-            Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode, $"File {Path.GetFileName(dtroTempFilePath)}: expected status code is {HttpStatusCode.BadRequest} but actual status code was {dtroCreationResponse.StatusCode}, with response body\n{dtroCreationResponseJson}");
-
+            Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
+                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
             // Evaluate response JSON rule failures
             string expectedErrorJson = Dtros.GetLinearGeometryErrorJson(linearGeometryString);
             JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
