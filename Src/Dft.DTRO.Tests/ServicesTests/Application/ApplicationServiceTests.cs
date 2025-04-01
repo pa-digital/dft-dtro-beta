@@ -1,5 +1,6 @@
 using DfT.DTRO.Models.Apigee;
 using DfT.DTRO.Models.Pagination;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Dft.DTRO.Tests.ServicesTests.Application;
 
@@ -12,6 +13,7 @@ public class ApplicationServiceTests
     private readonly ApplicationService _applicationService;
     private readonly DtroContext _dtroContext;
     private readonly Mock<IDtroUserDal> _dtroUserDalMock;
+    private readonly Mock<IWebHostEnvironment> _envMock;
     private readonly string _email;
 
     public ApplicationServiceTests()
@@ -21,6 +23,7 @@ public class ApplicationServiceTests
         _traDalMock = new Mock<ITraDal>();
         _userDalMock = new Mock<IUserDal>();
         _dtroUserDalMock = new Mock<IDtroUserDal>();
+        _envMock = new Mock<IWebHostEnvironment>();
 
         var options = new DbContextOptionsBuilder<DtroContext>()
             .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -34,7 +37,8 @@ public class ApplicationServiceTests
             _traDalMock.Object,
             _userDalMock.Object,
             _dtroContext,
-            _dtroUserDalMock.Object
+            _dtroUserDalMock.Object,
+            _envMock.Object
         );
         _email = "user@test.com";
     }
