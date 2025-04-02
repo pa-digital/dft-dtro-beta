@@ -11,4 +11,8 @@ public interface ITraDal
     /// <param name="parameters">Parameters passed</param>
     /// <returns>All active TRA records</returns>
     Task<IEnumerable<TrafficRegulationAuthority>> GetTrasAsync(GetAllTrasQueryParameters parameters);
+
+    Task<TrafficRegulationAuthority> CreateTra();
+
+    Task<TrafficRegulationAuthority> GetTraBySwaCode(int swaCode);
 }

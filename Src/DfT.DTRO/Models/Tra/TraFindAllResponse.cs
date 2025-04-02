@@ -7,6 +7,12 @@
 public class TraFindAllResponse
 {
     /// <summary>
+    /// TRA SWA code.
+    /// </summary>
+    [DataMember(Name = "swaCode")]
+    public int SwaCode { get; set; }
+    
+    /// <summary>
     /// TRA name.
     /// </summary>
     [DataMember(Name = "name")]

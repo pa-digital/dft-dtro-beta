@@ -52,4 +52,15 @@ public class User
     public UserStatus UserStatus { get; set; }
 
     public List<Application> Applications { get; set; }
+
+    /// <summary>
+    /// Foreign key to DigitalServiceProvider
+    /// </summary>
+    [ForeignKey("DigitalServiceProvider")]
+    public Guid? DigitalServiceProviderId { get; set; }
+
+    /// <summary>
+    /// Navigation property for DigitalServiceProvider
+    /// </summary>
+    public DigitalServiceProvider DigitalServiceProvider { get; set; }
 }

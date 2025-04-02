@@ -22,24 +22,21 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
     public async Task<ApplicationDetailsDto> GetApplicationDetails(Guid appId)
     {
         return await _context.Applications
-            .Include(a => a.Purpose)
-            .Include(a => a.TrafficRegulationAuthority)
             .Where(a => a.Id == appId)
             .Select(a => new ApplicationDetailsDto
             {
                 Name = a.Nickname,
                 AppId = a.Id,
-                Purpose = a.Purpose.Description,
+                Purpose = a.Purpose,
                 SwaCode = a.TrafficRegulationAuthority.SwaCode
             })
             .FirstOrDefaultAsync();
     }
 
-    public async Task<List<ApplicationListDto>> GetApplicationList(string email)
+    public async Task<PaginatedResponse<ApplicationListDto>> GetApplicationList(string email, PaginatedRequest paginatedRequest)
     {
-        return await _context.Applications
+        IQueryable<ApplicationListDto> query = _context.Applications
             .Include(a => a.User)
-            .Include(a => a.TrafficRegulationAuthority)
             .Include(a => a.ApplicationType)
             .Where(a => a.User.Email == email)
             .Select(a => new ApplicationListDto
@@ -47,9 +44,24 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
                 Id = a.Id,
                 Name = a.Nickname,
                 Type = a.ApplicationType.Name,
-                Tra = a.TrafficRegulationAuthority.Name
-            })
+                Tra = a.TrafficRegulationAuthority != null
+                    ? a.TrafficRegulationAuthority.Name
+                    : "-"
+            });
+
+        int totalRecords = await query.CountAsync();
+        int totalPages = (int)Math.Ceiling((double)totalRecords / paginatedRequest.PageSize);
+
+        List<ApplicationListDto> paginatedResults = await query
+            .Skip((paginatedRequest.Page - 1) * paginatedRequest.PageSize)
+            .Take(paginatedRequest.PageSize)
             .ToListAsync();
+
+        return new PaginatedResponse<ApplicationListDto>(
+            paginatedResults,
+            paginatedRequest.Page,
+            totalPages
+        );
     }
 
     public async Task<PaginatedResult<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest)
@@ -67,7 +79,7 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
                 UserEmail = a.User.Email,
                 Username = $"{a.User.Forename} {a.User.Surname}",
             });
-
+        
         int totalCount = await query.CountAsync();
 
         List<ApplicationInactiveListDto> paginatedList = await query
@@ -106,5 +118,11 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
         {
             return false;
         }
+    }
+
+    public async Task CreateApplication(Application application)
+    {
+        _context.Applications.Add(application);
+        await _context.SaveChangesAsync();
     }
 }

@@ -62,11 +62,6 @@ public class DtroContext : DbContext
     public virtual DbSet<ApplicationType> ApplicationTypes { get; set; }
 
     /// <summary>
-    /// Application Purpose table
-    /// </summary>
-    public virtual DbSet<ApplicationPurpose> ApplicationPurposes { get; set; }
-
-    /// <summary>
     /// Application table
     /// </summary>
     public virtual DbSet<Application> Applications { get; set; }
@@ -123,13 +118,6 @@ public class DtroContext : DbContext
                     args[1],
                     args[0].TypeMapping);
             });
-
-        modelBuilder.Entity<Application>()
-            .HasOne(a => a.Purpose)
-            .WithOne(p => p.Application)
-            .HasForeignKey<Application>(a => a.PurposeId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Application>()
             .HasOne(a => a.User)
