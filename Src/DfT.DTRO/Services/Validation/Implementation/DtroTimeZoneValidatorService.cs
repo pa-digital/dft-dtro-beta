@@ -6,55 +6,55 @@ public class DtroTimeZoneValidatorService : IDtroTimeZoneValidatorService
     private SystemClock _clock = new();
 
     /// <inheritdoc cref="IDtroTimeZoneValidatorService"/>
-    public async Task<DtroValidationException> Validate(DtroSubmit dtroSubmit)
+    public DtroValidationException Validate(DtroSubmit dtroSubmit)
     {
         var expandoObject = dtroSubmit.Data.GetExpando(Constants.Source);
 
         var dateTimeValues = new List<DateTime>();
-        await FindAllDateTimeValues(expandoObject, dateTimeValues);
+        expandoObject.FindDateTimeValues(dateTimeValues);
 
         var error = new DtroValidationException();
         error.RequestComparedToRules = new List<SemanticValidationError>();
         foreach (var dateTimeValue in dateTimeValues)
         {
-            if (dateTimeValue >= _clock.UtcNow.AddHours(-1).DateTime)
+            if (dateTimeValue.IsDaylightSavingTime())
             {
-                error.RequestComparedToRules.Add(
-                    new SemanticValidationError()
+                if (dateTimeValue.AddHours(-1) < _clock.UtcNow.DateTime)
+                {
+                    continue;
+                }
+                else
+                {
+                    var semanticValidationError = new SemanticValidationError
                     {
                         Name = $"Invalid '{dateTimeValue}'", 
-                        //TODO: To be updated
-                        Message = "", 
-                        //TODO: To be updated
+                        Message = "One or more date-time values passed are in the future", 
                         Path = "", 
-                        //TODO: To be updated
                         Rule = ""
-                    });
+                    };
+                    error.RequestComparedToRules.Add(semanticValidationError);
+                }
+            }
+            else
+            {
+                if (dateTimeValue.AddHours(-1) < _clock.UtcNow.DateTime)
+                {
+                    continue;
+                }
+                else
+                {
+                    var semanticValidationError = new SemanticValidationError
+                    {
+                        Name = $"Invalid '{dateTimeValue}'", 
+                        Message = "One or more date-time values passed are in the future", 
+                        Path = "", 
+                        Rule = ""
+                    };
+                    error.RequestComparedToRules.Add(semanticValidationError);
+                }
             }
         }
 
         return error;
-    }
-
-    /// <summary>
-    /// Recursive method to find all string values formatted as date-time
-    /// </summary>
-    /// <param name="expandoObject">Expando object to check against.</param>
-    /// <param name="dateTimeValues">List of date-time values found.</param>
-    public async Task FindAllDateTimeValues(ExpandoObject expandoObject, List<DateTime> dateTimeValues)
-    {
-        foreach (var kvp in expandoObject)
-        {
-            if (kvp.Value is DateTime value)
-                dateTimeValues.Add(value);
-            else if (kvp.Value is ExpandoObject nestedExpandoObject)
-                await FindAllDateTimeValues(nestedExpandoObject, dateTimeValues);
-            else if (kvp.Value is IEnumerable<object> enumerable)
-                foreach (var item in enumerable)
-                    if (item is ExpandoObject nestedItemExpandoObject)
-                        await FindAllDateTimeValues(nestedItemExpandoObject, dateTimeValues);
-                    else if (item is DateTime nestedItemValue) 
-                        dateTimeValues.Add(nestedItemValue);
-        }
     }
 }

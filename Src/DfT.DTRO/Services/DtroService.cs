@@ -151,7 +151,7 @@ public class DtroService : IDtroService
             throw errors;
         }
 
-        errors = await _dtroTimeZoneValidatorService.Validate(dtroSubmit);
+        errors = _dtroTimeZoneValidatorService.Validate(dtroSubmit);
         if (errors.RequestComparedToRules.Count > 0)
         {
             throw errors;
@@ -170,7 +170,7 @@ public class DtroService : IDtroService
             throw errors;
         }
 
-        errors = await _dtroTimeZoneValidatorService.Validate(dtroSubmit);
+        errors = _dtroTimeZoneValidatorService.Validate(dtroSubmit);
         if (errors.RequestComparedToRules.Count > 0)
         {
             throw errors;

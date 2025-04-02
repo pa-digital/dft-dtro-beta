@@ -213,4 +213,26 @@ public static class ExpandoObjectExtensions
 
         return result;
     }
+
+    /// <summary>
+    /// Recursive method to find all string values formatted as date-time
+    /// </summary>
+    /// <param name="expandoObject">Expando object to check against.</param>
+    /// <param name="dateTimeValues">List of date-time values found.</param>
+    public static void FindDateTimeValues(this ExpandoObject expandoObject, List<DateTime> dateTimeValues)
+    {
+        foreach (var kvp in expandoObject)
+        {
+            if (kvp.Value is DateTime value)
+                dateTimeValues.Add(value);
+            else if (kvp.Value is ExpandoObject nestedExpandoObject)
+                FindDateTimeValues(nestedExpandoObject, dateTimeValues);
+            else if (kvp.Value is IEnumerable<object> enumerable)
+                foreach (var item in enumerable)
+                    if (item is ExpandoObject nestedItemExpandoObject)
+                        FindDateTimeValues(nestedItemExpandoObject, dateTimeValues);
+                    else if (item is DateTime nestedItemValue) 
+                        dateTimeValues.Add(nestedItemValue);
+        }
+    }
 }
