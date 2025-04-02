@@ -1,4 +1,4 @@
-./scripts/insert_into_database.sh ApplicationPurposes scripts/application_purpose.csv
+./scripts/insert_into_database.sh DigitalServiceProvider scripts/dsp.csv
 ./scripts/insert_into_database.sh ApplicationTypes scripts/application_types.csv
 ./scripts/insert_into_database.sh ApplicationStatus scripts/application_status.csv
 ./scripts/insert_into_database.sh TrafficRegulationAuthorities scripts/tras.csv

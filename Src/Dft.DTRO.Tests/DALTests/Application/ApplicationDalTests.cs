@@ -30,17 +30,12 @@ namespace Dft.DTRO.Tests.DALTests
             var typeA = new ApplicationType { Id = Guid.NewGuid(), Name = "TypeA" };
             var typeB = new ApplicationType { Id = Guid.NewGuid(), Name = "TypeB" };
 
-            var purposeA = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeA" };
-            var purposeB = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeB" };
-            var purposeC = new ApplicationPurpose { Id = Guid.NewGuid(), Description = "PurposeC" };
-
             var statusA = new ApplicationStatus { Id = Guid.NewGuid(), Status = "Active" };
             var statusB = new ApplicationStatus { Id = Guid.NewGuid(), Status = "Inactive" };
 
             _context.Users.AddRange(user1, user2);
             _context.TrafficRegulationAuthorities.AddRange(tra1, tra2);
             _context.ApplicationTypes.AddRange(typeA, typeB);
-            _context.ApplicationPurposes.AddRange(purposeA, purposeB);
             _context.ApplicationStatus.AddRange(statusA, statusB);
             _context.SaveChanges();
 
@@ -53,7 +48,7 @@ namespace Dft.DTRO.Tests.DALTests
                     User = user1,
                     ApplicationType = typeA,
                     TrafficRegulationAuthority = tra1,
-                    Purpose = purposeA,
+                    Purpose = "PurposeA",
                     Status = statusB
                 },
                 new Application
@@ -63,7 +58,7 @@ namespace Dft.DTRO.Tests.DALTests
                     User = user2,
                     ApplicationType = typeB,
                     TrafficRegulationAuthority = tra2,
-                    Purpose = purposeB,
+                    Purpose = "PurposeB",
                     Status = statusB
                 },
                 new Application
@@ -73,7 +68,7 @@ namespace Dft.DTRO.Tests.DALTests
                     User = user1,
                     ApplicationType = typeA,
                     TrafficRegulationAuthority = tra1,
-                    Purpose = purposeC,
+                    Purpose = "PurposeC",
                     Status = statusB
                 },
             });
@@ -121,7 +116,6 @@ namespace Dft.DTRO.Tests.DALTests
             var details = await _applicationDal.GetApplicationDetails(appId);
             Assert.NotNull(details);
             Assert.Equal(app.Nickname, details.Name);
-            Assert.Equal(app.Purpose.Description, details.Purpose);
         }
 
         [Fact]

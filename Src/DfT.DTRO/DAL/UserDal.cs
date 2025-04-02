@@ -18,7 +18,7 @@ public class UserDal(DtroContext context) : IUserDal
             .Take(paginatedRequest.PageSize);
         return new PaginatedResult<UserListDto>(paginatedQuery.ToList(), paginatedQuery.Count());
     }
-    
+
     public async Task DeleteUser(Guid userId)
     {
         User user = await _context.Users.FindAsync(userId);
@@ -29,5 +29,14 @@ public class UserDal(DtroContext context) : IUserDal
             _context.DtroUsers.Remove(dtroUser);
             await _context.SaveChangesAsync();
         }
+    }
+
+    public async Task<User> GetUserFromEmail(string email)
+    {
+        User user = await _context.Users
+            .Where(u => u.Email == email)
+            .SingleOrDefaultAsync();
+        
+        return user ?? throw new Exception("No matching user found");
     }
 }

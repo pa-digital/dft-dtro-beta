@@ -22,14 +22,13 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
     public async Task<ApplicationDetailsDto> GetApplicationDetails(Guid appId)
     {
         return await _context.Applications
-            .Include(a => a.Purpose)
             .Include(a => a.TrafficRegulationAuthority)
             .Where(a => a.Id == appId)
             .Select(a => new ApplicationDetailsDto
             {
                 Name = a.Nickname,
                 AppId = a.Id,
-                Purpose = a.Purpose.Description,
+                Purpose = a.Purpose,
                 SwaCode = a.TrafficRegulationAuthority.SwaCode
             })
             .FirstOrDefaultAsync();
@@ -106,5 +105,11 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
         {
             return false;
         }
+    }
+
+    public async Task CreateApplication(Application application)
+    {
+        _context.Applications.Add(application);
+        await _context.SaveChangesAsync();
     }
 }

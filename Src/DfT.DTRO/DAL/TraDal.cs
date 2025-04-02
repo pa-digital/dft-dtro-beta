@@ -28,4 +28,12 @@ public class TraDal : ITraDal
         var tras = await trasQuery.ToListAsync();
         return tras;
     }
+
+    public async Task<TrafficRegulationAuthority> CreateTra()
+    {
+        TrafficRegulationAuthority tra = new TrafficRegulationAuthority { Name = "New TRA", Status = "Active" };
+        _dtroContext.TrafficRegulationAuthorities.Add(tra);
+        await _dtroContext.SaveChangesAsync();
+        return tra;
+    }
 }

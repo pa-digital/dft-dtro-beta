@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    partial class DtroContextModelSnapshot : ModelSnapshot
+    [Migration("20250324181302_AddInformationColumnsForConsumerApp")]
+    partial class AddInformationColumnsForConsumerApp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,6 +144,9 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CreatedCorrelationId")
+                        .HasColumnType("text");
+
                     b.Property<string>("Data")
                         .IsRequired()
                         .HasColumnType("jsonb");
@@ -153,6 +159,9 @@ namespace DfT.DTRO.Migrations
 
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastUpdatedCorrelationId")
+                        .HasColumnType("text");
 
                     b.Property<NpgsqlBox>("Location")
                         .HasColumnType("box");
@@ -268,10 +277,6 @@ namespace DfT.DTRO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("AppId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(2147483647)
@@ -287,6 +292,10 @@ namespace DfT.DTRO.Migrations
                     b.Property<int>("UserGroup")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("xAppId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.ToTable("DtroUsers");
@@ -297,6 +306,9 @@ namespace DfT.DTRO.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("CreatedCorrelationId")
+                        .HasColumnType("text");
 
                     b.Property<int>("DeletionCount")
                         .HasColumnType("integer");
@@ -310,6 +322,9 @@ namespace DfT.DTRO.Migrations
 
                     b.Property<DateOnly>("ForDate")
                         .HasColumnType("date");
+
+                    b.Property<string>("LastUpdatedCorrelationId")
+                        .HasColumnType("text");
 
                     b.Property<int>("SearchCount")
                         .HasColumnType("integer");
@@ -343,8 +358,14 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CreatedCorrelationId")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastUpdatedCorrelationId")
+                        .HasColumnType("text");
 
                     b.Property<string>("SchemaVersion")
                         .IsRequired()
@@ -373,11 +394,17 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CreatedCorrelationId")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastUpdatedCorrelationId")
+                        .HasColumnType("text");
 
                     b.Property<string>("SchemaVersion")
                         .IsRequired()
@@ -430,9 +457,6 @@ namespace DfT.DTRO.Migrations
 
                     b.Property<string>("Status")
                         .HasColumnType("text");
-
-                    b.Property<int>("SwaCode")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

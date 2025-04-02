@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    partial class DtroContextModelSnapshot : ModelSnapshot
+    [Migration("20250321172706_RemoveUniqueConstraintFromPurposeId")]
+    partial class RemoveUniqueConstraintFromPurposeId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,20 +32,11 @@ namespace DfT.DTRO.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Activity")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AdditionalInformation")
-                        .HasColumnType("text");
-
                     b.Property<Guid>("ApplicationTypeId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DataType")
-                        .HasColumnType("text");
 
                     b.Property<Guid?>("DigitalServiceProviderId")
                         .HasColumnType("uuid");
@@ -53,11 +47,8 @@ namespace DfT.DTRO.Migrations
                     b.Property<string>("Nickname")
                         .HasColumnType("text");
 
-                    b.Property<string>("Purpose")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Regions")
-                        .HasColumnType("text");
+                    b.Property<Guid>("PurposeId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("StatusId")
                         .HasColumnType("uuid");
@@ -75,6 +66,9 @@ namespace DfT.DTRO.Migrations
 
                     b.HasIndex("DigitalServiceProviderId");
 
+                    b.HasIndex("PurposeId")
+                        .IsUnique();
+
                     b.HasIndex("StatusId");
 
                     b.HasIndex("TrafficRegulationAuthorityId");
@@ -82,6 +76,20 @@ namespace DfT.DTRO.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Applications");
+                });
+
+            modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationPurpose", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationPurposes");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationStatus", b =>
@@ -96,23 +104,6 @@ namespace DfT.DTRO.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationStatus", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6e563a53-05b6-4521-8323-896aecc27cc1"),
-                            Status = "Active"
-                        },
-                        new
-                        {
-                            Id = new Guid("3153c4a8-6434-46bf-99ff-98500c02e983"),
-                            Status = "Pending"
-                        },
-                        new
-                        {
-                            Id = new Guid("c47cc91d-0d20-47b0-8fc8-ec51fb5aae94"),
-                            Status = "Inactive"
-                        });
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationType", b =>
@@ -141,6 +132,9 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CreatedCorrelationId")
+                        .HasColumnType("text");
+
                     b.Property<string>("Data")
                         .IsRequired()
                         .HasColumnType("jsonb");
@@ -153,6 +147,9 @@ namespace DfT.DTRO.Migrations
 
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastUpdatedCorrelationId")
+                        .HasColumnType("text");
 
                     b.Property<NpgsqlBox>("Location")
                         .HasColumnType("box");
@@ -268,10 +265,6 @@ namespace DfT.DTRO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("AppId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(2147483647)
@@ -287,6 +280,10 @@ namespace DfT.DTRO.Migrations
                     b.Property<int>("UserGroup")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("xAppId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.ToTable("DtroUsers");
@@ -297,6 +294,9 @@ namespace DfT.DTRO.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("CreatedCorrelationId")
+                        .HasColumnType("text");
 
                     b.Property<int>("DeletionCount")
                         .HasColumnType("integer");
@@ -310,6 +310,9 @@ namespace DfT.DTRO.Migrations
 
                     b.Property<DateOnly>("ForDate")
                         .HasColumnType("date");
+
+                    b.Property<string>("LastUpdatedCorrelationId")
+                        .HasColumnType("text");
 
                     b.Property<int>("SearchCount")
                         .HasColumnType("integer");
@@ -343,8 +346,14 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CreatedCorrelationId")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastUpdatedCorrelationId")
+                        .HasColumnType("text");
 
                     b.Property<string>("SchemaVersion")
                         .IsRequired()
@@ -373,11 +382,17 @@ namespace DfT.DTRO.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CreatedCorrelationId")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastUpdatedCorrelationId")
+                        .HasColumnType("text");
 
                     b.Property<string>("SchemaVersion")
                         .IsRequired()
@@ -430,9 +445,6 @@ namespace DfT.DTRO.Migrations
 
                     b.Property<string>("Status")
                         .HasColumnType("text");
-
-                    b.Property<int>("SwaCode")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -540,6 +552,12 @@ namespace DfT.DTRO.Migrations
                         .WithMany("Applications")
                         .HasForeignKey("DigitalServiceProviderId");
 
+                    b.HasOne("DfT.DTRO.Models.DataBase.ApplicationPurpose", "Purpose")
+                        .WithOne("Application")
+                        .HasForeignKey("DfT.DTRO.Models.DataBase.Application", "PurposeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("DfT.DTRO.Models.DataBase.ApplicationStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
@@ -559,6 +577,8 @@ namespace DfT.DTRO.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationType");
+
+                    b.Navigation("Purpose");
 
                     b.Navigation("Status");
 
@@ -628,6 +648,11 @@ namespace DfT.DTRO.Migrations
                     b.Navigation("RuleTemplates");
 
                     b.Navigation("SchemaTemplates");
+                });
+
+            modelBuilder.Entity("DfT.DTRO.Models.DataBase.ApplicationPurpose", b =>
+                {
+                    b.Navigation("Application");
                 });
 
             modelBuilder.Entity("DfT.DTRO.Models.DataBase.DigitalServiceProvider", b =>
