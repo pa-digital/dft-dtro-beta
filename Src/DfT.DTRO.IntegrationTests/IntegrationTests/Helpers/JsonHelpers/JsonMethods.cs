@@ -109,7 +109,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers
             return JsonConvert.SerializeObject(camelCasedObject, Formatting.Indented);
         }
 
-        private static JObject ConvertKeysToCamelCase(JObject original)
+        public static JObject ConvertKeysToCamelCase(JObject original)
         {
             JObject newObject = new JObject();
 

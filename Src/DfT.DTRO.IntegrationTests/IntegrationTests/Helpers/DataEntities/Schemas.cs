@@ -2,6 +2,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using DfT.DTRO.Consts;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
@@ -33,10 +34,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         private static async Task<HttpResponseMessage> DeleteSchemaAsync(string schemaVersion, TestUser testUser)
         {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { RequestHeaderNames.AppId, testUser.AppId }
-            };
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
 
             HttpResponseMessage deleteSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Delete, $"{BaseUri}{RouteTemplates.SchemasBase}/{schemaVersion}", headers);
             return deleteSchemaResponse;
@@ -55,10 +55,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         private static async Task<HttpResponseMessage> DeactivateSchemaAsync(string schemaVersion, TestUser testUser)
         {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { RequestHeaderNames.AppId, testUser.AppId }
-            };
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
 
             HttpResponseMessage deactivateSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Patch, $"{BaseUri}{RouteTemplates.SchemasBase}/deactivate/{schemaVersion}", headers);
             return deactivateSchemaResponse;
@@ -66,10 +65,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> ActivateSchemaAsync(string schemaVersion, TestUser testUser)
         {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { RequestHeaderNames.AppId, testUser.AppId }
-            };
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
 
             HttpResponseMessage activateSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Patch, $"{BaseUri}{RouteTemplates.SchemasBase}/activate/{schemaVersion}", headers);
             return activateSchemaResponse;
@@ -94,10 +92,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> GetAllSchemasAsync(TestUser testUser)
         {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { RequestHeaderNames.AppId, testUser.AppId }
-            };
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
 
             HttpResponseMessage getAllSchemasResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.SchemasFindVersions}", headers);
             return getAllSchemasResponse;
@@ -118,11 +115,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> CreateSchemaFromFileAsync(string schemaVersion, TestUser testUser)
         {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { RequestHeaderNames.AppId, testUser.AppId },
-                { "Content-Type", "multipart/form-data" }
-            };
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add("Content-Type", "multipart/form-data");
+
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
 
             HttpResponseMessage createSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.SchemasBase}/createFromFile/{schemaVersion}", headers, pathToJsonFile: $"{PathToSchemaExamplesDirectory}/schemas-{schemaVersion}.json");
             return createSchemaResponse;
@@ -130,10 +126,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static async Task<HttpResponseMessage> GetSchemaAsync(string schemaVersion, TestUser testUser)
         {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            {
-                { RequestHeaderNames.AppId, testUser.AppId }
-            };
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
 
             HttpResponseMessage getSchemaResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.SchemasBase}/{schemaVersion}", headers);
             return getSchemaResponse;
