@@ -105,6 +105,7 @@ public class EmissionValidationService : IEmissionValidationService
                                     Rule = $"If {EmissionClassificationEuroType.Other.GetDisplayName()} is present, the {Constants.EmissionClasificationEuroTypeExtension} must be present.",
                                 };
                                 errors.Add(newError);
+                                return errors;
                             }
 
                             var hasDefinition = emissionClassificationEuroTypeExtension
