@@ -12,6 +12,7 @@ public class DtroService : IDtroService
     private readonly IDtroMappingService _dtroMappingService;
     private readonly IDtroGroupValidatorService _dtroGroupValidatorService;
     private readonly string _fileDirectory;
+    private readonly IDtroTimeZoneValidatorService _dtroTimeZoneValidatorService;
 
     public DtroService(
         IDtroUserDal swaCodeDal,
@@ -19,7 +20,8 @@ public class DtroService : IDtroService
         IDtroHistoryDal dtroHistoryDal,
         ISchemaTemplateDal schemaTemplateDal,
         IDtroMappingService dtroMappingService,
-        IDtroGroupValidatorService dtroGroupValidatorService)
+        IDtroGroupValidatorService dtroGroupValidatorService,
+        IDtroTimeZoneValidatorService dtroTimeZoneValidatorService)
     {
         _dtroUserDal = swaCodeDal;
         _dtroDal = dtroDal;
@@ -29,6 +31,7 @@ public class DtroService : IDtroService
         _dtroGroupValidatorService = dtroGroupValidatorService;
         _fileDirectory = OSHelper.GetOSAppDataPath();
         Directory.CreateDirectory(_fileDirectory);
+        _dtroTimeZoneValidatorService = dtroTimeZoneValidatorService;
     }
 
     public async Task<bool> DeleteDtroAsync(Guid dtroId, DateTime? deletionTime = null)
@@ -148,6 +151,12 @@ public class DtroService : IDtroService
             throw errors;
         }
 
+        errors = await _dtroTimeZoneValidatorService.Validate(dtroSubmit);
+        if (errors.RequestComparedToRules.Count > 0)
+        {
+            throw errors;
+        }
+
         return await _dtroDal.SaveDtroAsJsonAsync(dtroSubmit);
     }
 
@@ -157,6 +166,12 @@ public class DtroService : IDtroService
         var errors = await _dtroGroupValidatorService.ValidateDtro(dtroSubmit, user.TraId);
 
         if (errors is not null)
+        {
+            throw errors;
+        }
+
+        errors = await _dtroTimeZoneValidatorService.Validate(dtroSubmit);
+        if (errors.RequestComparedToRules.Count > 0)
         {
             throw errors;
         }
