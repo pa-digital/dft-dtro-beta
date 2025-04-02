@@ -101,6 +101,7 @@ public class VehicleCharacteristicsValidationService : IVehicleCharacteristicsVa
                                     Rule = $"If {VehicleUsageType.Other.GetDisplayName()} is present, the {Constants.VehicleUsageTypeExtension} must be present.",
                                 };
                                 errors.Add(newError);
+                                return errors;
                             }
 
                             var hasDefinition = vehicleUsageTypeExtension

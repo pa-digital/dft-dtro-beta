@@ -209,6 +209,7 @@ public class PermitConditionValidationService : IPermitConditionValidationServic
                                         Rule = $"If {PermitType.Other.GetDisplayName()} is present, the {Constants.PermitTypeExtension} must be present.",
                                     };
                                     errors.Add(newError);
+                                    return errors;
                                 }
 
                                 var hasDefinition = permitTypeDefinitions.HasField(Constants.Definition);
