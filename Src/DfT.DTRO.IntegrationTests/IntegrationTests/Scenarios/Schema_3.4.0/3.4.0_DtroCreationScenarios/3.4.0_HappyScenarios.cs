@@ -46,14 +46,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
 
             // Get created DTRO
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
             HttpResponseMessage dtroGetResponse = await dtroId.GetDtroResponseByIdAsync(publisher);
             string dtroGetResponseJson = await dtroGetResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.OK == dtroGetResponse.StatusCode,
-                $"Response JSON for file {fileName}:\n\n{dtroGetResponseJson}");
+                $"Actual status code: {dtroGetResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroGetResponseJson}");
 
             // Add ID to sent DTRO and compare
             string expectedCreationJsonForComparison = dtroCreationJson
@@ -81,14 +81,14 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
             HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher.AppId);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
 
             // Get created DTRO
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
             HttpResponseMessage dtroGetResponse = await dtroId.GetDtroResponseByIdAsync(publisher);
             string dtroGetResponseJson = await dtroGetResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.OK == dtroGetResponse.StatusCode,
-                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroGetResponseJson}");
+                $"Actual status code: {dtroGetResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroGetResponseJson}");
 
             // Add ID to sent DTRO and compare
             string expectedCreationJsonForComparison = dtroCreationJson

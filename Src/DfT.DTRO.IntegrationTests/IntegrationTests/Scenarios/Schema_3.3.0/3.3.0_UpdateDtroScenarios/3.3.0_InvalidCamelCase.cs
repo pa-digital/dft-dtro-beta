@@ -49,7 +49,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.DtroUpdateScen
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {fileToCreateDtroWithValidPascalCase}:\n\n{dtroCreationResponseJson}");
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {fileToCreateDtroWithValidPascalCase}:\n\n{dtroCreationResponseJson}");
 
             // Prepare DTRO update
             string dtroUpdateJson = nameOfFileWithInvalidCamelCase
@@ -64,7 +64,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.DtroUpdateScen
             HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisher.AppId);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroUpdateResponse.StatusCode,
-                $"Response JSON for file {nameOfFileWithInvalidCamelCase}:\n\n{dtroUpdateResponseJson}");
+                $"Actual status code: {dtroUpdateResponse.StatusCode}. Response JSON for file {nameOfFileWithInvalidCamelCase}:\n\n{dtroUpdateResponseJson}");
 
             // Check DTRO response JSON
             ErrorJson jsonErrorResponse = await ErrorJsonResponseProcessor.GetErrorJson(dtroUpdateResponse);
@@ -92,7 +92,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.DtroUpdateScen
             HttpResponseMessage dtroCreationResponse = await tempFilePathForDtroCreation.SendFileInDtroCreationRequestAsync(publisher.AppId);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {Path.GetFileName(tempFilePathForDtroCreation)}:\n\n{dtroCreationResponseJson}");
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(tempFilePathForDtroCreation)}:\n\n{dtroCreationResponseJson}");
 
             // Prepare DTRO update
             string dtroUpdateJson = nameOfFileWithInvalidCamelCase
@@ -109,7 +109,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_3_0.DtroUpdateScen
             HttpResponseMessage dtroUpdateResponse = await tempFilePathForDtroUpdate.SendFileInDtroUpdateRequestAsync(dtroId, publisher.AppId);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroUpdateResponse.StatusCode,
-                $"Response JSON for file {Path.GetFileName(tempFilePathForDtroUpdate)}:\n\n{dtroUpdateResponseJson}");
+                $"Actual status code: {dtroUpdateResponse.StatusCode}. Response JSON for file {Path.GetFileName(tempFilePathForDtroUpdate)}:\n\n{dtroUpdateResponseJson}");
 
             // Check DTRO response JSON
             ErrorJson jsonErrorResponse = await ErrorJsonResponseProcessor.GetErrorJson(dtroUpdateResponse);

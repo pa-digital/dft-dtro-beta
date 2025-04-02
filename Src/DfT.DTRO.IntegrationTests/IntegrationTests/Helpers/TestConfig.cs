@@ -55,13 +55,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             string envFilePath = $"{PathToProjectDirectory}/docker/dev/.env";
             if (File.Exists(envFilePath))
             {
-                string[] lines = File.ReadAllLines(envFilePath);
-                string postgresUserLine = lines.First(line => line.StartsWith("POSTGRES_USER="));
-                string postgresUser = postgresUserLine.Split('=')[1];
-                string postgresPasswordLine = lines.First(line => line.StartsWith("POSTGRES_PASSWORD="));
-                string postgresPassword = postgresPasswordLine.Split('=')[1];
-                string postgresDbLine = lines.First(line => line.StartsWith("POSTGRES_DB="));
-                string postgresDb = postgresDbLine.Split('=')[1];
+                string postgresUser = EnvVariables.GetEnvValue("POSTGRES_USER");
+                string postgresPassword = EnvVariables.GetEnvValue("POSTGRES_PASSWORD");
+                string postgresDb = EnvVariables.GetEnvValue("POSTGRES_DB");
 
                 return $"Host={DatabaseHostName};Username={postgresUser};Password={postgresPassword};Database={postgresDb}";
             }

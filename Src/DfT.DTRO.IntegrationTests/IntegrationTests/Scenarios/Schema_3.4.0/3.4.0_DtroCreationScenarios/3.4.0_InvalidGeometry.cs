@@ -81,7 +81,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {pointGeometryFileName}:\n\n{dtroCreationResponseJson}");
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {pointGeometryFileName}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON
             string expectedErrorJson = Dtros.GetPointGeometryErrorJson(pointGeometryString);
@@ -107,7 +107,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
             HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher.AppId);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON rule failures
             string expectedErrorJson = Dtros.GetPointGeometryErrorJson(pointGeometryString);
@@ -131,7 +131,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {linearGeometryFileName}:\n\n{dtroCreationResponseJson}");
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {linearGeometryFileName}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON rule failures
             string expectedErrorJson = Dtros.GetLinearGeometryErrorJson(linearGeometryString);
@@ -158,7 +158,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
             HttpResponseMessage dtroCreationResponse = await Dtros.CreateDtroFromFileAsync(dtroTempFilePath, publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
             // Evaluate response JSON rule failures
             string expectedErrorJson = Dtros.GetLinearGeometryErrorJson(linearGeometryString);
             JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
