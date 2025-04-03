@@ -17,41 +17,18 @@ public class DtroTimeZoneValidatorService : IDtroTimeZoneValidatorService
         error.RequestComparedToRules = new List<SemanticValidationError>();
         foreach (var dateTimeValue in dateTimeValues)
         {
-            if (dateTimeValue.IsDaylightSavingTime())
+            TimeZoneInfo ukTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+            DateTime utcTime = TimeZoneInfo.ConvertTimeToUtc(dateTimeValue, ukTimeZone);
+            if (utcTime >= _clock.UtcNow)
             {
-                if (dateTimeValue.AddHours(-1) < _clock.UtcNow.DateTime)
+                var semanticValidationError = new SemanticValidationError
                 {
-                    continue;
-                }
-                else
-                {
-                    var semanticValidationError = new SemanticValidationError
-                    {
-                        Name = $"Invalid '{dateTimeValue}'", 
-                        Message = "One or more date-time values passed are in the future", 
-                        Path = "", 
-                        Rule = ""
-                    };
-                    error.RequestComparedToRules.Add(semanticValidationError);
-                }
-            }
-            else
-            {
-                if (dateTimeValue.AddHours(-1) < _clock.UtcNow.DateTime)
-                {
-                    continue;
-                }
-                else
-                {
-                    var semanticValidationError = new SemanticValidationError
-                    {
-                        Name = $"Invalid '{dateTimeValue}'", 
-                        Message = "One or more date-time values passed are in the future", 
-                        Path = "", 
-                        Rule = ""
-                    };
-                    error.RequestComparedToRules.Add(semanticValidationError);
-                }
+                    Name = $"Invalid '{dateTimeValue}'", 
+                    Message = $"Date-time values passed in the record should not be equal or greater than GMT Standard Time", 
+                    Path = "Check all date-time values passed in the D-TRO payload", 
+                    Rule = $"Passed in date-time '{dateTimeValue}' cannot be equal or greater than GMT Standard Time: '{_clock.UtcNow.DateTime}'"
+                };
+                error.RequestComparedToRules.Add(semanticValidationError);
             }
         }
 
