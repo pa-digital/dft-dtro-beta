@@ -136,12 +136,9 @@ public static class ObjectExtensions
     /// Convert the date-time to GTM if Daylight saving time is in place
     /// </summary>
     /// <param name="dateTime">date time to check</param>
-    /// <returns>The GMT date time</returns>
-    public static DateTime ToUkTimeZone(this DateTime dateTime)
+    /// <returns>UTC date time</returns>
+    public static DateTime ToUTC(this DateTime dateTime)
     {
-        if (!dateTime.IsDaylightSavingTime())
-            return dateTime;
-
         var ukTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
         return TimeZoneInfo.ConvertTimeToUtc(dateTime, ukTimeZone);
     }

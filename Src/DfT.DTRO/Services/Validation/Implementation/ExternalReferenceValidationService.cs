@@ -57,10 +57,8 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                     errors.Add(error);
                 }
 
-                var lastDateUpdatesUkTimeZone = lastDateUpdates
-                    .Select(lastUpdateDate => lastUpdateDate.Value.ToUkTimeZone());
-
-                if (lastDateUpdatesUkTimeZone.All(dateTime => dateTime >= _clock.UtcNow))
+                var lastDateUpdatesUtc = lastDateUpdates.Select(lastUpdateDate => lastUpdateDate.Value.ToUTC());
+                if (lastDateUpdatesUtc.All(dateTime => dateTime >= _clock.UtcNow))
                 {
                     var error = new SemanticValidationError
                     {

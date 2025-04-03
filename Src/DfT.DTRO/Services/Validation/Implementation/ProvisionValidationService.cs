@@ -147,8 +147,7 @@ public class ProvisionValidationService : IProvisionValidationService
                     validationErrors.Add(error);
                 }
 
-                var isInTheFuture = eventAtValidDate.ToUkTimeZone() >= _clock.UtcNow;
-                if (isInTheFuture)
+                if (eventAtValidDate.ToUTC() >= _clock.UtcNow)
                 {
                     var error = new SemanticValidationError
                     {
