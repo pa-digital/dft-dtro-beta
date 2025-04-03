@@ -10,7 +10,6 @@ public class GetDtroSubmissionCountTests
     private readonly Mock<ISchemaTemplateDal> _mockSchemaTemplateDal = new();
     private readonly Mock<IDtroMappingService> _mockDtroMappingService = new();
     private readonly Mock<IDtroGroupValidatorService> _mockDtroGroupValidatorService = new();
-    private readonly Mock<IDtroTimeZoneValidatorService> _mockDtroTimeZoneValidatorService = new();
     private readonly DtroService _dtroService;
 
     public GetDtroSubmissionCountTests()
@@ -21,8 +20,7 @@ public class GetDtroSubmissionCountTests
                 _mockDtroHistoryDal.Object,
                 _mockSchemaTemplateDal.Object,
                 _mockDtroMappingService.Object,
-                _mockDtroGroupValidatorService.Object,
-                _mockDtroTimeZoneValidatorService.Object
+                _mockDtroGroupValidatorService.Object
             );
     }
 
