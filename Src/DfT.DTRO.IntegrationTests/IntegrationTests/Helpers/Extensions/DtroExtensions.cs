@@ -155,8 +155,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
-            HttpResponseMessage getDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.Search}", headers, jsonString);
-            return getDtroResponse;
+            HttpResponseMessage searchDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.Search}", headers, jsonString);
+            return searchDtroResponse;
         }
 
         public static string AddDtroIdToJson(this string jsonString, string dtroId)
