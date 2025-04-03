@@ -38,13 +38,13 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                     continue;
                 }
 
-                var lastDateUpdates = geometry
+                var lastUpdateDates = geometry
                     .GetValueOrDefault<IList<object>>($"{concreteGeometry}.ExternalReference")
                     .OfType<ExpandoObject>()
                     .Select(it => it.GetDateTimeOrNull("lastUpdateDate"))
                     .ToList();
 
-                if (!lastDateUpdates.All(dateTime => dateTime.HasValue))
+                if (!lastUpdateDates.All(lastUpdateDate => lastUpdateDate.HasValue))
                 {
                     var error = new SemanticValidationError
                     {
@@ -57,8 +57,12 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                     errors.Add(error);
                 }
 
+                var areAnyInTheFuture = lastUpdateDates
+                    .Where(lastUpdateDate => lastUpdateDate.HasValue)
+                    .Select(lastUpdateDate => lastUpdateDate.Value.ToUtc())
+                    .Any(lastUpdateDate => lastUpdateDate > _clock.UtcNow.DateTime);
 
-                if (lastDateUpdates.All(dateTime => dateTime >= _clock.UtcNow))
+                if (areAnyInTheFuture)
                 {
                     var error = new SemanticValidationError
                     {
@@ -72,7 +76,6 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                 }
             }
         }
-
         return errors;
     }
 }
