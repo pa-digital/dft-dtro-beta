@@ -126,6 +126,19 @@ public class ProvisionValidationService : IProvisionValidationService
                 .Cast<ExpandoObject>()
                 .ToList();
 
+            // if (actualStartOrStops.Count == 0)
+            // {
+            //     var error = new SemanticValidationError
+            //     {
+            //         Name = $"Invalid '{Constants.ActualStartOrStop}'",
+            //         Message = "Object supporting the recording of actual start and stop dates and times",
+            //         Rule = $"'{Constants.ActualStartOrStop}' must be present if a temporary ordering reporting point exists",
+            //         Path = $"{Constants.Source} -> {Constants.Provision} -> {Constants.ActualStartOrStop}"
+            //     };
+
+            //     validationErrors.Add(error);
+            // }
+
             if (actualStartOrStops.Count > 0)
             {
                 var eventAts = actualStartOrStops
@@ -147,7 +160,7 @@ public class ProvisionValidationService : IProvisionValidationService
                     validationErrors.Add(error);
                 }
 
-                var isInTheFuture = eventAtValidDate.ToUkTimeZone() >= _clock.UtcNow;
+                var isInTheFuture = eventAtValidDate > _clock.UtcNow;
                 if (isInTheFuture)
                 {
                     var error = new SemanticValidationError

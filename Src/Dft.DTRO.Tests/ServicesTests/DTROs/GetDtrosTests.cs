@@ -9,6 +9,7 @@ public class GetDtrosTests
     private readonly Mock<IDtroMappingService> _mockDtroMappingService = new();
     private readonly Mock<IDtroGroupValidatorService> _mockDtroGroupValidatorService = new();
 
+
     private readonly IDtroService _sut;
 
     public GetDtrosTests()
