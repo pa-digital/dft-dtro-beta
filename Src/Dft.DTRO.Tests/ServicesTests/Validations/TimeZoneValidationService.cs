@@ -156,7 +156,7 @@ public class TimeZoneValidationService
                                 ""Condition"": [
                                     {{
                                         ""TimeValidity"": {{
-                                            ""end"": ""{dateTimeValues[2]}]"",
+                                            ""end"": ""{dateTimeValues[2]}"",
                                             ""start"": ""{dateTimeValues[3]}""
                                         }},
                                         ""RateTable"": {{
