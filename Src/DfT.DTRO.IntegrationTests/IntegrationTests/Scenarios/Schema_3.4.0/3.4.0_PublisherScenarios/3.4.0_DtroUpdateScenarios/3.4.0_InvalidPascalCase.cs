@@ -5,7 +5,7 @@ using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers.Erro
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScenarios
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScenarios.DtroUpdateScenarios
 {
     public class InvalidPascalCase : BaseTest
     {

@@ -26,16 +26,6 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             return dtroCreationResponse;
         }
 
-        public static async Task<HttpResponseMessage> GetDtroAsync(string dtroId, TestUser testUser)
-        {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
-
-            HttpResponseMessage getDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtrosBase}/{dtroId}", headers);
-            return getDtroResponse;
-        }
-
         public static async Task<HttpResponseMessage> GetDtrosCountAsync(TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -166,6 +156,23 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             """;
 
             return expectedErrorJson;
+        }
+
+        public static string GetSearchRequestJson(string traField, string traId)
+        {
+            string requestJson = $$"""
+            {
+                "page": 1,
+                "pageSize": 50,
+                "queries": [
+                    {
+                        "{{traField}}": {{traId}}
+                    }
+                ]
+            }
+            """;
+
+            return requestJson;
         }
     }
 }

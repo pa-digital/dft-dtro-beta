@@ -23,6 +23,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                     clientId = TestConfig.PublisherClientId;
                     clientSecret = TestConfig.PublisherClientSecret;
                     break;
+                case UserGroup.Consumer:
+                    clientId = TestConfig.ConsumerClientId;
+                    clientSecret = TestConfig.ConsumerClientSecret;
+                    break;
                 default:
                     throw new Exception($"{userGroup} not found!");
             }

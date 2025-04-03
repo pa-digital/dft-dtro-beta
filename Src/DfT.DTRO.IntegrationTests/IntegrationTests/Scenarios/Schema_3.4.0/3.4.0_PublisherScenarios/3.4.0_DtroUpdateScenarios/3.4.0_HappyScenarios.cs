@@ -4,7 +4,7 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScenarios
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScenarios.DtroUpdateScenarios
 {
     public class HappyScenarios : BaseTest
     {

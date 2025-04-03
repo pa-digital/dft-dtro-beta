@@ -68,7 +68,7 @@ jobs:
     - name: Integration tests
       id: integration-tests
       run: |
-        ./run_integration_tests.sh -e dev -ai ${{ secrets.CSO_CLIENT_ID_DEV }} -as ${{ secrets.CSO_CLIENT_SECRET_DEV }} -pi ${{ secrets.PUBLISHER_CLIENT_ID_DEV }} -ps ${{ secrets.PUBLISHER_CLIENT_SECRET_DEV }} -ti 8888
+        ./run_integration_tests.sh -e dev -ai ${{ secrets.CSO_CLIENT_ID_DEV }} -as ${{ secrets.CSO_CLIENT_SECRET_DEV }} -ci ${{ secrets.CONSUMER_CLIENT_ID_DEV }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_DEV }} -pi ${{ secrets.PUBLISHER_CLIENT_ID_DEV }} -ps ${{ secrets.PUBLISHER_CLIENT_SECRET_DEV }} -ti 8888
 
     - name: Upload integration test results
       if: always() && steps.integration-tests.outcome != 'skipped'
@@ -120,7 +120,7 @@ jobs:
     - name: Integration tests
       id: integration-tests
       run: |
-        ./run_integration_tests.sh -e test -ai ${{ secrets.CSO_CLIENT_ID_TEST }} -as ${{ secrets.CSO_CLIENT_SECRET_TEST }} -pi ${{ secrets.PUBLISHER_CLIENT_ID_TEST }} -ps ${{ secrets.PUBLISHER_CLIENT_SECRET_TEST }} -ti 3579
+        ./run_integration_tests.sh -e test -ai ${{ secrets.CSO_CLIENT_ID_TEST }} -as ${{ secrets.CSO_CLIENT_SECRET_TEST }} -ci ${{ secrets.CONSUMER_CLIENT_ID_TEST }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_TEST }} -pi ${{ secrets.PUBLISHER_CLIENT_ID_TEST }} -ps ${{ secrets.PUBLISHER_CLIENT_SECRET_TEST }} -ti 3579
 
     - name: Upload integration test results
       if: always() && steps.integration-tests.outcome != 'skipped'

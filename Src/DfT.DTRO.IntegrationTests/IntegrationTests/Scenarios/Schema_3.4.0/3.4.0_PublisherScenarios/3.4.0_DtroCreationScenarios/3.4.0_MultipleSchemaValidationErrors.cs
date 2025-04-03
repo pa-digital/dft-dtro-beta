@@ -5,15 +5,15 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationScenarios
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScenarios.DtroCreationScenarios
 {
-    public class DuplicateItems : BaseTest
+    public class MultipleSchemaValidationErrors : BaseTest
     {
         readonly static string schemaVersionToTest = "3.4.0";
         readonly string fileName = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
 
         [Fact]
-        public async Task DtroSubmittedFromJsonBodyWithDuplicateProvisionReferenceShouldBeRejected()
+        public async Task DtroSubmittedFromJsonBodyWithWithMultipleSchemaErrorsShouldBeRejected()
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
@@ -22,7 +22,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
-                                    .DuplicateProvisionReferenceInDtro();
+                                    .ModifyToFailSchemaValidation();
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
@@ -31,13 +31,18 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON
-            string provisionReference = JsonMethods.GetValueAtJsonPath(dtroCreationJson, "data.source.provision[0].reference").ToString();
-            string expectedErrorJson = Dtros.GetDuplicateProvisionReferenceErrorJson(provisionReference);
-            JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
+            Assert.True(dtroCreationResponseJson.Contains("Invalid type. Expected Integer but got String.\",\"path\":\"source.currentTraOwner"),
+                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Invalid type. Expected Array but got Integer.\",\"path\":\"source.traAffected"),
+                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Required properties are missing from object: actionType.\",\"path\":\"source"),
+                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Property 'apples' has not been defined and the schema does not allow additional properties."),
+                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
         }
 
         [Fact]
-        public async Task DtroSubmittedFromFileWithDuplicateProvisionReferenceShouldBeRejected()
+        public async Task DtroSubmittedFromFileWithMultipleSchemaErrorsShouldBeRejected()
         {
             // Generate user to send DTRO and read it back
             TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
@@ -46,7 +51,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
-                                    .DuplicateProvisionReferenceInDtro();
+                                    .ModifyToFailSchemaValidation();
 
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
@@ -57,9 +62,15 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON
-            string provisionReference = JsonMethods.GetValueAtJsonPath(dtroCreationJson, "data.source.provision[0].reference").ToString();
-            string expectedErrorJson = Dtros.GetDuplicateProvisionReferenceErrorJson(provisionReference);
-            JsonMethods.CompareJson(expectedErrorJson, dtroCreationResponseJson);
+            Assert.True(dtroCreationResponseJson.Contains("Invalid type. Expected Integer but got String.\",\"path\":\"source.currentTraOwner"),
+                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Invalid type. Expected Array but got Integer.\",\"path\":\"source.traAffected"),
+                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Required properties are missing from object: actionType.\",\"path\":\"source"),
+                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+            Assert.True(dtroCreationResponseJson.Contains("Property 'apples' has not been defined and the schema does not allow additional properties."),
+                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+
         }
     }
 }

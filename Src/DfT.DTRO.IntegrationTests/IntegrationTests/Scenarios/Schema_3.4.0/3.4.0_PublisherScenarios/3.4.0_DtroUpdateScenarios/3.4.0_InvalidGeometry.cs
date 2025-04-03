@@ -6,7 +6,7 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScenarios
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScenarios.DtroUpdateScenarios
 {
     // DPPB-1235
     public class InvalidGeometry : BaseTest
