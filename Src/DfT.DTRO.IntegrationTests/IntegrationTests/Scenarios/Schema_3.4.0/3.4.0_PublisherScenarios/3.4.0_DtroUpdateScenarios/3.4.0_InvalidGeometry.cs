@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScenarios.DtroUpdateScenarios
 {
@@ -69,7 +69,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
         public async Task DtroSubmittedFromJsonBodyWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
         {
             // Generate user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
             // Prepare DTRO
             string dtroCreationJson = pointGeometryFileName
@@ -77,7 +77,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
+            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {pointGeometryFileName}:\n\n{dtroCreationResponseJson}");
@@ -90,7 +90,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
-            HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisher.AppId);
+            HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisher);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroUpdateResponse.StatusCode,
                 $"Actual status code: {dtroUpdateResponse.StatusCode}. Response JSON for file {pointGeometryFileName}:\n\n{dtroUpdateResponseJson}");
@@ -105,7 +105,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
         public async Task DtroUpdatedFromFileWithInvalidPointGeometryShouldBeRejected(string pointGeometryString)
         {
             // Generate user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
             // Prepare DTRO
             string dtroCreationJson = pointGeometryFileName
@@ -115,7 +115,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
             string tempFilePathForDtroCreation = dtroCreationJson.CreateDtroTempFile(pointGeometryFileName, publisher);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await tempFilePathForDtroCreation.SendFileInDtroCreationRequestAsync(publisher.AppId);
+            HttpResponseMessage dtroCreationResponse = await tempFilePathForDtroCreation.SendFileInDtroCreationRequestAsync(publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(tempFilePathForDtroCreation)}:\n\n{dtroCreationResponseJson}");
@@ -130,7 +130,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
-            HttpResponseMessage dtroUpdateResponse = await tempFilePathForDtroUpdate.SendFileInDtroUpdateRequestAsync(dtroId, publisher.AppId);
+            HttpResponseMessage dtroUpdateResponse = await tempFilePathForDtroUpdate.SendFileInDtroUpdateRequestAsync(dtroId, publisher);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroUpdateResponse.StatusCode,
                 $"Actual status code: {dtroUpdateResponse.StatusCode}. Response JSON for file {Path.GetFileName(tempFilePathForDtroUpdate)}:\n\n{dtroUpdateResponseJson}");
@@ -145,7 +145,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
         public async Task DtroUpdatedFromJsonBodyWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
         {
             // Generate user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
             // Prepare DTRO
             string dtroCreationJson = linearGeometryFileName
@@ -153,7 +153,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
+            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {linearGeometryFileName}:\n\n{dtroCreationResponseJson}");
@@ -166,7 +166,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
-            HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisher.AppId);
+            HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisher);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroUpdateResponse.StatusCode,
                 $"Actual status code: {dtroUpdateResponse.StatusCode}. Response JSON for file {linearGeometryFileName}:\n\n{dtroUpdateResponseJson}");
@@ -181,7 +181,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
         public async Task DtroUpdatedFromFileWithInvalidLinearGeometryShouldBeRejected(string linearGeometryString)
         {
             // Generate user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
             // Prepare DTRO
             string dtroCreationJson = linearGeometryFileName
@@ -191,7 +191,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
             string tempFilePathForDtroCreation = dtroCreationJson.CreateDtroTempFile(linearGeometryFileName, publisher);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await tempFilePathForDtroCreation.SendFileInDtroCreationRequestAsync(publisher.AppId);
+            HttpResponseMessage dtroCreationResponse = await tempFilePathForDtroCreation.SendFileInDtroCreationRequestAsync(publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(tempFilePathForDtroCreation)}:\n\n{dtroCreationResponseJson}");
@@ -206,7 +206,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
-            HttpResponseMessage dtroUpdateResponse = await tempFilePathForDtroUpdate.SendFileInDtroUpdateRequestAsync(dtroId, publisher.AppId);
+            HttpResponseMessage dtroUpdateResponse = await tempFilePathForDtroUpdate.SendFileInDtroUpdateRequestAsync(dtroId, publisher);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroUpdateResponse.StatusCode,
                 $"Actual status code: {dtroUpdateResponse.StatusCode}. Response JSON for file {Path.GetFileName(tempFilePathForDtroUpdate)}:\n\n{dtroUpdateResponseJson}");

@@ -1,20 +1,22 @@
 #nullable enable
 using System.Threading.Tasks;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class TestUsers
     {
-        public static async Task<TestUser> GetUser(UserGroup userGroup)
+        public static async Task<TestUser> GetUser(TestUserType testUserType)
         {
-            // If we're running the tests on dev, test, integration, the user already exists - we just need to return it
-            if (TestConfig.EnvironmentName != EnvironmentType.Local && userGroup == UserGroup.Tra)
+            // If we're running the tests on dev / test / integration, the user already exists - we just need get the TRA ID (if relevant) and return an access token
+            if (TestConfig.EnvironmentName != EnvironmentType.Local)
             {
                 return new TestUser
                 {
+                    LocalUser = false,
                     AppId = null,
-                    TraId = TestConfig.PublisherTraId,
+                    AccessToken = await Oauth.GetAccessToken(testUserType),
+                    TraId = DtroUsers.GetTraId(testUserType),
                     Name = null,
                     UserGroup = null
                 };
@@ -28,36 +30,44 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                 string traId = "9" + first9Digits.Substring(1); // Make sure traId doesn't have leading 0
 
                 string name;
+                int userGroup;
 
-                switch (userGroup)
+                switch (testUserType)
                 {
-                    case UserGroup.Tra:
+                    case TestUserType.Publisher1:
+                    case TestUserType.Publisher2:
                         name = "A publisher / TRA";
+                        userGroup = 1;
                         break;
-                    case UserGroup.Consumer:
+                    case TestUserType.Consumer:
                         name = "A consumer";
+                        userGroup = 2;
                         break;
-                    case UserGroup.Admin:
+                    case TestUserType.Admin:
                         name = "A CSO / admin";
+                        userGroup = 3;
                         break;
-                    case UserGroup.All:
-                        name = "All permissions";
+                    case TestUserType.AllPermissions:
+                        name = "User with all permissions";
+                        userGroup = 0;
                         break;
                     default:
-                        throw new Exception($"{userGroup} is not a valid user group!");
+                        throw new Exception($"{testUserType} is not a valid test user type!");
                 }
 
                 Console.WriteLine();
                 Console.WriteLine($"App ID: {appId}");
                 Console.WriteLine($"TRA ID: {traId}");
-                Console.WriteLine($"Group ID: {(int)userGroup}");
+                Console.WriteLine($"Group ID: {userGroup}");
 
                 TestUser testUser = new TestUser
                 {
+                    LocalUser = true,
                     AppId = Guid.NewGuid().ToString(),
+                    AccessToken = null,
                     TraId = traId,
                     Name = name,
-                    UserGroup = (int)userGroup
+                    UserGroup = userGroup
                 };
 
                 await DtroUsers.CreateUserForDataSetUpAsync(testUser);
@@ -68,8 +78,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
     public class TestUser
     {
+        public required bool LocalUser { get; init; }
         public string? AppId { get; init; }
-        public required string TraId { get; init; }
+        public string? AccessToken { get; init; }
+        public string? TraId { get; init; }
         public string? Name { get; init; }
         public int? UserGroup { get; init; }
     }

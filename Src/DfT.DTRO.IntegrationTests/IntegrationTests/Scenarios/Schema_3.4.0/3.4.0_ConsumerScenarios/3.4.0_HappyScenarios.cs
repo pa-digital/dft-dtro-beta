@@ -1,8 +1,8 @@
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenarios.DtroCreationScenarios
 {
@@ -15,7 +15,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
         public async Task DtroSubmittedFromJsonBodyShouldBeSavedCorrectly()
         {
             // Get test user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
             // Prepare DTRO
             string dtroCreationJson = fileName
@@ -23,13 +23,13 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
+            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
 
             // Search for DTRO as consumer
-            TestUser consumer = await TestUsers.GetUser(UserGroup.Consumer);
+            TestUser consumer = await TestUsers.GetUser(TestUserType.Consumer);
 
             string searchRequestJson = Dtros.GetSearchRequestJson("traCreator", publisher.TraId);
             HttpResponseMessage dtroSearchResponse = await searchRequestJson.GetDtroSearchResponseAsync(consumer);
@@ -61,7 +61,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
         //     Console.WriteLine($"\nTesting with file {fileName}...");
 
         //     // Get test user to send DTRO and read it back
-        //     TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
+        //     TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
         //     // Prepare DTRO
         //     string dtroCreationJson = fileName
@@ -71,7 +71,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
         //     string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
         //     // Send DTRO
-        //     HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher.AppId);
+        //     HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher);
         //     string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
         //     Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
         //         $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");

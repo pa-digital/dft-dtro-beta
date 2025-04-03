@@ -1,7 +1,7 @@
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScenarios.DtroUpdateScenarios
@@ -35,7 +35,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
             Console.WriteLine($"\nTesting with file {fileName}...");
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
             // Prepare DTRO
             string dtroCreationJson = fileName
@@ -43,7 +43,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
+            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
@@ -55,7 +55,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
-            HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisher.AppId);
+            HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisher);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.OK == dtroUpdateResponse.StatusCode,
                 $"Actual status code: {dtroUpdateResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroUpdateResponseJson}");
@@ -79,7 +79,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
             Console.WriteLine($"\nTesting with file {fileName}...");
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
             // Prepare DTRO
             string dtroCreationJson = fileName
@@ -89,7 +89,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
             string tempFilePathForDtroCreation = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await tempFilePathForDtroCreation.SendFileInDtroCreationRequestAsync(publisher.AppId);
+            HttpResponseMessage dtroCreationResponse = await tempFilePathForDtroCreation.SendFileInDtroCreationRequestAsync(publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(tempFilePathForDtroCreation)}:\n\n{dtroCreationResponseJson}");
@@ -103,7 +103,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
-            HttpResponseMessage dtroUpdateResponse = await tempFilePathForDtroUpdate.SendFileInDtroUpdateRequestAsync(dtroId, publisher.AppId);
+            HttpResponseMessage dtroUpdateResponse = await tempFilePathForDtroUpdate.SendFileInDtroUpdateRequestAsync(dtroId, publisher);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.OK == dtroUpdateResponse.StatusCode,
                 $"Actual status code: {dtroUpdateResponse.StatusCode}. Response JSON for file {Path.GetFileName(tempFilePathForDtroUpdate)}:\n\n{dtroUpdateResponseJson}");
@@ -128,7 +128,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
             string updateFileWithSchema3_4_0 = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
             // Prepare DTRO
             string dtroCreationJson = createFileWithSchema3_3_1
@@ -136,7 +136,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
                                     .ModifyTraInDtroJson(oldSchemaVersion, publisher.TraId);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
+            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {createFileWithSchema3_3_1}:\n\n{dtroCreationResponseJson}");
@@ -150,7 +150,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
-            HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisher.AppId);
+            HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisher);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.OK == dtroUpdateResponse.StatusCode,
                 $"Actual status code: {dtroUpdateResponse.StatusCode}. Response JSON for file {updateFileWithSchema3_4_0}:\n\n{dtroUpdateResponseJson}");
@@ -175,7 +175,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
             string updateFileWithSchema3_4_0 = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
+            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
             // Prepare DTRO
             string dtroCreationJson = createFileWithSchema3_3_1
@@ -185,7 +185,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
             string tempFilePathForDtroCreation = dtroCreationJson.CreateDtroTempFile(createFileWithSchema3_3_1, publisher);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await tempFilePathForDtroCreation.SendFileInDtroCreationRequestAsync(publisher.AppId);
+            HttpResponseMessage dtroCreationResponse = await tempFilePathForDtroCreation.SendFileInDtroCreationRequestAsync(publisher);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(tempFilePathForDtroCreation)}:\n\n{dtroCreationResponseJson}");
@@ -201,7 +201,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
-            HttpResponseMessage dtroUpdateResponse = await tempFilePathForDtroUpdate.SendFileInDtroUpdateRequestAsync(dtroId, publisher.AppId);
+            HttpResponseMessage dtroUpdateResponse = await tempFilePathForDtroUpdate.SendFileInDtroUpdateRequestAsync(dtroId, publisher);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.OK == dtroUpdateResponse.StatusCode,
                 $"Actual status code: {dtroUpdateResponse.StatusCode}. Response JSON for file {Path.GetFileName(tempFilePathForDtroUpdate)}:\n\n{dtroUpdateResponseJson}");

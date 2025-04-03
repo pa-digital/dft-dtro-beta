@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DfT.DTRO.Consts;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using DfT.DTRO.Models.DataBase;
 
@@ -8,27 +9,31 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class Oauth
     {
-        public static async Task<string> GetAccessToken(UserGroup userGroup)
+        public static async Task<string> GetAccessToken(TestUserType testUserType)
         {
             string clientId;
             string clientSecret;
 
-            switch (userGroup)
+            switch (testUserType)
             {
-                case UserGroup.Admin:
-                    clientId = TestConfig.AdminClientId;
-                    clientSecret = TestConfig.AdminClientSecret;
+                case TestUserType.Publisher1:
+                    clientId = TestConfig.Publisher1ClientId;
+                    clientSecret = TestConfig.Publisher1ClientSecret;
                     break;
-                case UserGroup.Tra:
-                    clientId = TestConfig.PublisherClientId;
-                    clientSecret = TestConfig.PublisherClientSecret;
+                case TestUserType.Publisher2:
+                    clientId = TestConfig.Publisher2ClientId;
+                    clientSecret = TestConfig.Publisher2ClientSecret;
                     break;
-                case UserGroup.Consumer:
+                case TestUserType.Consumer:
                     clientId = TestConfig.ConsumerClientId;
                     clientSecret = TestConfig.ConsumerClientSecret;
                     break;
+                case TestUserType.Admin:
+                    clientId = TestConfig.AdminClientId;
+                    clientSecret = TestConfig.AdminClientSecret;
+                    break;
                 default:
-                    throw new Exception($"{userGroup} not found!");
+                    throw new Exception($"{testUserType} not found!");
             }
 
             string credentials = $"{clientId}:{clientSecret}";

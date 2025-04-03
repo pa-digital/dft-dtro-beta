@@ -86,45 +86,45 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions
             return jsonObj.ToString();
         }
 
-        public static async Task<HttpResponseMessage> SendJsonInDtroCreationRequestAsync(this string jsonString, String appId, UserGroup userGroup = UserGroup.Tra)
+        public static async Task<HttpResponseMessage> SendJsonInDtroCreationRequestAsync(this string jsonString, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 
-            await headers.AddValidHeadersForEnvironmentAsync(userGroup, appId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonString);
             return dtroCreationResponse;
         }
 
-        public static async Task<HttpResponseMessage> SendJsonInDtroUpdateRequestAsync(this string jsonString, string dtroId, String appId)
+        public static async Task<HttpResponseMessage> SendJsonInDtroUpdateRequestAsync(this string jsonString, string dtroId, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, appId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             HttpResponseMessage updateDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromBody/{dtroId}", headers, jsonString);
             return updateDtroResponse;
         }
 
-        public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestAsync(this string dtroFilePath, String appId, UserGroup userGroup = UserGroup.Tra)
+        public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestAsync(this string dtroFilePath, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "multipart/form-data");
 
-            await headers.AddValidHeadersForEnvironmentAsync(userGroup, appId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: dtroFilePath);
             return dtroCreationResponse;
         }
 
-        public static async Task<HttpResponseMessage> SendFileInDtroUpdateRequestAsync(this string dtroFilePath, string dtroId, String appId)
+        public static async Task<HttpResponseMessage> SendFileInDtroUpdateRequestAsync(this string dtroFilePath, string dtroId, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "multipart/form-data");
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, appId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             HttpResponseMessage dtroUpdateResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromFile/{dtroId}", headers, pathToJsonFile: dtroFilePath);
             return dtroUpdateResponse;
@@ -142,18 +142,18 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             HttpResponseMessage getDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/{dtroId}", headers);
             return getDtroResponse;
         }
 
-        public static async Task<HttpResponseMessage> GetDtroSearchResponseAsync(this string jsonString, TestUser testUser, UserGroup userGroup = UserGroup.Consumer)
+        public static async Task<HttpResponseMessage> GetDtroSearchResponseAsync(this string jsonString, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 
-            await headers.AddValidHeadersForEnvironmentAsync(userGroup, testUser.AppId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             HttpResponseMessage getDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.Search}", headers, jsonString);
             return getDtroResponse;

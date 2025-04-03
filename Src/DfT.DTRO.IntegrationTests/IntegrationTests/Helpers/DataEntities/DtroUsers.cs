@@ -4,6 +4,7 @@ using DfT.DTRO.Consts;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.Models.DataBase;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
@@ -25,7 +26,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             HttpResponseMessage getAllUsersResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtroUsersBase}", headers);
             return getAllUsersResponse;
@@ -58,7 +59,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             JObject requestBody = new JObject { ["ids"] = JArray.FromObject(ids) };
 
@@ -71,7 +72,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Admin, testUser.AppId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             string jsonBody = $$"""
             {
@@ -94,6 +95,22 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             string userCreationResponseJson = await userCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Created == userCreationResponse.StatusCode,
                 $"Response JSON:\n\n{userCreationResponseJson}");
+        }
+
+        public static string GetTraId(TestUserType testUserType)
+        {
+            switch (testUserType)
+            {
+                case TestUserType.Publisher1:
+                    return TestConfig.Publisher1TraId;
+                case TestUserType.Publisher2:
+                    return TestConfig.Publisher2TraId;
+                case TestUserType.Consumer:
+                case TestUserType.Admin:
+                    return null;
+                default:
+                    throw new Exception($"{testUserType} not found!");
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 using System.Threading;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
@@ -12,7 +12,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
         private static async Task SetUpBeforeTestRunAsync()
         {
             Console.WriteLine("Do once before each test run...");
-            UserWithAllPermissions = await TestUsers.GetUser(UserGroup.All);
+            UserWithAllPermissions = await TestUsers.GetUser(TestUserType.AllPermissions);
             HttpResponseMessage userCreationResponse = await DtroUsers.CreateUserAsync(UserWithAllPermissions);
 
             string userCreationResponseJson = await userCreationResponse.Content.ReadAsStringAsync();

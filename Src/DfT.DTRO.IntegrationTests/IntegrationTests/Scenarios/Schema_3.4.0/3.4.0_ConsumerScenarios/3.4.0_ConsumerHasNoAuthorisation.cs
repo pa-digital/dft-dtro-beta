@@ -2,7 +2,7 @@ using Newtonsoft.Json.Linq;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenarios
 {
@@ -28,7 +28,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
             Skip.If(EnvironmentName == EnvironmentType.Local);
 
             // Get test user to send DTRO and read it back
-            TestUser consumer = await TestUsers.GetUser(UserGroup.Consumer);
+            TestUser consumer = await TestUsers.GetUser(TestUserType.Consumer);
 
             // Prepare DTRO
             string dtroCreationJson = fileName
@@ -36,7 +36,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
                                     .ModifyTraInDtroJson(schemaVersionToTest, consumer.TraId);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(consumer.AppId, UserGroup.Consumer);
+            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(consumer);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Forbidden == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
@@ -53,7 +53,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
             Console.WriteLine($"\nTesting with file {fileName}...");
 
             // Get test user to send DTRO and read it back
-            TestUser consumer = await TestUsers.GetUser(UserGroup.Consumer);
+            TestUser consumer = await TestUsers.GetUser(TestUserType.Consumer);
 
             // Prepare DTRO
             string dtroCreationJson = fileName
@@ -63,7 +63,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, consumer);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(consumer.AppId, UserGroup.Consumer);
+            HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(consumer);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Forbidden == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
