@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System.Globalization;
+using Google.Type;
+using Newtonsoft.Json;
+using DateTime = System.DateTime;
+using TimeZone = Google.Type.TimeZone;
 
 namespace DfT.DTRO.Extensions;
 
@@ -130,5 +134,16 @@ public static class ObjectExtensions
             var item = $"{toLower + string.Join("", chars.Skip(1))}";
             return item;
         }
+    }
+
+    /// <summary>
+    /// Find the timezone for the parameter passed in and convert it to UTC
+    /// </summary>
+    /// <param name="dateTime">date-time parameter to check</param>
+    /// <returns>UTC converted date-time</returns>
+    public static DateTime ToUtc(this DateTime dateTime)
+    {
+        var timeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+        return TimeZoneInfo.ConvertTimeToUtc(dateTime, timeZone);
     }
 }
