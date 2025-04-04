@@ -144,12 +144,10 @@ public static class ObjectExtensions
     public static DateTime ToUtc(this DateTime dateTime)
     {
         var isIana = TimeZoneInfo.TryConvertWindowsIdToIanaId("GMT Standard Time", out string id);
-        if (isIana)
-        {
-            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(id);
-            return TimeZoneInfo.ConvertTimeToUtc(dateTime, timeZone);
-        }
+        var timeZone = isIana 
+            ? TimeZoneInfo.FindSystemTimeZoneById(id) 
+            : TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
 
-        return dateTime;
+        return TimeZoneInfo.ConvertTimeToUtc(dateTime, timeZone);
     }
 }
