@@ -143,11 +143,7 @@ public static class ObjectExtensions
     /// <returns>UTC converted date-time</returns>
     public static DateTime ToUtc(this DateTime dateTime)
     {
-        var isIana = TimeZoneInfo.TryConvertWindowsIdToIanaId("GMT Standard Time", out string id);
-        var timeZone = isIana 
-            ? TimeZoneInfo.FindSystemTimeZoneById(id) 
-            : TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-
+        var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/London");
         return TimeZoneInfo.ConvertTimeToUtc(dateTime, timeZone);
     }
 }
