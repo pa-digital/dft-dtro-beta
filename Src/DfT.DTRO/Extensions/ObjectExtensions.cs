@@ -141,9 +141,5 @@ public static class ObjectExtensions
     /// </summary>
     /// <param name="dateTime">date-time parameter to check</param>
     /// <returns>UTC converted date-time</returns>
-    public static DateTime ToUtc(this DateTime dateTime)
-    {
-        var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/London");
-        return TimeZoneInfo.ConvertTimeToUtc(dateTime, timeZone);
-    }
+    public static DateTime ToUtc(this DateTime dateTime) => TimeZoneInfo.ConvertTimeToUtc(dateTime);
 }
