@@ -147,7 +147,13 @@ public static class ObjectExtensions
         var timeZoneId = "GB"; // IANA ID.
         var timeZones = TimeZoneInfo
             .GetSystemTimeZones()
-            .Select(zoneInfo=>zoneInfo.Id)
+            .Select(zoneInfo=> new
+            {
+                Id = zoneInfo.Id,
+                Name = zoneInfo.DisplayName,
+                HasIana = zoneInfo.HasIanaId
+            })
+            .OrderBy(it=>it.Id)
             .ToList();
         timeZones.ForEach(Console.WriteLine);
         TimeZoneInfo tz = TZConvert.GetTimeZoneInfo(timeZoneId);
