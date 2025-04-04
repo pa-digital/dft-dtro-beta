@@ -144,7 +144,12 @@ public static class ObjectExtensions
     /// <returns>UTC converted date-time</returns>
     public static DateTime ToUtc(this DateTime dateTime)
     {
-        var timeZoneId = "Europe/London"; // IANA ID
+        var timeZoneId = "GB"; // IANA ID.
+        var timeZones = TimeZoneInfo
+            .GetSystemTimeZones()
+            .Select(zoneInfo=>zoneInfo.Id)
+            .ToList();
+        timeZones.ForEach(Console.WriteLine);
         TimeZoneInfo tz = TZConvert.GetTimeZoneInfo(timeZoneId);
         DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, tz);
         
