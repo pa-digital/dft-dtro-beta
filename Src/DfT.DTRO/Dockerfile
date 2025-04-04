@@ -34,6 +34,9 @@ RUN dotnet ef migrations bundle --self-contained -r linux-musl-x64
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS runtime
 WORKDIR /app
 
+# Install IANA time zones
+RUN apk add --no-cache tzdata
+
 # Copy the published application from the build stage
 COPY --from=build /app/out .
 COPY --from=migration-bundle /app/efbundle .
