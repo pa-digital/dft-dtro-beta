@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Google.Type;
 using Newtonsoft.Json;
+using TimeZoneConverter;
 using DateTime = System.DateTime;
 using TimeZone = Google.Type.TimeZone;
 
@@ -141,5 +142,12 @@ public static class ObjectExtensions
     /// </summary>
     /// <param name="dateTime">date-time parameter to check</param>
     /// <returns>UTC converted date-time</returns>
-    public static DateTime ToUtc(this DateTime dateTime) => TimeZoneInfo.ConvertTimeToUtc(dateTime);
+    public static DateTime ToUtc(this DateTime dateTime)
+    {
+        var timeZoneId = "Europe/London"; // IANA ID
+        TimeZoneInfo tz = TZConvert.GetTimeZoneInfo(timeZoneId);
+        DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, tz);
+        
+        return utcDateTime;
+    }
 }
