@@ -144,21 +144,8 @@ public static class ObjectExtensions
     /// <returns>UTC converted date-time</returns>
     public static DateTime ToUtc(this DateTime dateTime)
     {
-        var timeZoneId = "GB"; // IANA ID.
-        var timeZones = TimeZoneInfo
-            .GetSystemTimeZones()
-            .Select(zoneInfo=> new
-            {
-                Id = zoneInfo.Id,
-                Name = zoneInfo.DisplayName,
-                HasIana = zoneInfo.HasIanaId
-            })
-            .OrderBy(it=>it.Id)
-            .ToList();
-        timeZones.ForEach(Console.WriteLine);
-        TimeZoneInfo tz = TZConvert.GetTimeZoneInfo(timeZoneId);
-        DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, tz);
-        
-        return utcDateTime;
+        var timeZoneId = "GB";
+        var timeZone = TZConvert.GetTimeZoneInfo(timeZoneId);
+        return TimeZoneInfo.ConvertTimeToUtc(dateTime, timeZone);
     }
 }
