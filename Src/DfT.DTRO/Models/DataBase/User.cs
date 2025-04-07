@@ -52,4 +52,9 @@ public class User
     public UserStatus UserStatus { get; set; }
 
     public List<Application> Applications { get; set; }
+
+     /// <summary>
+    /// Indicates whether the user has requested production access
+    /// </summary>
+    public bool ProductionAccessRequested { get; set; } = false;
 }

@@ -39,4 +39,27 @@ public class UserDal(DtroContext context) : IUserDal
         
         return user ?? throw new Exception("No matching user found");
     }
+
+    public async Task<bool> HasUserRequestedProductionAccess(Guid userId)
+    {
+        User user = await _context.Users.Where(u => u.Id == userId).SingleOrDefaultAsync();
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+
+        return user.ProductionAccessRequested;
+    }
+
+    public async Task RequestProductionAccess(Guid userId)
+    {
+        User user = await _context.Users.Where(u => u.Id == userId).SingleOrDefaultAsync();
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+
+        user.ProductionAccessRequested = true;
+        await _context.SaveChangesAsync();
+    }
 }
