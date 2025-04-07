@@ -46,3 +46,5 @@ global using Microsoft.Extensions.Internal;
 global using Microsoft.Extensions.Logging;
 global using Moq;
 global using Xunit;
+global using DfT.DTRO.Models.Apigee;
+global using DfT.DTRO.Models.Pagination;

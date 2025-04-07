@@ -3,6 +3,7 @@ using DfT.DTRO.Models.Pagination;
 public class ApplicationControllerTests
 {
     private readonly Mock<IApplicationService> _mockApplicationService;
+    private readonly Mock<IEmailService> _mockEmailService;
     private readonly ApplicationController _controller;
     private readonly string _email;
 
@@ -12,7 +13,8 @@ public class ApplicationControllerTests
         var mockLoggingExtension = new Mock<LoggingExtension>();
 
         _mockApplicationService = new Mock<IApplicationService>();
-        _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, mockLoggingExtension.Object);
+        _mockEmailService = new Mock<IEmailService>();
+        _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, mockLoggingExtension.Object, _mockEmailService.Object);
         _email = "user@test.com";
     }
 

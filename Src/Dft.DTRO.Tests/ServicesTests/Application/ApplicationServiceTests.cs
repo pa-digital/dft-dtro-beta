@@ -1,6 +1,3 @@
-using DfT.DTRO.Models.Apigee;
-using DfT.DTRO.Models.Pagination;
-
 namespace Dft.DTRO.Tests.ServicesTests.Application;
 
 public class ApplicationServiceTests

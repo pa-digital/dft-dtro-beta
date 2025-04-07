@@ -59,6 +59,7 @@ public class Startup
         services.TryAddSingleton<ISystemClock, SystemClock>();
         services.AddHttpClient();
         services.AddStorage(Configuration);
+        services.AddEmailSettings();
         services.AddValidationServices();
         services.AddCache(Configuration);
     }
