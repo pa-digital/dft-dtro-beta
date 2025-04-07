@@ -12,8 +12,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroUpdateScen
     public class InvalidGeometry : BaseTest
     {
         readonly static string schemaVersionToTest = "3.4.0";
-        readonly string pointGeometryFileName = "JSON-3.4.0-example-TTRO-HeightRestrictionwithConditions.json";
-        readonly string linearGeometryFileName = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
+        readonly string pointGeometryFileName = "dtro-v3.4.0-example-height-restriction-with-conditions.json";
+        readonly string linearGeometryFileName = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";
 
         public static IEnumerable<object[]> GetPointGeometryStrings()
         {
