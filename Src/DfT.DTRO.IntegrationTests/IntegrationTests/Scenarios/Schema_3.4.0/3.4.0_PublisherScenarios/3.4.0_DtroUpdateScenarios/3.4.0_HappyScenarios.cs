@@ -125,7 +125,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
         {
             string oldSchemaVersion = "3.3.1";
             string createFileWithSchema3_3_1 = "JSON-3.3.1-example-Derbyshire 2024 DJ388 partial.json";
-            string updateFileWithSchema3_4_0 = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
+            string updateFileWithSchema3_4_0 = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";
 
             // Generate user to send DTRO and read it back
             TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
@@ -172,7 +172,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
         {
             string oldSchemaVersion = "3.3.1";
             string createFileWithSchema3_3_1 = "JSON-3.3.1-example-Derbyshire 2024 DJ388 partial.json";
-            string updateFileWithSchema3_4_0 = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
+            string updateFileWithSchema3_4_0 = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";
 
             // Generate user to send DTRO and read it back
             TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);

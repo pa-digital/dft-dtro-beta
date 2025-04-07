@@ -11,7 +11,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.PublisherScena
     {
         readonly static string schemaVersionToTest = "3.4.0";
         readonly static string schemaVersionWithInvalidPascalCase = "3.3.1";
-        readonly string fileToCreateDtroWithValidCamelCase = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
+        readonly string fileToCreateDtroWithValidCamelCase = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";
 
         public static IEnumerable<object[]> GetDtroNamesOfFilesWithInvalidPascalCase()
         {

@@ -1,0 +1,133 @@
+{
+    "schemaVersion": "3.4.0",
+    "data": {
+        "source": {
+            "actionType": "new",
+            "currentTraOwner": 9001,
+            "provision": [
+                {
+                    "actionType": "new",
+                    "orderReportingPoint": "permanentNoticeOfMaking",
+                    "provisionDescription": "No Waiting at any time",
+                    "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbda",
+                    "regulatedPlace": [
+                        {
+                            "description": "East Reach, Taunton, northside / eastbound, between 10 metres east from the junction with Tancred Street to 15 metres west of the junction with South Street {approximate - linear}",
+                            "concession": false,
+                            "assignment": false,
+                            "tramcar": false,
+                            "busRoute": false,
+                            "bywayType": "road",
+                            "linearGeometry": {
+                                "representation": "linear",
+                                "direction": "bidirectional",
+                                "linestring": "SRID=27700;LINESTRING(323158 124529,323252 124546)",
+                                "lateralPosition": "onKerb",
+                                "externalReference": [
+                                    {
+                                        "lastUpdateDate": "2024-10-01T00:00:00",
+                                        "uniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39608173
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "version": 1
+                            },
+                            "type": "regulationLocation"
+                        }
+                    ],
+                    "regulation": [
+                        {
+                            "isDynamic": false,
+                            "timeZone": "Europe/London",
+                            "generalRegulation": {
+                                "regulationType": "kerbsideNoWaiting"
+                            },
+                            "condition": [
+                                {
+                                    "negate": false,
+                                    "timeValidity": {
+                                        "start": "2025-02-19T08:00:00"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "actionType": "new",
+                    "orderReportingPoint": "permanentNoticeOfMaking",
+                    "provisionDescription": "No Waiting at any time",
+                    "reference": "b1618e6f-f65c-48c7-9cc7-45da9f45fbdb",
+                    "regulatedPlace": [
+                        {
+                            "description": "East Reach, Taunton, northside / eastbound, between 10 metres east from the junction with Tancred Street to 15 metres west of the junction with South Street {approximate - linear}",
+                            "concession": false,
+                            "assignment": false,
+                            "tramcar": false,
+                            "busRoute": false,
+                            "bywayType": "road",
+                            "linearGeometry": {
+                                "representation": "linear",
+                                "direction": "bidirectional",
+                                "linestring": "SRID=27700;LINESTRING(323158 124529,323252 124546)",
+                                "lateralPosition": "onKerb",
+                                "externalReference": [
+                                    {
+                                        "lastUpdateDate": "2024-10-01T00:00:00",
+                                        "uniqueStreetReferenceNumber": [
+                                            {
+                                                "usrn": 39608173
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "version": 1
+                            },
+                            "type": "regulationLocation"
+                        }
+                    ],
+                    "regulation": [
+                        {
+                            "isDynamic": false,
+                            "timeZone": "Europe/London",
+                            "generalRegulation": {
+                                "regulationType": "kerbsideNoLoading"
+                            },
+                            "condition": [
+                                {
+                                    "negate": false,
+                                    "timeValidity": {
+                                        "start": "2025-02-19T08:00:00",
+                                        "validPeriod": [
+                                            {
+                                                "recurringTimePeriodOfDay": [
+                                                    {
+                                                        "endTimeOfPeriod": "19:00:00",
+                                                        "startTimeOfPeriod": "07:00:00"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
+            "section": "All sections",
+            "traAffected": [
+                9001
+            ],
+            "traCreator": 9001,
+            "troName": "DfT Example - No waiting and no loading v1, Feb. 2025",
+            "statementDescription": "No waiting and parking, no loading regulations",
+            "madeDate": "2025-02-19",
+            "comingIntoForceDate": "2025-03-01"
+        }
+    }
+}
