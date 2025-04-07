@@ -9,10 +9,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
     public class HappyScenarios : BaseTest
     {
         readonly static string schemaVersionToTest = "3.4.0";
-        readonly string fileName = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
+        readonly string fileName = "JSON-3.4.0-example-TTRO-MoreComplexExample.json";
 
         [Fact]
-        public async Task DtroSubmittedFromJsonBodyShouldBeSavedCorrectly()
+        public async Task DtroSubmittedFromJsonBodyAppearsInSearchResponse()
         {
             // Get test user to send DTRO and read it back
             TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
@@ -56,7 +56,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
 
         // [Theory]
         // [MemberData(nameof(GetNamesOfDtroExampleFiles))]
-        // public async Task DtroSubmittedFromFileShouldBeSavedCorrectly(string fileName)
+        // public async Task DtroSubmittedFromFileAppearsInSearchResponse(string fileName)
         // {
         //     Console.WriteLine($"\nTesting with file {fileName}...");
 
