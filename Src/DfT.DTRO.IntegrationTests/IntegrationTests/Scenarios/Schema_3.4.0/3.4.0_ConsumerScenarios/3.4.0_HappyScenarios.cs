@@ -37,56 +37,38 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
             Assert.True(HttpStatusCode.OK == dtroSearchResponse.StatusCode,
                 $"Actual status code: {dtroSearchResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroSearchResponseJson}");
 
-
-
-
-
-            // // Get created DTRO
-            // string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
-            // HttpResponseMessage dtroGetResponse = await dtroId.GetDtroResponseByIdAsync(publisher);
-            // string dtroGetResponseJson = await dtroGetResponse.Content.ReadAsStringAsync();
-            // Assert.True(HttpStatusCode.OK == dtroGetResponse.StatusCode,
-            //     $"Actual status code: {dtroGetResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroGetResponseJson}");
-
-            // // Add ID to sent DTRO and compare
-            // string expectedCreationJsonForComparison = dtroCreationJson
-            //                                             .AddDtroIdToJson(dtroId);
-            // JsonMethods.CompareJson(expectedCreationJsonForComparison, dtroGetResponseJson);
+            // Compare response JSON once DPPB-1263 is done
         }
 
-        // [Theory]
-        // [MemberData(nameof(GetNamesOfDtroExampleFiles))]
-        // public async Task DtroSubmittedFromFileAppearsInSearchResponse(string fileName)
-        // {
-        //     Console.WriteLine($"\nTesting with file {fileName}...");
+        [Fact]
+        public async Task DtroSubmittedFromFileAppearsInSearchResponse()
+        {
+            // Get test user to send DTRO and read it back
+            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
 
-        //     // Get test user to send DTRO and read it back
-        //     TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
+            // Prepare DTRO
+            string dtroCreationJson = fileName
+                                    .GetJsonFromFile(schemaVersionToTest)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
 
-        //     // Prepare DTRO
-        //     string dtroCreationJson = fileName
-        //                             .GetJsonFromFile(schemaVersionToTest)
-        //                             .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
-        //     string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
+            // Send DTRO
+            HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher);
+            string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
 
-        //     // Send DTRO
-        //     HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher);
-        //     string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
-        //     Assert.True(HttpStatusCode.Created == dtroCreationResponse.StatusCode,
-        //         $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+            // Search for DTRO as consumer
+            TestUser consumer = await TestUsers.GetUser(TestUserType.Consumer);
 
-        //     // Get created DTRO
-        //     string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
-        //     HttpResponseMessage dtroGetResponse = await dtroId.GetDtroResponseByIdAsync(publisher);
-        //     string dtroGetResponseJson = await dtroGetResponse.Content.ReadAsStringAsync();
-        //     Assert.True(HttpStatusCode.OK == dtroGetResponse.StatusCode,
-        //         $"Actual status code: {dtroGetResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroGetResponseJson}");
+            string searchRequestJson = Dtros.GetSearchRequestJson("traCreator", publisher.TraId);
+            HttpResponseMessage dtroSearchResponse = await searchRequestJson.GetDtroSearchResponseAsync(consumer);
+            string dtroSearchResponseJson = await dtroSearchResponse.Content.ReadAsStringAsync();
+            Assert.True(HttpStatusCode.OK == dtroSearchResponse.StatusCode,
+                $"Actual status code: {dtroSearchResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroSearchResponseJson}");
 
-        //     // Add ID to sent DTRO and compare
-        //     string expectedCreationJsonForComparison = dtroCreationJson
-        //                                                 .AddDtroIdToJson(dtroId);
-        //     JsonMethods.CompareJson(expectedCreationJsonForComparison, dtroGetResponseJson);
-        // }
+            // Compare response JSON once DPPB-1263 is done
+        }
     }
 }
