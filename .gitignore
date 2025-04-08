@@ -49,3 +49,4 @@
 **/TestReports
 **/Coverage
 **/temp_integration_tests
+/Src/DfT.DTRO/Properties/launchSettings.json
