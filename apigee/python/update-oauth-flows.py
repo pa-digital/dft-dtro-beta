@@ -36,6 +36,13 @@ for path, methods in paths.items():
                 if step.text == "OAuth-v20-1":
                     step.text = filename
 
+                    condition_elem = step.find("Condition")
+                    if condition_elem is not None:
+                        step.remove(condition_elem)
+
+                    new_condition = ET.SubElement(step, "Condition")
+                    new_condition.text = '(request.verb != "OPTIONS")'
+
 tree.write(proxy_xml_path, encoding='utf-8', xml_declaration=True)
 
 print("Update OAuth Flows function complete")

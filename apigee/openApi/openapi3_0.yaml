@@ -542,7 +542,7 @@ paths:
       tags:
         - Dtros
       summary: Return a count of submitted D-TROs
-      operationId: get-d-tro-users
+      operationId: get-dtro-count
       security:
         - oAuth:
             - cso
