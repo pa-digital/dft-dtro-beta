@@ -1,7 +1,3 @@
-using DfT.DTRO.Models.Apigee;
-using DfT.DTRO.Models.Pagination;
-using Microsoft.AspNetCore.Hosting;
-
 namespace Dft.DTRO.Tests.ServicesTests.Application;
 
 public class ApplicationServiceTests

@@ -1,7 +1,8 @@
-using DfT.DTRO.Models.Applications;
-
 namespace DfT.DTRO.Controllers;
 
+/// <summary>
+/// Controller for managing application-related operations.
+/// </summary>
 [ApiController]
 [Consumes("application/json")]
 [Produces("application/json")]
@@ -9,14 +10,23 @@ namespace DfT.DTRO.Controllers;
 public class ApplicationController : ControllerBase
 {
     private readonly IApplicationService _applicationService;
+    private readonly IEmailService _emailService;
     private readonly ILogger<ApplicationController> _logger;
     private readonly LoggingExtension _loggingExtension;
 
-    public ApplicationController(IApplicationService applicationService, ILogger<ApplicationController> logger, LoggingExtension loggingExtension)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ApplicationController"/> class.
+    /// </summary>
+    /// <param name="applicationService">Service for application operations.</param>
+    /// <param name="logger">Logger instance for logging.</param>
+    /// <param name="loggingExtension">Extension for logging operations.</param>
+    /// <param name="emailService">Service used for email operations.</param>
+    public ApplicationController(IApplicationService applicationService, ILogger<ApplicationController> logger, LoggingExtension loggingExtension, IEmailService emailService)
     {
         _applicationService = applicationService;
         _logger = logger;
         _loggingExtension = loggingExtension;
+        _emailService = emailService;
     }
 
     /// <summary>
@@ -33,10 +43,25 @@ public class ApplicationController : ControllerBase
     {
         try
         {
-            App app = await _applicationService.CreateApplication(email, appInput);
+            var app = await _applicationService.CreateApplication(email, appInput);
+            if (string.IsNullOrEmpty(app.AppId))
+            {
+                var response = _emailService.SendEmail(app, email);
+                if (string.IsNullOrEmpty(response.reference))
+                    throw new EmailSendException();
+
+            }
+
             _logger.LogInformation($"'{nameof(CreateApplication)}' method called ");
-            _loggingExtension.LogInformation(nameof(CreateApplication), RouteTemplates.ApplicationsCreate, $"'{nameof(CreateApplication)}' method called.");
+            _loggingExtension.LogInformation(nameof(CreateApplication), RouteTemplates.ApplicationsCreate,
+                $"'{nameof(CreateApplication)}' method called.");
             return Ok(app);
+        }
+        catch (EmailSendException esex)
+        {
+            _logger.LogError(esex.Message);
+            _loggingExtension.LogError(nameof(CreateApplication), RouteTemplates.ApplicationsCreate, "", esex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {esex.Message}"));
         }
         catch (Exception ex)
         {
