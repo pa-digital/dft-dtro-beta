@@ -5,7 +5,7 @@ using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
-namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScenarios
+namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationScenarios
 {
     public class ExternalReferenceLastUpdateInFuture : BaseTest
     {
@@ -15,8 +15,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
         {
             return new List<object[]>
             {
-                new object[] { "JSON-3.4.0-example-TTRO-HeightRestrictionwithConditions.json" }, // point geometry
-                new object[] { "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json" } // linear geometry
+                new object[] { "dtro-v3.4.0-example-height-restriction-with-conditions.json" }, // point geometry
+                new object[] { "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json" } // linear geometry
             };
         }
 
@@ -27,8 +27,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
             Console.WriteLine($"\nTesting with file {fileName}...");
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            await publisher.CreateUserForDataSetUpAsync();
+            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
 
             // Prepare DTRO
             string dtroCreationJson = fileName
@@ -40,7 +39,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher.AppId);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON
             string expectedErrorJson = Dtros.GetExternalReferenceLastUpdateDateErrorJson(fileName);
@@ -54,8 +53,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
             Console.WriteLine($"\nTesting with file {fileName}...");
 
             // Generate user to send DTRO and read it back
-            TestUser publisher = TestUsers.GenerateUserDetails(UserGroup.Tra);
-            await publisher.CreateUserForDataSetUpAsync();
+            TestUser publisher = await TestUsers.GetUser(UserGroup.Tra);
 
             // Prepare DTRO
             string dtroCreationJson = fileName
@@ -63,13 +61,13 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.CreateDtroScen
                                     .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
                                     .SetExternalReferenceLastUpdatedDateInFuture();
 
-            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher.TraId);
+            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisher.AppId);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
-                $"Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
+                $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");
 
             // Evaluate response JSON
             string expectedErrorJson = Dtros.GetExternalReferenceLastUpdateDateErrorJson(fileName);

@@ -46,6 +46,37 @@ jobs:
       run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
       run-apigee: ${{ inputs.run-apigee }}
 
+  run-integration-tests-on-dev:
+    name: Run integration tests on dev after deployment to dev is complete
+    needs: deploy-feature-dev
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Integration tests
+      id: integration-tests
+      run: |
+        ./run_integration_tests.sh -e dev -ai ${{ secrets.CSO_CLIENT_ID_DEV }} -as ${{ secrets.CSO_CLIENT_SECRET_DEV }} -pi ${{ secrets.PUBLISHER_CLIENT_ID_DEV }} -ps ${{ secrets.PUBLISHER_CLIENT_SECRET_DEV }} -ti 8888
+
+    - name: Upload integration test results
+      if: always() && steps.integration-tests.outcome != 'skipped'
+      uses: actions/upload-artifact@v4
+      with:
+        name: Integration test results
+        path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html
+
   deploy-feature-test:
    if: ${{ inputs.deploy-to-test }}
    name: Deploy to Test
@@ -66,3 +97,34 @@ jobs:
      run-build-push: ${{ inputs.run-build-push }}
      run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
      run-apigee: ${{ inputs.run-apigee }}
+
+  run-integration-tests-on-test:
+    name: Run integration tests on test after deployment to test is complete
+    needs: deploy-feature-test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Integration tests
+      id: integration-tests
+      run: |
+        ./run_integration_tests.sh -e test -ai ${{ secrets.CSO_CLIENT_ID_TEST }} -as ${{ secrets.CSO_CLIENT_SECRET_TEST }} -pi ${{ secrets.PUBLISHER_CLIENT_ID_TEST }} -ps ${{ secrets.PUBLISHER_CLIENT_SECRET_TEST }} -ti 3579
+
+    - name: Upload integration test results
+      if: always() && steps.integration-tests.outcome != 'skipped'
+      uses: actions/upload-artifact@v4
+      with:
+        name: Integration test results
+        path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html

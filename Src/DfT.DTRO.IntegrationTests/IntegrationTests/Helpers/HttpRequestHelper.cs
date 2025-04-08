@@ -5,15 +5,16 @@ using Newtonsoft.Json;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 {
     public static class HttpRequestHelper
     {
-        public static async Task<HttpResponseMessage> MakeHttpRequestAsync(HttpMethod method, string uri, Dictionary<string, string> headers = null, string body = null, string pathToJsonFile = null, bool printCurl = true)
+        public static async Task<HttpResponseMessage> MakeHttpRequestAsync(HttpMethod method, string uri, Dictionary<string, string> headers = null, string body = null, string pathToJsonFile = null, KeyValuePair<string, string>? formUrlEncodedBody = null, bool printCurl = true)
         {
             // Throw exception if Content-Type exists but body or JSON file path doesn't exist, and vice versa
-            if ((headers.ContainsKey("Content-Type") && body == null && pathToJsonFile == null) || (!headers.ContainsKey("Content-Type") && (body != null || pathToJsonFile != null)))
+            if ((headers.ContainsKey("Content-Type") && body == null && pathToJsonFile == null && formUrlEncodedBody == null) || (!headers.ContainsKey("Content-Type") && (body != null || pathToJsonFile != null || formUrlEncodedBody != null)))
             {
                 throw new Exception("Re-write test to send request with both the Content-Type header and a body (HttpClient doesn't allow one to exist and the other to be absent).");
             }
@@ -30,7 +31,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                         content.Headers.ContentType = new MediaTypeHeaderValue(contentTypeValue);
                         request.Content = content;
                     }
-                    else
+                    else if (pathToJsonFile != null)
                     {
                         MultipartFormDataContent multipartContent = new MultipartFormDataContent();
                         FileStream fileStream = new FileStream(pathToJsonFile, FileMode.Open, FileAccess.Read);
@@ -39,6 +40,13 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
                         multipartContent.Add(fileContent, "file", Path.GetFileName(pathToJsonFile));
                         request.Content = multipartContent;
+                    }
+                    else if (formUrlEncodedBody != null)
+                    {
+                        var collection = new List<KeyValuePair<string, string>>();
+                        collection.Add(formUrlEncodedBody.Value);
+                        var content = new FormUrlEncodedContent(collection);
+                        request.Content = content;
                     }
                     // Content-Type header can't be added to request like other headers, so it's removed here
                     headers.Remove("Content-Type");
@@ -83,8 +91,9 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             {
                 Console.WriteLine($"  {header.Key}: {string.Join(", ", header.Value)}");
             }
+            string responseBodyToPrint = responseBody.Contains("client_id") || responseBody.Contains("access_token") ? "Response body from oauth not printed" : responseBody;
             Console.WriteLine("\nResponse body:");
-            Console.WriteLine(PrettyFormatJson(responseBody));
+            Console.WriteLine(PrettyFormatJson(responseBodyToPrint));
             Console.WriteLine("=================================\n");
             return response;
         }
@@ -103,7 +112,10 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
 
             foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
             {
-                curl.Append($" -H \"{header.Key}: {string.Join(", ", header.Value)}\"");
+                // Obfuscate bearer / access token
+                string headerValueToPrint = header.Key == "Authorization" ? "******" : header.Value.ToString();
+
+                curl.Append($$""" -H "{{header.Key}}: {{string.Join(", ", headerValueToPrint)}}" """);
             }
 
             if (request.Content?.Headers != null)
@@ -114,7 +126,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
                     string headerValue = string.Join(", ", contentHeader.Value);
                     // Strip out boundary, because cURL adds it automatically
                     string headerValueWithoutBoundard = Regex.Replace(headerValue, pattern, "");
-                    curl.Append($" -H \"{contentHeader.Key}: {headerValueWithoutBoundard}\"");
+                    curl.Append($$""" -H "{{contentHeader.Key}}: {{headerValueWithoutBoundard}}" """);
                 }
             }
 
@@ -127,7 +139,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             }
             else if (request.Content is MultipartFormDataContent)
             {
-                curl.Append($" --form 'file=@\"{pathToJsonFile}\"'");
+                curl.Append($$""" --form 'file=@"{{pathToJsonFile}}"'""");
             }
 
             string curlString = curl.ToString();

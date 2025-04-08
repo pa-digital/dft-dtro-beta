@@ -22,6 +22,7 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
     public async Task<ApplicationDetailsDto> GetApplicationDetails(Guid appId)
     {
         return await _context.Applications
+            .Include(a => a.TrafficRegulationAuthority)
             .Where(a => a.Id == appId)
             .Select(a => new ApplicationDetailsDto
             {
@@ -79,7 +80,7 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
                 UserEmail = a.User.Email,
                 Username = $"{a.User.Forename} {a.User.Surname}",
             });
-        
+
         int totalCount = await query.CountAsync();
 
         List<ApplicationInactiveListDto> paginatedList = await query
