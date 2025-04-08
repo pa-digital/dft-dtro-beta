@@ -3,6 +3,7 @@ namespace Dft.DTRO.Tests.ControllerTests;
 public class AuthControllerTests
 {
     private readonly Mock<IAuthService> _mockAuthService = new();
+    private readonly Mock<IUserDal> mockUserDal = new();
 
     private readonly AuthController _sut;
 
@@ -11,7 +12,7 @@ public class AuthControllerTests
         ILogger<AuthController> mockLogger = MockLogger.Setup<AuthController>();
         var mockLoggingExtension = new Mock<LoggingExtension>();
 
-        _sut = new AuthController(_mockAuthService.Object, mockLogger, mockLoggingExtension.Object);
+        _sut = new AuthController(_mockAuthService.Object, _mockUserDal.Object, mockLogger, mockLoggingExtension.Object);
 
         Guid appId = Guid.NewGuid();
         Mock<HttpContext> mockContext = MockHttpContext.Setup();

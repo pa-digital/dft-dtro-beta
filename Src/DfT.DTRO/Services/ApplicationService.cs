@@ -107,7 +107,7 @@ public class ApplicationService : IApplicationService
                     Nickname = appInput.Name,
                     ApplicationTypeId = typeId,
                     UserId = user.Id,
-                    StatusId = _env.IsProduction() ? ApplicationStatusType.Inactive : ApplicationStatusType.Active,
+                    StatusId = typeId == ApplicationTypeType.Consume ? ApplicationStatusType.Active : ApplicationStatusType.Pending,
                     TrafficRegulationAuthorityId = tra?.Id,
                     Purpose = appInput.Purpose,
                     AdditionalInformation = appInput.AdditionalInformation,

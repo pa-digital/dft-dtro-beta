@@ -49,3 +49,5 @@
 **/TestReports
 **/Coverage
 **/temp_integration_tests
+
+.vscode/
