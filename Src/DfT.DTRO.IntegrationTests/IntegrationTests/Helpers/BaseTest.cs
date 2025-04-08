@@ -1,5 +1,5 @@
 using System.Threading;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
@@ -7,37 +7,32 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
     public abstract class BaseTest : IAsyncLifetime
     {
         private static readonly Task _setUpBeforeTestRunAsync = SetUpBeforeTestRunAsync();
-        private static TestUser UserWithAllPermissions { get; set; }
+        private static TestUser AdminTestUser { get; set; }
 
         private static async Task SetUpBeforeTestRunAsync()
         {
             Console.WriteLine("Do once before each test run...");
-            UserWithAllPermissions = await TestUsers.GetUser(UserGroup.All);
-            HttpResponseMessage userCreationResponse = await DtroUsers.CreateUserAsync(UserWithAllPermissions);
-
-            string userCreationResponseJson = await userCreationResponse.Content.ReadAsStringAsync();
-            Assert.True(HttpStatusCode.Created == userCreationResponse.StatusCode,
-                $"Response JSON:\n\n{userCreationResponseJson}");
+            AdminTestUser = await TestUsers.GetUser(TestUserType.Admin);
 
             FileHelper.DeleteFilesInDirectory(PathToDtroExamplesTempDirectory);
 
             // Only hit /count end point locally for the time being - because it's not yet been exposed via Apigee
             if (EnvironmentName == EnvironmentType.Local)
             {
-                await Dtros.PrintDtroCountAsync(UserWithAllPermissions, "DTRO count before any data is deleted or any tests run");
+                await Dtros.PrintDtroCountAsync(AdminTestUser, "DTRO count before any data is deleted or any tests run");
             }
 
             // Only delete data on local machine
             if (EnvironmentName == EnvironmentType.Local)
             {
-                await DataSetUp.ClearAllDataAsync(UserWithAllPermissions);
-                await DataSetUp.CreateRulesAndSchema(UserWithAllPermissions);
-                await Dtros.PrintDtroCountAsync(UserWithAllPermissions, "DTRO count after data is deleted (locally) and before tests are run");
+                await DataSetUp.ClearAllDataAsync(AdminTestUser);
+                await DataSetUp.CreateRulesAndSchema(AdminTestUser);
+                await Dtros.PrintDtroCountAsync(AdminTestUser, "DTRO count after data is deleted (locally) and before tests are run");
             }
             else
             // Only create rules and schema on dev, test, etc., if they don't already exist
             {
-                await DataSetUp.CreateRulesAndSchemaIfDoNotExist(UserWithAllPermissions);
+                await DataSetUp.CreateRulesAndSchemaIfDoNotExist(AdminTestUser);
             }
         }
 
@@ -58,7 +53,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers
             // Only hit /count end point locally for the time being - because it's not yet been exposed via Apigee
             if (EnvironmentName == EnvironmentType.Local)
             {
-                await Dtros.PrintDtroCountAsync(UserWithAllPermissions, "DTRO count after each test");
+                await Dtros.PrintDtroCountAsync(AdminTestUser, "DTRO count after each test");
             }
 
             // To avoid hitting the rate limit in dev / test / integration, we need to wait before executing the next test

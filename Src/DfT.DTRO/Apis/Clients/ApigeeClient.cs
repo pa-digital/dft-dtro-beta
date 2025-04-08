@@ -1,9 +1,4 @@
-﻿using System.Net.Http;
-using System.Net.Http.Headers;
-using DfT.DTRO.Apis.Consts;
-using DfT.DTRO.Models.Apigee;
-using Google.Apis.Auth.OAuth2;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
 
 namespace DfT.DTRO.Apis.Clients;
