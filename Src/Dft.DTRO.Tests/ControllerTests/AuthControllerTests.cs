@@ -34,11 +34,16 @@ public class AuthControllerTests
             .Setup(it => it.GetToken(authTokenInput))
             .ReturnsAsync(() => MockTestObjects.AuthToken);
 
+        _sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
         IActionResult? actual = await _sut.GetToken(authTokenInput);
 
         Assert.NotNull(actual);
-
-        Assert.Equal(200, ((ObjectResult)actual).StatusCode);
+        var okResult = Assert.IsType<OkResult>(actual);
+        Assert.Equal(200, okResult.StatusCode);
     }
 
     [Fact]
