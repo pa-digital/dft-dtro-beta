@@ -6,7 +6,8 @@
       "launchUrl": "index.html",
       "applicationUrl": "https://localhost:5001",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "GOOGLE_APPLICATION_CREDENTIALS": "C:/Users/BELGP3/OneDrive - PA Consulting Group/Documents/Work/Clients/DfT/docs/dft-dtro-dev-01-505586f7d88f.json"
       }
     },
     "DfT.DTRO-Test": {

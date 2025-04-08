@@ -1,6 +1,4 @@
-﻿using DfT.DTRO.Apis.Consts;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services;
 
 /// <inheritdoc cref="IEmailService"/>
 public class EmailService(ISecretManagerClient client) : IEmailService
@@ -25,9 +23,7 @@ public class EmailService(ISecretManagerClient client) : IEmailService
             var email = MailHelper.CreateSingleEmail(from, to, subject, body, string.Empty);
             var response = await client.SendEmailAsync(email, CancellationToken.None);
             if (!response.IsSuccessStatusCode)
-            {
-                throw new EmailSendException();
-            }
+                throw new EmailSendException("Please contact Central Service Operator as the email was not send.");
         }
         catch (EmailSendException esex)
         {
