@@ -9,4 +9,5 @@ public interface IApplicationDal
     Task<PaginatedResult<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest);
     Task<bool> ActivateApplicationById(Guid appId);
     Task CreateApplication(Application application);
+    Task<int> GetUserApplicationsCount(Guid userId);
 }

@@ -126,4 +126,11 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
         _context.Applications.Add(application);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<int> GetUserApplicationsCount(Guid userId)
+    {
+        return await _context.Applications
+                         .Where(a => a.UserId == userId)
+                         .CountAsync();
+    }
 }

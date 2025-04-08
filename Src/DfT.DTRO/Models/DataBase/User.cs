@@ -53,6 +53,11 @@ public class User
 
     public List<Application> Applications { get; set; }
 
+     /// <summary>
+    /// Indicates whether the user has requested production access
+    /// </summary>
+    public bool ProductionAccessRequested { get; set; } = false;
+
     /// <summary>
     /// Foreign key to DigitalServiceProvider
     /// </summary>
