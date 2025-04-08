@@ -9,7 +9,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenar
     public class HappyScenarios : BaseTest
     {
         readonly static string schemaVersionToTest = "3.4.0";
-        readonly string fileName = "JSON-3.4.0-example-TTRO-MoreComplexExample.json";
+        readonly string fileName = "dtro-v3.4.0-example-more-complex-example.json";
 
         [Fact]
         public async Task DtroSubmittedFromJsonBodyAppearsInSearchResponse()
