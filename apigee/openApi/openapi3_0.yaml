@@ -38,7 +38,7 @@ paths:
     get:
       tags:
         - Applications
-      summary: Retrieves application details by ID
+      summary: Retrieves applications
       operationId: get-apps
       security:
         - oAuth:
@@ -102,6 +102,10 @@ paths:
       tags:
         - Applications
       summary: Retrieves application details by ID
+      operationId: get-app
+      security:
+        - oAuth:
+            - cso
       parameters:
         - $ref: "#/components/parameters/Email"
         - name: appId
@@ -122,6 +126,10 @@ paths:
       tags:
         - Applications
       summary: Retrieves application list for user
+      operationId: get-inactive-apps
+      security:
+        - oAuth:
+            - cso
       parameters:
         - name: Page
           in: query
@@ -529,6 +537,20 @@ paths:
           description: Could not find a DTRO with the specified id.
         '500':
           description: Internal Server Error.
+  /dtros/count:
+    get:
+      tags:
+        - Dtros
+      summary: Return a count of submitted D-TROs
+      operationId: get-d-tro-users
+      security:
+        - oAuth:
+            - cso
+      responses:
+        '200':
+          description: Successfully retrieved DTRO count
+        '500':
+          description: Internal server error
   /dtroUsers:
     get:
       tags:
