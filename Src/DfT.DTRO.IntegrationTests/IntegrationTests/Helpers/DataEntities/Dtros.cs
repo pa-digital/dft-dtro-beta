@@ -1,9 +1,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.Consts;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
-using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 {
@@ -20,27 +20,17 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "multipart/form-data");
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: filePath);
             return dtroCreationResponse;
-        }
-
-        public static async Task<HttpResponseMessage> GetDtroAsync(string dtroId, TestUser testUser)
-        {
-            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
-
-            HttpResponseMessage getDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtrosBase}/{dtroId}", headers);
-            return getDtroResponse;
         }
 
         public static async Task<HttpResponseMessage> GetDtrosCountAsync(TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            await headers.AddValidHeadersForEnvironmentAsync(UserGroup.Tra, testUser.AppId);
+            await headers.AddValidHeadersForEnvironment(testUser);
 
             HttpResponseMessage getDtrosCountResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Get, $"{BaseUri}{RouteTemplates.DtrosCount}", headers);
             return getDtrosCountResponse;
@@ -166,6 +156,23 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
             """;
 
             return expectedErrorJson;
+        }
+
+        public static string GetSearchRequestJson(string traField, string traId)
+        {
+            string requestJson = $$"""
+            {
+                "page": 1,
+                "pageSize": 50,
+                "queries": [
+                    {
+                        "{{traField}}": {{traId}}
+                    }
+                ]
+            }
+            """;
+
+            return requestJson;
         }
     }
 }

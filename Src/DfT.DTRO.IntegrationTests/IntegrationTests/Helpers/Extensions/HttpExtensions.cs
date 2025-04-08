@@ -1,26 +1,27 @@
 using DfT.DTRO.Consts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Oauth;
-using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions
 {
     public static class HttpExtensions
     {
-        public static async Task AddValidHeadersForEnvironmentAsync(this Dictionary<string, string> headers, UserGroup userGroup, String appId)
+        public static Task AddValidHeadersForEnvironment(this Dictionary<string, string> headers, TestUser testUser)
         {
             switch (EnvironmentName)
             {
                 case EnvironmentType.Local:
-                    headers.Add("App-Id", appId);
+                    headers.Add("App-Id", testUser.AppId);
                     break;
                 default:
-                    string accessToken = await GetAccessToken(userGroup);
-                    headers.Add("Authorization", $"Bearer {accessToken}");
+                    headers.Add("Authorization", $"Bearer {testUser.AccessToken}");
                     break;
             }
+
+            return Task.CompletedTask;
         }
     }
 
