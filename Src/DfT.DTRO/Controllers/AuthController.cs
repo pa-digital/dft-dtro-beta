@@ -84,6 +84,11 @@ public class AuthController : ControllerBase
         User user = await _userDal.GetUserFromEmail(email);
         bool isAdmin = user.IsCentralServiceOperator;
         var value = Request.Cookies["access_token"];
+        if (string.IsNullOrEmpty(value))
+        {
+            return Unauthorized();
+        }
+
         string[] parts = value.Split(':');
         string accessToken = parts[0];
         long expiryEpochTime = long.Parse(parts[1]);
