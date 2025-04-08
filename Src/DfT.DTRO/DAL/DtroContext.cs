@@ -144,8 +144,28 @@ public class DtroContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<ApplicationStatus>().ToTable("ApplicationStatus");
-    }
 
+        modelBuilder.Entity<User>()
+            .Property(u => u.ProductionAccessRequested)
+            .HasDefaultValue(false);
+
+        modelBuilder.Entity<ApplicationStatus>().HasData(
+            new
+            {
+                Id = new Guid("6e563a53-05b6-4521-8323-896aecc27cc1"),
+                Status = "Active"
+            },
+            new
+            {
+                Id = new Guid("3153c4a8-6434-46bf-99ff-98500c02e983"),
+                Status = "Pending"
+            },
+            new
+            {
+                Id = new Guid("c47cc91d-0d20-47b0-8fc8-ec51fb5aae94"),
+                Status = "Inactive"
+            });
+    }
 
     ///<inheritdoc />
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

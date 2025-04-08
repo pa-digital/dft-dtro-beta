@@ -1,2 +1,2 @@
-Id,Created,LastUpdated,Nickname,DigitalServiceProviderId,TrafficRegulationAuthorityId,ApplicationTypeId,UserId,StatusId,Purpose,AdditionalInformation,Activity,Regions,DataType
-18e6ac7e-c730-48f3-b96e-3bdcaa0b8b9d,2025-01-01 00:00:00.000000,,Test App,3d9c3306-4fc3-424e-9c7d-ce5564995a0d,,fb1be9e2-782e-436b-8a2d-1ecf37fc8efd,38514ea8-402b-4675-8089-db7804e080df,6e563a53-05b6-4521-8323-896aecc27cc1,,,,,
+Id,Created,LastUpdated,Nickname,TrafficRegulationAuthorityId,ApplicationTypeId,UserId,StatusId,Purpose,AdditionalInformation,Activity,Regions,DataType
+18e6ac7e-c730-48f3-b96e-3bdcaa0b8b9d,2025-01-01 00:00:00.000000,,Test App,,fb1be9e2-782e-436b-8a2d-1ecf37fc8efd,38514ea8-402b-4675-8089-db7804e080df,6e563a53-05b6-4521-8323-896aecc27cc1,,,,,
