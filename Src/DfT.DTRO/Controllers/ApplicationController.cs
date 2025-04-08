@@ -20,6 +20,7 @@ public class ApplicationController : ControllerBase
     /// <param name="applicationService">Service for application operations.</param>
     /// <param name="logger">Logger instance for logging.</param>
     /// <param name="loggingExtension">Extension for logging operations.</param>
+    /// <param name="emailService">Service used for email operations.</param>
     public ApplicationController(IApplicationService applicationService, ILogger<ApplicationController> logger, LoggingExtension loggingExtension, IEmailService emailService)
     {
         _applicationService = applicationService;
@@ -42,13 +43,13 @@ public class ApplicationController : ControllerBase
     {
         try
         {
-            var app = await _applicationService.CreateApplication(email, appInput);
-            await _emailService.SendAsync(app, email);
+            //var app = await _applicationService.CreateApplication(email, appInput);
+            var response = _emailService.SendAsync(new App(), email);
 
             _logger.LogInformation($"'{nameof(CreateApplication)}' method called ");
             _loggingExtension.LogInformation(nameof(CreateApplication), RouteTemplates.ApplicationsCreate,
                 $"'{nameof(CreateApplication)}' method called.");
-            return Ok(app);
+            return Ok(new App());
         }
         catch (EmailSendException esex)
         {

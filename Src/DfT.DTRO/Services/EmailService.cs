@@ -1,34 +1,35 @@
 ﻿namespace DfT.DTRO.Services;
 
 /// <inheritdoc cref="IEmailService"/>
-public class EmailService(ISecretManagerClient client) : IEmailService
+public class EmailService : IEmailService
 {
-    /// <inheritdoc cref="IEmailService"/>
-    public async Task SendAsync(App app, string requestEmail)
-    {
-        var apiKey = client.GetSecret(ApiConsts.SendGridApiKey);
-        var emailOriginator = client.GetSecret(ApiConsts.EmailOriginator);
-        var dtroCsoEmail = client.GetSecret(ApiConsts.DtroCsoEmail);
+    private readonly ISecretManagerClient _secretManagerClient;
+    private readonly INotificationClient _notificationClient;
 
-        try
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="secretManagerClient">secret manager client</param>
+    public EmailService(ISecretManagerClient secretManagerClient)
+    {
+        _secretManagerClient = secretManagerClient;
+        _notificationClient = new NotificationClient(_secretManagerClient.GetSecret(ApiConsts.NotifyApiKey));
+    }
+
+    /// <inheritdoc cref="IEmailService"/>
+    public EmailNotificationResponse SendAsync(App app, string requestEmail)
+    {
+        //TODO: This template will be refactored once I will have more of the email tickets implemented.
+        var templateResponse = _notificationClient.GetTemplateById(_secretManagerClient.GetSecret(ApiConsts.ApplicationPendingApproval));
+        var personalisation = new Dictionary<string, dynamic>()
         {
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(emailOriginator, "DfT Central Service Operator");
-            var to = new EmailAddress(requestEmail, "Application created");
-            var subject = $"Approval for {app.Name}";
-            var body = $"Your request for '{app.Name}' app has been approved. " +
-                       "Please log in to the D-TRO portal to view your app credentials. " +
-                       $"If you need assistance please email '{dtroCsoEmail}'. " +
-                       "Do not reply to this email.";
-            var email = MailHelper.CreateSingleEmail(from, to, subject, body, string.Empty);
-            var response = await client.SendEmailAsync(email, CancellationToken.None);
-            if (!response.IsSuccessStatusCode)
-                throw new EmailSendException("Please contact Central Service Operator as the email was not send.");
-        }
-        catch (EmailSendException esex)
-        {
-            throw esex;
-        }
+            {"email address", requestEmail},
+            {"application name", app.Name},
+            {"dtro-cso-email", _secretManagerClient.GetSecret(ApiConsts.DtroCsoEmail)}
+        };
+
+        var response = _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
+        return response;
     }
 
 }
