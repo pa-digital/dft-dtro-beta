@@ -8,9 +8,10 @@ public class ApplicationService : IApplicationService
     private readonly IUserDal _userDal;
     private readonly DtroContext _dtroContext;
     private readonly IDtroUserDal _dtroUserDal;
+    private readonly IWebHostEnvironment _env;
 
 
-    public ApplicationService(IApplicationDal applicationDal, IApigeeAppRepository apigeeAppRepository, ITraDal traDal, IUserDal userDal, DtroContext dtroContext, IDtroUserDal dtroUserDal)
+    public ApplicationService(IApplicationDal applicationDal, IApigeeAppRepository apigeeAppRepository, ITraDal traDal, IUserDal userDal, DtroContext dtroContext, IDtroUserDal dtroUserDal, IWebHostEnvironment env)
     {
         _applicationDal = applicationDal;
         _apigeeAppRepository = apigeeAppRepository;
@@ -18,6 +19,7 @@ public class ApplicationService : IApplicationService
         _userDal = userDal;
         _dtroContext = dtroContext;
         _dtroUserDal = dtroUserDal;
+        _env = env;
     }
 
     public async Task<bool> ValidateAppBelongsToUser(string email, Guid appId)
@@ -42,9 +44,10 @@ public class ApplicationService : IApplicationService
         return applicationResponse;
     }
 
-    public async Task<List<ApplicationListDto>> GetApplications(string email)
+    public async Task<PaginatedResponse<ApplicationListDto>> GetApplications(string email, PaginatedRequest paginatedRequest)
     {
-        return await _applicationDal.GetApplicationList(email);
+        PaginatedResponse<ApplicationListDto> paginatedResponse = await _applicationDal.GetApplicationList(email, paginatedRequest);
+        return new(paginatedResponse.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResponse.TotalCount);
     }
 
     public async Task<PaginatedResponse<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest)
@@ -64,14 +67,34 @@ public class ApplicationService : IApplicationService
     public async Task<App> CreateApplication(string email, AppInput appInput)
     {
         var developerAppInput = JsonHelper.ConvertObject<AppInput, ApigeeDeveloperAppInput>(appInput);
+        developerAppInput.ApiProducts = appInput.Type == "Publish" ? new[] { "dev-publisher" } : new[] { "dev-consumer" };
         var developerApp = await _apigeeAppRepository.CreateApp(email, developerAppInput);
+
+        // In production, API products have to be manually approved
+        // TODO: approve API product in production
 
         using (var transaction = await _dtroContext.Database.BeginTransactionAsync())
         {
             try
             {
+                // Consumer apps don't have a TRA linked
                 // In integration, we need to make a dummy TRA for the application
-                TrafficRegulationAuthority tra = await _traDal.CreateTra();
+                TrafficRegulationAuthority? tra = null;
+                if (appInput.Type == "Publish")
+                {
+                    if (!_env.IsProduction())
+                    {
+                        tra = await _traDal.CreateTra();
+                    }
+                    else
+                    {
+                        if (!appInput.SwaCode.HasValue)
+                        {
+                            throw new Exception("SWA code is required");
+                        }
+                        tra = await _traDal.GetTraBySwaCode(appInput.SwaCode.Value);
+                    }
+                }
 
                 // Create app in database
                 var appId = Guid.Parse(developerApp.AppId);
@@ -84,8 +107,8 @@ public class ApplicationService : IApplicationService
                     Nickname = appInput.Name,
                     ApplicationTypeId = typeId,
                     UserId = user.Id,
-                    StatusId = ApplicationStatusType.Inactive,
-                    TrafficRegulationAuthorityId = tra.Id,
+                    StatusId = _env.IsProduction() ? ApplicationStatusType.Inactive : ApplicationStatusType.Active,
+                    TrafficRegulationAuthorityId = tra?.Id,
                     Purpose = appInput.Purpose,
                     AdditionalInformation = appInput.AdditionalInformation,
                     Activity = appInput.Activity,
@@ -100,11 +123,10 @@ public class ApplicationService : IApplicationService
                 {
                     Id = Guid.NewGuid(),
                     AppId = appId,
-                    // TODO: when the table contains SWA code, update this to use tra.SwaCode
-                    TraId = 1,
+                    TraId = tra?.SwaCode,
                     Name = user.Forename + " " + user.Surname,
-                    Prefix = appInput.Purpose == "Publish" ? "PUB" : "CON",
-                    UserGroup = appInput.Purpose == "Publish" ? UserGroup.All : UserGroup.Consumer,
+                    Prefix = appInput.Type == "Publish" ? "PUB" : "CON",
+                    UserGroup = appInput.Type == "Publish" ? UserGroup.All : UserGroup.Consumer,
                 };
                 await _dtroUserDal.SaveDtroUserAsync(dtroUser);
                 await transaction.CommitAsync();

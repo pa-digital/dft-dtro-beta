@@ -48,3 +48,4 @@ global using Moq;
 global using Xunit;
 global using DfT.DTRO.Models.Apigee;
 global using DfT.DTRO.Models.Pagination;
+global using Microsoft.AspNetCore.Hosting;

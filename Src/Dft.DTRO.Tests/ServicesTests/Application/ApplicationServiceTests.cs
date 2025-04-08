@@ -9,6 +9,7 @@ public class ApplicationServiceTests
     private readonly ApplicationService _applicationService;
     private readonly DtroContext _dtroContext;
     private readonly Mock<IDtroUserDal> _dtroUserDalMock;
+    private readonly Mock<IWebHostEnvironment> _envMock;
     private readonly string _email;
 
     public ApplicationServiceTests()
@@ -18,6 +19,7 @@ public class ApplicationServiceTests
         _traDalMock = new Mock<ITraDal>();
         _userDalMock = new Mock<IUserDal>();
         _dtroUserDalMock = new Mock<IDtroUserDal>();
+        _envMock = new Mock<IWebHostEnvironment>();
 
         var options = new DbContextOptionsBuilder<DtroContext>()
             .UseInMemoryDatabase(databaseName: "TestDatabase")
@@ -31,7 +33,8 @@ public class ApplicationServiceTests
             _traDalMock.Object,
             _userDalMock.Object,
             _dtroContext,
-            _dtroUserDalMock.Object
+            _dtroUserDalMock.Object,
+            _envMock.Object
         );
         _email = "user@test.com";
     }
@@ -154,12 +157,21 @@ public class ApplicationServiceTests
             new ApplicationListDto{ Id = Guid.NewGuid(), Name = "Test", Tra = "Test", Type = "Test" },
             new ApplicationListDto{ Id = Guid.NewGuid(), Name = "Another Test", Tra = "test TRA", Type = "Publish" }
         };
-        _applicationDalMock
-            .Setup(dal => dal.GetApplicationList(_email))
-            .ReturnsAsync(expectedList);
 
-        var result = await _applicationService.GetApplications(_email);
-        Assert.Equal(expectedList, result);
+        var paginatedRequest = new PaginatedRequest { Page = 1, PageSize = 10 };
+
+        var expectedResponse = new PaginatedResponse<ApplicationListDto>(
+            expectedList.AsReadOnly(), paginatedRequest.Page, expectedList.Count);
+
+        _applicationDalMock
+            .Setup(dal => dal.GetApplicationList(_email, paginatedRequest))
+            .ReturnsAsync(expectedResponse);
+
+        var result = await _applicationService.GetApplications(_email, paginatedRequest);
+        Assert.NotNull(result);
+        Assert.Equal(expectedResponse.Page, result.Page);
+        Assert.Equal(expectedResponse.TotalCount, result.TotalCount);
+        Assert.Equal(expectedResponse.Results, result.Results);
     }
     
     [Fact]

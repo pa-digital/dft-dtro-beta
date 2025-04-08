@@ -43,13 +43,16 @@ public class ApplicationController : ControllerBase
     {
         try
         {
-            //var app = await _applicationService.CreateApplication(email, appInput);
-            var response = _emailService.SendAsync(new App(), email);
+            var app = await _applicationService.CreateApplication(email, appInput);
+            if (string.IsNullOrEmpty(app.AppId))
+            {
+                var response = _emailService.SendEmail(app, email);
+            }
 
             _logger.LogInformation($"'{nameof(CreateApplication)}' method called ");
             _loggingExtension.LogInformation(nameof(CreateApplication), RouteTemplates.ApplicationsCreate,
                 $"'{nameof(CreateApplication)}' method called.");
-            return Ok(new App());
+            return Ok(app);
         }
         catch (EmailSendException esex)
         {
@@ -183,11 +186,11 @@ public class ApplicationController : ControllerBase
     /// <response code="500">Invalid operation or other exception</response>
     [HttpGet(RouteTemplates.ApplicationsFindAll)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> FindApplications([FromHeader(Name = RequestHeaderNames.Email)][Required] string email)
+    public async Task<ActionResult<PaginatedResponse<ApplicationListDto>>> FindApplications([FromHeader(Name = RequestHeaderNames.Email)][Required] string email, [FromQuery] PaginatedRequest paginatedRequest)
     {
         try
         {
-            var result = await _applicationService.GetApplications(email);
+            var result = await _applicationService.GetApplications(email, paginatedRequest);
             return Ok(result);
         }
         catch (ArgumentNullException ex)

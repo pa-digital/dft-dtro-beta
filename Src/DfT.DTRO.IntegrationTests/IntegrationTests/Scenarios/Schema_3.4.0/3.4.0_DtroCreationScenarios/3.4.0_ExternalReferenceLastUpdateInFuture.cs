@@ -15,8 +15,8 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.DtroCreationSc
         {
             return new List<object[]>
             {
-                new object[] { "JSON-3.4.0-example-TTRO-HeightRestrictionwithConditions.json" }, // point geometry
-                new object[] { "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json" } // linear geometry
+                new object[] { "dtro-v3.4.0-example-height-restriction-with-conditions.json" }, // point geometry
+                new object[] { "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json" } // linear geometry
             };
         }
 

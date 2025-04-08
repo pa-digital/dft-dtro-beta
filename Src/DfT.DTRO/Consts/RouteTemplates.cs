@@ -39,6 +39,10 @@ public static class RouteTemplates
     public const string DtroUsersFindById = DtroUsersBase + "/{dtroUserId:guid}";
     public const string DtroUsersDeleteRedundant = DtroUsersBase + "/redundant";
 
+    // Environment
+    public const string CanRequestProductionAccess = "/canRequestProductionAccess";
+    public const string RequestProductionAccess = "/requestAccess";
+
     // Events
     public const string EventsBase = "/events";
     public const string EventsFindAll = EventsBase;

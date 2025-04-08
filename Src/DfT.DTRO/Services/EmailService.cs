@@ -17,7 +17,7 @@ public class EmailService : IEmailService
     }
 
     /// <inheritdoc cref="IEmailService"/>
-    public EmailNotificationResponse SendAsync(App app, string requestEmail)
+    public EmailNotificationResponse SendEmail(App app, string requestEmail)
     {
         //TODO: This template will be refactored once I will have more of the email tickets implemented.
         var templateResponse = _notificationClient.GetTemplateById(_secretManagerClient.GetSecret(ApiConsts.ApplicationPendingApproval));

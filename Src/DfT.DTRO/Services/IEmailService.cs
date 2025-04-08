@@ -1,6 +1,4 @@
-﻿using Notify.Models.Responses;
-
-namespace DfT.DTRO.Services;
+﻿namespace DfT.DTRO.Services;
 
 /// <summary>
 /// Service for handling email-related operations.
@@ -13,5 +11,5 @@ public interface IEmailService
     /// <param name="app">The application name to be sent.</param>
     /// <param name="requestEmail">The application email to be sent.</param>
     /// <returns>An email response notification.</returns>
-    EmailNotificationResponse SendAsync(App app, string requestEmail);
+    EmailNotificationResponse SendEmail(App app, string requestEmail);
 }

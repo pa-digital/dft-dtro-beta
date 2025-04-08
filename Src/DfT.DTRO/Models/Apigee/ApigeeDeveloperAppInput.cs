@@ -12,4 +12,10 @@ public class ApigeeDeveloperAppInput
     /// </summary>
     [DataMember(Name = "name")]
     public string Name { get; set; }
+
+    /// <summary>
+    /// api products.
+    /// </summary>
+    [DataMember(Name = "apiProducts")]
+    public string[] ApiProducts { get; set; }
 }

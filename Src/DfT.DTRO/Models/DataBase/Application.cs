@@ -65,7 +65,7 @@ public class Application
 
     [Column("TrafficRegulationAuthorityId")]
     [ForeignKey("TrafficRegulationAuthority")]
-    public Guid TrafficRegulationAuthorityId { get; set; }
+    public Guid? TrafficRegulationAuthorityId { get; set; }
     public TrafficRegulationAuthority TrafficRegulationAuthority { get; set; }
 
     public Guid ApplicationTypeId { get; set; }
