@@ -1,15 +1,15 @@
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Extensions;
 using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.JsonHelpers;
 using static DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.TestConfig;
-using DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.Enums;
 
 namespace DfT.DTRO.IntegrationTests.IntegrationTests.Schema_3_4_0.ConsumerScenarios
 {
     public class ConsumerHasNoAuthorisation : BaseTest
     {
         readonly static string schemaVersionToTest = "3.4.0";
-        readonly string fileName = "JSON-3.4.0-example-Derbyshire 2024 DJ388 partial.json";
+        readonly string fileName = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";
 
         readonly string expectedErrorJson = """
         {
