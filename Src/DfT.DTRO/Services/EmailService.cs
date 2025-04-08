@@ -28,8 +28,7 @@ public class EmailService : IEmailService
             {"dtro-cso-email", _secretManagerClient.GetSecret(ApiConsts.DtroCsoEmail)}
         };
 
-        var response = _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
-        return response;
+        return _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
     }
 
 }

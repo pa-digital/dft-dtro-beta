@@ -47,6 +47,9 @@ public class ApplicationController : ControllerBase
             if (string.IsNullOrEmpty(app.AppId))
             {
                 var response = _emailService.SendEmail(app, email);
+                if (string.IsNullOrEmpty(response.reference))
+                    throw new EmailSendException();
+
             }
 
             _logger.LogInformation($"'{nameof(CreateApplication)}' method called ");
