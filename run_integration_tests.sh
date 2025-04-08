@@ -21,9 +21,9 @@ while [[ $# -gt 0 ]]; do
     -p1i) PUBLISHER_1_CLIENT_ID="$2"; shift 2;;
     -p1s) PUBLISHER_1_CLIENT_SECRET="$2"; shift 2;;
     -t1i) PUBLISHER_1_TRA_ID="$2"; shift 2;;
-    -p2i) PUBLISHER_1_CLIENT_ID="$2"; shift 2;;
-    -p2s) PUBLISHER_1_CLIENT_SECRET="$2"; shift 2;;
-    -t2i) PUBLISHER_1_TRA_ID="$2"; shift 2;;
+    -p2i) PUBLISHER_2_CLIENT_ID="$2"; shift 2;;
+    -p2s) PUBLISHER_2_CLIENT_SECRET="$2"; shift 2;;
+    -t2i) PUBLISHER_2_TRA_ID="$2"; shift 2;;
     --) shift; break;;
     *) echo "Unknown option: $1"; exit 1;;
   esac
