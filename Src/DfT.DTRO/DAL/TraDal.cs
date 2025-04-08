@@ -31,9 +31,24 @@ public class TraDal : ITraDal
 
     public async Task<TrafficRegulationAuthority> CreateTra()
     {
-        TrafficRegulationAuthority tra = new TrafficRegulationAuthority { Name = "New TRA", Status = "Active" };
+        Random random = new Random();
+        bool isUnique = false;
+        int dummySwaCode;
+        do
+        {
+            dummySwaCode = random.Next(1, 10000);
+            isUnique = !await _dtroContext.TrafficRegulationAuthorities.AnyAsync(e => e.SwaCode == dummySwaCode);
+        }
+        while (!isUnique);
+
+        TrafficRegulationAuthority tra = new TrafficRegulationAuthority { Name = "New TRA", Status = "Active", SwaCode = dummySwaCode };
         _dtroContext.TrafficRegulationAuthorities.Add(tra);
         await _dtroContext.SaveChangesAsync();
         return tra;
+    }
+
+    public async Task<TrafficRegulationAuthority> GetTraBySwaCode(int swaCode)
+    {
+        return await _dtroContext.TrafficRegulationAuthorities.SingleOrDefaultAsync(tra => tra.SwaCode == swaCode);
     }
 }

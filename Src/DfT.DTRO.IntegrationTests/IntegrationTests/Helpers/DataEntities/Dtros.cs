@@ -153,7 +153,7 @@ namespace DfT.DTRO.IntegrationTests.IntegrationTests.Helpers.DataEntities
 
         public static string GetExternalReferenceLastUpdateDateErrorJson(string fileName)
         {
-            string geometryType = fileName.Contains("Derbyshire") ? "LinearGeometry" : "PointGeometry";
+            string geometryType = fileName.Contains("derbyshire") ? "LinearGeometry" : "PointGeometry";
             string expectedErrorJson = $$"""
             {
                 "ruleError_0": {

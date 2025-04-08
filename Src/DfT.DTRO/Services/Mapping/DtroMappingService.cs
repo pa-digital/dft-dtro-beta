@@ -108,6 +108,7 @@ public class DtroMappingService : IDtroMappingService
         new()
         {
             Name = tra.Name,
+            SwaCode = tra.SwaCode
         };
 
     /// <inheritdoc cref="IDtroMappingService"/>
