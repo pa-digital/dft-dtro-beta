@@ -164,11 +164,11 @@ public class ApplicationController : ControllerBase
     /// <response code="500">Invalid operation or other exception</response>
     [HttpGet(RouteTemplates.ApplicationsFindAll)]
     [FeatureGate(FeatureNames.ReadOnly)]
-    public async Task<IActionResult> FindApplications([FromHeader(Name = RequestHeaderNames.Email)][Required] string email)
+    public async Task<ActionResult<PaginatedResponse<ApplicationListDto>>> FindApplications([FromHeader(Name = RequestHeaderNames.Email)][Required] string email, [FromQuery] PaginatedRequest paginatedRequest)
     {
         try
         {
-            var result = await _applicationService.GetApplications(email);
+            var result = await _applicationService.GetApplications(email, paginatedRequest);
             return Ok(result);
         }
         catch (ArgumentNullException ex)

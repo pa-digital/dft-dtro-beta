@@ -35,4 +35,10 @@ public class ApigeeDeveloperAppCredential
     /// </summary>
     [DataMember(Name = "status")]
     public string Status { get; set; }
+
+    /// <summary>
+    /// List of API products associated with the app.
+    /// </summary>
+    [DataMember(Name = "apiProducts")]
+    public ApigeeDeveloperApiProduct[] ApiProducts { get; set; }
 }
