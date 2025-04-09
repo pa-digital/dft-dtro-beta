@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "3.3.1",
+  "data": {
+    "source": {
+      "actionType": "amendment",
+      "currentTraOwner": 974098744,
+      "provision": [
+        {
+          "actionType": "new",
+          "orderReportingPoint": "ttroTtmoNoticeOfIntention",
+          "provisionDescription": "Temporary height restriction (2.5m)",
+          "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
+          "regulatedPlace": [
+            {
+              "description": "East Reach - Taunton",
+              "type": "regulationLocation",
+              "pointGeometry": {
+                "externalReference": [
+                  {
+                    "lastUpdateDate": "2024-08-01T00:00:00",
+                    "uniqueStreetReferenceNumber": [
+                      {
+                        "usrn": 39608173
+                      }
+                    ]
+                  }
+                ],
+                "point": "SRID=27700;POINT(323544 124622)",
+                "representation": "centreLinePoint",
+                "version": 1
+              }
+            }
+          ],
+          "regulation": [
+            {
+              "conditionSet": [
+                {
+                  "operator": "and",
+                  "conditions": [
+                    {
+                      "negate": false,
+                      "timeValidity": {
+                        "start": "2024-08-22T08:00:00",
+                        "end": "2024-08-22T20:00:00"
+                      }
+                    },
+                    {
+                      "negate": false,
+                      "vehicleCharacteristics": {
+                        "maximumHeightCharacteristic": {
+                          "vehicleHeight": 2.5
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "generalRegulation": {
+                "regulationType": "dimensionMaximumHeightWithTRO"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
+        }
+      ],
+      "reference": "c962b51f-e1aa-416e-8f0b-aefe39a4c099",
+      "section": "All sections",
+      "traAffected": [
+        974098744
+      ],
+      "traCreator": 974098744,
+      "troName": "DfT Example - TTRO height restriction with multiple conditions v2, Nov. 2024 UPDATED"
+    }
+  }
+}

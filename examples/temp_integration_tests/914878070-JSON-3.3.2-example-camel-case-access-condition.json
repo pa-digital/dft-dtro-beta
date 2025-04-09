@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "3.3.1",
+  "data": {
+    "source": {
+      "actionType": "new",
+      "currentTraOwner": 914878070,
+      "provision": [
+        {
+          "actionType": "new",
+          "orderReportingPoint": "permanentNoticeOfMaking",
+          "provisionDescription": "Schedule 1: No Waiting Monday to Saturday, 8am to 6pm",
+          "reference": "A3448229-1DFA-48CD-A785-376ACB9F7C56",
+          "regulatedPlace": [
+            {
+              "description": "West side, Market Street, Draycott",
+              "type": "regulationLocation",
+              "polygon": {
+                "version": 1,
+                "polygon": "SRID=27700;POLYGON((529100 178750, 529200 178750, 529200 178860, 529100 178860, 529100 178750))"
+              }
+            }
+          ],
+          "regulation": [
+            {
+              "condition": [
+                {
+                  "timeValidity": {
+                    "specialDay": {
+                      "intersectWithApplicableDays": true,
+                      "specialDayType": "easter"
+                    },
+                    "start": "2024-08-01T08:00:00",
+                    "validPeriod": [
+                      {
+                        "periodStart": {
+                          "startType": "dawn",
+                          "changeableTimePeriodEntry": [
+                            {
+                              "entry": "2025-01-01T09:00:00"
+                            }
+                          ]
+                        },
+                        "recurringDayWeekMonthPeriod": [
+                          {
+                            "applicableDay": [
+                              "friday",
+                              "monday",
+                              "saturday",
+                              "thursday",
+                              "tuesday",
+                              "wednesday"
+                            ],
+                            "calendarWeekInMonth": {
+                              "weekinMonth": "firstWeekOfMonth"
+                            },
+                            "weekOfMonth": {
+                              "applicableWeek": "firstWeek"
+                            },
+                            "instanceOfDayWithinMonth": {
+                              "applicableInstanceOfDayWithinMonth": "firstInstance"
+                            }
+                          }
+                        ],
+                        "recurringTimePeriodOfDay": [
+                          {
+                            "endTimeOfPeriod": "18:00:00T00:00:00",
+                            "startTimeOfPeriod": "08:00:00T00:00:00"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "accessCondition": {
+                    "accessConditionType": [
+                      "accessOnly"
+                    ]
+                  }
+                }
+              ],
+              "generalRegulation": {
+                "regulationType": "kerbsideLimitedWaiting"
+              },
+              "isDynamic": false,
+              "timeZone": "Europe/London"
+            }
+          ]
+        }
+      ],
+      "reference": "B2787FE2-AD74-432A-BB32-76FDB065F3E8",
+      "section": "Schedule 1",
+      "traAffected": [
+        914878070
+      ],
+      "traCreator": 914878070,
+      "troName": "DfT Example - Oct. 2024 - partial extract of THE DERBYSHIRE COUNTY COUNCIL (MARKET STREET AND TOWN END ROAD, DRAYCOTT) (RESTRICTION AND LIMITED WAITING) TRAFFIC REGULATION ORDER 2024 (DfT mockup, v2)"
+    }
+  }
+}
