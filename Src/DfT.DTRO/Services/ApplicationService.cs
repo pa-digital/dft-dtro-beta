@@ -135,7 +135,7 @@ public class ApplicationService : IApplicationService
             }
             catch (Exception)
             {
-                // TODO: Delete app from Apigee
+                await _apigeeAppRepository.DeleteApp(email, appInput.Name);
                 await transaction.RollbackAsync();
                 throw;
             }

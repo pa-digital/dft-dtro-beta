@@ -22,6 +22,14 @@ public interface IApigeeClient
     Task<HttpResponseMessage> GetApp(string developerEmail, string name);
     
     /// <summary>
+    /// Delete app
+    /// </summary>
+    /// <param name="developerEmail">Developer email parameter passed</param>
+    /// <param name="name">App name</param>
+    /// <returns>App</returns>
+    Task<HttpResponseMessage> DeleteApp(string developerEmail, string name);
+    
+    /// <summary>
     /// Update app status
     /// </summary>
     /// <param name="developerEmail">Developer email parameter passed</param>

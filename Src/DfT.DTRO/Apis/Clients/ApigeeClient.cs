@@ -28,6 +28,12 @@ public class ApigeeClient : IApigeeClient
         return await SendRequest(HttpMethod.Get, requestUrl, null);
     }
     
+    public async Task<HttpResponseMessage> DeleteApp(string developerEmail, string name)
+    {
+        var requestUrl = $"developers/{developerEmail}/apps/{name}";
+        return await SendRequest(HttpMethod.Delete, requestUrl, null);
+    }
+    
     public async Task<HttpResponseMessage> UpdateAppStatus(string developerEmail, string name, string action)
     {
         var requestUrl = $"developers/{developerEmail}/apps/{name}?action={action}";
