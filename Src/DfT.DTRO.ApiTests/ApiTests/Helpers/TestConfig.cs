@@ -13,12 +13,12 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
         public static string AdminClientSecret { get; }
         public static string ConsumerClientId { get; }
         public static string ConsumerClientSecret { get; }
-        public static string Publisher1ClientId { get; }
-        public static string Publisher1ClientSecret { get; }
-        public static string Publisher1TraId { get; }
-        public static string Publisher2ClientId { get; }
-        public static string Publisher2ClientSecret { get; }
-        public static string Publisher2TraId { get; }
+        public static string PublisherClientId1 { get; }
+        public static string PublisherClientSecret1 { get; }
+        public static string PublisherTraId1 { get; }
+        public static string PublisherClientId2 { get; }
+        public static string PublisherClientSecret2 { get; }
+        public static string PublisherTraId2 { get; }
 
         public static string BaseUri { get; }
         public static string PathToProjectDirectory { get; }
@@ -105,9 +105,12 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
             AdminClientSecret = EnvVariables.GetEnvValue("ADMIN_CLIENT_SECRET");
             ConsumerClientId = EnvVariables.GetEnvValue("CONSUMER_CLIENT_ID");
             ConsumerClientSecret = EnvVariables.GetEnvValue("CONSUMER_CLIENT_SECRET");
-            Publisher1ClientId = EnvVariables.GetEnvValue("PUBLISHER_1_CLIENT_ID");
-            Publisher1ClientSecret = EnvVariables.GetEnvValue("PUBLISHER_1_CLIENT_SECRET");
-            Publisher1TraId = EnvVariables.GetEnvValue("PUBLISHER_1_TRA_ID");
+            PublisherClientId1 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID_1");
+            PublisherClientSecret1 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET_1");
+            PublisherTraId1 = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_1");
+            PublisherClientId2 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID_2");
+            PublisherClientSecret2 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET_2");
+            PublisherTraId2 = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_2");
         }
     }
 }
