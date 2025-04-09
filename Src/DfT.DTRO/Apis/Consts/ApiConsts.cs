@@ -6,8 +6,7 @@ public static class ApiConsts
     public const string SaExecutionPrivateKeySecretName = "sa-execution-private-key";
     public const string GoogleApisAuthScope = "https://www.googleapis.com/auth/cloud-platform";
     public const string NotifyApiKey = "notify-api-key";
+    public const string ApplicationCreated = "application-created";
     public const string ApplicationPendingApproval = "application-pending-approval";
-    public const string EmailOriginator = "dft-email-originator";
     public const string DtroCsoEmail = "dtro-cso-email";
-
 }

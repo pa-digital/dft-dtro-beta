@@ -1,4 +1,4 @@
-using DfT.DTRO.Models.Pagination;
+namespace Dft.DTRO.Tests.ControllerTests;
 
 public class ApplicationControllerTests
 {
@@ -6,16 +6,19 @@ public class ApplicationControllerTests
     private readonly Mock<IEmailService> _mockEmailService;
     private readonly ApplicationController _controller;
     private readonly string _email;
+    private readonly ApplicationResponse _applicationResponse;
+    private readonly EmailNotificationResponse _emailNotificationResponse;
 
     public ApplicationControllerTests()
     {
         ILogger<ApplicationController> mockLogger = MockLogger.Setup<ApplicationController>();
-        var mockLoggingExtension = new Mock<LoggingExtension>();
 
         _mockApplicationService = new Mock<IApplicationService>();
         _mockEmailService = new Mock<IEmailService>();
-        _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, mockLoggingExtension.Object, _mockEmailService.Object);
+        _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, _mockEmailService.Object);
         _email = "user@test.com";
+        _applicationResponse = new ApplicationResponse { Name = "Test" };
+        _emailNotificationResponse = new EmailNotificationResponse { id = Guid.NewGuid().ToString() };
     }
 
     [Fact]
@@ -171,6 +174,12 @@ public class ApplicationControllerTests
         _mockApplicationService
             .Setup(s => s.ActivateApplicationById(_email, appId))
             .ReturnsAsync(true);
+        _mockApplicationService
+            .Setup(s => s.GetApplication(_email, appId))
+            .ReturnsAsync(_applicationResponse);
+        _mockEmailService
+            .Setup(s => s.SendEmail(_applicationResponse.Name, _email, ApplicationStatusType.Active.Status))
+            .Returns(_emailNotificationResponse);
 
         var result = await _controller.ActivateApplication(_email, appId);
         var okResult = Assert.IsType<OkObjectResult>(result);
