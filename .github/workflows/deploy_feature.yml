@@ -68,7 +68,7 @@ jobs:
     - name: API tests
       id: api-tests
       run: |
-        ./run_api_tests.sh -e dev -ai ${{ secrets.CSO_CLIENT_ID_DEV }} -as ${{ secrets.CSO_CLIENT_SECRET_DEV }} -ci ${{ secrets.CONSUMER_CLIENT_ID_DEV }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_DEV }} -pi1 ${{ secrets.PUBLISHER_CLIENT_ID_DEV }} -ps1 ${{ secrets.PUBLISHER_CLIENT_SECRET_DEV }} -ti1 8888
+        ./run_api_tests.sh -e dev -ai ${{ secrets.CSO_CLIENT_ID_DEV }} -as ${{ secrets.CSO_CLIENT_SECRET_DEV }} -ci ${{ secrets.CONSUMER_CLIENT_ID_DEV }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_DEV }} -pi1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_1_DEV }} -ps1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_1_DEV }} -ti1 99999
 
     - name: Upload API test results
       if: always() && steps.api-tests.outcome != 'skipped'
@@ -120,7 +120,7 @@ jobs:
     - name: API tests
       id: api-tests
       run: |
-        ./run_api_tests.sh -e test -ai ${{ secrets.CSO_CLIENT_ID_TEST }} -as ${{ secrets.CSO_CLIENT_SECRET_TEST }} -ci ${{ secrets.CONSUMER_CLIENT_ID_TEST }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_TEST }} -pi1 ${{ secrets.PUBLISHER_CLIENT_ID_TEST }} -ps1 ${{ secrets.PUBLISHER_CLIENT_SECRET_TEST }} -ti1 3579
+        ./run_api_tests.sh -e test -ai ${{ secrets.CSO_CLIENT_ID_TEST }} -as ${{ secrets.CSO_CLIENT_SECRET_TEST }} -ci ${{ secrets.CONSUMER_CLIENT_ID_TEST }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_TEST }} -pi1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_1_TEST }} -ps1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_1_TEST }} -ti1 99999
 
     - name: Upload API test results
       if: always() && steps.api-tests.outcome != 'skipped'
