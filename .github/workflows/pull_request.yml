@@ -78,15 +78,15 @@ jobs:
           done
 
       - name: Integration tests
-        id: integration-tests
+        id: api-tests
         env:
           ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${{ secrets.INTEGRATION_TEST_DB_NAME }};Username=${{ secrets.INTEGRATION_TEST_DB_USER }};Password=${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}"
         run: |
-          ./Src/DfT.DTRO.IntegrationTests/ci_scripts/run_integration_tests_against_localhost_on_ci.sh
+          ./Src/DfT.DTRO.ApiTests/ci_scripts/run_api_tests_against_localhost_on_ci.sh
 
       - name: Upload integration test results
-        if: always() && steps.integration-tests.outcome != 'skipped'
+        if: always() && steps.api-tests.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
           name: Integration test results
-          path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html
+          path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html
