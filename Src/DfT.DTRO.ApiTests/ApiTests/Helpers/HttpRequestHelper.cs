@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace DfT.DTRO.ApiTests.ApiTests.Helpers
 {
@@ -113,7 +112,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
             foreach (KeyValuePair<string, IEnumerable<string>> header in request.Headers)
             {
                 // Obfuscate bearer / access token
-                string headerValueToPrint = header.Key == "Authorization" ? "******" : header.Value.ToString();
+                string headerValueToPrint = header.Key == "Authorization" ? "******" : string.Join(", ", header.Value);
 
                 curl.Append($$""" -H "{{header.Key}}: {{string.Join(", ", headerValueToPrint)}}" """);
             }
