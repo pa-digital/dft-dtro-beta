@@ -50,6 +50,46 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
+    /// Retrieve user details
+    /// </summary>
+    /// <response code="200">Valid user ID</response>
+    /// <response code="400">Invalid or empty parameters, or no matching user</response>
+    /// <response code="500">Invalid operation or other exception.</response>
+    [HttpGet(RouteTemplates.UserDetails)]
+    [FeatureGate(FeatureNames.Admin)]
+    [SwaggerResponse(statusCode: 200, type: typeof(PaginatedResponse<ApplicationListDto>), description: "Ok")]
+    [SwaggerResponse(statusCode: 400, type: typeof(BadRequestObjectResult), description: "No users found for this user ID")]
+    [SwaggerResponse(statusCode: 404, type: typeof(ArgumentNullException), description: "Could not found any users")]
+    [SwaggerResponse(statusCode: 500, type: typeof(InvalidOperationException), description: "An error occurred while fetching users")]
+    [SwaggerResponse(statusCode: 500, type: typeof(Exception), description: "An unexpected error occurred")]
+    public async Task<ActionResult<UserDto>> FindUserDetails([FromRoute] string userId)
+    {
+        // TODO: validate user is CSO
+        try
+        {
+            Guid userGuid = Guid.Parse(userId);
+            var result = await _userService.GetUserDetails(userGuid);
+            return Ok(result);
+        }
+        catch (ArgumentNullException ex)
+        {
+            return BadRequest(new { message = "Invalid input parameters", error = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while fetching user details", error = ex.Message });
+        }
+        catch (FormatException ex)
+        {
+            return BadRequest(new { message = "Invalid user ID", error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An unexpected error occurred.", error = ex.Message });
+        }
+    }
+
+    /// <summary>
     /// Deletes a user
     /// </summary>
     /// <param name="parameters"></param>

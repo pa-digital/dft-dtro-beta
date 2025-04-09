@@ -94,4 +94,7 @@ public static class RouteTemplates
     public const string UsersFindAll = UsersBase;
     public const string UsersDelete = UsersBase + "/{userId:guid}";
 
+    public const string UserBase = "/user";
+    public const string UserDetails = UserBase + "/{userId:guid}";
+
 }

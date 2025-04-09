@@ -56,4 +56,67 @@ public class UserControllerTests
         var objectResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, objectResult.StatusCode);
     }
+
+    [Fact]
+    public async Task FindUserDetailsReturnsOkWhenUserFound()
+    {
+        var userId = Guid.NewGuid();
+        var userDto = new UserDto { Id = userId, Name = "Test User" };
+
+        _mockUserService.Setup(s => s.GetUserDetails(userId))
+                        .ReturnsAsync(userDto);
+
+        var result = await _controller.FindUserDetails(userId.ToString());
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.Equal(200, okResult.StatusCode);
+        Assert.Equal(userDto, okResult.Value);
+    }
+
+    [Fact]
+    public async Task FindUserDetailsReturnsBadRequestWhenArgumentNullExceptionIsThrown()
+    {
+        var userId = Guid.NewGuid();
+
+        _mockUserService.Setup(s => s.GetUserDetails(userId))
+                        .ThrowsAsync(new ArgumentNullException("userId"));
+
+        var result = await _controller.FindUserDetails(userId.ToString());
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal(400, badRequestResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task FindUserDetailsReturnsServerErrorWhenInvalidOperationExceptionIsThrown()
+    {
+        var userId = Guid.NewGuid();
+
+        _mockUserService.Setup(s => s.GetUserDetails(userId))
+                        .ThrowsAsync(new InvalidOperationException("Something went wrong"));
+
+        var result = await _controller.FindUserDetails(userId.ToString());
+        var serverError = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(500, serverError.StatusCode);
+    }
+
+    [Fact]
+    public async Task FindUserDetailsReturnsServerErrorWhenUnexpectedExceptionIsThrown()
+    {
+        var userId = Guid.NewGuid();
+
+        _mockUserService.Setup(s => s.GetUserDetails(userId))
+                        .ThrowsAsync(new Exception("Unknown error"));
+
+        var result = await _controller.FindUserDetails(userId.ToString());
+        var serverError = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(500, serverError.StatusCode);
+    }
+
+    [Fact]
+    public async Task FindUserDetailsReturnsBadRequestWhenUserIdIsInvalid()
+    {
+        var invalidUserId = "not-a-guid";
+        var result = await _controller.FindUserDetails(invalidUserId);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        Assert.Equal(400, badRequestResult.StatusCode);
+    }
 }

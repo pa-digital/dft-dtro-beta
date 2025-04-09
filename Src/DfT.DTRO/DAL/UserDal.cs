@@ -9,6 +9,7 @@ public class UserDal(DtroContext context) : IUserDal
         IQueryable<UserListDto> query = _context.Users
             .Select(u => new UserListDto()
             {
+                Id = u.Id,
                 Name = $"{u.Forename} {u.Surname}",
                 Email = u.Email,
                 Created = u.Created.ToString()
@@ -61,5 +62,14 @@ public class UserDal(DtroContext context) : IUserDal
 
         user.ProductionAccessRequested = true;
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<User> GetUserFromId(Guid userId)
+    {
+        User user = await _context.Users
+            .Where(u => u.Id == userId)
+            .SingleOrDefaultAsync();
+        
+        return user ?? throw new Exception("No matching user found");
     }
 }

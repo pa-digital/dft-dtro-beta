@@ -10,4 +10,5 @@ public interface IApplicationDal
     Task<bool> ActivateApplicationById(Guid appId);
     Task CreateApplication(Application application);
     Task<int> GetUserApplicationsCount(Guid userId);
+    Task<List<ApplicationListDto>> GetUserApplications(Guid userId);
 }

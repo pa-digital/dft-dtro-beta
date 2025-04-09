@@ -3,7 +3,6 @@
 /// Wrapper for Application
 /// </summary>
 [ExcludeFromCodeCoverage]
-[DataContract]
 public class Application
 {
     /// <summary>

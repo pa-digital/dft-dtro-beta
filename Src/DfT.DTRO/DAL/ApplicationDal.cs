@@ -133,4 +133,25 @@ public class ApplicationDal(DtroContext context) : IApplicationDal
                          .Where(a => a.UserId == userId)
                          .CountAsync();
     }
+
+    public async Task<List<ApplicationListDto>> GetUserApplications(Guid userId)
+    {
+        List<Application> applications = await _context.Applications
+            .Include(a => a.ApplicationType)
+            .Include(a => a.TrafficRegulationAuthority)
+            .Include(a => a.Status)
+            .Where(a => a.UserId == userId)
+            .ToListAsync();
+        
+        List<ApplicationListDto> result = applications.Select(a => new ApplicationListDto
+        {
+            Id = a.Id,
+            Name = a.Nickname,
+            Status = a.Status.Status,
+            Type = a.ApplicationType.Name,
+            Tra = a.TrafficRegulationAuthority?.Name
+        }).ToList();
+
+        return result;
+    }
 }
