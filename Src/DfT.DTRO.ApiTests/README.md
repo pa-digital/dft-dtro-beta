@@ -1,8 +1,8 @@
 # Summary
-The integration tests are API tests which test the solution as a black box, sending requests as publishers and consumers.
+The API tests test the solution as a black box, sending requests as publishers and consumers.
 
 # Running the tests
-To execute the integration tests locally against localhost:
+To execute the API tests locally against localhost:
 1. Ensure the database is up, with connection string set up correcly in `docker/dev/.env`.
 2. Ensure the the app is running.
 3. Run one of the following commands from the project root:

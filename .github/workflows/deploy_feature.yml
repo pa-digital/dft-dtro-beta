@@ -47,7 +47,7 @@ jobs:
       run-apigee: ${{ inputs.run-apigee }}
 
   run-api-tests-on-dev:
-    name: Run integration tests on dev after deployment to dev is complete
+    name: Run API tests on dev after deployment to dev is complete
     needs: deploy-feature-dev
     runs-on: ubuntu-latest
     steps:
@@ -65,16 +65,16 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
 
-    - name: Integration tests
+    - name: API tests
       id: api-tests
       run: |
         ./run_api_tests.sh -e dev -ai ${{ secrets.CSO_CLIENT_ID_DEV }} -as ${{ secrets.CSO_CLIENT_SECRET_DEV }} -ci ${{ secrets.CONSUMER_CLIENT_ID_DEV }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_DEV }} -pi1 ${{ secrets.PUBLISHER_CLIENT_ID_DEV }} -ps1 ${{ secrets.PUBLISHER_CLIENT_SECRET_DEV }} -ti1 8888
 
-    - name: Upload integration test results
+    - name: Upload API test results
       if: always() && steps.api-tests.outcome != 'skipped'
       uses: actions/upload-artifact@v4
       with:
-        name: Integration test results
+        name: API test results
         path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html
 
   deploy-feature-test:
@@ -99,7 +99,7 @@ jobs:
      run-apigee: ${{ inputs.run-apigee }}
 
   run-api-tests-on-test:
-    name: Run integration tests on test after deployment to test is complete
+    name: Run API tests on test after deployment to test is complete
     needs: deploy-feature-test
     runs-on: ubuntu-latest
     steps:
@@ -117,14 +117,14 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
 
-    - name: Integration tests
+    - name: API tests
       id: api-tests
       run: |
         ./run_api_tests.sh -e test -ai ${{ secrets.CSO_CLIENT_ID_TEST }} -as ${{ secrets.CSO_CLIENT_SECRET_TEST }} -ci ${{ secrets.CONSUMER_CLIENT_ID_TEST }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_TEST }} -pi1 ${{ secrets.PUBLISHER_CLIENT_ID_TEST }} -ps1 ${{ secrets.PUBLISHER_CLIENT_SECRET_TEST }} -ti1 3579
 
-    - name: Upload integration test results
+    - name: Upload API test results
       if: always() && steps.api-tests.outcome != 'skipped'
       uses: actions/upload-artifact@v4
       with:
-        name: Integration test results
+        name: API test results
         path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html
