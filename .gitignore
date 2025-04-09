@@ -14,8 +14,8 @@
 /Src/DfT.DTRO/.vs/DfT.DTRO/xs/project-cache/DfT.DTRO-Debug.json
 /Src/DfT.DTRO/.vs/
 /Src/DfT.DTRO/.vs/DfT.DTRO/xs/UserPrefs.xml
-/Src/DfT.DTRO.IntegrationTests/bin/
-/Src/DfT.DTRO.IntegrationTests/obj/
+/Src/DfT.DTRO.ApiTests/bin/
+/Src/DfT.DTRO.ApiTests/obj/
 
 /.idea/.idea.DfT.DTRO/.idea
 /.idea/
@@ -39,8 +39,8 @@
 /Src/.idea/.idea.DfT.DTRO/.idea/workspace.xml
 
 .env
-/Src/DfT.DTRO.IntegrationTests/obj
-/Src/DfT.DTRO.IntegrationTests/bin/Debug/net6.0
+/Src/DfT.DTRO.ApiTests/obj
+/Src/DfT.DTRO.ApiTests/bin/Debug/net6.0
 /Src/Dft.DTRO.Admin/obj/Debug/net6.0
 /DfT.DTRO.DatabaseFeeder/bin/Debug/net8.0
 /DfT.DTRO.DatabaseFeeder/obj
@@ -48,4 +48,4 @@
 **/TestResults
 **/TestReports
 **/Coverage
-**/temp_integration_tests
+**/temp_api_tests

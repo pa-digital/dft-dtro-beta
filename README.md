@@ -46,7 +46,7 @@ Before committing changes, please run `dotnet format` to apply standard formatti
 
 Apply GCP Credentials
 
-First, you must obtain a .json file containing credentials to connect to the GCP project. This is needed to run the integration tests. You can generate a key file for the project on the IAM page. Once downloaded, add the path to the key in your environment variables as follows:
+First, you must obtain a .json file containing credentials to connect to the GCP project. This is needed to run the API tests. You can generate a key file for the project on the IAM page. Once downloaded, add the path to the key in your environment variables as follows:
 
 export GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_KEY_FILE>
 
