@@ -1,5 +1,6 @@
 using System.Threading;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
+using Xunit;
 using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.ApiTests.ApiTests.Helpers
