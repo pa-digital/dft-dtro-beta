@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DfT.DTRO", "Src\DfT.DTRO\Df
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dft.DTRO.Tests", "Src\Dft.DTRO.Tests\Dft.DTRO.Tests.csproj", "{FEBBD929-EF49-43DB-8344-6A4F0A3E69E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DfT.DTRO.IntegrationTests", "Src\DfT.DTRO.IntegrationTests\DfT.DTRO.IntegrationTests.csproj", "{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DfT.DTRO.ApiTests", "Src\DfT.DTRO.ApiTests\DfT.DTRO.ApiTests.csproj", "{B7FB5DA4-DF28-4A04-B6F2-4A1F03F4BE2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
