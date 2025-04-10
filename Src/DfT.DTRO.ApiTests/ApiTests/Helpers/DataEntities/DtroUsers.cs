@@ -102,9 +102,9 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.DataEntities
             switch (testUserType)
             {
                 case TestUserType.Publisher1:
-                    return TestConfig.Publisher1TraId;
+                    return TestConfig.PublisherTraId1;
                 case TestUserType.Publisher2:
-                    return TestConfig.Publisher2TraId;
+                    return TestConfig.PublisherTraId2;
                 case TestUserType.Consumer:
                 case TestUserType.Admin:
                     return null;

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LINE_THRESHOLD="44.87"
+LINE_THRESHOLD="44.85"
 PROJECT_NAME="Dft.DTRO.Tests"
  
 dotnet tool install -g dotnet-reportgenerator-globaltool

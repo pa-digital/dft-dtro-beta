@@ -6,7 +6,7 @@ using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.ConsumerScenarios
 {
-    public class ConsumerHasNoAuthorisation : BaseTest
+    public class ConsumerCannotCreateDtro : BaseTest
     {
         readonly static string schemaVersionToTest = "3.4.0";
         readonly string fileName = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";

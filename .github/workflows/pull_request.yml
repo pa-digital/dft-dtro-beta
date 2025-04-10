@@ -24,9 +24,9 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: ${{ secrets.INTEGRATION_TEST_DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.INTEGRATION_TEST_DB_NAME }}
+          POSTGRES_USER: ${{ secrets.API_TEST_DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.API_TEST_DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.API_TEST_DB_NAME }}
         options: >-
           --health-cmd="pg_isready -U postgres"
           --health-interval=10s
@@ -34,10 +34,10 @@ jobs:
           --health-retries=3
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
@@ -80,7 +80,7 @@ jobs:
       - name: API tests
         id: api-tests
         env:
-          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${{ secrets.INTEGRATION_TEST_DB_NAME }};Username=${{ secrets.INTEGRATION_TEST_DB_USER }};Password=${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}"
+          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${{ secrets.API_TEST_DB_NAME }};Username=${{ secrets.API_TEST_DB_USER }};Password=${{ secrets.API_TEST_DB_PASSWORD }}"
         run: |
           ./Src/DfT.DTRO.ApiTests/ci_scripts/run_api_tests_against_localhost_on_ci.sh
 

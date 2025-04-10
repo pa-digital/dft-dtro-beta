@@ -17,12 +17,12 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
             switch (testUserType)
             {
                 case TestUserType.Publisher1:
-                    clientId = TestConfig.Publisher1ClientId;
-                    clientSecret = TestConfig.Publisher1ClientSecret;
+                    clientId = TestConfig.PublisherClientId1;
+                    clientSecret = TestConfig.PublisherClientSecret1;
                     break;
                 case TestUserType.Publisher2:
-                    clientId = TestConfig.Publisher2ClientId;
-                    clientSecret = TestConfig.Publisher2ClientSecret;
+                    clientId = TestConfig.PublisherClientId2;
+                    clientSecret = TestConfig.PublisherClientSecret2;
                     break;
                 case TestUserType.Consumer:
                     clientId = TestConfig.ConsumerClientId;
