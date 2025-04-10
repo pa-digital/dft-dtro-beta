@@ -101,7 +101,16 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "application/json");
-            headers.Add("Authorization", accessToken);
+            headers.Add("Authorization", $"Bearer {accessToken}");
+
+            HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonString);
+            return dtroCreationResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendJsonInDtroCreationRequestWithNoAuthorizationHeaderAsync(this string jsonString)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add("Content-Type", "application/json");
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonString);
             return dtroCreationResponse;
@@ -133,7 +142,16 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "multipart/form-data");
-            headers.Add("Authorization", accessToken);
+            headers.Add("Authorization", $"Bearer {accessToken}");
+
+            HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: dtroFilePath);
+            return dtroCreationResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestWithNoAuthorizationHeaderAsync(this string dtroFilePath, string accessToken)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add("Content-Type", "multipart/form-data");
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: dtroFilePath);
             return dtroCreationResponse;
