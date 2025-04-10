@@ -38,7 +38,6 @@ public class Startup
 
         services.AddSwagger(Configuration, Environment);
         services.AddHealthChecks();
-
         services.AddFeatureManagement();
 
         services.Scan(scan => scan

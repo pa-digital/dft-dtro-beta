@@ -13,22 +13,36 @@ public class EmailService : IEmailService
     public EmailService(ISecretManagerClient secretManagerClient)
     {
         _secretManagerClient = secretManagerClient;
-        _notificationClient = new NotificationClient(_secretManagerClient.GetSecret(ApiConsts.NotifyApiKey));
+        string apiKey = _secretManagerClient.GetSecret(ApiConsts.NotifyApiKey);
+        _notificationClient = new NotificationClient(apiKey);
     }
 
     /// <inheritdoc cref="IEmailService"/>
-    public EmailNotificationResponse SendEmail(App app, string requestEmail)
+    public EmailNotificationResponse SendEmail(string name, string requestEmail, string status)
     {
-        //TODO: This template will be refactored once I will have more of the email tickets implemented.
-        var templateResponse = _notificationClient.GetTemplateById(_secretManagerClient.GetSecret(ApiConsts.ApplicationPendingApproval));
+        EmailNotificationResponse emailNotificationResponse = new();
+        TemplateResponse templateResponse = new();
+        string templateId;
+        switch (status)
+        {
+            case "Inactive":
+                templateId = _secretManagerClient.GetSecret(ApiConsts.ApplicationCreated);
+                templateResponse = _notificationClient.GetTemplateById(templateId);
+                break;
+            case "Active":
+                templateId = _secretManagerClient.GetSecret(ApiConsts.ApplicationPendingApproval);
+                templateResponse = _notificationClient.GetTemplateById(templateId);
+                break;
+        }
         var personalisation = new Dictionary<string, dynamic>()
         {
             {"email address", requestEmail},
-            {"application name", app.Name},
+            {"application name", name},
             {"dtro-cso-email", _secretManagerClient.GetSecret(ApiConsts.DtroCsoEmail)}
         };
 
-        return _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
+        emailNotificationResponse = _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
+        return emailNotificationResponse;
     }
 
 }
