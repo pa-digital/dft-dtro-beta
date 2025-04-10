@@ -97,6 +97,16 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             return dtroCreationResponse;
         }
 
+        public static async Task<HttpResponseMessage> SendJsonInDtroCreationRequestWithAccessTokenAsync(this string jsonString, string accessToken)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add("Content-Type", "application/json");
+            headers.Add("Authorization", accessToken);
+
+            HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonString);
+            return dtroCreationResponse;
+        }
+
         public static async Task<HttpResponseMessage> SendJsonInDtroUpdateRequestAsync(this string jsonString, string dtroId, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -114,6 +124,16 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             headers.Add("Content-Type", "multipart/form-data");
 
             await headers.AddValidHeadersForEnvironment(testUser);
+
+            HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: dtroFilePath);
+            return dtroCreationResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestWithAccessTokenAsync(this string dtroFilePath, string accessToken)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add("Content-Type", "multipart/form-data");
+            headers.Add("Authorization", accessToken);
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: dtroFilePath);
             return dtroCreationResponse;
