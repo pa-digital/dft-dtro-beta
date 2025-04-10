@@ -84,7 +84,7 @@ jobs:
         run: |
           ./Src/DfT.DTRO.ApiTests/ci_scripts/run_api_tests_against_localhost_on_ci.sh
 
-      - name: Upload API test results
+      - name: Upload API test report
         if: always() && steps.api-tests.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
