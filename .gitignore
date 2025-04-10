@@ -49,3 +49,4 @@
 **/TestReports
 **/Coverage
 **/temp_api_tests
+.vscode/
