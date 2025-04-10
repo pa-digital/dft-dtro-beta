@@ -24,20 +24,20 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: ${{ secrets.INTEGRATION_TEST_DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.INTEGRATION_TEST_DB_NAME }}
+          POSTGRES_USER: ${{ secrets.API_TEST_DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.API_TEST_DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.API_TEST_DB_NAME }}
         options: >-
-          --health-cmd="pg_isready -U postgres"
+          --health-cmd="pg_isready -U ${POSTGRES_USER}"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
@@ -69,7 +69,7 @@ jobs:
       - name: Wait for PostgreSQL to be ready
         run: |
           for i in {1..10}; do
-            if pg_isready -h localhost -p 5432 -U postgres; then
+            if pg_isready -h localhost -p 5432 -U ${POSTGRES_USER}; then
               echo "PostgreSQL is ready"
               break
             fi
@@ -77,16 +77,16 @@ jobs:
             sleep 5
           done
 
-      - name: Integration tests
-        id: integration-tests
+      - name: API tests
+        id: api-tests
         env:
-          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${{ secrets.INTEGRATION_TEST_DB_NAME }};Username=${{ secrets.INTEGRATION_TEST_DB_USER }};Password=${{ secrets.INTEGRATION_TEST_DB_PASSWORD }}"
+          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
         run: |
-          ./Src/DfT.DTRO.IntegrationTests/ci_scripts/run_integration_tests_against_localhost_on_ci.sh
+          ./Src/DfT.DTRO.ApiTests/ci_scripts/run_api_tests_against_localhost_on_ci.sh
 
-      - name: Upload integration test results
-        if: always() && steps.integration-tests.outcome != 'skipped'
+      - name: Upload API test report
+        if: always() && steps.api-tests.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
-          name: Integration test results
-          path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html
+          name: API test report
+          path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html

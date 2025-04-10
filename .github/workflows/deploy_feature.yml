@@ -46,8 +46,8 @@ jobs:
       run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
       run-apigee: ${{ inputs.run-apigee }}
 
-  run-integration-tests-on-dev:
-    name: Run integration tests on dev after deployment to dev is complete
+  run-api-tests-on-dev:
+    name: Run API tests on dev after deployment to dev is complete
     needs: deploy-feature-dev
     runs-on: ubuntu-latest
     steps:
@@ -65,17 +65,17 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
 
-    - name: Integration tests
-      id: integration-tests
+    - name: API tests
+      id: api-tests
       run: |
-        ./run_integration_tests.sh -e dev -ai ${{ secrets.CSO_CLIENT_ID_DEV }} -as ${{ secrets.CSO_CLIENT_SECRET_DEV }} -ci ${{ secrets.CONSUMER_CLIENT_ID_DEV }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_DEV }} -p1i ${{ secrets.PUBLISHER_CLIENT_ID_DEV }} -p1s ${{ secrets.PUBLISHER_CLIENT_SECRET_DEV }} -t1i 8888
+        ./run_api_tests.sh -e dev -ai ${{ secrets.CSO_CLIENT_ID_DEV }} -as ${{ secrets.CSO_CLIENT_SECRET_DEV }} -ci ${{ secrets.CONSUMER_CLIENT_ID_DEV }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_DEV }} -pi1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_1_DEV }} -ps1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_1_DEV }} -ti1 99999 -pi2 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_2_DEV }} -ps2 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_2_DEV }} -ti2 99998
 
-    - name: Upload integration test results
-      if: always() && steps.integration-tests.outcome != 'skipped'
+    - name: Upload API test report
+      if: always() && steps.api-tests.outcome != 'skipped'
       uses: actions/upload-artifact@v4
       with:
-        name: Integration test results
-        path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html
+        name: API test report (dev environment)
+        path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html
 
   deploy-feature-test:
    if: ${{ inputs.deploy-to-test }}
@@ -98,8 +98,8 @@ jobs:
      run-deploy-CR-job: ${{ inputs.run-deploy-CR-job }}
      run-apigee: ${{ inputs.run-apigee }}
 
-  run-integration-tests-on-test:
-    name: Run integration tests on test after deployment to test is complete
+  run-api-tests-on-test:
+    name: Run API tests on test after deployment to test is complete
     needs: deploy-feature-test
     runs-on: ubuntu-latest
     steps:
@@ -117,14 +117,14 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
 
-    - name: Integration tests
-      id: integration-tests
+    - name: API tests
+      id: api-tests
       run: |
-        ./run_integration_tests.sh -e test -ai ${{ secrets.CSO_CLIENT_ID_TEST }} -as ${{ secrets.CSO_CLIENT_SECRET_TEST }} -ci ${{ secrets.CONSUMER_CLIENT_ID_TEST }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_TEST }} -p1i ${{ secrets.PUBLISHER_CLIENT_ID_TEST }} -p1s ${{ secrets.PUBLISHER_CLIENT_SECRET_TEST }} -t1i 3579
+        ./run_api_tests.sh -e test -ai ${{ secrets.CSO_CLIENT_ID_TEST }} -as ${{ secrets.CSO_CLIENT_SECRET_TEST }} -ci ${{ secrets.CONSUMER_CLIENT_ID_TEST }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_TEST }} -pi1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_1_TEST }} -ps1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_1_TEST }} -ti1 99999 -pi2 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_2_TEST }} -ps2 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_2_TEST }} -ti1 99998
 
-    - name: Upload integration test results
-      if: always() && steps.integration-tests.outcome != 'skipped'
+    - name: Upload API test report
+      if: always() && steps.api-tests.outcome != 'skipped'
       uses: actions/upload-artifact@v4
       with:
-        name: Integration test results
-        path: Src/DfT.DTRO.IntegrationTests/TestResults/test-results.html
+        name: API test report (test environment)
+        path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html
