@@ -14,6 +14,7 @@ public static class RouteTemplates
     // Auth
     public const string AuthBase = "/oauth";
     public const string AuthGetToken = AuthBase + "/token";
+    public const string AuthVerifyToken = AuthBase + "/verify";
 
     // Dtros
     public const string DtrosBase = "/dtros";
@@ -92,5 +93,8 @@ public static class RouteTemplates
     public const string UsersBase = "/users";
     public const string UsersFindAll = UsersBase;
     public const string UsersDelete = UsersBase + "/{userId:guid}";
+
+    public const string UserBase = "/user";
+    public const string UserDetails = UserBase + "/{userId:guid}";
 
 }

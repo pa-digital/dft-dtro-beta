@@ -7,6 +7,7 @@ public interface IUserDal
     Task DeleteUser(Guid userId);
 
     Task<User> GetUserFromEmail(string email);
+    Task<User> GetUserFromId(Guid userId);
     Task<bool> HasUserRequestedProductionAccess(Guid userId);
     Task RequestProductionAccess(Guid userId);
 }

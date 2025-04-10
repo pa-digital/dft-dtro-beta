@@ -245,7 +245,9 @@ public static class MockTestObjects
 
     public static AuthToken AuthToken => new()
     {
-        AccessToken = "accessToken"
+        AccessToken = "accessToken",
+        IssuedAt = 1744131081,
+        ExpiresIn = 1799
     };
 
     public static App App => new()

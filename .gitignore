@@ -48,4 +48,5 @@
 **/TestResults
 **/TestReports
 **/Coverage
+.vscode/
 **/temp_api_tests
