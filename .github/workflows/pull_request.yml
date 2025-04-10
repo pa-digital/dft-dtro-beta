@@ -28,7 +28,7 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.API_TEST_DB_PASSWORD }}
           POSTGRES_DB: ${{ secrets.API_TEST_DB_NAME }}
         options: >-
-          --health-cmd="pg_isready -U postgres"
+          --health-cmd="pg_isready -U ${POSTGRES_USER}"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -69,7 +69,7 @@ jobs:
       - name: Wait for PostgreSQL to be ready
         run: |
           for i in {1..10}; do
-            if pg_isready -h localhost -p 5432 -U postgres; then
+            if pg_isready -h localhost -p 5432 -U ${POSTGRES_USER}; then
               echo "PostgreSQL is ready"
               break
             fi
@@ -80,13 +80,13 @@ jobs:
       - name: API tests
         id: api-tests
         env:
-          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${{ secrets.API_TEST_DB_NAME }};Username=${{ secrets.API_TEST_DB_USER }};Password=${{ secrets.API_TEST_DB_PASSWORD }}"
+          ConnectionStrings__DefaultConnection: "Host=localhost;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
         run: |
           ./Src/DfT.DTRO.ApiTests/ci_scripts/run_api_tests_against_localhost_on_ci.sh
 
-      - name: Upload API test results
+      - name: Upload API test report
         if: always() && steps.api-tests.outcome != 'skipped'
         uses: actions/upload-artifact@v4
         with:
-          name: API test results
+          name: API test report
           path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html

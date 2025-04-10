@@ -70,11 +70,11 @@ jobs:
       run: |
         ./run_api_tests.sh -e dev -ai ${{ secrets.CSO_CLIENT_ID_DEV }} -as ${{ secrets.CSO_CLIENT_SECRET_DEV }} -ci ${{ secrets.CONSUMER_CLIENT_ID_DEV }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_DEV }} -pi1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_1_DEV }} -ps1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_1_DEV }} -ti1 99999 -pi2 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_2_DEV }} -ps2 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_2_DEV }} -ti2 99998
 
-    - name: Upload API test results
+    - name: Upload API test report
       if: always() && steps.api-tests.outcome != 'skipped'
       uses: actions/upload-artifact@v4
       with:
-        name: API test results
+        name: API test report (dev environment)
         path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html
 
   deploy-feature-test:
@@ -122,9 +122,9 @@ jobs:
       run: |
         ./run_api_tests.sh -e test -ai ${{ secrets.CSO_CLIENT_ID_TEST }} -as ${{ secrets.CSO_CLIENT_SECRET_TEST }} -ci ${{ secrets.CONSUMER_CLIENT_ID_TEST }} -cs ${{ secrets.CONSUMER_CLIENT_SECRET_TEST }} -pi1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_1_TEST }} -ps1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_1_TEST }} -ti1 99999 -pi2 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_2_TEST }} -ps2 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_2_TEST }} -ti1 99998
 
-    - name: Upload API test results
+    - name: Upload API test report
       if: always() && steps.api-tests.outcome != 'skipped'
       uses: actions/upload-artifact@v4
       with:
-        name: API test results
+        name: API test report (test environment)
         path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html
