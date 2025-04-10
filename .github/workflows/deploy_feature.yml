@@ -74,7 +74,7 @@ jobs:
       if: always() && steps.api-tests.outcome != 'skipped'
       uses: actions/upload-artifact@v4
       with:
-        name: API test report
+        name: API test report (dev environment)
         path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html
 
   deploy-feature-test:
@@ -126,5 +126,5 @@ jobs:
       if: always() && steps.api-tests.outcome != 'skipped'
       uses: actions/upload-artifact@v4
       with:
-        name: API test report
+        name: API test report (test environment)
         path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html
