@@ -133,6 +133,25 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             return updateDtroResponse;
         }
 
+        public static async Task<HttpResponseMessage> SendJsonInDtroUpdateRequestWithAccessTokenAsync(this string jsonString, string dtroId, string accessToken)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
+            headers.Add(HttpHeaderKeys.Authorization, $"Bearer {accessToken}");
+
+            HttpResponseMessage updateDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromBody/{dtroId}", headers, jsonString);
+            return updateDtroResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendJsonInDtroUpdateRequestWithNoAuthorizationHeaderAsync(this string jsonString, string dtroId)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
+
+            HttpResponseMessage updateDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromBody/{dtroId}", headers, jsonString);
+            return updateDtroResponse;
+        }
+
         public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestAsync(this string dtroFilePath, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -169,6 +188,25 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             await headers.AddValidHeadersForEnvironment(testUser);
+
+            HttpResponseMessage dtroUpdateResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromFile/{dtroId}", headers, pathToJsonFile: dtroFilePath);
+            return dtroUpdateResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendFileInDtroUpdateRequestWithAccessTokenAsync(this string dtroFilePath, string dtroId, string accessToken)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
+            headers.Add(HttpHeaderKeys.Authorization, $"Bearer {accessToken}");
+
+            HttpResponseMessage dtroUpdateResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromFile/{dtroId}", headers, pathToJsonFile: dtroFilePath);
+            return dtroUpdateResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendFileInDtroUpdateRequestWithNoAuthorizationHeaderAsync(this string dtroFilePath, string dtroId)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             HttpResponseMessage dtroUpdateResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromFile/{dtroId}", headers, pathToJsonFile: dtroFilePath);
             return dtroUpdateResponse;

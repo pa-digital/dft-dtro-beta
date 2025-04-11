@@ -120,10 +120,10 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Get test user to send DTRO and read it back
             TestUser publisherWhoOwnsDtro = await TestUsers.GetUser(TestUserType.Publisher1);
 
+            // Prepare DTRO
             TestUser publisherWhoDoesNotOwnDtro = await TestUsers.GetUser(TestUserType.Publisher2);
             string invalidAccessToken = publisherWhoDoesNotOwnDtro.AccessToken;
 
-            // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
                                     .SetValueAtJsonPath("data.source.currentTraOwner", publisherWhoOwnsDtro.TraId)
@@ -149,10 +149,10 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Get test user to send DTRO and read it back
             TestUser publisherWhoOwnsDtro = await TestUsers.GetUser(TestUserType.Publisher1);
 
+            // Prepare DTRO
             TestUser publisherWhoDoesNotOwnDtro = await TestUsers.GetUser(TestUserType.Publisher2);
             string invalidAccessToken = publisherWhoDoesNotOwnDtro.AccessToken;
 
-            // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
                                     .SetValueAtJsonPath("data.source.currentTraOwner", publisherWhoOwnsDtro.TraId)
