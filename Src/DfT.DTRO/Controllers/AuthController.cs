@@ -7,6 +7,8 @@ namespace DfT.DTRO.Controllers;
 [Consumes("application/json")]
 [Produces("application/json")]
 [Tags("Auth")]
+//TODO: AuthController is not fully implemented therefore no test is done against it. 
+[ExcludeFromCodeCoverage]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
