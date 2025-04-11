@@ -49,3 +49,6 @@
 **/TestReports
 **/Coverage
 **/temp_api_tests
+/Src/DfT.DTRO.IntegrationTests/bin/Debug/net8.0
+/Src/DfT.DTRO.IntegrationTests/obj/Debug/net8.0
+/Src/DfT.DTRO.IntegrationTests/obj

@@ -12,7 +12,6 @@ public class ApplicationController : ControllerBase
     private readonly IApplicationService _applicationService;
     private readonly IEmailService _emailService;
     private readonly ILogger<ApplicationController> _logger;
-    private readonly LoggingExtension _loggingExtension;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ApplicationController"/> class.
@@ -21,11 +20,10 @@ public class ApplicationController : ControllerBase
     /// <param name="logger">Logger instance for logging.</param>
     /// <param name="loggingExtension">Extension for logging operations.</param>
     /// <param name="emailService">Service used for email operations.</param>
-    public ApplicationController(IApplicationService applicationService, ILogger<ApplicationController> logger, LoggingExtension loggingExtension, IEmailService emailService)
+    public ApplicationController(IApplicationService applicationService, ILogger<ApplicationController> logger,IEmailService emailService)
     {
         _applicationService = applicationService;
         _logger = logger;
-        _loggingExtension = loggingExtension;
         _emailService = emailService;
     }
 
@@ -34,7 +32,7 @@ public class ApplicationController : ControllerBase
     /// </summary>
     /// <param name="email">Developer email linked to access token.</param>
     /// <param name="appInput">Properties passed by body</param>
-    /// <returns>created app</returns>
+    /// <returns>Created app</returns>
     [HttpPost(RouteTemplates.ApplicationsCreate)]
     [FeatureGate(RequirementType.Any, FeatureNames.ReadOnly, FeatureNames.Publish, FeatureNames.Consumer)]
     [SwaggerResponse(statusCode: 500, description: "Internal Server Error")]
@@ -46,27 +44,24 @@ public class ApplicationController : ControllerBase
             var app = await _applicationService.CreateApplication(email, appInput);
             if (string.IsNullOrEmpty(app.AppId))
             {
-                var response = _emailService.SendEmail(app, email);
-                if (string.IsNullOrEmpty(response.reference))
+                var response = _emailService.SendEmail(app.Name, email, ApplicationStatusType.Inactive.Status);
+                if (string.IsNullOrEmpty(response.id))
+                {
                     throw new EmailSendException();
-
+                }
             }
 
             _logger.LogInformation($"'{nameof(CreateApplication)}' method called ");
-            _loggingExtension.LogInformation(nameof(CreateApplication), RouteTemplates.ApplicationsCreate,
-                $"'{nameof(CreateApplication)}' method called.");
             return Ok(app);
         }
         catch (EmailSendException esex)
         {
             _logger.LogError(esex.Message);
-            _loggingExtension.LogError(nameof(CreateApplication), RouteTemplates.ApplicationsCreate, "", esex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {esex.Message}"));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
-            _loggingExtension.LogError(nameof(CreateApplication), RouteTemplates.ApplicationsCreate, "", ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
         }
     }
@@ -75,9 +70,10 @@ public class ApplicationController : ControllerBase
     /// Activates an application by app ID
     /// </summary>
     /// <param name="email">Developer email linked to access token.</param>
+    /// <param name="appId">Application unique identifier.</param>
     /// <response code="200">Valid application ID</response>
     /// <response code="400">Invalid or empty parameters, or no matching application</response>
-    /// <response code="500">Invalid operation or other exception</response>
+    /// <response code="500">Invalid operation or other exception.</response>
     [HttpPost(RouteTemplates.ActivateApplication)]
     [FeatureGate(FeatureNames.ReadOnly)]
     public async Task<IActionResult> ActivateApplication([FromHeader(Name = RequestHeaderNames.Email)][Required] string email, [FromRoute] Guid appId)
@@ -90,7 +86,18 @@ public class ApplicationController : ControllerBase
                 return Forbid();
             }
 
-            bool result = await _applicationService.ActivateApplicationById(email, appId);
+            var isActivated = await _applicationService.ActivateApplicationById(email, appId);
+            if (isActivated)
+            {
+                var app = await _applicationService.GetApplication(email, appId);
+                var response = _emailService.SendEmail(app.Name, email, ApplicationStatusType.Active.Status);
+                if (string.IsNullOrEmpty(response.id))
+                {
+                    throw new EmailSendException();
+                }
+
+            }
+            _logger.LogInformation($"'{nameof(ActivateApplication)}' method called ");
             return Ok(new { id = appId, status = "Active" });
 
         }
@@ -101,6 +108,11 @@ public class ApplicationController : ControllerBase
         catch (InvalidOperationException ex)
         {
             return StatusCode(500, new { message = "An error occurred while trying to activate application", error = ex.Message });
+        }
+        catch (EmailSendException esex)
+        {
+            _logger.LogError(esex.Message);
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {esex.Message}"));
         }
         catch (Exception ex)
         {

@@ -1,5 +1,6 @@
 namespace DfT.DTRO.Services;
 
+/// <inheritdoc cref="IApplicationService"/>
 public class ApplicationService : IApplicationService
 {
     private readonly IApplicationDal _applicationDal;
@@ -10,7 +11,16 @@ public class ApplicationService : IApplicationService
     private readonly IDtroUserDal _dtroUserDal;
     private readonly IWebHostEnvironment _env;
 
-
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="applicationDal">Application data access layer</param>
+    /// <param name="apigeeAppRepository">Apigee data access layer</param>
+    /// <param name="traDal">Traffic regulation Authority data access layer</param>
+    /// <param name="userDal">User data access layer</param>
+    /// <param name="dtroContext">Database context</param>
+    /// <param name="dtroUserDal">D-TRO user data access layer</param>
+    /// <param name="env">environment</param>
     public ApplicationService(IApplicationDal applicationDal, IApigeeAppRepository apigeeAppRepository, ITraDal traDal, IUserDal userDal, DtroContext dtroContext, IDtroUserDal dtroUserDal, IWebHostEnvironment env)
     {
         _applicationDal = applicationDal;
@@ -22,40 +32,53 @@ public class ApplicationService : IApplicationService
         _env = env;
     }
 
+    /// <inheritdoc cref="IApplicationService"/>
     public async Task<bool> ValidateAppBelongsToUser(string email, Guid appId)
     {
         string userEmail = await _applicationDal.GetApplicationUser(appId);
         return userEmail == email;
     }
 
+    /// <inheritdoc cref="IApplicationService"/>
     public async Task<bool> ValidateApplicationName(string appName)
     {
         return await _applicationDal.CheckApplicationNameDoesNotExist(appName);
     }
 
+    /// <inheritdoc cref="IApplicationService"/>
     public async Task<ApplicationResponse> GetApplication(string email, Guid appId)
     {
         var application = await _applicationDal.GetApplicationDetails(appId);
-        var name = application.Name;
-        var developerApp = await _apigeeAppRepository.GetApp(email, name);
-        var applicationResponse = JsonHelper.ConvertObject<ApigeeDeveloperApp, ApplicationResponse>(developerApp);
-        applicationResponse.Purpose = application.Purpose;
-        applicationResponse.SwaCode = application.SwaCode;
-        return applicationResponse;
+        return new ApplicationResponse
+        {
+            AppId = application.AppId,
+            Name = application.Name,
+            Purpose = application.Purpose,
+            SwaCode = application.SwaCode
+        };
     }
 
+    /// <inheritdoc cref="IApplicationService"/>
+    public async Task<ApigeeDeveloperApp> GetApigeeDeveloperApp(string email, string name)
+    {
+        return await _apigeeAppRepository.GetApp(email, name);
+    }
+
+    /// <inheritdoc cref="IApplicationService"/>
     public async Task<PaginatedResponse<ApplicationListDto>> GetApplications(string email, PaginatedRequest paginatedRequest)
     {
         PaginatedResponse<ApplicationListDto> paginatedResponse = await _applicationDal.GetApplicationList(email, paginatedRequest);
         return new(paginatedResponse.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResponse.TotalCount);
     }
 
+    /// <inheritdoc cref="IApplicationService"/>
     public async Task<PaginatedResponse<ApplicationInactiveListDto>> GetInactiveApplications(PaginatedRequest paginatedRequest)
     {
         PaginatedResult<ApplicationInactiveListDto> paginatedResult = await _applicationDal.GetInactiveApplications(paginatedRequest);
         return new(paginatedResult.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResult.TotalCount);
     }
 
+    /// <inheritdoc cref="IApplicationService"/>
     public async Task<bool> ActivateApplicationById(string email, Guid appId)
     {
         var application = await _applicationDal.GetApplicationDetails(appId);
@@ -64,6 +87,7 @@ public class ApplicationService : IApplicationService
         return await _applicationDal.ActivateApplicationById(appId);
     }
 
+    /// <inheritdoc cref="IApplicationService"/>
     public async Task<App> CreateApplication(string email, AppInput appInput)
     {
         var developerAppInput = JsonHelper.ConvertObject<AppInput, ApigeeDeveloperAppInput>(appInput);
@@ -107,7 +131,7 @@ public class ApplicationService : IApplicationService
                     Nickname = appInput.Name,
                     ApplicationTypeId = typeId,
                     UserId = user.Id,
-                    StatusId = _env.IsProduction() ? ApplicationStatusType.Inactive : ApplicationStatusType.Active,
+                    StatusId = _env.IsProduction() ? ApplicationStatusType.Inactive.Id : ApplicationStatusType.Active.Id,
                     TrafficRegulationAuthorityId = tra?.Id,
                     Purpose = appInput.Purpose,
                     AdditionalInformation = appInput.AdditionalInformation,
