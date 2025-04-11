@@ -48,7 +48,7 @@ public static class RouteTemplates
     public const string EventsFindAll = EventsBase;
 
     // Metrics
-    public const string HealthApi = "/healthApi";
+    public const string HealthApi = "/health";
     public const string HealthDatabase = "/healthDatabase";
     public const string MetricsForDtroUser = "/metricsForDtroUser";
     public const string FullMetricsForDtroUser = "/fullMetricsForDtroUser";
