@@ -1,17 +1,18 @@
-﻿using DfT.DTRO.Models.Auth;
+﻿namespace DfT.DTRO.Services;
 
-namespace DfT.DTRO.Services;
-
+/// <inheritdoc cref="IAuthService"/>
 public class AuthService : IAuthService
 {
-
     private readonly IAuthRepository _authRepository;
 
-    public AuthService(IAuthRepository authRepository) =>
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    /// <param name="authRepository">Repository passed</param>
+    public AuthService(IAuthRepository authRepository) => 
         _authRepository = authRepository;
 
-    public async Task<AuthToken> GetToken(AuthTokenInput authTokenInput)
-    {
-        return await _authRepository.GetToken(authTokenInput);
-    }
+    /// <inheritdoc cref="IAuthService"/>
+    public async Task<AuthToken> GetToken(AuthTokenInput authTokenInput) => 
+        await _authRepository.GetToken(authTokenInput);
 }

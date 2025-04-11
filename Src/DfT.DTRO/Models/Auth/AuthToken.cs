@@ -7,7 +7,7 @@
 public class AuthToken
 {
     /// <summary>
-    /// username.
+    /// access token
     /// </summary>
     [DataMember(Name = "access_token")]
     public string AccessToken { get; set; }

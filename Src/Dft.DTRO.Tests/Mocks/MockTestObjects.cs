@@ -243,9 +243,26 @@ public static class MockTestObjects
         }
     };
 
-    public static AuthToken AuthToken => new()
+    public static AuthToken AuthToken => new() { AccessToken = "accessToken" };
+
+    public static ApigeeDeveloperApp ApigeeDeveloperApp => new()
     {
-        AccessToken = "accessToken"
+        Name = "Test",
+        Status = "Active",
+        AppId = Guid.NewGuid().ToString(),
+        CreatedAt = DateTime.UtcNow.Ticks,
+        LastModifiedAt = DateTime.UtcNow.Ticks,
+        DeveloperId = Guid.NewGuid().ToString(),
+        Credentials = new List<ApigeeDeveloperAppCredential>()
+        {
+            new ApigeeDeveloperAppCredential()
+            {
+                ConsumerKey = "consumerKey",
+                ConsumerSecret = "consumerSecret",
+                IssuedAt = DateTime.UtcNow.Ticks,
+                ExpiresAt = -1
+            }
+        }
     };
 
     public static App App => new()

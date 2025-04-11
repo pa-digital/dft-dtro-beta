@@ -121,7 +121,7 @@ public class ApplicationService : IApplicationService
                 }
 
                 // Create app in database
-                var appId = Guid.Parse(developerApp.AppId);
+                var appId = developerApp.AppId.ToGuid();
                 var typeId = appInput.Type == "Publish" ? ApplicationTypeType.Publish : ApplicationTypeType.Consume;
                 var user = await _userDal.GetUserFromEmail(email);
 

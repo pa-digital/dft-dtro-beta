@@ -99,3 +99,6 @@ global using Google.Apis.Auth.OAuth2;
 global using Notify.Client;
 global using Notify.Interfaces;
 global using Notify.Models.Responses;
+global using DfT.DTRO.Models.Auth;
+global using System.Net.Http;
+global using System.Net.Http.Headers;
