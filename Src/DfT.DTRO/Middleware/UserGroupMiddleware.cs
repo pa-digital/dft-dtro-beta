@@ -4,7 +4,6 @@
     private readonly ILogger<UserGroupMiddleware> _logger;
     private readonly HashSet<string> _excludedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
-        "/health",
         "/favicon.ico"// Add other paths you want to exclude
         // You can add other paths here if necessary
     };
