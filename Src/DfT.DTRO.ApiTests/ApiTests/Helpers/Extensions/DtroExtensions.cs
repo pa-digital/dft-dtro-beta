@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.Consts;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
 
 namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
@@ -89,7 +90,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendJsonInDtroCreationRequestAsync(this string jsonString, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
@@ -100,8 +101,8 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendJsonInDtroCreationRequestWithAccessTokenAsync(this string jsonString, string accessToken)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
-            headers.Add("Authorization", $"Bearer {accessToken}");
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
+            headers.Add(HttpHeaderKeys.Authorization, $"Bearer {accessToken}");
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonString);
             return dtroCreationResponse;
@@ -110,7 +111,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendJsonInDtroCreationRequestWithNoAuthorizationHeaderAsync(this string jsonString)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonString);
             return dtroCreationResponse;
@@ -119,7 +120,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendJsonInDtroUpdateRequestAsync(this string jsonString, string dtroId, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
@@ -130,7 +131,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestAsync(this string dtroFilePath, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "multipart/form-data");
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
@@ -141,8 +142,8 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestWithAccessTokenAsync(this string dtroFilePath, string accessToken)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "multipart/form-data");
-            headers.Add("Authorization", $"Bearer {accessToken}");
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
+            headers.Add(HttpHeaderKeys.Authorization, $"Bearer {accessToken}");
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: dtroFilePath);
             return dtroCreationResponse;
@@ -151,7 +152,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestWithNoAuthorizationHeaderAsync(this string dtroFilePath)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "multipart/form-data");
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: dtroFilePath);
             return dtroCreationResponse;
@@ -160,7 +161,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendFileInDtroUpdateRequestAsync(this string dtroFilePath, string dtroId, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "multipart/form-data");
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
@@ -189,7 +190,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> GetDtroSearchResponseAsync(this string jsonString, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
@@ -258,5 +259,4 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             return JsonConvert.SerializeObject(camelCasedObject, Formatting.Indented);
         }
     }
-
 }

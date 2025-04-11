@@ -1,10 +1,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.Consts;
-using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions;
-using DfT.DTRO.Models.DataBase;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
+using DfT.DTRO.Models.DataBase;
+using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
 
 namespace DfT.DTRO.ApiTests.ApiTests.Helpers.DataEntities
 {
@@ -57,7 +58,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.DataEntities
         public static async Task<HttpResponseMessage> DeleteUsersAsync(List<string> ids, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
@@ -70,7 +71,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.DataEntities
         public static async Task<HttpResponseMessage> CreateUserAsync(TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 

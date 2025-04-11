@@ -1,6 +1,7 @@
 using DfT.DTRO.Consts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 using DfT.DTRO.ApiTests.ApiTests.Helpers;
 using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
@@ -14,10 +15,10 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             switch (EnvironmentName)
             {
                 case EnvironmentType.Local:
-                    headers.Add("App-Id", testUser.AppId);
+                    headers.Add(HttpHeaderKeys.AppId, testUser.AppId);
                     break;
                 default:
-                    headers.Add("Authorization", $"Bearer {testUser.AccessToken}");
+                    headers.Add(HttpHeaderKeys.Authorization, $"Bearer {testUser.AccessToken}");
                     break;
             }
 
