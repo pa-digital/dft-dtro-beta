@@ -43,11 +43,11 @@ public class EmailServiceTests
     }
 
     [Theory]
-    [InlineData("FirstApplication","ben.pauley@dft.gov.uk")]
-    [InlineData("SecondApplication","fareed.faisal@dft.gov.uk")]
-    [InlineData("ThirdApplication","marcus.cumming@dft.gov.uk")]
-    [InlineData("FourthApplication","gabriel.popescu@dft.gov.uk")]
-    public void SendEmailReturnWhenRefreshSecrets(string applicationName, string requestEmail)
+    [InlineData("ben.pauley@dft.gov.uk","FirstApplication" )]
+    [InlineData("fareed.faisal@dft.gov.uk","SecondApplication")]
+    [InlineData("marcus.cumming@dft.gov.uk","ThirdApplication" )]
+    [InlineData("gabriel.popescu@dft.gov.uk","FourthApplication")]
+    public void SendEmailReturnWhenRefreshSecrets(string requestEmail, string applicationName)
     {
         _apigeeDeveloperApp = new ApigeeDeveloperApp()
         {
@@ -65,5 +65,9 @@ public class EmailServiceTests
         _sut
             .Setup(it => it.SendEmail(requestEmail, _apigeeDeveloperApp))
             .Returns(new EmailNotificationResponse() { id = _testId });
+
+        var actual = _sut.Object.SendEmail(requestEmail, _apigeeDeveloperApp);
+        Assert.NotNull(actual.id);
+
     }
 }
