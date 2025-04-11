@@ -1,15 +1,16 @@
 using Newtonsoft.Json;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
 using static DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers.ErrorJsonResponseProcessor;
 using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
-using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 
 namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_3_1.DtroCreationScenarios
 {
     public class InvalidCamelCase : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.3.1";
+        readonly static string schemaVersionToTest = SchemaVersions._3_3_1;
         readonly static string schemaVersionWithInvalidCamelCase = "3.3.2";
 
         public static IEnumerable<object[]> GetDtroNamesOfFilesWithInvalidCamelCase()

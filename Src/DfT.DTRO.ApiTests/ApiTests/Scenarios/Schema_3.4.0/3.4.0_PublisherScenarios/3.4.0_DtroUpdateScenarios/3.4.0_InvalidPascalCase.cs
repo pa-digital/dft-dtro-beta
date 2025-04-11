@@ -1,16 +1,17 @@
 using Newtonsoft.Json;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
 using static DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers.ErrorJsonResponseProcessor;
 using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
-using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 
 namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateScenarios
 {
     public class InvalidPascalCase : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.4.0";
-        readonly static string schemaVersionWithInvalidPascalCase = "3.3.1";
+        readonly static string schemaVersionToTest = SchemaVersions._3_4_0;
+        readonly static string schemaVersionWithInvalidPascalCase = SchemaVersions._3_3_1;
         readonly string fileToCreateDtroWithValidCamelCase = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";
 
         public static IEnumerable<object[]> GetDtroNamesOfFilesWithInvalidPascalCase()

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
@@ -10,7 +11,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
 {
     public class DuplicateItems : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.4.0";
+        readonly static string schemaVersionToTest = SchemaVersions._3_4_0;
         readonly string fileName = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";
 
         [Fact]

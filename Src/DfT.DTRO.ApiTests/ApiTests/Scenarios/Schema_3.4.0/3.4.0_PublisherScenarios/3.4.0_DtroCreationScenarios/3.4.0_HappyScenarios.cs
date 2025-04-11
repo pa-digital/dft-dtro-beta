@@ -1,4 +1,5 @@
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
@@ -8,7 +9,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
 {
     public class HappyScenarios : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.4.0";
+        readonly static string schemaVersionToTest = SchemaVersions._3_4_0;
 
         public static IEnumerable<object[]> GetNamesOfDtroExampleFiles()
         {
