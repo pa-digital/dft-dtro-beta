@@ -44,7 +44,7 @@ public class MetricsController : ControllerBase
             _logger.LogInformation($"'{nameof(HealthApi)}' method called");
             _loggingExtension.LogInformation(
                 nameof(HealthApi),
-                "/healthApi",
+                "/health",
                 $"'{nameof(HealthApi)}' method called");
             return Ok(true);
         }
@@ -53,7 +53,7 @@ public class MetricsController : ControllerBase
             _logger.LogError(ex.Message);
             _loggingExtension.LogError(
                 nameof(HealthApi),
-                "/healthApi",
+                "/health",
                 "The application is unavialable",
                 ex.Message);
             return StatusCode(500, new ApiErrorResponse("Internal Server Error", "The application is unavialable"));

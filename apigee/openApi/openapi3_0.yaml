@@ -921,7 +921,7 @@ paths:
           description: Event(s) not found.
         '500':
           description: Internal Server Error.
-  /healthApi:
+  /health:
     get:
       tags:
         - Metrics
