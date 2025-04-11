@@ -51,7 +51,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestWithNoAuthorizationHeaderAsync("Rabbit");
+            HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestWithNoAuthorizationHeaderAsync();
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.Unauthorized == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {Path.GetFileName(dtroTempFilePath)}:\n\n{dtroCreationResponseJson}");

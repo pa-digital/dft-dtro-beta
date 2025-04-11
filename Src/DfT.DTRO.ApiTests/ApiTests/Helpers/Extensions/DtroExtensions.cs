@@ -148,7 +148,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             return dtroCreationResponse;
         }
 
-        public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestWithNoAuthorizationHeaderAsync(this string dtroFilePath, string accessToken)
+        public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestWithNoAuthorizationHeaderAsync(this string dtroFilePath)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             headers.Add("Content-Type", "multipart/form-data");
