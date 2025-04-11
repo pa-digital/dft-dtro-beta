@@ -131,4 +131,15 @@ public static class ObjectExtensions
             return item;
         }
     }
+
+    /// <summary>
+    /// Unique identifier parsing
+    /// </summary>
+    /// <param name="source">unique identifier as string</param>
+    /// <returns>Unique identifier</returns>
+    public static Guid ToGuid(this string source)
+    {
+        var isValidGuid = Guid.TryParse(source, out Guid guid);
+        return isValidGuid ? guid : Guid.Empty;
+    }
 }

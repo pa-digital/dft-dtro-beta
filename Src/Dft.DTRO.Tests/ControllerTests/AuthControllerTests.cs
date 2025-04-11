@@ -3,15 +3,15 @@ namespace Dft.DTRO.Tests.ControllerTests;
 public class AuthControllerTests
 {
     private readonly Mock<IAuthService> _mockAuthService = new();
-
+    private readonly Mock<IEmailService> _mockEmailService = new();
     private readonly AuthController _sut;
 
     public AuthControllerTests()
     {
         ILogger<AuthController> mockLogger = MockLogger.Setup<AuthController>();
-        var mockLoggingExtension = new Mock<LoggingExtension>();
+        _mockEmailService = new Mock<IEmailService>();
 
-        _sut = new AuthController(_mockAuthService.Object, mockLogger, mockLoggingExtension.Object);
+        _sut = new AuthController(_mockAuthService.Object, _mockEmailService.Object,mockLogger);
 
         Guid appId = Guid.NewGuid();
         Mock<HttpContext> mockContext = MockHttpContext.Setup();
@@ -20,16 +20,12 @@ public class AuthControllerTests
     [Fact]
     public async Task GetTokenReturnsAuthToken()
     {
-        var authTokenInput = new AuthTokenInput()
-        {
-            Username = "username",
-            Password = "password"
-        };
+        var authTokenInput = new AuthTokenInput { Username = "username", Password = "password" };
         _mockAuthService
             .Setup(it => it.GetToken(authTokenInput))
             .ReturnsAsync(() => MockTestObjects.AuthToken);
 
-        IActionResult? actual = await _sut.GetToken(authTokenInput);
+        IActionResult actual = await _sut.GetToken(authTokenInput);
 
         Assert.NotNull(actual);
 

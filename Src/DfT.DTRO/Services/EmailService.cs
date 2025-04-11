@@ -45,4 +45,23 @@ public class EmailService : IEmailService
         return emailNotificationResponse;
     }
 
+    /// <inheritdoc cref="IEmailService"/>
+    public EmailNotificationResponse SendEmail(ApigeeDeveloperApp apigeeDeveloperApp, string requestEmail)
+    {
+        EmailNotificationResponse emailNotification = new();
+        var templateId = _secretManagerClient.GetSecret(ApiConsts.RefreshToken);
+        var templateResponse = _notificationClient.GetTemplateById(templateId);
+
+        var personalisation = new Dictionary<string, dynamic>()
+        {
+            { "email address", requestEmail },
+            { "application name", apigeeDeveloperApp.Name },
+            { "consumer-key", apigeeDeveloperApp.Credentials.FirstOrDefault().ConsumerKey },
+            { "consumer-secret", apigeeDeveloperApp.Credentials.FirstOrDefault().ConsumerSecret },
+            { "dtro-cso-email", _secretManagerClient.GetSecret(ApiConsts.DtroCsoEmail) }
+        };
+
+        emailNotification = _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
+        return emailNotification;
+    }
 }
