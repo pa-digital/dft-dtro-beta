@@ -15,20 +15,25 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             return dtroJson;
         }
 
-        public static string ModifyTraInDtroJson(this string jsonString, string schemaVersion, string traId)
+        public static string ModifyTraInDtroJson(this string jsonString, string schemaVersion, int traId)
         {
             JObject jsonObj = JObject.Parse(jsonString);
-            int traIdAsInt = int.Parse(traId);
 
             int schemaVersionAsInt = int.Parse(schemaVersion.Replace(".", ""));
 
             string sourceCapitalisation = schemaVersionAsInt >= 332 ? "source" : "Source";
 
-            jsonObj["data"][sourceCapitalisation]["currentTraOwner"] = traIdAsInt;
-            jsonObj["data"][sourceCapitalisation]["traAffected"] = new JArray(traIdAsInt);
-            jsonObj["data"][sourceCapitalisation]["traCreator"] = traIdAsInt;
+            jsonObj["data"][sourceCapitalisation]["currentTraOwner"] = traId;
+            jsonObj["data"][sourceCapitalisation]["traAffected"] = new JArray(traId);
+            jsonObj["data"][sourceCapitalisation]["traCreator"] = traId;
 
             return jsonObj.ToString();
+        }
+
+        public static string SetValueAtJsonPath(this string jsonString, string jsonPath, object newValue)
+        {
+            string modifiedJson = JsonMethods.SetValueAtJsonPath(jsonString, jsonPath, newValue);
+            return modifiedJson;
         }
 
         public static string ModifySchemaVersion(this string jsonString, string schemaVersion)
@@ -209,7 +214,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static string CreateDtroTempFile(this string jsonString, string fileName, TestUser testUser)
         {
             // If the name is null, we're using a pre-existing user on dev / test / integration, so we have to create a unique file name prefix rather than use the TRA ID as a prefix
-            string uniquePrefix = testUser.Name == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : testUser.TraId;
+            string uniquePrefix = testUser.Name == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : testUser.TraId.ToString();
             string nameOfCopyFile = $"{uniquePrefix}-{fileName}";
             string tempFilePath = $"{TestConfig.PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             FileHelper.WriteStringToFile(TestConfig.PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonString);
@@ -219,7 +224,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static string CreateDtroTempFileForUpdate(this string jsonString, string fileName, TestUser testUser)
         {
             // If the name is null, we're using a pre-existing user on dev / test / integration, so we have to create a unique file name prefix rather than use the TRA ID as a prefix
-            string uniquePrefix = testUser.Name == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : testUser.TraId;
+            string uniquePrefix = testUser.Name == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : testUser.TraId.ToString();
             string nameOfCopyFile = $"update-{uniquePrefix}-{fileName}";
             string tempFilePath = $"{TestConfig.PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             FileHelper.WriteStringToFile(TestConfig.PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonString);

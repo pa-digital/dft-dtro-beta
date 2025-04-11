@@ -44,7 +44,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO
             string dtroCreationJson = fileToCreateDtroWithValidCamelCase
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher);
@@ -55,7 +55,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO update
             string dtroUpdateJson = nameOfFileWithInvalidPascalCase
                                     .GetJsonFromFile(schemaVersionWithInvalidPascalCase)
-                                    .ModifyTraInDtroJson(schemaVersionWithInvalidPascalCase, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionWithInvalidPascalCase, (int)publisher.TraId)
                                     .ModifySourceActionType(schemaVersionWithInvalidPascalCase, "amendment")
                                     .ModifyTroNameForUpdate(schemaVersionWithInvalidPascalCase)
                                     .ModifySchemaVersion(schemaVersionToTest);
@@ -86,7 +86,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO
             string dtroCreationJson = fileToCreateDtroWithValidCamelCase
                                                 .GetJsonFromFile(schemaVersionToTest)
-                                                .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                                .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId);
 
             string tempFilePathForDtroCreation = dtroCreationJson.CreateDtroTempFile(fileToCreateDtroWithValidCamelCase, publisher);
 
@@ -99,7 +99,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO update
             string dtroUpdateJson = nameOfFileWithInvalidPascalCase
                                     .GetJsonFromFile(schemaVersionWithInvalidPascalCase)
-                                    .ModifyTraInDtroJson(schemaVersionWithInvalidPascalCase, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionWithInvalidPascalCase, (int)publisher.TraId)
                                     .ModifySourceActionType(schemaVersionWithInvalidPascalCase, "amendment")
                                     .ModifyTroNameForUpdate(schemaVersionWithInvalidPascalCase)
                                     .ModifySchemaVersion(schemaVersionToTest);

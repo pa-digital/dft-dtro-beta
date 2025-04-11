@@ -102,13 +102,6 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers
             }
         }
 
-        public static string ConvertJsonKeysToCamelCase(string json)
-        {
-            JObject jsonObject = JObject.Parse(json);
-            JObject camelCasedObject = ConvertKeysToCamelCase(jsonObject);
-            return JsonConvert.SerializeObject(camelCasedObject, Formatting.Indented);
-        }
-
         public static JObject ConvertKeysToCamelCase(JObject original)
         {
             JObject newObject = new JObject();
@@ -220,7 +213,15 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers
 
                 if (token != null)
                 {
-                    token.Replace(JToken.FromObject(newValue));
+                    if (token.Type == JTokenType.Array && newValue is IEnumerable<object> arrayValue)
+                    {
+                        token.Replace(JArray.FromObject(arrayValue));
+                    }
+                    else
+                    {
+                        token.Replace(JToken.FromObject(newValue));
+                    }
+
                     return jsonObject.ToString(Formatting.Indented);
                 }
                 else

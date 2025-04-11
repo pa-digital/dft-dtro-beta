@@ -23,7 +23,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                     .ModifyToFailSchemaValidation();
 
             // Send DTRO
@@ -52,7 +52,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                     .ModifyToFailSchemaValidation();
 
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);

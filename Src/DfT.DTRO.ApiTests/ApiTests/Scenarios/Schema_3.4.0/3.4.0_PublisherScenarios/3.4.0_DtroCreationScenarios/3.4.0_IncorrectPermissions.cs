@@ -23,7 +23,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestWithNoAuthorizationHeaderAsync();
@@ -47,7 +47,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId);
 
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
@@ -73,7 +73,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestWithAccessTokenAsync("Rabbit");
@@ -97,7 +97,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId);
 
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
@@ -118,15 +118,17 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             Skip.If(EnvironmentName == EnvironmentType.Local);
 
             // Get test user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
+            TestUser publisherWhoOwnsDtro = await TestUsers.GetUser(TestUserType.Publisher1);
+
+            TestUser publisherWhoDoesNotOwnDtro = await TestUsers.GetUser(TestUserType.Publisher2);
+            string invalidAccessToken = publisherWhoDoesNotOwnDtro.AccessToken;
 
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
-
-            TestUser secondPublisher = await TestUsers.GetUser(TestUserType.Publisher2);
-            string invalidAccessToken = secondPublisher.AccessToken;
+                                    .SetValueAtJsonPath("data.source.currentTraOwner", publisherWhoOwnsDtro.TraId)
+                                    .SetValueAtJsonPath("data.source.traAffected", new[] { publisherWhoDoesNotOwnDtro.TraId })
+                                    .SetValueAtJsonPath("data.source.traCreator", publisherWhoDoesNotOwnDtro.TraId);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestWithAccessTokenAsync(invalidAccessToken);
@@ -145,17 +147,19 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             Skip.If(EnvironmentName == EnvironmentType.Local);
 
             // Get test user to send DTRO and read it back
-            TestUser publisher = await TestUsers.GetUser(TestUserType.Publisher1);
+            TestUser publisherWhoOwnsDtro = await TestUsers.GetUser(TestUserType.Publisher1);
+
+            TestUser publisherWhoDoesNotOwnDtro = await TestUsers.GetUser(TestUserType.Publisher2);
+            string invalidAccessToken = publisherWhoDoesNotOwnDtro.AccessToken;
 
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                    .SetValueAtJsonPath("data.source.currentTraOwner", publisherWhoOwnsDtro.TraId)
+                                    .SetValueAtJsonPath("data.source.traAffected", new[] { publisherWhoDoesNotOwnDtro.TraId })
+                                    .SetValueAtJsonPath("data.source.traCreator", publisherWhoDoesNotOwnDtro.TraId);
 
-            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
-
-            TestUser secondPublisher = await TestUsers.GetUser(TestUserType.Publisher2);
-            string invalidAccessToken = secondPublisher.AccessToken;
+            string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisherWhoOwnsDtro);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestWithAccessTokenAsync(invalidAccessToken);

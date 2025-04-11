@@ -98,7 +98,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.DataEntities
                 $"Response JSON:\n\n{userCreationResponseJson}");
         }
 
-        public static string GetTraId(TestUserType testUserType)
+        public static int? GetTraId(TestUserType testUserType)
         {
             switch (testUserType)
             {

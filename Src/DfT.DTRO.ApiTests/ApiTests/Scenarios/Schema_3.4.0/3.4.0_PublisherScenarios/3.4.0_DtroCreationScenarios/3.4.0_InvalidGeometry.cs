@@ -75,7 +75,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = pointGeometryFileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                     .ModifyPointGeometry(pointGeometryString);
 
             // Send DTRO
@@ -99,7 +99,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = pointGeometryFileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                     .ModifyPointGeometry(pointGeometryString);
 
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(pointGeometryFileName, publisher);
@@ -125,7 +125,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = linearGeometryFileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                     .ModifyLinearGeometry(linearGeometryString);
 
             // Send DTRO
@@ -149,7 +149,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = linearGeometryFileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                     .ModifyLinearGeometry(linearGeometryString);
 
             // Prepare DTRO

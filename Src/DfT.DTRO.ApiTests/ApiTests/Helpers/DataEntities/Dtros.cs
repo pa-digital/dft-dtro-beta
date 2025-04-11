@@ -159,7 +159,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.DataEntities
             return expectedErrorJson;
         }
 
-        public static string GetSearchRequestJson(string traField, string traId)
+        public static string GetSearchRequestJson(string traField, int traId)
         {
             string requestJson = $$"""
             {

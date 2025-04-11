@@ -43,7 +43,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = nameOfFileWithInvalidPascalCase
                                     .GetJsonFromFile(schemaVersionWithInvalidPascalCase)
-                                    .ModifyTraInDtroJson(schemaVersionWithInvalidPascalCase, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionWithInvalidPascalCase, (int)publisher.TraId)
                                     .ModifySchemaVersion(schemaVersionToTest);
 
             // Send DTRO
@@ -71,7 +71,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = nameOfFileWithInvalidPascalCase
                                     .GetJsonFromFile(schemaVersionWithInvalidPascalCase)
-                                    .ModifyTraInDtroJson(schemaVersionWithInvalidPascalCase, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionWithInvalidPascalCase, (int)publisher.TraId)
                                     .ModifySchemaVersion(schemaVersionToTest);
 
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(nameOfFileWithInvalidPascalCase, publisher);

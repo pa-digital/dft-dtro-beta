@@ -15,10 +15,10 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
         public static string ConsumerClientSecret { get; }
         public static string PublisherClientId1 { get; }
         public static string PublisherClientSecret1 { get; }
-        public static string PublisherTraId1 { get; }
+        public static int PublisherTraId1 { get; }
         public static string PublisherClientId2 { get; }
         public static string PublisherClientSecret2 { get; }
-        public static string PublisherTraId2 { get; }
+        public static int PublisherTraId2 { get; }
 
         public static string BaseUri { get; }
         public static string PathToProjectDirectory { get; }
@@ -107,10 +107,10 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
             ConsumerClientSecret = EnvVariables.GetEnvValue("CONSUMER_CLIENT_SECRET");
             PublisherClientId1 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID_1");
             PublisherClientSecret1 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET_1");
-            PublisherTraId1 = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_1");
+            PublisherTraId1 = int.Parse(EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_1"));
             PublisherClientId2 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID_2");
             PublisherClientSecret2 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET_2");
-            PublisherTraId2 = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_2");
+            PublisherTraId2 = int.Parse(EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_2"));
         }
     }
 }
