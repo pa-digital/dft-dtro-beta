@@ -107,10 +107,19 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
             ConsumerClientSecret = EnvVariables.GetEnvValue("CONSUMER_CLIENT_SECRET");
             PublisherClientId1 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID_1");
             PublisherClientSecret1 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET_1");
-            PublisherTraId1 = int.Parse(EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_1"));
+
+            string publisherTraId1FromScript = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_1");
+            if (publisherTraId1FromScript != null) {
+                PublisherTraId1 = int.Parse(publisherTraId1FromScript);
+            }
+
             PublisherClientId2 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID_2");
             PublisherClientSecret2 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET_2");
-            PublisherTraId2 = int.Parse(EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_2"));
+
+            string publisherTraId2FromScript = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_2");
+            if (publisherTraId2FromScript != null) {
+                PublisherTraId2 = int.Parse(publisherTraId2FromScript);
+            }
         }
     }
 }
