@@ -6,7 +6,6 @@ public class EmailServiceTests
     private readonly Mock<INotificationClient> _mockNotificationClient = new();
 
     private readonly string _testApiKey = $"testapikey-{Guid.NewGuid()}";
-    private readonly string _testApplication = "testApplication";
     private ApigeeDeveloperApp _apigeeDeveloperApp = new();
     private readonly string _testEmail = "jon.doe@email.com";
     private readonly string _testId = Guid.NewGuid().ToString();
@@ -25,15 +24,21 @@ public class EmailServiceTests
     }
 
     [Theory]
-    [InlineData(nameof(ApplicationStatusType.Active.Status))]
-    [InlineData(nameof(ApplicationStatusType.Inactive.Status))]
-    public void SendEmailWhenApplicationCreated(string status)
+    [InlineData("First Application",nameof(ApplicationStatusType.Active.Status))]
+    [InlineData("Second Application",nameof(ApplicationStatusType.Active.Status))]
+    [InlineData("Third Application",nameof(ApplicationStatusType.Active.Status))]
+    [InlineData("Fourth Application",nameof(ApplicationStatusType.Active.Status))]
+    [InlineData("First Application",nameof(ApplicationStatusType.Inactive.Status))]
+    [InlineData("Second Application",nameof(ApplicationStatusType.Inactive.Status))]
+    [InlineData("Third Application",nameof(ApplicationStatusType.Inactive.Status))]
+    [InlineData("Fourth Application",nameof(ApplicationStatusType.Inactive.Status))]
+    public void SendEmailWhenApplicationCreated(string application, string status)
     {
         _sut
-            .Setup(it => it.SendEmail(_testApplication, _testEmail, status))
+            .Setup(it => it.SendEmail(application, _testEmail, status))
             .Returns(new EmailNotificationResponse(){ id = _testId });
 
-        var actual = _sut.Object.SendEmail(_testApplication, _testEmail, status);
+        var actual = _sut.Object.SendEmail(application, _testEmail, status);
         Assert.NotNull(actual.id);
     }
 

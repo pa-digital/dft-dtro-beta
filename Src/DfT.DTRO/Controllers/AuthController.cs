@@ -7,8 +7,6 @@ namespace DfT.DTRO.Controllers;
 [Consumes("application/json")]
 [Produces("application/json")]
 [Tags("Auth")]
-//TODO: AuthController is not fully implemented therefore no test is done against it. 
-[ExcludeFromCodeCoverage]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
@@ -67,19 +65,7 @@ public class AuthController : ControllerBase
         try
         {
             //TODO: This will be changed once the api endpoint is going to be implemented.
-            apigeeDeveloperApp = new()
-            {
-                Name = "Test",
-                Credentials = new List<ApigeeDeveloperAppCredential>()
-                {
-                    new ApigeeDeveloperAppCredential
-                    {
-                        ConsumerKey = Guid.NewGuid().ToString(), 
-                        ConsumerSecret = Guid.NewGuid().ToString()
-                    }
-                }
-            };
-            var response = _emailService.SendEmail(apigeeDeveloperApp, email);
+            var response = _emailService.SendEmail(new ApigeeDeveloperApp(){Name = "Test", Credentials = new List<ApigeeDeveloperAppCredential>(){new ApigeeDeveloperAppCredential(){ConsumerKey = "consumerKey", ConsumerSecret = "consumerSecret"}}}, email);
             if (string.IsNullOrEmpty(response.id))
             {
                 throw new EmailSendException();
