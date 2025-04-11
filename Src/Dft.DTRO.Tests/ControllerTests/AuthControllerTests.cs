@@ -1,3 +1,5 @@
+using DfT.DTRO.Models.Auth;
+
 namespace Dft.DTRO.Tests.ControllerTests;
 
 public class AuthControllerTests
@@ -18,7 +20,7 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async Task GetTokenReturnsAuthToken()
+    public async Task GetTokenReturnsOkStatusCode()
     {
         var authTokenInput = new AuthTokenInput { Username = "username", Password = "password" };
         _mockAuthService
@@ -28,7 +30,19 @@ public class AuthControllerTests
         IActionResult actual = await _sut.GetToken(authTokenInput);
 
         Assert.NotNull(actual);
-
         Assert.Equal(200, ((ObjectResult)actual).StatusCode);
+    }
+
+    [Fact]
+    public async Task GetTokenThrowsException()
+    {
+        var authTokenInput = new AuthTokenInput { Username = "username", Password = "password" };
+        _mockAuthService
+            .Setup(authService => authService.GetToken(authTokenInput))
+            .Throws<Exception>();
+
+        IActionResult actual = await _sut.GetToken(authTokenInput);
+        Assert.NotNull(actual);
+        Assert.Equal(500, ((ObjectResult)actual).StatusCode);
     }
 }

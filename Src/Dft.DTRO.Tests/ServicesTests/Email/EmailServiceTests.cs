@@ -63,7 +63,7 @@ public class EmailServiceTests
             }
         };
         _sut
-            .Setup(it => it.SendEmail(_apigeeDeveloperApp, requestEmail))
+            .Setup(it => it.SendEmail(requestEmail, _apigeeDeveloperApp))
             .Returns(new EmailNotificationResponse() { id = _testId });
     }
 }

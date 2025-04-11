@@ -46,7 +46,7 @@ public class EmailService : IEmailService
     }
 
     /// <inheritdoc cref="IEmailService"/>
-    public EmailNotificationResponse SendEmail(ApigeeDeveloperApp apigeeDeveloperApp, string requestEmail)
+    public EmailNotificationResponse SendEmail(string requestEmail, ApigeeDeveloperApp apigeeDeveloperApp)
     {
         EmailNotificationResponse emailNotification = new();
         var templateId = _secretManagerClient.GetSecret(ApiConsts.RefreshToken);
