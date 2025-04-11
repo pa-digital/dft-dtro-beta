@@ -1,17 +1,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
 using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
-using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 
 namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreationScenarios
 {
     // DPPB-1235
     public class InvalidGeometry : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.4.0";
+        readonly static string schemaVersionToTest = SchemaVersions._3_4_0;
         readonly string pointGeometryFileName = "dtro-v3.4.0-example-height-restriction-with-conditions.json";
         readonly string linearGeometryFileName = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";
 
@@ -74,7 +75,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = pointGeometryFileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                     .ModifyPointGeometry(pointGeometryString);
 
             // Send DTRO
@@ -98,7 +99,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = pointGeometryFileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                     .ModifyPointGeometry(pointGeometryString);
 
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(pointGeometryFileName, publisher);
@@ -124,7 +125,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = linearGeometryFileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                     .ModifyLinearGeometry(linearGeometryString);
 
             // Send DTRO
@@ -148,7 +149,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             // Prepare DTRO
             string dtroCreationJson = linearGeometryFileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                     .ModifyLinearGeometry(linearGeometryString);
 
             // Prepare DTRO

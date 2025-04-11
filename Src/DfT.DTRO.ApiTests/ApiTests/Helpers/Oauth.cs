@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DfT.DTRO.Consts;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
 using DfT.DTRO.Models.DataBase;
@@ -40,8 +41,8 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
             string base64EncodedCredentials = Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials));
 
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/x-www-form-urlencoded");
-            headers.Add("Authorization", $"Basic {base64EncodedCredentials}");
+            headers.Add(HttpHeaderKeys.ContentType, "application/x-www-form-urlencoded");
+            headers.Add(HttpHeaderKeys.Authorization, $"Basic {base64EncodedCredentials}");
 
             KeyValuePair<string, string> formUrlEncodedBody = new KeyValuePair<string, string>("grant_type", "client_credentials");
 
