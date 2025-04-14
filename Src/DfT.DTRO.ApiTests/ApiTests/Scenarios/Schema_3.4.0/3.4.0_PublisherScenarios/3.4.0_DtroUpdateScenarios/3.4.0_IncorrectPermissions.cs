@@ -34,7 +34,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest);
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED");
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
@@ -72,7 +72,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest);
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED");
 
             string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(fileName, publisher);
 
@@ -110,7 +110,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest);
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED");
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
@@ -148,7 +148,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest);
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED");
 
             string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(fileName, publisher);
 
@@ -188,7 +188,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
 
             string dtroUpdateJson = dtroCreationJson
                                     .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                    .ModifyTroNameForUpdate(schemaVersionToTest)
+                                    .AppendTextToTroName(schemaVersionToTest, "UPDATED")
                                     .SetValueAtJsonPath("data.source.currentTraOwner", publisherWhoOwnsDtro.TraId)
                                     .SetValueAtJsonPath("data.source.traAffected", new[] { publisherWhoDoesNotOwnDtro.TraId })
                                     .SetValueAtJsonPath("data.source.traCreator", publisherWhoDoesNotOwnDtro.TraId);
@@ -231,7 +231,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
 
             string dtroUpdateJson = dtroCreationJson
                                     .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                    .ModifyTroNameForUpdate(schemaVersionToTest)
+                                    .AppendTextToTroName(schemaVersionToTest, "UPDATED")
                                     .SetValueAtJsonPath("data.source.currentTraOwner", publisherWhoOwnsDtro.TraId)
                                     .SetValueAtJsonPath("data.source.traAffected", new[] { publisherWhoDoesNotOwnDtro.TraId })
                                     .SetValueAtJsonPath("data.source.traCreator", publisherWhoDoesNotOwnDtro.TraId);

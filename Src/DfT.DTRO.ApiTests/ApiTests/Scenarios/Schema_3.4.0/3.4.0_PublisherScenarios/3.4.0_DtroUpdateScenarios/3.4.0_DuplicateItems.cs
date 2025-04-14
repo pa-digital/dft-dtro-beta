@@ -34,7 +34,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
                                     .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                    .ModifyTroNameForUpdate(schemaVersionToTest)
+                                    .AppendTextToTroName(schemaVersionToTest, "UPDATED")
                                     .DuplicateProvisionReferenceInDtro();
 
             // Send DTRO update
@@ -72,7 +72,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest)
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED")
                                         .DuplicateProvisionReferenceInDtro();
 
             string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(fileName, publisher);

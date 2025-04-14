@@ -281,3 +281,45 @@ jobs:
 
       - name: Publish Products to Developer Portal
         run: portals/publish_int_product_to_int_portal.sh ${{ steps.google-auth.outputs.access_token }}
+
+  run-api-tests-on-integration:
+    name: Run API tests on integration after deployment to integration is complete
+    needs: build-apigee-proxies-and-products
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: API tests
+      id: api-tests
+      run: |
+        ./run_api_tests.sh \
+        -e integration \
+        -ai ${{ secrets.CSO_CLIENT_ID_INTEGRATION }} \
+        -as ${{ secrets.CSO_CLIENT_SECRET_INTEGRATION }} \
+        -ci ${{ secrets.CONSUMER_CLIENT_ID_INTEGRATION }} \
+        -cs ${{ secrets.CONSUMER_CLIENT_SECRET_INTEGRATION }} \
+        -pi1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_1_INTEGRATION }} \
+        -ps1 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_1_INTEGRATION }} \
+        -ti1 99999 \
+        -pi2 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_ID_2_INTEGRATION }} \
+        -ps2 ${{ secrets.API_TESTS_PUBLISHER_CLIENT_SECRET_2_INTEGRATION }} \
+        -ti1 99998
+
+    - name: Upload API test report
+      if: always() && steps.api-tests.outcome != 'skipped'
+      uses: actions/upload-artifact@v4
+      with:
+        name: API test report (integration environment)
+        path: Src/DfT.DTRO.ApiTests/TestResults/test-results.html

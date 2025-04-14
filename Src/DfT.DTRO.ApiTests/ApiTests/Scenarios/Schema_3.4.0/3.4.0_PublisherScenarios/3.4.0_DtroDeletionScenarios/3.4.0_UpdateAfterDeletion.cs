@@ -45,7 +45,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroDeletio
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest);
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED");
 
             // Send DTRO update                    
             HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisher);
@@ -93,7 +93,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroDeletio
             // Prepare DTRO update
             string dtroUpdateJson = dtroCreationJson
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest);
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED");
 
             string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(fileName, publisher);
 

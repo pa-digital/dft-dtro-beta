@@ -27,10 +27,11 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
         public static string PathToDtroExamplesTempDirectory { get; }
         public static string PathToSchemaExamplesDirectory { get; }
         public static string PathToRuleExamplesDirectory { get; }
-        public static string RulesJsonFile { get; }
-        public static string SchemaJsonFile { get; }
+
         public static string DatabaseHostName { get; }
         public static string DatabaseConnectionString { get; }
+
+        public static string testRunDescription = $"API_TEST_RUN_{DateTimeOffset.UtcNow.ToString("o")}";
 
         private static string GetAbsolutePathToProjectDirectory()
         {
@@ -88,6 +89,10 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
                 case "test":
                     EnvironmentName = EnvironmentType.Test;
                     BaseUri = "https://dtro-test.dft.gov.uk/v1";
+                    break;
+                case "integration":
+                    EnvironmentName = EnvironmentType.Integration;
+                    BaseUri = "https://dtro-integration.dft.gov.uk/v1";
                     break;
                 default:
                     throw new Exception($"Environment {environmentFromBashCommand} not recognised!");

@@ -87,7 +87,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             string dtroUpdateJson = dtroCreationJson
                                         .ModifyPointGeometry(pointGeometryString)
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest);
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED");
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
@@ -125,7 +125,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             string dtroUpdateJson = dtroCreationJson
                                         .ModifyPointGeometry(pointGeometryString)
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest);
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED");
 
             string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(pointGeometryFileName, publisher);
 
@@ -163,7 +163,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             string dtroUpdateJson = dtroCreationJson
                                         .ModifyLinearGeometry(linearGeometryString)
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest);
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED");
 
             // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
@@ -201,7 +201,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             string dtroUpdateJson = dtroCreationJson
                                         .ModifyLinearGeometry(linearGeometryString)
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
-                                        .ModifyTroNameForUpdate(schemaVersionToTest);
+                                        .AppendTextToTroName(schemaVersionToTest, "UPDATED");
 
             string tempFilePathForDtroUpdate = dtroUpdateJson.CreateDtroTempFileForUpdate(linearGeometryFileName, publisher);
 
