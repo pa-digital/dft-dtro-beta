@@ -1,4 +1,5 @@
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
@@ -8,7 +9,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.ConsumerScenarios
 {
     public class HappyScenarios : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.4.0";
+        readonly static string schemaVersionToTest = SchemaVersions._3_4_0;
         readonly string fileName = "dtro-v3.4.0-example-more-complex-example.json";
 
         [Fact]
@@ -20,7 +21,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.ConsumerScenarios
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher);
@@ -31,7 +32,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.ConsumerScenarios
             // Search for DTRO as consumer
             TestUser consumer = await TestUsers.GetUser(TestUserType.Consumer);
 
-            string searchRequestJson = Dtros.GetSearchRequestJson("traCreator", publisher.TraId);
+            string searchRequestJson = Dtros.GetSearchRequestJson("traCreator", (int)publisher.TraId);
             HttpResponseMessage dtroSearchResponse = await searchRequestJson.GetDtroSearchResponseAsync(consumer);
             string dtroSearchResponseJson = await dtroSearchResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.OK == dtroSearchResponse.StatusCode,
@@ -49,7 +50,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.ConsumerScenarios
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId);
 
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
@@ -62,7 +63,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.ConsumerScenarios
             // Search for DTRO as consumer
             TestUser consumer = await TestUsers.GetUser(TestUserType.Consumer);
 
-            string searchRequestJson = Dtros.GetSearchRequestJson("traCreator", publisher.TraId);
+            string searchRequestJson = Dtros.GetSearchRequestJson("traCreator", (int)publisher.TraId);
             HttpResponseMessage dtroSearchResponse = await searchRequestJson.GetDtroSearchResponseAsync(consumer);
             string dtroSearchResponseJson = await dtroSearchResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.OK == dtroSearchResponse.StatusCode,

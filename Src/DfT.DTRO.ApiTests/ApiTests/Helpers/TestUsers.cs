@@ -27,7 +27,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
 
                 string timeNow = DateTime.UtcNow.Ticks.ToString();
                 string first9Digits = timeNow.Substring(timeNow.Length - 9);
-                string traId = "9" + first9Digits.Substring(1); // Make sure traId doesn't have leading 0
+                int traId = int.Parse("9" + first9Digits.Substring(1)); // Make sure traId doesn't have leading 0
 
                 string name;
                 int userGroup;
@@ -81,7 +81,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
         public required bool LocalUser { get; init; }
         public string? AppId { get; init; }
         public string? AccessToken { get; init; }
-        public string? TraId { get; init; }
+        public int? TraId { get; init; }
         public string? Name { get; init; }
         public int? UserGroup { get; init; }
     }

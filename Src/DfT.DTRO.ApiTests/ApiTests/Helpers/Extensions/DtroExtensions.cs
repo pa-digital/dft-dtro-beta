@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.Consts;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
 
 namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
@@ -14,20 +15,25 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             return dtroJson;
         }
 
-        public static string ModifyTraInDtroJson(this string jsonString, string schemaVersion, string traId)
+        public static string ModifyTraInDtroJson(this string jsonString, string schemaVersion, int traId)
         {
             JObject jsonObj = JObject.Parse(jsonString);
-            int traIdAsInt = int.Parse(traId);
 
             int schemaVersionAsInt = int.Parse(schemaVersion.Replace(".", ""));
 
             string sourceCapitalisation = schemaVersionAsInt >= 332 ? "source" : "Source";
 
-            jsonObj["data"][sourceCapitalisation]["currentTraOwner"] = traIdAsInt;
-            jsonObj["data"][sourceCapitalisation]["traAffected"] = new JArray(traIdAsInt);
-            jsonObj["data"][sourceCapitalisation]["traCreator"] = traIdAsInt;
+            jsonObj["data"][sourceCapitalisation]["currentTraOwner"] = traId;
+            jsonObj["data"][sourceCapitalisation]["traAffected"] = new JArray(traId);
+            jsonObj["data"][sourceCapitalisation]["traCreator"] = traId;
 
             return jsonObj.ToString();
+        }
+
+        public static string SetValueAtJsonPath(this string jsonString, string jsonPath, object newValue)
+        {
+            string modifiedJson = JsonMethods.SetValueAtJsonPath(jsonString, jsonPath, newValue);
+            return modifiedJson;
         }
 
         public static string ModifySchemaVersion(this string jsonString, string schemaVersion)
@@ -89,7 +95,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendJsonInDtroCreationRequestAsync(this string jsonString, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
@@ -100,8 +106,17 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendJsonInDtroCreationRequestWithAccessTokenAsync(this string jsonString, string accessToken)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
-            headers.Add("Authorization", accessToken);
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
+            headers.Add(HttpHeaderKeys.Authorization, $"Bearer {accessToken}");
+
+            HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonString);
+            return dtroCreationResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendJsonInDtroCreationRequestWithNoAuthorizationHeaderAsync(this string jsonString)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromBody}", headers, jsonString);
             return dtroCreationResponse;
@@ -110,9 +125,28 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendJsonInDtroUpdateRequestAsync(this string jsonString, string dtroId, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             await headers.AddValidHeadersForEnvironment(testUser);
+
+            HttpResponseMessage updateDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromBody/{dtroId}", headers, jsonString);
+            return updateDtroResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendJsonInDtroUpdateRequestWithAccessTokenAsync(this string jsonString, string dtroId, string accessToken)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
+            headers.Add(HttpHeaderKeys.Authorization, $"Bearer {accessToken}");
+
+            HttpResponseMessage updateDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromBody/{dtroId}", headers, jsonString);
+            return updateDtroResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendJsonInDtroUpdateRequestWithNoAuthorizationHeaderAsync(this string jsonString, string dtroId)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             HttpResponseMessage updateDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromBody/{dtroId}", headers, jsonString);
             return updateDtroResponse;
@@ -121,7 +155,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestAsync(this string dtroFilePath, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "multipart/form-data");
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
@@ -132,8 +166,17 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestWithAccessTokenAsync(this string dtroFilePath, string accessToken)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "multipart/form-data");
-            headers.Add("Authorization", accessToken);
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
+            headers.Add(HttpHeaderKeys.Authorization, $"Bearer {accessToken}");
+
+            HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: dtroFilePath);
+            return dtroCreationResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendFileInDtroCreationRequestWithNoAuthorizationHeaderAsync(this string dtroFilePath)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             HttpResponseMessage dtroCreationResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosCreateFromFile}", headers, pathToJsonFile: dtroFilePath);
             return dtroCreationResponse;
@@ -142,9 +185,28 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> SendFileInDtroUpdateRequestAsync(this string dtroFilePath, string dtroId, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "multipart/form-data");
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             await headers.AddValidHeadersForEnvironment(testUser);
+
+            HttpResponseMessage dtroUpdateResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromFile/{dtroId}", headers, pathToJsonFile: dtroFilePath);
+            return dtroUpdateResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendFileInDtroUpdateRequestWithAccessTokenAsync(this string dtroFilePath, string dtroId, string accessToken)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
+            headers.Add(HttpHeaderKeys.Authorization, $"Bearer {accessToken}");
+
+            HttpResponseMessage dtroUpdateResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromFile/{dtroId}", headers, pathToJsonFile: dtroFilePath);
+            return dtroUpdateResponse;
+        }
+
+        public static async Task<HttpResponseMessage> SendFileInDtroUpdateRequestWithNoAuthorizationHeaderAsync(this string dtroFilePath, string dtroId)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             HttpResponseMessage dtroUpdateResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Put, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/updateFromFile/{dtroId}", headers, pathToJsonFile: dtroFilePath);
             return dtroUpdateResponse;
@@ -171,7 +233,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static async Task<HttpResponseMessage> GetDtroSearchResponseAsync(this string jsonString, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "application/json");
+            headers.Add(HttpHeaderKeys.ContentType, "application/json");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
@@ -190,7 +252,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static string CreateDtroTempFile(this string jsonString, string fileName, TestUser testUser)
         {
             // If the name is null, we're using a pre-existing user on dev / test / integration, so we have to create a unique file name prefix rather than use the TRA ID as a prefix
-            string uniquePrefix = testUser.Name == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : testUser.TraId;
+            string uniquePrefix = testUser.Name == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : testUser.TraId.ToString();
             string nameOfCopyFile = $"{uniquePrefix}-{fileName}";
             string tempFilePath = $"{TestConfig.PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             FileHelper.WriteStringToFile(TestConfig.PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonString);
@@ -200,7 +262,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         public static string CreateDtroTempFileForUpdate(this string jsonString, string fileName, TestUser testUser)
         {
             // If the name is null, we're using a pre-existing user on dev / test / integration, so we have to create a unique file name prefix rather than use the TRA ID as a prefix
-            string uniquePrefix = testUser.Name == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : testUser.TraId;
+            string uniquePrefix = testUser.Name == null ? Guid.NewGuid().ToString("N").Substring(0, 6) : testUser.TraId.ToString();
             string nameOfCopyFile = $"update-{uniquePrefix}-{fileName}";
             string tempFilePath = $"{TestConfig.PathToDtroExamplesTempDirectory}/{nameOfCopyFile}";
             FileHelper.WriteStringToFile(TestConfig.PathToDtroExamplesTempDirectory, nameOfCopyFile, jsonString);
@@ -240,5 +302,4 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             return JsonConvert.SerializeObject(camelCasedObject, Formatting.Indented);
         }
     }
-
 }
