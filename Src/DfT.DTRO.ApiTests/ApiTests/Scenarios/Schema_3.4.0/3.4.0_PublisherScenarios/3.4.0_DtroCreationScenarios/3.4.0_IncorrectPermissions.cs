@@ -122,7 +122,6 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
 
             // Prepare DTRO
             TestUser publisherWhoDoesNotOwnDtro = await TestUsers.GetUser(TestUserType.Publisher2);
-            string invalidAccessToken = publisherWhoDoesNotOwnDtro.AccessToken;
 
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
@@ -131,7 +130,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
                                     .SetValueAtJsonPath("data.source.traCreator", publisherWhoDoesNotOwnDtro.TraId);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestWithAccessTokenAsync(invalidAccessToken);
+            HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisherWhoDoesNotOwnDtro);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
@@ -151,7 +150,6 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
 
             // Prepare DTRO
             TestUser publisherWhoDoesNotOwnDtro = await TestUsers.GetUser(TestUserType.Publisher2);
-            string invalidAccessToken = publisherWhoDoesNotOwnDtro.AccessToken;
 
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
@@ -162,7 +160,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroCreatio
             string dtroTempFilePath = dtroCreationJson.CreateDtroTempFile(fileName, publisherWhoOwnsDtro);
 
             // Send DTRO
-            HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestWithAccessTokenAsync(invalidAccessToken);
+            HttpResponseMessage dtroCreationResponse = await dtroTempFilePath.SendFileInDtroCreationRequestAsync(publisherWhoDoesNotOwnDtro);
             string dtroCreationResponseJson = await dtroCreationResponse.Content.ReadAsStringAsync();
             Assert.True(HttpStatusCode.BadRequest == dtroCreationResponse.StatusCode,
                 $"Actual status code: {dtroCreationResponse.StatusCode}. Response JSON for file {fileName}:\n\n{dtroCreationResponseJson}");
