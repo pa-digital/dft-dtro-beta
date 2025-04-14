@@ -104,8 +104,11 @@ public class ExternalReferenceValidationServiceTests
     }
 
 
-    [Fact]
-    public void ValidateMultipleExternalReferencesWithDifferentGeometriesLastUpdatedDate()
+    [Theory]
+    [InlineData("origin")]
+    [InlineData("destination")]
+    [InlineData("intermediateLocation")]
+    public void ValidateMultipleExternalReferencesWithDifferentGeometriesLastUpdatedDate(string externalReference)
     {
         var dtroSubmit = Utils.PrepareDtro($@"
         {{
@@ -145,7 +148,7 @@ public class ExternalReferenceValidationServiceTests
                                     ]
                                 }},
                                 ""DirectedLinear"":  {{
-                                    ""ExternalReference"": [
+                                    ""{externalReference}"": [
                                         {{
                                             ""lastUpdateDate"": ""2023-01-01T00:00:00""
                                         }},

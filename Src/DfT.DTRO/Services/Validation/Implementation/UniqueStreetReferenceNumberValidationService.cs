@@ -24,16 +24,18 @@ public class UniqueStreetReferenceNumberValidationService : IUniqueStreetReferen
             foreach (var concreteGeometry in Constants.ConcreteGeometries.Where(geometry.HasField))
             {
 
-                var hasExternalReference = geometry
-                    .GetExpandoOrDefault(concreteGeometry)
-                    .HasField("ExternalReference");
-                if (!hasExternalReference)
+                var externalReference = Constants
+                    .PossibleExternalReferences
+                    .FirstOrDefault(possibleExternalReference=> geometry
+                        .GetExpandoOrDefault(concreteGeometry)
+                        .HasField(possibleExternalReference));
+                if (string.IsNullOrEmpty(externalReference))
                 {
                     continue;
                 }
 
                 var externalReferences = geometry
-                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.ExternalReference")
+                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.{externalReference}")
                     .OfType<ExpandoObject>()
                     .ToList();
 
@@ -53,7 +55,7 @@ public class UniqueStreetReferenceNumberValidationService : IUniqueStreetReferen
                     {
                         Name = "Invalid usrn",
                         Message = "One or more 'usrn' are invalid",
-                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> UniqueStreetReferenceNumber -> usrn",
+                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> {externalReference} -> UniqueStreetReferenceNumber -> usrn",
                         Rule = "'usrn' value should be between 0 and 99999999"
                     };
 
@@ -72,7 +74,7 @@ public class UniqueStreetReferenceNumberValidationService : IUniqueStreetReferen
                     {
                         Name = "Duplicate unique street reference numbers",
                         Message = "Object to enable linkage of Regulated Place geometry to the National Street Gazetteer Unique Street Reference Number",
-                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> UniqueStreetReferenceNumber -> usrn",
+                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> {externalReference} -> UniqueStreetReferenceNumber -> usrn",
                         Rule = $"'usrn' number must be unique"
                     };
 

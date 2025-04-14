@@ -23,16 +23,19 @@ public class ElementaryStreetUnitValidationService : IElementaryStreetUnitValida
         {
             foreach (var concreteGeometry in Constants.ConcreteGeometries.Where(geometry.HasField))
             {
-                var hasExternalReference = geometry
-                    .GetExpandoOrDefault(concreteGeometry)
-                    .HasField("ExternalReference");
-                if (!hasExternalReference)
+               
+                var externalReference = Constants
+                    .PossibleExternalReferences
+                    .FirstOrDefault(possibleExternalReference=> geometry
+                        .GetExpandoOrDefault(concreteGeometry)
+                        .HasField(possibleExternalReference));
+                if (string.IsNullOrEmpty(externalReference))
                 {
                     continue;
                 }
 
                 var externalReferences = geometry
-                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.ExternalReference")
+                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.{externalReference}")
                     .OfType<ExpandoObject>()
                     .ToList();
 
@@ -58,7 +61,7 @@ public class ElementaryStreetUnitValidationService : IElementaryStreetUnitValida
                     {
                         Name = "Invalid esu ID",
                         Message = "One or more “esu” are invalid",
-                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> UniqueStreetReferenceNumber -> ElementaryStreetUnit -> esu",
+                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> {externalReference} -> UniqueStreetReferenceNumber -> ElementaryStreetUnit -> esu",
                         Rule = "'esu' value should follow the NSG DEC convention and be between 10,000,001 (8 digits) and 99,999,999,999,999 (14 digits) and specified as an integer (no leading zeros). " +
                                "This shall correspond to a value found in the National Street Gazetteer"
                     };
