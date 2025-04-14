@@ -27,7 +27,14 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
                 LoadEnvFile();
             }
 
-            return _envVariables != null && _envVariables.TryGetValue(key, out var envValue) ? envValue : null;
+            if (_envVariables != null && _envVariables.TryGetValue(key, out var envValue))
+            {
+                return envValue;
+            }
+            else
+            {
+                throw new InvalidOperationException($"Environment variable '{key}' not found. When running the tests against dev / test / integration, make sure you've supplied '{key}' as an argument passed to run_api_tests.sh or in docker/dev/.env");
+            }
         }
 
         private static void LoadEnvFile()
