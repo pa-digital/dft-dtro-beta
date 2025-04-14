@@ -1,5 +1,3 @@
-using DfT.DTRO.Models.Auth;
-
 namespace Dft.DTRO.Tests.ControllerTests;
 
 public class AuthControllerTests
@@ -44,5 +42,20 @@ public class AuthControllerTests
         IActionResult actual = await _sut.GetToken(authTokenInput);
         Assert.NotNull(actual);
         Assert.Equal(500, ((ObjectResult)actual).StatusCode);
+    }
+
+    [Theory]
+    [InlineData("Test App","jon.doe@email.com")]
+    public void RefreshSecretsReturnsOk(string appName, string email)
+    {
+        var emailNotificationResponse = new EmailNotificationResponse() { id = Guid.NewGuid().ToString() };
+        var apigeeApplication = new ApigeeDeveloperApp() { Name = appName };
+        _mockEmailService
+            .Setup(it => it.SendEmail(email, apigeeApplication))
+            .Returns(() => emailNotificationResponse);
+
+        var actual = _sut.RefreshSecrets(email, apigeeApplication);
+        Assert.NotNull(actual);
+        Assert.Equal(200, ((ObjectResult)actual).StatusCode);
     }
 }
