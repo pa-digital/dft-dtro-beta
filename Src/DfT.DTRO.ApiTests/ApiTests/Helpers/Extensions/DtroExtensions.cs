@@ -12,7 +12,8 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
         {
             string dtroFile = $"{TestConfig.PathToExamplesDirectory}/D-TROs/{schemaVersion}/{fileName}";
             string dtroJson = File.ReadAllText(dtroFile);
-            return dtroJson;
+            string dtroJsonWithTestRunDetails = dtroJson.AppendTextToTroName(schemaVersion, TestConfig.testRunDescription);
+            return dtroJsonWithTestRunDetails;
         }
 
         public static string ModifyTraInDtroJson(this string jsonString, string schemaVersion, int traId)
@@ -80,14 +81,14 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             return jsonObj.ToString();
         }
 
-        public static string ModifyTroNameForUpdate(this string jsonString, string schemaVersion)
+        public static string AppendTextToTroName(this string jsonString, string schemaVersion, string textToAppend)
         {
             JObject jsonObj = JObject.Parse(jsonString);
             int schemaVersionAsInt = int.Parse(schemaVersion.Replace(".", ""));
 
             string sourceCapitalisation = schemaVersionAsInt >= 332 ? "source" : "Source";
 
-            jsonObj["data"][sourceCapitalisation]["troName"] = $"{jsonObj["data"][sourceCapitalisation]["troName"]} UPDATED";
+            jsonObj["data"][sourceCapitalisation]["troName"] = $"{jsonObj["data"][sourceCapitalisation]["troName"]} {textToAppend}";
 
             return jsonObj.ToString();
         }

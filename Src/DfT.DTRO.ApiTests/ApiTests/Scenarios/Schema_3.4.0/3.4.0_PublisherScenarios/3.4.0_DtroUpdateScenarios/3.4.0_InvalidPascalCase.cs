@@ -57,7 +57,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
                                     .GetJsonFromFile(schemaVersionWithInvalidPascalCase)
                                     .ModifyTraInDtroJson(schemaVersionWithInvalidPascalCase, (int)publisher.TraId)
                                     .ModifySourceActionType(schemaVersionWithInvalidPascalCase, "amendment")
-                                    .ModifyTroNameForUpdate(schemaVersionWithInvalidPascalCase)
+                                    .AppendTextToTroName(schemaVersionWithInvalidPascalCase, "UPDATED")
                                     .ModifySchemaVersion(schemaVersionToTest);
 
             // Send DTRO update
@@ -101,7 +101,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
                                     .GetJsonFromFile(schemaVersionWithInvalidPascalCase)
                                     .ModifyTraInDtroJson(schemaVersionWithInvalidPascalCase, (int)publisher.TraId)
                                     .ModifySourceActionType(schemaVersionWithInvalidPascalCase, "amendment")
-                                    .ModifyTroNameForUpdate(schemaVersionWithInvalidPascalCase)
+                                    .AppendTextToTroName(schemaVersionWithInvalidPascalCase, "UPDATED")
                                     .ModifySchemaVersion(schemaVersionToTest);
 
 
