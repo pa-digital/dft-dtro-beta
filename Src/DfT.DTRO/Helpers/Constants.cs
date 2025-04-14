@@ -59,7 +59,7 @@ public static class Constants
         typeof(EmissionClassificationEuroType).GetDisplayNames<EmissionClassificationEuroType>();
     public static List<string> PossibleConditions => ["conditions", "Condition", "ConditionSet"];
 
-    public static List<string> PossibleExternalReferences => ["externalReference", "origin", "intermediateLocation", "destination"];
+    public static List<string> PossibleExternalReferences => ["ExternalReference", "origin", "intermediateLocation", "destination"];
 
     public static List<int> MphValues => [10, 20, 30, 40, 50, 60, 70];
 

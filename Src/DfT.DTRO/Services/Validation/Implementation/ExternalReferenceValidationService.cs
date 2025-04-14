@@ -35,6 +35,7 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                     .FirstOrDefault(possibleExternalReference=> geometry
                     .GetExpandoOrDefault(concreteGeometry)
                     .HasField(possibleExternalReference));
+
                 if (string.IsNullOrEmpty(externalReference))
                 {
                     continue;
