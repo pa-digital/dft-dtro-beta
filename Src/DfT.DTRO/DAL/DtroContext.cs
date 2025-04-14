@@ -88,6 +88,8 @@ public class DtroContext : DbContext
 
     public DbSet<ApplicationStatus> ApplicationStatus { get; set; }
 
+    public DbSet<Auth> Auth { get; set; }
+
     /// <summary>
     /// Default constructor.
     /// </summary>
