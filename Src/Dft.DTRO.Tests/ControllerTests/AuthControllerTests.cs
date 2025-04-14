@@ -45,8 +45,8 @@ public class AuthControllerTests
     }
 
     [Theory]
-    [InlineData("Test App","jon.doe@email.com")]
-    public void RefreshSecretsReturnsOk(string appName, string email)
+    [InlineData("jon.doe@email.com","Test App")]
+    public void RefreshSecretsReturnsOk(string email,string appName)
     {
         var emailNotificationResponse = new EmailNotificationResponse() { id = Guid.NewGuid().ToString() };
         var apigeeApplication = new ApigeeDeveloperApp() { Name = appName };
@@ -57,5 +57,32 @@ public class AuthControllerTests
         var actual = _sut.RefreshSecrets(email, apigeeApplication);
         Assert.NotNull(actual);
         Assert.Equal(200, ((ObjectResult)actual).StatusCode);
+    }
+
+    [Theory]
+    [InlineData("Test App","jon.doe@email.com")]
+    public void RefreshSecretsThrowsEmailException(string email, string appName)
+    {
+        var emailNotificationResponse = new EmailNotificationResponse();
+        var apigeeApplication = new ApigeeDeveloperApp() { Name = appName };
+        _mockEmailService
+            .Setup(it => it.SendEmail(email, apigeeApplication))
+            .Throws<EmailSendException>();
+
+        var actual = _sut.RefreshSecrets(email, apigeeApplication);
+        Assert.Equal(500, ((ObjectResult)actual).StatusCode);
+    }
+
+    [Theory]
+    [InlineData("Test App","jon.doe@email.com")]
+    public void RefreshSecretsThrowsException(string email, string appName)
+    {
+        var apigeeApplication = new ApigeeDeveloperApp() { Name = appName };
+        _mockEmailService
+            .Setup(it => it.SendEmail(email, apigeeApplication))
+            .Throws<Exception>();
+
+        var actual = _sut.RefreshSecrets(email, apigeeApplication);
+        Assert.Equal(500, ((ObjectResult)actual).StatusCode);
     }
 }
