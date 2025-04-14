@@ -30,16 +30,19 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                     continue;
                 }
 
-                var hasExternalReference = geometry
+                var externalReference = Constants
+                    .PossibleExternalReferences
+                    .FirstOrDefault(possibleExternalReference=> geometry
                     .GetExpandoOrDefault(concreteGeometry)
-                    .HasField("ExternalReference");
-                if (!hasExternalReference)
+                    .HasField(possibleExternalReference));
+
+                if (string.IsNullOrEmpty(externalReference))
                 {
                     continue;
                 }
 
                 var lastDateUpdates = geometry
-                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.ExternalReference")
+                    .GetValueOrDefault<IList<object>>($"{concreteGeometry}.{externalReference}")
                     .OfType<ExpandoObject>()
                     .Select(it => it.GetDateTimeOrNull("lastUpdateDate"))
                     .ToList();
@@ -50,7 +53,7 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                     {
                         Name = "Missing last update date",
                         Message = "Indicates the date the USRN reference was last updated",
-                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> lastUpdateDate",
+                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> {externalReference} -> lastUpdateDate",
                         Rule = "One or more 'lastUpdateDate' is missing"
                     };
 
@@ -64,7 +67,7 @@ public class ExternalReferenceValidationService : IExternalReferenceValidationSe
                     {
                         Name = "Invalid last update date",
                         Message = "Indicates the date the USRN reference was last updated",
-                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> ExternalReference -> lastUpdateDate",
+                        Path = $"Source -> Provision -> RegulatedPlace -> {concreteGeometry} -> {externalReference} -> lastUpdateDate",
                         Rule = $"'lastUpdateDate' cannot be in the future"
                     };
 
