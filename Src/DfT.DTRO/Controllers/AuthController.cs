@@ -65,7 +65,7 @@ public class AuthController : ControllerBase
         try
         {
             //TODO: This will be changed once the api endpoint is going to be implemented.
-            var response = _emailService.SendEmail(email, new ApigeeDeveloperApp(){Name = "Test", Credentials = new List<ApigeeDeveloperAppCredential>(){new ApigeeDeveloperAppCredential(){ConsumerKey = "consumerKey", ConsumerSecret = "consumerSecret"}}});
+            var response = _emailService.SendEmail(email, new ApigeeDeveloperApp(){Name = "Test" });
             if (string.IsNullOrEmpty(response.id))
             {
                 throw new EmailSendException();
