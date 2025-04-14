@@ -101,24 +101,29 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers
             PathToRuleExamplesDirectory = $"{PathToExamplesDirectory}/Rules";
             DatabaseConnectionString = GetDatabaseConnectionString();
 
-            AdminClientId = EnvVariables.GetEnvValue("ADMIN_CLIENT_ID");
-            AdminClientSecret = EnvVariables.GetEnvValue("ADMIN_CLIENT_SECRET");
-            ConsumerClientId = EnvVariables.GetEnvValue("CONSUMER_CLIENT_ID");
-            ConsumerClientSecret = EnvVariables.GetEnvValue("CONSUMER_CLIENT_SECRET");
-            PublisherClientId1 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID_1");
-            PublisherClientSecret1 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET_1");
+            // When running the tests against localhost, there's no need to specify user credententials because a new user is
+            // dynamically created for every test. But when running the tests against dev / test / integration, we need to 
+            // specify user credentials for "fixed" users
+            if (EnvironmentName != EnvironmentType.Local) {
+                AdminClientId = EnvVariables.GetEnvValue("ADMIN_CLIENT_ID");
+                AdminClientSecret = EnvVariables.GetEnvValue("ADMIN_CLIENT_SECRET");
+                ConsumerClientId = EnvVariables.GetEnvValue("CONSUMER_CLIENT_ID");
+                ConsumerClientSecret = EnvVariables.GetEnvValue("CONSUMER_CLIENT_SECRET");
+                PublisherClientId1 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID_1");
+                PublisherClientSecret1 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET_1");
 
-            string publisherTraId1FromScript = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_1");
-            if (publisherTraId1FromScript != null) {
-                PublisherTraId1 = int.Parse(publisherTraId1FromScript);
-            }
+                string publisherTraId1FromScript = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_1");
+                if (publisherTraId1FromScript != null) {
+                    PublisherTraId1 = int.Parse(publisherTraId1FromScript);
+                }
 
-            PublisherClientId2 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID_2");
-            PublisherClientSecret2 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET_2");
+                PublisherClientId2 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_ID_2");
+                PublisherClientSecret2 = EnvVariables.GetEnvValue("PUBLISHER_CLIENT_SECRET_2");
 
-            string publisherTraId2FromScript = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_2");
-            if (publisherTraId2FromScript != null) {
-                PublisherTraId2 = int.Parse(publisherTraId2FromScript);
+                string publisherTraId2FromScript = EnvVariables.GetEnvValue("PUBLISHER_TRA_ID_2");
+                if (publisherTraId2FromScript != null) {
+                    PublisherTraId2 = int.Parse(publisherTraId2FromScript);
+                }
             }
         }
     }
