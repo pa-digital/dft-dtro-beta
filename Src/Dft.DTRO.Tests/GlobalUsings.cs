@@ -54,3 +54,4 @@ global using Notify.Models.Responses;
 global using DfT.DTRO.Apis.Clients;
 global using Notify.Client;
 global using Notify.Interfaces;
+global using DfT.DTRO.Models.Auth;

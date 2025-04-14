@@ -18,7 +18,6 @@ public class ApplicationController : ControllerBase
     /// </summary>
     /// <param name="applicationService">Service for application operations.</param>
     /// <param name="logger">Logger instance for logging.</param>
-    /// <param name="loggingExtension">Extension for logging operations.</param>
     /// <param name="emailService">Service used for email operations.</param>
     public ApplicationController(IApplicationService applicationService, ILogger<ApplicationController> logger,IEmailService emailService)
     {
@@ -161,6 +160,7 @@ public class ApplicationController : ControllerBase
     /// Retrieves application details by ID
     /// </summary>
     /// <param name="email">Developer email linked to access token.</param>
+    /// <param name="appId">Application unique identifier.</param>
     /// <response code="200">Valid application ID</response>
     /// <response code="400">Invalid or empty parameters, or no matching application</response>
     /// <response code="500">Invalid operation or other exception</response>
@@ -196,6 +196,7 @@ public class ApplicationController : ControllerBase
     /// Retrieves application list for user
     /// </summary>
     /// <param name="email">Developer email linked to access token.</param>
+    /// <param name="paginatedRequest">Page request parameters.</param>
     /// <response code="200">Valid user ID</response>
     /// <response code="400">Invalid or empty parameters, or no matching user</response>
     /// <response code="500">Invalid operation or other exception</response>

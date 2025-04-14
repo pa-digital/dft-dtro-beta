@@ -8,5 +8,6 @@ public static class ApiConsts
     public const string NotifyApiKey = "notify-api-key";
     public const string ApplicationCreated = "application-created";
     public const string ApplicationPendingApproval = "application-pending-approval";
+    public const string RefreshToken = "secret-refresh-email-confirmation";
     public const string DtroCsoEmail = "dtro-cso-email";
 }
