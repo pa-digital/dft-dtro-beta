@@ -1,4 +1,5 @@
 using Newtonsoft.Json.Linq;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Enums;
@@ -8,7 +9,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
 {
     public class HappyScenarios : BaseTest
     {
-        readonly static string schemaVersionToTest = "3.4.0";
+        readonly static string schemaVersionToTest = SchemaVersions._3_4_0;
 
         public static IEnumerable<object[]> GetNamesOfDtroExampleFiles()
         {
@@ -40,7 +41,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher);
@@ -84,7 +85,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO
             string dtroCreationJson = fileName
                                     .GetJsonFromFile(schemaVersionToTest)
-                                    .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId);
+                                    .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId);
 
             string tempFilePathForDtroCreation = dtroCreationJson.CreateDtroTempFile(fileName, publisher);
 
@@ -123,7 +124,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
         [Fact]
         public async Task DtroUpdatedWithLaterSchemaFromJsonBodyShouldBeSavedCorrectly()
         {
-            string oldSchemaVersion = "3.3.1";
+            string oldSchemaVersion = SchemaVersions._3_3_1;
             string createFileWithSchema3_3_1 = "JSON-3.3.1-example-Derbyshire 2024 DJ388 partial.json";
             string updateFileWithSchema3_4_0 = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";
 
@@ -133,7 +134,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO
             string dtroCreationJson = createFileWithSchema3_3_1
                                     .GetJsonFromFile(oldSchemaVersion)
-                                    .ModifyTraInDtroJson(oldSchemaVersion, publisher.TraId);
+                                    .ModifyTraInDtroJson(oldSchemaVersion, (int)publisher.TraId);
 
             // Send DTRO
             HttpResponseMessage dtroCreationResponse = await dtroCreationJson.SendJsonInDtroCreationRequestAsync(publisher);
@@ -144,7 +145,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO update
             string dtroUpdateJson = updateFileWithSchema3_4_0
                                         .GetJsonFromFile(schemaVersionToTest)
-                                        .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                        .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
                                         .ModifyTroNameForUpdate(schemaVersionToTest);
 
@@ -170,7 +171,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
         [Fact]
         public async Task DtroUpdatedWithLaterSchemaFromFileShouldBeSavedCorrectly()
         {
-            string oldSchemaVersion = "3.3.1";
+            string oldSchemaVersion = SchemaVersions._3_3_1;
             string createFileWithSchema3_3_1 = "JSON-3.3.1-example-Derbyshire 2024 DJ388 partial.json";
             string updateFileWithSchema3_4_0 = "dtro-v3.4.0-example-derbyshire-2024-dj388-partial.json";
 
@@ -180,7 +181,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO
             string dtroCreationJson = createFileWithSchema3_3_1
                                     .GetJsonFromFile(oldSchemaVersion)
-                                    .ModifyTraInDtroJson(oldSchemaVersion, publisher.TraId);
+                                    .ModifyTraInDtroJson(oldSchemaVersion, (int)publisher.TraId);
 
             string tempFilePathForDtroCreation = dtroCreationJson.CreateDtroTempFile(createFileWithSchema3_3_1, publisher);
 
@@ -193,7 +194,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
             // Prepare DTRO update
             string dtroUpdateJson = updateFileWithSchema3_4_0
                                         .GetJsonFromFile(schemaVersionToTest)
-                                        .ModifyTraInDtroJson(schemaVersionToTest, publisher.TraId)
+                                        .ModifyTraInDtroJson(schemaVersionToTest, (int)publisher.TraId)
                                         .ModifySourceActionType(schemaVersionToTest, "amendment")
                                         .ModifyTroNameForUpdate(schemaVersionToTest);
 

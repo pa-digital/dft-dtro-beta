@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using DfT.DTRO.Consts;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.JsonHelpers;
 using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
@@ -18,7 +19,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.DataEntities
         public static async Task<HttpResponseMessage> CreateDtroFromFileAsync(string filePath, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "multipart/form-data");
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
@@ -158,7 +159,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.DataEntities
             return expectedErrorJson;
         }
 
-        public static string GetSearchRequestJson(string traField, string traId)
+        public static string GetSearchRequestJson(string traField, int traId)
         {
             string requestJson = $$"""
             {

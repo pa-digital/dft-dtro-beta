@@ -1,4 +1,5 @@
 using DfT.DTRO.Consts;
+using DfT.DTRO.ApiTests.ApiTests.Helpers.Consts;
 using DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions;
 using static DfT.DTRO.ApiTests.ApiTests.Helpers.TestConfig;
 
@@ -14,7 +15,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.DataEntities
         public static async Task<HttpResponseMessage> CreateRuleSetFromFileAsync(string schemaVersion, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            headers.Add("Content-Type", "multipart/form-data");
+            headers.Add(HttpHeaderKeys.ContentType, "multipart/form-data");
 
             await headers.AddValidHeadersForEnvironment(testUser);
 
