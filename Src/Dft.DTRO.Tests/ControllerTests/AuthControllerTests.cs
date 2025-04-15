@@ -1,4 +1,5 @@
 using DfT.DTRO.Consts;
+using DfT.DTRO.Utilities;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -8,6 +9,8 @@ public class AuthControllerTests
 {
     private readonly Mock<IAuthService> _mockAuthService = new();
     private readonly Mock<IUserDal> _mockUserDal = new();
+    private readonly Mock<ITwoFactorAuthService> _mockTwoFactorAuthService = new();
+    private readonly Mock<AuthHelper> _mockAuthHelper = new();
 
     private readonly AuthController _sut;
 
@@ -16,7 +19,7 @@ public class AuthControllerTests
         ILogger<AuthController> mockLogger = MockLogger.Setup<AuthController>();
         var mockLoggingExtension = new Mock<LoggingExtension>();
 
-        _sut = new AuthController(_mockAuthService.Object, _mockUserDal.Object, mockLogger, mockLoggingExtension.Object);
+        _sut = new AuthController(_mockAuthService.Object, _mockUserDal.Object, _mockTwoFactorAuthService.Object, _mockAuthHelper.Object, mockLogger, mockLoggingExtension.Object);
 
         Guid appId = Guid.NewGuid();
         Mock<HttpContext> mockContext = MockHttpContext.Setup();
@@ -67,7 +70,7 @@ public class AuthControllerTests
         _mockUserDal.Setup(x => x.GetUserFromEmail(email))
             .ReturnsAsync(new User { IsCentralServiceOperator = true });
 
-        var result = await _sut.VerifyToken(email);
+        var result = await _sut.VerifyToken();
         var okResult = Assert.IsType<OkObjectResult>(result);
         var json = JsonConvert.SerializeObject(okResult.Value);
         var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
@@ -96,7 +99,7 @@ public class AuthControllerTests
         _mockUserDal.Setup(x => x.GetUserFromEmail(email))
             .ReturnsAsync(new User { IsCentralServiceOperator = false });
 
-        var result = await _sut.VerifyToken(email);
+        var result = await _sut.VerifyToken();
         Assert.IsType<UnauthorizedResult>(result);
     }
 
@@ -119,7 +122,7 @@ public class AuthControllerTests
         _mockUserDal.Setup(x => x.GetUserFromEmail(email))
             .ReturnsAsync(new User { IsCentralServiceOperator = false });
 
-        var result = await _sut.VerifyToken(email);
+        var result = await _sut.VerifyToken();
         Assert.IsType<UnauthorizedResult>(result);
     }
 
@@ -142,7 +145,7 @@ public class AuthControllerTests
         _mockUserDal.Setup(x => x.GetUserFromEmail(email))
             .ReturnsAsync(new User { IsCentralServiceOperator = true });
 
-        await Assert.ThrowsAsync<IndexOutOfRangeException>(() => _sut.VerifyToken(email));
+        await Assert.ThrowsAsync<IndexOutOfRangeException>(() => _sut.VerifyToken());
     }
 
     [Fact]
@@ -164,7 +167,7 @@ public class AuthControllerTests
         _mockUserDal.Setup(x => x.GetUserFromEmail(email))
             .ThrowsAsync(new Exception("DB error"));
 
-        var ex = await Assert.ThrowsAsync<Exception>(() => _sut.VerifyToken(email));
+        var ex = await Assert.ThrowsAsync<Exception>(() => _sut.VerifyToken());
         Assert.Equal("DB error", ex.Message);
     }
 }

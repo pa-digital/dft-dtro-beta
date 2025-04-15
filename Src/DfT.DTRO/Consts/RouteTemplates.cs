@@ -16,6 +16,9 @@ public static class RouteTemplates
     public const string AuthGetToken = AuthBase + "/token";
     public const string AuthVerifyToken = AuthBase + "/verify";
 
+    public const string AuthenticateUser = "/auth";
+    public const string ValidateTwoFactorAuthCode = AuthenticateUser + "/2fa";
+
     // Dtros
     public const string DtrosBase = "/dtros";
     public const string DtrosCreateFromFile = DtrosBase + "/createFromFile";

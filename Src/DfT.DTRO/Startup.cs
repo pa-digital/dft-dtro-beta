@@ -1,6 +1,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace DfT.DTRO;
 
@@ -47,7 +50,8 @@ public class Startup
                 "DfT.DTRO.Services",
                 "DfT.DTRO.DAL",
                 "DfT.DTRO.Apis.Clients",
-                "DfT.DTRO.Apis.Repositories"))
+                "DfT.DTRO.Apis.Repositories",
+                "DfT.DTRO.Utilities"))
             .AsImplementedInterfaces()
             .WithScopedLifetime()
             .AddClasses(classes => classes.InNamespaces("DfT.DTRO.Services.Mapping"))
@@ -66,8 +70,8 @@ public class Startup
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
         app.UseRouting();
-        
-        // 
+
+        app.UseAuthentication();
 
         app.UseAuthorization();
 

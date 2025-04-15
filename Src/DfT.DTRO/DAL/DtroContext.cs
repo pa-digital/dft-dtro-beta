@@ -90,6 +90,8 @@ public class DtroContext : DbContext
 
     public DbSet<Auth> Auth { get; set; }
 
+    public DbSet<TwoFactorAuthentication> TwoFactorAuthentication { get; set; }
+
     /// <summary>
     /// Default constructor.
     /// </summary>
