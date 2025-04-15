@@ -51,7 +51,7 @@ public class AuthControllerTests
         var emailNotificationResponse = new EmailNotificationResponse() { id = Guid.NewGuid().ToString() };
         var apigeeApplication = new ApigeeDeveloperApp() { Name = appName };
         _mockEmailService
-            .Setup(it => it.SendEmail(email, apigeeApplication))
+            .Setup(it => it.NotifyUserWhenSecretsRefreshes(email, apigeeApplication))
             .Returns(() => emailNotificationResponse);
 
         var actual = _sut.RefreshSecrets(email, apigeeApplication);
@@ -66,7 +66,7 @@ public class AuthControllerTests
         var emailNotificationResponse = new EmailNotificationResponse();
         var apigeeApplication = new ApigeeDeveloperApp() { Name = appName };
         _mockEmailService
-            .Setup(it => it.SendEmail(email, apigeeApplication))
+            .Setup(it => it.NotifyUserWhenSecretsRefreshes(email, apigeeApplication))
             .Throws<EmailSendException>();
 
         var actual = _sut.RefreshSecrets(email, apigeeApplication);
@@ -79,7 +79,7 @@ public class AuthControllerTests
     {
         var apigeeApplication = new ApigeeDeveloperApp() { Name = appName };
         _mockEmailService
-            .Setup(it => it.SendEmail(email, apigeeApplication))
+            .Setup(it => it.NotifyUserWhenSecretsRefreshes(email, apigeeApplication))
             .Throws<Exception>();
 
         var actual = _sut.RefreshSecrets(email, apigeeApplication);

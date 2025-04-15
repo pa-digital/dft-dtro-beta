@@ -10,6 +10,7 @@ namespace DfT.DTRO.Controllers;
 public class ApplicationController : ControllerBase
 {
     private readonly IApplicationService _applicationService;
+    private readonly IUserService _userService;
     private readonly IEmailService _emailService;
     private readonly ILogger<ApplicationController> _logger;
 
@@ -17,11 +18,13 @@ public class ApplicationController : ControllerBase
     /// Initializes a new instance of the <see cref="ApplicationController"/> class.
     /// </summary>
     /// <param name="applicationService">Service for application operations.</param>
+    /// <param name="userService">Service for user operations.</param>
     /// <param name="logger">Logger instance for logging.</param>
     /// <param name="emailService">Service used for email operations.</param>
-    public ApplicationController(IApplicationService applicationService, ILogger<ApplicationController> logger,IEmailService emailService)
+    public ApplicationController(IApplicationService applicationService, IUserService userService, ILogger<ApplicationController> logger,IEmailService emailService)
     {
         _applicationService = applicationService;
+        _userService = userService;
         _logger = logger;
         _emailService = emailService;
     }
@@ -43,8 +46,15 @@ public class ApplicationController : ControllerBase
             var app = await _applicationService.CreateApplication(email, appInput);
             if (string.IsNullOrEmpty(app.AppId))
             {
-                var response = _emailService.SendEmail(app.Name, email, ApplicationStatusType.Inactive.Status);
-                if (string.IsNullOrEmpty(response.id))
+                var firstEmailNotificationResponse = _emailService.NotifyUserWhenApplicationCreatedOrApproved(app.Name, email, ApplicationStatusType.Inactive.Status);
+                if (string.IsNullOrEmpty(firstEmailNotificationResponse.id))
+                {
+                    throw new EmailSendException();
+                }
+
+                var applicationOwner = await _userService.GetUser(email);
+                var secondEmailNotificationResponse = _emailService.NotifyCSOWhenApplicationCreated(applicationOwner.Name);
+                if (string.IsNullOrEmpty(secondEmailNotificationResponse.id))
                 {
                     throw new EmailSendException();
                 }
@@ -89,7 +99,7 @@ public class ApplicationController : ControllerBase
             if (isActivated)
             {
                 var app = await _applicationService.GetApplication(email, appId);
-                var response = _emailService.SendEmail(app.Name, email, ApplicationStatusType.Active.Status);
+                var response = _emailService.NotifyUserWhenApplicationCreatedOrApproved(app.Name, email, ApplicationStatusType.Active.Status);
                 if (string.IsNullOrEmpty(response.id))
                 {
                     throw new EmailSendException();

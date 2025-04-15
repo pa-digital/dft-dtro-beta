@@ -12,7 +12,7 @@ public interface IEmailService
     /// <param name="requestEmail">The application email to be sent.</param>
     /// <param name="status">Status of the application.</param>
     /// <returns>An email response notification.</returns>
-    EmailNotificationResponse SendEmail(string name, string requestEmail, string status);
+    EmailNotificationResponse NotifyUserWhenApplicationCreatedOrApproved(string name, string requestEmail, string status);
 
     /// <summary>
     /// Asynchronously sends an email for the specified application.
@@ -20,5 +20,12 @@ public interface IEmailService
     /// <param name="requestEmail">The application email to be sent.</param>
     /// <param name="apigeeDeveloperApp">Apigee developer application.</param>
     /// <returns>An email response notification.</returns>
-    EmailNotificationResponse SendEmail(string requestEmail,ApigeeDeveloperApp apigeeDeveloperApp);
+    EmailNotificationResponse NotifyUserWhenSecretsRefreshes(string requestEmail,ApigeeDeveloperApp apigeeDeveloperApp);
+
+    /// <summary>
+    /// Asynchronously sends an email to the CSO when an application is created.
+    /// </summary>
+    /// <param name="username">The username creating the application</param>
+    /// <returns>An email response notification.</returns>
+    EmailNotificationResponse NotifyCSOWhenApplicationCreated(string username);
 }

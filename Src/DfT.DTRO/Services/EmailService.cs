@@ -18,9 +18,8 @@ public class EmailService : IEmailService
     }
 
     /// <inheritdoc cref="IEmailService"/>
-    public EmailNotificationResponse SendEmail(string name, string requestEmail, string status)
+    public EmailNotificationResponse NotifyUserWhenApplicationCreatedOrApproved(string name, string requestEmail, string status)
     {
-        EmailNotificationResponse emailNotificationResponse = new();
         TemplateResponse templateResponse = new();
         string templateId;
         switch (status)
@@ -41,14 +40,12 @@ public class EmailService : IEmailService
             {"dtro-cso-email", _secretManagerClient.GetSecret(ApiConsts.DtroCsoEmail)}
         };
 
-        emailNotificationResponse = _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
-        return emailNotificationResponse;
+        return _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
     }
 
     /// <inheritdoc cref="IEmailService"/>
-    public EmailNotificationResponse SendEmail(string requestEmail, ApigeeDeveloperApp apigeeDeveloperApp)
+    public EmailNotificationResponse NotifyUserWhenSecretsRefreshes(string requestEmail, ApigeeDeveloperApp apigeeDeveloperApp)
     {
-        EmailNotificationResponse emailNotification = new();
         var templateId = _secretManagerClient.GetSecret(ApiConsts.RefreshToken);
         var templateResponse = _notificationClient.GetTemplateById(templateId);
 
@@ -61,7 +58,20 @@ public class EmailService : IEmailService
             { "dtro-cso-email", _secretManagerClient.GetSecret(ApiConsts.DtroCsoEmail) }
         };
 
-        emailNotification = _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
-        return emailNotification;
+        return _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
+    }
+
+    public EmailNotificationResponse NotifyCSOWhenApplicationCreated(string username)
+    {
+        var noReplyEmailAddress = _secretManagerClient.GetSecret(ApiConsts.NoReplyEmail);
+        var templateId = _secretManagerClient.GetSecret(ApiConsts.ApplicationCreatedCSONotified);
+        var templateResponse = _notificationClient.GetTemplateById(templateId);
+        var personalisation = new Dictionary<string, dynamic>()
+        {
+            { "email address", "gabriel.popescu@dft.gov.uk" },
+            { "username", username }
+        };
+
+        return _notificationClient.SendEmail("gabriel.popescu@dft.gov.uk", templateResponse.id, personalisation);
     }
 }

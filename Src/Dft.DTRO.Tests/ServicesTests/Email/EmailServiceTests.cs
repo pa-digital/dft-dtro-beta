@@ -35,10 +35,10 @@ public class EmailServiceTests
     public void SendEmailWhenApplicationCreated(string application, string status)
     {
         _sut
-            .Setup(it => it.SendEmail(application, _testEmail, status))
+            .Setup(it => it.NotifyUserWhenApplicationCreatedOrApproved(application, _testEmail, status))
             .Returns(new EmailNotificationResponse(){ id = _testId });
 
-        var actual = _sut.Object.SendEmail(application, _testEmail, status);
+        var actual = _sut.Object.NotifyUserWhenApplicationCreatedOrApproved(application, _testEmail, status);
         Assert.NotNull(actual.id);
     }
 
@@ -63,10 +63,10 @@ public class EmailServiceTests
             }
         };
         _sut
-            .Setup(it => it.SendEmail(requestEmail, _apigeeDeveloperApp))
+            .Setup(it => it.NotifyUserWhenSecretsRefreshes(requestEmail, _apigeeDeveloperApp))
             .Returns(new EmailNotificationResponse() { id = _testId });
 
-        var actual = _sut.Object.SendEmail(requestEmail, _apigeeDeveloperApp);
+        var actual = _sut.Object.NotifyUserWhenSecretsRefreshes(requestEmail, _apigeeDeveloperApp);
         Assert.NotNull(actual.id);
 
     }
