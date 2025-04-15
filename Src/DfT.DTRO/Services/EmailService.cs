@@ -61,17 +61,18 @@ public class EmailService : IEmailService
         return _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
     }
 
-    public EmailNotificationResponse NotifyCSOWhenApplicationCreated(string username)
+    /// <inheritdoc cref="IEmailService"/>
+    public EmailNotificationResponse NotifyCSOWhenApplicationCreated(string username, string csoEmail)
     {
         var noReplyEmailAddress = _secretManagerClient.GetSecret(ApiConsts.NoReplyEmail);
         var templateId = _secretManagerClient.GetSecret(ApiConsts.ApplicationCreatedCSONotified);
         var templateResponse = _notificationClient.GetTemplateById(templateId);
         var personalisation = new Dictionary<string, dynamic>()
         {
-            { "email address", "gabriel.popescu@dft.gov.uk" },
+            { "email address", csoEmail },
             { "username", username }
         };
 
-        return _notificationClient.SendEmail("gabriel.popescu@dft.gov.uk", templateResponse.id, personalisation);
+        return _notificationClient.SendEmail(csoEmail, templateResponse.id, personalisation);
     }
 }

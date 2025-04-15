@@ -26,6 +26,7 @@ public interface IEmailService
     /// Asynchronously sends an email to the CSO when an application is created.
     /// </summary>
     /// <param name="username">The username creating the application</param>
+    /// <param name="csoEmail">The D-TRO CSO email address</param>
     /// <returns>An email response notification.</returns>
-    EmailNotificationResponse NotifyCSOWhenApplicationCreated(string username);
+    EmailNotificationResponse NotifyCSOWhenApplicationCreated(string username, string csoEmail);
 }

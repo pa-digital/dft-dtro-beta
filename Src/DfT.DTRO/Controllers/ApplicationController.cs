@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+
 namespace DfT.DTRO.Controllers;
 
 /// <summary>
@@ -46,18 +48,23 @@ public class ApplicationController : ControllerBase
             var app = await _applicationService.CreateApplication(email, appInput);
             if (string.IsNullOrEmpty(app.AppId))
             {
-                var firstEmailNotificationResponse = _emailService.NotifyUserWhenApplicationCreatedOrApproved(app.Name, email, ApplicationStatusType.Inactive.Status);
-                if (string.IsNullOrEmpty(firstEmailNotificationResponse.id))
-                {
-                    throw new EmailSendException();
-                }
+                _logger.LogError($"'{app.Name}' was not created.");
+                return StatusCode(400, new ApiErrorResponse("Bad Request", $"An unexpected error occurred when trying to create '{app.Name}' application name."));
+            }
 
-                var applicationOwner = await _userService.GetUser(email);
-                var secondEmailNotificationResponse = _emailService.NotifyCSOWhenApplicationCreated(applicationOwner.Name);
-                if (string.IsNullOrEmpty(secondEmailNotificationResponse.id))
-                {
-                    throw new EmailSendException();
-                }
+            var firstEmailNotificationResponse = _emailService.NotifyUserWhenApplicationCreatedOrApproved(app.Name, email, ApplicationStatusType.Inactive.Status);
+            if (string.IsNullOrEmpty(firstEmailNotificationResponse.id))
+            {
+                throw new EmailSendException();
+            }
+
+            var applicationOwner = await _userService.GetUser(email);
+            //TODO: The CSO email should be retrieved from the configuration,
+            // but for testing purposes we are using a one of the developers.
+            var secondEmailNotificationResponse = _emailService.NotifyCSOWhenApplicationCreated(applicationOwner.Name, email);
+            if (string.IsNullOrEmpty(secondEmailNotificationResponse.id))
+            {
+                throw new EmailSendException();
             }
 
             _logger.LogInformation($"'{nameof(CreateApplication)}' method called ");
