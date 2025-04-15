@@ -193,7 +193,7 @@ namespace DfT.DTRO.ApiTests.ApiTests.Schema_3_4_0.PublisherScenarios.DtroUpdateS
                                     .SetValueAtJsonPath("data.source.traAffected", new[] { publisherWhoDoesNotOwnDtro.TraId })
                                     .SetValueAtJsonPath("data.source.traCreator", publisherWhoDoesNotOwnDtro.TraId);
 
-            // Send DTRO
+            // Send DTRO update
             string dtroId = await dtroCreationResponse.GetIdFromResponseJsonAsync();
             HttpResponseMessage dtroUpdateResponse = await dtroUpdateJson.SendJsonInDtroUpdateRequestAsync(dtroId, publisherWhoDoesNotOwnDtro);
             string dtroUpdateResponseJson = await dtroUpdateResponse.Content.ReadAsStringAsync();

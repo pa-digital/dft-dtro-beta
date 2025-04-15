@@ -230,6 +230,16 @@ namespace DfT.DTRO.ApiTests.ApiTests.Helpers.Extensions
             return getDtroResponse;
         }
 
+        public static async Task<HttpResponseMessage> ReassignDtroByIdAsync(this string dtroId, TestUser newOwner, TestUser admin)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            await headers.AddValidHeadersForEnvironment(admin);
+
+            HttpResponseMessage getDtroResponse = await HttpRequestHelper.MakeHttpRequestAsync(HttpMethod.Post, $"{TestConfig.BaseUri}{RouteTemplates.DtrosBase}/ownership/{dtroId}/{newOwner.TraId}", headers);
+            return getDtroResponse;
+        }
+
         public static async Task<HttpResponseMessage> DeleteDtroResponseByIdAsync(this string dtroId, TestUser testUser)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
