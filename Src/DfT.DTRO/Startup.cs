@@ -22,6 +22,44 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        var jwtSettings = Configuration.GetSection("Jwt");
+        var key = System.Environment.GetEnvironmentVariable("Jwt__Key");
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var cookie = context.Request.Cookies["jwtToken"];
+                    if (!string.IsNullOrEmpty(cookie))
+                    {
+                        context.Token = cookie;
+                    }
+                    return Task.CompletedTask;
+                }
+            };
+
+            options.RequireHttpsMetadata = true;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+
+                ValidIssuer = jwtSettings["Issuer"],
+                ValidAudience = jwtSettings["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+            };
+        });
+
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services

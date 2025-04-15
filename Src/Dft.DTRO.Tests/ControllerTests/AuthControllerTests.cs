@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using DfT.DTRO.Consts;
+using DfT.DTRO.Models.TwoFactorAuth;
 using DfT.DTRO.Utilities;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -10,7 +12,7 @@ public class AuthControllerTests
     private readonly Mock<IAuthService> _mockAuthService = new();
     private readonly Mock<IUserDal> _mockUserDal = new();
     private readonly Mock<ITwoFactorAuthService> _mockTwoFactorAuthService = new();
-    private readonly Mock<AuthHelper> _mockAuthHelper = new();
+    private readonly Mock<IAuthHelper> _mockAuthHelper = new();
 
     private readonly AuthController _sut;
 
@@ -25,149 +27,143 @@ public class AuthControllerTests
         Mock<HttpContext> mockContext = MockHttpContext.Setup();
     }
 
-    [Fact]
-    public async Task GetTokenReturnsAuthToken()
+    private AuthController SetupControllerWithUser(string email)
     {
-        var authTokenInput = new AuthTokenInput()
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new[]
         {
-            Username = "username",
-            Password = "password"
-        };
-        _mockAuthService
-            .Setup(it => it.GetToken(authTokenInput))
-            .ReturnsAsync(() => MockTestObjects.AuthToken);
+            new Claim(ClaimTypes.Name, email)
+        }, "mock"));
+
+        var context = MockHttpContext.Setup();
+        context.SetupGet(x => x.User).Returns(user);
 
         _sut.ControllerContext = new ControllerContext
         {
-            HttpContext = new DefaultHttpContext()
+            HttpContext = context.Object
         };
 
-        IActionResult? actual = await _sut.GetToken(authTokenInput);
-
-        Assert.NotNull(actual);
-        var okResult = Assert.IsType<OkResult>(actual);
-        Assert.Equal(200, okResult.StatusCode);
+        return _sut;
     }
 
     [Fact]
-    public async Task VerifyTokenValidTokenReturnsOkWithIsAdmin()
+    public async Task VerifyTokenReturnsIsAdminTrue()
     {
-        string email = "user@test.com";
-
-        var mockCookies = new Mock<IRequestCookieCollection>();
-        long futureTime = DateTimeOffset.Now.AddMinutes(10).ToUnixTimeSeconds();
-        mockCookies.Setup(c => c["access_token"]).Returns($"validtoken:{futureTime}");
-
-        var httpContext = new DefaultHttpContext();
-        httpContext.Request.Headers[RequestHeaderNames.Email] = email;
-        httpContext.Request.Cookies = mockCookies.Object;
+        var claims = new List<Claim> { new Claim(ClaimTypes.Name, "user@test.com") };
+        var identity = new ClaimsIdentity(claims, "TestAuth");
+        var principal = new ClaimsPrincipal(identity);
 
         _sut.ControllerContext = new ControllerContext
         {
-            HttpContext = httpContext
+            HttpContext = new DefaultHttpContext { User = principal }
         };
 
-        _mockUserDal.Setup(x => x.GetUserFromEmail(email))
-            .ReturnsAsync(new User { IsCentralServiceOperator = true });
+        _mockUserDal.Setup(x => x.GetUserFromEmail("user@test.com")).ReturnsAsync(new User { IsCentralServiceOperator = true });
 
         var result = await _sut.VerifyToken();
         var okResult = Assert.IsType<OkObjectResult>(result);
+
         var json = JsonConvert.SerializeObject(okResult.Value);
-        var response = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+        var value = JsonConvert.DeserializeObject<Dictionary<string, bool>>(json);
 
-        Assert.True(bool.Parse(response["isAdmin"].ToString()));
+        Assert.True(value["isAdmin"]);
     }
 
-     [Fact]
-    public async Task VerifyTokenExpiredTokenReturnsUnauthorized()
+    [Fact]
+    public async Task AuthenticateUserReturnsUnauthorizedIfInvalid()
     {
-        string email = "user@test.com";
+        var input = new AuthTokenInput { Username = "user", Password = "wrong" };
 
-        long pastTime = DateTimeOffset.Now.AddMinutes(-10).ToUnixTimeSeconds();
-        var mockCookies = new Mock<IRequestCookieCollection>();
-        mockCookies.Setup(c => c["access_token"]).Returns($"validtoken:{pastTime}");
-        
-        var httpContext = new DefaultHttpContext();
-        httpContext.Request.Headers[RequestHeaderNames.Email] = email;
-        httpContext.Request.Cookies = mockCookies.Object;
+        _mockAuthService.Setup(x => x.AuthenticateUser("user", "wrong")).ReturnsAsync(false);
 
-        _sut.ControllerContext = new ControllerContext
-        {
-            HttpContext = httpContext
-        };
+        var result = await _sut.AuthenticateUser(input);
 
-        _mockUserDal.Setup(x => x.GetUserFromEmail(email))
-            .ReturnsAsync(new User { IsCentralServiceOperator = false });
-
-        var result = await _sut.VerifyToken();
         Assert.IsType<UnauthorizedResult>(result);
     }
 
     [Fact]
-    public async Task VerifyTokenMissingAccessTokenReturnsUnauthorized()
+    public async Task AuthenticateUserReturnsTokenIfValid()
     {
-        string email = "user@test.com";
-        var mockCookies = new Mock<IRequestCookieCollection>();
-        mockCookies.Setup(c => c["access_token"]).Returns("");
-        
-        var httpContext = new DefaultHttpContext();
-        httpContext.Request.Headers[RequestHeaderNames.Email] = email;
-        httpContext.Request.Cookies = mockCookies.Object;
+        var input = new AuthTokenInput { Username = "user", Password = "pass" };
 
-        _sut.ControllerContext = new ControllerContext
-        {
-            HttpContext = httpContext
-        };
+        _mockAuthService.Setup(x => x.AuthenticateUser("user", "pass")).ReturnsAsync(true);
+        _mockTwoFactorAuthService.Setup(x => x.GenerateTwoFactorAuthCode("user")).ReturnsAsync(new TwoFactorAuthentication { Token = Guid.NewGuid() });
 
-        _mockUserDal.Setup(x => x.GetUserFromEmail(email))
-            .ReturnsAsync(new User { IsCentralServiceOperator = false });
+        var result = await _sut.AuthenticateUser(input);
 
-        var result = await _sut.VerifyToken();
-        Assert.IsType<UnauthorizedResult>(result);
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var json = JsonConvert.SerializeObject(okResult.Value);
+        var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+        Assert.True(dict.ContainsKey("token"));
+        Assert.False(string.IsNullOrWhiteSpace(dict["token"]));
     }
 
     [Fact]
-    public async Task VerifyTokenMalformedAccessTokenThrowsFormatException()
+    public async Task ValidateTwoFactorAuthCodeReturnsBadRequestIfInvalid()
     {
-        string email = "user@test.com";
-        var mockCookies = new Mock<IRequestCookieCollection>();
-        mockCookies.Setup(c => c["access_token"]).Returns("invalidformat");
-        
-        var httpContext = new DefaultHttpContext();
-        httpContext.Request.Headers[RequestHeaderNames.Email] = email;
-        httpContext.Request.Cookies = mockCookies.Object;
+        _mockTwoFactorAuthService.Setup(x => x.VerifyTwoFactorAuthCode(It.IsAny<Guid>().ToString(), It.IsAny<string>())).ReturnsAsync((TwoFactorAuthentication)null);
 
-        _sut.ControllerContext = new ControllerContext
-        {
-            HttpContext = httpContext
-        };
+        var result = await _sut.ValidateTwoFactorAuthCode(new TwoFactorAuthInput { Code = "123", Token = Guid.NewGuid().ToString() });
 
-        _mockUserDal.Setup(x => x.GetUserFromEmail(email))
-            .ReturnsAsync(new User { IsCentralServiceOperator = true });
-
-        await Assert.ThrowsAsync<IndexOutOfRangeException>(() => _sut.VerifyToken());
+        var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Contains("Invalid code", badRequest.Value.ToString());
     }
 
     [Fact]
-    public async Task VerifyTokenUserFetchThrowsThrowsException()
+    public async Task ValidateTwoFactorAuthCodeReturnsOkIfValid()
     {
-        string email = "user@test.com";
-        var mockCookies = new Mock<IRequestCookieCollection>();
-        mockCookies.Setup(c => c["access_token"]).Returns("invalidformat");
-        
-        var httpContext = new DefaultHttpContext();
-        httpContext.Request.Headers[RequestHeaderNames.Email] = email;
-        httpContext.Request.Cookies = mockCookies.Object;
+        var user = new User { Email = "user@test.com" };
+        var tfa = new TwoFactorAuthentication { Id = Guid.NewGuid(), Token = Guid.NewGuid(), User = user };
+
+        _mockTwoFactorAuthService
+            .Setup(x => x.VerifyTwoFactorAuthCode(tfa.Token.ToString(), "123"))
+            .ReturnsAsync(tfa);
+
+        _mockTwoFactorAuthService
+            .Setup(x => x.DeleteTwoFactorAuthCodeById(tfa.Id))
+            .Returns(Task.CompletedTask);
+
+        var token = "mocked.jwt.token";
+        var expiry = DateTime.UtcNow.AddMinutes(30);
+
+        _mockAuthHelper
+            .Setup(x => x.GenerateJwtToken(user.Email))
+            .Returns(token);
+
+        _mockAuthHelper
+            .Setup(x => x.GetJwtExpiration(token))
+            .Returns(expiry);
+
+        var responseCookies = new Mock<IResponseCookies>();
+        var response = new Mock<HttpResponse>();
+        response.SetupGet(r => r.Cookies).Returns(responseCookies.Object);
+
+        var httpContext = new Mock<HttpContext>();
+        httpContext.SetupGet(x => x.Response).Returns(response.Object);
 
         _sut.ControllerContext = new ControllerContext
         {
-            HttpContext = httpContext
+            HttpContext = httpContext.Object
         };
 
-        _mockUserDal.Setup(x => x.GetUserFromEmail(email))
-            .ThrowsAsync(new Exception("DB error"));
+        var input = new TwoFactorAuthInput
+        {
+            Token = tfa.Token.ToString(),
+            Code = "123"
+        };
 
-        var ex = await Assert.ThrowsAsync<Exception>(() => _sut.VerifyToken());
-        Assert.Equal("DB error", ex.Message);
+        var result = await _sut.ValidateTwoFactorAuthCode(input);
+
+        Assert.IsType<OkResult>(result);
+        responseCookies.Verify(c => c.Append(
+            "jwtToken",
+            token,
+            It.Is<CookieOptions>(opt =>
+                opt.Expires == expiry &&
+                opt.HttpOnly &&
+                opt.Secure &&
+                opt.SameSite == SameSiteMode.None
+            )
+        ), Times.Once);
     }
 }
