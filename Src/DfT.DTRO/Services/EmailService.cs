@@ -53,8 +53,6 @@ public class EmailService : IEmailService
         {
             { "email address", requestEmail },
             { "application name", apigeeDeveloperApp.Name },
-            { "consumer-key", apigeeDeveloperApp.Credentials.FirstOrDefault().ConsumerKey },
-            { "consumer-secret", apigeeDeveloperApp.Credentials.FirstOrDefault().ConsumerSecret },
             { "dtro-cso-email", _secretManagerClient.GetSecret(ApiConsts.DtroCsoEmail) }
         };
 

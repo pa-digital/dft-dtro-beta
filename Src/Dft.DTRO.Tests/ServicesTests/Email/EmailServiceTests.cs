@@ -72,7 +72,7 @@ public class EmailServiceTests
     }
 
     [Theory]
-    [InlineData("gabriel.popescu@dft.gov.uk","dtro-cso@dft.gov.uk")]
+    [InlineData("no-reply@dft.gov.uk","dtro-cso@dft.gov.uk")]
     public void NotifyCSOWhenApplicationCreated(string username, string csoEmail)
     {
         _sut
