@@ -102,3 +102,4 @@ global using Notify.Models.Responses;
 global using DfT.DTRO.Models.Auth;
 global using System.Net.Http;
 global using System.Net.Http.Headers;
+global using Microsoft.AspNetCore.Http.HttpResults;
