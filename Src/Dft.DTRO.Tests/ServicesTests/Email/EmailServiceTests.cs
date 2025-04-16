@@ -32,13 +32,13 @@ public class EmailServiceTests
     [InlineData("Second Application",nameof(ApplicationStatusType.Inactive.Status))]
     [InlineData("Third Application",nameof(ApplicationStatusType.Inactive.Status))]
     [InlineData("Fourth Application",nameof(ApplicationStatusType.Inactive.Status))]
-    public void SendEmailWhenApplicationCreated(string application, string status)
+    public void NotifyUserWhenApplicationCreatedOrApproved(string application, string status)
     {
         _sut
-            .Setup(it => it.SendEmail(application, _testEmail, status))
+            .Setup(it => it.NotifyUserWhenApplicationCreatedOrApproved(application, _testEmail, status))
             .Returns(new EmailNotificationResponse(){ id = _testId });
 
-        var actual = _sut.Object.SendEmail(application, _testEmail, status);
+        var actual = _sut.Object.NotifyUserWhenApplicationCreatedOrApproved(application, _testEmail, status);
         Assert.NotNull(actual.id);
     }
 
@@ -47,7 +47,7 @@ public class EmailServiceTests
     [InlineData("fareed.faisal@dft.gov.uk","SecondApplication")]
     [InlineData("marcus.cumming@dft.gov.uk","ThirdApplication" )]
     [InlineData("gabriel.popescu@dft.gov.uk","FourthApplication")]
-    public void SendEmailReturnWhenRefreshSecrets(string requestEmail, string applicationName)
+    public void NotifyUserWhenSecretsRefreshes(string requestEmail, string applicationName)
     {
         _apigeeDeveloperApp = new ApigeeDeveloperApp()
         {
@@ -63,11 +63,22 @@ public class EmailServiceTests
             }
         };
         _sut
-            .Setup(it => it.SendEmail(requestEmail, _apigeeDeveloperApp))
+            .Setup(it => it.NotifyUserWhenSecretsRefreshes(requestEmail, _apigeeDeveloperApp))
             .Returns(new EmailNotificationResponse() { id = _testId });
 
-        var actual = _sut.Object.SendEmail(requestEmail, _apigeeDeveloperApp);
+        var actual = _sut.Object.NotifyUserWhenSecretsRefreshes(requestEmail, _apigeeDeveloperApp);
         Assert.NotNull(actual.id);
 
+    }
+
+    [Theory]
+    [InlineData("no-reply@dft.gov.uk","dtro-cso@dft.gov.uk")]
+    public void NotifyCSOWhenApplicationCreated(string username, string csoEmail)
+    {
+        _sut
+            .Setup(it => it.NotifyCSOWhenApplicationCreated(username, csoEmail))
+            .Returns(new EmailNotificationResponse() { id = _testId });
+        var actual = _sut.Object.NotifyCSOWhenApplicationCreated(username, csoEmail);
+        Assert.NotNull(actual.id);
     }
 }

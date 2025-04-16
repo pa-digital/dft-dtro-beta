@@ -3,6 +3,7 @@ namespace Dft.DTRO.Tests.ControllerTests;
 public class ApplicationControllerTests
 {
     private readonly Mock<IApplicationService> _mockApplicationService;
+    private readonly Mock<IUserService> _mockUserService;
     private readonly Mock<IEmailService> _mockEmailService;
     private readonly ApplicationController _controller;
     private readonly string _email;
@@ -14,8 +15,9 @@ public class ApplicationControllerTests
         ILogger<ApplicationController> mockLogger = MockLogger.Setup<ApplicationController>();
 
         _mockApplicationService = new Mock<IApplicationService>();
+        _mockUserService = new Mock<IUserService>();
         _mockEmailService = new Mock<IEmailService>();
-        _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, _mockEmailService.Object);
+        _controller = new ApplicationController(_mockApplicationService.Object, _mockUserService.Object, mockLogger, _mockEmailService.Object);
         _email = "user@test.com";
         _applicationResponse = new ApplicationResponse { Name = "Test" };
         _emailNotificationResponse = new EmailNotificationResponse { id = Guid.NewGuid().ToString() };
@@ -178,7 +180,7 @@ public class ApplicationControllerTests
             .Setup(s => s.GetApplication(_email, appId))
             .ReturnsAsync(_applicationResponse);
         _mockEmailService
-            .Setup(s => s.SendEmail(_applicationResponse.Name, _email, ApplicationStatusType.Active.Status))
+            .Setup(s => s.NotifyUserWhenApplicationCreatedOrApproved(_applicationResponse.Name, _email, ApplicationStatusType.Active.Status))
             .Returns(_emailNotificationResponse);
 
         var result = await _controller.ActivateApplication(_email, appId);

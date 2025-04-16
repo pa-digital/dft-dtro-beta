@@ -10,4 +10,6 @@ public static class ApiConsts
     public const string ApplicationPendingApproval = "application-pending-approval";
     public const string RefreshToken = "secret-refresh-email-confirmation";
     public const string DtroCsoEmail = "dtro-cso-email";
+    public const string NoReplyEmail = "no-reply-email";
+    public const string ApplicationCreatedCSONotified = "application-created-cso-notified";
 }

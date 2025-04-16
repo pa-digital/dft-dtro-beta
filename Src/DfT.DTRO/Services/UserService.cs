@@ -17,6 +17,19 @@ public class UserService : IUserService
         return new(paginatedResult.Results.ToList().AsReadOnly(), paginatedRequest.Page, paginatedResult.TotalCount);
     }
 
+    public async Task<UserListDto> GetUser(string email)
+    {
+        var user = await _userDal.GetUserFromEmail(email);
+        var dto = new UserListDto
+        {
+            Email = user.Email, 
+            Name = $"{user.Forename} {user.Surname}", 
+            Created = user.Created.ToString("s")
+        };
+
+        return dto;
+    }
+
     public async Task DeleteUser(string email, Guid userId)
     {
         await _userDal.DeleteUser(userId);
