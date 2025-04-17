@@ -5,6 +5,8 @@ public class ApplicationControllerTests
     private readonly Mock<IApplicationService> _mockApplicationService;
     private readonly Mock<IEmailService> _mockEmailService;
     private readonly ApplicationController _controller;
+    private readonly AppInput _appInput;
+    private readonly App _app;
     private readonly string _email;
     private readonly ApplicationResponse _applicationResponse;
     private readonly EmailNotificationResponse _emailNotificationResponse;
@@ -16,16 +18,65 @@ public class ApplicationControllerTests
         _mockApplicationService = new Mock<IApplicationService>();
         _mockEmailService = new Mock<IEmailService>();
         _controller = new ApplicationController(_mockApplicationService.Object, mockLogger, _mockEmailService.Object);
+        _appInput = new() { Name = "Test", Type = "Publish" };
+        _app = new() { AppId = Guid.NewGuid().ToString(), Name = _appInput.Name };
         _email = "user@test.com";
         _applicationResponse = new ApplicationResponse { Name = "Test" };
         _emailNotificationResponse = new EmailNotificationResponse { id = Guid.NewGuid().ToString() };
     }
 
     [Fact]
+    public async Task CreateApplicationReturnsOk()
+    {
+        _mockApplicationService
+            .Setup(it => it.CreateApplication(_email, _appInput))
+            .ReturnsAsync(() => _app);
+
+        _mockEmailService
+            .Setup(it => it.SendEmailForApplicationConfirmation(_app.Name, _email))
+            .Returns(_emailNotificationResponse);
+
+        var actual = await _controller.CreateApplication(_email, _appInput);
+        var okResult = Assert.IsType<OkObjectResult>(actual);
+        Assert.Equal(200, okResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateApplicationThrowsEmailSendException()
+    {
+       _mockApplicationService
+            .Setup(it => it.CreateApplication(_email, _appInput))
+            .ReturnsAsync(() => _app);
+
+        _mockEmailService
+            .Setup(it => it.SendEmailForApplicationConfirmation(_app.Name, _email))
+            .Throws(() => new EmailSendException());
+
+        var actual = await _controller.CreateApplication(_email, _appInput);
+        var okResult = Assert.IsType<ObjectResult>(actual);
+        Assert.Equal(400, okResult.StatusCode);
+    }
+
+    
+    [Fact]
+    public async Task CreateApplicationThrowsException()
+    {
+        _mockApplicationService
+            .Setup(it => it.CreateApplication(_email, _appInput))
+            .Throws(() => new Exception());
+
+        var actual = await _controller.CreateApplication(_email, _appInput);
+        var okResult = Assert.IsType<ObjectResult>(actual);
+        Assert.Equal(500, okResult.StatusCode);
+    }
+
+    [Fact]
     public async Task ValidateApplicationNameValidNameReturnsOk()
     {
         var parameters = new ApplicationNameQueryParameters { Name = "ValidAppName" };
-        _mockApplicationService.Setup(service => service.ValidateApplicationName("ValidAppName")).ReturnsAsync(true);
+        _mockApplicationService
+            .Setup(service => service.ValidateApplicationName("ValidAppName"))
+            .ReturnsAsync(true);
         var result = await _controller.ValidateApplicationName(parameters);
 
         var okResult = Assert.IsType<OkObjectResult>(result);

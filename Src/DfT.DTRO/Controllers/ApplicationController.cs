@@ -65,7 +65,7 @@ public class ApplicationController : ControllerBase
         catch (EmailSendException esex)
         {
             _logger.LogError(esex.Message);
-            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {esex.Message}"));
+            return StatusCode(400, new ApiErrorResponse("Bad Request", $"An error occurred when trying to send email: {esex.Message}"));
         }
         catch (Exception ex)
         {
