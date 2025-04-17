@@ -50,6 +50,15 @@ public class ApplicationController : ControllerBase
                 }
             }
 
+            if (appInput.Type == "Publish")
+            {
+                var result = _emailService.SendEmail(app.Name, email);
+                if (string.IsNullOrEmpty(result.id))
+                {
+                    throw new EmailSendException();
+                }
+            }
+
             _logger.LogInformation($"'{nameof(CreateApplication)}' method called ");
             return Ok(app);
         }

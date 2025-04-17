@@ -1,4 +1,6 @@
-﻿namespace DfT.DTRO.Services;
+﻿using DfT.DTRO.Models.Apigee;
+
+namespace DfT.DTRO.Services;
 
 /// <inheritdoc cref="IEmailService"/>
 public class EmailService : IEmailService
@@ -63,5 +65,25 @@ public class EmailService : IEmailService
 
         emailNotification = _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
         return emailNotification;
+    }
+
+    /// <inheritdoc cref="IEmailService"/>
+    public EmailNotificationResponse SendEmail(string name, string requestEmail)
+    {
+
+        EmailNotificationResponse emailNotification = new();
+        var templateId = _secretManagerClient.GetSecret(ApiConsts.ApplicationConfirmation);
+        var templateResponse = _notificationClient.GetTemplateById(templateId);
+
+        var personalisation = new Dictionary<string, dynamic>()
+        {
+            {"email address", requestEmail},
+            {"application name", name},
+            {"dtro-portal", _secretManagerClient.GetSecret(ApiConsts.DtroPortal)},
+            {"dtro-cso-email", _secretManagerClient.GetSecret(ApiConsts.DtroCsoEmail)}
+        };
+
+        var emailNotificationResponse = _notificationClient.SendEmail(requestEmail, templateResponse.id, personalisation);
+        return emailNotificationResponse;
     }
 }
