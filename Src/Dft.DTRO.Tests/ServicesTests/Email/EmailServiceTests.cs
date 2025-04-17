@@ -68,6 +68,19 @@ public class EmailServiceTests
 
         var actual = _sut.Object.SendEmail(requestEmail, _apigeeDeveloperApp);
         Assert.NotNull(actual.id);
+    }
 
+    [Theory]
+    [InlineData("ben.pauley@dft.gov.uk","FirstApplication" )]
+    [InlineData("fareed.faisal@dft.gov.uk","SecondApplication")]
+    [InlineData("marcus.cumming@dft.gov.uk","ThirdApplication" )]
+    [InlineData("gabriel.popescu@dft.gov.uk","FourthApplication")]
+    public void SendEmailForApplicationConfirmation(string requestEmail, string applicationName)
+    {
+        _sut
+            .Setup(it => it.SendEmailForApplicationConfirmation(applicationName, requestEmail))
+            .Returns(new EmailNotificationResponse() { id = _testId });
+        var actual = _sut.Object.SendEmailForApplicationConfirmation(applicationName, requestEmail);
+        Assert.NotNull(actual.id);
     }
 }

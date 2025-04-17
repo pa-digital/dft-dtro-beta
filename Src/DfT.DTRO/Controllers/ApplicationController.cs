@@ -52,7 +52,7 @@ public class ApplicationController : ControllerBase
 
             if (appInput.Type == "Publish")
             {
-                var result = _emailService.SendEmail(app.Name, email);
+                var result = _emailService.SendEmailForApplicationConfirmation(app.Name, email);
                 if (string.IsNullOrEmpty(result.id))
                 {
                     throw new EmailSendException();

@@ -28,5 +28,5 @@ public interface IEmailService
     /// <param name="name">The application name to be send.</param>
     /// <param name="requestEmail">The developer email to be send.</param>
     /// <returns>An email response notification.</returns>
-    EmailNotificationResponse SendEmail(string name, string requestEmail);
+    EmailNotificationResponse SendEmailForApplicationConfirmation(string name, string requestEmail);
 }

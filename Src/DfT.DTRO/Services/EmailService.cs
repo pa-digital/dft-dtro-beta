@@ -68,7 +68,7 @@ public class EmailService : IEmailService
     }
 
     /// <inheritdoc cref="IEmailService"/>
-    public EmailNotificationResponse SendEmail(string name, string requestEmail)
+    public EmailNotificationResponse SendEmailForApplicationConfirmation(string name, string requestEmail)
     {
 
         EmailNotificationResponse emailNotification = new();
