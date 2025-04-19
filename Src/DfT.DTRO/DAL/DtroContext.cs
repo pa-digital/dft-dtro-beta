@@ -88,6 +88,8 @@ public class DtroContext : DbContext
 
     public DbSet<ApplicationStatus> ApplicationStatus { get; set; }
 
+    public DbSet<ErrorReport> ErrorReport { get; set; }
+
     /// <summary>
     /// Default constructor.
     /// </summary>
@@ -165,6 +167,18 @@ public class DtroContext : DbContext
                 Id = new Guid("c47cc91d-0d20-47b0-8fc8-ec51fb5aae94"),
                 Status = "Inactive"
             });
+        
+        modelBuilder.Entity<ErrorReport>()
+            .HasOne(er => er.User)
+            .WithMany()
+            .HasForeignKey(er => er.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<ErrorReport>()
+            .HasOne(er => er.Dtro)
+            .WithMany()
+            .HasForeignKey(er => er.TroId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
     ///<inheritdoc />

@@ -30,6 +30,7 @@ public static class RouteTemplates
     public const string DtrosAssignOwnership = DtrosBase + "/ownership/{dtroId:guid}/{assignToTraId}";
 
     public const string DtrosCount = DtrosBase + "/count";
+    public const string ValidateDtro = DtrosBase + "/validate";
 
     // Dtro Users
     public const string DtroUsersBase = "/dtroUsers";
@@ -93,5 +94,8 @@ public static class RouteTemplates
     public const string UsersBase = "/users";
     public const string UsersFindAll = UsersBase;
     public const string UsersDelete = UsersBase + "/{userId:guid}";
+
+    // Error report
+    public const string ErrorReportBase = "/errorReport";
 
 }

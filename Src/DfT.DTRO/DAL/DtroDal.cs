@@ -523,4 +523,9 @@ public class DtroDal : IDtroDal
     {
         return await _dtroContext.Dtros.CountAsync();
     }
+
+    public async Task<bool> ValidateDtroById(Guid id)
+    {
+        return await _dtroContext.Dtros.AnyAsync(dtro => dtro.Id == id);
+    }
 }

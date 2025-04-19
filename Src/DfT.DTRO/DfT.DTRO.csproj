@@ -30,6 +30,7 @@
 		<PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
 		<PackageReference Include="Google.Apis.Auth" Version="1.69.0" />
 		<PackageReference Include="Google.Cloud.SecretManager.V1" Version="2.5.0" />
+		<PackageReference Include="Google.Cloud.Storage.V1" Version="4.11.0" />
 		<PackageReference Include="GovukNotify" Version="7.2.0" />
 		<PackageReference Include="JsonLogic" Version="4.0.4" />
 		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" />
