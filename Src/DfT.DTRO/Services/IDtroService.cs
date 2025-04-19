@@ -39,4 +39,6 @@ public interface IDtroService
     Task<bool> AssignOwnershipAsync(Guid dtroId, Guid appId, Guid assignToUser);
     
     Task<int> GetDtroSubmissionCount();
+
+    Task<bool> ValidateDtroById(string id);
 }

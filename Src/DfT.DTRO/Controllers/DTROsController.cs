@@ -781,4 +781,24 @@ public class DTROsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Validate whether DTRO ID exists
+    /// </summary>
+    /// <response code="200">Success</response>
+    /// <response code="500">Internal Server Error.</response>
+    [HttpPost(RouteTemplates.ValidateDtro)]
+    [SwaggerResponse(statusCode: 200, description: "Successful response")]
+    [SwaggerResponse(statusCode: 500, description: "Internal server error")]
+    public async Task<IActionResult> ValidateDTROById([FromBody] ValidateDTROByIdRequest request)
+    {
+        try
+        {
+            bool exists = await _dtroService.ValidateDtroById(request.Id);
+            return Ok(new ValidatedDtroResponse { Valid = exists });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ApiErrorResponse("Internal Server Error", $"An unexpected error occurred: {ex.Message}"));
+        }
+    }
 }

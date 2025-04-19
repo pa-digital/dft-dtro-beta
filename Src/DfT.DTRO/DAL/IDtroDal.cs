@@ -106,4 +106,6 @@ public interface IDtroDal
 
     Task<int> GetDtroSubmissionCount();
 
+    Task<bool> ValidateDtroById(Guid id);
+
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DfT.DTRO.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,11 @@ using NpgsqlTypes;
 namespace DfT.DTRO.Migrations
 {
     [DbContext(typeof(DtroContext))]
-    partial class DtroContextModelSnapshot : ModelSnapshot
+    [Migration("20250418162306_AddErrorReportTable")]
+    partial class AddErrorReportTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -529,17 +532,8 @@ namespace DfT.DTRO.Migrations
                     b.Property<string>("OtherType")
                         .HasColumnType("text");
 
-                    b.Property<List<string>>("RegulationTypes")
-                        .HasColumnType("text[]");
-
-                    b.Property<List<string>>("Tras")
-                        .HasColumnType("text[]");
-
                     b.Property<Guid?>("TroId")
                         .HasColumnType("uuid");
-
-                    b.Property<List<string>>("TroTypes")
-                        .HasColumnType("text[]");
 
                     b.Property<string>("Type")
                         .HasColumnType("text");

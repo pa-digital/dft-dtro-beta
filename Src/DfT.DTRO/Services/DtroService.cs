@@ -314,4 +314,17 @@ public class DtroService : IDtroService
     {
         return await _dtroDal.GetDtroSubmissionCount();
     }
+
+    public async Task<bool> ValidateDtroById(string id)
+    {
+        try
+        {
+            Guid dtroGuid = Guid.Parse(id);
+            return await _dtroDal.ValidateDtroById(dtroGuid);
+        }
+        catch (FormatException fex)
+        {
+            throw new Exception("Invalid DTRO ID format");
+        }
+    }
 }
